@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم الرئيسية | منصة محمد سراج للأجهزة والأدوات المنزلية</title>
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Cairo', 'sans-serif']
+                    },
+                    colors: {
+                        amber: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- ApexCharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex antialiased selection:bg-amber-500 selection:text-slate-950">
+
+    <!-- Sticky Sidebar -->
+    <aside id="admin-sidebar" class="w-72 bg-slate-900 border-l border-slate-800/80 shrink-0 h-screen sticky top-0 z-40 hidden lg:block"></aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col min-w-0 min-h-screen overflow-y-auto">
+        
+        <!-- Top Bar -->
+        <header class="h-20 bg-slate-900/80 backdrop-blur-md border-b border-slate-800/80 px-6 sm:px-8 flex items-center justify-between sticky top-0 z-30">
+            <div class="flex items-center gap-4">
+                <button onclick="document.getElementById('admin-sidebar').classList.toggle('hidden')" class="lg:hidden p-2 rounded-xl bg-slate-800 text-slate-300">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+                <div>
+                    <h2 class="text-lg sm:text-xl font-black text-white flex items-center gap-2">
+                        <span>مرحباً، محمد سراج</span>
+                        <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30">مباشر الآن</span>
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-0.5">نظرة عامة على إحصائيات المبيعات والنشاط اللوجستي الفوري لليوم</p>
+                </div>
+            </div>
+
+            <!-- Topbar Actions -->
+            <div class="flex items-center gap-3">
+                <button onclick="refreshData()" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition text-sm flex items-center gap-2 border border-slate-700/60" title="تحديث البيانات">
+                    <i class="fa-solid fa-rotate text-amber-400"></i>
+                    <span class="hidden sm:inline text-xs font-semibold">تحديث</span>
+                </button>
+                <a href="orders.html" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black text-xs transition shadow-lg shadow-amber-500/20 flex items-center gap-2">
+                    <i class="fa-solid fa-plus text-slate-950"></i>
+                    <span>طلب جديد هاتفياً</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- Page Body Container -->
+        <div class="p-6 sm:p-8 space-y-8 max-w-7xl">
+
+            <!-- 1. Executive KPI Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <!-- Sales KPI -->
+                <div class="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-slate-700 transition relative overflow-hidden group">
+                    <div class="absolute -left-6 -bottom-6 w-24 h-24 bg-amber-500/5 rounded-full blur-2xl group-hover:bg-amber-500/10 transition"></div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-slate-400">إجمالي مبيعات اليوم</span>
+                        <span class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-sm border border-amber-500/20">
+                            <i class="fa-solid fa-sack-dollar"></i>
+                        </span>
+                    </div>
+                    <div class="mt-4">
+                        <h3 class="text-2xl font-black text-white" id="kpi-today-sales">154,600 ج.م</h3>
+                        <div class="mt-2 flex items-center gap-1.5 text-xs text-emerald-400 font-semibold">
+                            <i class="fa-solid fa-arrow-trend-up"></i>
+                            <span>+24.5% مقارنة بأمس</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Orders Count KPI -->
+                <div class="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-slate-700 transition relative overflow-hidden group">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-slate-400">الطلبات النشطة اليوم</span>
+                        <span class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-sm border border-blue-500/20">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </span>
+                    </div>
+                    <div class="mt-4">
+                        <h3 class="text-2xl font-black text-white" id="kpi-today-orders">18 طلب</h3>
+                        <div class="mt-2 flex items-center gap-1.5 text-xs text-amber-400 font-semibold">
+                            <i class="fa-solid fa-clock"></i>
+                            <span>5 طلبات بانتظار التأكيد التليفوني</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Average Order Value KPI -->
+                <div class="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-slate-700 transition relative overflow-hidden group">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-slate-400">متوسط قيمة السلة (AOV)</span>
+                        <span class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-sm border border-purple-500/20">
+                            <i class="fa-solid fa-chart-pie"></i>
+                        </span>
+                    </div>
+                    <div class="mt-4">
+                        <h3 class="text-2xl font-black text-white">8,580 ج.م</h3>
+                        <div class="mt-2 flex items-center gap-1.5 text-xs text-emerald-400 font-semibold">
+                            <i class="fa-solid fa-arrow-trend-up"></i>
+                            <span>+8% بفضل باقات العرائس</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Low Stock Alert KPI -->
+                <div class="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-slate-700 transition relative overflow-hidden group">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-slate-400">تنبيهات نواقص المخزن</span>
+                        <span class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center text-sm border border-rose-500/20">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </span>
+                    </div>
+                    <div class="mt-4">
+                        <h3 class="text-2xl font-black text-white text-rose-400" id="kpi-low-stock">3 أصناف</h3>
+                        <div class="mt-2 flex items-center gap-1.5 text-xs text-slate-400 font-semibold">
+                            <a href="products.html?filter=low" class="text-amber-400 hover:underline">مراجعة المخزن الفوري &larr;</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Charts Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Sales Trend Area Chart -->
+                <div class="lg:col-span-2 p-6 rounded-2xl bg-slate-900/90 border border-slate-800">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="text-base font-black text-white">حركة المبيعات الأسبوعية (أكتوبر 2026)</h3>
+                            <p class="text-xs text-slate-400 mt-1">مقارنة بين إجمالي إيرادات الأجهزة الكبيرة ومجموعات الحلل التركية</p>
+                        </div>
+                        <span class="text-xs font-bold text-amber-400 bg-amber-500/10 px-3 py-1 rounded-lg border border-amber-500/20">تحديث فوري</span>
+                    </div>
+                    <div id="chart-sales-trend" class="w-full h-72"></div>
+                </div>
+
+                <!-- Payment Methods Distribution Donut -->
+                <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-base font-black text-white">قنوات السداد الأكثر طلباً</h3>
+                            <i class="fa-solid fa-credit-card text-slate-500"></i>
+                        </div>
+                        <p class="text-xs text-slate-400 mb-6">توزيع طرق دفع العملاء خلال الأسبوع الحالي</p>
+                        <div id="chart-payment-methods" class="flex justify-center items-center h-56"></div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+                        <span>أعلى وسيلة نمواً: <strong class="text-emerald-400">InstaPay (+42%)</strong></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Recent Urgent Orders & Live Activity -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- Recent Orders Table -->
+                <div class="lg:col-span-2 rounded-2xl bg-slate-900/90 border border-slate-800 overflow-hidden">
+                    <div class="p-6 border-b border-slate-800 flex items-center justify-between">
+                        <div>
+                            <h3 class="text-base font-black text-white flex items-center gap-2">
+                                <span>آخر الطلبات المستلمة</span>
+                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                            </h3>
+                            <p class="text-xs text-slate-400 mt-0.5">الطلبات الواردة حديثاً عبر المتجر وواتساب</p>
+                        </div>
+                        <a href="orders.html" class="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1">
+                            <span>عرض لوحة الكانبان كاملة</span>
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </a>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-right text-sm">
+                            <thead class="bg-slate-950/60 text-slate-400 text-xs font-bold border-b border-slate-800/60">
+                                <tr>
+                                    <th class="p-4">كود الطلب</th>
+                                    <th class="p-4">العميل والموقع</th>
+                                    <th class="p-4">إجمالي الفاتورة</th>
+                                    <th class="p-4">طريقة الدفع</th>
+                                    <th class="p-4">الحالة</th>
+                                    <th class="p-4 text-center">الإجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-orders-tbody" class="divide-y divide-slate-800/60 text-slate-300">
+                                <!-- Populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Quick Factory Partners & Stock Alerts -->
+                <div class="space-y-6">
+                    <!-- Turkish Exclusive Agencies Status -->
+                    <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-base font-black text-white">حالة مصانع الحلل التركية</h3>
+                            <span class="text-xs font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">استيراد مباشر</span>
+                        </div>
+                        <p class="text-xs text-slate-400">متابعة الحصص والشحنات المستوردة الحصرية لمحمد سراج</p>
+
+                        <div class="space-y-3 pt-2">
+                            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-950/60 border border-slate-800/60">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-slate-800 text-amber-400 flex items-center justify-center font-black text-xs">TAÇ</div>
+                                    <div>
+                                        <div class="text-xs font-bold text-white">مصنع تاتش للجرانيت (TAÇ)</div>
+                                        <div class="text-[11px] text-slate-400">حاوية رقم TR-809 وصلت الميناء</div>
+                                    </div>
+                                </div>
+                                <span class="text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">جاهز للتوزيع</span>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-950/60 border border-slate-800/60">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-slate-800 text-amber-400 flex items-center justify-center font-black text-xs">ÖZT</div>
+                                    <div>
+                                        <div class="text-xs font-bold text-white">أوزتف للزهر (ÖZTEF DÖKÜM)</div>
+                                        <div class="text-[11px] text-slate-400">شحنة قلايات الشواء قيد الجمارك</div>
+                                    </div>
+                                </div>
+                                <span class="text-[11px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full">قيد الفحص</span>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-950/60 border border-slate-800/60">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-slate-800 text-amber-400 flex items-center justify-center font-black text-xs">GLR</div>
+                                    <div>
+                                        <div class="text-xs font-bold text-white">جلور للبورسلين (GLORE)</div>
+                                        <div class="text-[11px] text-slate-400">مخزون المعرض الرئيسي وفير</div>
+                                    </div>
+                                </div>
+                                <span class="text-[11px] font-bold text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-full">متوفر بالمخازن</span>
+                            </div>
+                        </div>
+
+                        <a href="brands.html" class="block text-center w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 transition mt-2">
+                            إدارة كافة المصانع والشركاء &larr;
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Shared Store Scripts -->
+    <script src="admin.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            AdminApp.renderNavigation('dashboard');
+            renderDashboardData();
+            initCharts();
+        });
+
+        function renderDashboardData() {
+            const orders = AdminApp.getOrders();
+            const products = AdminApp.getProducts();
+
+            // Populate table
+            const tbody = document.getElementById('recent-orders-tbody');
+            if (tbody) {
+                tbody.innerHTML = orders.slice(0, 5).map(o => {
+                    const statusBadges = {
+                        pending: { text: 'بانتظار التأكيد', class: 'bg-amber-500/10 text-amber-400 border-amber-500/20' },
+                        confirmed: { text: 'مؤكد هاتفياً', class: 'bg-blue-500/10 text-blue-400 border-blue-500/20' },
+                        processing: { text: 'جاري التجهيز', class: 'bg-purple-500/10 text-purple-400 border-purple-500/20' },
+                        shipped: { text: 'خرج مع المندوب', class: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20' },
+                        delivered: { text: 'تم التسليم بنجاح', class: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' },
+                        cancelled: { text: 'ملغي', class: 'bg-rose-500/10 text-rose-400 border-rose-500/20' }
+                    };
+                    const badge = statusBadges[o.status] || { text: o.status, class: 'bg-slate-700 text-slate-300' };
+
+                    return `
+                        <tr class="hover:bg-slate-900/60 transition">
+                            <td class="p-4 font-mono font-bold text-amber-400">${o.id}</td>
+                            <td class="p-4">
+                                <div class="font-bold text-white text-xs">${o.customerName}</div>
+                                <div class="text-[11px] text-slate-400">${o.city}</div>
+                            </td>
+                            <td class="p-4 font-bold text-white">${AdminApp.formatEGP(o.total)}</td>
+                            <td class="p-4 text-xs text-slate-300">${o.paymentMethod}</td>
+                            <td class="p-4">
+                                <span class="px-2.5 py-1 rounded-full text-[11px] font-bold border ${badge.class}">
+                                    ${badge.text}
+                                </span>
+                            </td>
+                            <td class="p-4 text-center">
+                                <a href="orders.html?id=${o.id}" class="p-2 rounded-lg bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-slate-300 transition text-xs font-bold inline-flex items-center gap-1">
+                                    <span>تفاصيل</span>
+                                    <i class="fa-solid fa-angle-left"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+        }
+
+        function initCharts() {
+            // 1. Sales Trend
+            const salesOptions = {
+                series: [
+                    { name: 'الأجهزة المنزلية الكبيرة (سامسونج، إل جي، توشيبا)', data: [45000, 62000, 58000, 89000, 74000, 110000, 95000] },
+                    { name: 'أطقم الحلل التركية الفاخرة (TAÇ, Glore)', data: [22000, 31000, 28000, 42000, 39000, 58000, 49000] }
+                ],
+                chart: {
+                    type: 'area',
+                    height: 280,
+                    toolbar: { show: false },
+                    fontFamily: 'Cairo, sans-serif'
+                },
+                colors: ['#f59e0b', '#10b981'],
+                dataLabels: { enabled: false },
+                stroke: { curve: 'smooth', width: 2 },
+                xaxis: {
+                    categories: ['السبت', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'],
+                    labels: { style: { colors: '#94a3b8' } }
+                },
+                yaxis: {
+                    labels: {
+                        formatter: val => `${(val / 1000).toFixed(0)} ألف`,
+                        style: { colors: '#94a3b8' }
+                    }
+                },
+                grid: { borderColor: '#1e293b' },
+                theme: { mode: 'dark' },
+                tooltip: {
+                    theme: 'dark',
+                    y: { formatter: val => `${val.toLocaleString()} ج.م` }
+                }
+            };
+            new ApexCharts(document.querySelector("#chart-sales-trend"), salesOptions).render();
+
+            // 2. Payment Methods Donut
+            const paymentOptions = {
+                series: [45, 30, 15, 10],
+                labels: ['الدفع عند الاستلام (COD)', 'إنستاباي (InstaPay)', 'فودافون كاش', 'فوري / فيزا'],
+                chart: {
+                    type: 'donut',
+                    height: 240,
+                    fontFamily: 'Cairo, sans-serif'
+                },
+                colors: ['#f59e0b', '#3b82f6', '#ef4444', '#10b981'],
+                legend: { position: 'bottom', labels: { colors: '#94a3b8' } },
+                dataLabels: { enabled: false },
+                theme: { mode: 'dark' }
+            };
+            new ApexCharts(document.querySelector("#chart-payment-methods"), paymentOptions).render();
+        }
+
+        function refreshData() {
+            AdminApp.notify('تم تحديث البيانات الحية بنجاح!', 'success');
+            renderDashboardData();
+        }
+    </script>
+</body>
+</html>
