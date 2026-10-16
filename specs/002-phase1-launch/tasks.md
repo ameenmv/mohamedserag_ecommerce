@@ -4,25 +4,25 @@
 **Who**: `C` = Claude runs it directly (CLI/scaffolding), `A` = Argon writes it from Claude's brief, Claude reviews. `[P]` = can run in parallel with other `[P]` tasks of the same phase (different files).
 
 ## Phase 0: Setup (Slice 0) — blocks everything
-- [ ] T001 C Branch `002-phase1-launch`; `git mv` prototype files into `prototype/` (S1)
-- [ ] T002 C Root workspace files: package.json, pnpm-workspace.yaml, turbo.json, .nvmrc, .editorconfig, .gitignore, .env.example (S2)
-- [ ] T003 C `packages/config`: tsconfig bases, ESLint flat config, Prettier (S3)
-- [ ] T004 A `packages/shared`: Zod setup, status enums, money helpers, `normalizeArabic`, `normalizePhone`, WhatsApp link builder + unit tests (S4)
-- [ ] T005 A [P] `packages/ui`: brand tokens light/dark, Tailwind preset, font setup (S5)
-- [ ] T006 C Scaffold `apps/web` (Nuxt 4, Tailwind 4, shadcn-vue, image, fonts, i18n, eslint) (S6)
-- [ ] T007 A Web shells: RTL `app.vue`, store layout (header, footer, bottom nav from prototype), admin layout (sidebar, topbar, theme toggle, Ctrl/⌘+K command palette, «G ثم حرف» shortcuts, toasts with undo) (S6)
-- [ ] T008 C Scaffold `apps/api` (NestJS strict, Vitest + `unplugin-swc`, nestjs-zod, helmet, rate limit, trust proxy, config, /health) (S7)
-- [ ] T008b C `docker/compose.dev.yml` (Debian postgres:17 db + db-test) and start it (S7b)
-- [ ] T009 A Prisma schema for all PRD §9 entities, incl. product `searchText` + `pg_trgm` (S8)
-- [ ] T009b C Run `prisma migrate dev` + `prisma generate`; fix schema errors with Argon if any (S8)
-- [ ] T010 A Seed script: catalog from `prototype/config.js` (EGP → piastres, `searchText`, cookware `setContents`, brand logos from `prototype/assets/brands`), zones, settings, CMS content, demo orders, admin user from env (S8)
-- [ ] T011 A Auth module + `@RequirePermission` guard + audit-log interceptor + admin login page (S9)
-- [ ] T012 C Docker `compose.yml` (shared uploads volume) + `compose.e2e.yml` + Caddyfile (S10)
-- [ ] T012b A Test seed module `/api/test/seed/*` behind `ALLOW_TEST_SEED` + secret header, with API tests (S10b)
-- [ ] T012c A Analytics: provider wiring (D5) + funnel events helper in web
-- [ ] T013 C `npx e2e@latest init` in `tests/e2e` (Web/Playwright, provider per D1), base URL to compose + e2e override, seed helper, smoke suite (S11)
-- [ ] T014 C GitHub Actions CI + Lighthouse CI (S12)
-- [ ] T015 C `docs/STACK.md` (S13)
+- [x] T001 C Branch `002-phase1-launch`; `git mv` prototype files into `prototype/` (S1)
+- [x] T002 C Root workspace files: package.json, pnpm-workspace.yaml, turbo.json, .nvmrc, .editorconfig, .gitignore, .env.example (S2)
+- [x] T003 C `packages/config`: tsconfig bases, ESLint flat config, Prettier (S3)
+- [x] T004 A `packages/shared`: Zod setup, status enums, money helpers, `normalizeArabic`, `normalizePhone`, WhatsApp link builder + unit tests (S4)
+- [x] T005 A [P] `packages/ui`: brand tokens light/dark, Tailwind preset, font setup (S5)
+- [x] T006 C Scaffold `apps/web` (Nuxt 4, Tailwind 4, shadcn-vue, image, fonts, i18n, eslint) (S6)
+- [x] T007 A Web shells: RTL `app.vue`, store layout (header, footer, bottom nav from prototype), admin layout (sidebar, topbar, theme toggle, Ctrl/⌘+K command palette, «G ثم حرف» shortcuts, toasts with undo) (S6)
+- [x] T008 C Scaffold `apps/api` (NestJS strict, Vitest + `unplugin-swc`, nestjs-zod, helmet, rate limit, trust proxy, config, /health) (S7)
+- [x] T008b C `docker/compose.dev.yml` (Debian postgres:17 db + db-test) and start it (S7b)
+- [x] T009 A Prisma schema for all PRD §9 entities, incl. product `searchText` + `pg_trgm` (S8)
+- [x] T009b C Run `prisma migrate dev` + `prisma generate`; fix schema errors with Argon if any (S8)
+- [x] T010 A Seed script: catalog from `prototype/config.js` (EGP → piastres, `searchText`, cookware `setContents`, brand logos from `prototype/assets/brands`), zones, settings, CMS content, demo orders, admin user from env (S8)
+- [x] T011 A Auth module + `@RequirePermission` guard + audit-log interceptor + admin login page (S9)
+- [x] T012 C Docker `compose.yml` (shared uploads volume) + `compose.e2e.yml` + Caddyfile (S10)
+- [x] T012b A Test seed module `/api/test/seed/*` behind `ALLOW_TEST_SEED` + secret header, with API tests (S10b)
+- [x] T012c A Analytics: provider wiring (D5) + funnel events helper in web
+- [x] T013 C `npx e2e@latest init` in `tests/e2e` (Web/Playwright, provider per D1), base URL to compose + e2e override, seed helper, smoke suite (S11)
+- [x] T014 C GitHub Actions CI + Lighthouse CI (S12)
+- [x] T015 C `docs/STACK.md` (S13)
 
 **Checkpoint**: smoke e2e green; `docker compose up` works.
 

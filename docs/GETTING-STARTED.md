@@ -49,7 +49,7 @@ Open `.env` and change at least these:
 | `ADMIN_PASSWORD` | A password of at least 6 characters (only used to create the first admin) |
 | `SESSION_SECRET` | A long random string, e.g. the output of `openssl rand -hex 32` |
 
-The other values already work for local development: the database on 5432, the test database on 5433, the API on 4000 and the web on 3000.
+The other values already work for local development: the database on 5432, the test database on 5433, the API on 4000 and the web on 3000. If you run the full stack in Docker, `UMAMI_SECRET` is also required (`openssl rand -hex 32`).
 
 ## 4. Install dependencies
 
@@ -131,14 +131,42 @@ The runner starts web and API by itself if they are not running, or reuses them 
 
 ## Run the full stack in Docker (like production)
 
+The full production-like stack requires `SESSION_SECRET` and `UMAMI_SECRET`:
+
 ```bash
-SESSION_SECRET=$(openssl rand -hex 32) docker compose -f docker/compose.yml up -d --build
+SESSION_SECRET=$(openssl rand -hex 32) UMAMI_SECRET=$(openssl rand -hex 32) \
+  docker compose -f docker/compose.yml up -d --build
 ```
 
-Caddy serves everything on one origin: `/` (web), `/api` (API), `/uploads` (images) and `/stats` (Umami analytics). Stop it with:
+Database migrations run automatically on container startup via the `migrate` service.
+
+### Seed demo data and initial admin in Docker
+
+Run the `seed` tool service on demand:
+
+```bash
+ADMIN_EMAIL=admin@serag.local ADMIN_PASSWORD=change-me \
+  docker compose -f docker/compose.yml --profile tools run --rm seed
+```
+
+Caddy serves everything on one origin: `/` (web), `/api` (API), `/uploads` (images) and `/stats` (Umami analytics). Stop the stack with:
 
 ```bash
 docker compose -f docker/compose.yml down
+```
+
+### Run e2e tests against the Docker stack
+
+To run browser end-to-end tests against Docker, launch the stack with the test seed overlay (`docker/compose.e2e.yml`) and provide `TEST_SEED_SECRET` (at least 16 characters):
+
+```bash
+SESSION_SECRET=$(openssl rand -hex 32) UMAMI_SECRET=$(openssl rand -hex 32) \
+  TEST_SEED_SECRET=ci-test-seed-secret-must-be-32-chars-long-min \
+  docker compose -f docker/compose.yml -f docker/compose.e2e.yml up -d --build
+
+APP_URL=http://localhost API_URL=http://localhost/api \
+  TEST_SEED_SECRET=ci-test-seed-secret-must-be-32-chars-long-min \
+  pnpm test:e2e
 ```
 
 ## See the original HTML prototype
@@ -158,6 +186,7 @@ Then open http://localhost:8765 for the store and http://localhost:8765/admin/ f
 | `Cannot find module '../generated/prisma/client.js'` | Run `pnpm db:generate`. |
 | Prisma asks to reset the database | Your local schema drifted. `pnpm --filter @serag/api exec prisma migrate reset` wipes the **dev** database and reapplies the migrations; then run `pnpm db:seed`. |
 | Admin login says the email or password is wrong | The admin is created from `.env` on the first seed. To change the password, set the new one in `.env` and run `SEED_RESET_ADMIN_PASSWORD=true pnpm db:seed`. |
+| `test seed routes return 404` | `ALLOW_TEST_SEED` is not set to `"true"` or `TEST_SEED_SECRET` is shorter than 16 characters (the test seed module does not register its controller unless both are satisfied). If running `pnpm test:e2e` locally, check if an existing `pnpm dev` process without `ALLOW_TEST_SEED=true` was running and reused by the runner. |
 | e2e: `APP_UNREACHABLE` | Make sure the databases are up (`pnpm db:up`). The runner's app log is in `tests/e2e/.e2e/logs/app.log`. |
 | e2e: browser not found | Run `pnpm --filter @serag/e2e exec e2e-web install chromium --with-deps`. |
 
