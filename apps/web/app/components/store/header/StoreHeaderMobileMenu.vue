@@ -28,7 +28,7 @@ const side = computed<'right' | 'left'>(() => (localeProperties.value.dir === 'l
         <Menu class="size-5" aria-hidden="true" />
       </button>
     </SheetTrigger>
-    <SheetContent :side="side" class="w-80 bg-background p-0">
+    <LazySheetContent :side="side" class="w-80 bg-background p-0">
       <SheetHeader class="border-b border-sidebar-border bg-serag-deep px-5 py-5 text-start text-serag-ivory">
         <SheetTitle class="font-display text-2xl text-serag-ivory">
           {{ t('brand.name') }}
@@ -74,6 +74,6 @@ const side = computed<'right' | 'left'>(() => (localeProperties.value.dir === 'l
           <span>{{ t('store.header.callShowroom') }}: <span class="num">{{ phone }}</span></span>
         </a>
       </div>
-    </SheetContent>
+    </LazySheetContent>
   </Sheet>
 </template>

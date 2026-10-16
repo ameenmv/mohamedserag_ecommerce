@@ -44,14 +44,16 @@ export default defineNuxtConfig({
 
   fonts: {
     families: [
-      { name: 'IBM Plex Sans Arabic', provider: 'google', weights: [400, 500, 600, 700], subsets: ['arabic', 'latin'] },
-      { name: 'Lalezar', provider: 'google', weights: [400], subsets: ['arabic', 'latin'] },
-      { name: 'Outfit', provider: 'google', weights: [400, 500, 600, 700, 800], subsets: ['latin'] },
+      { name: 'IBM Plex Sans Arabic', provider: 'google', weights: [400, 500, 600, 700], subsets: ['arabic'], preload: true },
+      { name: 'Lalezar', provider: 'google', weights: [400], subsets: ['arabic'], preload: true },
+      { name: 'Outfit', provider: 'google', weights: [400, 500, 600, 700, 800], subsets: ['latin'], preload: false },
     ],
   },
 
   // Dev only: serve the shared uploads folder at /uploads (Caddy serves it in production).
   nitro: {
+    // Serve prebuilt gzip/brotli JS and CSS; Caddy compresses in production, this covers the bare node server.
+    compressPublicAssets: { gzip: true, brotli: true },
     publicAssets: [{ dir: process.env.UPLOADS_DIR || '../../uploads', baseURL: '/uploads', maxAge: 3600 }],
   },
 
@@ -71,6 +73,10 @@ export default defineNuxtConfig({
     ],
     // Arabic-first store: '/' is always Arabic; English only via explicit /en links.
     detectBrowserLanguage: false,
+    bundle: {
+      dropMessageCompiler: true,
+      fullInstall: false,
+    },
   },
 
   shadcn: {

@@ -38,6 +38,7 @@ const items: { labelKey: string; to: string; icon: Component; showCartBadge?: bo
         <component :is="item.icon" class="size-5" aria-hidden="true" />
         <span
           v-if="item.showCartBadge"
+          aria-hidden="true"
           class="num absolute -top-1.5 -start-2.5 inline-flex min-w-4.5 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-extrabold text-accent-foreground"
         >
           {{ cart }}

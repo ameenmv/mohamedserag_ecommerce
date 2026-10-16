@@ -12,6 +12,6 @@ useSeoMeta({ title: () => t('brand.storeName') })
       <Button>{{ t('store.home.shopNow') }}</Button>
       <Button variant="outline">{{ t('store.home.bridalPackages') }}</Button>
     </div>
-    <p class="num text-sm text-muted-foreground">{{ t('store.home.samplePrice') }}</p>
+    <p class="num text-sm text-foreground/80">{{ t('store.home.samplePrice') }}</p>
   </main>
 </template>

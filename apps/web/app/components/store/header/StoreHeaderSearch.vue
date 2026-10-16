@@ -27,7 +27,7 @@ function handleSearch(): void {
         <span class="hidden sm:inline">{{ t('store.header.searchProductEllipsis') }}</span>
       </button>
     </SheetTrigger>
-    <SheetContent side="top" class="mx-auto max-w-3xl rounded-b-3xl bg-background p-6">
+    <LazySheetContent side="top" class="mx-auto max-w-3xl rounded-b-3xl bg-background p-6">
       <SheetHeader class="text-start">
         <SheetTitle class="font-display text-2xl text-primary">
           {{ t('store.header.searchTitle') }}
@@ -83,6 +83,6 @@ function handleSearch(): void {
           </NuxtLink>
         </SheetClose>
       </div>
-    </SheetContent>
+    </LazySheetContent>
   </Sheet>
 </template>

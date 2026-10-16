@@ -65,6 +65,7 @@ const whatsappUrl = computed(() =>
         <StoreHeaderBadgeButton
           to="/wishlist"
           :label="t('store.header.wishlist')"
+          :sr-text="t('store.header.wishlistCount', { count: wishlist })"
           :count="wishlist"
           :icon="Heart"
         />
@@ -72,6 +73,7 @@ const whatsappUrl = computed(() =>
         <StoreHeaderBadgeButton
           to="/compare"
           :label="t('store.header.compare')"
+          :sr-text="t('store.header.compareCount', { count: compare })"
           :count="compare"
           :icon="ArrowLeftRight"
         />

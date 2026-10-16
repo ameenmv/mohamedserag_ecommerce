@@ -14,7 +14,7 @@ const props = withDefaults(
   },
 )
 
-const { locale, locales, t } = useI18n()
+const { locale, locales } = useI18n()
 const switchLocalePath = useSwitchLocalePath()
 
 const other = computed(() => locales.value.find((l) => l.code !== locale.value)!)
@@ -25,7 +25,6 @@ const other = computed(() => locales.value.find((l) => l.code !== locale.value)!
     :to="switchLocalePath(other.code)"
     :lang="other.code"
     :hreflang="other.language"
-    :aria-label="t('locale.switch')"
     :class="
       cn(
         'inline-flex min-h-11 items-center justify-center gap-2 border border-border bg-card px-3.5 text-sm font-bold text-foreground transition-colors hover:border-accent hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-reduce:transition-none',

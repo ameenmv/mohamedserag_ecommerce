@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { Toaster } from '@/components/ui/sonner'
 import 'vue-sonner/style.css'
+
+const Toaster = defineAsyncComponent(() => import('@/components/ui/sonner').then((m) => m.Toaster))
 
 const head = useLocaleHead()
 
@@ -30,6 +31,8 @@ useHead({
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
-    <Toaster :dir="localeProperties.dir" rich-colors position="bottom-center" />
+    <ClientOnly>
+      <Toaster :dir="localeProperties.dir" rich-colors position="bottom-center" />
+    </ClientOnly>
   </div>
 </template>
