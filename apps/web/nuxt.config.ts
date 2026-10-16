@@ -73,10 +73,6 @@ export default defineNuxtConfig({
     ],
     // Arabic-first store: '/' is always Arabic; English only via explicit /en links.
     detectBrowserLanguage: false,
-    bundle: {
-      dropMessageCompiler: true,
-      fullInstall: false,
-    },
   },
 
   shadcn: {

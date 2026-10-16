@@ -3,9 +3,7 @@
     "collect": {
       "startServerCommand": "node apps/web/.output/server/index.mjs",
       "startServerReadyPattern": "Listening",
-      "url": [
-        "http://localhost:3000/"
-      ],
+      "url": ["http://localhost:3000/"],
       "numberOfRuns": 3,
       "settings": {
         "formFactor": "mobile",
@@ -41,6 +39,12 @@
           "error",
           {
             "maxNumericValue": 0.1
+          }
+        ],
+        "errors-in-console": [
+          "error",
+          {
+            "maxLength": 0
           }
         ]
       }
