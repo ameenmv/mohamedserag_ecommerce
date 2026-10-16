@@ -50,7 +50,7 @@
 | Gate | Result |
 |---|---|
 | Lint + typecheck (all packages) | ✅ |
-| Unit tests: shared 47 · ui 3 · web 17 · api 26 (93 total) | ✅ |
+| Unit tests: shared 47 · ui 3 · web 38 · api 26 (114 total) | ✅ |
 | API tests against real test DB (seeded in global setup) | ✅ 17/17 |
 | Browser e2e (smoke 4, admin login 2, test-seed signed-in 1) | ✅ 7/7 |
 | Production builds (API, web) | ✅ |
@@ -58,6 +58,15 @@
 | Lighthouse CI budgets (perf ≥ 0.9, a11y = 1, LCP < 2.5 s, CLS < 0.1 on `/`) | ⏳ Drafted locally, first GitHub run pending push |
 
 ## Found and fixed during review
+
+### 2026-10-16: Web architecture refactor, bilingual UI (ar/en) & engineering skill
+- **Web architecture refactor:** Refactored pages under `apps/web/app/pages/` to thin composition shells handling routes, SEO/meta, and layout selection only. Split the monolithic admin login into `components/admin/login/*` with generic form controls in `components/form/{FormField,FormPasswordInput,FormAlert}.vue` and `components/common/LocaleSwitcher.vue`. Reorganized storefront header/footer and admin sidebar/topbar/dashboard into dedicated subcomponents. Extracted state and API operations into composables (`useAdminSession`, `useAdminAuth`, `useApiClient` with `adminFetch`, `useLoginForm`, `useAdminShortcuts`, `useAdminRouteTitleSync`, `useNavActive`), pure utilities (`utils/{api,auth,i18n}.ts`), `constants/navigation.ts`, and `types/admin.ts`.
+- **Dev-only prefilled admin login:** Configured `apps/web/nuxt.config.ts` via `$development.runtimeConfig.public.devLogin` to prefill the login form with `ADMIN_EMAIL` and `ADMIN_PASSWORD` (fallback `admin@serag.local` / `change-me`) during local development. In production builds, `devLogin` fields are strictly empty strings.
+- **Bilingual UI (Arabic default, English):** Configured `@nuxtjs/i18n` with Arabic as default RTL (`/`) and English as LTR (`/en/...`) using `prefix_except_default`. Locale preference is saved in the `serag_locale` cookie, `useLocaleHead` keeps document `lang`, `dir`, and hreflang meta up to date, English fonts are overridden in `main.css`, login API error codes are mapped to localized keys (`loginErrorKey`), and locale parity is enforced by `apps/web/test/i18n-messages.test.ts`.
+- **Agent engineering handbook:** Documented monorepo conventions, layer rules, and definition of done in `.agents/skills/serag-engineering/` (`SKILL.md` + reference guides), mirrored to `AGENTS.md`, `CLAUDE.md`, and `.claude/skills/serag-engineering`.
+- **Review catches:**
+  - *Component auto-import mismatch:* Nuxt auto-import requires component filenames in nested folders to match directory prefixes (e.g. `components/admin/dashboard/AdminDashboardWelcomeHeader.vue` registers as `<AdminDashboardWelcomeHeader>`). Shortened or mismatched tags caused component resolution errors in Vue and were fixed.
+  - *Circular import between auth composables:* Splitting auth actions from session state revealed a circular dependency when auth functions and fetch wrappers imported each other. Resolved by isolating state in `useAdminSession` and consumers in `useAdminAuth` and `useApiClient` (`adminFetch`).
 
 ### In this round (Claude review of T012b, T012c, T014, Docker & tests)
 - **Prisma JSON zones parsed with Zod:** delivery zones stored in JSON columns now go through Zod schemas so invalid runtime payloads cannot bypass validation.

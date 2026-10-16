@@ -33,6 +33,15 @@ docker/         compose.dev.yml (DBs), compose.yml (full stack), compose.e2e.yml
 prototype/      the original HTML prototype and HTML admin (design reference only)
 ```
 
+In `apps/web`, route pages under `app/pages/` are thin composition entry points handling routes, layouts, and SEO metadata. UI is organized by domain under `components/store/`, `components/admin/` (sidebar, topbar, dashboard, login subcomponents), `components/form/`, and `components/common/`. Stateful reactive logic lives in composables (`useAdminSession`, `useAdminAuth`, `useApiClient`, `useLoginForm`, `useNavActive`), while pure, framework-agnostic logic lives in unit-tested utilities (`utils/`). For complete directory layout and layering rules, see [.agents/skills/serag-engineering/references/architecture.md](../.agents/skills/serag-engineering/references/architecture.md).
+
+### Internationalization (i18n)
+
+Serag is bilingual, supporting Arabic (primary/default) and English:
+- **Locales & URLs:** Powered by `@nuxtjs/i18n` with strategy `prefix_except_default`. Arabic (`ar`, RTL) is served at `/` and English (`en`, LTR) under `/en/...` (e.g. `/en/admin/login`). Active locale is persisted in the `serag_locale` cookie, and document attributes (`lang`, `dir`, hreflang links) are bound reactively via `useLocaleHead`.
+- **Message dictionaries:** Translation strings live in `apps/web/i18n/locales/ar.json` and `en.json`.
+- **Parity testing:** Key parity is strictly enforced by `apps/web/test/i18n-messages.test.ts`. Every user-facing UI string must exist in both files with identical key structures and no empty strings.
+
 ## Root scripts
 
 | Script | What it does |
@@ -60,6 +69,8 @@ pnpm install
 pnpm db:setup                                # Postgres (5432 dev, 5433 test) + migrate + generate + seed
 pnpm dev                                     # web :3000, api :4000
 ```
+
+In development (`nuxt dev`), the admin login form at `http://localhost:3000/admin/login` is automatically prefilled using `ADMIN_EMAIL` and `ADMIN_PASSWORD` from `.env` (fallback `admin@serag.local` / `change-me`) via `$development.runtimeConfig.public.devLogin`. In production builds, `devLogin` credentials always ship as empty strings.
 
 ## Test
 
@@ -157,7 +168,7 @@ The GitHub Actions CI workflow contains three jobs:
 1. **`checks`:** Runs on `ubuntu-latest` with a Postgres 17 service. Steps:
    - Lint (`pnpm lint`)
    - Typecheck (`pnpm typecheck`)
-   - Unit tests (`pnpm test` — 93 tests across 4 packages)
+   - Unit tests (`pnpm test` — 114 tests across 4 packages)
    - API tests (`pnpm --filter @serag/api test:e2e` — 17 tests against real DB)
    - Build (`pnpm build`)
    - Browser e2e (`pnpm --filter @serag/e2e exec e2e run` — 7 tests via TesterArmy runner)
@@ -170,9 +181,12 @@ The GitHub Actions CI workflow contains three jobs:
 
 *Note: The CI workflow is committed locally and verified; the first remote GitHub run is pending push.*
 
+## Working with AI agents
+
+All coding agents and contributors must follow the engineering guidelines in [AGENTS.md](../AGENTS.md) and load the repository skill at [.agents/skills/serag-engineering/SKILL.md](../.agents/skills/serag-engineering/SKILL.md) before writing, modifying, or reviewing code. Architecture patterns, conventions, and definition-of-done checklists are documented in its reference guides.
+
 ## Working with Argon and Flash
 
-Claude writes a brief per task in `specs/002-phase1-launch/tasks.md`, Gemini implements it through `agy` (`.agents/skills/agy-delegate`), and Claude installs dependencies, runs every gate and reviews the diff before committing. Gemini may write to `apps/`, `packages/`, `tests/` and `docker/`, and runs no shell commands.
+Claude writes a brief per task in `specs/002-phase1-launch/tasks.md`, Gemini implements it through `agy` (`.agents/skills/agy-delegate`), and Claude installs dependencies, runs every gate and reviews the diff before committing. Gemini may write to `apps/`, `packages/`, `tests/`, `docker/`, `docs/`, `.github/`, the `serag-engineering` skill, `AGENTS.md` and `CLAUDE.md`, and runs no shell commands.
 
 **Model note:** Tasks up to T011 were implemented by Gemini 4 Argon (`A`). After Argon's quota was exhausted on ~16 Oct (resets ~23 Oct), tasks T012b, T012c, T014, and T015 were implemented by Gemini 3.8 Flash (`F`) via Antigravity, and reviewed/verified by Claude (`C`).
-

@@ -80,11 +80,16 @@ pnpm dev
 
 | What | URL |
 |---|---|
-| Store | http://localhost:3000 |
+| Store (Arabic default) | http://localhost:3000 |
+| Store (English) | http://localhost:3000/en |
 | Admin dashboard | http://localhost:3000/admin (sign in with `ADMIN_EMAIL` / `ADMIN_PASSWORD`) |
 | API health | http://localhost:4000/api/health |
 
 `pnpm dev` builds the shared package first, then runs the web (Nuxt) and the API (NestJS) in watch mode. Stop both with `Ctrl + C`.
+
+In development, the login page at http://localhost:3000/admin/login is prefilled automatically with the seeded admin credentials from `.env` (`ADMIN_EMAIL` and `ADMIN_PASSWORD`), so you can log in with one click. The storefront and admin portal also offer an English interface at http://localhost:3000/en (and http://localhost:3000/en/admin).
+
+If you are a new contributor or coding agent, read [AGENTS.md](../AGENTS.md) for mandatory architecture rules, conventions, and quality gates before making changes.
 
 **Run only one side:**
 
@@ -200,6 +205,7 @@ pnpm --filter @serag/e2e exec e2e telemetry disable
 
 ## Where to go next
 
+- [`AGENTS.md`](../AGENTS.md): contributor and AI agent guidelines, core rules, and quality gates
 - [`PHASE-1.md`](PHASE-1.md): what is done and what comes next
 - [`STACK.md`](STACK.md): pinned versions and technical details
 - [`PRD.md`](PRD.md): the full product requirements
