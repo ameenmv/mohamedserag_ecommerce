@@ -1,7 +1,5 @@
 <div align="center">
 
-<img src="docs/assets/banner.svg" alt="معرض محمد سراج — Mohamed Serag e-commerce" width="100%"/>
-
 # Mohamed Serag · معرض محمد سراج
 
 **An Arabic-first online store for a home-appliance showroom in Mansoura, Egypt, family-run since 1972.**
@@ -279,6 +277,7 @@ Implementation runs on an AI pair workflow. Claude plans each task and writes a 
 
 | Document | Contents |
 |---|---|
+| [`docs/PHASE-1.md`](docs/PHASE-1.md) | Phase 1 progress: what is done, in progress and next |
 | [`docs/PRD.md`](docs/PRD.md) | Vision, personas, decisions, user stories with acceptance criteria, data model, KPIs |
 | [`docs/STACK.md`](docs/STACK.md) | Pinned versions, commands, Docker, telemetry notes |
 | [`specs/002-phase1-launch/`](specs/002-phase1-launch) | Phase 1 spec, plan and tasks |
