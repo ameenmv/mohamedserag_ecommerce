@@ -35,6 +35,11 @@ export default defineNuxtConfig({
     ],
   },
 
+  // Dev only: serve the shared uploads folder at /uploads (Caddy serves it in production).
+  nitro: {
+    publicAssets: [{ dir: process.env.UPLOADS_DIR || '../../uploads', baseURL: '/uploads', maxAge: 3600 }],
+  },
+
   image: {
     // Uploaded product images live on the shared `uploads` volume (see docker/compose.yml).
     ipx: { fs: { dir: process.env.UPLOADS_DIR || '../../uploads' } },

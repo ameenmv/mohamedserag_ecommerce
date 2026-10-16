@@ -162,3 +162,6 @@ export const ALL_PERMISSIONS = [
 ] as const
 
 export type Permission = (typeof ALL_PERMISSIONS)[number]
+
+/** Phase 1 has one role holding every permission (PRD US-12.1); more roles come in Phase 2 (US-19.2). */
+export const OWNER_ROLE_KEY = 'owner'
