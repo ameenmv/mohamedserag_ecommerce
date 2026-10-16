@@ -1,7 +1,11 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
-import { APP_GUARD } from '@nestjs/core'
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core'
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
+import { AuditInterceptor } from './audit/audit.interceptor.js'
+import { AuthModule } from './auth/auth.module.js'
+import { PermissionGuard } from './auth/permission.guard.js'
+import { SessionGuard } from './auth/session.guard.js'
 import { HealthController } from './health.controller.js'
 import { PrismaModule } from './prisma/prisma.module.js'
 
@@ -10,8 +14,15 @@ import { PrismaModule } from './prisma/prisma.module.js'
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ['../../.env', '.env'] }),
     ThrottlerModule.forRoot([{ ttl: 60_000, limit: 120 }]),
     PrismaModule,
+    AuthModule,
   ],
   controllers: [HealthController],
-  providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
+  providers: [
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
+    { provide: APP_GUARD, useClass: SessionGuard },
+    { provide: APP_GUARD, useClass: PermissionGuard },
+    { provide: APP_INTERCEPTOR, useClass: AuditInterceptor },
+  ],
 })
 export class AppModule {}
+
