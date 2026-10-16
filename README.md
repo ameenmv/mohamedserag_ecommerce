@@ -187,11 +187,11 @@ git clone https://github.com/ameenmv/mohamedserag_ecommerce.git
 cd mohamedserag_ecommerce
 cp .env.example .env              # set ADMIN_EMAIL / ADMIN_PASSWORD
 pnpm install
-pnpm db:up                        # Postgres for dev (5432) and tests (5433)
-pnpm --filter @serag/api exec prisma migrate dev
-pnpm --filter @serag/api exec prisma db seed
+pnpm db:setup                     # Postgres in Docker + migrations + Prisma client + demo data
 pnpm dev                          # web → http://localhost:3000 · api → http://localhost:4000/api
 ```
+
+Full step-by-step guide with troubleshooting: **[docs/GETTING-STARTED.md](docs/GETTING-STARTED.md)**.
 
 Open `http://localhost:3000` for the store and `http://localhost:3000/admin` for the dashboard, then sign in with the admin from your `.env`.
 
@@ -227,7 +227,9 @@ Then open `http://localhost:8765` for the store and `http://localhost:8765/admin
 | `pnpm test` | Unit tests in every package |
 | `pnpm --filter @serag/api test:e2e` | API tests against the test database |
 | `pnpm test:e2e` | Browser end-to-end tests (starts web and API if they are not running) |
+| `pnpm db:setup` | Databases + migrations + Prisma client + demo data |
 | `pnpm db:up` · `pnpm db:down` | Start or stop the dev databases |
+| `pnpm db:migrate` · `pnpm db:seed` · `pnpm db:studio` | Migrate, reseed, browse the data |
 
 ## Testing
 
@@ -277,6 +279,7 @@ Implementation runs on an AI pair workflow. Claude plans each task and writes a 
 
 | Document | Contents |
 |---|---|
+| [`docs/GETTING-STARTED.md`](docs/GETTING-STARTED.md) | Run the project locally, step by step |
 | [`docs/PHASE-1.md`](docs/PHASE-1.md) | Phase 1 progress: what is done, in progress and next |
 | [`docs/PRD.md`](docs/PRD.md) | Vision, personas, decisions, user stories with acceptance criteria, data model, KPIs |
 | [`docs/STACK.md`](docs/STACK.md) | Pinned versions, commands, Docker, telemetry notes |

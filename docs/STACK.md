@@ -38,9 +38,7 @@ prototype/      the original HTML prototype and HTML admin (design reference onl
 ```bash
 cp .env.example .env
 pnpm install
-pnpm db:up                                   # Postgres on 5432 (dev) and 5433 (test)
-pnpm --filter @serag/api exec prisma migrate dev
-pnpm --filter @serag/api exec prisma db seed
+pnpm db:setup                                # Postgres (5432 dev, 5433 test) + migrate + generate + seed
 pnpm dev                                     # web :3000, api :4000
 ```
 
