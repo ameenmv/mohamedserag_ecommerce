@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="360" viewBox="0 0 1280 360" role="img" aria-label="محمد سراج — Mohamed Serag e-commerce">
+  <defs>
+    <radialGradient id="glow" cx="18%" cy="20%" r="70%">
+      <stop offset="0" stop-color="#3D4A23" stop-opacity=".9"/>
+      <stop offset="1" stop-color="#0E1A13" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#D2C27A"/>
+      <stop offset="1" stop-color="#B5A45C"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="360" rx="28" fill="#0E1A13"/>
+  <rect width="1280" height="360" rx="28" fill="url(#glow)"/>
+  <text x="70" y="330" font-family="Outfit, Segoe UI, Arial, sans-serif" font-size="300" font-weight="800" fill="none" stroke="#B5A45C" stroke-opacity=".12" stroke-width="2">1972</text>
+  <g transform="translate(1110 70)">
+    <rect width="100" height="100" rx="24" fill="#2A4D38" stroke="#B5A45C" stroke-opacity=".5"/>
+    <text x="50" y="66" text-anchor="middle" font-family="Outfit, Segoe UI, Arial, sans-serif" font-size="44" font-weight="800" fill="url(#gold)">MS</text>
+  </g>
+  <text x="1080" y="128" text-anchor="end" direction="rtl" font-family="Lalezar, 'IBM Plex Sans Arabic', Tahoma, sans-serif" font-size="64" font-weight="700" fill="#FAF7EE">معرض محمد سراج</text>
+  <text x="1080" y="176" text-anchor="end" font-family="Outfit, Segoe UI, Arial, sans-serif" font-size="18" letter-spacing="6" fill="#B5A45C">SINCE 1972 · MANSOURA</text>
+  <text x="1210" y="250" text-anchor="end" direction="rtl" font-family="'IBM Plex Sans Arabic', Tahoma, sans-serif" font-size="26" fill="#C9D5C6">أجهزة منزلية وأدوات مطبخ تركي · جهاز العروسة · دفع عند الاستلام وإنستا باي</text>
+  <text x="1210" y="296" text-anchor="end" font-family="Outfit, Segoe UI, Arial, sans-serif" font-size="20" fill="#97A39A">Arabic-first e-commerce · Nuxt 4 · NestJS · PostgreSQL</text>
+</svg>

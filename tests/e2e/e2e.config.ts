@@ -1,13 +1,36 @@
 import type { E2EConfig } from 'e2e';
 import { web } from '@e2e-dev/web';
 
+// Local runs read the repo .env (ADMIN_EMAIL / ADMIN_PASSWORD); CI passes real env vars.
+try {
+  process.loadEnvFile('../../.env');
+} catch {
+  // no .env: rely on the environment
+}
+
 export default {
   targets: [{
     engine: web(),
     app: {
+      // Dev: web on :3000, API on :4000. Docker/prod: both behind Caddy on one origin (set APP_URL and API_URL to it).
       url: process.env.APP_URL ?? 'http://localhost:3000',
-      // Or let the runner start the dev server:
-      // command: { executable: 'npm', args: ['run', 'dev'] },
+      // Without APP_URL the runner starts web + API (turbo `pnpm dev` at the repo root) and stops them after the run.
+      ...(process.env.APP_URL
+        ? {}
+        : {
+            command: {
+              executable: 'pnpm',
+              args: ['dev'],
+              cwd: '../..',
+              inheritEnv: ['NODE_ENV', 'XDG_*'],
+              startupTimeout: 180_000,
+              reuseExisting: true,
+              log: '.e2e/logs/app.log',
+            },
+          }),
     },
   }],
+  credentials: {
+    admin: { username: process.env.ADMIN_EMAIL ?? '', password: process.env.ADMIN_PASSWORD ?? '' },
+  },
 } satisfies E2EConfig;
