@@ -38,7 +38,7 @@ export default defineNuxtConfig({
   image: {
     // Uploaded product images live on the shared `uploads` volume (see docker/compose.yml).
     ipx: { fs: { dir: process.env.UPLOADS_DIR || '../../uploads' } },
-    formats: ['avif', 'webp'],
+    format: ['avif', 'webp'],
   },
 
   i18n: {
