@@ -3,9 +3,11 @@
  */
 export function useAdminUser() {
   const { user, logout } = useAdminAuth()
+  const { t } = useI18n()
+
   return {
     get name() {
-      return user.value?.name ?? 'المدير'
+      return user.value?.name ?? t('admin.topbar.adminRole')
     },
     user,
     logout,

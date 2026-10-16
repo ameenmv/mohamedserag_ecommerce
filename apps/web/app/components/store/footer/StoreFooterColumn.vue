@@ -1,0 +1,30 @@
+<script setup lang="ts">
+import type { FooterLinkItem } from '~/constants/navigation'
+
+defineProps<{
+  title: string
+  links: readonly FooterLinkItem[]
+  gridColsClass?: string
+}>()
+
+const { t } = useI18n()
+const localePath = useLocalePath()
+</script>
+
+<template>
+  <div class="flex flex-col gap-2.5">
+    <h2 class="mb-1 text-lg font-bold text-serag-ivory">
+      {{ title }}
+    </h2>
+    <div :class="gridColsClass">
+      <NuxtLink
+        v-for="link in links"
+        :key="link.to"
+        :to="localePath(link.to)"
+        class="inline-flex min-h-11 items-center rounded-lg px-1 text-base transition-colors hover:text-serag-gold-hi focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:outline-none motion-reduce:transition-none"
+      >
+        {{ t(link.labelKey) }}
+      </NuxtLink>
+    </div>
+  </div>
+</template>

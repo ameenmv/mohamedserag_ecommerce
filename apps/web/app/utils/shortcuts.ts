@@ -1,26 +1,26 @@
 export const ADMIN_SHORTCUT_WINDOW_MS = 1500
 
-export type AdminNavGroup = 'الرئيسية' | 'المتجر' | 'المحتوى' | 'النظام'
+export type AdminNavGroup = 'main' | 'store' | 'content' | 'system'
 
 export interface AdminNavShortcut {
   key: string
   hint: string
   paletteHint: string
-  label: string
+  labelKey: string
   to: string
   group: AdminNavGroup
 }
 
 export const ADMIN_NAV_SHORTCUTS: readonly AdminNavShortcut[] = [
-  { key: 'h', hint: 'G H', paletteHint: 'G ثم H', label: 'نظرة عامة', to: '/admin', group: 'الرئيسية' },
-  { key: 'o', hint: 'G O', paletteHint: 'G ثم O', label: 'الطلبات', to: '/admin/orders', group: 'المتجر' },
-  { key: 'p', hint: 'G P', paletteHint: 'G ثم P', label: 'المنتجات', to: '/admin/products', group: 'المتجر' },
-  { key: 'b', hint: 'G B', paletteHint: 'G ثم B', label: 'جهاز العروسة', to: '/admin/bridal', group: 'المتجر' },
-  { key: 'm', hint: 'G M', paletteHint: 'G ثم M', label: 'العروض والكوبونات', to: '/admin/promotions', group: 'المتجر' },
-  { key: 'r', hint: 'G R', paletteHint: 'G ثم R', label: 'التقييمات', to: '/admin/reviews', group: 'المتجر' },
-  { key: 'e', hint: 'G E', paletteHint: 'G ثم E', label: 'محرر الموقع', to: '/admin/content', group: 'المحتوى' },
-  { key: 't', hint: 'G T', paletteHint: 'G ثم T', label: 'التقارير', to: '/admin/reports', group: 'النظام' },
-  { key: 's', hint: 'G S', paletteHint: 'G ثم S', label: 'الإعدادات', to: '/admin/settings', group: 'النظام' },
+  { key: 'h', hint: 'G H', paletteHint: 'G H', labelKey: 'admin.nav.overview', to: '/admin', group: 'main' },
+  { key: 'o', hint: 'G O', paletteHint: 'G O', labelKey: 'admin.nav.orders', to: '/admin/orders', group: 'store' },
+  { key: 'p', hint: 'G P', paletteHint: 'G P', labelKey: 'admin.nav.products', to: '/admin/products', group: 'store' },
+  { key: 'b', hint: 'G B', paletteHint: 'G B', labelKey: 'admin.nav.bridal', to: '/admin/bridal', group: 'store' },
+  { key: 'm', hint: 'G M', paletteHint: 'G M', labelKey: 'admin.nav.promotions', to: '/admin/promotions', group: 'store' },
+  { key: 'r', hint: 'G R', paletteHint: 'G R', labelKey: 'admin.nav.reviews', to: '/admin/reviews', group: 'store' },
+  { key: 'e', hint: 'G E', paletteHint: 'G E', labelKey: 'admin.nav.content', to: '/admin/content', group: 'content' },
+  { key: 't', hint: 'G T', paletteHint: 'G T', labelKey: 'admin.nav.reports', to: '/admin/reports', group: 'system' },
+  { key: 's', hint: 'G S', paletteHint: 'G S', labelKey: 'admin.nav.settings', to: '/admin/settings', group: 'system' },
 ] as const
 
 export const ADMIN_SHORTCUT_ROUTES: Readonly<Record<string, string>> = Object.freeze(

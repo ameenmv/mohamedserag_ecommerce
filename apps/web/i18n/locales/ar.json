@@ -1,3 +1,178 @@
 {
-  "brand": { "name": "محمد سراج", "since": "من 1972" }
+  "brand": {
+    "name": "محمد سراج",
+    "storeName": "معرض محمد سراج",
+    "since": "من 1972"
+  },
+  "common": {
+    "mainNav": "القائمة الرئيسية",
+    "openMenu": "افتح القائمة",
+    "skipToContent": "انتقل للمحتوى",
+    "search": "بحث",
+    "logout": "تسجيل الخروج",
+    "undo": "تراجع",
+    "showPassword": "إظهار كلمة المرور",
+    "hidePassword": "إخفاء كلمة المرور"
+  },
+  "locale": {
+    "switch": "تغيير اللغة",
+    "ar": "العربية",
+    "en": "English"
+  },
+  "store": {
+    "header": {
+      "announcementAuthentic": "أصلي 100% وبضمان حقيقي",
+      "announcementDelivery": "استلام من المعرض أو توصيل لحد باب البيت",
+      "brandAria": "محمد سراج - الرئيسية",
+      "home": "الرئيسية",
+      "shop": "الأقسام",
+      "bridal": "جهاز العروسة",
+      "offers": "العروض",
+      "guides": "دليل الشراء",
+      "wishlist": "المفضلة",
+      "compare": "المقارنة",
+      "cart": "السلة",
+      "whatsapp": "واتساب",
+      "whatsappAria": "تواصل معنا عبر واتساب",
+      "searchProduct": "ابحث عن منتج",
+      "searchProductEllipsis": "ابحث عن منتج…",
+      "searchTitle": "ابحث في معرض محمد سراج",
+      "searchDescription": "ابحث عن ثلاجة، غسالة، شاشة، بوتاجاز، تكييف أو أدوات مطبخ تركي",
+      "searchPlaceholder": "ابحث عن ثلاجة، غسالة، شاشة، بوتاجاز...",
+      "quickCategories": "أقسام سريعة:",
+      "allProducts": "كل المنتجات",
+      "quickNavAria": "روابط سريعة",
+      "mobileMenuSubtitle": "SINCE 1972 · المنصورة",
+      "browseSite": "تصفح الموقع",
+      "directWhatsapp": "تواصل واتساب مباشر",
+      "callShowroom": "اتصل بالمعرض"
+    },
+    "footer": {
+      "whatsappPrefill": "السلام عليكم، عندي استفسار من موقع معرض محمد سراج 👋",
+      "shopTitle": "تسوّق",
+      "allSections": "كل الأقسام",
+      "infoTitle": "معلومات وسياسات المعرض",
+      "about": "من نحن",
+      "delivery": "التوصيل",
+      "returns": "الاسترجاع",
+      "warranty": "الضمان",
+      "privacy": "الخصوصية",
+      "faq": "الأسئلة الشائعة",
+      "traders": "التجار",
+      "contactTitle": "تواصل معانا",
+      "mansouraEgypt": "المنصورة، مصر",
+      "showroomAddress": "[عنوان المعرض]",
+      "chatOnWhatsapp": "كلّمنا على واتساب",
+      "brandDescription": "أجهزة كهربائية وأدوات منزلية بضمان حقيقي، من المنصورة لكل بيت مصري. خبرة وثقة من سنة 1972 في تجهيز البيوت والعرايس بأفضل الأسعار.",
+      "vatNotice": "الأسعار شاملة ضريبة القيمة المضافة",
+      "availablePaymentMethods": "طرق الدفع المتاحة:",
+      "cashOnDelivery": "كاش عند الاستلام",
+      "instapay": "إنستا باي",
+      "vodafoneCash": "فودافون كاش",
+      "legacyTagline": "ثقة لها تاريخ",
+      "allRightsReserved": "كل الحقوق محفوظة.",
+      "deliveryNotice": "توصيل بعربيات المعرض لكل محافظات مصر"
+    },
+    "bottomNav": {
+      "ariaLabel": "تنقل سريع للموبايل",
+      "bridal": "العروسة",
+      "account": "حسابي"
+    },
+    "home": {
+      "subtitle": "أجهزة منزلية وأدوات مطبخ — المنصورة",
+      "shopNow": "تسوّق الآن",
+      "bridalPackages": "جهاز العروسة",
+      "samplePrice": "28,900 ج.م"
+    }
+  },
+  "admin": {
+    "nav": {
+      "ariaLabel": "القائمة الرئيسية للوحة التحكم",
+      "sheetTitle": "قائمة لوحة التحكم",
+      "sheetDescription": "تنقل بين أقسام لوحة تحكم معرض محمد سراج",
+      "statusOnline": "الموقع منشور وشغال",
+      "statusDesc": "تقدر تراجع شكل المتجر للعملاء في أي وقت من تاب جديد.",
+      "openStore": "افتح الموقع",
+      "groups": {
+        "main": "الرئيسية",
+        "store": "المتجر",
+        "content": "المحتوى",
+        "system": "النظام"
+      },
+      "overview": "نظرة عامة",
+      "orders": "الطلبات",
+      "products": "المنتجات",
+      "bridal": "جهاز العروسة",
+      "promotions": "العروض والكوبونات",
+      "reviews": "التقييمات",
+      "content": "محرر الموقع",
+      "reports": "التقارير",
+      "settings": "الإعدادات"
+    },
+    "login": {
+      "title": "تسجيل الدخول",
+      "subtitle": "لوحة تحكم معرض محمد سراج — سجّل دخولك لإدارة الطلبات والمنتجات",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "submit": "دخول",
+      "submitting": "جاري تسجيل الدخول...",
+      "sideTitle": "إدارة معرض",
+      "sideDescription": "متابعة الطلبات، تأكيد التحويلات، إدارة باقات العروسة وتحديث المخزون والأسعار في مكان واحد.",
+      "features": {
+        "orders": "متابعة الطلبات وتأكيد الدفع بضغطة واحدة",
+        "bridal": "إدارة حجوزات العروسة وفترة تثبيت الأسعار",
+        "catalog": "تحديث الكتالوج وعروض الفلاش والكوبونات"
+      },
+      "errors": {
+        "invalidCredentials": "البريد أو كلمة المرور غير صحيحة",
+        "tooManyAttempts": "محاولات دخول كثيرة، يرجى المحاولة لاحقاً"
+      }
+    },
+    "dashboard": {
+      "welcome": "أهلاً {name}",
+      "subtitle": "نظرة عامة على أداء المعرض والطلبات اليومية",
+      "emptyState": "لوحة التحكم هتتملي لما الطلبات تبدأ توصل"
+    },
+    "topbar": {
+      "portalSubtitle": "لوحة التحكم · معرض محمد سراج",
+      "shortcutsTitle": "اختصارات لوحة المفاتيح (?)",
+      "userMenuAria": "قائمة حساب المدير",
+      "fullAccess": "صلاحية كاملة",
+      "adminRole": "المدير"
+    },
+    "shortcuts": {
+      "title": "اختصارات لوحة المفاتيح",
+      "description": "اضغط G ثم حرف الصفحة خلال 1.5 ثانية للانتقال السريع.",
+      "descriptionPress": "اضغط",
+      "descriptionHint": "ثم حرف الصفحة خلال 1.5 ثانية للانتقال السريع.",
+      "pageNavigation": "التنقل بين الصفحات",
+      "generalCommands": "أوامر عامة",
+      "openCommandPalette": "فتح لوحة البحث والأوامر",
+      "showShortcutsDialog": "عرض نافذة الاختصارات",
+      "gThen": "G ثم {key}"
+    },
+    "commandPalette": {
+      "title": "البحث والأوامر",
+      "description": "ابحث عن صفحة أو أمر في لوحة تحكم معرض محمد سراج",
+      "placeholder": "ابحث عن صفحة أو أمر…",
+      "noResults": "مفيش نتايج مطابقة للبحث.",
+      "pages": "الصفحات",
+      "commands": "الأوامر",
+      "toggleTheme": "تبديل الوضع الليلي",
+      "toggleThemeSearch": "تبديل الوضع الليلي الوضع الفاتح المظهر",
+      "lightMode": "الوضع الفاتح",
+      "darkMode": "الوضع الليلي",
+      "openStore": "افتح الموقع",
+      "openStoreSearch": "افتح الموقع المتجر الرئيسي تاب جديد",
+      "inNewTab": "في تاب جديد"
+    }
+  },
+  "validation": {
+    "emailRequired": "يرجى إدخال البريد الإلكتروني",
+    "emailInvalid": "البريد الإلكتروني غير صحيح",
+    "passwordRequired": "يرجى إدخال كلمة المرور"
+  },
+  "errors": {
+    "generic": "حدث خطأ غير متوقع، يرجى المحاولة مرة أخرى"
+  }
 }

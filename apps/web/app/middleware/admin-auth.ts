@@ -1,9 +1,11 @@
 export default defineNuxtRouteMiddleware(async (to) => {
   const { user, fetchMe } = useAdminAuth()
+  const localePath = useLocalePath()
   if (!user.value) {
     await fetchMe()
   }
   if (!user.value) {
-    return navigateTo(`/admin/login?next=${encodeURIComponent(to.fullPath)}`)
+    const loginPath = localePath('/admin/login')
+    return navigateTo(`${loginPath}?next=${encodeURIComponent(to.fullPath)}`)
   }
 })

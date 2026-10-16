@@ -1,0 +1,178 @@
+{
+  "brand": {
+    "name": "Mohamed Serag",
+    "storeName": "Mohamed Serag Showroom",
+    "since": "Since 1972"
+  },
+  "common": {
+    "mainNav": "Main Navigation",
+    "openMenu": "Open Menu",
+    "skipToContent": "Skip to content",
+    "search": "Search",
+    "logout": "Logout",
+    "undo": "Undo",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password"
+  },
+  "locale": {
+    "switch": "Change language",
+    "ar": "العربية",
+    "en": "English"
+  },
+  "store": {
+    "header": {
+      "announcementAuthentic": "100% Authentic with Genuine Warranty",
+      "announcementDelivery": "Showroom Pickup or Doorstep Delivery",
+      "brandAria": "Mohamed Serag - Home",
+      "home": "Home",
+      "shop": "Departments",
+      "bridal": "Bridal Packages",
+      "offers": "Offers",
+      "guides": "Buying Guide",
+      "wishlist": "Wishlist",
+      "compare": "Compare",
+      "cart": "Cart",
+      "whatsapp": "WhatsApp",
+      "whatsappAria": "Contact us via WhatsApp",
+      "searchProduct": "Search for a product",
+      "searchProductEllipsis": "Search for a product…",
+      "searchTitle": "Search Mohamed Serag Showroom",
+      "searchDescription": "Search for refrigerators, washing machines, TVs, cookers, ACs, or Turkish kitchenware",
+      "searchPlaceholder": "Search for refrigerator, washing machine, TV, cooker...",
+      "quickCategories": "Quick Categories:",
+      "allProducts": "All Products",
+      "quickNavAria": "Quick links",
+      "mobileMenuSubtitle": "SINCE 1972 · Mansoura",
+      "browseSite": "Browse Site",
+      "directWhatsapp": "Direct WhatsApp Chat",
+      "callShowroom": "Call Showroom"
+    },
+    "footer": {
+      "whatsappPrefill": "Hello, I have an inquiry from Mohamed Serag Showroom website 👋",
+      "shopTitle": "Shop",
+      "allSections": "All Departments",
+      "infoTitle": "Showroom Info & Policies",
+      "about": "About Us",
+      "delivery": "Delivery",
+      "returns": "Returns",
+      "warranty": "Warranty",
+      "privacy": "Privacy Policy",
+      "faq": "FAQ",
+      "traders": "Wholesale & Traders",
+      "contactTitle": "Contact Us",
+      "mansouraEgypt": "Mansoura, Egypt",
+      "showroomAddress": "[Showroom Address]",
+      "chatOnWhatsapp": "Chat on WhatsApp",
+      "brandDescription": "Home appliances and kitchenware with genuine warranty, from Mansoura to every Egyptian home. Trust and experience since 1972 in outfitting homes and bridal setups at the best prices.",
+      "vatNotice": "Prices include Value Added Tax (VAT)",
+      "availablePaymentMethods": "Accepted Payment Methods:",
+      "cashOnDelivery": "Cash on Delivery",
+      "instapay": "InstaPay",
+      "vodafoneCash": "Vodafone Cash",
+      "legacyTagline": "A Legacy of Trust",
+      "allRightsReserved": "All rights reserved.",
+      "deliveryNotice": "Delivery to all Egyptian governorates via showroom fleet"
+    },
+    "bottomNav": {
+      "ariaLabel": "Mobile quick navigation",
+      "bridal": "Bridal",
+      "account": "My Account"
+    },
+    "home": {
+      "subtitle": "Home Appliances & Kitchenware — Mansoura",
+      "shopNow": "Shop Now",
+      "bridalPackages": "Bridal Packages",
+      "samplePrice": "28,900 EGP"
+    }
+  },
+  "admin": {
+    "nav": {
+      "ariaLabel": "Admin Main Navigation",
+      "sheetTitle": "Admin Menu",
+      "sheetDescription": "Navigate between sections of Mohamed Serag admin dashboard",
+      "statusOnline": "Storefront is live and running",
+      "statusDesc": "You can review the customer storefront anytime in a new tab.",
+      "openStore": "Open Storefront",
+      "groups": {
+        "main": "Main",
+        "store": "Store",
+        "content": "Content",
+        "system": "System"
+      },
+      "overview": "Overview",
+      "orders": "Orders",
+      "products": "Products",
+      "bridal": "Bridal Packages",
+      "promotions": "Promotions & Coupons",
+      "reviews": "Reviews",
+      "content": "Site Editor",
+      "reports": "Reports",
+      "settings": "Settings"
+    },
+    "login": {
+      "title": "Sign In",
+      "subtitle": "Mohamed Serag Admin Portal — Log in to manage orders and products",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign In",
+      "submitting": "Signing in...",
+      "sideTitle": "Management Portal",
+      "sideDescription": "Track orders, verify transfers, manage bridal packages, and update inventory and prices in one place.",
+      "features": {
+        "orders": "Track orders and confirm payments in one click",
+        "bridal": "Manage bridal packages and price-lock periods",
+        "catalog": "Update product catalog, flash sales, and coupons"
+      },
+      "errors": {
+        "invalidCredentials": "Invalid email or password",
+        "tooManyAttempts": "Too many login attempts. Please try again later."
+      }
+    },
+    "dashboard": {
+      "welcome": "Welcome {name}",
+      "subtitle": "Overview of showroom performance and daily orders",
+      "emptyState": "Dashboard activity will appear once orders start arriving"
+    },
+    "topbar": {
+      "portalSubtitle": "Admin Portal · Mohamed Serag Showroom",
+      "shortcutsTitle": "Keyboard Shortcuts (?)",
+      "userMenuAria": "Admin user menu",
+      "fullAccess": "Full Access",
+      "adminRole": "Admin"
+    },
+    "shortcuts": {
+      "title": "Keyboard Shortcuts",
+      "description": "Press G followed by the page letter within 1.5s for quick navigation.",
+      "descriptionPress": "Press",
+      "descriptionHint": "then the page key within 1.5s for quick navigation.",
+      "pageNavigation": "Page Navigation",
+      "generalCommands": "General Commands",
+      "openCommandPalette": "Open Search & Command Palette",
+      "showShortcutsDialog": "Show Shortcuts Dialog",
+      "gThen": "G then {key}"
+    },
+    "commandPalette": {
+      "title": "Search & Commands",
+      "description": "Search for a page or command in Mohamed Serag admin dashboard",
+      "placeholder": "Search for a page or command…",
+      "noResults": "No matching results found.",
+      "pages": "Pages",
+      "commands": "Commands",
+      "toggleTheme": "Toggle Theme",
+      "toggleThemeSearch": "toggle dark mode light mode theme appearance",
+      "lightMode": "Light Mode",
+      "darkMode": "Dark Mode",
+      "openStore": "Open Storefront",
+      "openStoreSearch": "open store storefront new tab main site",
+      "inNewTab": "in new tab"
+    }
+  },
+  "validation": {
+    "emailRequired": "Please enter your email",
+    "emailInvalid": "Invalid email address",
+    "passwordRequired": "Please enter your password"
+  },
+  "errors": {
+    "generic": "An unexpected error occurred. Please try again."
+  }
+}

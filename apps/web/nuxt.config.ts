@@ -11,9 +11,19 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      htmlAttrs: { lang: 'ar', dir: 'rtl' },
-      titleTemplate: '%s · محمد سراج',
       meta: [{ name: 'theme-color', content: '#16291E' }],
+    },
+  },
+
+  $development: {
+    runtimeConfig: {
+      public: {
+        // Prefilled admin credentials only populated in `nuxt dev`.
+        devLogin: {
+          email: process.env.ADMIN_EMAIL ?? 'admin@serag.local',
+          password: process.env.ADMIN_PASSWORD ?? 'change-me',
+        },
+      },
     },
   },
 
@@ -24,6 +34,11 @@ export default defineNuxtConfig({
       apiBase: 'http://localhost:4000/api',
       umamiHost: '',
       umamiWebsiteId: '',
+      // Only populated in nuxt dev via $development; empty in production.
+      devLogin: {
+        email: '',
+        password: '',
+      },
     },
   },
 
@@ -48,8 +63,18 @@ export default defineNuxtConfig({
 
   i18n: {
     defaultLocale: 'ar',
-    strategy: 'no_prefix',
-    locales: [{ code: 'ar', language: 'ar-EG', dir: 'rtl', file: 'ar.json' }],
+    strategy: 'prefix_except_default',
+    baseUrl: process.env.BASE_URL || process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+    locales: [
+      { code: 'ar', language: 'ar-EG', dir: 'rtl', name: 'العربية', file: 'ar.json' },
+      { code: 'en', language: 'en-US', dir: 'ltr', name: 'English', file: 'en.json' },
+    ],
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'serag_locale',
+      redirectOn: 'root',
+      alwaysRedirect: false,
+    },
   },
 
   shadcn: {

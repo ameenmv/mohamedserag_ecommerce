@@ -29,6 +29,8 @@ import { ADMIN_NAV_SHORTCUTS } from '@/utils/shortcuts'
 
 const open = defineModel<boolean>('open', { default: false })
 
+const { t } = useI18n()
+const localePath = useLocalePath()
 const { isDark, toggleTheme } = useAdminTheme()
 
 const iconByKey: Record<string, Component> = {
@@ -45,7 +47,7 @@ const iconByKey: Record<string, Component> = {
 
 function handleNavigate(to: string): void {
   open.value = false
-  navigateTo(to)
+  navigateTo(localePath(to))
 }
 
 function handleToggleTheme(): void {
@@ -56,7 +58,7 @@ function handleToggleTheme(): void {
 function handleOpenStorefront(): void {
   open.value = false
   if (import.meta.client) {
-    window.open('/', '_blank', 'noopener,noreferrer')
+    window.open(localePath('/'), '_blank', 'noopener,noreferrer')
   }
 }
 </script>
@@ -64,18 +66,18 @@ function handleOpenStorefront(): void {
 <template>
   <CommandDialog
     v-model:open="open"
-    title="البحث والأوامر"
-    description="ابحث عن صفحة أو أمر في لوحة تحكم معرض محمد سراج"
+    :title="t('admin.commandPalette.title')"
+    :description="t('admin.commandPalette.description')"
   >
-    <CommandInput placeholder="ابحث عن صفحة أو أمر…" />
+    <CommandInput :placeholder="t('admin.commandPalette.placeholder')" />
     <CommandList>
-      <CommandEmpty>مفيش نتايج مطابقة للبحث.</CommandEmpty>
+      <CommandEmpty>{{ t('admin.commandPalette.noResults') }}</CommandEmpty>
 
-      <CommandGroup heading="الصفحات">
+      <CommandGroup :heading="t('admin.commandPalette.pages')">
         <CommandItem
           v-for="page in ADMIN_NAV_SHORTCUTS"
           :key="page.to"
-          :value="`${page.label} ${page.group} ${page.paletteHint} ${page.hint}`"
+          :value="`${t(page.labelKey)} ${t(`admin.nav.groups.${page.group}`)} ${page.hint}`"
           class="flex min-h-11 cursor-pointer items-center justify-between gap-3 px-3 py-2"
           @select="handleNavigate(page.to)"
         >
@@ -85,43 +87,43 @@ function handleOpenStorefront(): void {
               class="size-4 text-primary"
               aria-hidden="true"
             />
-            <span class="font-semibold">{{ page.label }}</span>
-            <span class="text-xs text-muted-foreground">({{ page.group }})</span>
+            <span class="font-semibold">{{ t(page.labelKey) }}</span>
+            <span class="text-xs text-muted-foreground">({{ t(`admin.nav.groups.${page.group}`) }})</span>
           </div>
           <CommandShortcut class="ms-auto me-0 font-sans text-xs text-muted-foreground">
-            {{ page.paletteHint }}
+            {{ t('admin.shortcuts.gThen', { key: page.key.toUpperCase() }) }}
           </CommandShortcut>
         </CommandItem>
       </CommandGroup>
 
       <CommandSeparator />
 
-      <CommandGroup heading="الأوامر">
+      <CommandGroup :heading="t('admin.commandPalette.commands')">
         <CommandItem
-          value="تبديل الوضع الليلي الوضع الفاتح المظهر"
+          :value="t('admin.commandPalette.toggleThemeSearch')"
           class="flex min-h-11 cursor-pointer items-center justify-between gap-3 px-3 py-2"
           @select="handleToggleTheme"
         >
           <div class="flex items-center gap-2.5">
             <Sun v-if="isDark" class="size-4 text-serag-gold-hi" aria-hidden="true" />
             <Moon v-else class="size-4 text-primary" aria-hidden="true" />
-            <span class="font-semibold">تبديل الوضع الليلي</span>
+            <span class="font-semibold">{{ t('admin.commandPalette.toggleTheme') }}</span>
           </div>
           <span class="text-xs text-muted-foreground">
-            {{ isDark ? 'الوضع الفاتح' : 'الوضع الليلي' }}
+            {{ isDark ? t('admin.commandPalette.lightMode') : t('admin.commandPalette.darkMode') }}
           </span>
         </CommandItem>
 
         <CommandItem
-          value="افتح الموقع المتجر الرئيسي تاب جديد"
+          :value="t('admin.commandPalette.openStoreSearch')"
           class="flex min-h-11 cursor-pointer items-center justify-between gap-3 px-3 py-2"
           @select="handleOpenStorefront"
         >
           <div class="flex items-center gap-2.5">
             <ExternalLink class="size-4 text-primary" aria-hidden="true" />
-            <span class="font-semibold">افتح الموقع</span>
+            <span class="font-semibold">{{ t('admin.commandPalette.openStore') }}</span>
           </div>
-          <span class="text-xs text-muted-foreground">في تاب جديد</span>
+          <span class="text-xs text-muted-foreground">{{ t('admin.commandPalette.inNewTab') }}</span>
         </CommandItem>
       </CommandGroup>
     </CommandList>

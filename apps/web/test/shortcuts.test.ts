@@ -22,6 +22,10 @@ describe('ADMIN_NAV_SHORTCUTS', () => {
       s: '/admin/settings',
     })
     expect(ADMIN_NAV_SHORTCUTS).toHaveLength(9)
+    for (const item of ADMIN_NAV_SHORTCUTS) {
+      expect(item.labelKey).toMatch(/^admin\.nav\./)
+      expect(['main', 'store', 'content', 'system']).toContain(item.group)
+    }
   })
 })
 

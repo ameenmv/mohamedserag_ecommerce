@@ -2,16 +2,25 @@
 import { Toaster } from '@/components/ui/sonner'
 import 'vue-sonner/style.css'
 
-const STORE_NAME = 'معرض محمد سراج'
+const head = useLocaleHead()
+
+const { t, localeProperties } = useI18n()
 
 useHead({
-  titleTemplate: (titleChunk) => {
-    const trimmed = titleChunk?.trim()
-    if (!trimmed || trimmed === STORE_NAME) {
-      return STORE_NAME
-    }
-    return `${trimmed} · ${STORE_NAME}`
+  htmlAttrs: {
+    lang: () => head.value.htmlAttrs?.lang,
+    dir: () => head.value.htmlAttrs?.dir,
   },
+  titleTemplate: (titleChunk) => {
+    const storeName = t('brand.storeName')
+    const trimmed = titleChunk?.trim()
+    if (!trimmed || trimmed === storeName) {
+      return storeName
+    }
+    return `${trimmed} · ${storeName}`
+  },
+  link: () => head.value.link || [],
+  meta: () => head.value.meta || [],
 })
 </script>
 
@@ -21,6 +30,6 @@ useHead({
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
-    <Toaster dir="rtl" rich-colors position="bottom-center" />
+    <Toaster :dir="localeProperties.dir" rich-colors position="bottom-center" />
   </div>
 </template>
