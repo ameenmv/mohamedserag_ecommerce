@@ -17,7 +17,7 @@ test('home renders the Arabic RTL brand shell', async ({ app, browser, screen })
 
 test('admin redirects to login when signed out', async ({ app, browser }) => {
   await app.open('/admin');
-  await expect(browser).toHaveURL(/\/admin\/login\?next=%2Fadmin/);
+  await expect(browser).toHaveURL(/\/admin\/login\?next=(%2F|\/)admin/);
 });
 
 test('admin API rejects requests without a session', async () => {

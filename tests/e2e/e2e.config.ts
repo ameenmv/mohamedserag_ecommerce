@@ -8,6 +8,9 @@ try {
   // no .env: rely on the environment
 }
 
+const testSeedSecret = process.env.TEST_SEED_SECRET || 'dev-test-seed-secret-32-chars-long!';
+process.env.TEST_SEED_SECRET ||= testSeedSecret;
+
 export default {
   targets: [{
     engine: web(),
@@ -23,6 +26,10 @@ export default {
               args: ['dev'],
               cwd: '../..',
               inheritEnv: ['NODE_ENV', 'XDG_*'],
+              env: {
+                ALLOW_TEST_SEED: 'true',
+                TEST_SEED_SECRET: testSeedSecret,
+              },
               startupTimeout: 180_000,
               reuseExisting: true,
               log: '.e2e/logs/app.log',
@@ -32,5 +39,8 @@ export default {
   }],
   credentials: {
     admin: { username: process.env.ADMIN_EMAIL ?? '', password: process.env.ADMIN_PASSWORD ?? '' },
+  },
+  secrets: {
+    'test-seed': testSeedSecret,
   },
 } satisfies E2EConfig;

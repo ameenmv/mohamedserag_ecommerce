@@ -2,9 +2,11 @@
 import { Banknote, MapPin, MessageCircle, Phone, ShieldCheck, Smartphone, Wallet } from '@lucide/vue'
 import { waLink } from '@serag/shared'
 import { computed } from 'vue'
+import { useAnalytics } from '@/composables/useAnalytics'
 import { useStoreSettings } from '@/composables/useStoreSettings'
 
 const settings = useStoreSettings()
+const { track } = useAnalytics()
 
 const whatsappUrl = computed(() =>
   waLink(settings.whatsapp, 'السلام عليكم، عندي استفسار من موقع معرض محمد سراج 👋'),
@@ -122,6 +124,7 @@ const paymentMethods = [
             target="_blank"
             rel="noopener noreferrer"
             class="mt-1 inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-sidebar-primary px-5 font-bold text-sidebar-primary-foreground transition-colors hover:bg-serag-gold-hi focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:outline-none motion-reduce:transition-none"
+            @click="track('whatsapp_click', { source: 'footer' })"
           >
             <MessageCircle class="size-5" aria-hidden="true" />
             <span>كلّمنا على واتساب</span>

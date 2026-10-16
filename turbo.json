@@ -1,6 +1,23 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "stream",
+  "globalPassThroughEnv": [
+    "DATABASE_URL",
+    "TEST_DATABASE_URL",
+    "API_PORT",
+    "SESSION_SECRET",
+    "WEB_ORIGIN",
+    "ADMIN_EMAIL",
+    "ADMIN_PASSWORD",
+    "ADMIN_NAME",
+    "NUXT_PUBLIC_*",
+    "NUXT_API_INTERNAL_BASE",
+    "UPLOADS_DIR",
+    "ALLOW_TEST_SEED",
+    "TEST_SEED_SECRET",
+    "NODE_ENV",
+    "CI"
+  ],
   "tasks": {
     "build": {
       "dependsOn": [

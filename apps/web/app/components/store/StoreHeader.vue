@@ -24,6 +24,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
+import { useAnalytics } from '@/composables/useAnalytics'
 import { useHeaderBadges } from '@/composables/useHeaderBadges'
 import { useStoreSettings } from '@/composables/useStoreSettings'
 
@@ -31,6 +32,7 @@ const route = useRoute()
 const settings = useStoreSettings()
 const { wishlist, compare, cart } = useHeaderBadges()
 const { y } = useWindowScroll()
+const { track } = useAnalytics()
 
 const isScrolled = computed(() => y.value > 10)
 const searchSheetOpen = ref(false)
@@ -137,6 +139,7 @@ function isNavActive(path: string): boolean {
                 target="_blank"
                 rel="noopener noreferrer"
                 class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-primary px-4 font-bold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-reduce:transition-none"
+                @click="track('whatsapp_click', { source: 'header_drawer' })"
               >
                 <MessageCircle class="size-5" aria-hidden="true" />
                 <span>تواصل واتساب مباشر</span>
@@ -321,6 +324,7 @@ function isNavActive(path: string): boolean {
           rel="noopener noreferrer"
           aria-label="تواصل معنا عبر واتساب"
           class="inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-xl bg-primary px-2.5 font-bold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:px-3.5 motion-reduce:transition-none"
+          @click="track('whatsapp_click', { source: 'header' })"
         >
           <MessageCircle class="size-5 text-serag-gold-hi" aria-hidden="true" />
           <span class="hidden text-sm xl:inline">واتساب</span>

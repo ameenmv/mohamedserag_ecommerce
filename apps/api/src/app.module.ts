@@ -8,10 +8,12 @@ import { PermissionGuard } from './auth/permission.guard.js'
 import { SessionGuard } from './auth/session.guard.js'
 import { HealthController } from './health.controller.js'
 import { PrismaModule } from './prisma/prisma.module.js'
+import { TestSeedModule } from './test-seed/test-seed.module.js'
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ['../../.env', '.env'] }),
+    TestSeedModule.forRoot(),
     ThrottlerModule.forRoot([{ ttl: 60_000, limit: 120 }]),
     PrismaModule,
     AuthModule,
