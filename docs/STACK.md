@@ -179,6 +179,8 @@ The GitHub Actions CI workflow contains three jobs:
    - Largest Contentful Paint (LCP) < 2.5 s
    - Cumulative Layout Shift (CLS) < 0.1
 
+   Lighthouse runs against the production build behind Caddy (HTTP/2 + compression) via `docker/Caddyfile.lighthouse`, budget unchanged.
+
 *Note: The CI workflow is committed locally and verified; the first remote GitHub run is pending push.*
 
 ## Working with AI agents

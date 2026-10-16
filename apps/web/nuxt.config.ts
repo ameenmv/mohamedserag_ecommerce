@@ -44,10 +44,56 @@ export default defineNuxtConfig({
 
   fonts: {
     families: [
-      { name: 'IBM Plex Sans Arabic', provider: 'google', weights: [400, 500, 600, 700], subsets: ['arabic'], preload: true },
-      { name: 'Lalezar', provider: 'google', weights: [400], subsets: ['arabic'], preload: true },
-      { name: 'Outfit', provider: 'google', weights: [400, 500, 600, 700, 800], subsets: ['latin'], preload: false },
+      {
+        name: 'IBM Plex Sans Arabic',
+        provider: 'google',
+        weights: [400, 700],
+        subsets: ['arabic'],
+        preload: { weights: [400, 700] },
+      },
+      {
+        name: 'Lalezar',
+        provider: 'google',
+        weights: [400],
+        subsets: ['arabic'],
+        preload: true,
+      },
+      {
+        name: 'Outfit',
+        provider: 'google',
+        weights: [400, 500, 600, 700, 800],
+        subsets: ['latin'],
+        preload: { weights: [800] },
+      },
     ],
+  },
+
+  hooks: {
+    // Fewer tiny chunks = fewer requests before first paint.
+    'vite:extendConfig'(config, { isClient }) {
+      if (isClient) {
+        const build = config.build ?? Object.assign(config, { build: {} }).build
+        build.rolldownOptions = build.rolldownOptions || {}
+        const output = (build.rolldownOptions.output = build.rolldownOptions.output || {})
+        const codeSplitting = {
+          minSize: 20000,
+          groups: [
+            {
+              name: 'framework',
+              test: /[\\/]node_modules[\\/](?:@vue[\\/]|vue[\\/]|vue-router[\\/]|@unhead[\\/]|unhead[\\/]|@intlify[\\/]|vue-i18n[\\/])/,
+              priority: 1,
+            },
+          ],
+        }
+        if (Array.isArray(output)) {
+          for (const o of output) {
+            o.codeSplitting = codeSplitting
+          }
+        } else {
+          output.codeSplitting = codeSplitting
+        }
+      }
+    },
   },
 
   // Dev only: serve the shared uploads folder at /uploads (Caddy serves it in production).

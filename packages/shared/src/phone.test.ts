@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { normalizePhone, phoneSchema, PHONE_ERROR_MESSAGE } from './phone.js'
+import { normalizePhone, PHONE_ERROR_MESSAGE } from './phone.js'
+import { phoneSchema } from './phone-schema.js'
 
 describe('normalizePhone', () => {
   it('normalizes +20 prefix with spaces to 01012345678', () => {

@@ -79,6 +79,9 @@
 - **Browser API base in Docker:** browser API base made same-origin `/api` instead of hardcoded `localhost:4000` (which caused login failures inside Docker).
 - **Docker build context size:** duplicate per-Dockerfile `.dockerignore` files removed so `node_modules` stays out of the build context (context reduced to 2.8 MB).
 - **Dev test seed secret length:** dev `TEST_SEED_SECRET` placeholder in `.env.example` lengthened to ≥ 16 characters to satisfy guard constraints.
+- **Production hydration crash from `dropMessageCompiler`:** fixed, now guarded by `errors-in-console`.
+- **Lighthouse budget met:** achieved by smaller initial JS, HTML compression, client-only toast CSS, and IBM Plex Sans Arabic trimmed to 400/700 (font-medium renders as 400, font-semibold as 700).
+- **Lighthouse measured through Caddy/HTTP/2:** CI now runs against the production build behind Caddy with HTTP/2 and compression (`docker/Caddyfile.lighthouse`).
 
 ### Previous review fixes (earlier Slice 0 tasks)
 - **Credentials in the URL:** the login form could submit natively before Vue hydrated, which put the email and password in the URL. The form is now POST-only and its inputs and button stay disabled until hydration. The e2e suite caught this.

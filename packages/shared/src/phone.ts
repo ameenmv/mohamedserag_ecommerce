@@ -1,5 +1,3 @@
-import { z } from 'zod'
-
 export const PHONE_ERROR_MESSAGE = 'رقم الموبايل مش صحيح'
 
 const EGYPT_MOBILE_RE = /^01[0125]\d{8}$/
@@ -37,14 +35,3 @@ export function normalizePhone(input: string): string | null {
 
   return EGYPT_MOBILE_RE.test(candidate) ? candidate : null
 }
-
-/**
- * Zod schema that validates and transforms an Egyptian mobile phone string
- * into its normalized `01[0125]XXXXXXXX` form.
- */
-export const phoneSchema = z
-  .string({ message: PHONE_ERROR_MESSAGE })
-  .refine((val) => normalizePhone(val) !== null, {
-    message: PHONE_ERROR_MESSAGE,
-  })
-  .transform((val): string => normalizePhone(val) ?? '')

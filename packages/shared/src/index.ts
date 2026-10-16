@@ -1,5 +1,6 @@
 export * from './arabic.js'
 export * from './phone.js'
+export * from './phone-schema.js'
 export * from './money.js'
 export * from './enums.js'
 export * from './order-flow.js'

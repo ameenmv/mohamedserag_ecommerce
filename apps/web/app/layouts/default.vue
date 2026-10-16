@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import StoreBottomNav from '@/components/store/StoreBottomNav.vue'
-import StoreFooter from '@/components/store/StoreFooter.vue'
 import StoreHeader from '@/components/store/StoreHeader.vue'
 
 const { t } = useI18n()
@@ -21,7 +19,7 @@ const { t } = useI18n()
       <slot />
     </div>
 
-    <StoreFooter />
-    <StoreBottomNav />
+    <LazyStoreFooter hydrate-on-visible />
+    <LazyStoreBottomNav hydrate-on-idle />
   </div>
 </template>

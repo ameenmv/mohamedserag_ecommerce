@@ -3,9 +3,10 @@
     "collect": {
       "startServerCommand": "node apps/web/.output/server/index.mjs",
       "startServerReadyPattern": "Listening",
-      "url": ["http://localhost:3000/"],
+      "url": ["https://localhost:8443/"],
       "numberOfRuns": 3,
       "settings": {
+        "chromeFlags": "--ignore-certificate-errors",
         "formFactor": "mobile",
         "screenEmulation": {
           "mobile": true,
