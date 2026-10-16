@@ -25,7 +25,19 @@ export default {
               executable: 'pnpm',
               args: ['dev'],
               cwd: '../..',
-              inheritEnv: ['NODE_ENV', 'XDG_*'],
+              // CI has no .env file, so the API and web need their config passed through.
+              inheritEnv: [
+                'NODE_ENV',
+                'XDG_*',
+                'CI',
+                'DATABASE_URL',
+                'TEST_DATABASE_URL',
+                'API_PORT',
+                'SESSION_SECRET',
+                'WEB_ORIGIN',
+                'ADMIN_*',
+                'NUXT_*',
+              ],
               env: {
                 ALLOW_TEST_SEED: 'true',
                 TEST_SEED_SECRET: testSeedSecret,

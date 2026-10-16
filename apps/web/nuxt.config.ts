@@ -69,12 +69,8 @@ export default defineNuxtConfig({
       { code: 'ar', language: 'ar-EG', dir: 'rtl', name: 'العربية', file: 'ar.json' },
       { code: 'en', language: 'en-US', dir: 'ltr', name: 'English', file: 'en.json' },
     ],
-    detectBrowserLanguage: {
-      useCookie: true,
-      cookieKey: 'serag_locale',
-      redirectOn: 'root',
-      alwaysRedirect: false,
-    },
+    // Arabic-first store: '/' is always Arabic; English only via explicit /en links.
+    detectBrowserLanguage: false,
   },
 
   shadcn: {

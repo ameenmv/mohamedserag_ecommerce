@@ -11,7 +11,7 @@ test('API health reports the database is up', async () => {
 test('home renders the Arabic RTL brand shell', async ({ app, browser, screen }) => {
   await app.open('/');
   await expect(browser.locator('html')).toHaveAttribute('dir', 'rtl');
-  await expect(browser.locator('html')).toHaveAttribute('lang', 'ar');
+  await expect(browser.locator('html')).toHaveAttribute('lang', /^ar(-|$)/);
   await expect(screen.getByRole('heading', 'معرض محمد سراج')).toBeVisible();
 });
 

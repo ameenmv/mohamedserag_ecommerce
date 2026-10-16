@@ -38,7 +38,7 @@ In `apps/web`, route pages under `app/pages/` are thin composition entry points 
 ### Internationalization (i18n)
 
 Serag is bilingual, supporting Arabic (primary/default) and English:
-- **Locales & URLs:** Powered by `@nuxtjs/i18n` with strategy `prefix_except_default`. Arabic (`ar`, RTL) is served at `/` and English (`en`, LTR) under `/en/...` (e.g. `/en/admin/login`). Active locale is persisted in the `serag_locale` cookie, and document attributes (`lang`, `dir`, hreflang links) are bound reactively via `useLocaleHead`.
+- **Locales & URLs:** Powered by `@nuxtjs/i18n` with strategy `prefix_except_default`. Arabic (`ar`, RTL) is served at `/` and English (`en`, LTR) under `/en/...` (e.g. `/en/admin/login`). The URL alone decides the locale (browser-language detection is off, so `/` is always Arabic), and document attributes (`lang`, `dir`, hreflang links) are bound reactively via `useLocaleHead`.
 - **Message dictionaries:** Translation strings live in `apps/web/i18n/locales/ar.json` and `en.json`.
 - **Parity testing:** Key parity is strictly enforced by `apps/web/test/i18n-messages.test.ts`. Every user-facing UI string must exist in both files with identical key structures and no empty strings.
 
