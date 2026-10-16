@@ -1,0 +1,751 @@
+// Prisma 7 schema for the Serag store. Source of truth for entities: docs/PRD.md §9.
+// Money columns are integer piastres. Generated client is ESM for the NestJS (nodenext) app.
+
+generator client {
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
+  moduleFormat        = "esm"
+  importFileExtension = "js"
+  previewFeatures     = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  extensions = [pg_trgm]
+}
+
+// ===== MODELS BELOW (T009) =====
+
+// ============================================================================
+// ENUMS
+// ============================================================================
+
+enum OrderType {
+  order
+  bridal
+}
+
+enum OrderStatus {
+  new
+  awaiting_payment
+  awaiting_deposit
+  payment_rejected
+  confirmed
+  out_for_delivery
+  delivered
+  cancelled
+}
+
+enum BridalStatus {
+  draft
+  awaiting_deposit
+  locked
+  delivery_agreed
+  delivered
+  cancelled
+  lock_expired
+}
+
+enum PaymentMethod {
+  cod
+  instapay
+  vodafone_cash
+  fawry
+}
+
+enum PaymentStatus {
+  confirmed
+  rejected
+}
+
+enum AvailabilityMode {
+  auto
+  on_request
+  out
+}
+
+enum ReviewStatus {
+  pending
+  approved
+  rejected
+}
+
+enum NotifyStatus {
+  waiting
+  sent
+}
+
+enum StockReason {
+  order_confirmed
+  order_cancelled
+  bridal_delivery_agreed
+  manual
+  import
+}
+
+enum CouponType {
+  percent
+  fixed
+}
+
+enum RedemptionStatus {
+  active
+  released
+}
+
+enum WhatsAppChannel {
+  link
+  cloud_api
+}
+
+enum WhatsAppStatus {
+  opened
+  sent
+  delivered
+  failed
+}
+
+enum ContentStatus {
+  draft
+  published
+}
+
+// ============================================================================
+// CATALOG & DISCOVERY (E1, E2, E3)
+// ============================================================================
+
+// PRD §9 — US-1.3, US-1.5, US-2.2, US-2.3, US-12.4: Category specification templates
+model SpecTemplate {
+  id         String     @id @default(cuid())
+  name       String
+  /// Array of {key, label, type, unit, options, filterable, comparable}
+  fields     Json       @default("[]")
+  categories Category[]
+  createdAt  DateTime   @default(now()) @map("created_at")
+  updatedAt  DateTime   @updatedAt @map("updated_at")
+
+  @@map("spec_templates")
+}
+
+// PRD §9 — US-1.1, US-1.4, US-1.5, US-11.4, US-12.4: Product categories (hierarchical) and SEO landing pages
+model Category {
+  id             String        @id @default(cuid())
+  name           String
+  slug           String        @unique
+  parentId       String?       @map("parent_id")
+  parent         Category?     @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
+  children       Category[]    @relation("CategoryHierarchy")
+  specTemplateId String?       @map("spec_template_id")
+  specTemplate   SpecTemplate? @relation(fields: [specTemplateId], references: [id], onDelete: SetNull)
+  intro          String?
+  seoTitle       String?       @map("seo_title")
+  seoDescription String?       @map("seo_description")
+  sort           Int           @default(0)
+  visible        Boolean       @default(true)
+  products       Product[]
+  quizRule       QuizRule?
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+
+  @@index([parentId])
+  @@index([sort])
+  @@map("categories")
+}
+
+// PRD §9 — US-1.2, US-1.4, US-2.2, US-11.4, US-12.4: Appliance & Turkish cookware brands
+model Brand {
+  id             String    @id @default(cuid())
+  name           String
+  slug           String    @unique
+  logoUrl        String?   @map("logo_url")
+  intro          String?
+  seoTitle       String?   @map("seo_title")
+  seoDescription String?   @map("seo_description")
+  sort           Int       @default(0)
+  visible        Boolean   @default(true)
+  products       Product[]
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  @@index([sort])
+  @@map("brands")
+}
+
+// PRD §9 — US-1.2..1.4, US-2.1..2.4, US-3.1, US-8.1, US-11.4, US-11.5, US-12.4: Store catalog products
+model Product {
+  id                 String           @id @default(cuid())
+  slug               String           @unique
+  modelCode          String           @unique @map("model_code")
+  name               String
+  brandId            String           @map("brand_id")
+  brand              Brand            @relation(fields: [brandId], references: [id], onDelete: Restrict)
+  categoryId         String           @map("category_id")
+  category           Category         @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  specs              Json             @default("{}")
+  /// Current regular price in integer piastres (VAT-inclusive, e.g. 2890000 = 28,900 EGP)
+  price              Int
+  /// Previous price before discount in integer piastres
+  oldPrice           Int?             @map("old_price")
+  stock              Int              @default(0)
+  lowStockThreshold  Int              @default(3) @map("low_stock_threshold")
+  availabilityMode   AvailabilityMode @default(auto) @map("availability_mode")
+  leadTimeText       String?          @map("lead_time_text")
+  warranty           String?
+  warrantyActivation String?          @map("warranty_activation")
+  origin             String?
+  /// Cookware set pieces list (JSON array)
+  setContents        Json?            @map("set_contents")
+  visible            Boolean          @default(false)
+  featured           Boolean          @default(false)
+  archivedAt         DateTime?        @map("archived_at")
+  /// VAT percentage (default 14%)
+  taxRate            Int              @default(14) @map("tax_rate")
+  /// Egyptian Tax Authority item code (reserved for Phase 2 E-receipts, US-18.1)
+  etaItemCode        String?          @map("eta_item_code")
+  seoTitle           String?          @map("seo_title")
+  seoDescription     String?          @map("seo_description")
+  /// Normalized Arabic search text (folded letters, Latin digits, expanded synonyms)
+  searchText         String           @default("") @map("search_text")
+  images             ProductImage[]
+  flashSaleItems     FlashSaleItem[]
+  orderItems         OrderItem[]
+  stockMovements     StockMovement[]
+  reviews            Review[]
+  notifyRequests     NotifyRequest[]
+  createdAt          DateTime         @default(now()) @map("created_at")
+  updatedAt          DateTime         @updatedAt @map("updated_at")
+
+  @@index([searchText(ops: raw("gin_trgm_ops"))], type: Gin)
+  @@index([categoryId])
+  @@index([brandId])
+  @@index([visible, archivedAt])
+  @@map("products")
+}
+
+// PRD §9 — US-1.2, US-1.3, US-12.4: Product gallery images (manufacturer & real showroom photos)
+model ProductImage {
+  id        String   @id @default(cuid())
+  productId String   @map("product_id")
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  alt       String   @default("")
+  isReal    Boolean  @default(false) @map("is_real")
+  sort      Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([productId, sort])
+  @@map("product_images")
+}
+
+// ============================================================================
+// PROMOTIONS (E8)
+// ============================================================================
+
+// PRD §9 — US-8.2, US-12.7, US-12.9: Time-limited flash sales
+model FlashSale {
+  id        String          @id @default(cuid())
+  name      String
+  startsAt  DateTime        @map("starts_at")
+  endsAt    DateTime        @map("ends_at")
+  items     FlashSaleItem[]
+  createdAt DateTime        @default(now()) @map("created_at")
+  updatedAt DateTime        @updatedAt @map("updated_at")
+
+  @@index([startsAt, endsAt])
+  @@map("flash_sales")
+}
+
+// PRD §9 — US-8.2, US-12.7: Product included in a flash sale with temporary sale price
+model FlashSaleItem {
+  id          String    @id @default(cuid())
+  flashSaleId String    @map("flash_sale_id")
+  flashSale   FlashSale @relation(fields: [flashSaleId], references: [id], onDelete: Cascade)
+  productId   String    @map("product_id")
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  /// Temporary flash sale price in integer piastres
+  salePrice   Int       @map("sale_price")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@unique([flashSaleId, productId])
+  @@index([productId])
+  @@map("flash_sale_items")
+}
+
+// PRD §9 — US-5.3, US-8.3, US-12.7, US-12.9: Discount coupon codes and eligibility rules
+model Coupon {
+  id              String             @id @default(cuid())
+  code            String             @unique
+  type            CouponType
+  /// Percentage (1–100) when type=percent, or discount amount in integer piastres when type=fixed
+  value           Int
+  /// Minimum eligible order subtotal in integer piastres
+  minOrder        Int                @default(0) @map("min_order")
+  startsAt        DateTime?          @map("starts_at")
+  endsAt          DateTime?          @map("ends_at")
+  maxUses         Int?               @map("max_uses")
+  maxUsesPerPhone Int?               @map("max_uses_per_phone")
+  categoryIds     String[]           @default([]) @map("category_ids")
+  brandIds        String[]           @default([]) @map("brand_ids")
+  active          Boolean            @default(true)
+  redemptions     CouponRedemption[]
+  orders          Order[]
+  createdAt       DateTime           @default(now()) @map("created_at")
+  updatedAt       DateTime           @updatedAt @map("updated_at")
+
+  @@map("coupons")
+}
+
+// PRD §9 — US-5.3, US-8.3, US-12.9: Per-order coupon usage tracking (released if order cancelled/rejected)
+model CouponRedemption {
+  id            String           @id @default(cuid())
+  couponId      String           @map("coupon_id")
+  coupon        Coupon           @relation(fields: [couponId], references: [id], onDelete: Cascade)
+  orderId       String           @map("order_id")
+  order         Order            @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  customerPhone String           @map("customer_phone")
+  /// Discount amount applied in integer piastres
+  amount        Int
+  status        RedemptionStatus @default(active)
+  createdAt     DateTime         @default(now()) @map("created_at")
+  updatedAt     DateTime         @updatedAt @map("updated_at")
+
+  @@index([couponId, customerPhone])
+  @@index([orderId])
+  @@map("coupon_redemptions")
+}
+
+// ============================================================================
+// BRIDAL BUILDER (E4)
+// ============================================================================
+
+// PRD §9 — US-4.1, US-12.5: Bridal package starting tiers (أساسية / ذهبية / القصر)
+model BridalTier {
+  id        String       @id @default(cuid())
+  name      String
+  slug      String       @unique
+  sort      Int          @default(0)
+  /// Array of [{key, label, items: [{productId, qty}]}]
+  rooms     Json         @default("[]")
+  lists     BridalList[]
+  createdAt DateTime     @default(now()) @map("created_at")
+  updatedAt DateTime     @updatedAt @map("updated_at")
+
+  @@index([sort])
+  @@map("bridal_tiers")
+}
+
+// PRD §9 — US-4.2, US-4.3, US-4.4: Bride's customized appliance package list
+model BridalList {
+  id            String       @id @default(cuid())
+  editToken     String       @unique @map("edit_token")
+  shareToken    String       @unique @map("share_token")
+  tierId        String?      @map("tier_id")
+  tier          BridalTier?  @relation(fields: [tierId], references: [id], onDelete: SetNull)
+  /// Array of [{key, label, items: [{productId, qty}]}]
+  rooms         Json         @default("[]")
+  status        BridalStatus @default(draft)
+  customerName  String?      @map("customer_name")
+  customerPhone String?      @map("customer_phone")
+  order         Order?
+  createdAt     DateTime     @default(now()) @map("created_at")
+  updatedAt     DateTime     @updatedAt @map("updated_at")
+
+  @@index([tierId])
+  @@map("bridal_lists")
+}
+
+// ============================================================================
+// ORDERS, PAYMENTS & STOCK MOVEMENTS (E3, E4, E5, E6, E7)
+// ============================================================================
+
+// PRD §9 — US-4.4..4.6, US-5.1..5.5, US-6.1..6.3, US-7.1, US-7.2, US-12.3, US-12.9: Retail orders & bridal reservations
+model Order {
+  id                 String             @id @default(cuid())
+  /// Human-readable order number (e.g. SR-2026-000124)
+  no                 String             @unique
+  type               OrderType          @default(order)
+  status             OrderStatus        @default(new)
+  customerPhone      String             @map("customer_phone")
+  /// Reserved for Phase 2 customer accounts (E14)
+  customerId         String?            @map("customer_id")
+  customerName       String             @map("customer_name")
+  governorate        String
+  city               String
+  zoneId             String             @map("zone_id")
+  address            String
+  notes              String?
+  preferredDate      DateTime?          @map("preferred_date")
+  agreedDeliveryDate DateTime?          @map("agreed_delivery_date")
+  /// Items subtotal in integer piastres
+  subtotal           Int
+  /// Discount amount in integer piastres
+  discount           Int                @default(0)
+  /// Delivery zone fee in integer piastres
+  deliveryFee        Int                @default(0) @map("delivery_fee")
+  /// Final payable total in integer piastres
+  total              Int
+  couponId           String?            @map("coupon_id")
+  coupon             Coupon?            @relation(fields: [couponId], references: [id], onDelete: SetNull)
+  paymentMethod      PaymentMethod      @map("payment_method")
+  depositPct         Int?               @map("deposit_pct")
+  /// Required deposit amount in integer piastres (bridal reservation or large COD)
+  depositAmount      Int?               @map("deposit_amount")
+  /// Sum of confirmed payments in integer piastres
+  paidAmount         Int                @default(0) @map("paid_amount")
+  publicToken        String             @unique @map("public_token")
+  confirmToken       String             @unique @map("confirm_token")
+  bridalListId       String?            @unique @map("bridal_list_id")
+  bridalList         BridalList?        @relation(fields: [bridalListId], references: [id], onDelete: SetNull)
+  lockedUntil        DateTime?          @map("locked_until")
+  bridalStatus       BridalStatus?      @map("bridal_status")
+  items              OrderItem[]
+  events             OrderEvent[]
+  payments           Payment[]
+  stockMovements     StockMovement[]
+  couponRedemptions  CouponRedemption[]
+  whatsAppMessages   WhatsAppMessage[]
+  createdAt          DateTime           @default(now()) @map("created_at")
+  updatedAt          DateTime           @updatedAt @map("updated_at")
+
+  @@index([customerPhone])
+  @@index([status])
+  @@index([type])
+  @@index([createdAt])
+  @@map("orders")
+}
+
+// PRD §9 — US-4.4, US-5.1, US-5.4, US-12.3: Line items with locked price and tax rate at order time
+model OrderItem {
+  id        String   @id @default(cuid())
+  orderId   String   @map("order_id")
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String?  @map("product_id")
+  product   Product? @relation(fields: [productId], references: [id], onDelete: Restrict)
+  name      String
+  modelCode String   @map("model_code")
+  qty       Int
+  /// Locked unit price in integer piastres
+  unitPrice Int      @map("unit_price")
+  taxRate   Int      @default(14) @map("tax_rate")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([orderId])
+  @@index([productId])
+  @@map("order_items")
+}
+
+// PRD §9 — US-7.1, US-12.3: Order and bridal reservation status transition history
+model OrderEvent {
+  id      String   @id @default(cuid())
+  orderId String   @map("order_id")
+  order   Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  status  String
+  note    String?
+  userId  String?  @map("user_id")
+  user    User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  at      DateTime @default(now())
+
+  @@index([orderId, at])
+  @@index([userId])
+  @@map("order_events")
+}
+
+// PRD §9 — US-4.4, US-5.5, US-6.1, US-6.3, US-12.3, US-12.9: Confirmed or rejected payments/deposits
+model Payment {
+  id           String        @id @default(cuid())
+  orderId      String        @map("order_id")
+  order        Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  method       PaymentMethod
+  /// Payment amount in integer piastres
+  amount       Int
+  status       PaymentStatus @default(confirmed)
+  rejectReason String?       @map("reject_reason")
+  userId       String?       @map("user_id")
+  user         User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  at           DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+
+  @@index([orderId])
+  @@index([userId])
+  @@map("payments")
+}
+
+// PRD §9 — US-3.3, US-12.3, US-12.4: Automatic and manual inventory stock movements
+model StockMovement {
+  id        String      @id @default(cuid())
+  productId String      @map("product_id")
+  product   Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  /// Signed quantity change (±)
+  qty       Int
+  reason    StockReason
+  orderId   String?     @map("order_id")
+  order     Order?      @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  userId    String?     @map("user_id")
+  user      User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  at        DateTime    @default(now())
+
+  @@index([productId, at])
+  @@index([orderId])
+  @@index([userId])
+  @@map("stock_movements")
+}
+
+// ============================================================================
+// REVIEWS, STOCK ALERTS & WHATSAPP (E3, E7, E9)
+// ============================================================================
+
+// PRD §9 — US-1.3, US-9.1, US-9.2, US-11.4, US-12.7: Customer product reviews and moderation
+model Review {
+  id            String       @id @default(cuid())
+  productId     String       @map("product_id")
+  product       Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name          String
+  phone         String
+  stars         Int
+  text          String
+  status        ReviewStatus @default(pending)
+  reply         String?
+  verifiedBuyer Boolean      @default(false) @map("verified_buyer")
+  ip            String?
+  createdAt     DateTime     @default(now()) @map("created_at")
+  updatedAt     DateTime     @updatedAt @map("updated_at")
+
+  @@unique([productId, phone])
+  @@index([status])
+  @@index([productId, status])
+  @@map("reviews")
+}
+
+// PRD §9 — US-3.2, US-12.2, US-12.8: Back-in-stock WhatsApp notification requests
+model NotifyRequest {
+  id        String       @id @default(cuid())
+  productId String       @map("product_id")
+  product   Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name      String
+  phone     String
+  status    NotifyStatus @default(waiting)
+  sentAt    DateTime?    @map("sent_at")
+  createdAt DateTime     @default(now()) @map("created_at")
+  updatedAt DateTime     @updatedAt @map("updated_at")
+
+  @@unique([productId, phone])
+  @@index([productId, status])
+  @@map("notify_requests")
+}
+
+// PRD §9 — US-6.2, US-7.2, US-12.3, US-17.1..17.3: Outbound/click-to-chat WhatsApp messages log
+model WhatsAppMessage {
+  id          String          @id @default(cuid())
+  orderId     String?         @map("order_id")
+  order       Order?          @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  to          String
+  templateKey String          @map("template_key")
+  variables   Json            @default("{}")
+  channel     WhatsAppChannel @default(link)
+  status      WhatsAppStatus  @default(opened)
+  userId      String?         @map("user_id")
+  user        User?           @relation(fields: [userId], references: [id], onDelete: SetNull)
+  at          DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt @map("updated_at")
+
+  @@index([orderId])
+  @@index([userId])
+  @@map("whatsapp_messages")
+}
+
+// ============================================================================
+// CONTENT, CMS, QUIZ & SETTINGS (E2, E11, E12)
+// ============================================================================
+
+// PRD §9 — US-11.1, US-12.6: Homepage CMS section drafts, published state and version history
+model ContentVersion {
+  id          String        @id @default(cuid())
+  page        String        @default("home")
+  status      ContentStatus @default(draft)
+  data        Json          @default("{}")
+  layout      Json          @default("{}")
+  label       String?
+  publishedAt DateTime?     @map("published_at")
+  userId      String?       @map("user_id")
+  user        User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+
+  @@index([page, status])
+  @@index([userId])
+  @@map("content_versions")
+}
+
+// PRD §9 — US-11.2, US-12.6: Static/policy content pages (About, delivery, returns, warranty, privacy, FAQ)
+model Page {
+  id             String   @id @default(cuid())
+  slug           String   @unique
+  title          String
+  body           String
+  seoTitle       String?  @map("seo_title")
+  seoDescription String?  @map("seo_description")
+  published      Boolean  @default(false)
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@map("pages")
+}
+
+// PRD §9 — US-11.3, US-12.6: Buying guides blog articles
+model Guide {
+  id             String    @id @default(cuid())
+  slug           String    @unique
+  title          String
+  cover          String?
+  body           String
+  categoryIds    String[]  @default([]) @map("category_ids")
+  productIds     String[]  @default([]) @map("product_ids")
+  seoTitle       String?   @map("seo_title")
+  seoDescription String?   @map("seo_description")
+  published      Boolean   @default(false)
+  publishedAt    DateTime? @map("published_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  @@map("guides")
+}
+
+// PRD §9 — US-2.5, US-12.10: "Help me choose" appliance recommendation quiz rules per category
+model QuizRule {
+  id         String   @id @default(cuid())
+  categoryId String   @unique @map("category_id")
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  questions  Json     @default("[]")
+  rules      Json     @default("[]")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@map("quiz_rules")
+}
+
+// PRD §9 — US-10.1, US-12.5, US-12.10: Key-value settings groups (store, whatsapp, payments, zones, codDeposit, bridal, searchSynonyms, templates)
+model Setting {
+  key       String   @id
+  value     Json
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("settings")
+}
+
+// ============================================================================
+// ADMIN AUTH, RBAC & AUDIT LOG (E12, E19)
+// ============================================================================
+
+// PRD §9 — US-12.1, US-19.1: Admin users
+model User {
+  id               String            @id @default(cuid())
+  email            String            @unique
+  name             String
+  passwordHash     String            @map("password_hash")
+  active           Boolean           @default(true)
+  lastLoginAt      DateTime?         @map("last_login_at")
+  roles            UserRole[]
+  sessions         Session[]
+  orderEvents      OrderEvent[]
+  payments         Payment[]
+  stockMovements   StockMovement[]
+  whatsAppMessages WhatsAppMessage[]
+  contentVersions  ContentVersion[]
+  auditLogs        AuditLog[]
+  createdAt        DateTime          @default(now()) @map("created_at")
+  updatedAt        DateTime          @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+// PRD §9 — US-12.1, US-19.2: Admin roles (e.g. manager, content, orders)
+model Role {
+  id          String           @id @default(cuid())
+  key         String           @unique
+  name        String
+  users       UserRole[]
+  permissions RolePermission[]
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+
+  @@map("roles")
+}
+
+// PRD §9 — US-12.1, US-19.2: Granular admin permission keys
+model Permission {
+  id        String           @id @default(cuid())
+  key       String           @unique
+  label     String
+  roles     RolePermission[]
+  createdAt DateTime         @default(now()) @map("created_at")
+  updatedAt DateTime         @updatedAt @map("updated_at")
+
+  @@map("permissions")
+}
+
+// PRD §9 — US-12.1, US-19.2: Many-to-many join between User and Role
+model UserRole {
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roleId    String   @map("role_id")
+  role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@id([userId, roleId])
+  @@index([roleId])
+  @@map("user_roles")
+}
+
+// PRD §9 — US-12.1, US-19.2: Many-to-many join between Role and Permission
+model RolePermission {
+  roleId       String     @map("role_id")
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permissionId String     @map("permission_id")
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now()) @map("created_at")
+
+  @@id([roleId, permissionId])
+  @@index([permissionId])
+  @@map("role_permissions")
+}
+
+// PRD §9 — US-12.1: Admin HTTP session with CSRF token and 14-day inactivity expiry
+model Session {
+  /// Random session token hash
+  id        String   @id
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime @map("expires_at")
+  ip        String?
+  userAgent String?  @map("user_agent")
+  csrfToken String   @map("csrf_token")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("sessions")
+}
+
+// PRD §9 — US-12.1, US-19.3: Audit log of admin mutations
+model AuditLog {
+  id       String   @id @default(cuid())
+  userId   String?  @map("user_id")
+  user     User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action   String
+  entity   String
+  entityId String   @map("entity_id")
+  before   Json?
+  after    Json?
+  ip       String?
+  at       DateTime @default(now())
+
+  @@index([entity, entityId])
+  @@index([userId])
+  @@index([at])
+  @@map("audit_logs")
+}

@@ -1,0 +1,24 @@
+packages:
+  - apps/*
+  - packages/*
+  - tests/*
+
+# One version of each shared dependency for the whole repo.
+catalog:
+  "@types/node": ^24.19.2
+  eslint: ^9.39.5
+  prettier: ^3.6.0
+  turbo: ^2.11.8
+  typescript: ~6.0.3
+  vitest: ^5.0.5
+  zod: 4.6.7
+
+onlyBuiltDependencies:
+  - "@prisma/client"
+  - "@prisma/engines"
+  - prisma
+  - "@swc/core"
+  - esbuild
+  - sharp
+  - "@parcel/watcher"
+  - vue-demi

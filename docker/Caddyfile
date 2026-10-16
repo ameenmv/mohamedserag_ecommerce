@@ -1,0 +1,22 @@
+{$SITE_ADDRESS} {
+	encode zstd gzip
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+	}
+	handle /api/* {
+		reverse_proxy api:4000
+	}
+	handle_path /uploads/* {
+		root * /uploads
+		file_server
+	}
+	handle /stats/* {
+		uri strip_prefix /stats
+		reverse_proxy umami:3000
+	}
+	handle {
+		reverse_proxy web:3000
+	}
+}

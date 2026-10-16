@@ -1,0 +1,1 @@
+{ "extends": "@serag/config/tsconfig.base.json", "compilerOptions": { "noEmit": true, "types": ["node"] }, "include": ["e2e.config.ts", "tests", "support"] }

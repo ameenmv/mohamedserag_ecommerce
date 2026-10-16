@@ -1,0 +1,17 @@
+node_modules/
+dist/
+.output/
+.nuxt/
+.turbo/
+coverage/
+*.log
+.env
+.env.*
+!.env.example
+.DS_Store
+# e2e runner: commit the action cache, not run artifacts
+tests/e2e/.e2e/*
+!tests/e2e/.e2e/cache/
+tests/e2e/reports/
+uploads/
+uploads/

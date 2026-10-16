@@ -1,0 +1,26 @@
+{
+  "name": "serag",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=24.8.0"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "test:e2e": "pnpm --filter @serag/e2e test",
+    "db:up": "docker compose -f docker/compose.dev.yml up -d",
+    "db:down": "docker compose -f docker/compose.dev.yml down",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "prettier": "catalog:",
+    "turbo": "catalog:",
+    "typescript": "catalog:"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@serag/config",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./tsconfig.base.json": "./tsconfig.base.json",
+    "./tsconfig.node.json": "./tsconfig.node.json",
+    "./eslint": "./eslint.config.js"
+  },
+  "dependencies": {
+    "@eslint/js": "^9.39.0",
+    "typescript-eslint": "^8.46.0",
+    "eslint-config-prettier": "^10.1.0"
+  },
+  "peerDependencies": { "eslint": "catalog:" }
+}

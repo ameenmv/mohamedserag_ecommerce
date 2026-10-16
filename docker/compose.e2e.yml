@@ -1,0 +1,6 @@
+# Overlay for end-to-end tests: enables the API test seed module (never in production).
+services:
+  api:
+    environment:
+      ALLOW_TEST_SEED: "true"
+      TEST_SEED_SECRET: ${TEST_SEED_SECRET:-e2e-secret}
