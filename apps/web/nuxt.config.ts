@@ -94,6 +94,15 @@ export default defineNuxtConfig({
         }
       }
     },
+    // Prefetch hints for lazy chunks compete with first paint; NuxtLink still prefetches visible links.
+    'build:manifest'(manifest) {
+      for (const key in manifest) {
+        const file = manifest[key]
+        if (file) {
+          file.prefetch = false
+        }
+      }
+    },
   },
 
   // Dev only: serve the shared uploads folder at /uploads (Caddy serves it in production).
