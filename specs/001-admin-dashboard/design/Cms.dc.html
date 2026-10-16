@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>محرر الموقع</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Lalezar&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>body { margin: 0; }</style>
+</helmet>
+
+<div style="box-sizing:border-box;width:100%;font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;color:#14201A;padding:26px 32px 56px;display:flex;flex-direction:column;gap:22px">
+
+  <!-- toolbar -->
+  <div style="box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;gap:14px;background:#fff;border:1px solid #E7E0C8;border-radius:24px;padding:14px 18px">
+    <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:2px;flex:1 1 240px">
+      <span style="box-sizing:border-box;font-weight:700;font-size:17px">الصفحة الرئيسية</span>
+      <span style="box-sizing:border-box;font-family:'Outfit',sans-serif;font-size:12.5px;color:#7A857E;direction:ltr;text-align:right">GET /api/content/home</span>
+    </div>
+    <div style="box-sizing:border-box;display:flex;background:#F4F1E6;border-radius:999px;padding:4px;gap:2px">
+      <button class="chip" onClick="{{setDesktop}}" style="box-sizing:border-box;height:38px;padding:0 16px;border:none;border-radius:999px;font-weight:700;font-size:14px;background:{{dBg}};color:{{dFg}}">كمبيوتر</button>
+      <button class="chip" onClick="{{setMobile}}" style="box-sizing:border-box;height:38px;padding:0 16px;border:none;border-radius:999px;font-weight:700;font-size:14px;background:{{mBg}};color:{{mFg}}">موبايل</button>
+    </div>
+    <sc-if value="{{dirty}}" hint-placeholder-val="{{ true }}">
+      <span style="box-sizing:border-box;display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:#6F6329;background:#F6EFCB;border-radius:999px;padding:9px 16px"><span style="box-sizing:border-box;width:8px;height:8px;border-radius:50%;background:#B5A45C"></span>{{changedCount}} تعديل غير منشور</span>
+    </sc-if>
+    <sc-if value="{{clean}}" hint-placeholder-val="{{ false }}">
+      <span style="box-sizing:border-box;display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:#1F6B3F;background:#E2F1E6;border-radius:999px;padding:9px 16px"><span style="box-sizing:border-box;width:8px;height:8px;border-radius:50%;background:#2E9E5B"></span>كل التعديلات منشورة</span>
+    </sc-if>
+    <button class="btn-line" onClick="{{discard}}" style="box-sizing:border-box;height:46px;padding:0 20px;border-radius:999px;border:1.5px solid #CFC7A8;background:transparent;color:#2A4D38;font-weight:700;font-size:15px;opacity:{{actOp}}">تراجع عن الكل</button>
+    <button class="btn-gold" onClick="{{publish}}" style="box-sizing:border-box;height:46px;padding:0 26px;border-radius:999px;border:none;background:#B5A45C;color:#14201A;font-weight:700;font-size:15.5px;opacity:{{actOp}}">نشر على الموقع</button>
+  </div>
+
+  <div style="box-sizing:border-box;display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start">
+
+    <!-- LEFT: structure + fields -->
+    <div style="box-sizing:border-box;flex:1 1 400px;max-width:460px;min-width:0;display:flex;flex-direction:column;gap:18px">
+
+      <div style="box-sizing:border-box;background:#fff;border:1px solid #E7E0C8;border-radius:26px;padding:20px;display:flex;flex-direction:column;gap:6px">
+        <div style="box-sizing:border-box;display:flex;justify-content:space-between;align-items:baseline;padding:0 4px 8px">
+          <span style="box-sizing:border-box;font-family:'Lalezar',sans-serif;font-size:25px;color:#2A4D38;line-height:1">أقسام الصفحة</span>
+          <span style="box-sizing:border-box;font-size:12.5px;color:#7A857E">رتّب، أخفي، أو افتح للتعديل</span>
+        </div>
+        <sc-for list="{{sections}}" as="s" hint-placeholder-count="8">
+          <div style="box-sizing:border-box;display:flex;align-items:center;gap:6px;border-radius:16px;padding:4px;background:{{s.bg}};border:1.5px solid {{s.bd}}">
+            <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:2px">
+              <button aria-label="تحريك لأعلى" onClick="{{s.up}}" style="box-sizing:border-box;width:28px;height:22px;border:none;background:transparent;color:#7A857E;opacity:{{s.upOp}};display:flex;align-items:center;justify-content:center;padding:0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"></path></svg></button>
+              <button aria-label="تحريك لأسفل" onClick="{{s.down}}" style="box-sizing:border-box;width:28px;height:22px;border:none;background:transparent;color:#7A857E;opacity:{{s.downOp}};display:flex;align-items:center;justify-content:center;padding:0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+            </div>
+            <button onClick="{{s.pick}}" style="box-sizing:border-box;flex:1;min-width:0;border:none;background:transparent;text-align:right;display:flex;align-items:center;gap:10px;padding:8px 6px;color:inherit;opacity:{{s.textOp}}">
+              <span style="box-sizing:border-box;width:34px;height:34px;border-radius:11px;background:{{s.chipBg}};color:{{s.chipFg}};font-family:'Outfit',sans-serif;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex:none">{{s.n}}</span>
+              <span style="box-sizing:border-box;display:flex;flex-direction:column;gap:1px;min-width:0">
+                <span style="box-sizing:border-box;font-weight:700;font-size:15.5px">{{s.label}}</span>
+                <span style="box-sizing:border-box;font-size:12.5px;color:#7A857E">{{s.meta}}</span>
+              </span>
+            </button>
+            <sc-if value="{{s.changedN}}" hint-placeholder-val="{{ false }}"><span style="box-sizing:border-box;height:22px;min-width:22px;padding:0 6px;border-radius:999px;background:#B5A45C;color:#14201A;font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center">{{s.changedN}}</span></sc-if>
+            <button aria-label="إظهار أو إخفاء القسم" onClick="{{s.toggle}}" style="box-sizing:border-box;width:46px;height:28px;border:none;border-radius:999px;background:{{s.swBg}};position:relative;flex:none;margin-inline-end:6px">
+              <span style="box-sizing:border-box;position:absolute;top:3px;{{s.knobSide}}:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25)"></span>
+            </button>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="box-sizing:border-box;background:#fff;border:1px solid #E7E0C8;border-radius:26px;padding:22px;display:flex;flex-direction:column;gap:18px">
+        <div style="box-sizing:border-box;display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap">
+          <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:3px">
+            <span style="box-sizing:border-box;font-family:'Lalezar',sans-serif;font-size:27px;color:#2A4D38;line-height:1">{{cur.label}}</span>
+            <span style="box-sizing:border-box;font-family:'Outfit',sans-serif;font-size:12.5px;color:#7A857E;direction:ltr;text-align:right">content.{{cur.id}}</span>
+          </div>
+          <div style="box-sizing:border-box;display:flex;background:#F4F1E6;border-radius:999px;padding:4px;gap:2px">
+            <button class="chip" onClick="{{tabEdit}}" style="box-sizing:border-box;height:34px;padding:0 15px;border:none;border-radius:999px;font-weight:700;font-size:13.5px;background:{{eBg}};color:{{eFg}}">تحرير</button>
+            <button class="chip" onClick="{{tabJson}}" style="box-sizing:border-box;height:34px;padding:0 15px;border:none;border-radius:999px;font-weight:700;font-size:13.5px;background:{{jBg}};color:{{jFg}}">API</button>
+          </div>
+        </div>
+
+        <sc-if value="{{isEdit}}" hint-placeholder-val="{{ true }}">
+          <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:18px">
+            <sc-for list="{{fields}}" as="f" hint-placeholder-count="5">
+              <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:7px">
+                <div style="box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:8px">
+                  <label for="{{f.id}}" style="box-sizing:border-box;font-weight:700;font-size:14.5px">{{f.label}}</label>
+                  <span style="box-sizing:border-box;display:flex;align-items:center;gap:8px">
+                    <sc-if value="{{f.changed}}" hint-placeholder-val="{{ false }}"><button aria-label="رجّع القيمة الأصلية" onClick="{{f.reset}}" style="box-sizing:border-box;height:24px;padding:0 10px;border:none;border-radius:999px;background:#F6EFCB;color:#6F6329;font-size:12px;font-weight:700">استرجاع</button></sc-if>
+                    <span style="box-sizing:border-box;font-family:'Outfit',sans-serif;font-size:11.5px;color:#9AA39D;direction:ltr">{{f.key}}</span>
+                  </span>
+                </div>
+                <sc-if value="{{f.isText}}" hint-placeholder-val="{{ true }}">
+                  <input id="{{f.id}}" value="{{f.value}}" onChange="{{f.set}}" style="box-sizing:border-box;height:48px;border-radius:14px;border:1.5px solid {{f.bd}};background:#FBFAF4;padding:0 14px;font-size:15.5px;color:#14201A;width:100%">
+                </sc-if>
+                <sc-if value="{{f.isLong}}" hint-placeholder-val="{{ false }}">
+                  <textarea id="{{f.id}}" rows="3" value="{{f.value}}" onChange="{{f.set}}" style="box-sizing:border-box;border-radius:14px;border:1.5px solid {{f.bd}};background:#FBFAF4;padding:12px 14px;font-size:15.5px;line-height:1.8;color:#14201A;width:100%;resize:vertical"></textarea>
+                </sc-if>
+                <sc-if value="{{f.isSwatch}}" hint-placeholder-val="{{ false }}">
+                  <div style="box-sizing:border-box;display:flex;gap:10px;flex-wrap:wrap">
+                    <sc-for list="{{f.swatches}}" as="w" hint-placeholder-count="4">
+                      <button aria-label="{{w.name}}" onClick="{{w.pick}}" style="box-sizing:border-box;width:78px;border:2px solid {{w.bd}};background:#fff;border-radius:16px;padding:6px;display:flex;flex-direction:column;gap:6px;align-items:center">
+                        <span style="box-sizing:border-box;width:100%;height:38px;border-radius:10px;background:{{w.bg}};display:flex;align-items:center;justify-content:center;font-family:'Lalezar',sans-serif;font-size:18px;color:{{w.acc}};line-height:1">أب</span>
+                        <span style="box-sizing:border-box;font-size:11.5px;font-weight:600;color:#3B4A41">{{w.name}}</span>
+                      </button>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                <sc-if value="{{f.counter}}" hint-placeholder-val="{{ true }}"><span style="box-sizing:border-box;font-size:12px;color:#9AA39D">{{f.len}} حرف</span></sc-if>
+              </div>
+            </sc-for>
+            <div style="box-sizing:border-box;display:flex;align-items:center;gap:10px;border-top:1px dashed #D8D0B4;padding-top:16px;font-size:13px;color:#5B665F;line-height:1.7">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B5A45C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="box-sizing:border-box;flex:none"><circle cx="12" cy="12" r="9"></circle><path d="M12 8h.01M11 12h1v5h1"></path></svg>
+              كل حقل هنا ليه مفتاح ثابت في الـ API، فالفرونت بيقرأ النص من الباك إند مباشرة وأي تعديل بيظهر بعد النشر.
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{isJson}}" hint-placeholder-val="{{ false }}">
+          <pre style="box-sizing:border-box;margin:0;direction:ltr;text-align:left;background:#0E1A13;color:#BFE3CB;border-radius:18px;padding:18px;font-family:'Outfit',ui-monospace,monospace;font-size:13px;line-height:1.75;overflow:auto;white-space:pre-wrap;word-break:break-word;max-height:520px">{{json}}</pre>
+        </sc-if>
+      </div>
+
+      <div style="box-sizing:border-box;background:#fff;border:1px solid #E7E0C8;border-radius:26px;padding:20px;display:flex;flex-direction:column;gap:10px">
+        <span style="box-sizing:border-box;font-family:'Lalezar',sans-serif;font-size:25px;color:#2A4D38;line-height:1;padding:0 4px 4px">سجل النسخ</span>
+        <sc-for list="{{versions}}" as="x" hint-placeholder-count="3">
+          <div class="row-h" style="box-sizing:border-box;display:flex;align-items:center;gap:12px;padding:10px 8px;border-radius:14px">
+            <span style="box-sizing:border-box;width:36px;height:36px;border-radius:50%;background:#F1ECDD;color:#2A4D38;display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;font-weight:700;font-size:13px;flex:none">v{{x.n}}</span>
+            <span style="box-sizing:border-box;flex:1;display:flex;flex-direction:column;gap:1px;min-width:0"><span style="box-sizing:border-box;font-weight:700;font-size:14.5px">{{x.label}}</span><span style="box-sizing:border-box;font-size:12.5px;color:#7A857E">{{x.when}}</span></span>
+            <button class="btn-line" onClick="{{x.restore}}" style="box-sizing:border-box;height:34px;padding:0 14px;border-radius:999px;border:1.5px solid #CFC7A8;background:transparent;color:#2A4D38;font-weight:700;font-size:13px">استرجاع</button>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- RIGHT: live preview -->
+    <div style="box-sizing:border-box;flex:999 1 500px;min-width:0;display:flex;flex-direction:column;gap:12px">
+      <div style="box-sizing:border-box;display:flex;align-items:center;gap:10px;color:#5B665F;font-size:13.5px;font-weight:600">
+        <span style="box-sizing:border-box;display:flex;gap:5px"><span style="box-sizing:border-box;width:10px;height:10px;border-radius:50%;background:#E4572E"></span><span style="box-sizing:border-box;width:10px;height:10px;border-radius:50%;background:#D2C27A"></span><span style="box-sizing:border-box;width:10px;height:10px;border-radius:50%;background:#5BD08A"></span></span>
+        معاينة حيّة — اضغط على أي قسم لتعديله
+      </div>
+      <div style="box-sizing:border-box;background:#E4DFCB;border-radius:28px;padding:18px;display:flex;justify-content:center">
+        <div style="box-sizing:border-box;width:100%;max-width:{{frameW}};background:#FAF7EE;border-radius:18px;overflow:hidden;box-shadow:0 20px 50px rgba(22,41,30,.18)">
+          <sc-for list="{{preview}}" as="p" hint-placeholder-count="8">
+            <div style="box-sizing:border-box;position:relative;outline:{{p.ring}};outline-offset:-3px">
+              <button aria-label="{{p.aria}}" onClick="{{p.pick}}" style="box-sizing:border-box;position:absolute;inset:0;z-index:3;width:100%;height:100%;background:transparent;border:none;padding:0;cursor:pointer"></button>
+              <sc-if value="{{p.sel}}" hint-placeholder-val="{{ false }}"><span style="box-sizing:border-box;position:absolute;top:8px;left:8px;z-index:4;background:#B5A45C;color:#14201A;font-size:12px;font-weight:700;padding:4px 12px;border-radius:999px;pointer-events:none">{{p.label}}</span></sc-if>
+
+              <sc-if value="{{p.isAnnounce}}" hint-placeholder-val="{{ false }}">
+                <div style="box-sizing:border-box;background:#2A4D38;color:#FAF7EE;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px;padding:10px 18px;font-size:{{p.fs.small}}">
+                  <span>{{p.pv.announce.text}}</span>
+                  <span style="box-sizing:border-box;color:#D2C27A;font-weight:700;text-decoration:underline">{{p.pv.announce.link}}</span>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{p.isHero}}" hint-placeholder-val="{{ true }}">
+                <div style="box-sizing:border-box;position:relative;background:{{p.th.bg}};color:{{p.th.fg}};padding:{{p.fs.pad}};overflow:hidden">
+                  <div style="box-sizing:border-box;position:absolute;top:-120px;left:-80px;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(181,164,92,.35),rgba(181,164,92,0) 65%)"></div>
+                  <div style="box-sizing:border-box;position:relative;display:flex;flex-wrap:wrap;gap:24px;align-items:center">
+                    <div style="box-sizing:border-box;flex:1 1 240px;display:flex;flex-direction:column;gap:14px">
+                      <span style="box-sizing:border-box;align-self:flex-start;font-size:{{p.fs.small}};font-weight:600;padding:6px 14px;border-radius:999px;border:1px solid {{p.th.acc}};color:{{p.th.acc}}">{{p.pv.hero.eyebrow}}</span>
+                      <div style="box-sizing:border-box;font-family:'Lalezar',sans-serif;font-size:{{p.fs.h1}};line-height:1.05">{{p.pv.hero.title1}} <span style="box-sizing:border-box;color:{{p.th.acc}}">{{p.pv.hero.title2}}</span></div>
+                      <p style="box-sizing:border-box;margin:0;font-size:{{p.fs.body}};line-height:1.9;opacity:.85;max-width:460px">{{p.pv.hero.sub}}</p>
+                      <div style="box-sizing:border-box;display:flex;flex-wrap:wrap;gap:10px;margin-top:4px">
+                        <span style="box-sizing:border-box;height:46px;padding:0 22px;border-radius:999px;background:{{p.th.btn}};color:{{p.th.btnFg}};font-weight:700;font-size:{{p.fs.body}};display:flex;align-items:center">{{p.pv.hero.cta1}}</span>
+                        <span style="box-sizing:border-box;height:46px;padding:0 22px;border-radius:999px;border:1.5px solid {{p.th.fg}};font-weight:700;font-size:{{p.fs.body}};display:flex;align-items:center">{{p.pv.hero.cta2}}</span>
+                      </div>
+                    </div>
+                    <div style="box-sizing:border-box;flex:0 1 190px;width:190px;height:190px;margin:0 auto;border-radius:50%;border:2px dashed {{p.th.acc}};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center">
+                      <span style="box-sizing:border-box;font-family:'Outfit',sans-serif;font-weight:800;font-size:15px;letter-spacing:.14em;color:{{p.th.acc}}">{{p.pv.hero.badge}}</span>
+                      <span style="box-sizing:border-box;font-family:'Lalezar',sans-serif;font-size:52px;line-height:1">54</span>
+                      <span style="box-sizing:border-box;font-size:13px;opacity:.8">سنة ثقة</span>
+                    </div>
+                  </div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{p.isCategories}}" hint-placeholder-val="{{ false }}">
+                <div style="box-sizing:border-box;padding:{{p.fs.pad}};display:flex;flex-direction:column;gap:18px;background:#FAF7EE">
+                  <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:4px"><span style="box-sizing:border-box;font-family:'Lalezar',sans-serif;font-size:{{p.fs.h2}};color:#2A4D38;line-height:1.1">{{p.pv.categories.title}}</span><span style="box-sizing:border-box;font-size:{{p.fs.body}};color:#5B665F">{{p.pv.categories.sub}}</span></div>
+                  <div style="box-sizing:border-box;display:grid;grid-template-columns:repeat({{p.fs.cols}},minmax(0,1fr));gap:12px">
+                    <div style="box-sizing:border-box;background:#F1ECDD;border-radius:18px;padding:18px 8px;text-align:center;font-weight:700;font-size:14px;color:#2A4D38">ثلاجات</div>
+                    <div style="box-sizing:border-box;background:#F1ECDD;border-radius:18px;padding:18px 8px;text-align:center;font-weight:700;font-size:14px;color:#2A4D38">غسالات</div>
+                    <div style="box-sizing:border-box;background:#F1ECDD;border-radius:18px;padding:18px 8px;text-align:center;font-weight:700;font-size:14px;color:#2A4D38">شاشات</div>
+                    <div style="box-sizing:border-box;background:#F1ECDD;border-radius:18px;padding:18px 8px;text-align:center;font-weight:700;font-size:14px;color:#2A4D38">تكييفات</div>
+                  </div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{p.isFlash}}" hint-placeholder-val="{{ false }}">
+                <div style="box-sizing:border-box;padding:{{p.fs.pad}};display:flex;flex-direction:column;gap:18px;background:#F4F1E6">
+                  <div style="box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px">
+                    <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:4px"><span style="box-sizing:border-box;font-family:'Lalezar',sans-serif;font-size:{{p.fs.h2}};color:#2A4D38;line-height:1.1">{{p.pv.flash.title}}</span><span style="box-sizing:border-box;font-size:{{p.fs.body}};color:#5B665F">{{p.pv.flash.sub}}</span></div>
+                    <span style="box-sizing:border-box;display:flex;align-items:center;gap:8px;background:#14201A;color:#D2C27A;border-radius:999px;padding:8px 16px;font-family:'Outfit',sans-serif;font-weight:700;font-size:15px;direction:ltr">{{p.pv.flash.hours}}:00:00</span>
+                  </div>
+                  <div style="box-sizing:border-box;display:grid;grid-template-columns:repeat({{p.fs.cols3}},minmax(0,1fr));gap:12px">
+                    <div style="box-sizing:border-box;background:#fff;border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:8px"><div style="box-sizing:border-box;height:84px;border-radius:12px;background:linear-gradient(135deg,#DDE6DA,#F1ECDD)"></div><span style="box-sizing:border-box;font-size:13px;font-weight:600">منتج من قسم المنتجات</span><span style="box-sizing:border-box;font-family:'Outfit',sans-serif;font-weight:800;color:#2A4D38">00,000 ج.م</span></div>
+                    <div style="box-sizing:border-box;background:#fff;border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:8px"><div style="box-sizing:border-box;height:84px;border-radius:12px;background:linear-gradient(135deg,#DDE6DA,#F1ECDD)"></div><span style="box-sizing:border-box;font-size:13px;font-weight:600">منتج من قسم المنتجات</span><span style="box-sizing:border-box;font-family:'Outfit',sans-serif;font-weight:800;color:#2A4D38">00,000 ج.م</span></div>
+                    <div style="box-sizing:border-box;background:#fff;border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:8px"><div style="box-sizing:border-box;height:84px;border-radius:12px;background:linear-gradient(135deg,#DDE6DA,#F1ECDD)"></div><span style="box-sizing:border-box;font-size:13px;font-weight:600">منتج من قسم المنتجات</span><span style="box-sizing:border-box;font-family:'Outfit',sans-serif;font-weight:800;color:#2A4D38">00,000 ج.م</span></div>
+                  </div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{p.isBridal}}" hint-placeholder-val="{{ false }}">
+                <div style="box-sizing:border-box;padding:{{p.fs.pad}};display:flex;flex-direction:column;gap:18px;background:#FAF7EE">
+                  <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:4px"><span style="box-sizing:border-box;font-family:'Lalezar',sans-serif;font-size:{{p.fs.h2}};color:#2A4D38;line-height:1.1">{{p.pv.bridal.title}}</span><span style="box-sizing:border-box;font-size:{{p.fs.body}};color:#5B665F">{{p.pv.bridal.sub}}</span></div>
+                  <div style="box-sizing:border-box;display:grid;grid-template-columns:repeat({{p.fs.cols3}},minmax(0,1fr));gap:12px">
+                    <div style="box-sizing:border-box;border:1.5px solid #E1DAC0;border-radius:20px;padding:18px;font-weight:700;color:#2A4D38;background:#fff">{{p.pv.bridal.tier1}}</div>
+                    <div style="box-sizing:border-box;border:1.5px solid #B5A45C;border-radius:20px;padding:18px;font-weight:700;color:#14201A;background:#F6EFCB">{{p.pv.bridal.tier2}}</div>
+                    <div style="box-sizing:border-box;border:1.5px solid #E1DAC0;border-radius:20px;padding:18px;font-weight:700;color:#2A4D38;background:#fff">{{p.pv.bridal.tier3}}</div>
+                  </div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{p.isB2b}}" hint-placeholder-val="{{ false }}">
+                <div style="box-sizing:border-box;padding:{{p.fs.pad}};background:#16291E;color:#FAF7EE;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px">
+                  <div style="box-sizing:border-box;flex:1 1 240px;display:flex;flex-direction:column;gap:6px"><span style="box-sizing:border-box;font-family:'Lalezar',sans-serif;font-size:{{p.fs.h2}};line-height:1.1">{{p.pv.b2b.title}}</span><span style="box-sizing:border-box;font-size:{{p.fs.body}};color:#C9D5C6;line-height:1.8">{{p.pv.b2b.sub}}</span></div>
+                  <span style="box-sizing:border-box;height:48px;padding:0 24px;border-radius:999px;background:#B5A45C;color:#14201A;font-weight:700;display:flex;align-items:center;font-size:{{p.fs.body}}">{{p.pv.b2b.cta}}</span>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{p.isAbout}}" hint-placeholder-val="{{ false }}">
+                <div style="box-sizing:border-box;padding:{{p.fs.pad}};display:flex;flex-wrap:wrap;gap:22px;align-items:center;background:#FAF7EE">
+                  <div style="box-sizing:border-box;flex:0 1 150px;width:150px;height:150px;border-radius:30px;background:#2A4D38;color:#D2C27A;display:flex;align-items:center;justify-content:center;font-family:'Lalezar',sans-serif;font-size:50px">{{p.pv.about.since}}</div>
+                  <div style="box-sizing:border-box;flex:1 1 240px;display:flex;flex-direction:column;gap:8px"><span style="box-sizing:border-box;font-family:'Lalezar',sans-serif;font-size:{{p.fs.h2}};color:#2A4D38;line-height:1.1">{{p.pv.about.title}}</span><p style="box-sizing:border-box;margin:0;font-size:{{p.fs.body}};line-height:1.9;color:#3B4A41">{{p.pv.about.p1}}</p><p style="box-sizing:border-box;margin:0;font-size:{{p.fs.body}};line-height:1.9;color:#7A857E">{{p.pv.about.p2}}</p></div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{p.isFooter}}" hint-placeholder-val="{{ false }}">
+                <div style="box-sizing:border-box;padding:{{p.fs.pad}};background:#0E1A13;color:#C9D5C6;display:flex;flex-direction:column;gap:8px;font-size:{{p.fs.body}}">
+                  <span style="box-sizing:border-box;font-family:'Lalezar',sans-serif;font-size:{{p.fs.h2}};color:#FAF7EE;line-height:1.1">محمد سراج</span>
+                  <span style="box-sizing:border-box;line-height:1.8">{{p.pv.footer.tagline}}</span>
+                  <span style="box-sizing:border-box;color:#D2C27A">واتساب: {{p.pv.footer.whatsapp}}</span>
+                  <span>{{p.pv.footer.address}}</span>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+          <sc-if value="{{emptyPreview}}" hint-placeholder-val="{{ false }}"><div style="box-sizing:border-box;padding:80px 20px;text-align:center;color:#7A857E;font-size:15px">كل الأقسام مخفية. فعّل قسم من القايمة.</div></sc-if>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
+    <div class="toast" style="box-sizing:border-box;position:fixed;bottom:28px;left:50%;margin-left:-190px;width:380px;max-width:92vw;background:#14201A;color:#FAF7EE;border-radius:18px;padding:16px 20px;display:flex;align-items:center;gap:12px;font-weight:600;font-size:15px;box-shadow:0 18px 40px rgba(0,0,0,.3);z-index:50">
+      <span style="box-sizing:border-box;width:28px;height:28px;border-radius:50%;background:#B5A45C;color:#14201A;display:flex;align-items:center;justify-content:center;flex:none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>{{toast}}
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1176,"height":1500}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    const base = {
+      announce: { text: 'توصيل لحد باب البيت وتقسيط مريح على الأجهزة الكبيرة', link: 'اعرف التفاصيل' },
+      hero: { eyebrow: 'منذ 1972 · المنصورة', title1: 'بيتك', title2: 'يستاهل الأحسن', sub: 'أجهزة منزلية وأدوات مطبخ من أكبر الماركات، بضمان حقيقي وخدمة بتستمر بعد البيع.', cta1: 'تسوّق دلوقتي', cta2: 'اطلب جهاز عروستك', badge: 'SINCE 1972', theme: 0 },
+      categories: { title: 'تسوّق حسب القسم', sub: 'كل اللي بيتك محتاجه في مكان واحد' },
+      flash: { title: 'عروض الفلاش', sub: 'خصومات لفترة محدودة على أجهزة مختارة', hours: '12' },
+      bridal: { title: 'جهاز العروسة', sub: 'باقات متكاملة جاهزة للتوصيل والتركيب', tier1: 'الباقة الأساسية', tier2: 'الباقة الذهبية', tier3: 'باقة القصر' },
+      b2b: { title: 'حلول للشركات والتجّار', sub: 'أسعار جملة، فواتير رسمية، وحساب مخصص لمدير حساب.', cta: 'سجّل كتاجر' },
+      about: { title: 'حكاية سراج', p1: 'بدأت الحكاية سنة 1972 في المنصورة بمحل صغير وحلم كبير: إن كل بيت يلاقي الجهاز اللي يستاهله بسعر عادل.', p2: '[اكتب هنا باقي القصة: المراحل، الفروع، الشراكات مع المصانع]', since: '1972' },
+      footer: { tagline: 'محمد سراج — أجهزة منزلية وأدوات مطبخ', whatsapp: '[رقم الواتساب]', address: '[العنوان - المنصورة]' }
+    };
+    const clone = (o) => JSON.parse(JSON.stringify(o));
+    const old1 = clone(base); old1.hero.title2 = 'يستاهل الأفضل'; old1.flash.hours = '24'; old1.announce.text = 'خصم خاص على الأجهزة الكبيرة';
+    const old2 = clone(old1); old2.hero.theme = 1; old2.hero.cta1 = 'اشتري دلوقتي';
+    this.state = {
+      sel: 'hero',
+      c: clone(base),
+      base: clone(base),
+      order: ['announce', 'hero', 'categories', 'flash', 'bridal', 'b2b', 'about', 'footer'],
+      hidden: {},
+      device: 'desktop',
+      tab: 'edit',
+      toast: '',
+      versions: [
+        { n: 3, label: 'تعديل نصوص الهيرو', when: 'امبارح · 09:40 م', snap: old1 },
+        { n: 2, label: 'ثيم كريمي للهيرو', when: 'من 4 أيام', snap: old2 },
+        { n: 1, label: 'النسخة الأولى', when: 'من أسبوعين', snap: clone(base) }
+      ]
+    };
+    this.clone = clone;
+  }
+  flash(msg) {
+    this.setState({ toast: msg });
+    clearTimeout(this._t);
+    this._t = setTimeout(() => this.setState({ toast: '' }), 2600);
+  }
+  setField(sec, key, v) {
+    const c = this.state.c;
+    this.setState({ c: { ...c, [sec]: { ...c[sec], [key]: v } } });
+  }
+  move(id, d) {
+    const o = this.state.order.slice();
+    const i = o.indexOf(id);
+    const j = i + d;
+    if (j < 0 || j >= o.length) return;
+    o.splice(i, 1);
+    o.splice(j, 0, id);
+    this.setState({ order: o });
+  }
+  renderVals() {
+    const S = this.state;
+    const defs = {
+      announce: { label: 'شريط الإعلان', f: [['text', 'text', 'نص الإعلان'], ['link', 'text', 'نص الرابط']] },
+      hero: { label: 'الهيرو الرئيسي', f: [['eyebrow', 'text', 'السطر العلوي'], ['title1', 'text', 'العنوان - الجزء الأول'], ['title2', 'text', 'العنوان - الجزء الملوّن'], ['sub', 'long', 'الوصف'], ['cta1', 'text', 'زر أساسي'], ['cta2', 'text', 'زر ثانوي'], ['badge', 'text', 'نص الختم الدائري'], ['theme', 'swatch', 'ثيم الخلفية']] },
+      categories: { label: 'التصنيفات', f: [['title', 'text', 'عنوان القسم'], ['sub', 'long', 'وصف القسم']] },
+      flash: { label: 'عروض الفلاش', f: [['title', 'text', 'عنوان القسم'], ['sub', 'long', 'وصف القسم'], ['hours', 'text', 'ساعات العد التنازلي']] },
+      bridal: { label: 'باقات جهاز العروسة', f: [['title', 'text', 'عنوان القسم'], ['sub', 'long', 'وصف القسم'], ['tier1', 'text', 'اسم الباقة 1'], ['tier2', 'text', 'اسم الباقة 2'], ['tier3', 'text', 'اسم الباقة 3']] },
+      b2b: { label: 'قسم الشركات والتجّار', f: [['title', 'text', 'عنوان القسم'], ['sub', 'long', 'وصف القسم'], ['cta', 'text', 'نص الزر']] },
+      about: { label: 'من نحن', f: [['title', 'text', 'عنوان القسم'], ['p1', 'long', 'الفقرة الأولى'], ['p2', 'long', 'الفقرة الثانية'], ['since', 'text', 'سنة التأسيس']] },
+      footer: { label: 'الفوتر', f: [['tagline', 'long', 'الوصف المختصر'], ['whatsapp', 'text', 'رقم الواتساب'], ['address', 'text', 'العنوان']] }
+    };
+    const themes = [
+      { name: 'أخضر ملكي', bg: '#16291E', fg: '#FAF7EE', acc: '#D2C27A', btn: '#B5A45C', btnFg: '#14201A' },
+      { name: 'كريمي', bg: '#F1ECDD', fg: '#14201A', acc: '#6F6329', btn: '#2A4D38', btnFg: '#FAF7EE' },
+      { name: 'ذهبي', bg: '#B5A45C', fg: '#14201A', acc: '#2A4D38', btn: '#14201A', btnFg: '#FAF7EE' },
+      { name: 'فحمي', bg: '#1C1F1D', fg: '#FAF7EE', acc: '#D2C27A', btn: '#D2C27A', btnFg: '#14201A' }
+    ];
+    const c = S.c, base = S.base;
+    const mobile = S.device === 'mobile';
+    const changedIn = (id) => Object.keys(c[id]).filter((k) => c[id][k] !== base[id][k]).length;
+    const total = S.order.reduce((a, id) => a + changedIn(id), 0);
+    const cur = defs[S.sel];
+    const curKeys = cur.f;
+
+    const sections = S.order.map((id, i) => {
+      const on = !S.hidden[id];
+      const sel = id === S.sel;
+      return {
+        n: i + 1, label: defs[id].label,
+        meta: on ? defs[id].f.length + ' حقول' : 'مخفي عن الزوار',
+        bg: sel ? '#F6EFCB' : 'transparent', bd: sel ? '#B5A45C' : 'transparent',
+        chipBg: sel ? '#14201A' : '#F1ECDD', chipFg: sel ? '#D2C27A' : '#2A4D38',
+        textOp: on ? 1 : .5, upOp: i === 0 ? .25 : 1, downOp: i === S.order.length - 1 ? .25 : 1,
+        swBg: on ? '#2A4D38' : '#CFC7A8', knobSide: on ? 'left' : 'right',
+        changedN: changedIn(id) || '',
+        pick: () => this.setState({ sel: id, tab: 'edit' }),
+        up: () => this.move(id, -1), down: () => this.move(id, 1),
+        toggle: () => this.setState({ hidden: { ...S.hidden, [id]: on } })
+      };
+    });
+
+    const fields = curKeys.map(([key, kind, label]) => {
+      const val = c[S.sel][key];
+      const changed = val !== base[S.sel][key];
+      return {
+        id: 'f-' + S.sel + '-' + key, key, label,
+        isText: kind === 'text', isLong: kind === 'long', isSwatch: kind === 'swatch',
+        value: val, changed, bd: changed ? '#B5A45C' : '#E1DAC0',
+        counter: kind !== 'swatch', len: String(val).length,
+        set: (e) => this.setField(S.sel, key, e.target.value),
+        reset: () => this.setField(S.sel, key, base[S.sel][key]),
+        swatches: themes.map((t, ti) => ({ name: t.name, bg: t.bg, acc: t.acc, bd: ti === val ? '#B5A45C' : '#E7E0C8', pick: () => this.setField(S.sel, key, ti) }))
+      };
+    });
+
+    const fs = mobile
+      ? { h1: '36px', h2: '28px', body: '15px', small: '12.5px', pad: '28px 20px', cols: '2', cols3: '1' }
+      : { h1: '54px', h2: '34px', body: '16px', small: '13.5px', pad: '44px 40px', cols: '4', cols3: '3' };
+    const th = themes[c.hero.theme] || themes[0];
+    const preview = S.order.filter((id) => !S.hidden[id]).map((id) => ({
+      id, label: defs[id].label, aria: 'تحديد قسم ' + defs[id].label,
+      isAnnounce: id === 'announce', isHero: id === 'hero', isCategories: id === 'categories', isFlash: id === 'flash',
+      isBridal: id === 'bridal', isB2b: id === 'b2b', isAbout: id === 'about', isFooter: id === 'footer',
+      sel: id === S.sel, ring: id === S.sel ? '3px solid #B5A45C' : '0 solid transparent',
+      pv: c, th, fs, pick: () => this.setState({ sel: id, tab: 'edit' })
+    }));
+
+    const fe = S.tab === 'edit';
+    const json = JSON.stringify({ section: S.sel, visible: !S.hidden[S.sel], updated_by: 'admin', fields: c[S.sel] }, null, 2);
+
+    return {
+      sections, fields, preview, cur: { id: S.sel, label: cur.label }, json,
+      isEdit: fe, isJson: !fe,
+      eBg: fe ? '#2A4D38' : 'transparent', eFg: fe ? '#FAF7EE' : '#3B4A41',
+      jBg: !fe ? '#2A4D38' : 'transparent', jFg: !fe ? '#FAF7EE' : '#3B4A41',
+      tabEdit: () => this.setState({ tab: 'edit' }), tabJson: () => this.setState({ tab: 'json' }),
+      dBg: !mobile ? '#2A4D38' : 'transparent', dFg: !mobile ? '#FAF7EE' : '#3B4A41',
+      mBg: mobile ? '#2A4D38' : 'transparent', mFg: mobile ? '#FAF7EE' : '#3B4A41',
+      setDesktop: () => this.setState({ device: 'desktop' }), setMobile: () => this.setState({ device: 'mobile' }),
+      frameW: mobile ? '360px' : '100%',
+      dirty: total > 0, clean: total === 0, changedCount: total, actOp: total > 0 ? 1 : .45,
+      emptyPreview: preview.length === 0,
+      toast: S.toast,
+      discard: () => { if (total > 0) { this.setState({ c: this.clone(base) }); this.flash('اترجعت كل التعديلات'); } },
+      publish: () => {
+        if (total === 0) return;
+        const n = S.versions.length ? S.versions[0].n + 1 : 1;
+        this.setState({
+          base: this.clone(c),
+          versions: [{ n, label: total + ' تعديل منشور', when: 'دلوقتي', snap: this.clone(c) }].concat(S.versions).slice(0, 4)
+        });
+        this.flash('اتنشر ' + total + ' تعديل على الموقع');
+      },
+      versions: S.versions.map((x) => ({ n: x.n, label: x.label, when: x.when, restore: () => { this.setState({ c: this.clone(x.snap) }); this.flash('اترجعت النسخة v' + x.n + ' كمسودة، انشرها لتأكيدها'); } }))
+    };
+  }
+}
+</script>
+</body>
+</html>

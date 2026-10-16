@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>المنتجات</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Lalezar&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>body { margin: 0; }</style>
+</helmet>
+
+<div style="box-sizing:border-box;width:100%;font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;color:#14201A;padding:28px 32px 56px;display:flex;flex-direction:column;gap:20px">
+
+  <!-- stats -->
+  <div style="box-sizing:border-box;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px">
+    <sc-for list="{{stats}}" as="s" hint-placeholder-count="4">
+      <div style="box-sizing:border-box;background:#fff;border:1px solid #E7E0C8;border-radius:22px;padding:18px 20px;display:flex;flex-direction:column;gap:6px"><span style="box-sizing:border-box;font-size:13.5px;color:#5B665F;font-weight:600">{{s.label}}</span><span style="box-sizing:border-box;font-family:'Outfit',sans-serif;font-weight:800;font-size:30px;line-height:1;color:{{s.fg}}">{{s.value}}</span></div>
+    </sc-for>
+  </div>
+
+  <div style="box-sizing:border-box;display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+    <div style="box-sizing:border-box;display:flex;flex-wrap:wrap;gap:8px;flex:1 1 400px">
+      <sc-for list="{{cats}}" as="c" hint-placeholder-count="6">
+        <button class="chip" onClick="{{c.pick}}" style="box-sizing:border-box;height:40px;padding:0 16px;border-radius:999px;border:1.5px solid {{c.bd}};background:{{c.bg}};color:{{c.fg}};font-weight:700;font-size:14px">{{c.label}}</button>
+      </sc-for>
+    </div>
+    <label style="box-sizing:border-box;flex:0 1 280px;height:44px;border-radius:999px;background:#fff;border:1px solid #E1DAC0;display:flex;align-items:center;gap:10px;padding:0 16px;color:#7A857E">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input value="{{q}}" onChange="{{setQ}}" placeholder="اسم المنتج أو الماركة" aria-label="بحث في المنتجات" style="box-sizing:border-box;flex:1;min-width:0;border:none;background:transparent;font-size:14.5px;color:#14201A">
+    </label>
+    <button class="btn-gold" onClick="{{addNew}}" style="box-sizing:border-box;height:44px;padding:0 22px;border:none;border-radius:999px;background:#B5A45C;color:#14201A;font-weight:700;font-size:15px">+ منتج جديد</button>
+  </div>
+
+  <div style="box-sizing:border-box;display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start">
+
+    <!-- table -->
+    <div style="box-sizing:border-box;flex:1.7 1 520px;min-width:0;background:#fff;border:1px solid #E7E0C8;border-radius:28px;padding:14px 14px 8px">
+      <div style="box-sizing:border-box;overflow-x:auto">
+        <div style="box-sizing:border-box;min-width:580px">
+          <div style="box-sizing:border-box;display:grid;grid-template-columns:2.4fr .9fr 1.2fr .8fr;gap:12px;padding:12px 14px;font-size:12.5px;font-weight:700;color:#7A857E"><span>المنتج</span><span>السعر</span><span>المخزون</span><span>الظهور</span></div>
+          <sc-for list="{{rows}}" as="p" hint-placeholder-count="8">
+            <div class="row-h" style="box-sizing:border-box;display:grid;grid-template-columns:2.4fr .9fr 1.2fr .8fr;gap:12px;align-items:center;padding:12px 14px;border-top:1px solid #F0EAD3;border-radius:14px;background:{{p.bg}}">
+              <button onClick="{{p.pick}}" style="box-sizing:border-box;border:none;background:transparent;text-align:right;display:flex;align-items:center;gap:12px;color:inherit;padding:0;min-width:0">
+                <span style="box-sizing:border-box;width:54px;height:54px;border-radius:16px;background:{{p.tile}};flex:none;display:flex;align-items:center;justify-content:center;font-family:'Lalezar',sans-serif;font-size:19px;color:#2A4D38;line-height:1">{{p.catShort}}</span>
+                <span style="box-sizing:border-box;display:flex;flex-direction:column;gap:3px;min-width:0"><span style="box-sizing:border-box;font-weight:700;font-size:15px;line-height:1.4">{{p.name}}</span><span style="box-sizing:border-box;font-size:12.5px;color:#7A857E">{{p.brand}} · {{p.cat}}</span></span>
+              </button>
+              <span style="box-sizing:border-box;font-family:'Outfit',sans-serif;font-weight:700;font-size:15px">{{p.price}}</span>
+              <span style="box-sizing:border-box;display:flex;flex-direction:column;gap:6px"><span style="box-sizing:border-box;font-family:'Outfit',sans-serif;font-weight:700;font-size:14px;color:{{p.stockFg}}">{{p.stockLabel}}</span><span style="box-sizing:border-box;height:6px;border-radius:999px;background:#F1ECDD;overflow:hidden"><span style="box-sizing:border-box;display:block;height:100%;width:{{p.stockW}};background:{{p.stockBar}};border-radius:999px"></span></span></span>
+              <button aria-label="تفعيل أو إيقاف ظهور المنتج" onClick="{{p.toggle}}" style="box-sizing:border-box;width:46px;height:28px;border:none;border-radius:999px;background:{{p.swBg}};position:relative;flex:none"><span style="box-sizing:border-box;position:absolute;top:3px;{{p.side}}:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25)"></span></button>
+            </div>
+          </sc-for>
+          <sc-if value="{{empty}}" hint-placeholder-val="{{ false }}"><div style="box-sizing:border-box;padding:60px 10px;text-align:center;color:#7A857E;font-size:15px">مفيش منتجات بالشكل ده.</div></sc-if>
+        </div>
+      </div>
+    </div>
+
+    <!-- editor -->
+    <div style="box-sizing:border-box;flex:1 1 360px;min-width:0;background:#fff;border:1px solid #E7E0C8;border-radius:28px;padding:26px;display:flex;flex-direction:column;gap:18px">
+      <div style="box-sizing:border-box;display:flex;justify-content:space-between;align-items:center;gap:10px"><span style="box-sizing:border-box;font-family:'Lalezar',sans-serif;font-size:27px;color:#2A4D38;line-height:1.1">تعديل المنتج</span><span style="box-sizing:border-box;font-family:'Outfit',sans-serif;font-size:12.5px;color:#9AA39D;direction:ltr">ID {{e.id}}</span></div>
+
+      <!-- storefront card preview -->
+      <div style="box-sizing:border-box;background:#F4F1E6;border-radius:22px;padding:16px;display:flex;gap:14px;align-items:center">
+        <div style="box-sizing:border-box;position:relative;width:96px;height:96px;border-radius:18px;background:{{e.tile}};flex:none">
+          <sc-if value="{{e.hasDisc}}" hint-placeholder-val="{{ true }}"><span style="box-sizing:border-box;position:absolute;top:-8px;right:-8px;background:#E4572E;color:#fff;font-family:'Outfit',sans-serif;font-weight:800;font-size:13px;padding:4px 9px;border-radius:999px">-{{e.disc}}%</span></sc-if>
+        </div>
+        <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:5px;min-width:0"><span style="box-sizing:border-box;font-size:12.5px;color:#7A857E">{{e.brand}}</span><span style="box-sizing:border-box;font-weight:700;font-size:15px;line-height:1.5">{{e.name}}</span><span style="box-sizing:border-box;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap"><span style="box-sizing:border-box;font-family:'Outfit',sans-serif;font-weight:800;font-size:21px;color:#2A4D38">{{e.priceFmt}} <span style="box-sizing:border-box;font-family:'IBM Plex Sans Arabic',sans-serif;font-size:12px;font-weight:500;color:#14201A">ج.م</span></span><sc-if value="{{e.hasDisc}}" hint-placeholder-val="{{ true }}"><span style="box-sizing:border-box;font-family:'Outfit',sans-serif;font-size:13px;color:#8A918C;text-decoration:line-through">{{e.oldFmt}}</span></sc-if></span></div>
+      </div>
+
+      <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:7px"><label for="pn" style="box-sizing:border-box;font-weight:700;font-size:14.5px">اسم المنتج</label><input id="pn" value="{{e.name}}" onChange="{{set.name}}" style="box-sizing:border-box;height:48px;border-radius:14px;border:1.5px solid #E1DAC0;background:#FBFAF4;padding:0 14px;font-size:15.5px;color:#14201A;width:100%"></div>
+      <div style="box-sizing:border-box;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:7px"><label for="pb" style="box-sizing:border-box;font-weight:700;font-size:14.5px">الماركة</label>
+          <select id="pb" value="{{e.brand}}" onChange="{{set.brand}}" style="box-sizing:border-box;height:48px;border-radius:14px;border:1.5px solid #E1DAC0;background:#FBFAF4;padding:0 10px;font-size:15px;color:#14201A;width:100%"><option>Samsung</option><option>LG</option><option>Toshiba</option><option>Sharp</option><option>Fresh</option><option>Tornado</option><option>Unionaire</option></select></div>
+        <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:7px"><label for="pc" style="box-sizing:border-box;font-weight:700;font-size:14.5px">القسم</label>
+          <select id="pc" value="{{e.cat}}" onChange="{{set.cat}}" style="box-sizing:border-box;height:48px;border-radius:14px;border:1.5px solid #E1DAC0;background:#FBFAF4;padding:0 10px;font-size:15px;color:#14201A;width:100%"><option>ثلاجات</option><option>غسالات</option><option>شاشات</option><option>تكييفات</option><option>بوتاجازات</option><option>أجهزة صغيرة</option></select></div>
+      </div>
+      <div style="box-sizing:border-box;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+        <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:7px"><label for="pp" style="box-sizing:border-box;font-weight:700;font-size:14.5px">السعر</label><input id="pp" value="{{e.price}}" onChange="{{set.price}}" style="box-sizing:border-box;height:48px;border-radius:14px;border:1.5px solid #E1DAC0;background:#FBFAF4;padding:0 12px;font-family:'Outfit',sans-serif;font-weight:600;font-size:16px;color:#14201A;width:100%;direction:ltr;text-align:right"></div>
+        <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:7px"><label for="po" style="box-sizing:border-box;font-weight:700;font-size:14.5px">قبل الخصم</label><input id="po" value="{{e.old}}" onChange="{{set.old}}" style="box-sizing:border-box;height:48px;border-radius:14px;border:1.5px solid #E1DAC0;background:#FBFAF4;padding:0 12px;font-family:'Outfit',sans-serif;font-weight:600;font-size:16px;color:#14201A;width:100%;direction:ltr;text-align:right"></div>
+        <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:7px"><label for="ps" style="box-sizing:border-box;font-weight:700;font-size:14.5px">المخزون</label><input id="ps" value="{{e.stock}}" onChange="{{set.stock}}" style="box-sizing:border-box;height:48px;border-radius:14px;border:1.5px solid #E1DAC0;background:#FBFAF4;padding:0 12px;font-family:'Outfit',sans-serif;font-weight:600;font-size:16px;color:#14201A;width:100%;direction:ltr;text-align:right"></div>
+      </div>
+      <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:7px"><label for="pd" style="box-sizing:border-box;font-weight:700;font-size:14.5px">الوصف</label><textarea id="pd" rows="3" value="{{e.desc}}" onChange="{{set.desc}}" style="box-sizing:border-box;border-radius:14px;border:1.5px solid #E1DAC0;background:#FBFAF4;padding:12px 14px;font-size:15px;line-height:1.8;color:#14201A;width:100%;resize:vertical"></textarea></div>
+
+      <div style="box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:12px;background:#F4F1E6;border-radius:16px;padding:12px 16px">
+        <span style="box-sizing:border-box;display:flex;flex-direction:column;gap:2px"><span style="box-sizing:border-box;font-weight:700;font-size:14.5px">يظهر في عروض الفلاش</span><span style="box-sizing:border-box;font-size:12.5px;color:#7A857E">بيتسحب تلقائي لقسم الفلاش في الموقع</span></span>
+        <button aria-label="تفعيل عرض الفلاش" onClick="{{e.toggleFlash}}" style="box-sizing:border-box;width:46px;height:28px;border:none;border-radius:999px;background:{{e.flashBg}};position:relative;flex:none"><span style="box-sizing:border-box;position:absolute;top:3px;{{e.flashSide}}:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25)"></span></button>
+      </div>
+
+      <div style="box-sizing:border-box;display:flex;flex-wrap:wrap;gap:10px">
+        <button class="btn-gold" onClick="{{save}}" style="box-sizing:border-box;flex:1 1 160px;height:50px;border:none;border-radius:999px;background:#B5A45C;color:#14201A;font-weight:700;font-size:15.5px">حفظ التعديلات</button>
+        <button class="btn-line" onClick="{{del}}" style="box-sizing:border-box;flex:1 1 110px;height:50px;border-radius:999px;border:1.5px solid #E4B3A3;background:transparent;color:#A2381A;font-weight:700;font-size:15px">حذف</button>
+      </div>
+    </div>
+  </div>
+
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
+    <div class="toast" style="box-sizing:border-box;position:fixed;bottom:28px;left:50%;margin-left:-190px;width:380px;max-width:92vw;background:#14201A;color:#FAF7EE;border-radius:18px;padding:16px 20px;font-weight:600;font-size:15px;box-shadow:0 18px 40px rgba(0,0,0,.3);z-index:50">{{toast}}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1176,"height":1400}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    const P = (id, name, brand, cat, price, old, stock, flash, desc) => ({ id, name, brand, cat, price, old, stock, flash, active: true, desc });
+    this.state = {
+      cat: 'الكل', q: '', sel: 1, toast: '', nextId: 11,
+      products: [
+        P(1, 'ثلاجة نوفروست بابين 450 لتر', 'Samsung', 'ثلاجات', 28900, 32500, 14, true, 'ثلاجة نوفروست بابين، موفرة للطاقة، بضمان 10 سنين على الكمبروسر.'),
+        P(2, 'ثلاجة ديجيتال 14 قدم', 'Toshiba', 'ثلاجات', 19800, 21500, 6, false, 'ثلاجة بابين ديجيتال، تبريد سريع وتوزيع هواء متساوي.'),
+        P(3, 'ثلاجة سايد باي سايد 620 لتر', 'LG', 'ثلاجات', 54900, 59900, 3, true, 'سايد باي سايد بديسبنسر مياه وثلج.'),
+        P(4, 'غسالة أوتوماتيك فتحة أمامية 8 كجم', 'LG', 'غسالات', 24500, 26900, 22, true, 'غسالة فتحة أمامية بمحرك انفرتر وبرامج غسيل متعددة.'),
+        P(5, 'غسالة نصف أوتوماتيك 10 كجم', 'Fresh', 'غسالات', 8700, 0, 31, false, 'غسالة نصف أوتوماتيك بحوضين، سعة 10 كجم.'),
+        P(6, 'شاشة سمارت 55 بوصة 4K', 'Sharp', 'شاشات', 21900, 24500, 9, true, 'شاشة 4K سمارت بنظام تشغيل وتطبيقات مدمجة.'),
+        P(7, 'شاشة سمارت 43 بوصة Full HD', 'Tornado', 'شاشات', 11400, 12900, 17, false, 'شاشة Full HD سمارت للمطبخ أو الغرف الصغيرة.'),
+        P(8, 'تكييف سبليت 1.5 حصان بارد/ساخن', 'Unionaire', 'تكييفات', 51500, 56000, 2, true, 'تكييف سبليت انفرتر بارد/ساخن بفلتر هواء.'),
+        P(9, 'بوتاجاز 5 شعلة ستانلس', 'Fresh', 'بوتاجازات', 17900, 19500, 11, false, 'بوتاجاز ستانلس 5 شعلة بفرن واسع وإشعال أوتوماتيك.'),
+        P(10, 'قلاية هوائية 6 لتر', 'Tornado', 'أجهزة صغيرة', 3200, 3800, 48, false, 'قلاية هوائية بشاشة رقمية وبرامج جاهزة.')
+      ]
+    };
+  }
+  flash(m) {
+    this.setState({ toast: m });
+    clearTimeout(this._t);
+    this._t = setTimeout(() => this.setState({ toast: '' }), 2400);
+  }
+  renderVals() {
+    const S = this.state;
+    const fmt = (n) => n.toLocaleString('en-US');
+    const tiles = { 'ثلاجات': 'linear-gradient(135deg,#DDE6DA,#F1ECDD)', 'غسالات': 'linear-gradient(135deg,#DCE6EC,#EEF1F1)', 'شاشات': 'linear-gradient(135deg,#D9D6E6,#EFEDF3)', 'تكييفات': 'linear-gradient(135deg,#D6E8EC,#EEF4F4)', 'بوتاجازات': 'linear-gradient(135deg,#EADFC0,#F6F0DD)', 'أجهزة صغيرة': 'linear-gradient(135deg,#F0D9CE,#F8EEE8)' };
+    const short = { 'ثلاجات': 'ث', 'غسالات': 'غ', 'شاشات': 'ش', 'تكييفات': 'ت', 'بوتاجازات': 'ب', 'أجهزة صغيرة': 'ص' };
+    const catList = ['الكل', 'ثلاجات', 'غسالات', 'شاشات', 'تكييفات', 'بوتاجازات', 'أجهزة صغيرة'];
+    const q = S.q.trim().toLowerCase();
+    const vis = S.products.filter((p) => (S.cat === 'الكل' || p.cat === S.cat) && (!q || p.name.toLowerCase().indexOf(q) >= 0 || p.brand.toLowerCase().indexOf(q) >= 0));
+    const cur = S.products.find((p) => p.id === S.sel) || S.products[0] || null;
+    const upd = (id, patch) => this.setState({ products: S.products.map((p) => p.id === id ? { ...p, ...patch } : p) });
+    const num = (e) => Number(String(e.target.value).replace(/[^\d]/g, '')) || 0;
+    const low = S.products.filter((p) => p.stock <= 5).length;
+    const e = cur || { id: 0, name: '', brand: 'Samsung', cat: 'ثلاجات', price: 0, old: 0, stock: 0, flash: false, desc: '' };
+    const disc = e.old > e.price && e.old ? Math.round((e.old - e.price) / e.old * 100) : 0;
+    return {
+      stats: [
+        { label: 'إجمالي المنتجات', value: S.products.length, fg: '#14201A' },
+        { label: 'ظاهر في الموقع', value: S.products.filter((p) => p.active).length, fg: '#1F6B3F' },
+        { label: 'مخزون قارب يخلص', value: low, fg: low ? '#A2381A' : '#14201A' },
+        { label: 'في عروض الفلاش', value: S.products.filter((p) => p.flash).length, fg: '#6F6329' }
+      ],
+      cats: catList.map((c) => ({ label: c, bd: S.cat === c ? '#2A4D38' : '#E1DAC0', bg: S.cat === c ? '#2A4D38' : '#fff', fg: S.cat === c ? '#FAF7EE' : '#3B4A41', pick: () => this.setState({ cat: c }) })),
+      q: S.q, setQ: (ev) => this.setState({ q: ev.target.value }),
+      rows: vis.map((p) => ({
+        name: p.name, brand: p.brand, cat: p.cat, price: fmt(p.price), tile: tiles[p.cat], catShort: short[p.cat],
+        stockLabel: p.stock <= 5 ? p.stock + ' · قارب يخلص' : String(p.stock), stockFg: p.stock <= 5 ? '#A2381A' : '#14201A',
+        stockW: Math.min(100, p.stock * 3) + '%', stockBar: p.stock <= 5 ? '#E4572E' : '#2A4D38',
+        bg: p.id === e.id ? '#F6EFCB' : 'transparent',
+        swBg: p.active ? '#2A4D38' : '#CFC7A8', side: p.active ? 'left' : 'right',
+        pick: () => this.setState({ sel: p.id }), toggle: () => upd(p.id, { active: !p.active })
+      })),
+      empty: vis.length === 0,
+      e: {
+        id: e.id, name: e.name, brand: e.brand, cat: e.cat, price: String(e.price), old: String(e.old), stock: String(e.stock), desc: e.desc,
+        priceFmt: fmt(e.price), oldFmt: fmt(e.old), disc, hasDisc: disc > 0, tile: tiles[e.cat],
+        flashBg: e.flash ? '#2A4D38' : '#CFC7A8', flashSide: e.flash ? 'left' : 'right',
+        toggleFlash: () => upd(e.id, { flash: !e.flash })
+      },
+      set: {
+        name: (ev) => upd(e.id, { name: ev.target.value }), brand: (ev) => upd(e.id, { brand: ev.target.value }), cat: (ev) => upd(e.id, { cat: ev.target.value }),
+        price: (ev) => upd(e.id, { price: num(ev) }), old: (ev) => upd(e.id, { old: num(ev) }), stock: (ev) => upd(e.id, { stock: num(ev) }), desc: (ev) => upd(e.id, { desc: ev.target.value })
+      },
+      save: () => this.flash('اتحفظ المنتج وبقى ظاهر بالتعديلات في الموقع'),
+      del: () => {
+        const rest = S.products.filter((p) => p.id !== e.id);
+        this.setState({ products: rest, sel: rest.length ? rest[0].id : 0 });
+        this.flash('اتحذف المنتج');
+      },
+      addNew: () => {
+        const id = S.nextId;
+        this.setState({ nextId: id + 1, sel: id, cat: 'الكل', q: '', products: [{ id, name: 'منتج جديد', brand: 'Samsung', cat: 'ثلاجات', price: 0, old: 0, stock: 0, flash: false, active: false, desc: '' }].concat(S.products) });
+        this.flash('اتضاف منتج جديد، كمّل بياناته');
+      },
+      toast: S.toast
+    };
+  }
+}
+</script>
+</body>
+</html>

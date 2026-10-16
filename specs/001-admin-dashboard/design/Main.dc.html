@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>لوحة تحكم محمد سراج</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Lalezar&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+body { margin: 0; }
+* { box-sizing: border-box; }
+a { color: inherit; text-decoration: none; }
+button, input, select, textarea { font-family: inherit; }
+button { cursor: pointer; }
+.nav-i { transition: background .18s ease, color .18s ease; }
+.nav-i:hover { background: rgba(250,247,238,.08) !important; color: #FAF7EE !important; }
+.card { transition: box-shadow .2s ease, transform .2s ease; }
+.card:hover { box-shadow: 0 14px 34px rgba(22,41,30,.10); }
+.btn-gold { transition: transform .18s ease, background .18s ease; }
+.btn-gold:hover { transform: translateY(-1px); background: #D2C27A !important; }
+.btn-line { transition: background .18s ease, color .18s ease, border-color .18s ease; }
+.btn-line:hover { background: #2A4D38 !important; color: #FAF7EE !important; border-color: #2A4D38 !important; }
+.row-h { transition: background .15s ease; }
+.row-h:hover { background: #F7F4E9 !important; }
+.chip { transition: background .15s ease, color .15s ease; }
+.chip:hover { background: #E9E2C6 !important; }
+input:focus, select:focus, textarea:focus { outline: 2px solid #B5A45C; outline-offset: 1px; }
+button:focus-visible, a:focus-visible { outline: 2px solid #B5A45C; outline-offset: 2px; }
+@keyframes slideUp { from { transform: translateY(14px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(228,87,46,.5); } 100% { box-shadow: 0 0 0 10px rgba(228,87,46,0); } }
+.toast { animation: slideUp .3s ease both; }
+.view { animation: fadeIn .35s ease both; }
+.dot { animation: pulse 1.8s ease-out infinite; }
+@media (max-width: 900px) { .side { width: 100% !important; flex-basis: 100% !important; position: static !important; } .side-nav { flex-direction: row !important; flex-wrap: wrap; } .hide-m { display: none !important; } }
+@media (prefers-reduced-motion: reduce) { .toast, .view, .dot { animation: none !important; } }
+</style>
+</helmet>
+
+<div style="width:100%;min-height:100%;background:#F4F1E6;color:#14201A;font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;display:flex;flex-wrap:wrap;align-items:stretch">
+
+  <!-- SIDEBAR -->
+  <aside class="side" style="flex:0 0 264px;width:264px;background:#0E1A13;color:#C9D5C6;display:flex;flex-direction:column;padding:26px 18px;gap:26px;position:relative;overflow:hidden">
+    <div style="position:absolute;top:-120px;left:-120px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(181,164,92,.28),rgba(181,164,92,0) 65%)"></div>
+    <div style="position:relative;display:flex;align-items:center;gap:12px;padding:0 6px">
+      <div style="width:50px;height:50px;border-radius:16px;background:#B5A45C;color:#0E1A13;display:flex;align-items:center;justify-content:center;font-family:'Lalezar',sans-serif;font-size:30px;line-height:1;flex:none;padding-bottom:4px">س</div>
+      <div style="display:flex;flex-direction:column;gap:3px">
+        <span style="font-family:'Lalezar',sans-serif;font-size:25px;color:#FAF7EE;line-height:1">محمد سراج</span>
+        <span style="font-family:'Outfit',sans-serif;font-size:11px;letter-spacing:.18em;color:#B5A45C;font-weight:600">ADMIN · SINCE 1972</span>
+      </div>
+    </div>
+
+    <nav class="side-nav" style="position:relative;display:flex;flex-direction:column;gap:4px">
+      <sc-for list="{{nav}}" as="n" hint-placeholder-count="7">
+        <sc-if value="{{n.isGroup}}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:12px;letter-spacing:.06em;color:#6F8576;padding:16px 14px 6px;font-weight:600">{{n.label}}</div>
+        </sc-if>
+        <sc-if value="{{n.isItem}}" hint-placeholder-val="{{ true }}">
+          <button class="nav-i" onClick="{{n.go}}" style="display:flex;align-items:center;gap:12px;width:100%;border:none;text-align:right;padding:12px 14px;border-radius:14px;font-size:15.5px;font-weight:600;background:{{n.bg}};color:{{n.fg}}">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.icon}}"></path></svg>
+            <span style="flex:1">{{n.label}}</span>
+            <sc-if value="{{n.badge}}" hint-placeholder-val="{{ true }}">
+              <span style="min-width:24px;height:22px;padding:0 7px;border-radius:999px;background:#E4572E;color:#fff;font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center">{{n.badge}}</span>
+            </sc-if>
+          </button>
+        </sc-if>
+      </sc-for>
+    </nav>
+
+    <div class="hide-m" style="position:relative;margin-top:auto;background:rgba(250,247,238,.06);border:1px solid rgba(250,247,238,.12);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;align-items:center;gap:8px;color:#FAF7EE;font-weight:700;font-size:14px"><span style="width:9px;height:9px;border-radius:50%;background:#5BD08A"></span>الموقع منشور وشغال</div>
+      <div style="font-size:13px;line-height:1.7;color:#9FB0A4">آخر نشر النهارده الساعة 11:20 ص بواسطة مدير المتجر</div>
+      <button class="btn-gold" onClick="{{preview}}" style="height:42px;border:none;border-radius:999px;background:#B5A45C;color:#0E1A13;font-weight:700;font-size:14.5px">افتح الموقع في تاب جديد</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div style="flex:999 1 640px;min-width:0;display:flex;flex-direction:column">
+    <header style="display:flex;flex-wrap:wrap;align-items:center;gap:16px;padding:22px 32px;border-bottom:1px solid #E7E0C8;background:rgba(250,247,238,.9)">
+      <div style="display:flex;flex-direction:column;gap:2px;flex:1 1 220px">
+        <span style="font-size:13px;color:#7A857E">لوحة التحكم / {{crumb}}</span>
+        <h1 style="margin:0;font-family:'Lalezar',sans-serif;font-weight:400;font-size:38px;line-height:1.1;color:#2A4D38">{{title}}</h1>
+      </div>
+      <label style="flex:0 1 340px;height:48px;border-radius:999px;background:#fff;border:1px solid #E1DAC0;display:flex;align-items:center;gap:10px;padding:0 18px;color:#7A857E">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+        <input placeholder="ابحث عن طلب، منتج، عميل..." aria-label="بحث" style="flex:1;border:none;background:transparent;font-size:15px;color:#14201A;min-width:0">
+      </label>
+      <button aria-label="الإشعارات" style="position:relative;width:48px;height:48px;border-radius:50%;background:#fff;border:1px solid #E1DAC0;color:#2A4D38;display:flex;align-items:center;justify-content:center">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 17V11a6 6 0 1 1 12 0v6l1.5 2h-15L6 17zM10 21h4"></path></svg>
+        <span class="dot" style="position:absolute;top:9px;right:11px;width:10px;height:10px;border-radius:50%;background:#E4572E;border:2px solid #fff"></span>
+      </button>
+      <div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #E1DAC0;border-radius:999px;padding:5px 16px 5px 6px">
+        <div style="width:38px;height:38px;border-radius:50%;background:#2A4D38;color:#D2C27A;font-family:'Lalezar',sans-serif;font-size:21px;display:flex;align-items:center;justify-content:center;padding-bottom:3px">م</div>
+        <div style="display:flex;flex-direction:column;line-height:1.3"><span style="font-weight:700;font-size:14px">مدير المتجر</span><span style="font-size:12px;color:#7A857E">صلاحية كاملة</span></div>
+      </div>
+    </header>
+
+    <main class="view" style="flex:1;min-width:0">
+      <sc-if value="{{v.overview}}" hint-placeholder-val="{{ true }}"><dc-import name="Overview" hint-size="100%,1480px"></dc-import></sc-if>
+      <sc-if value="{{v.cms}}" hint-placeholder-val="{{ false }}"><dc-import name="Cms" hint-size="100%,1500px"></dc-import></sc-if>
+      <sc-if value="{{v.orders}}" hint-placeholder-val="{{ false }}"><dc-import name="Orders" hint-size="100%,1300px"></dc-import></sc-if>
+      <sc-if value="{{v.products}}" hint-placeholder-val="{{ false }}"><dc-import name="Products" hint-size="100%,1400px"></dc-import></sc-if>
+      <sc-if value="{{v.customers}}" hint-placeholder-val="{{ false }}"><dc-import name="Customers" hint-size="100%,1200px"></dc-import></sc-if>
+      <sc-if value="{{v.settings}}" hint-placeholder-val="{{ false }}"><dc-import name="Settings" hint-size="100%,1300px"></dc-import></sc-if>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { view: 'overview' };
+  }
+  renderVals() {
+    const view = this.state.view;
+    const items = [
+      { g: 'الرئيسية' },
+      { id: 'overview', label: 'نظرة عامة', title: 'صباح الخير يا مدير', icon: 'M4 13h6V4H4v9zM4 20h6v-5H4v5zM14 20h6v-9h-6v9zM14 4v5h6V4h-6z' },
+      { g: 'المحتوى' },
+      { id: 'cms', label: 'محرر الموقع', title: 'محرر الموقع', icon: 'M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4' },
+      { g: 'المتجر' },
+      { id: 'orders', label: 'الطلبات', title: 'الطلبات', icon: 'M6 7h12l-1 12H7L6 7zM9 7a3 3 0 0 1 6 0', badge: '12' },
+      { id: 'products', label: 'المنتجات', title: 'المنتجات والمخزون', icon: 'M4 8l8-4 8 4v8l-8 4-8-4V8zM4 8l8 4 8-4M12 12v8' },
+      { id: 'customers', label: 'العملاء والتجّار', title: 'العملاء والتجّار', icon: 'M16 19v-1a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v1M10 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM20 19v-1a3 3 0 0 0-2-2.8M16 5.2a3 3 0 0 1 0 5.6', badge: '4' },
+      { g: 'النظام' },
+      { id: 'settings', label: 'الإعدادات', title: 'الإعدادات', icon: 'M4 7h10M18 7h2M4 17h2M10 17h10M14 4v6M6 14v6' }
+    ];
+    const nav = items.map((n) => n.g
+      ? { isGroup: true, isItem: false, label: n.g }
+      : { isGroup: false, isItem: true, label: n.label, icon: n.icon, badge: n.badge || '',
+          bg: n.id === view ? '#B5A45C' : 'transparent',
+          fg: n.id === view ? '#0E1A13' : '#C9D5C6',
+          go: () => this.setState({ view: n.id }) });
+    const cur = items.find((n) => n.id === view);
+    return {
+      nav,
+      title: cur.title,
+      crumb: cur.label,
+      v: { overview: view === 'overview', cms: view === 'cms', orders: view === 'orders', products: view === 'products', customers: view === 'customers', settings: view === 'settings' },
+      preview: () => {}
+    };
+  }
+}
+</script>
+</body>
+</html>

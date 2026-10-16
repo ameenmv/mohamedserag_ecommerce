@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>الطلبات</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Lalezar&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>body { margin: 0; }</style>
+</helmet>
+
+<div style="box-sizing:border-box;width:100%;font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;color:#14201A;padding:28px 32px 56px;display:flex;flex-direction:column;gap:20px">
+
+  <div style="box-sizing:border-box;display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+    <div style="box-sizing:border-box;display:flex;flex-wrap:wrap;gap:8px;flex:1 1 400px">
+      <sc-for list="{{filters}}" as="f" hint-placeholder-count="6">
+        <button class="chip" onClick="{{f.pick}}" style="box-sizing:border-box;height:42px;padding:0 16px;border-radius:999px;border:1.5px solid {{f.bd}};background:{{f.bg}};color:{{f.fg}};font-weight:700;font-size:14.5px;display:flex;align-items:center;gap:8px">{{f.label}}<span style="box-sizing:border-box;font-family:'Outfit',sans-serif;font-size:12.5px;min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:{{f.nbg}};color:{{f.nfg}};display:flex;align-items:center;justify-content:center">{{f.n}}</span></button>
+      </sc-for>
+    </div>
+    <label style="box-sizing:border-box;flex:0 1 300px;height:44px;border-radius:999px;background:#fff;border:1px solid #E1DAC0;display:flex;align-items:center;gap:10px;padding:0 16px;color:#7A857E">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input value="{{q}}" onChange="{{setQ}}" placeholder="رقم الطلب أو اسم العميل" aria-label="بحث في الطلبات" style="box-sizing:border-box;flex:1;min-width:0;border:none;background:transparent;font-size:14.5px;color:#14201A">
+    </label>
+    <button class="btn-line" style="box-sizing:border-box;height:44px;padding:0 20px;border-radius:999px;border:1.5px solid #CFC7A8;background:transparent;color:#2A4D38;font-weight:700;font-size:14.5px">تصدير Excel</button>
+  </div>
+
+  <div style="box-sizing:border-box;display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start">
+
+    <!-- list -->
+    <div style="box-sizing:border-box;flex:1.7 1 520px;min-width:0;background:#fff;border:1px solid #E7E0C8;border-radius:28px;padding:14px 14px 8px">
+      <div style="box-sizing:border-box;overflow-x:auto">
+        <div style="box-sizing:border-box;min-width:560px">
+          <div style="box-sizing:border-box;display:grid;grid-template-columns:1.2fr 1.4fr .9fr 1fr 1fr;gap:12px;padding:12px 14px;font-size:12.5px;font-weight:700;color:#7A857E">
+            <span>رقم الطلب</span><span>العميل</span><span>القناة</span><span>الإجمالي</span><span>الحالة</span>
+          </div>
+          <sc-for list="{{rows}}" as="o" hint-placeholder-count="8">
+            <button class="row-h" onClick="{{o.pick}}" style="box-sizing:border-box;width:100%;border:none;border-top:1px solid #F0EAD3;text-align:right;display:grid;grid-template-columns:1.2fr 1.4fr .9fr 1fr 1fr;gap:12px;align-items:center;padding:15px 14px;border-radius:14px;background:{{o.bg}};color:inherit">
+              <span style="box-sizing:border-box;font-family:'Outfit',sans-serif;font-weight:700;font-size:14.5px;direction:ltr;text-align:right">{{o.id}}</span>
+              <span style="box-sizing:border-box;display:flex;flex-direction:column;gap:2px"><span style="box-sizing:border-box;font-weight:700;font-size:15px">{{o.name}}</span><span style="box-sizing:border-box;font-size:12.5px;color:#7A857E">{{o.when}}</span></span>
+              <span style="box-sizing:border-box;font-size:13.5px;color:#3B4A41">{{o.channel}}</span>
+              <span style="box-sizing:border-box;font-family:'Outfit',sans-serif;font-weight:700;font-size:15px">{{o.total}} <span style="box-sizing:border-box;font-family:'IBM Plex Sans Arabic',sans-serif;font-weight:500;font-size:12px;color:#7A857E">ج.م</span></span>
+              <span style="box-sizing:border-box;justify-self:start;font-size:13px;font-weight:700;padding:5px 12px;border-radius:999px;background:{{o.sbg}};color:{{o.sfg}}">{{o.status}}</span>
+            </button>
+          </sc-for>
+          <sc-if value="{{empty}}" hint-placeholder-val="{{ false }}"><div style="box-sizing:border-box;padding:60px 10px;text-align:center;color:#7A857E;font-size:15px">مفيش طلبات بالشكل ده.</div></sc-if>
+        </div>
+      </div>
+    </div>
+
+    <!-- detail -->
+    <div style="box-sizing:border-box;flex:1 1 360px;min-width:0;background:#fff;border:1px solid #E7E0C8;border-radius:28px;padding:26px;display:flex;flex-direction:column;gap:20px">
+      <div style="box-sizing:border-box;display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+        <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:4px">
+          <span style="box-sizing:border-box;font-family:'Outfit',sans-serif;font-weight:800;font-size:24px;direction:ltr;text-align:right;line-height:1.1">{{d.id}}</span>
+          <span style="box-sizing:border-box;font-size:13.5px;color:#7A857E">{{d.when}} · {{d.channel}}</span>
+        </div>
+        <span style="box-sizing:border-box;font-size:13px;font-weight:700;padding:6px 14px;border-radius:999px;background:{{d.sbg}};color:{{d.sfg}}">{{d.status}}</span>
+      </div>
+
+      <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:2px;background:#F4F1E6;border-radius:18px;padding:16px">
+        <span style="box-sizing:border-box;font-weight:700;font-size:16px">{{d.name}}</span>
+        <span style="box-sizing:border-box;font-size:14px;color:#5B665F">{{d.city}} · [رقم الموبايل]</span>
+        <span style="box-sizing:border-box;font-size:14px;color:#5B665F">{{d.pay}}</span>
+      </div>
+
+      <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:2px">
+        <span style="box-sizing:border-box;font-weight:700;font-size:14px;color:#7A857E;padding-bottom:6px">المنتجات</span>
+        <sc-for list="{{d.items}}" as="it" hint-placeholder-count="3">
+          <div style="box-sizing:border-box;display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid #F0EAD3;font-size:14.5px"><span style="box-sizing:border-box;flex:1;line-height:1.6">{{it.name}} <span style="box-sizing:border-box;color:#8A918C">× {{it.q}}</span></span><span style="box-sizing:border-box;font-family:'Outfit',sans-serif;font-weight:700">{{it.p}}</span></div>
+        </sc-for>
+        <div style="box-sizing:border-box;display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid #F0EAD3;font-size:14px;color:#5B665F"><span>التوصيل</span><span style="box-sizing:border-box;font-family:'Outfit',sans-serif;font-weight:700">{{d.ship}}</span></div>
+        <div style="box-sizing:border-box;display:flex;justify-content:space-between;align-items:baseline;padding-top:12px;border-top:1px dashed #D8D0B4"><span style="box-sizing:border-box;font-weight:700;font-size:16px">الإجمالي</span><span style="box-sizing:border-box;font-family:'Outfit',sans-serif;font-weight:800;font-size:28px;color:#2A4D38;line-height:1">{{d.total}} <span style="box-sizing:border-box;font-family:'IBM Plex Sans Arabic',sans-serif;font-weight:500;font-size:13px;color:#14201A">ج.م</span></span></div>
+      </div>
+
+      <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:0">
+        <span style="box-sizing:border-box;font-weight:700;font-size:14px;color:#7A857E;padding-bottom:10px">مسار الطلب</span>
+        <sc-for list="{{steps}}" as="s" hint-placeholder-count="4">
+          <div style="box-sizing:border-box;display:flex;gap:12px;align-items:stretch">
+            <div style="box-sizing:border-box;display:flex;flex-direction:column;align-items:center">
+              <span style="box-sizing:border-box;width:22px;height:22px;border-radius:50%;background:{{s.dot}};border:2px solid {{s.ring}};display:flex;align-items:center;justify-content:center;color:#fff;flex:none"><sc-if value="{{s.done}}" hint-placeholder-val="{{ false }}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></sc-if></span>
+              <span style="box-sizing:border-box;width:2px;flex:1;min-height:16px;background:{{s.bar}}"></span>
+            </div>
+            <span style="box-sizing:border-box;padding-bottom:12px;font-size:14.5px;font-weight:{{s.fw}};color:{{s.fg}}">{{s.label}}</span>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="box-sizing:border-box;display:flex;flex-wrap:wrap;gap:10px">
+        <sc-if value="{{d.canAdvance}}" hint-placeholder-val="{{ true }}"><button class="btn-gold" onClick="{{advance}}" style="box-sizing:border-box;flex:1 1 180px;height:50px;border:none;border-radius:999px;background:#B5A45C;color:#14201A;font-weight:700;font-size:15.5px">{{d.nextLabel}}</button></sc-if>
+        <sc-if value="{{d.canCancel}}" hint-placeholder-val="{{ true }}"><button class="btn-line" onClick="{{cancel}}" style="box-sizing:border-box;flex:1 1 120px;height:50px;border-radius:999px;border:1.5px solid #E4B3A3;background:transparent;color:#A2381A;font-weight:700;font-size:15px">إلغاء الطلب</button></sc-if>
+        <button class="btn-line" style="box-sizing:border-box;flex:1 1 120px;height:50px;border-radius:999px;border:1.5px solid #CFC7A8;background:transparent;color:#2A4D38;font-weight:700;font-size:15px">طباعة الفاتورة</button>
+      </div>
+    </div>
+  </div>
+
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
+    <div class="toast" style="box-sizing:border-box;position:fixed;bottom:28px;left:50%;margin-left:-190px;width:380px;max-width:92vw;background:#14201A;color:#FAF7EE;border-radius:18px;padding:16px 20px;font-weight:600;font-size:15px;box-shadow:0 18px 40px rgba(0,0,0,.3);z-index:50">{{toast}}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1176,"height":1300}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    const mk = (id, name, when, channel, city, pay, status, items, ship) => ({ id, name, when, channel, city, pay, status, items, ship });
+    this.state = {
+      filter: 'all', q: '', sel: 'SR-2026-0124', toast: '',
+      orders: [
+        mk('SR-2026-0124', 'أحمد محمود', 'النهارده · 10:42 ص', 'أفراد', 'المنصورة - الدقهلية', 'الدفع عند الاستلام', 'new', [{ name: 'ثلاجة نوفروست بابين 450 لتر', q: 1, p: 28900 }, { name: 'غسالة أوتوماتيك فتحة أمامية 8 كجم', q: 1, p: 24500 }, { name: 'شاشة سمارت 55 بوصة 4K', q: 1, p: 21900 }], 0),
+        mk('SR-2026-0123', 'شركة النيل للتجهيزات', 'النهارده · 09:15 ص', 'تجّار', 'طنطا - الغربية', 'تحويل بنكي', 'prep', [{ name: 'تكييف سبليت 1.5 حصان بارد/ساخن', q: 8, p: 51500 }], 0),
+        mk('SR-2026-0122', 'منى السيد', 'امبارح · 08:30 م', 'أفراد', 'دمياط', 'الدفع عند الاستلام', 'ship', [{ name: 'ثلاجة نوفروست بابين 450 لتر', q: 1, p: 28900 }], 150),
+        mk('SR-2026-0121', 'محمد إبراهيم', 'امبارح · 02:10 م', 'أفراد', 'المنصورة - الدقهلية', 'الدفع عند الاستلام', 'done', [{ name: 'شاشة سمارت 55 بوصة 4K', q: 1, p: 21900 }], 0),
+        mk('SR-2026-0120', 'ياسمين خالد', 'من يومين', 'جهاز عروسة', 'الزقازيق - الشرقية', 'تحويل بنكي', 'done', [{ name: 'باقة الجهاز الذهبية', q: 1, p: 137500 }], 0),
+        mk('SR-2026-0119', 'مكتب الأمل للتوريدات', 'من يومين', 'تجّار', 'المنصورة - الدقهلية', 'آجل (حد ائتماني)', 'prep', [{ name: 'بوتاجاز 5 شعلة ستانلس', q: 12, p: 17900 }], 0),
+        mk('SR-2026-0118', 'كريم عادل', 'من 3 أيام', 'أفراد', 'ميت غمر - الدقهلية', 'الدفع عند الاستلام', 'new', [{ name: 'غسالة أوتوماتيك فتحة أمامية 8 كجم', q: 1, p: 24500 }], 150),
+        mk('SR-2026-0117', 'هدى سمير', 'من 3 أيام', 'أفراد', 'المنصورة - الدقهلية', 'الدفع عند الاستلام', 'cancel', [{ name: 'مكنسة روبوت ذكية', q: 1, p: 9800 }], 0),
+        mk('SR-2026-0116', 'عمر فتحي', 'من 4 أيام', 'أفراد', 'كفر الشيخ', 'الدفع عند الاستلام', 'done', [{ name: 'قلاية هوائية 6 لتر', q: 2, p: 3200 }], 100)
+      ]
+    };
+  }
+  flash(m) {
+    this.setState({ toast: m });
+    clearTimeout(this._t);
+    this._t = setTimeout(() => this.setState({ toast: '' }), 2400);
+  }
+  renderVals() {
+    const S = this.state;
+    const fmt = (n) => n.toLocaleString('en-US');
+    const meta = {
+      new: { l: 'جديد', bg: '#F6EFCB', fg: '#6F6329' },
+      prep: { l: 'قيد التجهيز', bg: '#DCE8F5', fg: '#1D4E80' },
+      ship: { l: 'خرج للتوصيل', bg: '#E4DDF5', fg: '#4B3A8C' },
+      done: { l: 'تم التسليم', bg: '#E2F1E6', fg: '#1F6B3F' },
+      cancel: { l: 'ملغي', bg: '#FBE4DC', fg: '#A2381A' }
+    };
+    const flow = ['new', 'prep', 'ship', 'done'];
+    const nextLabels = { new: 'أكّد وابدأ التجهيز', prep: 'اشحن الطلب', ship: 'تم التسليم' };
+    const total = (o) => o.items.reduce((a, i) => a + i.p * i.q, 0) + o.ship;
+    const q = S.q.trim();
+    const visible = S.orders.filter((o) => (S.filter === 'all' || o.status === S.filter) && (!q || o.id.indexOf(q) >= 0 || o.name.indexOf(q) >= 0));
+    const cur = S.orders.find((o) => o.id === S.sel) || S.orders[0];
+    const fl = [['all', 'الكل']].concat(Object.keys(meta).map((k) => [k, meta[k].l]));
+    const cnt = (k) => k === 'all' ? S.orders.length : S.orders.filter((o) => o.status === k).length;
+    const setStatus = (id, st) => this.setState({ orders: S.orders.map((o) => o.id === id ? { ...o, status: st } : o) });
+    const idx = flow.indexOf(cur.status);
+    return {
+      filters: fl.map(([k, l]) => ({ label: l, n: cnt(k), bd: S.filter === k ? '#2A4D38' : '#E1DAC0', bg: S.filter === k ? '#2A4D38' : '#fff', fg: S.filter === k ? '#FAF7EE' : '#3B4A41', nbg: S.filter === k ? '#B5A45C' : '#F1ECDD', nfg: '#14201A', pick: () => this.setState({ filter: k }) })),
+      q: S.q, setQ: (e) => this.setState({ q: e.target.value }),
+      rows: visible.map((o) => ({ id: o.id, name: o.name, when: o.when, channel: o.channel, total: fmt(total(o)), status: meta[o.status].l, sbg: meta[o.status].bg, sfg: meta[o.status].fg, bg: o.id === cur.id ? '#F6EFCB' : 'transparent', pick: () => this.setState({ sel: o.id }) })),
+      empty: visible.length === 0,
+      d: {
+        id: cur.id, when: cur.when, channel: cur.channel, name: cur.name, city: cur.city, pay: cur.pay,
+        status: meta[cur.status].l, sbg: meta[cur.status].bg, sfg: meta[cur.status].fg,
+        items: cur.items.map((i) => ({ name: i.name, q: i.q, p: fmt(i.p * i.q) })), ship: cur.ship ? fmt(cur.ship) + ' ج.م' : 'مجاني',
+        total: fmt(total(cur)),
+        canAdvance: idx >= 0 && idx < 3, nextLabel: nextLabels[cur.status] || '',
+        canCancel: cur.status === 'new' || cur.status === 'prep'
+      },
+      steps: flow.map((k, i) => {
+        const done = cur.status !== 'cancel' && i <= idx;
+        const now = i === idx;
+        return { label: meta[k].l, done, dot: done ? '#2A4D38' : '#fff', ring: done ? '#2A4D38' : '#CFC7A8', bar: done && i < idx ? '#2A4D38' : '#E1DAC0', fw: now ? 700 : 500, fg: done ? '#14201A' : '#9AA39D' };
+      }),
+      advance: () => { if (idx >= 0 && idx < 3) { setStatus(cur.id, flow[idx + 1]); this.flash('الطلب ' + cur.id + ' بقى: ' + meta[flow[idx + 1]].l); } },
+      cancel: () => { setStatus(cur.id, 'cancel'); this.flash('اتلغى الطلب ' + cur.id); },
+      toast: S.toast
+    };
+  }
+}
+</script>
+</body>
+</html>

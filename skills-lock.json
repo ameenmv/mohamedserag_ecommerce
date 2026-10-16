@@ -1,0 +1,152 @@
+{
+  "version": 1,
+  "skills": {
+    "accessibility": {
+      "source": "addyosmani/web-quality-skills",
+      "sourceType": "autoskills-registry",
+      "computedHash": "2174f783a038a7ca4869c4c18e14726ec13b9c6b705d59253f647d0ca37cb78d"
+    },
+    "agy-delegate": {
+      "source": "amElnagdy/delegate-skills",
+      "sourceType": "github",
+      "skillPath": "skills/agy-delegate/SKILL.md",
+      "computedHash": "43a3192d68c96c148e01a4c4925bc797cb2e8eed5a075ca1af08d7c98bd7fd86"
+    },
+    "aider-delegate": {
+      "source": "amElnagdy/delegate-skills",
+      "sourceType": "github",
+      "skillPath": "skills/aider-delegate/SKILL.md",
+      "computedHash": "29be84a0377f3cdeb6bbf18ca84a9a45d5ae5ff540f85ca4f7f65d81a6667a9a"
+    },
+    "claude-delegate": {
+      "source": "amElnagdy/delegate-skills",
+      "sourceType": "github",
+      "skillPath": "skills/claude-delegate/SKILL.md",
+      "computedHash": "7562aefa7ca0d48d5465403e09ee29e848bbeb43de89ea3f3e53854b0a0f074d"
+    },
+    "cline-delegate": {
+      "source": "amElnagdy/delegate-skills",
+      "sourceType": "github",
+      "skillPath": "skills/cline-delegate/SKILL.md",
+      "computedHash": "2a94421ae65f42819edc4e648f7c4b4f9503e904113f5511d080e0278dbe6b16"
+    },
+    "codex-background": {
+      "source": "amElnagdy/delegate-skills",
+      "sourceType": "github",
+      "skillPath": "skills/codex-background/SKILL.md",
+      "computedHash": "063da943f68396da7d7ac1283da911145ac016b2d1ccb6b424e008c086124b2e"
+    },
+    "codex-delegate": {
+      "source": "amElnagdy/delegate-skills",
+      "sourceType": "github",
+      "skillPath": "skills/codex-delegate/SKILL.md",
+      "computedHash": "a73265fba87272c6426c6ad834db9d3c3ac6343b9a1c341b4702865782c5e685"
+    },
+    "commandcode-delegate": {
+      "source": "amElnagdy/delegate-skills",
+      "sourceType": "github",
+      "skillPath": "skills/commandcode-delegate/SKILL.md",
+      "computedHash": "9769cf42e57ff3acbb57a1a84a4970d5a445e482c933c5459e784588f3d766fd"
+    },
+    "copilot-delegate": {
+      "source": "amElnagdy/delegate-skills",
+      "sourceType": "github",
+      "skillPath": "skills/copilot-delegate/SKILL.md",
+      "computedHash": "11ba1c4f8d2cf2c02553a2d8c01e8884239840121b07395de477d5f5a626cbbb"
+    },
+    "cursor-delegate": {
+      "source": "amElnagdy/delegate-skills",
+      "sourceType": "github",
+      "skillPath": "skills/cursor-delegate/SKILL.md",
+      "computedHash": "b5026af8f4aa057183988e9f85033e5cdfe3464b6880f4f9569e67d9b75b87b0"
+    },
+    "delegate-setup": {
+      "source": "amElnagdy/delegate-skills",
+      "sourceType": "github",
+      "skillPath": "skills/delegate-setup/SKILL.md",
+      "computedHash": "06bcf434412f539438b1c038cff9f14b4b44eade034a6bf412edc1a1d3789fdc"
+    },
+    "frontend-design": {
+      "source": "anthropics/skills",
+      "sourceType": "autoskills-registry",
+      "computedHash": "a4e6516a601f72ffd8bcd0d64609e8ba724d2ce92569a059a6890a5caadf072b"
+    },
+    "grill-me": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "skillPath": "skills/productivity/grill-me/SKILL.md",
+      "computedHash": "9cdbb4b8f7a3aeaef82e6230c9e823500d4a8a1214c726cf342cf9829d34fc7d"
+    },
+    "grilling": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "skillPath": "skills/productivity/grilling/SKILL.md",
+      "computedHash": "ef1641a2047b71b60f1942cd35efb47d3afc9d584dff5a0b01f8c7db923aaa08"
+    },
+    "grok-delegate": {
+      "source": "amElnagdy/delegate-skills",
+      "sourceType": "github",
+      "skillPath": "skills/grok-delegate/SKILL.md",
+      "computedHash": "e3d71439b5c8215f52d6bf13e945e5591330b1b1d86e5d821c6e4e31088bc829"
+    },
+    "kimi-delegate": {
+      "source": "amElnagdy/delegate-skills",
+      "sourceType": "github",
+      "skillPath": "skills/kimi-delegate/SKILL.md",
+      "computedHash": "0dfbe6cba7f4e8a4851cdc98a089b7f13aad5d577593480404195429fb91612d"
+    },
+    "muse-delegate": {
+      "source": "amElnagdy/delegate-skills",
+      "sourceType": "github",
+      "skillPath": "skills/muse-delegate/SKILL.md",
+      "computedHash": "3a990b0a827f37d0932304ad13a62a29a3978a78d3658cdc7e4c667188e37eb0"
+    },
+    "omp-delegate": {
+      "source": "amElnagdy/delegate-skills",
+      "sourceType": "github",
+      "skillPath": "skills/omp-delegate/SKILL.md",
+      "computedHash": "82be4d0e916009f5c78b4815385fa12b99560b23488e61f1a7eb2ee900ab334f"
+    },
+    "opencode-delegate": {
+      "source": "amElnagdy/delegate-skills",
+      "sourceType": "github",
+      "skillPath": "skills/opencode-delegate/SKILL.md",
+      "computedHash": "6e44ef9bdd396a95418f74e5e22d2d6e3977947d852f924b66185157071b24ee"
+    },
+    "pi-delegate": {
+      "source": "amElnagdy/delegate-skills",
+      "sourceType": "github",
+      "skillPath": "skills/pi-delegate/SKILL.md",
+      "computedHash": "a795e8a761aa02e44322a36266408519601105be09fe8837804b445a97c76369"
+    },
+    "qoder-delegate": {
+      "source": "amElnagdy/delegate-skills",
+      "sourceType": "github",
+      "skillPath": "skills/qoder-delegate/SKILL.md",
+      "computedHash": "257852ebcc1c69280f49743969f016234c167781a6adcc57f4bde31fe1ed2298"
+    },
+    "seo": {
+      "source": "addyosmani/web-quality-skills",
+      "sourceType": "autoskills-registry",
+      "computedHash": "7495da57766c99f787a729d4a21234ecb5d29d90f304a0d9a5996dcdc1eec048"
+    },
+    "vibe-delegate": {
+      "source": "amElnagdy/delegate-skills",
+      "sourceType": "github",
+      "skillPath": "skills/vibe-delegate/SKILL.md",
+      "computedHash": "6ced181483923ffdbadb3a83d67552a2adbb6eceb4e58c1ed1619f343a9c8791"
+    },
+    "warp-delegate": {
+      "source": "amElnagdy/delegate-skills",
+      "sourceType": "github",
+      "skillPath": "skills/warp-delegate/SKILL.md",
+      "computedHash": "dfd6202af3662f03509daf58f9b24388aa10cbea79088b835191f585bd742802"
+    },
+    "zcode-delegate": {
+      "source": "amElnagdy/delegate-skills",
+      "sourceType": "github",
+      "skillPath": "skills/zcode-delegate/SKILL.md",
+      "computedHash": "409b6ea44001a124056d3091309f5e20a052f67fd312520c77e1592ec7a3f3f9"
+    }
+  }
+}

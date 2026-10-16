@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>الإعدادات</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Lalezar&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>body { margin: 0; }</style>
+</helmet>
+
+<div style="box-sizing:border-box;width:100%;font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;color:#14201A;padding:28px 32px 56px;display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start">
+
+  <div style="box-sizing:border-box;flex:0 1 250px;min-width:200px;background:#fff;border:1px solid #E7E0C8;border-radius:26px;padding:14px;display:flex;flex-direction:column;gap:4px">
+    <sc-for list="{{tabs}}" as="t" hint-placeholder-count="4">
+      <button class="chip" onClick="{{t.pick}}" style="box-sizing:border-box;width:100%;border:none;text-align:right;height:50px;padding:0 16px;border-radius:16px;font-weight:700;font-size:15.5px;background:{{t.bg}};color:{{t.fg}}">{{t.label}}</button>
+    </sc-for>
+  </div>
+
+  <div style="box-sizing:border-box;flex:999 1 560px;min-width:0;display:flex;flex-direction:column;gap:18px">
+
+    <sc-if value="{{s.store}}" hint-placeholder-val="{{ true }}">
+      <div style="box-sizing:border-box;background:#fff;border:1px solid #E7E0C8;border-radius:28px;padding:28px;display:flex;flex-direction:column;gap:20px">
+        <span style="box-sizing:border-box;font-family:'Lalezar',sans-serif;font-size:30px;color:#2A4D38;line-height:1.1">بيانات المتجر</span>
+        <div style="box-sizing:border-box;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px">
+          <sc-for list="{{storeFields}}" as="f" hint-placeholder-count="6">
+            <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:7px"><label for="{{f.id}}" style="box-sizing:border-box;font-weight:700;font-size:14.5px">{{f.label}}</label><input id="{{f.id}}" value="{{f.value}}" onChange="{{f.set}}" style="box-sizing:border-box;height:48px;border-radius:14px;border:1.5px solid #E1DAC0;background:#FBFAF4;padding:0 14px;font-size:15.5px;color:#14201A;width:100%"></div>
+          </sc-for>
+        </div>
+        <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:10px;border-top:1px dashed #D8D0B4;padding-top:18px">
+          <span style="box-sizing:border-box;font-weight:700;font-size:14.5px">لوجو المتجر</span>
+          <div style="box-sizing:border-box;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+            <span style="box-sizing:border-box;width:84px;height:84px;border-radius:24px;background:#2A4D38;color:#D2C27A;font-family:'Lalezar',sans-serif;font-size:50px;display:flex;align-items:center;justify-content:center;padding-bottom:6px">س</span>
+            <button class="btn-line" style="box-sizing:border-box;height:46px;padding:0 20px;border-radius:999px;border:1.5px solid #CFC7A8;background:transparent;color:#2A4D38;font-weight:700;font-size:14.5px">رفع لوجو جديد</button>
+            <span style="box-sizing:border-box;font-size:13px;color:#7A857E">PNG أو SVG بخلفية شفافة</span>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{s.shipping}}" hint-placeholder-val="{{ false }}">
+      <div style="box-sizing:border-box;background:#fff;border:1px solid #E7E0C8;border-radius:28px;padding:28px;display:flex;flex-direction:column;gap:20px">
+        <span style="box-sizing:border-box;font-family:'Lalezar',sans-serif;font-size:30px;color:#2A4D38;line-height:1.1">الشحن والدفع</span>
+        <div style="box-sizing:border-box;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px">
+          <sc-for list="{{shipFields}}" as="f" hint-placeholder-count="3">
+            <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:7px"><label for="{{f.id}}" style="box-sizing:border-box;font-weight:700;font-size:14.5px">{{f.label}}</label><input id="{{f.id}}" value="{{f.value}}" onChange="{{f.set}}" style="box-sizing:border-box;height:48px;border-radius:14px;border:1.5px solid #E1DAC0;background:#FBFAF4;padding:0 14px;font-family:'Outfit',sans-serif;font-weight:600;font-size:16px;color:#14201A;width:100%;direction:ltr;text-align:right"></div>
+          </sc-for>
+        </div>
+        <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:10px;border-top:1px dashed #D8D0B4;padding-top:18px">
+          <sc-for list="{{switches}}" as="w" hint-placeholder-count="4">
+            <div style="box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:14px;background:#F4F1E6;border-radius:16px;padding:14px 18px">
+              <span style="box-sizing:border-box;display:flex;flex-direction:column;gap:2px"><span style="box-sizing:border-box;font-weight:700;font-size:15px">{{w.label}}</span><span style="box-sizing:border-box;font-size:13px;color:#7A857E">{{w.hint}}</span></span>
+              <button aria-label="{{w.label}}" onClick="{{w.toggle}}" style="box-sizing:border-box;width:50px;height:30px;border:none;border-radius:999px;background:{{w.bg}};position:relative;flex:none"><span style="box-sizing:border-box;position:absolute;top:3px;{{w.side}}:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25)"></span></button>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{s.team}}" hint-placeholder-val="{{ false }}">
+      <div style="box-sizing:border-box;background:#fff;border:1px solid #E7E0C8;border-radius:28px;padding:28px;display:flex;flex-direction:column;gap:14px">
+        <div style="box-sizing:border-box;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><span style="box-sizing:border-box;font-family:'Lalezar',sans-serif;font-size:30px;color:#2A4D38;line-height:1.1">الفريق والصلاحيات</span><button class="btn-gold" onClick="{{invite}}" style="box-sizing:border-box;height:44px;padding:0 22px;border:none;border-radius:999px;background:#B5A45C;color:#14201A;font-weight:700;font-size:15px">+ دعوة عضو</button></div>
+        <sc-for list="{{team}}" as="m" hint-placeholder-count="4">
+          <div class="row-h" style="box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;gap:14px;padding:14px;border-top:1px solid #F0EAD3;border-radius:14px">
+            <span style="box-sizing:border-box;width:46px;height:46px;border-radius:50%;background:#2A4D38;color:#D2C27A;font-family:'Lalezar',sans-serif;font-size:23px;display:flex;align-items:center;justify-content:center;flex:none;padding-bottom:3px">{{m.initial}}</span>
+            <span style="box-sizing:border-box;flex:1 1 180px;display:flex;flex-direction:column;gap:2px"><span style="box-sizing:border-box;font-weight:700;font-size:15.5px">{{m.name}}</span><span style="box-sizing:border-box;font-size:13px;color:#7A857E">{{m.scope}}</span></span>
+            <div style="box-sizing:border-box;display:flex;background:#F4F1E6;border-radius:999px;padding:4px;gap:2px">
+              <sc-for list="{{m.roles}}" as="r" hint-placeholder-count="3">
+                <button class="chip" onClick="{{r.pick}}" style="box-sizing:border-box;height:34px;padding:0 14px;border:none;border-radius:999px;font-weight:700;font-size:13px;background:{{r.bg}};color:{{r.fg}}">{{r.label}}</button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{s.brand}}" hint-placeholder-val="{{ false }}">
+      <div style="box-sizing:border-box;background:#fff;border:1px solid #E7E0C8;border-radius:28px;padding:28px;display:flex;flex-direction:column;gap:20px">
+        <span style="box-sizing:border-box;font-family:'Lalezar',sans-serif;font-size:30px;color:#2A4D38;line-height:1.1">الهوية واللون</span>
+        <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:10px"><span style="box-sizing:border-box;font-weight:700;font-size:14.5px">اللون الأساسي للموقع</span>
+          <div style="box-sizing:border-box;display:flex;flex-wrap:wrap;gap:12px">
+            <sc-for list="{{palettes}}" as="p" hint-placeholder-count="4">
+              <button aria-label="{{p.name}}" onClick="{{p.pick}}" style="box-sizing:border-box;width:104px;border:2px solid {{p.bd}};background:#fff;border-radius:18px;padding:8px;display:flex;flex-direction:column;gap:8px;align-items:center"><span style="box-sizing:border-box;width:100%;height:46px;border-radius:12px;background:{{p.main}};display:flex;align-items:flex-end;justify-content:flex-end;padding:6px"><span style="box-sizing:border-box;width:18px;height:18px;border-radius:50%;background:{{p.acc}}"></span></span><span style="box-sizing:border-box;font-size:13px;font-weight:700">{{p.name}}</span></button>
+            </sc-for>
+          </div>
+        </div>
+        <div style="box-sizing:border-box;background:{{brandMain}};border-radius:24px;padding:30px;display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between">
+          <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:6px"><span style="box-sizing:border-box;font-family:'Lalezar',sans-serif;font-size:36px;color:#FAF7EE;line-height:1.1">معاينة الألوان</span><span style="box-sizing:border-box;font-size:15px;color:#FAF7EE;opacity:.8">زي ما هتظهر الأزرار والخلفيات في الموقع</span></div>
+          <span style="box-sizing:border-box;height:50px;padding:0 28px;border-radius:999px;background:{{brandAcc}};color:#14201A;font-weight:700;font-size:16px;display:flex;align-items:center">تسوّق دلوقتي</span>
+        </div>
+      </div>
+    </sc-if>
+
+    <div style="box-sizing:border-box;display:flex;justify-content:flex-end;gap:12px">
+      <button class="btn-gold" onClick="{{save}}" style="box-sizing:border-box;height:52px;padding:0 34px;border:none;border-radius:999px;background:#B5A45C;color:#14201A;font-weight:700;font-size:16px">حفظ الإعدادات</button>
+    </div>
+  </div>
+
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
+    <div class="toast" style="box-sizing:border-box;position:fixed;bottom:28px;left:50%;margin-left:-190px;width:380px;max-width:92vw;background:#14201A;color:#FAF7EE;border-radius:18px;padding:16px 20px;font-weight:600;font-size:15px;box-shadow:0 18px 40px rgba(0,0,0,.3);z-index:50">{{toast}}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1176,"height":1300}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      tab: 'store', toast: '', palette: 0,
+      store: { name: 'محمد سراج للأجهزة المنزلية', since: '1972', phone: '[رقم التليفون]', whatsapp: '[رقم الواتساب]', email: '[الإيميل]', address: '[العنوان - المنصورة]' },
+      ship: { fee: '150', free: '10000', cod: '30' },
+      sw: { cod: true, pickup: true, installments: false, b2b: true },
+      team: [
+        { id: 1, name: 'مدير المتجر', scope: 'كل الصلاحيات', role: 0 },
+        { id: 2, name: 'مسؤول المحتوى', scope: 'محرر الموقع والمنتجات', role: 1 },
+        { id: 3, name: 'مسؤول الطلبات', scope: 'الطلبات والعملاء فقط', role: 2 }
+      ]
+    };
+  }
+  flash(m) {
+    this.setState({ toast: m });
+    clearTimeout(this._t);
+    this._t = setTimeout(() => this.setState({ toast: '' }), 2400);
+  }
+  renderVals() {
+    const S = this.state;
+    const tabs = [['store', 'بيانات المتجر'], ['shipping', 'الشحن والدفع'], ['team', 'الفريق والصلاحيات'], ['brand', 'الهوية واللون']];
+    const setS = (grp, k, v) => this.setState({ [grp]: { ...S[grp], [k]: v } });
+    const pal = [
+      { name: 'أخضر سراج', main: '#16291E', acc: '#B5A45C' },
+      { name: 'أخضر زيتي', main: '#2F3E2A', acc: '#D2C27A' },
+      { name: 'أزرق ليلي', main: '#14263D', acc: '#D2C27A' },
+      { name: 'فحمي', main: '#1C1F1D', acc: '#B5A45C' }
+    ];
+    const sf = [['name', 'اسم المتجر'], ['since', 'سنة التأسيس'], ['phone', 'التليفون'], ['whatsapp', 'واتساب'], ['email', 'الإيميل'], ['address', 'العنوان']];
+    const shf = [['fee', 'رسوم التوصيل (ج.م)'], ['free', 'شحن مجاني فوق (ج.م)'], ['cod', 'رسوم الدفع عند الاستلام (ج.م)']];
+    const sws = [['cod', 'الدفع عند الاستلام', 'يظهر في صفحة إتمام الشراء'], ['pickup', 'الاستلام من المعرض', 'خيار بدون رسوم توصيل'], ['installments', 'التقسيط', 'يتفعّل بعد ربط شركة التمويل'], ['b2b', 'تسجيل التجّار', 'نموذج تسجيل الشركات في الموقع']];
+    const roles = ['مدير', 'محتوى', 'طلبات'];
+    const p = pal[S.palette];
+    return {
+      tabs: tabs.map(([k, l]) => ({ label: l, bg: S.tab === k ? '#2A4D38' : 'transparent', fg: S.tab === k ? '#FAF7EE' : '#3B4A41', pick: () => this.setState({ tab: k }) })),
+      s: { store: S.tab === 'store', shipping: S.tab === 'shipping', team: S.tab === 'team', brand: S.tab === 'brand' },
+      storeFields: sf.map(([k, l]) => ({ id: 'st-' + k, label: l, value: S.store[k], set: (e) => setS('store', k, e.target.value) })),
+      shipFields: shf.map(([k, l]) => ({ id: 'sh-' + k, label: l, value: S.ship[k], set: (e) => setS('ship', k, e.target.value) })),
+      switches: sws.map(([k, l, h]) => ({ label: l, hint: h, bg: S.sw[k] ? '#2A4D38' : '#CFC7A8', side: S.sw[k] ? 'left' : 'right', toggle: () => setS('sw', k, !S.sw[k]) })),
+      team: S.team.map((m) => ({
+        initial: m.name.charAt(0), name: m.name, scope: m.scope,
+        roles: roles.map((r, i) => ({ label: r, bg: m.role === i ? '#2A4D38' : 'transparent', fg: m.role === i ? '#FAF7EE' : '#3B4A41', pick: () => this.setState({ team: S.team.map((x) => x.id === m.id ? { ...x, role: i } : x) }) }))
+      })),
+      invite: () => this.flash('اتبعت رابط دعوة للعضو الجديد'),
+      palettes: pal.map((x, i) => ({ name: x.name, main: x.main, acc: x.acc, bd: S.palette === i ? '#B5A45C' : '#E7E0C8', pick: () => this.setState({ palette: i }) })),
+      brandMain: p.main, brandAcc: p.acc,
+      save: () => this.flash('اتحفظت الإعدادات'),
+      toast: S.toast
+    };
+  }
+}
+</script>
+</body>
+</html>
