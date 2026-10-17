@@ -12,7 +12,8 @@
     "logout": "تسجيل الخروج",
     "undo": "تراجع",
     "showPassword": "إظهار كلمة المرور",
-    "hidePassword": "إخفاء كلمة المرور"
+    "hidePassword": "إخفاء كلمة المرور",
+    "currency": "ج.م"
   },
   "locale": {
     "switch": "تغيير اللغة",
@@ -30,11 +31,11 @@
       "offers": "العروض",
       "guides": "دليل الشراء",
       "wishlist": "المفضلة",
-      "wishlistCount": "المفضلة، {count} منتجات",
+      "wishlistCount": "المفضلة: {count}",
       "compare": "المقارنة",
-      "compareCount": "المقارنة، {count} منتجات",
+      "compareCount": "المقارنة: {count}",
       "cart": "السلة",
-      "cartCount": "السلة، {count} منتجات",
+      "cartCount": "السلة: {count}",
       "whatsapp": "واتساب",
       "whatsappAria": "تواصل معنا عبر واتساب",
       "searchProduct": "ابحث عن منتج",
@@ -86,6 +87,41 @@
       "shopNow": "تسوّق الآن",
       "bridalPackages": "جهاز العروسة",
       "samplePrice": "28,900 ج.م"
+    },
+    "product": {
+      "addToCart": "أضف للسلة",
+      "outOfStock": "نفذ",
+      "discountBadge": "خصم {percent}%",
+      "realPhoto": "صورة حقيقية",
+      "oldPriceAria": "السعر الأصلي: {price}"
+    },
+    "cart": {
+      "addedToCart": "تمت الإضافة للسلة"
+    },
+    "wishlist": {
+      "add": "إضافة للمفضلة",
+      "remove": "إزالة من المفضلة",
+      "addAria": "إضافة {name} للمفضلة",
+      "removeAria": "إزالة {name} من المفضلة",
+      "addedNotice": "تم الحفظ في المفضلة",
+      "removedNotice": "تم الحذف من المفضلة",
+      "priceDropped": "السعر نزل"
+    },
+    "compare": {
+      "add": "إضافة للمقارنة",
+      "remove": "إزالة من المقارنة",
+      "addAria": "إضافة {name} للمقارنة",
+      "removeAria": "إزالة {name} من المقارنة",
+      "addedNotice": "تمت الإضافة للمقارنة",
+      "removedNotice": "تم الحذف من المقارنة",
+      "maxReached": "الحد الأقصى للمقارنة 3 منتجات",
+      "fullNotice": "قائمة المقارنة ممتلئة (3 منتجات)"
+    },
+    "availability": {
+      "inStock": "متوفر",
+      "low": "كمية محدودة",
+      "onRequest": "متاح بالطلب",
+      "outOfStock": "نفذ"
     }
   },
   "admin": {

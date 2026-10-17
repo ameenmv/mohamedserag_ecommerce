@@ -18,6 +18,7 @@ const localePath = useLocalePath()
     <span class="sr-only">{{ t('store.header.cartCount', { count }) }}</span>
     <span class="hidden text-sm sm:inline" aria-hidden="true">{{ t('store.header.cart') }}</span>
     <span
+      v-if="count > 0"
       aria-hidden="true"
       class="num inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-serag-ink px-1.5 text-xs font-extrabold text-serag-gold-hi"
     >

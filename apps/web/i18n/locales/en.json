@@ -12,7 +12,8 @@
     "logout": "Logout",
     "undo": "Undo",
     "showPassword": "Show password",
-    "hidePassword": "Hide password"
+    "hidePassword": "Hide password",
+    "currency": "EGP"
   },
   "locale": {
     "switch": "Change language",
@@ -30,11 +31,11 @@
       "offers": "Offers",
       "guides": "Buying Guide",
       "wishlist": "Wishlist",
-      "wishlistCount": "Wishlist, {count} items",
+      "wishlistCount": "Wishlist: {count}",
       "compare": "Compare",
-      "compareCount": "Compare, {count} items",
+      "compareCount": "Compare: {count}",
       "cart": "Cart",
-      "cartCount": "Cart, {count} items",
+      "cartCount": "Cart: {count}",
       "whatsapp": "WhatsApp",
       "whatsappAria": "Contact us via WhatsApp",
       "searchProduct": "Search for a product",
@@ -86,6 +87,41 @@
       "shopNow": "Shop Now",
       "bridalPackages": "Bridal Packages",
       "samplePrice": "28,900 EGP"
+    },
+    "product": {
+      "addToCart": "Add to cart",
+      "outOfStock": "Out of stock",
+      "discountBadge": "{percent}% off",
+      "realPhoto": "Real photo",
+      "oldPriceAria": "Original price: {price}"
+    },
+    "cart": {
+      "addedToCart": "Added to cart"
+    },
+    "wishlist": {
+      "add": "Add to wishlist",
+      "remove": "Remove from wishlist",
+      "addAria": "Add {name} to wishlist",
+      "removeAria": "Remove {name} from wishlist",
+      "addedNotice": "Saved to wishlist",
+      "removedNotice": "Removed from wishlist",
+      "priceDropped": "Price dropped"
+    },
+    "compare": {
+      "add": "Add to compare",
+      "remove": "Remove from compare",
+      "addAria": "Add {name} to compare",
+      "removeAria": "Remove {name} from compare",
+      "addedNotice": "Added to compare",
+      "removedNotice": "Removed from compare",
+      "maxReached": "Maximum 3 products can be compared",
+      "fullNotice": "Compare list is full (3 products)"
+    },
+    "availability": {
+      "inStock": "In stock",
+      "low": "Limited stock",
+      "onRequest": "On request",
+      "outOfStock": "Out of stock"
     }
   },
   "admin": {
