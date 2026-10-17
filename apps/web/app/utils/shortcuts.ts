@@ -15,6 +15,7 @@ export const ADMIN_NAV_SHORTCUTS: readonly AdminNavShortcut[] = [
   { key: 'h', hint: 'G H', paletteHint: 'G H', labelKey: 'admin.nav.overview', to: '/admin', group: 'main' },
   { key: 'o', hint: 'G O', paletteHint: 'G O', labelKey: 'admin.nav.orders', to: '/admin/orders', group: 'store' },
   { key: 'p', hint: 'G P', paletteHint: 'G P', labelKey: 'admin.nav.products', to: '/admin/products', group: 'store' },
+  { key: 'c', hint: 'G C', paletteHint: 'G C', labelKey: 'admin.nav.catalog', to: '/admin/catalog', group: 'store' },
   { key: 'b', hint: 'G B', paletteHint: 'G B', labelKey: 'admin.nav.bridal', to: '/admin/bridal', group: 'store' },
   { key: 'm', hint: 'G M', paletteHint: 'G M', labelKey: 'admin.nav.promotions', to: '/admin/promotions', group: 'store' },
   { key: 'r', hint: 'G R', paletteHint: 'G R', labelKey: 'admin.nav.reviews', to: '/admin/reviews', group: 'store' },

@@ -117,7 +117,7 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
       {
         key: 'cooling',
         label: 'نظام التبريد',
-        type: 'select',
+        type: 'choice',
         options: ['نوفروست', 'ديفروست'],
         filterable: true,
         comparable: true,
@@ -127,7 +127,7 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
       {
         key: 'energy_class',
         label: 'كفاءة الطاقة',
-        type: 'select',
+        type: 'choice',
         options: ['A++', 'A+', 'A', 'B'],
         filterable: false,
         comparable: true,
@@ -148,7 +148,7 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
       {
         key: 'loading',
         label: 'نوع التحميل',
-        type: 'select',
+        type: 'choice',
         options: ['أمامي', 'علوي', 'حوضين'],
         filterable: true,
         comparable: true,
@@ -170,7 +170,7 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
       {
         key: 'resolution',
         label: 'الدقة',
-        type: 'select',
+        type: 'choice',
         options: ['HD', 'FHD', '4K', 'QLED'],
         filterable: true,
         comparable: true,
@@ -192,7 +192,7 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
       {
         key: 'mode',
         label: 'نظام التشغيل',
-        type: 'select',
+        type: 'choice',
         options: ['بارد', 'بارد ساخن'],
         filterable: true,
         comparable: true,
@@ -229,7 +229,7 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
       {
         key: 'material',
         label: 'الخامة',
-        type: 'select',
+        type: 'choice',
         options: ['جرانيت', 'ستانلس', 'سيراميك', 'تيفال'],
         filterable: true,
         comparable: true,

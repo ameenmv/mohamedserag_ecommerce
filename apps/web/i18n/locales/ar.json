@@ -13,7 +13,18 @@
     "undo": "تراجع",
     "showPassword": "إظهار كلمة المرور",
     "hidePassword": "إخفاء كلمة المرور",
-    "currency": "ج.م"
+    "currency": "ج.م",
+    "confirm": "تأكيد",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "create": "إنشاء",
+    "delete": "حذف",
+    "error": "خطأ",
+    "close": "إغلاق",
+    "errors": {
+      "unexpected": "حدث خطأ غير متوقع",
+      "invalidValue": "قيمة غير صالحة"
+    }
   },
   "locale": {
     "switch": "تغيير اللغة",
@@ -296,6 +307,7 @@
       "overview": "نظرة عامة",
       "orders": "الطلبات",
       "products": "المنتجات",
+      "catalog": "الأقسام والماركات",
       "bridal": "جهاز العروسة",
       "promotions": "العروض والكوبونات",
       "reviews": "التقييمات",
@@ -359,12 +371,318 @@
       "openStore": "افتح الموقع",
       "openStoreSearch": "افتح الموقع المتجر الرئيسي تاب جديد",
       "inNewTab": "في تاب جديد"
+    },
+    "products": {
+      "title": "المنتجات",
+      "newProduct": "منتج جديد",
+      "newTitle": "إضافة منتج جديد",
+      "editTitle": "تعديل المنتج",
+      "backToList": "العودة لقائمة المنتجات",
+      "searchPlaceholder": "اسم المنتج أو كود الموديل...",
+      "allCategories": "كل الأقسام",
+      "allBrands": "كل الماركات",
+      "status": {
+        "all": "كل الحالات",
+        "active": "ظاهر في المتجر",
+        "hidden": "مخفي",
+        "archived": "مؤرشف"
+      },
+      "stockFilter": {
+        "all": "كل مستويات المخزون",
+        "low": "مخزون منخفض",
+        "out": "نفد المخزون"
+      },
+      "sort": {
+        "label": "ترتيب حسب",
+        "updated": "آخر تحديث",
+        "name": "الاسم",
+        "price": "السعر",
+        "stock": "المخزون"
+      },
+      "list": {
+        "actionsFor": "إجراءات المنتج «{name}»"
+      },
+      "preview": {
+        "defaultName": "اسم المنتج الجديد",
+        "defaultBrand": "العلامة التجارية",
+        "defaultCategory": "القسم",
+        "defaultImageAlt": "صورة المنتج"
+      },
+      "validation": {
+        "nameRequired": "اسم المنتج مطلوب",
+        "modelCodeRequired": "كود الموديل مطلوب",
+        "brandRequired": "الماركة مطلوبة",
+        "categoryRequired": "القسم مطلوب"
+      },
+      "table": {
+        "product": "المنتج",
+        "category": "القسم",
+        "brand": "الماركة",
+        "price": "السعر",
+        "stock": "المخزون",
+        "status": "الحالة",
+        "actions": "إجراءات"
+      },
+      "actions": {
+        "edit": "تعديل",
+        "show": "إظهار في المتجر",
+        "hide": "إخفاء عن المتجر",
+        "archive": "أرشفة",
+        "unarchive": "إلغاء الأرشفة",
+        "delete": "حذف",
+        "confirmDeleteTitle": "حذف المنتج نهائياً",
+        "confirmDeleteDescription": "هل أنت متأكد من حذف «{name}»؟ لا يمكن التراجع عن هذا الإجراء إلا إذا لم يكن مرتبطاً بطلبات.",
+        "cancel": "إلغاء",
+        "confirmDelete": "نعم، احذف"
+      },
+      "inOrdersDialog": {
+        "title": "لا يمكن حذف المنتج",
+        "description": "هذا المنتج مسجل في طلبات سابقة للعملاء، لذا لا يمكن حذفه للحفاظ على سجل الحسابات والطلبات. يمكنك أرشفته لإخفائه تماماً عن المتجر.",
+        "archiveAction": "أرشفة بدلاً من الحذف",
+        "close": "إغلاق"
+      },
+      "toasts": {
+        "hidden": "تم إخفاء «{name}» من المتجر",
+        "shown": "تم إظهار «{name}» في المتجر",
+        "archived": "تم أرشفة «{name}»",
+        "unarchived": "تم إلغاء أرشفة «{name}»",
+        "deleted": "تم حذف «{name}» بنجاح",
+        "created": "تم إضافة المنتج بنجاح",
+        "saved": "تم حفظ التعديلات بنجاح",
+        "imageUploaded": "تم رفع الصورة بنجاح",
+        "imageDeleted": "تم حذف الصورة",
+        "imagesReordered": "تم تحديث ترتيب الصور",
+        "imagePatched": "تم تحديث بيانات الصورة"
+      },
+      "empty": {
+        "title": "مفيش منتجات بالشكل ده",
+        "description": "جرّب تغيّر كلمات البحث أو الفلاتر المطبقة.",
+        "clearFilters": "مسح الفلاتر"
+      },
+      "loading": "جاري تحميل المنتجات...",
+      "pagination": {
+        "previous": "السابق",
+        "next": "التالي",
+        "page": "صفحة {page} من {totalPages}",
+        "total": "إجمالي {total} منتج"
+      },
+      "editor": {
+        "save": "حفظ التعديلات",
+        "saving": "جاري الحفظ...",
+        "create": "إضافة المنتج",
+        "cancel": "إلغاء",
+        "unsavedChanges": "توجد تعديلات غير محفوظة. هل تريد المغادرة وتجاهلها؟",
+        "unsavedBadge": "تعديلات غير محفوظة",
+        "allSaved": "كل التعديلات محفوظة",
+        "preview": {
+          "title": "معاينة كارت المنتج",
+          "subtitle": "شكل المنتج كما يظهر للعميل في المتجر مباشرة",
+          "mobileToggle": "معاينة شكل الكارت",
+          "unsavedBadge": "تعديلات مش محفوظة"
+        },
+        "basics": {
+          "title": "البيانات الأساسية",
+          "name": "اسم المنتج",
+          "namePlaceholder": "مثال: غسالة إل جي 9 كيلو بالمجفف",
+          "modelCode": "كود الموديل",
+          "modelCodePlaceholder": "مثال: F4R5VGG2E",
+          "slug": "الرابط التعريفي (Slug)",
+          "slugPlaceholder": "هيتعمل تلقائي لو سبته فاضي",
+          "brand": "الماركة",
+          "selectBrand": "اختر الماركة",
+          "category": "القسم",
+          "selectCategory": "اختر القسم",
+          "categoryChangeWarnTitle": "تغيير القسم سيحذف المواصفات",
+          "categoryChangeWarnDescription": "تغيير القسم يؤدي إلى إعادة تحميل حقول المواصفات وحذف القيم غير الموجودة في قالب القسم الجديد. هل تريد المتابعة؟"
+        },
+        "pricing": {
+          "title": "الأسعار والمخزون",
+          "price": "سعر البيع (ج.م)",
+          "oldPrice": "السعر قبل الخصم (ج.م)",
+          "oldPriceGreater": "السعر قبل الخصم يجب أن يكون أكبر من سعر البيع",
+          "discountPercent": "نسبة الخصم المحسوبة",
+          "noDiscount": "بدون خصم",
+          "stock": "الكمية المتاحة في المخزن",
+          "lowStockThreshold": "حد التنبيه بانخفاض المخزون",
+          "availabilityMode": "نظام التوفر",
+          "modes": {
+            "auto": "تلقائي بحسب المخزون",
+            "on_request": "متاح بالطلب (حجز)",
+            "out": "نفد المخزون (غير متاح)"
+          },
+          "leadTimeText": "مدة التوريد المتوقعة للطلب",
+          "leadTimePlaceholder": "مثال: التوريد خلال 3 إلى 5 أيام عمل",
+          "taxRate": "نسبة ضريبة القيمة المضافة (%)"
+        },
+        "specs": {
+          "title": "المواصفات الفنية",
+          "noTemplate": "القسم المختار ليس له قالب مواصفات فنية مرتبط.",
+          "assignTemplateHint": "يمكنك ربط قالب مواصفات بالقسم من صفحة الأقسام والماركات.",
+          "true": "نعم / متاح",
+          "false": "لا / غير متاح",
+          "selectOption": "اختر من القائمة"
+        },
+        "setContents": {
+          "title": "محتويات الطقم",
+          "description": "سجل القطع المشمولة في الطقم وأحجامها وكمياتها لضمان وضوحها للعميل",
+          "emptyHint": "لا توجد قطع مضافة بعد. اضغط «إضافة قطعة» للبدء.",
+          "item": "اسم القطعة",
+          "itemPlaceholder": "مثال: حلة طهي بغطاء",
+          "size": "المقاس / السعة",
+          "sizePlaceholder": "مثال: 24 سم",
+          "qty": "العدد",
+          "addRow": "إضافة قطعة أخرى",
+          "removeRow": "حذف القطعة"
+        },
+        "warranty": {
+          "title": "الضمان والمنشأ",
+          "warranty": "مدة وتفاصيل الضمان",
+          "warrantyPlaceholder": "مثال: ضمان 10 سنوات شامل من الوكيل المعتمد",
+          "warrantyActivation": "طريقة تفعيل الضمان",
+          "warrantyActivationPlaceholder": "مثال: الاتصال بالخط الساخن للشركة وتثبيت الختم",
+          "origin": "بلد المنشأ والتصنيع",
+          "originPlaceholder": "مثال: مصر / تركيا / كوريا الجنوبية"
+        },
+        "images": {
+          "title": "صور المنتج",
+          "saveFirst": "احفظ المنتج الأول عشان ترفع صور",
+          "dragDrop": "اسحب الصور هنا أو اضغط للاختيار من جهازك",
+          "allowedTypes": "الصيغ المدعومة: JPEG, PNG, WebP, AVIF — الحد الأقصى 5 ميجابايت للصورة",
+          "uploading": "جاري رفع الصور...",
+          "realPhoto": "صورة حقيقية من المعرض",
+          "alt": "النص البديل (SEO)",
+          "altPlaceholder": "وصف دقيق للصورة لمحركات البحث",
+          "moveStart": "تحريك للبداية",
+          "moveEnd": "تحريك للنهاية",
+          "delete": "حذف الصورة",
+          "primary": "الصورة الرئيسية",
+          "maxSizeError": "حجم الصورة يجب ألا يتجاوز 5 ميجابايت",
+          "typeError": "صيغة الصورة غير مدعومة. الصيغ المقبولة: JPEG, PNG, WebP, AVIF",
+          "moveStartN": "تحريك الصورة {n} للبداية",
+          "moveEndN": "تحريك الصورة {n} للنهاية",
+          "realPhotoN": "صورة حقيقية من المعرض للصورة {n}",
+          "deleteN": "حذف الصورة {n}",
+          "altN": "النص البديل للصورة {n}"
+        },
+        "seo": {
+          "title": "الظهور ومحركات البحث (SEO)",
+          "visible": "المنتج ظاهر في الموقع",
+          "visibleHint": "إذا كان معطلاً لن يظهر المنتج لزوار المتجر ولن يظهر في نتائج البحث",
+          "featured": "منتج مميز (يظهر في الواجهة)",
+          "featuredHint": "يتم إبراز المنتج في الأقسام المميزة بالصفحة الرئيسية",
+          "seoTitle": "عنوان الصفحة في جوجل (SEO Title)",
+          "seoTitleHint": "موصى به ~60 حرف",
+          "seoDescription": "وصف المنتج لمحركات البحث (SEO Description)",
+          "seoDescriptionHint": "موصى به ~160 حرف",
+          "chars": "{count} حرف"
+        }
+      }
+    },
+    "catalog": {
+      "title": "الأقسام والماركات",
+      "tabs": {
+        "categories": "الأقسام",
+        "brands": "العلامات التجارية",
+        "specTemplates": "قوالب المواصفات"
+      },
+      "categories": {
+        "new": "قسم جديد",
+        "edit": "تعديل القسم",
+        "name": "اسم القسم",
+        "slug": "الرابط التعريفي",
+        "parent": "القسم الأب (الرئيسي)",
+        "noParent": "قسم رئيسي (بدون أب)",
+        "specTemplate": "قالب المواصفات المرتبط",
+        "noSpecTemplate": "بدون قالب مواصفات",
+        "intro": "نبذة عن القسم",
+        "seoTitle": "عنوان SEO",
+        "seoDescription": "وصف SEO",
+        "visible": "ظاهر في المتجر",
+        "productsCount": "{count} منتج",
+        "reorderSuccess": "تم تحديث ترتيب الأقسام",
+        "created": "تم إنشاء القسم بنجاح",
+        "updated": "تم تحديث القسم بنجاح",
+        "deleted": "تم حذف القسم بنجاح",
+        "confirmDelete": "هل أنت متأكد من حذف قسم «{name}»؟",
+        "empty": "لا توجد أقسام مسجلة حتى الآن.",
+        "moveUpN": "تحريك قسم «{name}» لأعلى (الترتيب {n})",
+        "moveDownN": "تحريك قسم «{name}» لأسفل (الترتيب {n})",
+        "editNamed": "تعديل قسم «{name}»",
+        "deleteNamed": "حذف قسم «{name}»"
+      },
+      "brands": {
+        "new": "ماركة جديدة",
+        "edit": "تعديل الماركة",
+        "name": "اسم الماركة",
+        "slug": "الرابط التعريفي",
+        "logo": "شعار الماركة",
+        "uploadLogo": "رفع الشعار",
+        "logoHint": "صورة الشعار بصيغة PNG أو WebP أو SVG بحد أقصى 5 ميجابايت",
+        "intro": "نبذة عن الماركة",
+        "seoTitle": "عنوان SEO",
+        "seoDescription": "وصف SEO",
+        "visible": "ظاهرة في المتجر",
+        "productsCount": "{count} منتج",
+        "created": "تم إضافة الماركة بنجاح",
+        "updated": "تم تحديث الماركة بنجاح",
+        "deleted": "تم حذف الماركة بنجاح",
+        "confirmDelete": "هل أنت متأكد من حذف ماركة «{name}»؟",
+        "empty": "لا توجد ماركات مسجلة حتى الآن.",
+        "logoSizeError": "حجم الشعار يجب ألا يتجاوز 5 ميجابايت",
+        "logoUploaded": "تم رفع الشعار بنجاح",
+        "editNamed": "تعديل ماركة «{name}»",
+        "deleteNamed": "حذف ماركة «{name}»"
+      },
+      "specTemplates": {
+        "new": "قالب مواصفات جديد",
+        "edit": "تعديل قالب المواصفات",
+        "name": "اسم القالب",
+        "fieldsCount": "{count} خاصية",
+        "usedIn": "مستخدم في {count} قسم",
+        "fields": "حقول وخصائص القالب",
+        "addField": "إضافة خاصية",
+        "removeField": "حذف",
+        "key": "المفتاح البرمجي (key)",
+        "keyPlaceholder": "e.g. capacity",
+        "label": "الاسم بالعربي",
+        "labelPlaceholder": "مثال: السعة باللتر",
+        "type": "النوع",
+        "unit": "الوحدة",
+        "unitPlaceholder": "مثال: لتر، وات",
+        "options": "الخيارات (مفصولة بفاصلة)",
+        "optionsPlaceholder": "مثال: أبيض, فضي, أسود",
+        "filterable": "فلترة بالمتجر",
+        "comparable": "مقارنة",
+        "emptyHint": "اضغط «إضافة خاصية» لإضافة أول مواصفة فنية للقالب.",
+        "types": {
+          "text": "نص",
+          "number": "رقم",
+          "boolean": "نعم/لا (منطقي)",
+          "choice": "اختيار من متعدد"
+        },
+        "created": "تم إنشاء القالب بنجاح",
+        "updated": "تم تحديث القالب بنجاح",
+        "deleted": "تم حذف القالب بنجاح",
+        "confirmDelete": "هل أنت متأكد من حذف قالب «{name}»؟",
+        "empty": "لا توجد قوالب مواصفات حتى الآن.",
+        "editNamed": "تعديل قالب «{name}»",
+        "deleteNamed": "حذف قالب «{name}»",
+        "moveUpN": "تحريك الخاصية {n} لأعلى",
+        "moveDownN": "تحريك الخاصية {n} لأسفل",
+        "removeFieldN": "حذف الخاصية {n}"
+      },
+      "errors": {
+        "hasRelations": "لا يمكن حذف القسم لأنه يحتوي على منتجات أو أقسام فرعية",
+        "hasProducts": "لا يمكن حذف الماركة لأنها مرتبطة بمنتجات",
+        "inUse": "لا يمكن حذف قالب المواصفات لأنه مستخدم في أقسام"
+      }
     }
   },
   "validation": {
     "emailRequired": "يرجى إدخال البريد الإلكتروني",
     "emailInvalid": "البريد الإلكتروني غير صحيح",
-    "passwordRequired": "يرجى إدخال كلمة المرور"
+    "passwordRequired": "يرجى إدخال كلمة المرور",
+    "priceRequired": "يرجى إدخال سعر صحيح"
   },
   "errors": {
     "generic": "حدث خطأ غير متوقع، يرجى المحاولة مرة أخرى"

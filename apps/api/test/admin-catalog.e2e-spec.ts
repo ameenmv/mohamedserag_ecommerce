@@ -133,6 +133,12 @@ describe('Admin Catalog API E2E (/api/admin/...)', () => {
     for (const f of uploadedFilesToCleanup) {
       await fs.promises.rm(f, { recursive: true, force: true }).catch(() => undefined)
     }
+    // ...and the per-product upload folders they lived in
+    for (const id of [productId, autoSlugProdId, autoSlugProd2Id].filter(Boolean)) {
+      await fs.promises
+        .rm(path.join(resolveUploadsDir(), 'products', id), { recursive: true, force: true })
+        .catch(() => undefined)
+    }
 
     if (app) {
       await app.close()

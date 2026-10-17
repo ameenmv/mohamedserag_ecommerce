@@ -33,7 +33,7 @@
 - [x] T022 A [P] Web: product card component, `/shop`, `/c/[slug]`, `/b/[slug]` with URL-synced filters and mobile filter sheet
 - [x] T023 A [P] Web: `/p/[slug]` product page (gallery, specs, cookware set contents, warranty + activation note, VAT label, availability incl. on-request lead time, zone delivery cost, WhatsApp ask, sticky mobile bar, related)
 - [x] T024 A [P] Web: live search dropdown, compare bar + `/compare`, wishlist with `priceAtAdd`
-- [ ] T025 A Admin: products list/editor with live card preview, archive, images upload; categories, brands, spec templates
+- [x] T025 A Admin: products list/editor with live card preview, archive, images upload; categories, brands, spec templates
 - [ ] T026 A Admin: CSV import with preview matched on model code (prices in EGP, converted to piastres)
 - [ ] T027 A E2E: catalog, search, compare/wishlist, admin products specs
 - [ ] T028 C Slice review: gates, 375 px and 320 px checks, Lighthouse

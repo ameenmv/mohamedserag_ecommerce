@@ -94,6 +94,14 @@ describe('admin-catalog.util', () => {
       expect(parseTemplateFields('not an array')).toEqual([])
       expect(parseTemplateFields([{ invalid: true }])).toEqual([])
     })
+
+    it('drops only the invalid entries and keeps the valid ones', () => {
+      const res = parseTemplateFields([
+        { key: 'capacity_l', label: 'السعة', type: 'number' },
+        { key: 'cooling', label: 'التبريد', type: 'select', options: ['نوفروست'] },
+      ])
+      expect(res.map((f) => f.key)).toEqual(['capacity_l'])
+    })
   })
 
   describe('parseProductSetContents', () => {

@@ -104,15 +104,16 @@ export function resolveUploadsDir(): string {
   return path.resolve('../../uploads')
 }
 
-const templateFieldsArraySchema = z.array(adminSpecTemplateFieldSchema)
-
 /**
- * Parses and validates SpecTemplate.fields JSON column from DB.
- * Falls back to [] on invalid JSON or parse failure.
+ * Parses SpecTemplate.fields from the DB. Invalid entries are dropped one by one,
+ * so a single bad field never empties the whole template in the editor.
  */
 export function parseTemplateFields(json: unknown): AdminSpecTemplateField[] {
-  const parsed = templateFieldsArraySchema.safeParse(json)
-  return parsed.success ? parsed.data : []
+  if (!Array.isArray(json)) return []
+  return json.flatMap((item: unknown) => {
+    const parsed = adminSpecTemplateFieldSchema.safeParse(item)
+    return parsed.success ? [parsed.data] : []
+  })
 }
 
 const productSetContentsArraySchema = z.array(productSetContentPieceSchema)

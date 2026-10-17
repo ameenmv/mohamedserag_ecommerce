@@ -13,7 +13,18 @@
     "undo": "Undo",
     "showPassword": "Show password",
     "hidePassword": "Hide password",
-    "currency": "EGP"
+    "currency": "EGP",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "save": "Save",
+    "create": "Create",
+    "delete": "Delete",
+    "error": "Error",
+    "close": "Close",
+    "errors": {
+      "unexpected": "An unexpected error occurred",
+      "invalidValue": "Invalid value"
+    }
   },
   "locale": {
     "switch": "Change language",
@@ -296,6 +307,7 @@
       "overview": "Overview",
       "orders": "Orders",
       "products": "Products",
+      "catalog": "Categories & Brands",
       "bridal": "Bridal Packages",
       "promotions": "Promotions & Coupons",
       "reviews": "Reviews",
@@ -359,12 +371,318 @@
       "openStore": "Open Storefront",
       "openStoreSearch": "open store storefront new tab main site",
       "inNewTab": "in new tab"
+    },
+    "products": {
+      "title": "Products",
+      "newProduct": "New Product",
+      "newTitle": "Add New Product",
+      "editTitle": "Edit Product",
+      "backToList": "Back to products list",
+      "searchPlaceholder": "Product name or model code...",
+      "allCategories": "All Categories",
+      "allBrands": "All Brands",
+      "status": {
+        "all": "All Statuses",
+        "active": "Active",
+        "hidden": "Hidden",
+        "archived": "Archived"
+      },
+      "stockFilter": {
+        "all": "All Stock Levels",
+        "low": "Low Stock",
+        "out": "Out of Stock"
+      },
+      "sort": {
+        "label": "Sort by",
+        "updated": "Last Updated",
+        "name": "Name",
+        "price": "Price",
+        "stock": "Stock"
+      },
+      "list": {
+        "actionsFor": "Actions for \"{name}\""
+      },
+      "preview": {
+        "defaultName": "New Product Name",
+        "defaultBrand": "Brand",
+        "defaultCategory": "Category",
+        "defaultImageAlt": "Product image"
+      },
+      "validation": {
+        "nameRequired": "Product name is required",
+        "modelCodeRequired": "Model code is required",
+        "brandRequired": "Brand is required",
+        "categoryRequired": "Category is required"
+      },
+      "table": {
+        "product": "Product",
+        "category": "Category",
+        "brand": "Brand",
+        "price": "Price",
+        "stock": "Stock",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "actions": {
+        "edit": "Edit",
+        "show": "Show in Store",
+        "hide": "Hide from Store",
+        "archive": "Archive",
+        "unarchive": "Unarchive",
+        "delete": "Delete",
+        "confirmDeleteTitle": "Permanently Delete Product",
+        "confirmDeleteDescription": "Are you sure you want to delete \"{name}\"? This cannot be undone unless it is unreferenced in orders.",
+        "cancel": "Cancel",
+        "confirmDelete": "Yes, Delete"
+      },
+      "inOrdersDialog": {
+        "title": "Product Cannot Be Deleted",
+        "description": "This product is referenced in existing customer orders and cannot be deleted to preserve order records. You can archive it instead to hide it completely from the storefront.",
+        "archiveAction": "Archive instead of deleting",
+        "close": "Close"
+      },
+      "toasts": {
+        "hidden": "\"{name}\" was hidden from store",
+        "shown": "\"{name}\" is now visible in store",
+        "archived": "\"{name}\" was archived",
+        "unarchived": "\"{name}\" was unarchived",
+        "deleted": "\"{name}\" was successfully deleted",
+        "created": "Product created successfully",
+        "saved": "Changes saved successfully",
+        "imageUploaded": "Image uploaded successfully",
+        "imageDeleted": "Image deleted",
+        "imagesReordered": "Image order updated",
+        "imagePatched": "Image details updated"
+      },
+      "empty": {
+        "title": "No matching products found",
+        "description": "Try adjusting your search terms or applied filters.",
+        "clearFilters": "Clear Filters"
+      },
+      "loading": "Loading products...",
+      "pagination": {
+        "previous": "Previous",
+        "next": "Next",
+        "page": "Page {page} of {totalPages}",
+        "total": "{total} products in total"
+      },
+      "editor": {
+        "save": "Save Changes",
+        "saving": "Saving...",
+        "create": "Create Product",
+        "cancel": "Cancel",
+        "unsavedChanges": "You have unsaved changes. Do you want to leave and discard them?",
+        "unsavedBadge": "Unsaved changes",
+        "allSaved": "All changes saved",
+        "preview": {
+          "title": "Live Product Card Preview",
+          "subtitle": "How this product appears to customers in the store",
+          "mobileToggle": "Toggle Card Preview",
+          "unsavedBadge": "Unsaved Draft"
+        },
+        "basics": {
+          "title": "Basic Information",
+          "name": "Product Name",
+          "namePlaceholder": "e.g. LG 9kg Front Load Washer with Dryer",
+          "modelCode": "Model Code",
+          "modelCodePlaceholder": "e.g. F4R5VGG2E",
+          "slug": "Slug",
+          "slugPlaceholder": "Auto-generated if left blank",
+          "brand": "Brand",
+          "selectBrand": "Select a brand",
+          "category": "Category",
+          "selectCategory": "Select a category",
+          "categoryChangeWarnTitle": "Category Change Discards Specs",
+          "categoryChangeWarnDescription": "Changing category will reload technical spec fields and remove values not present in the new template. Proceed?"
+        },
+        "pricing": {
+          "title": "Pricing & Inventory",
+          "price": "Sale Price (EGP)",
+          "oldPrice": "Original Price (EGP)",
+          "oldPriceGreater": "Original price must be greater than sale price",
+          "discountPercent": "Calculated Discount",
+          "noDiscount": "No discount",
+          "stock": "Available Stock Quantity",
+          "lowStockThreshold": "Low Stock Alert Threshold",
+          "availabilityMode": "Availability Mode",
+          "modes": {
+            "auto": "Automatic based on inventory",
+            "on_request": "Available on request (Orderable)",
+            "out": "Out of stock (Unavailable)"
+          },
+          "leadTimeText": "Estimated Lead Time",
+          "leadTimePlaceholder": "e.g. Delivery within 3-5 business days",
+          "taxRate": "VAT Rate (%)"
+        },
+        "specs": {
+          "title": "Technical Specifications",
+          "noTemplate": "Selected category has no spec template assigned.",
+          "assignTemplateHint": "You can assign a spec template from the Categories & Brands page.",
+          "true": "Yes / Available",
+          "false": "No / Unavailable",
+          "selectOption": "Select an option"
+        },
+        "setContents": {
+          "title": "Set Contents",
+          "description": "Record pieces, sizes, and quantities included in this set for customer transparency",
+          "emptyHint": "No pieces added yet. Click \"Add Piece\" to begin.",
+          "item": "Piece Name",
+          "itemPlaceholder": "e.g. Cooking Pot with Lid",
+          "size": "Size / Capacity",
+          "sizePlaceholder": "e.g. 24 cm",
+          "qty": "Quantity",
+          "addRow": "Add Another Piece",
+          "removeRow": "Remove Piece"
+        },
+        "warranty": {
+          "title": "Warranty & Origin",
+          "warranty": "Warranty Duration & Terms",
+          "warrantyPlaceholder": "e.g. 10-year official distributor warranty",
+          "warrantyActivation": "Warranty Activation Instructions",
+          "warrantyActivationPlaceholder": "e.g. Call manufacturer hotline and stamp card",
+          "origin": "Country of Origin",
+          "originPlaceholder": "e.g. Egypt / Turkey / South Korea"
+        },
+        "images": {
+          "title": "Product Images",
+          "saveFirst": "Save the product first before uploading images",
+          "dragDrop": "Drag and drop images here, or click to browse",
+          "allowedTypes": "Supported formats: JPEG, PNG, WebP, AVIF — Max 5 MB per file",
+          "uploading": "Uploading images...",
+          "realPhoto": "Showroom Real Photo",
+          "alt": "Alt Text (SEO)",
+          "altPlaceholder": "Accurate description for search engines",
+          "moveStart": "Move towards start",
+          "moveEnd": "Move towards end",
+          "delete": "Delete image",
+          "primary": "Primary Image",
+          "maxSizeError": "Image size must not exceed 5 MB",
+          "typeError": "Unsupported image format. Allowed formats: JPEG, PNG, WebP, AVIF",
+          "moveStartN": "Move image {n} towards start",
+          "moveEndN": "Move image {n} towards end",
+          "realPhotoN": "Showroom real photo for image {n}",
+          "deleteN": "Delete image {n}",
+          "altN": "Alt text for image {n}"
+        },
+        "seo": {
+          "title": "Visibility & SEO",
+          "visible": "Visible in Storefront",
+          "visibleHint": "If disabled, hidden from catalog and search",
+          "featured": "Featured Product",
+          "featuredHint": "Highlighted in homepage featured showcases",
+          "seoTitle": "Google Page Title (SEO Title)",
+          "seoTitleHint": "Recommended ~60 characters",
+          "seoDescription": "Search Description (SEO Description)",
+          "seoDescriptionHint": "Recommended ~160 characters",
+          "chars": "{count} chars"
+        }
+      }
+    },
+    "catalog": {
+      "title": "Categories & Brands",
+      "tabs": {
+        "categories": "Categories",
+        "brands": "Brands",
+        "specTemplates": "Spec Templates"
+      },
+      "categories": {
+        "new": "New Category",
+        "edit": "Edit Category",
+        "name": "Category Name",
+        "slug": "Slug",
+        "parent": "Parent Category",
+        "noParent": "Root Category (No Parent)",
+        "specTemplate": "Assigned Spec Template",
+        "noSpecTemplate": "No Spec Template",
+        "intro": "Category Introduction",
+        "seoTitle": "SEO Title",
+        "seoDescription": "SEO Description",
+        "visible": "Visible in Store",
+        "productsCount": "{count} products",
+        "reorderSuccess": "Category order updated",
+        "created": "Category created successfully",
+        "updated": "Category updated successfully",
+        "deleted": "Category deleted successfully",
+        "confirmDelete": "Are you sure you want to delete category \"{name}\"?",
+        "empty": "No categories registered yet.",
+        "moveUpN": "Move category \"{name}\" up (position {n})",
+        "moveDownN": "Move category \"{name}\" down (position {n})",
+        "editNamed": "Edit category \"{name}\"",
+        "deleteNamed": "Delete category \"{name}\""
+      },
+      "brands": {
+        "new": "New Brand",
+        "edit": "Edit Brand",
+        "name": "Brand Name",
+        "slug": "Slug",
+        "logo": "Brand Logo",
+        "uploadLogo": "Upload Logo",
+        "logoHint": "PNG, WebP, or SVG format up to 5 MB",
+        "intro": "Brand Introduction",
+        "seoTitle": "SEO Title",
+        "seoDescription": "SEO Description",
+        "visible": "Visible in Store",
+        "productsCount": "{count} products",
+        "created": "Brand created successfully",
+        "updated": "Brand updated successfully",
+        "deleted": "Brand deleted successfully",
+        "confirmDelete": "Are you sure you want to delete brand \"{name}\"?",
+        "empty": "No brands registered yet.",
+        "logoSizeError": "Logo size must not exceed 5 MB",
+        "logoUploaded": "Logo uploaded successfully",
+        "editNamed": "Edit brand \"{name}\"",
+        "deleteNamed": "Delete brand \"{name}\""
+      },
+      "specTemplates": {
+        "new": "New Spec Template",
+        "edit": "Edit Spec Template",
+        "name": "Template Name",
+        "fieldsCount": "{count} fields",
+        "usedIn": "Used in {count} categories",
+        "fields": "Template Spec Fields",
+        "addField": "Add Field",
+        "removeField": "Remove",
+        "key": "Field Key",
+        "keyPlaceholder": "e.g. capacity",
+        "label": "Display Label",
+        "labelPlaceholder": "e.g. Capacity (Liters)",
+        "type": "Type",
+        "unit": "Unit",
+        "unitPlaceholder": "e.g. Liters, Watts",
+        "options": "Options (comma-separated)",
+        "optionsPlaceholder": "e.g. White, Silver, Black",
+        "filterable": "Store Filter",
+        "comparable": "Compare",
+        "emptyHint": "Click \"Add Field\" to add the first spec definition to this template.",
+        "types": {
+          "text": "Text",
+          "number": "Number",
+          "boolean": "Yes/No (Boolean)",
+          "choice": "Single Choice"
+        },
+        "created": "Spec template created successfully",
+        "updated": "Spec template updated successfully",
+        "deleted": "Spec template deleted successfully",
+        "confirmDelete": "Are you sure you want to delete spec template \"{name}\"?",
+        "empty": "No spec templates registered yet.",
+        "editNamed": "Edit spec template \"{name}\"",
+        "deleteNamed": "Delete spec template \"{name}\"",
+        "moveUpN": "Move field {n} up",
+        "moveDownN": "Move field {n} down",
+        "removeFieldN": "Remove field {n}"
+      },
+      "errors": {
+        "hasRelations": "Cannot delete category because it contains products or subcategories",
+        "hasProducts": "Cannot delete brand because it is associated with products",
+        "inUse": "Cannot delete spec template because it is assigned to categories"
+      }
     }
   },
   "validation": {
     "emailRequired": "Please enter your email",
     "emailInvalid": "Invalid email address",
-    "passwordRequired": "Please enter your password"
+    "passwordRequired": "Please enter your password",
+    "priceRequired": "Please enter a valid price"
   },
   "errors": {
     "generic": "An unexpected error occurred. Please try again."
