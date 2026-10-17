@@ -49,7 +49,11 @@
       "mobileMenuSubtitle": "SINCE 1972 · المنصورة",
       "browseSite": "تصفح الموقع",
       "directWhatsapp": "تواصل واتساب مباشر",
-      "callShowroom": "اتصل بالمعرض"
+      "callShowroom": "اتصل بالمعرض",
+      "suggestedCategories": "أقسام مقترحة",
+      "seeAllResults": "عرض كل نتائج البحث ({query})",
+      "resultsCount": "النتائج: {count}",
+      "askOnWhatsapp": "اسألنا على واتساب"
     },
     "footer": {
       "whatsappPrefill": "السلام عليكم، عندي استفسار من موقع معرض محمد سراج 👋",
@@ -154,12 +158,23 @@
     },
     "wishlist": {
       "add": "إضافة للمفضلة",
-      "remove": "إزالة من المفضلة",
+      "remove": "شيل",
       "addAria": "إضافة {name} للمفضلة",
       "removeAria": "إزالة {name} من المفضلة",
       "addedNotice": "تم الحفظ في المفضلة",
       "removedNotice": "تم الحذف من المفضلة",
-      "priceDropped": "السعر نزل"
+      "priceDropped": "السعر نزل",
+      "pageTitle": "المفضلة - معرض محمد سراج",
+      "title": "المفضلة",
+      "subtitle": "منتجاتك المحفوظة للرجوع لها في أي وقت",
+      "emptyTitle": "قائمة المفضلة فاضية",
+      "emptyDescription": "احفظ المنتجات اللي بتفكر تشتريها وهنبلغك لو سعرها نزل.",
+      "browseProducts": "تصفح المنتجات",
+      "moveToCart": "انقل للسلة",
+      "moveToCartAria": "انقل {name} للسلة",
+      "unavailableProduct": "المنتج ده مبقاش متاح",
+      "removeUnavailable": "إزالة المنتج غير المتاح",
+      "movedToCartNotice": "تم نقل المنتج للسلة"
     },
     "compare": {
       "add": "إضافة للمقارنة",
@@ -169,7 +184,35 @@
       "addedNotice": "تمت الإضافة للمقارنة",
       "removedNotice": "تم الحذف من المقارنة",
       "maxReached": "الحد الأقصى للمقارنة 3 منتجات",
-      "fullNotice": "قائمة المقارنة ممتلئة (3 منتجات)"
+      "fullNotice": "قائمة المقارنة ممتلئة (3 منتجات)",
+      "pageTitle": "مقارنة المنتجات - معرض محمد سراج",
+      "title": "مقارنة المنتجات",
+      "subtitle": "قارن بين حتى 3 منتجات واعرف الفروق والمواصفات بالتفصيل",
+      "barAria": "شريط مقارنة المنتجات",
+      "compareButton": "قارن ({count})",
+      "clear": "مسح",
+      "clearAria": "مسح كل المنتجات من المقارنة",
+      "emptyTitle": "مفيش منتجات في المقارنة",
+      "emptyDescription": "اختر منتجات من المتجر عشان تقارن مواصفاتها وأسعارها جنباً لجنب.",
+      "browseProducts": "تصفح المنتجات",
+      "singleItemHint": "أضف منتج تاني عشان تقدر تقارن بينهم.",
+      "mixedCategoriesNotice": "المنتجات من أقسام مختلفة، بنعرض المواصفات المشتركة بس",
+      "showDifferencesOnly": "اعرض الاختلافات بس",
+      "noDifferencesNotice": "مفيش اختلافات في المواصفات المعروضة.",
+      "differentValue": "قيم مختلفة",
+      "replacedNotice": "تم استبدال المنتج في المقارنة",
+      "price": "السعر",
+      "brand": "العلامة التجارية",
+      "warranty": "الضمان",
+      "origin": "بلد المنشأ",
+      "productColumn": "الخاصية",
+      "replaceDialog": {
+        "title": "تبدّل أنهي منتج؟",
+        "description": "قائمة المقارنة فيها 3 منتجات. اختر منتج عشان تستبدله بـ {name}",
+        "replaceButton": "استبدال",
+        "replaceButtonAria": "استبدال {name}",
+        "cancel": "إلغاء"
+      }
     },
     "availability": {
       "inStock": "متوفر",

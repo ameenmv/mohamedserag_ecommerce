@@ -49,7 +49,11 @@
       "mobileMenuSubtitle": "SINCE 1972 · Mansoura",
       "browseSite": "Browse Site",
       "directWhatsapp": "Direct WhatsApp Chat",
-      "callShowroom": "Call Showroom"
+      "callShowroom": "Call Showroom",
+      "suggestedCategories": "Suggested categories",
+      "seeAllResults": "See all search results ({query})",
+      "resultsCount": "Results: {count}",
+      "askOnWhatsapp": "Ask us on WhatsApp"
     },
     "footer": {
       "whatsappPrefill": "Hello, I have an inquiry from Mohamed Serag Showroom website 👋",
@@ -154,12 +158,23 @@
     },
     "wishlist": {
       "add": "Add to wishlist",
-      "remove": "Remove from wishlist",
+      "remove": "Remove",
       "addAria": "Add {name} to wishlist",
       "removeAria": "Remove {name} from wishlist",
       "addedNotice": "Saved to wishlist",
       "removedNotice": "Removed from wishlist",
-      "priceDropped": "Price dropped"
+      "priceDropped": "Price dropped",
+      "pageTitle": "Wishlist - Mohamed Serag",
+      "title": "Wishlist",
+      "subtitle": "Your saved products to revisit anytime",
+      "emptyTitle": "Your wishlist is empty",
+      "emptyDescription": "Save products you are considering and we will notify you if prices drop.",
+      "browseProducts": "Browse products",
+      "moveToCart": "Move to cart",
+      "moveToCartAria": "Move {name} to cart",
+      "unavailableProduct": "This product is no longer available",
+      "removeUnavailable": "Remove unavailable product",
+      "movedToCartNotice": "Product moved to cart"
     },
     "compare": {
       "add": "Add to compare",
@@ -169,7 +184,35 @@
       "addedNotice": "Added to compare",
       "removedNotice": "Removed from compare",
       "maxReached": "Maximum 3 products can be compared",
-      "fullNotice": "Compare list is full (3 products)"
+      "fullNotice": "Compare list is full (3 products)",
+      "pageTitle": "Compare Products - Mohamed Serag",
+      "title": "Compare Products",
+      "subtitle": "Compare up to 3 products side by side to see differences and details",
+      "barAria": "Product comparison bar",
+      "compareButton": "Compare ({count})",
+      "clear": "Clear",
+      "clearAria": "Clear all products from compare",
+      "emptyTitle": "No products in compare",
+      "emptyDescription": "Select products from the store to compare their specifications and prices side by side.",
+      "browseProducts": "Browse products",
+      "singleItemHint": "Add at least one more product to compare them.",
+      "mixedCategoriesNotice": "Products are from different categories; showing common specifications only.",
+      "showDifferencesOnly": "Show differences only",
+      "noDifferencesNotice": "No differences found in the displayed specifications.",
+      "differentValue": "Different values",
+      "replacedNotice": "Product replaced in compare",
+      "price": "Price",
+      "brand": "Brand",
+      "warranty": "Warranty",
+      "origin": "Country of origin",
+      "productColumn": "Specification",
+      "replaceDialog": {
+        "title": "Which product to replace?",
+        "description": "The compare list has 3 products. Select a product to replace with {name}",
+        "replaceButton": "Replace",
+        "replaceButtonAria": "Replace {name}",
+        "cancel": "Cancel"
+      }
     },
     "availability": {
       "inStock": "In stock",

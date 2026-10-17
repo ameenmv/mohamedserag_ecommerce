@@ -14,13 +14,15 @@ const { t } = useI18n()
 const notify = useNotify()
 const { has, toggle } = useCompare()
 
+const pendingCompare = useState<ProductCard | null>('compare-pending', () => null)
+
 const isCompared = computed(() => has(props.product.id))
 
 function onToggle(): void {
   const result = toggle(props.product)
   if (result === 'full') {
+    pendingCompare.value = props.product
     emit('full', props.product)
-    notify.warning(t('store.compare.fullNotice'))
   } else if (result === 'added') {
     notify.success(t('store.compare.addedNotice'))
   } else {

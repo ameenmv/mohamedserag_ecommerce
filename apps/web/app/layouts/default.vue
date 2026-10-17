@@ -1,11 +1,43 @@
 <script setup lang="ts">
 import StoreHeader from '@/components/store/StoreHeader.vue'
+import type { ProductCard } from '@serag/shared'
+import { stripLocalePrefix } from '~/utils/i18n'
 
 const { t } = useI18n()
+const route = useRoute()
+const { count: compareCount } = useCompare()
+const pendingCompare = useState<ProductCard | null>('compare-pending', () => null)
+
+const isMounted = ref(false)
+if (import.meta.client) {
+  onMounted(() => {
+    isMounted.value = true
+  })
+}
+
+const showCompareBar = computed(() => {
+  if (!isMounted.value || compareCount.value < 1) return false
+  const path = stripLocalePrefix(route.path)
+  return path !== '/compare' && path !== '/compare/'
+})
+
+const isProductRoute = computed(() => {
+  const path = stripLocalePrefix(route.path)
+  return path.startsWith('/p/')
+})
 </script>
 
 <template>
-  <div class="flex min-h-dvh flex-col bg-background pb-20 text-foreground md:pb-0">
+  <div
+    :class="[
+      'flex min-h-dvh flex-col bg-background text-foreground',
+      showCompareBar
+        ? isProductRoute
+          ? 'pb-20 lg:pb-24'
+          : 'pb-36 md:pb-20 lg:pb-24'
+        : 'pb-20 md:pb-0',
+    ]"
+  >
     <a
       href="#store-main-content"
       class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:start-4 focus:z-50 focus:rounded-full focus:bg-accent focus:px-5 focus:py-2.5 focus:font-bold focus:text-accent-foreground focus:shadow-lg"
@@ -18,6 +50,12 @@ const { t } = useI18n()
     <div id="store-main-content" tabindex="-1" class="flex-1 outline-none">
       <slot />
     </div>
+
+    <!-- Client-only Floating Compare Bar & Replace Dialog -->
+    <ClientOnly>
+      <LazyStoreCompareBar v-if="showCompareBar" />
+      <LazyStoreCompareReplaceDialog v-if="pendingCompare" />
+    </ClientOnly>
 
     <LazyStoreFooter hydrate-on-visible />
     <LazyStoreBottomNav hydrate-on-idle />
