@@ -177,5 +177,5 @@ export interface ProductDetail {
   related: ProductCard[]
 }
 
-export type CatalogSort = 'popular' | 'price_asc' | 'price_desc' | 'discount' | 'newest'
+export type CatalogSort = 'popular' | 'price_asc' | 'price_desc' | 'discount' | 'newest' | 'relevance'
 export type CatalogAvailabilityFilter = 'in_stock' | 'low' | 'on_request' | 'out'

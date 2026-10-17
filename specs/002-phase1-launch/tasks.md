@@ -28,7 +28,7 @@
 
 ## Phase 1: Slice 1 — Catalog & discovery
 - [x] T020 F API catalog: categories, brands, spec templates, products (list with filters/sort/pagination, by slug, by ids), availability derivation
-- [ ] T021 A API search: query the `searchText` column with trigram similarity, synonyms from settings, keep `searchText` updated on product create/update
+- [x] T021 F API search: query the `searchText` column with trigram similarity, synonyms from settings, keep `searchText` updated on product create/update
 - [ ] T021b A Web shared pieces before the page tasks: `ProductCard`, `useApi`, `useCart`, `useWishlist`, `useCompare`, header badges
 - [ ] T022 A [P] Web: product card component, `/shop`, `/c/[slug]`, `/b/[slug]` with URL-synced filters and mobile filter sheet
 - [ ] T023 A [P] Web: `/p/[slug]` product page (gallery, specs, cookware set contents, warranty + activation note, VAT label, availability incl. on-request lead time, zone delivery cost, WhatsApp ask, sticky mobile bar, related)

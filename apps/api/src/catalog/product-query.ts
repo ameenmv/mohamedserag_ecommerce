@@ -142,10 +142,84 @@ export function buildSpecFilterSqlConditions(filters: readonly ParsedSpecFilter[
 }
 
 /**
+ * Escapes characters with special meaning in LIKE / ILIKE patterns (% and _ and \).
+ */
+export function escapeLikePattern(str: string): string {
+  return str.replace(/[%_\\]/g, '\\$&')
+}
+
+/**
+ * Builds the parameterized SQL WHERE fragment for search matching (PRD US-2.1).
+ *
+ * A product matches if:
+ * - EVERY term group has at least one alternative with `p.search_text ILIKE '%alt%'`
+ * - OR `word_similarity(${normalizedQuery}, p.search_text) >= 0.35` for typo tolerance.
+ */
+export function searchMatchSql(
+  terms: readonly (readonly string[])[],
+  normalizedQuery: string,
+): Prisma.Sql {
+  if (terms.length === 0) {
+    if (normalizedQuery.length >= 2) {
+      return Prisma.sql`word_similarity(${normalizedQuery}, p.search_text) >= 0.35`
+    }
+    return Prisma.sql`1 = 0`
+  }
+
+  const groupConditions: Prisma.Sql[] = []
+
+  for (const group of terms) {
+    const altConditions: Prisma.Sql[] = []
+    for (const alt of group) {
+      if (alt.length === 0) continue
+      const pattern = `%${escapeLikePattern(alt)}%`
+      altConditions.push(Prisma.sql`p.search_text ILIKE ${pattern}`)
+    }
+    if (altConditions.length > 0) {
+      groupConditions.push(Prisma.sql`(${Prisma.join(altConditions, ' OR ')})`)
+    }
+  }
+
+  const allTermsCondition =
+    groupConditions.length > 0 ? Prisma.sql`(${Prisma.join(groupConditions, ' AND ')})` : Prisma.sql`1 = 0`
+
+  if (normalizedQuery.length >= 2) {
+    return Prisma.sql`(${allTermsCondition} OR word_similarity(${normalizedQuery}, p.search_text) >= 0.35)`
+  }
+
+  return allTermsCondition
+}
+
+/**
+ * Builds the parameterized SQL ORDER BY fragment for search relevance ranking (PRD US-2.1).
+ *
+ * Ranking order:
+ * 1. Exact model code match (lower(p.model_code) = normalizedQuery)
+ * 2. Model code prefix match (lower(p.model_code) LIKE normalizedQuery%)
+ * 3. word_similarity(normalizedQuery, p.search_text) DESC
+ * 4. Popularity (units sold in last 90 days DESC)
+ * 5. Newest (p.created_at DESC)
+ */
+export function searchRankSql(normalizedQuery: string): Prisma.Sql {
+  const prefixPattern = `${escapeLikePattern(normalizedQuery)}%`
+  return Prisma.sql`
+    CASE WHEN lower(p.model_code) = ${normalizedQuery} THEN 0 ELSE 1 END ASC,
+    CASE WHEN lower(p.model_code) LIKE ${prefixPattern} THEN 0 ELSE 1 END ASC,
+    word_similarity(${normalizedQuery}, p.search_text) DESC,
+    COALESCE(pop.units_sold, 0) DESC,
+    p.created_at DESC
+  `
+}
+
+/**
  * Maps a catalog sort option to a parameterized Prisma.Sql ORDER BY fragment.
  */
-export function mapSortToOrderBy(sort: CatalogSort): Prisma.Sql {
+export function mapSortToOrderBy(sort: CatalogSort, normalizedQuery?: string): Prisma.Sql {
   switch (sort) {
+    case 'relevance':
+      return normalizedQuery && normalizedQuery.length > 0
+        ? searchRankSql(normalizedQuery)
+        : Prisma.sql`COALESCE(pop.units_sold, 0) DESC, p.created_at DESC`
     case 'popular':
       return Prisma.sql`COALESCE(pop.units_sold, 0) DESC, p.created_at DESC`
     case 'price_asc':

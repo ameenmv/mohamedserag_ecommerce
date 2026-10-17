@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   productQuerySchema,
+  resolveCatalogSort,
   specTemplateFieldSchema,
   type SpecTemplateField,
 } from '@serag/shared'
@@ -20,7 +21,8 @@ describe('productQuerySchema (query validation & defaults)', () => {
     const parsed = productQuerySchema.parse({})
     expect(parsed.page).toBe(1)
     expect(parsed.pageSize).toBe(24)
-    expect(parsed.sort).toBe('popular')
+    expect(parsed.sort).toBeUndefined()
+    expect(resolveCatalogSort(parsed)).toBe('popular')
     expect(parsed.discounted).toBeUndefined()
   })
 
@@ -238,6 +240,38 @@ describe('mapSortToOrderBy', () => {
   it('maps newest to created_at DESC', () => {
     const newest = mapSortToOrderBy('newest')
     expect(newest.sql).toContain('p.created_at DESC')
+  })
+
+  it('maps relevance to searchRankSql when normalizedQuery is provided', () => {
+    const rel = mapSortToOrderBy('relevance', 'samsung')
+    expect(rel.sql).toContain('word_similarity')
+    expect(rel.sql).toContain('lower(p.model_code)')
+  })
+
+  it('maps relevance to popular ordering fallback when normalizedQuery is absent', () => {
+    const rel = mapSortToOrderBy('relevance')
+    expect(rel.sql).toContain('pop.units_sold')
+    expect(rel.sql).toContain('p.created_at DESC')
+  })
+})
+
+describe('resolveCatalogSort', () => {
+  it('resolves default sort to popular when sort and q are omitted', () => {
+    expect(resolveCatalogSort({})).toBe('popular')
+  })
+
+  it('resolves to relevance when q is present without sort', () => {
+    expect(resolveCatalogSort({ q: 'samsung' })).toBe('relevance')
+    expect(resolveCatalogSort({ q: '  تلاجه  ' })).toBe('relevance')
+  })
+
+  it('honours explicit sort even when q is present', () => {
+    expect(resolveCatalogSort({ q: 'samsung', sort: 'price_asc' })).toBe('price_asc')
+    expect(resolveCatalogSort({ q: 'samsung', sort: 'newest' })).toBe('newest')
+  })
+
+  it('falls back to popular when q is whitespace only', () => {
+    expect(resolveCatalogSort({ q: '   ' })).toBe('popular')
   })
 })
 

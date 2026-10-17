@@ -21,8 +21,8 @@ import {
   DEFAULT_TEMPLATES,
   DEFAULT_ZONES,
   OWNER_ROLE_KEY,
+  buildProductSearchText,
   egpToPiastres,
-  expandSynonyms,
   findZone,
   type Permission,
 } from '@serag/shared'
@@ -1019,8 +1019,14 @@ async function main() {
         ? 'الضمان ساري بالفاتورة المختومة من معرض محمد سراج'
         : 'فعّل الضمان بالاتصال بالخط الساخن للوكيل المعتمد عند التركيب'
 
-    const searchText = expandSynonyms(
-      [item.name, `${brand.enName} ${brand.name}`, category.name, item.cap, item.tech, modelCode].join(' '),
+    const searchText = buildProductSearchText(
+      {
+        name: item.name,
+        brandNames: [brand.enName, brand.name],
+        categoryName: category.name,
+        modelCode,
+        extra: [item.cap, item.tech],
+      },
       SEARCH_SYNONYMS,
     )
 

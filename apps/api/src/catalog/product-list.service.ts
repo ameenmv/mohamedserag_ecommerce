@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import {
+  buildSearchTerms,
   egpToPiastres,
+  normalizeArabic,
   piastresToEgp,
+  resolveCatalogSort,
   specTemplateFieldSchema,
   type ProductCard,
   type ProductListResponse,
@@ -18,8 +21,10 @@ import {
   parseAvailabilityFilter,
   parseSpecFilters,
   popularityJoinSql,
+  searchMatchSql,
   toProductCard,
 } from './product-query.js'
+import { SearchService } from './search.service.js'
 
 interface IdTotalRow {
   id: string
@@ -39,7 +44,10 @@ interface PriceFacetRow {
 
 @Injectable()
 export class ProductListService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly searchService: SearchService,
+  ) {}
 
   /**
    * Returns a filtered, sorted, paginated list of products or exact products by IDs (US-2.2, US-2.4).
@@ -227,10 +235,20 @@ export class ProductListService {
       }
     }
 
-    const whereClause = Prisma.sql`WHERE ${Prisma.join(whereConditions, ' AND ')}`
-    const orderBy = mapSortToOrderBy(query.sort)
+    let normalizedQuery: string | undefined
+    if (query.q && query.q.trim().length > 0) {
+      normalizedQuery = normalizeArabic(query.q)
+      const synonyms = await this.searchService.getSynonyms()
+      const terms = normalizedQuery.length > 0 ? buildSearchTerms(query.q, synonyms) : []
+      whereConditions.push(searchMatchSql(terms, normalizedQuery))
+    }
 
-    const popularityJoin = query.sort === 'popular' ? popularityJoinSql() : Prisma.empty
+    const whereClause = Prisma.sql`WHERE ${Prisma.join(whereConditions, ' AND ')}`
+    const sort = resolveCatalogSort(query)
+    const orderBy = mapSortToOrderBy(sort, normalizedQuery)
+
+    const popularityJoin =
+      sort === 'popular' || sort === 'relevance' ? popularityJoinSql() : Prisma.empty
 
     const offset = (query.page - 1) * query.pageSize
 

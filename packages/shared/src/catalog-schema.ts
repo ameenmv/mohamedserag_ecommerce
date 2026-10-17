@@ -1,6 +1,7 @@
 import { z } from 'zod'
+import type { CatalogSort } from './catalog.js'
 
-export const CATALOG_SORTS = ['popular', 'price_asc', 'price_desc', 'discount', 'newest'] as const
+export const CATALOG_SORTS = ['popular', 'price_asc', 'price_desc', 'discount', 'newest', 'relevance'] as const
 export const catalogSortSchema = z.enum(CATALOG_SORTS)
 
 export const CATALOG_AVAILABILITY_FILTERS = ['in_stock', 'low', 'on_request', 'out'] as const
@@ -24,7 +25,7 @@ export const specTemplateFieldSchema = z.object({
 })
 
 /**
- * Validates and transforms the query string for `GET /api/products`.
+ * Validates the query string for `GET /api/products`.
  * Reused by web for URL query synchronization.
  */
 export const productQuerySchema = z
@@ -40,10 +41,11 @@ export const productQuerySchema = z
         if (val === 'false' || val === false) return false
         return undefined
       }, z.boolean().optional()),
-    sort: catalogSortSchema.default('popular'),
+    sort: catalogSortSchema.optional(),
     page: z.coerce.number().int().min(1, 'رقم الصفحة يبدأ من 1').default(1),
     pageSize: z.coerce.number().int().min(1).max(60, 'الحد الأقصى لحجم الصفحة هو 60').default(24),
     ids: z.string().trim().min(1).optional(),
+    q: z.string().trim().min(1).max(100).optional(),
   })
   .passthrough()
   .refine(
@@ -57,3 +59,20 @@ export const productQuerySchema = z
 
 export type ProductQueryInput = z.input<typeof productQuerySchema>
 export type ProductQueryOutput = z.output<typeof productQuerySchema>
+
+/**
+ * Resolves the effective catalog sort (PRD US-2.1 & US-2.2):
+ * - If explicit sort is provided, returns it
+ * - If q is present (non-empty), defaults to 'relevance'
+ * - Otherwise defaults to 'popular'
+ */
+export function resolveCatalogSort(query: { sort?: CatalogSort; q?: string }): CatalogSort {
+  if (query.sort) {
+    return query.sort
+  }
+  if (query.q && query.q.trim().length > 0) {
+    return 'relevance'
+  }
+  return 'popular'
+}
+
