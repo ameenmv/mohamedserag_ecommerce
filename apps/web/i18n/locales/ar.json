@@ -95,6 +95,60 @@
       "realPhoto": "صورة حقيقية",
       "oldPriceAria": "السعر الأصلي: {price}"
     },
+    "productPage": {
+      "modelCode": "الموديل: {code}",
+      "saving": "وفّر {amount}",
+      "vatIncluded": "الأسعار شاملة ضريبة القيمة المضافة",
+      "installmentAvailable": "التقسيط متاح في المعرض",
+      "askWhatsapp": "اسأل على واتساب",
+      "quantity": "الكمية",
+      "decreaseQty": "تقليل الكمية",
+      "increaseQty": "زيادة الكمية",
+      "qtyAria": "الكمية: {count}",
+      "brandLinkAria": "تصفح منتجات {brand}",
+      "gallery": {
+        "prev": "الصورة السابقة",
+        "next": "الصورة التالية",
+        "realPhoto": "صورة حقيقية من المعرض",
+        "thumbnailAria": "صورة {index} من {name}",
+        "placeholderAlt": "صورة غير متوفرة"
+      },
+      "delivery": {
+        "title": "التوصيل بعربيات المعرض",
+        "description": "شحن مباشر وسريع بأسطول عربيات معرض محمد سراج",
+        "zoneFee": "{zone}: {fee}"
+      },
+      "warranty": {
+        "title": "الضمان والمنشأ",
+        "warrantyTitle": "الضمان المعتمد",
+        "activationTitle": "طريقة تفعيل الضمان",
+        "originTitle": "بلد المنشأ"
+      },
+      "specs": {
+        "title": "المواصفات الفنية",
+        "caption": "جدول المواصفات الفنية للمنتج",
+        "property": "الخاصية",
+        "value": "القيمة",
+        "yes": "أيوه",
+        "no": "لأ"
+      },
+      "setContents": {
+        "title": "محتويات الطقم",
+        "caption": "قائمة القطع المشمولة في الطقم",
+        "piece": "القطعة",
+        "size": "المقاس",
+        "qty": "العدد"
+      },
+      "stickyBar": {
+        "addToCartAria": "أضف {name} للسلة"
+      },
+      "related": {
+        "title": "منتجات مشابهة"
+      },
+      "meta": {
+        "fallbackDescription": "اشترِ {name} من {brand} بضمان حقيقي وأفضل سعر من معرض محمد سراج بالمنصورة."
+      }
+    },
     "cart": {
       "addedToCart": "تمت الإضافة للسلة"
     },

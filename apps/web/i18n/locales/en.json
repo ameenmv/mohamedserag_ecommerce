@@ -95,6 +95,60 @@
       "realPhoto": "Real photo",
       "oldPriceAria": "Original price: {price}"
     },
+    "productPage": {
+      "modelCode": "Model: {code}",
+      "saving": "Save {amount}",
+      "vatIncluded": "Prices are VAT inclusive",
+      "installmentAvailable": "Installments available in showroom",
+      "askWhatsapp": "Ask on WhatsApp",
+      "quantity": "Quantity",
+      "decreaseQty": "Decrease quantity",
+      "increaseQty": "Increase quantity",
+      "qtyAria": "Quantity: {count}",
+      "brandLinkAria": "Browse {brand} products",
+      "gallery": {
+        "prev": "Previous image",
+        "next": "Next image",
+        "realPhoto": "Real photo from showroom",
+        "thumbnailAria": "Image {index} of {name}",
+        "placeholderAlt": "Product placeholder image"
+      },
+      "delivery": {
+        "title": "Showroom Truck Delivery",
+        "description": "Direct and fast delivery via Mohamed Serag fleet",
+        "zoneFee": "{zone}: {fee}"
+      },
+      "warranty": {
+        "title": "Warranty & Origin",
+        "warrantyTitle": "Certified Warranty",
+        "activationTitle": "Warranty Activation",
+        "originTitle": "Country of Origin"
+      },
+      "specs": {
+        "title": "Technical Specifications",
+        "caption": "Product technical specifications table",
+        "property": "Property",
+        "value": "Value",
+        "yes": "Yes",
+        "no": "No"
+      },
+      "setContents": {
+        "title": "Set Contents",
+        "caption": "Pieces included in the set",
+        "piece": "Piece",
+        "size": "Size",
+        "qty": "Quantity"
+      },
+      "stickyBar": {
+        "addToCartAria": "Add {name} to cart"
+      },
+      "related": {
+        "title": "Similar Products"
+      },
+      "meta": {
+        "fallbackDescription": "Buy {name} from {brand} with authentic warranty and best price from Mohamed Serag showroom in Mansoura."
+      }
+    },
     "cart": {
       "addedToCart": "Added to cart"
     },
