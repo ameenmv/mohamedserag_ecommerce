@@ -200,19 +200,20 @@ export class ProductListService {
       whereConditions.push(Prisma.sql`p.category_id IN (${Prisma.join(catParams, ', ')})`)
     }
 
+    // Brand and price conditions are kept apart so each facet ignores its own filter:
+    // ticking one brand must still list the other brands to add.
+    const brandConditions: Prisma.Sql[] = []
     if (brandIds && brandIds.length > 0) {
       const brandParams = brandIds.map((id) => Prisma.sql`${id}`)
-      whereConditions.push(Prisma.sql`p.brand_id IN (${Prisma.join(brandParams, ', ')})`)
+      brandConditions.push(Prisma.sql`p.brand_id IN (${Prisma.join(brandParams, ', ')})`)
     }
 
+    const priceConditions: Prisma.Sql[] = []
     if (query.minPrice !== undefined) {
-      const minPiastres = egpToPiastres(query.minPrice)
-      whereConditions.push(Prisma.sql`p.price >= ${minPiastres}`)
+      priceConditions.push(Prisma.sql`p.price >= ${egpToPiastres(query.minPrice)}`)
     }
-
     if (query.maxPrice !== undefined) {
-      const maxPiastres = egpToPiastres(query.maxPrice)
-      whereConditions.push(Prisma.sql`p.price <= ${maxPiastres}`)
+      priceConditions.push(Prisma.sql`p.price <= ${egpToPiastres(query.maxPrice)}`)
     }
 
     if (query.discounted) {
@@ -243,7 +244,9 @@ export class ProductListService {
       whereConditions.push(searchMatchSql(terms, normalizedQuery))
     }
 
-    const whereClause = Prisma.sql`WHERE ${Prisma.join(whereConditions, ' AND ')}`
+    const toWhere = (conditions: Prisma.Sql[]): Prisma.Sql =>
+      Prisma.sql`WHERE ${Prisma.join(conditions, ' AND ')}`
+    const whereClause = toWhere([...whereConditions, ...brandConditions, ...priceConditions])
     const sort = resolveCatalogSort(query)
     const orderBy = mapSortToOrderBy(sort, normalizedQuery)
 
@@ -302,23 +305,13 @@ export class ProductListService {
         .map(toProductCard)
     }
 
-    if (total === 0) {
-      return {
-        items: [],
-        total: 0,
-        page: query.page,
-        pageSize: query.pageSize,
-        facets: { brands: [], price: { min: null, max: null } },
-      }
-    }
-
-    // Compute live facets for the filtered set
+    // Compute live facets (also when total is 0, so the shopper can widen the filters) for the filtered set
     const brandFacetSql = Prisma.sql`
       SELECT b.slug, b.name, COUNT(*)::int AS count
       FROM products p
       JOIN brands b ON p.brand_id = b.id
       JOIN categories c ON p.category_id = c.id
-      ${whereClause}
+      ${toWhere([...whereConditions, ...priceConditions])}
       GROUP BY b.slug, b.name
       ORDER BY count DESC, b.name ASC
     `
@@ -330,7 +323,7 @@ export class ProductListService {
       FROM products p
       JOIN brands b ON p.brand_id = b.id
       JOIN categories c ON p.category_id = c.id
-      ${whereClause}
+      ${toWhere([...whereConditions, ...brandConditions])}
     `
 
     const [brandFacetRows, priceFacetRows] = await Promise.all([

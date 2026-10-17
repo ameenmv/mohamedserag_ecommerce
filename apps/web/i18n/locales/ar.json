@@ -122,6 +122,64 @@
       "low": "كمية محدودة",
       "onRequest": "متاح بالطلب",
       "outOfStock": "نفذ"
+    },
+    "listing": {
+      "title": "المتجر",
+      "metaDescription": "تصفح أحدث الأجهزة الكهربائية والأدوات المنزلية بضمان معتمد وأفضل الأسعار من معرض محمد سراج بالمنصورة.",
+      "searchResultsTitle": "نتائج البحث عن \"{query}\"",
+      "productCount": "{count} منتج",
+      "filters": "فلترة",
+      "filtersTitle": "فلترة النتائج",
+      "filterCountAria": "فلاتر مطبقة: {count}",
+      "clearAll": "مسح الكل",
+      "clearFilters": "مسح الفلاتر",
+      "applyFilters": "اعرض {count} منتج",
+      "sort": "الترتيب",
+      "sortBy": "ترتيب حسب",
+      "sortOptions": {
+        "popular": "الأكثر طلباً",
+        "price_asc": "السعر: من الأقل للأعلى",
+        "price_desc": "السعر: من الأعلى للأقل",
+        "discount": "أعلى خصم",
+        "newest": "وصل حديثاً",
+        "relevance": "الأكثر صلة"
+      },
+      "brands": "العلامة التجارية",
+      "price": "السعر",
+      "priceRange": "نطاق السعر",
+      "minPrice": "السعر الأدنى",
+      "maxPrice": "السعر الأقصى",
+      "fromPrice": "من",
+      "upToPrice": "حتى",
+      "egpUnit": "ج.م",
+      "availability": "حالة التوفر",
+      "offersAndSale": "العروض والتخفيضات",
+      "discountedOnly": "عليه خصم فقط",
+      "specs": "المواصفات",
+      "subcategories": "الأقسام الفرعية",
+      "empty": {
+        "noSearchResults": "مفيش نتايج لـ \"{query}\"",
+        "noFilteredProducts": "مفيش منتجات بالفلاتر دي",
+        "tryDifferentFilters": "جرّب تغيّر الفلاتر أو امسحها عشان تشوف كل المنتجات.",
+        "tryDifferentSearch": "تأكد من كتابة الكلمة صح أو تصفح أشهر الأقسام.",
+        "topCategories": "أشهر الأقسام",
+        "askOnWhatsapp": "اسألنا على واتساب",
+        "whatsappPrefill": "السلام عليكم، بدور على منتج ومش لاقيه على الموقع 👋"
+      },
+      "pagination": {
+        "label": "صفحات المنتجات",
+        "previous": "السابق",
+        "next": "التالي",
+        "page": "صفحة {page}"
+      },
+      "breadcrumb": {
+        "label": "مسار الصفحة",
+        "home": "الرئيسية",
+        "shop": "المتجر"
+      },
+      "activeFilters": "الفلاتر المطبقة",
+      "removeFilter": "إزالة فلتر {filter}",
+      "loading": "جاري تحميل المنتجات..."
     }
   },
   "admin": {

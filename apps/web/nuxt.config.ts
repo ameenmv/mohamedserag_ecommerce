@@ -1,4 +1,8 @@
+import { fileURLToPath } from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
+
+// Absolute, because IPX resolves a relative dir from its own build output, not from this app.
+const uploadsDir = process.env.UPLOADS_DIR || fileURLToPath(new URL('../../uploads', import.meta.url))
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -109,12 +113,14 @@ export default defineNuxtConfig({
   nitro: {
     // Serve prebuilt gzip/brotli JS and CSS; Caddy compresses in production, this covers the bare node server.
     compressPublicAssets: { gzip: true, brotli: true },
-    publicAssets: [{ dir: process.env.UPLOADS_DIR || '../../uploads', baseURL: '/uploads', maxAge: 3600 }],
+    publicAssets: [{ dir: uploadsDir, baseURL: '/uploads', maxAge: 3600 }],
   },
 
   image: {
     // Uploaded product images live on the shared `uploads` volume (see docker/compose.yml).
-    ipx: { fs: { dir: process.env.UPLOADS_DIR || '../../uploads' } },
+    ipx: { fs: { dir: uploadsDir } },
+    // Stored URLs are `/uploads/...`; IPX reads from inside the uploads folder, so strip the prefix.
+    alias: { '/uploads': '/' },
     format: ['avif', 'webp'],
   },
 

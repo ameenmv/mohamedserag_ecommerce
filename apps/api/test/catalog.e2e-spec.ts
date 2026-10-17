@@ -400,6 +400,24 @@ describe('Catalog API E2E (/api/categories, /api/brands, /api/products)', () => 
   // 4. GET /api/products (Listing, Filters, Sort, Facets, IDs)
   // ==========================================================================
   describe('GET /api/products', () => {
+    it('brand and price facets ignore their own filter so other options stay selectable', async () => {
+      const all = await request(app.getHttpServer()).get('/api/products').expect(200)
+      const slug: string = all.body.facets.brands[0].slug
+
+      const res = await request(app.getHttpServer())
+        .get(`/api/products?brand=${slug}&maxPrice=1`)
+        .expect(200)
+
+      expect(res.body.total).toBe(0)
+      expect(res.body.facets.price).toEqual(
+        expect.objectContaining({ min: expect.any(Number), max: expect.any(Number) }),
+      )
+      const brandsAtAnyPrice = await request(app.getHttpServer())
+        .get(`/api/products?brand=${slug}`)
+        .expect(200)
+      expect(brandsAtAnyPrice.body.facets.brands.length).toBe(all.body.facets.brands.length)
+    })
+
     it('returns paginated items, default popular sort, total and live facets', async () => {
       const res = await request(app.getHttpServer()).get('/api/products').expect(200)
 

@@ -122,6 +122,64 @@
       "low": "Limited stock",
       "onRequest": "On request",
       "outOfStock": "Out of stock"
+    },
+    "listing": {
+      "title": "Shop",
+      "metaDescription": "Browse the latest home appliances and cookware with official warranty and best prices from Mohamed Serag in Mansoura.",
+      "searchResultsTitle": "Results for \"{query}\"",
+      "productCount": "Products: {count}",
+      "filters": "Filters",
+      "filtersTitle": "Filter Results",
+      "filterCountAria": "Applied filters: {count}",
+      "clearAll": "Clear all",
+      "clearFilters": "Clear filters",
+      "applyFilters": "Show {count} products",
+      "sort": "Sort",
+      "sortBy": "Sort by",
+      "sortOptions": {
+        "popular": "Most popular",
+        "price_asc": "Price: low to high",
+        "price_desc": "Price: high to low",
+        "discount": "Biggest discount",
+        "newest": "Newest",
+        "relevance": "Most relevant"
+      },
+      "brands": "Brand",
+      "price": "Price",
+      "priceRange": "Price range",
+      "minPrice": "Min price",
+      "maxPrice": "Max price",
+      "fromPrice": "From",
+      "upToPrice": "Up to",
+      "egpUnit": "EGP",
+      "availability": "Availability",
+      "offersAndSale": "Offers & Discounts",
+      "discountedOnly": "On sale only",
+      "specs": "Specifications",
+      "subcategories": "Sub-categories",
+      "empty": {
+        "noSearchResults": "No results found for \"{query}\"",
+        "noFilteredProducts": "No products match these filters",
+        "tryDifferentFilters": "Try changing or clearing filters to see all products.",
+        "tryDifferentSearch": "Check your spelling or browse our popular categories.",
+        "topCategories": "Popular categories",
+        "askOnWhatsapp": "Ask us on WhatsApp",
+        "whatsappPrefill": "Hello, I am looking for a product on your store 👋"
+      },
+      "pagination": {
+        "label": "Product pages",
+        "previous": "Previous",
+        "next": "Next",
+        "page": "Page {page}"
+      },
+      "breadcrumb": {
+        "label": "Breadcrumb",
+        "home": "Home",
+        "shop": "Shop"
+      },
+      "activeFilters": "Applied filters",
+      "removeFilter": "Remove filter {filter}",
+      "loading": "Loading products..."
     }
   },
   "admin": {
