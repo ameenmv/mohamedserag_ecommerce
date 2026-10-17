@@ -374,6 +374,96 @@
     },
     "products": {
       "title": "Products",
+      "import": {
+        "title": "Bulk Price & Stock Update via CSV",
+        "subtitle": "Update selling prices and stock levels in bulk matched by model code, with a preview before applying",
+        "button": "CSV Import",
+        "backToProducts": "Back to products list",
+        "downloadCurrentCatalog": "Download Current Products CSV",
+        "instructions": {
+          "title": "Import Instructions & Data Rules",
+          "columns": "Supported columns: model code (required), price, old price, stock, and product name (optional).",
+          "pricing": "Prices are in Egyptian Pounds (EGP). Numbers can be written in Arabic or English with standard thousand separators.",
+          "emptyMeansNoChange": "An empty cell keeps the existing product value unchanged.",
+          "clearOldPrice": "To set or clear discounts: entering 0 or - in the old price column clears the previous price."
+        },
+        "dropzone": {
+          "ariaLabel": "CSV file upload dropzone for product import",
+          "prompt": "Click to choose a CSV file or drag and drop here",
+          "reading": "Reading file and preparing preview...",
+          "hint": "Accepts CSV files up to 2 MB and up to 2000 products",
+          "invalidType": "Please select a valid CSV file",
+          "fileTooLarge": "File size exceeds the 2 MB limit"
+        },
+        "summary": {
+          "title": "Preview Summary & Status Filters",
+          "filterLabel": "Filter preview rows by status",
+          "changesOnly": "Changes Only",
+          "allRows": "All Rows",
+          "updates": "Ready to Update",
+          "unchanged": "Unchanged",
+          "notFound": "Not Found",
+          "duplicate": "Duplicate in File",
+          "errors": "Data Errors"
+        },
+        "preview": {
+          "applyBarTitle": "Ready to Apply Changes",
+          "applyBarHint": "{count} products will be updated in the database and stock movements logged automatically.",
+          "applyButton": "Apply {count} changes"
+        },
+        "table": {
+          "product": "Product",
+          "price": "Selling Price",
+          "oldPrice": "Old Price",
+          "stock": "Stock",
+          "status": "Status & Notes",
+          "archived": "Archived",
+          "noMatchingRows": "No rows match the selected filter."
+        },
+        "status": {
+          "update": "Update",
+          "unchanged": "Unchanged",
+          "notFound": "Not Found",
+          "duplicate": "Duplicate",
+          "error": "Error"
+        },
+        "confirmDialog": {
+          "title": "Confirm Applying Changes",
+          "description": "You are about to apply {count} price and stock updates to the catalog. Stock movements will be logged automatically.",
+          "confirmAction": "Yes, Apply {count} Changes"
+        },
+        "result": {
+          "title": "Import Changes Applied Successfully",
+          "description": "Product prices and stock quantities were updated and inventory movements recorded.",
+          "skipped": "Skipped",
+          "importAnother": "Import Another File",
+          "backToProducts": "Back to Products",
+          "updated": "Updated"
+        },
+        "toasts": {
+          "appliedTitle": "Import Complete",
+          "appliedDescription": "{count} products were updated successfully."
+        },
+        "errors": {
+          "headerErrorTitle": "Could not process file due to a header error",
+          "headerMissing": "File header is missing or empty.",
+          "missingModelCodeHeader": "Model code column is missing. The file must include a model_code column.",
+          "noUpdatableColumns": "File has no updatable columns (must include price, old price, or stock).",
+          "maxRowsExceeded": "File exceeds the maximum limit of 2,000 data rows.",
+          "emptyFile": "The file is empty. Please select a file with data rows.",
+          "noDataRows": "The file contains only headers with no data rows.",
+          "missingModelCode": "Model code is missing on this row.",
+          "modelNotFound": "Model code was not found in the catalog.",
+          "duplicateModelCode": "Duplicate model code in this file (first occurrence applied; subsequent occurrences ignored).",
+          "invalidPrice": "Invalid price (must be a positive number greater than zero with up to 2 decimal places).",
+          "invalidOldPrice": "Invalid old price (must be a positive number, or 0 / - to clear).",
+          "invalidStock": "Invalid stock quantity (must be a non-negative integer).",
+          "oldPriceNotGreaterThanPrice": "Old price must be greater than the resulting selling price.",
+          "exportFailed": "Failed to download the current products file.",
+          "previewFailed": "Failed to generate import preview.",
+          "applyFailed": "Failed to apply import changes."
+        }
+      },
       "newProduct": "New Product",
       "newTitle": "Add New Product",
       "editTitle": "Edit Product",

@@ -303,7 +303,11 @@ export class AdminProductsService {
     return this.getById(created.id)
   }
 
-  async update(id: string, data: UpdateProductOutput): Promise<AdminProductDetail> {
+  async update(
+    id: string,
+    data: UpdateProductOutput,
+    adminUserId?: string,
+  ): Promise<AdminProductDetail> {
     const existing = await this.prisma.product.findUnique({ where: { id } })
     if (!existing) {
       throw new NotFoundException('المنتج غير موجود')
@@ -399,9 +403,25 @@ export class AdminProductsService {
     if (data.seoDescription !== undefined) updateData.seoDescription = data.seoDescription
     if (data.taxRate !== undefined) updateData.taxRate = data.taxRate
 
-    await this.prisma.product.update({
-      where: { id },
-      data: updateData,
+    const stockChanged = data.stock !== undefined && data.stock !== existing.stock
+    const stockDiff = stockChanged ? data.stock! - existing.stock : 0
+
+    await this.prisma.$transaction(async (tx) => {
+      await tx.product.update({
+        where: { id },
+        data: updateData,
+      })
+
+      if (stockChanged) {
+        await tx.stockMovement.create({
+          data: {
+            productId: id,
+            qty: stockDiff,
+            reason: 'manual',
+            userId: adminUserId ?? null,
+          },
+        })
+      }
     })
 
     await this.searchIndexService.reindexProduct(id)

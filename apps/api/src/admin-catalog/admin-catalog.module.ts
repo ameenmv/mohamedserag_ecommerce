@@ -5,6 +5,7 @@ import { AdminBrandsService } from './admin-brands.service.js'
 import { AdminCategoriesController } from './admin-categories.controller.js'
 import { AdminCategoriesService } from './admin-categories.service.js'
 import { AdminProductImagesService } from './admin-product-images.service.js'
+import { AdminProductImportService } from './admin-product-import.service.js'
 import { AdminProductsController } from './admin-products.controller.js'
 import { AdminProductsService } from './admin-products.service.js'
 import { AdminSpecTemplatesController } from './admin-spec-templates.controller.js'
@@ -20,6 +21,7 @@ import { AdminSpecTemplatesService } from './admin-spec-templates.service.js'
   ],
   providers: [
     AdminProductsService,
+    AdminProductImportService,
     AdminProductImagesService,
     AdminCategoriesService,
     AdminBrandsService,
@@ -27,6 +29,7 @@ import { AdminSpecTemplatesService } from './admin-spec-templates.service.js'
   ],
   exports: [
     AdminProductsService,
+    AdminProductImportService,
     AdminProductImagesService,
     AdminCategoriesService,
     AdminBrandsService,

@@ -10,6 +10,7 @@ import {
   Post,
   Put,
   Query,
+  Res,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common'
@@ -22,17 +23,22 @@ import {
   type AdminProductQueryOutput,
   createProductSchema,
   type CreateProductOutput,
+  type ImportPlan,
   patchProductImageSchema,
   type PatchProductImageOutput,
   PERMISSIONS,
+  productImportInputSchema,
+  type ProductImportInput,
   reorderProductImagesSchema,
   type ReorderProductImagesOutput,
   updateProductSchema,
   type UpdateProductOutput,
 } from '@serag/shared'
-import { Audit, RequirePermission } from '../auth/decorators.js'
+import type { Response } from 'express'
+import { type AdminContext, Audit, CurrentAdmin, RequirePermission } from '../auth/decorators.js'
 import { ZodValidationPipe } from '../common/zod-validation.pipe.js'
 import { AdminProductImagesService } from './admin-product-images.service.js'
+import { AdminProductImportService, type ImportApplyResult } from './admin-product-import.service.js'
 import { AdminProductsService } from './admin-products.service.js'
 import type { UploadedFile as AppUploadedFile } from './admin-catalog.util.js'
 
@@ -40,6 +46,7 @@ import type { UploadedFile as AppUploadedFile } from './admin-catalog.util.js'
 export class AdminProductsController {
   constructor(
     private readonly service: AdminProductsService,
+    private readonly importService: AdminProductImportService,
     private readonly imagesService: AdminProductImagesService,
   ) {}
 
@@ -49,6 +56,35 @@ export class AdminProductsController {
     @Query(new ZodValidationPipe(adminProductQuerySchema)) query: AdminProductQueryOutput,
   ): Promise<AdminProductListResponse> {
     return this.service.list(query)
+  }
+
+  @Get('import/export')
+  @RequirePermission(PERMISSIONS.products.import)
+  async exportCsv(@Res({ passthrough: true }) res: Response): Promise<string> {
+    const { csv, filename } = await this.importService.exportProductsCsv()
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8')
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`)
+    return csv
+  }
+
+  @Post('import/preview')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission(PERMISSIONS.products.import)
+  async preview(
+    @Body(new ZodValidationPipe(productImportInputSchema)) body: ProductImportInput,
+  ): Promise<ImportPlan> {
+    return this.importService.preview(body.csv)
+  }
+
+  @Post('import/apply')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission(PERMISSIONS.products.import)
+  @Audit('product-import')
+  async apply(
+    @Body(new ZodValidationPipe(productImportInputSchema)) body: ProductImportInput,
+    @CurrentAdmin() admin?: AdminContext,
+  ): Promise<ImportApplyResult> {
+    return this.importService.apply(body.csv, admin?.userId)
   }
 
   @Get(':id')
@@ -72,8 +108,9 @@ export class AdminProductsController {
   async update(
     @Param('id') id: string,
     @Body(new ZodValidationPipe(updateProductSchema)) body: UpdateProductOutput,
+    @CurrentAdmin() admin?: AdminContext,
   ): Promise<AdminProductDetail> {
-    return this.service.update(id, body)
+    return this.service.update(id, body, admin?.userId)
   }
 
   @Post(':id/archive')

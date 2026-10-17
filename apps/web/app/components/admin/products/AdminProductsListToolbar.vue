@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { AdminBrand, AdminCategory, AdminProductSort, AdminProductStatus } from '@serag/shared'
-import { Plus, Search } from '@lucide/vue'
+import { FileSpreadsheet, Plus, Search } from '@lucide/vue'
 
 defineProps<{
   searchQuery: string
@@ -46,13 +46,23 @@ const localePath = useLocalePath()
         />
       </div>
 
-      <NuxtLink
-        :to="localePath('/admin/products/new')"
-        class="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-serag-gold px-5 font-bold text-sm text-serag-ink transition-all hover:bg-serag-gold-hi shadow-xs"
-      >
-        <Plus class="size-4 stroke-[2.5]" aria-hidden="true" />
-        <span>{{ t('admin.products.newProduct') }}</span>
-      </NuxtLink>
+      <div class="flex items-center gap-2">
+        <NuxtLink
+          :to="localePath('/admin/products/import')"
+          class="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-input bg-card px-4 font-bold text-xs sm:text-sm text-foreground transition-all hover:bg-muted shadow-xs"
+        >
+          <FileSpreadsheet class="size-4 text-serag-night dark:text-serag-gold" aria-hidden="true" />
+          <span>{{ t('admin.products.import.button') }}</span>
+        </NuxtLink>
+
+        <NuxtLink
+          :to="localePath('/admin/products/new')"
+          class="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-serag-gold px-5 font-bold text-sm text-serag-ink transition-all hover:bg-serag-gold-hi shadow-xs"
+        >
+          <Plus class="size-4 stroke-[2.5]" aria-hidden="true" />
+          <span>{{ t('admin.products.newProduct') }}</span>
+        </NuxtLink>
+      </div>
     </div>
 
     <!-- Filters row -->
