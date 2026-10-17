@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import StoreBottomNav from '@/components/store/StoreBottomNav.vue'
-import StoreFooter from '@/components/store/StoreFooter.vue'
 import StoreHeader from '@/components/store/StoreHeader.vue'
+
+const { t } = useI18n()
 </script>
 
 <template>
@@ -10,7 +10,7 @@ import StoreHeader from '@/components/store/StoreHeader.vue'
       href="#store-main-content"
       class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:start-4 focus:z-50 focus:rounded-full focus:bg-accent focus:px-5 focus:py-2.5 focus:font-bold focus:text-accent-foreground focus:shadow-lg"
     >
-      انتقل للمحتوى
+      {{ t('common.skipToContent') }}
     </a>
 
     <StoreHeader />
@@ -19,7 +19,7 @@ import StoreHeader from '@/components/store/StoreHeader.vue'
       <slot />
     </div>
 
-    <StoreFooter />
-    <StoreBottomNav />
+    <LazyStoreFooter hydrate-on-visible />
+    <LazyStoreBottomNav hydrate-on-idle />
   </div>
 </template>

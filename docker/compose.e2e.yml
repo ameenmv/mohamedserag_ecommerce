@@ -3,4 +3,4 @@ services:
   api:
     environment:
       ALLOW_TEST_SEED: "true"
-      TEST_SEED_SECRET: ${TEST_SEED_SECRET:-e2e-secret}
+      TEST_SEED_SECRET: ${TEST_SEED_SECRET:?set TEST_SEED_SECRET}

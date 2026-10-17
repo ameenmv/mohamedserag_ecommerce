@@ -3,6 +3,11 @@
 
 @custom-variant dark (&:is(.dark *));
 
+:root:lang(en) {
+  --font-display: 'Outfit', sans-serif;
+  --font-sans: 'Outfit', system-ui, sans-serif;
+}
+
 @layer base {
   * { @apply border-border outline-ring/50; }
   body { @apply bg-background text-foreground font-sans antialiased; }

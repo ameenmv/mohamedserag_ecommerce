@@ -8,4 +8,13 @@ export default function setup() {
   if (!url) throw new Error('TEST_DATABASE_URL is not set (see .env.example)')
   process.env.DATABASE_URL = url
   execSync('pnpm exec prisma migrate deploy', { stdio: 'inherit', env: { ...process.env, DATABASE_URL: url } })
+  execSync('pnpm exec prisma db seed', {
+    stdio: 'inherit',
+    env: {
+      ...process.env,
+      DATABASE_URL: url,
+      ADMIN_EMAIL: process.env.ADMIN_EMAIL ?? 'admin@test.local',
+      ADMIN_PASSWORD: process.env.ADMIN_PASSWORD ?? 'test-admin-password',
+    },
+  })
 }

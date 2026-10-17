@@ -11,13 +11,13 @@ test('API health reports the database is up', async () => {
 test('home renders the Arabic RTL brand shell', async ({ app, browser, screen }) => {
   await app.open('/');
   await expect(browser.locator('html')).toHaveAttribute('dir', 'rtl');
-  await expect(browser.locator('html')).toHaveAttribute('lang', 'ar');
+  await expect(browser.locator('html')).toHaveAttribute('lang', /^ar(-|$)/);
   await expect(screen.getByRole('heading', 'معرض محمد سراج')).toBeVisible();
 });
 
 test('admin redirects to login when signed out', async ({ app, browser }) => {
   await app.open('/admin');
-  await expect(browser).toHaveURL(/\/admin\/login\?next=%2Fadmin/);
+  await expect(browser).toHaveURL(/\/admin\/login\?next=(%2F|\/)admin/);
 });
 
 test('admin API rejects requests without a session', async () => {

@@ -8,6 +8,9 @@ try {
   // no .env: rely on the environment
 }
 
+const testSeedSecret = process.env.TEST_SEED_SECRET || 'dev-test-seed-secret-32-chars-long!';
+process.env.TEST_SEED_SECRET ||= testSeedSecret;
+
 export default {
   targets: [{
     engine: web(),
@@ -22,7 +25,23 @@ export default {
               executable: 'pnpm',
               args: ['dev'],
               cwd: '../..',
-              inheritEnv: ['NODE_ENV', 'XDG_*'],
+              // CI has no .env file, so the API and web need their config passed through.
+              inheritEnv: [
+                'NODE_ENV',
+                'XDG_*',
+                'CI',
+                'DATABASE_URL',
+                'TEST_DATABASE_URL',
+                'API_PORT',
+                'SESSION_SECRET',
+                'WEB_ORIGIN',
+                'ADMIN_*',
+                'NUXT_*',
+              ],
+              env: {
+                ALLOW_TEST_SEED: 'true',
+                TEST_SEED_SECRET: testSeedSecret,
+              },
               startupTimeout: 180_000,
               reuseExisting: true,
               log: '.e2e/logs/app.log',
@@ -32,5 +51,8 @@ export default {
   }],
   credentials: {
     admin: { username: process.env.ADMIN_EMAIL ?? '', password: process.env.ADMIN_PASSWORD ?? '' },
+  },
+  secrets: {
+    'test-seed': testSeedSecret,
   },
 } satisfies E2EConfig;

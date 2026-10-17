@@ -12,7 +12,7 @@
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
-    "test:e2e": "pnpm --filter @serag/e2e test",
+    "test:e2e": "pnpm --filter @serag/e2e exec e2e run",
     "db:up": "docker compose -f docker/compose.dev.yml up -d --wait",
     "db:down": "docker compose -f docker/compose.dev.yml down",
     "db:setup": "pnpm db:up && pnpm db:migrate && pnpm db:generate && pnpm db:seed",

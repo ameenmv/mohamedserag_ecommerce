@@ -1,25 +1,12 @@
 <script setup lang="ts">
 import {
-  ChevronDown,
   ExternalLink,
   Keyboard,
-  LogOut,
   Menu,
   Moon,
   Search,
   Sun,
 } from '@lucide/vue'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { useAdminPageTitle } from '@/composables/useAdminPageTitle'
-import { useAdminTheme } from '@/composables/useAdminTheme'
-import { useAdminUser } from '@/composables/useAdminUser'
 
 const emit = defineEmits<{
   openMobileNav: []
@@ -28,6 +15,8 @@ const emit = defineEmits<{
   logout: []
 }>()
 
+const { t } = useI18n()
+const localePath = useLocalePath()
 const pageTitle = useAdminPageTitle()
 const { isDark, toggleTheme } = useAdminTheme()
 const adminUser = useAdminUser()
@@ -43,7 +32,7 @@ async function handleLogout(): Promise<void> {
     <!-- Mobile sidebar trigger -->
     <button
       type="button"
-      aria-label="افتح القائمة"
+      :aria-label="t('common.openMenu')"
       class="inline-flex size-11 shrink-0 items-center justify-center rounded-full border border-border bg-card text-primary transition-colors hover:border-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none lg:hidden motion-reduce:transition-none"
       @click="emit('openMobileNav')"
     >
@@ -53,11 +42,11 @@ async function handleLogout(): Promise<void> {
     <!-- Page title slot -->
     <div class="min-w-0 flex-1">
       <div class="text-xs text-muted-foreground">
-        لوحة التحكم · معرض محمد سراج
+        {{ t('admin.topbar.portalSubtitle') }}
       </div>
       <h1 class="font-display truncate text-2xl leading-tight text-primary sm:text-3xl">
         <slot name="title">
-          {{ pageTitle }}
+          {{ t(pageTitle) }}
         </slot>
       </h1>
     </div>
@@ -70,19 +59,22 @@ async function handleLogout(): Promise<void> {
       @click="emit('openCommandPalette')"
     >
       <Search class="size-4 shrink-0 text-primary" aria-hidden="true" />
-      <span class="flex-1 truncate">ابحث عن صفحة أو أمر…</span>
+      <span class="flex-1 truncate">{{ t('admin.commandPalette.placeholder') }}</span>
       <kbd class="num hidden rounded-md border border-border bg-muted px-2 py-0.5 text-xs font-semibold text-muted-foreground sm:inline-block">
         Ctrl K
       </kbd>
     </button>
 
-    <!-- Actions: Shortcuts help, Theme toggle, Open storefront, Admin user dropdown -->
+    <!-- Actions: Locale switcher, Shortcuts help, Theme toggle, Open storefront, Admin user dropdown -->
     <div class="flex items-center gap-2">
+      <!-- Locale Switcher -->
+      <CommonLocaleSwitcher variant="pill" />
+
       <!-- Shortcuts help button -->
       <button
         type="button"
-        aria-label="اختصارات لوحة المفاتيح"
-        title="اختصارات لوحة المفاتيح (?)"
+        :aria-label="t('admin.shortcuts.title')"
+        :title="t('admin.topbar.shortcutsTitle')"
         class="inline-flex size-11 shrink-0 items-center justify-center rounded-full border border-border bg-card text-primary transition-colors hover:border-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-reduce:transition-none"
         @click="emit('openShortcutsHelp')"
       >
@@ -92,7 +84,7 @@ async function handleLogout(): Promise<void> {
       <!-- Theme toggle -->
       <button
         type="button"
-        :aria-label="isDark ? 'الوضع الفاتح' : 'الوضع الليلي'"
+        :aria-label="isDark ? t('admin.commandPalette.lightMode') : t('admin.commandPalette.darkMode')"
         class="inline-flex size-11 shrink-0 items-center justify-center rounded-full border border-border bg-card text-primary transition-colors hover:border-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-reduce:transition-none"
         @click="toggleTheme()"
       >
@@ -102,50 +94,20 @@ async function handleLogout(): Promise<void> {
 
       <!-- Open storefront in a new tab -->
       <NuxtLink
-        to="/"
+        :to="localePath('/')"
         target="_blank"
         rel="noopener noreferrer"
         class="inline-flex min-h-11 items-center gap-2 rounded-full border border-border bg-card px-3.5 text-sm font-bold text-primary transition-colors hover:border-accent hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-reduce:transition-none"
       >
-        <span class="hidden sm:inline">افتح الموقع</span>
+        <span class="hidden sm:inline">{{ t('admin.nav.openStore') }}</span>
         <ExternalLink class="size-4 shrink-0" aria-hidden="true" />
       </NuxtLink>
 
       <!-- User menu DropdownMenu -->
-      <DropdownMenu>
-        <DropdownMenuTrigger as-child>
-          <button
-            type="button"
-            aria-label="قائمة حساب المدير"
-            class="inline-flex min-h-11 items-center gap-2 rounded-full border border-border bg-card ps-1.5 pe-3 text-start transition-colors hover:border-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-reduce:transition-none"
-          >
-            <span
-              class="font-display inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-primary pb-0.5 text-lg text-serag-gold-hi"
-              aria-hidden="true"
-            >
-              م
-            </span>
-            <span class="hidden text-sm font-bold text-foreground sm:inline">
-              {{ adminUser.name }}
-            </span>
-            <ChevronDown class="size-4 text-muted-foreground" aria-hidden="true" />
-          </button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" class="w-48">
-          <DropdownMenuLabel class="flex flex-col gap-0.5 text-start">
-            <span class="font-bold">{{ adminUser.name }}</span>
-            <span class="text-xs font-normal text-muted-foreground">صلاحية كاملة</span>
-          </DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            class="flex min-h-10 cursor-pointer items-center gap-2 text-destructive focus:text-destructive"
-            @select="handleLogout"
-          >
-            <LogOut class="size-4" aria-hidden="true" />
-            <span>تسجيل الخروج</span>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <AdminTopbarUserMenu
+        :name="adminUser.name"
+        @logout="handleLogout"
+      />
     </div>
   </header>
 </template>

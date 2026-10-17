@@ -1,0 +1,195 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Throwaway values for CI; none of these are real secrets or used in production.
+  CI: '1'
+  DATABASE_URL: postgresql://serag:serag@localhost:5432/serag
+  TEST_DATABASE_URL: postgresql://serag:serag@localhost:5432/serag_test
+  API_PORT: 4000
+  SESSION_SECRET: ci-dummy-session-secret-for-testing-only-not-used-in-prod
+  WEB_ORIGIN: http://localhost:3000
+  ADMIN_EMAIL: admin@ci.serag.local
+  ADMIN_PASSWORD: ci-admin-password
+  ADMIN_NAME: CI Admin
+  ALLOW_TEST_SEED: 'true'
+  # 32+ characters throwaway secret for the test seed endpoint in CI
+  TEST_SEED_SECRET: ci-test-seed-secret-must-be-32-chars-long-min
+  E2E_TELEMETRY_DISABLED: '1'
+
+jobs:
+  checks:
+    name: Checks (Lint, Types, Tests, Build, E2E)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: serag
+          POSTGRES_PASSWORD: serag
+          POSTGRES_DB: serag
+          POSTGRES_INITDB_ARGS: --encoding=UTF8 --locale=C.UTF-8
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U serag"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Create test database
+        run: PGPASSWORD=serag psql -h localhost -U serag -d serag -c 'CREATE DATABASE serag_test'
+
+      - name: Build shared package
+        run: pnpm --filter @serag/shared build
+
+      - name: Database migrations and client generation
+        run: |
+          pnpm --filter @serag/api exec prisma migrate deploy
+          pnpm --filter @serag/api exec prisma generate
+
+      - name: Seed database
+        run: pnpm db:seed
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Unit tests
+        run: pnpm test
+
+      - name: API tests
+        run: pnpm --filter @serag/api test:e2e
+
+      - name: Build
+        run: pnpm build
+
+      - name: Install chromium for e2e
+        run: pnpm --filter @serag/e2e exec e2e-web install chromium --with-deps
+
+      - name: Browser e2e (runner starts web + API)
+        env:
+          CI: '1'
+          ALLOW_TEST_SEED: 'true'
+          TEST_SEED_SECRET: ci-test-seed-secret-must-be-32-chars-long-min
+        run: pnpm --filter @serag/e2e exec e2e run --reporter list,junit
+
+      - name: Upload e2e artifacts
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-results
+          path: |
+            tests/e2e/.e2e/report.json
+            tests/e2e/.e2e/junit.xml
+            tests/e2e/.e2e/results
+            tests/e2e/.e2e/logs
+          if-no-files-found: warn
+          retention-days: 7
+
+  docker:
+    name: Docker Build Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      SESSION_SECRET: ci-dummy-session-secret-for-docker-build-verification
+      UMAMI_SECRET: ci-dummy-umami-secret-for-docker-build-verification
+      TEST_SEED_SECRET: ci-test-seed-secret-must-be-32-chars-long-min
+      SITE_ADDRESS: http://localhost
+      PUBLIC_URL: http://localhost
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker images
+        run: docker compose -f docker/compose.yml build
+
+      - name: compose-smoke
+        env:
+          SITE_ADDRESS: http://localhost
+          PUBLIC_URL: http://localhost
+          TEST_SEED_SECRET: ci-test-seed-secret-must-be-32-chars-long-min
+        run: |
+          docker compose -f docker/compose.yml -f docker/compose.e2e.yml up -d --wait
+          curl -fsS http://localhost/api/health
+          curl -fsS http://localhost/ | grep -q 'dir="rtl"'
+
+      - name: Docker compose logs on failure
+        if: failure()
+        run: docker compose -f docker/compose.yml -f docker/compose.e2e.yml logs
+
+      - name: Tear down Docker compose
+        if: always()
+        run: docker compose -f docker/compose.yml -f docker/compose.e2e.yml down -v
+
+  lighthouse:
+    name: Lighthouse CI
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build web application
+        run: pnpm --filter @serag/web... build
+
+      - name: Start Caddy (HTTP/2 like production)
+        run: docker run -d --name lh-caddy --network host -v "$PWD/docker/Caddyfile.lighthouse:/etc/caddy/Caddyfile:ro" caddy:2
+
+      - name: Run Lighthouse CI (mobile)
+        run: pnpm dlx @lhci/cli@0.15.1 autorun --config=lighthouserc.json
+
+      - name: Upload Lighthouse artifacts
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: .lighthouseci/
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Stop Caddy
+        if: always()
+        run: docker rm -f lh-caddy

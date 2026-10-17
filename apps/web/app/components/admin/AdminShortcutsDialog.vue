@@ -9,6 +9,7 @@ import {
 import { ADMIN_NAV_SHORTCUTS } from '@/utils/shortcuts'
 
 const open = defineModel<boolean>('open', { default: false })
+const { t } = useI18n()
 </script>
 
 <template>
@@ -16,17 +17,17 @@ const open = defineModel<boolean>('open', { default: false })
     <DialogContent class="sm:max-w-md">
       <DialogHeader class="text-start">
         <DialogTitle class="font-display text-2xl text-primary">
-          اختصارات لوحة المفاتيح
+          {{ t('admin.shortcuts.title') }}
         </DialogTitle>
         <DialogDescription>
-          اضغط <kbd class="num rounded border border-border bg-muted px-1.5 py-0.5 text-xs font-bold">G</kbd> ثم حرف الصفحة خلال <span class="num">1.5</span> ثانية للانتقال السريع.
+          {{ t('admin.shortcuts.descriptionPress') }} <kbd class="num rounded border border-border bg-muted px-1.5 py-0.5 text-xs font-bold">G</kbd> {{ t('admin.shortcuts.descriptionHint') }}
         </DialogDescription>
       </DialogHeader>
 
       <div class="flex flex-col gap-4 py-2">
         <div class="flex flex-col gap-1.5">
           <h3 class="text-xs font-bold text-muted-foreground">
-            التنقل بين الصفحات
+            {{ t('admin.shortcuts.pageNavigation') }}
           </h3>
           <div class="divide-y divide-border rounded-xl border border-border bg-card">
             <div
@@ -34,9 +35,11 @@ const open = defineModel<boolean>('open', { default: false })
               :key="item.key"
               class="flex items-center justify-between px-3.5 py-2 text-sm"
             >
-              <span class="font-medium text-foreground">{{ item.label }}</span>
+              <span class="font-medium text-foreground">{{ t(item.labelKey) }}</span>
               <div class="flex items-center gap-1.5">
-                <span class="text-xs text-muted-foreground">{{ item.paletteHint }}</span>
+                <span class="text-xs text-muted-foreground">
+                  {{ t('admin.shortcuts.gThen', { key: item.key.toUpperCase() }) }}
+                </span>
                 <kbd class="num rounded-md border border-border bg-muted px-2 py-0.5 text-xs font-bold text-foreground">
                   {{ item.hint }}
                 </kbd>
@@ -47,17 +50,17 @@ const open = defineModel<boolean>('open', { default: false })
 
         <div class="flex flex-col gap-1.5">
           <h3 class="text-xs font-bold text-muted-foreground">
-            أوامر عامة
+            {{ t('admin.shortcuts.generalCommands') }}
           </h3>
           <div class="divide-y divide-border rounded-xl border border-border bg-card">
             <div class="flex items-center justify-between px-3.5 py-2 text-sm">
-              <span class="font-medium text-foreground">فتح لوحة البحث والأوامر</span>
+              <span class="font-medium text-foreground">{{ t('admin.shortcuts.openCommandPalette') }}</span>
               <kbd class="num rounded-md border border-border bg-muted px-2 py-0.5 text-xs font-bold text-foreground">
                 Ctrl / ⌘ + K
               </kbd>
             </div>
             <div class="flex items-center justify-between px-3.5 py-2 text-sm">
-              <span class="font-medium text-foreground">عرض نافذة الاختصارات</span>
+              <span class="font-medium text-foreground">{{ t('admin.shortcuts.showShortcutsDialog') }}</span>
               <kbd class="num rounded-md border border-border bg-muted px-2 py-0.5 text-xs font-bold text-foreground">
                 ?
               </kbd>

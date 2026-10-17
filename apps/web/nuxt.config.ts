@@ -11,9 +11,19 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      htmlAttrs: { lang: 'ar', dir: 'rtl' },
-      titleTemplate: '%s · محمد سراج',
       meta: [{ name: 'theme-color', content: '#16291E' }],
+    },
+  },
+
+  $development: {
+    runtimeConfig: {
+      public: {
+        // Prefilled admin credentials only populated in `nuxt dev`.
+        devLogin: {
+          email: process.env.ADMIN_EMAIL ?? 'admin@serag.local',
+          password: process.env.ADMIN_PASSWORD ?? 'change-me',
+        },
+      },
     },
   },
 
@@ -24,19 +34,81 @@ export default defineNuxtConfig({
       apiBase: 'http://localhost:4000/api',
       umamiHost: '',
       umamiWebsiteId: '',
+      // Only populated in nuxt dev via $development; empty in production.
+      devLogin: {
+        email: '',
+        password: '',
+      },
     },
   },
 
   fonts: {
     families: [
-      { name: 'IBM Plex Sans Arabic', provider: 'google', weights: [400, 500, 600, 700], subsets: ['arabic', 'latin'] },
-      { name: 'Lalezar', provider: 'google', weights: [400], subsets: ['arabic', 'latin'] },
-      { name: 'Outfit', provider: 'google', weights: [400, 500, 600, 700, 800], subsets: ['latin'] },
+      {
+        name: 'IBM Plex Sans Arabic',
+        provider: 'google',
+        weights: [400, 700],
+        subsets: ['arabic'],
+        preload: { weights: [400, 700] },
+      },
+      {
+        name: 'Lalezar',
+        provider: 'google',
+        weights: [400],
+        subsets: ['arabic'],
+        preload: true,
+      },
+      {
+        name: 'Outfit',
+        provider: 'google',
+        weights: [400, 500, 600, 700, 800],
+        subsets: ['latin'],
+        preload: { weights: [800] },
+      },
     ],
+  },
+
+  hooks: {
+    // Fewer tiny chunks = fewer requests before first paint.
+    'vite:extendConfig'(config, { isClient }) {
+      if (isClient) {
+        const build = config.build ?? Object.assign(config, { build: {} }).build
+        build.rolldownOptions = build.rolldownOptions || {}
+        const output = (build.rolldownOptions.output = build.rolldownOptions.output || {})
+        const codeSplitting = {
+          minSize: 20000,
+          groups: [
+            {
+              name: 'framework',
+              test: /[\\/]node_modules[\\/](?:@vue[\\/]|vue[\\/]|vue-router[\\/]|@unhead[\\/]|unhead[\\/]|@intlify[\\/]|vue-i18n[\\/])/,
+              priority: 1,
+            },
+          ],
+        }
+        if (Array.isArray(output)) {
+          for (const o of output) {
+            o.codeSplitting = codeSplitting
+          }
+        } else {
+          output.codeSplitting = codeSplitting
+        }
+      }
+    },
+    // Prefetch hints for lazy chunks compete with first paint; NuxtLink still prefetches visible links.
+    'build:manifest'(manifest) {
+      for (const key in manifest) {
+        const file = manifest[key]
+        if (file) {
+          file.prefetch = false
+        }
+      }
+    },
   },
 
   // Dev only: serve the shared uploads folder at /uploads (Caddy serves it in production).
   nitro: {
+    // Serve prebuilt gzip/brotli JS and CSS; Caddy compresses in production, this covers the bare node server.
+    compressPublicAssets: { gzip: true, brotli: true },
     publicAssets: [{ dir: process.env.UPLOADS_DIR || '../../uploads', baseURL: '/uploads', maxAge: 3600 }],
   },
 
@@ -48,8 +120,14 @@ export default defineNuxtConfig({
 
   i18n: {
     defaultLocale: 'ar',
-    strategy: 'no_prefix',
-    locales: [{ code: 'ar', language: 'ar-EG', dir: 'rtl', file: 'ar.json' }],
+    strategy: 'prefix_except_default',
+    baseUrl: process.env.BASE_URL || process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+    locales: [
+      { code: 'ar', language: 'ar-EG', dir: 'rtl', name: 'العربية', file: 'ar.json' },
+      { code: 'en', language: 'en-US', dir: 'ltr', name: 'English', file: 'en.json' },
+    ],
+    // Arabic-first store: '/' is always Arabic; English only via explicit /en links.
+    detectBrowserLanguage: false,
   },
 
   shadcn: {
