@@ -27,7 +27,7 @@
 **Checkpoint**: smoke e2e green; `docker compose up` works.
 
 ## Phase 1: Slice 1 — Catalog & discovery
-- [ ] T020 A API catalog: categories, brands, spec templates, products (list with filters/sort/pagination, by slug, by ids), availability derivation
+- [x] T020 F API catalog: categories, brands, spec templates, products (list with filters/sort/pagination, by slug, by ids), availability derivation
 - [ ] T021 A API search: query the `searchText` column with trigram similarity, synonyms from settings, keep `searchText` updated on product create/update
 - [ ] T021b A Web shared pieces before the page tasks: `ProductCard`, `useApi`, `useCart`, `useWishlist`, `useCompare`, header badges
 - [ ] T022 A [P] Web: product card component, `/shop`, `/c/[slug]`, `/b/[slug]` with URL-synced filters and mobile filter sheet

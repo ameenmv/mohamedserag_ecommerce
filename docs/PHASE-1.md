@@ -1,15 +1,15 @@
 # Phase 1 — Launch: progress
 
-> المرحلة الأولى (الإطلاق) — **Slice 0: الأساس خلصت بالكامل** (١٠٠٪ من الكود، ومستنيين الرفع عشان أول تشغيل للـ CI على GitHub). كل حاجة شغالة ومتحققة: المستودع، الموقع، الـ API، قاعدة البيانات، دخول الأدمن، بيانات الاختبار، التحليلات، والدكّر، وكل اختبارات المتصفح 7/7 ناجحة على الديف وعلى الدكّر.
+> المرحلة الأولى (الإطلاق) — **Slice 0: الأساس خلصت بالكامل** (١٠٠٪ من الكود، والـ CI أخضر على GitHub بعد دمج PR #1 في main). كل حاجة شغالة ومتحققة: المستودع، الموقع، الـ API، قاعدة البيانات، دخول الأدمن، بيانات الاختبار، التحليلات، والدكّر، وكل اختبارات المتصفح 7/7 ناجحة على الديف وعلى الدكّر.
 
-**Updated:** 16 Oct 2026 · **Branch:** `002-phase1-launch` · **Source of truth:** [PRD](PRD.md) · [spec](../specs/002-phase1-launch/spec.md) · [plan](../specs/002-phase1-launch/plan.md) · [tasks](../specs/002-phase1-launch/tasks.md)
+**Updated:** 17 Oct 2026 · **Branch:** `002-phase1-launch` · **Source of truth:** [PRD](PRD.md) · [spec](../specs/002-phase1-launch/spec.md) · [plan](../specs/002-phase1-launch/plan.md) · [tasks](../specs/002-phase1-launch/tasks.md)
 
 ## Where we are
 
 | Slice | Scope | Status |
 |---|---|---|
-| **0 — Foundation** | Monorepo, web + API, database, seed, admin auth, Docker, CI | ✅ **Done** (100% code; first CI run pending push) |
-| 1 — Catalog & discovery | Categories, brands, product pages, Arabic search, filters, compare, wishlist, admin products | ⚪ Next |
+| **0 — Foundation** | Monorepo, web + API, database, seed, admin auth, Docker, CI | ✅ **Done** (CI green on GitHub, PR #1 merged into main) |
+| 1 — Catalog & discovery | Categories, brands, product pages, Arabic search, filters, compare, wishlist, admin products | 🟡 In progress |
 | 2 — Cart, checkout & payments | Zones, COD, transfers, large-COD deposit, one-tap confirm | ⚪ Planned |
 | 3 — Bridal builder «جهّز بيتك» | Tiers, sharing, deposit and price lock | ⚪ Planned |
 | 4 — Promotions & stock alerts | Flash sales, coupons, notify-me | ⚪ Planned |
@@ -40,10 +40,10 @@
 | T012b | Test seed endpoints behind `ALLOW_TEST_SEED` + secret header, cleanup routes | F | ✅ |
 | T012c | Analytics (Umami under `/stats`) + canonical funnel events + pre-load queue | F | ✅ |
 | T013 | e2e runner + smoke, admin-login and test-seed suites (7/7 passing on dev and Docker) | C | ✅ |
-| T014 | GitHub Actions CI + Lighthouse CI (checks, docker, lighthouse) | F | 🟡 Written + verified locally; first GitHub run pending push |
+| T014 | GitHub Actions CI + Lighthouse CI (checks, docker, lighthouse) | F | ✅ Green on GitHub (PR #1 merged into main) |
 | T015 | [`STACK.md`](STACK.md) | F | ✅ |
 
-**Slice 0 status:** Code-complete (100%) and verified locally and in Docker. `docker compose up` brings the stack up, `/` shows the RTL brand shell, `/admin` redirects to login, the seeded admin reaches the dashboard, and browser e2e 7/7 passes on dev and against the Docker stack. Only the GitHub Actions remote run is pending the push.
+**Slice 0 status:** Code-complete (100%), verified locally, in Docker, and green in GitHub Actions CI after merging PR #1 into main. `docker compose up` brings the stack up, `/` shows the RTL brand shell, `/admin` redirects to login, the seeded admin reaches the dashboard, and browser e2e 7/7 passes on dev and against the Docker stack.
 
 ## Quality gates (verified)
 
@@ -55,7 +55,7 @@
 | Browser e2e (smoke 4, admin login 2, test-seed signed-in 1) | ✅ 7/7 |
 | Production builds (API, web) | ✅ |
 | Docker stack (`docker compose build` + up with e2e overlay) | ✅ All services healthy (db, migrate exits 0, api, web, umami, caddy); `/api/health` ok, RTL home, `/admin` → login, `/stats/script.js` 200, `/api/test/*` 403 without secret, `seed` tool service works, browser e2e 7/7 against Docker |
-| Lighthouse CI budgets (perf ≥ 0.9, a11y = 1, LCP < 2.5 s, CLS < 0.1 on `/`) | ⏳ Drafted locally, first GitHub run pending push |
+| Lighthouse CI budgets (perf ≥ 0.9, a11y = 1, LCP < 2.5 s, CLS < 0.1 on `/`) | ✅ Verified in CI |
 
 ## Found and fixed during review
 
@@ -91,7 +91,6 @@
 
 ## Still open (be honest)
 
-- **CI on GitHub:** The GitHub Actions workflow (`.github/workflows/ci.yml`) is committed locally and verified, but not yet pushed or run on GitHub (waiting for the repository owner's OK). Therefore, "smoke suite passes in CI" and Lighthouse numbers are not verified on remote runners yet.
 - **Umami dashboard access:** The Umami dashboard UI is not reachable under `/stats` (only the tracker script and `/api/send` are reverse-proxied by Caddy). To view analytics, access Umami directly via `docker compose port umami 3000` or an SSH tunnel. A dedicated subdomain will be configured later for production.
 - **Store-owner data:** Real showroom information from PRD §13 (phone numbers, WhatsApp numbers, address, working hours, returns policy, and delivery city lists) is still placeholder data.
 
@@ -105,9 +104,8 @@
 
 ## Next steps
 
-1. Push the CI workflow once approved, and get the first green run on GitHub.
-2. Start **Slice 1 (Catalog & discovery)** in exact order:
-   - `T020`: API catalog (categories, brands, spec templates, products list/filters/pagination/detail)
+1. Continue **Slice 1 (Catalog & discovery)** in exact order:
+   - `T020`: API catalog (categories, brands, spec templates, products list/filters/pagination/detail) — [Slice 1 in progress]
    - `T021`: API Arabic search (trigram similarity on `searchText`, synonyms from settings)
    - `T021b`: Web shared pieces (`ProductCard`, `useApi`, `useCart`, `useWishlist`, `useCompare`, header badges)
    - `T022`–`T024`: Web pages (`/shop`, `/c/[slug]`, `/b/[slug]`, `/p/[slug]`, compare, wishlist)

@@ -1,0 +1,59 @@
+import { z } from 'zod'
+
+export const CATALOG_SORTS = ['popular', 'price_asc', 'price_desc', 'discount', 'newest'] as const
+export const catalogSortSchema = z.enum(CATALOG_SORTS)
+
+export const CATALOG_AVAILABILITY_FILTERS = ['in_stock', 'low', 'on_request', 'out'] as const
+export const catalogAvailabilityFilterSchema = z.enum(CATALOG_AVAILABILITY_FILTERS)
+
+export const SPEC_FIELD_TYPES = ['text', 'number', 'boolean', 'choice'] as const
+export const specFieldTypeSchema = z.enum(SPEC_FIELD_TYPES)
+
+/**
+ * Validates category spec template field definitions (PRD US-1.5).
+ * Normalizes legacy/seed 'select' to 'choice' so type is always text|number|boolean|choice.
+ */
+export const specTemplateFieldSchema = z.object({
+  key: z.string().min(1, 'مفتاح الخاصية مطلوب'),
+  label: z.string().min(1, 'اسم الخاصية مطلوب'),
+  type: z.preprocess((val) => (val === 'select' ? 'choice' : val), specFieldTypeSchema),
+  unit: z.string().nullable().optional(),
+  options: z.array(z.string()).nullable().optional(),
+  filterable: z.boolean().default(false),
+  comparable: z.boolean().default(false),
+})
+
+/**
+ * Validates and transforms the query string for `GET /api/products`.
+ * Reused by web for URL query synchronization.
+ */
+export const productQuerySchema = z
+  .object({
+    category: z.string().trim().min(1).optional(),
+    brand: z.string().trim().min(1).optional(),
+    minPrice: z.coerce.number().int().min(0, 'السعر الأدنى لا يمكن أن يكون سالباً').optional(),
+    maxPrice: z.coerce.number().int().min(0, 'السعر الأقصى لا يمكن أن يكون سالباً').optional(),
+    availability: z.string().trim().min(1).optional(),
+    discounted: z
+      .preprocess((val) => {
+        if (val === 'true' || val === true) return true
+        if (val === 'false' || val === false) return false
+        return undefined
+      }, z.boolean().optional()),
+    sort: catalogSortSchema.default('popular'),
+    page: z.coerce.number().int().min(1, 'رقم الصفحة يبدأ من 1').default(1),
+    pageSize: z.coerce.number().int().min(1).max(60, 'الحد الأقصى لحجم الصفحة هو 60').default(24),
+    ids: z.string().trim().min(1).optional(),
+  })
+  .passthrough()
+  .refine(
+    (data) => {
+      if (!data.ids) return true
+      const idList = data.ids.split(',').map((s) => s.trim()).filter((s) => s.length > 0)
+      return idList.length <= 60
+    },
+    { message: 'الحد الأقصى لعدد المعرفات هو 60 منتج', path: ['ids'] },
+  )
+
+export type ProductQueryInput = z.input<typeof productQuerySchema>
+export type ProductQueryOutput = z.output<typeof productQuerySchema>
