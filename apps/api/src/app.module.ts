@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config'
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core'
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
 import { AuditInterceptor } from './audit/audit.interceptor.js'
+import { AdminCatalogModule } from './admin-catalog/admin-catalog.module.js'
 import { AuthModule } from './auth/auth.module.js'
 import { CatalogModule } from './catalog/catalog.module.js'
 import { PermissionGuard } from './auth/permission.guard.js'
@@ -19,6 +20,7 @@ import { TestSeedModule } from './test-seed/test-seed.module.js'
     PrismaModule,
     AuthModule,
     CatalogModule,
+    AdminCatalogModule,
   ],
   controllers: [HealthController],
   providers: [
