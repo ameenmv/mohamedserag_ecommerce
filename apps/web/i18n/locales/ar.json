@@ -876,6 +876,139 @@
         "inUse": "لا يمكن حذف قالب المواصفات لأنه مستخدم في أقسام"
       }
     },
+    "orders": {
+      "title": "الطلبات",
+      "searchPlaceholder": "ابحث برقم الطلب، اسم العميل، أو الموبايل…",
+      "exportCsv": "تصدير CSV",
+      "tabs": {
+        "all": "الكل",
+        "new": "جديد",
+        "awaiting_payment": "بانتظار الدفع",
+        "awaiting_deposit": "بانتظار العربون",
+        "payment_rejected": "الدفع مرفوض",
+        "confirmed": "مؤكد",
+        "out_for_delivery": "خرج للتوصيل",
+        "delivered": "تم التسليم",
+        "cancelled": "ملغي"
+      },
+      "status": {
+        "new": "جديد",
+        "awaiting_payment": "بانتظار الدفع",
+        "awaiting_deposit": "بانتظار العربون",
+        "payment_rejected": "الدفع مرفوض",
+        "confirmed": "مؤكد",
+        "out_for_delivery": "خرج للتوصيل",
+        "delivered": "تم التسليم",
+        "cancelled": "ملغي"
+      },
+      "filters": {
+        "allMethods": "كل طرق الدفع",
+        "from": "من تاريخ",
+        "to": "إلى تاريخ",
+        "clear": "مسح الفلاتر"
+      },
+      "table": {
+        "orderNo": "رقم الطلب",
+        "date": "التاريخ",
+        "customer": "العميل",
+        "phone": "الموبايل",
+        "items": "عدد القطع",
+        "total": "الإجمالي",
+        "paid": "المدفوع",
+        "method": "طريقة الدفع",
+        "status": "الحالة",
+        "actions": "إجراءات",
+        "view": "عرض التفاصيل"
+      },
+      "empty": {
+        "title": "لا توجد طلبات مطابقة",
+        "description": "لم يتم العثور على أي طلبات بالفلاتر المحددة."
+      },
+      "pagination": {
+        "showing": "عرض {from} إلى {to} من إجمالي {total} طلب",
+        "prev": "السابق",
+        "next": "التالي"
+      },
+      "detail": {
+        "backToList": "العودة للطلبات",
+        "printInvoice": "طباعة الفاتورة",
+        "customerTitle": "بيانات العميل",
+        "customerName": "اسم العميل",
+        "customerPhone": "رقم الموبايل",
+        "chatWhatsapp": "محادثة واتساب",
+        "address": "العنوان",
+        "customerNotes": "ملاحظات العميل",
+        "noNotes": "لا توجد ملاحظات من العميل",
+        "itemsTitle": "المنتجات المطلوبة",
+        "item": "المنتج",
+        "modelCode": "كود الموديل",
+        "qty": "الكمية",
+        "unitPrice": "سعر الوحدة",
+        "lineTotal": "المجموع",
+        "totalsTitle": "تفاصيل الحساب",
+        "subtotal": "مجموع المنتجات",
+        "discount": "الخصم",
+        "deliveryFee": "مصاريف التوصيل",
+        "total": "الإجمالي",
+        "deposit": "العربون المطلوب",
+        "paid": "المدفوع",
+        "remaining": "المتبقي",
+        "paymentsTitle": "سجل المدفوعات",
+        "noPayments": "لا توجد مدفوعات مسجلة حتى الآن",
+        "confirmPayment": "تأكيد دفعة جديدة",
+        "rejectPayment": "رفض الدفع",
+        "paymentConfirmed": "تم تأكيد الدفعة بنجاح",
+        "paymentRejected": "تم رفض الدفع بنجاح",
+        "statusActionsTitle": "إجراءات الحالة",
+        "transition": {
+          "confirmed": "تأكيد الطلب",
+          "out_for_delivery": "خرج للتوصيل",
+          "delivered": "تم التسليم",
+          "cancelled": "إلغاء الطلب"
+        },
+        "statusChanged": "تم تغيير حالة الطلب إلى {status}",
+        "sendWhatsapp": "ابعت للعميل على واتساب",
+        "historyTitle": "سجل الأحداث والتغييرات",
+        "noHistory": "لا توجد أحداث مسجلة",
+        "events": {
+          "payment_confirmed": "تأكيد دفع",
+          "payment_rejected": "رفض دفع"
+        },
+        "internalNotesTitle": "ملاحظات الإدارة الداخلية",
+        "internalNotesPlaceholder": "اكتب ملاحظات داخلية سرية لا تظهر للعميل (حد أقصى 2000 حرف)…",
+        "saveNotes": "حفظ الملاحظات",
+        "notesSaved": "اتحفظت الملاحظات",
+        "whatsappMessagesTitle": "رسائل واتساب المسجلة",
+        "noWhatsappMessages": "لم يتم تسجيل رسائل واتساب لهذا الطلب حتى الآن",
+        "shortagesWarning": "تنبيه نقص في المخزون:",
+        "shortageItem": "{name}: المطلوب {requested}، المتاح كان {taken}",
+        "noStatusActions": "مفيش إجراءات متاحة للحالة دي"
+      },
+      "dialogs": {
+        "cancelTitle": "إلغاء الطلب",
+        "cancelDescription": "اكتب سبب إلغاء الطلب لتسجيله في سجل الأحداث:",
+        "cancelReasonLabel": "سبب الإلغاء",
+        "cancelReasonPlaceholder": "سبب الإلغاء (3 أحرف على الأقل)…",
+        "confirmCancel": "تأكيد الإلغاء",
+        "confirmPaymentTitle": "تأكيد الدفع",
+        "confirmPaymentDescription": "أدخل المبلغ المدفوع وملاحظات المعاملة:",
+        "amountLabel": "المبلغ المدفوع (ج.م)",
+        "noteLabel": "ملاحظة (اختياري)",
+        "rejectTitle": "رفض الدفع",
+        "rejectDescription": "اكتب سبب رفض الدفع لإرساله للعميل:",
+        "reasonLabel": "سبب الرفض"
+      },
+      "invoice": {
+        "title": "فاتورة داخلية — ليست إيصال ضريبي",
+        "print": "طباعة",
+        "back": "رجوع للطلب",
+        "showroomAddressPlaceholder": "[عنوان المعرض]",
+        "whatsappLabel": "واتساب",
+        "whatsappPlaceholder": "[رقم الواتساب]",
+        "customerInfo": "بيانات العميل",
+        "vatNotice": "شامل ضريبة القيمة المضافة 14%"
+      }
+    },
     "confirm": {
       "pageTitle": "تأكيد دفع الطلب",
       "header": "تأكيد دفع الطلب {no}",

@@ -1,4 +1,102 @@
-import type { OrderStatus, PaymentMethod } from './enums.js'
+import { z } from 'zod'
+import {
+  orderStatusSchema,
+  paymentMethodSchema,
+  type OrderStatus,
+  type PaymentMethod,
+} from './enums.js'
+import { phoneSchema } from './phone-schema.js'
+import { DEFAULT_TEMPLATES, type WhatsAppTemplateKey } from './whatsapp.js'
+
+export const ISO_DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/
+
+/**
+ * Validates list query parameters for `GET /admin/orders`.
+ * `from` and `to` are ISO date strings (YYYY-MM-DD) representing UTC day bounds
+ * (from 00:00:00.000Z to 23:59:59.999Z). Inclusive Cairo timezone day range is not needed.
+ */
+export const adminOrderListQuerySchema = z.object({
+  status: orderStatusSchema.optional(),
+  paymentMethod: paymentMethodSchema.optional(),
+  from: z
+    .string()
+    .trim()
+    .regex(ISO_DATE_REGEX, 'تاريخ البداية غير صالح (YYYY-MM-DD)')
+    .optional(),
+  to: z
+    .string()
+    .trim()
+    .regex(ISO_DATE_REGEX, 'تاريخ النهاية غير صالح (YYYY-MM-DD)')
+    .optional(),
+  q: z
+    .string()
+    .trim()
+    .max(60, 'نص البحث لا يمكن أن يتجاوز 60 حرف')
+    .optional(),
+  page: z.coerce
+    .number()
+    .int()
+    .min(1, 'رقم الصفحة يبدأ من 1')
+    .default(1),
+  pageSize: z.coerce
+    .number()
+    .int()
+    .min(1, 'الحد الأدنى لحجم الصفحة 1')
+    .max(100, 'الحد الأقصى لحجم الصفحة 100')
+    .default(20),
+})
+
+export type AdminOrderListQueryInput = z.input<typeof adminOrderListQuerySchema>
+export type AdminOrderListQueryOutput = z.output<typeof adminOrderListQuerySchema>
+
+export const orderNotesSchema = z.object({
+  internalNotes: z
+    .string()
+    .trim()
+    .max(2000, 'الملاحظات الداخلية لا يمكن أن تتجاوز 2000 حرف'),
+})
+
+export type OrderNotesInput = z.input<typeof orderNotesSchema>
+export type OrderNotesOutput = z.output<typeof orderNotesSchema>
+
+const whatsappTemplateKeys = Object.keys(DEFAULT_TEMPLATES) as [
+  WhatsAppTemplateKey,
+  ...WhatsAppTemplateKey[],
+]
+
+export const whatsappLogSchema = z.object({
+  templateKey: z.enum(whatsappTemplateKeys, {
+    message: 'قالب واتساب غير صالح',
+  }),
+  to: phoneSchema,
+  variables: z.record(z.string(), z.union([z.string(), z.number()])),
+})
+
+export type WhatsAppLogInput = z.input<typeof whatsappLogSchema>
+export type WhatsAppLogOutput = z.output<typeof whatsappLogSchema>
+
+export interface AdminOrderRow {
+  id: string
+  no: string
+  createdAt: Date | string
+  customerName: string
+  customerPhone: string
+  governorate: string
+  city: string
+  itemCount: number
+  total: number
+  paidAmount: number
+  paymentMethod: PaymentMethod
+  status: OrderStatus
+}
+
+export interface AdminOrderListResponse {
+  items: AdminOrderRow[]
+  total: number
+  page: number
+  pageSize: number
+  counts: Record<OrderStatus, number>
+}
 
 export interface OrderStockShortage {
   productId: string

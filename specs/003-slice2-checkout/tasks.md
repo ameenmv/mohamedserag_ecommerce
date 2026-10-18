@@ -90,14 +90,14 @@ description: "Tasks for Slice 2 — Cart, Checkout & Payments"
 
 **Independent Test**: filter «بانتظار الدفع» → open → confirm → dispatch → deliver; history complete; WhatsApp button logged; CSV contains the order.
 
-- [ ] T025 [P] [US4] Shared admin schemas in `packages/shared/src/order-admin-schema.ts`: `adminOrderListQuerySchema` ("status?, paymentMethod?, from?, to? ISO dates, q? ≤ 60, page ≥ 1, pageSize ≤ 100"), `orderNotesSchema` ("internalNotes ≤ 2000"), `whatsappLogSchema`, `AdminOrderRow`, `AdminOrderDetail` types
-- [ ] T026 [US4] Admin orders API in `apps/api/src/admin-orders/admin-orders.controller.ts`: list with filters/search (number, name, phone normalized)/pagination/status counts, detail (incl. `allowedTransitions`, payments, events, whatsappMessages), `PATCH status` via `OrderStatusService`, `PATCH notes`, `POST payments/confirm|reject` via `OrderPaymentsService`, `POST whatsapp` log; permissions `orders.read` / `orders.update` / `orders.confirmPayment`; e2e `apps/api/test/admin-orders.e2e-spec.ts`
-- [ ] T027 [US4] CSV export `GET /api/admin/orders/export.csv` (same filters, UTF-8 BOM, money in EGP, Arabic headers) in `apps/api/src/admin-orders/admin-orders-export.service.ts` + e2e
-- [ ] T028 [US4] Admin orders list page with status tabs + counts, filters, search, pagination in `apps/web/app/pages/admin/orders/index.vue` and `apps/web/app/components/admin/orders/AdminOrdersList*.vue`
-- [ ] T029 [US4] Admin order detail page: customer (phone + WhatsApp chat link), items, totals, deposit, paid/remaining, payments with confirm/reject, status actions (only allowed transitions; cancel asks reason), history timeline, internal notes, WhatsApp status button (logs then opens) in `apps/web/app/pages/admin/orders/[id].vue` and `apps/web/app/components/admin/orders/AdminOrderDetail*.vue`
-- [ ] T030 [US4] Internal invoice print page `apps/web/app/pages/admin/orders/[id]/invoice.vue` (store details placeholders, customer, items, VAT-inclusive totals, payments, remaining; print CSS)
-- [ ] T031 [P] [US4] Admin sidebar entry and command-palette action for Orders in `apps/web/app/components/admin/` (existing nav files)
-- [ ] T032 [US4] Browser e2e `tests/e2e/tests/order-admin.e2e.ts`: filter, confirm, dispatch, deliver, history entries, cancel restores stock, WhatsApp link href matches template, CSV download contains the order number
+- [x] T025 [P] [US4] Shared admin schemas in `packages/shared/src/order-admin-schema.ts`: `adminOrderListQuerySchema` ("status?, paymentMethod?, from?, to? ISO dates, q? ≤ 60, page ≥ 1, pageSize ≤ 100"), `orderNotesSchema` ("internalNotes ≤ 2000"), `whatsappLogSchema`, `AdminOrderRow`, `AdminOrderDetail` types
+- [x] T026 [US4] Admin orders API in `apps/api/src/admin-orders/admin-orders.controller.ts`: list with filters/search (number, name, phone normalized)/pagination/status counts, detail (incl. `allowedTransitions`, payments, events, whatsappMessages), `PATCH status` via `OrderStatusService`, `PATCH notes`, `POST payments/confirm|reject` via `OrderPaymentsService`, `POST whatsapp` log; permissions `orders.read` / `orders.update` / `orders.confirmPayment`; e2e `apps/api/test/admin-orders.e2e-spec.ts`
+- [x] T027 [US4] CSV export `GET /api/admin/orders/export.csv` (same filters, UTF-8 BOM, money in EGP, Arabic headers) in `apps/api/src/admin-orders/admin-orders-export.service.ts` + e2e
+- [x] T028 [US4] Admin orders list page with status tabs + counts, filters, search, pagination in `apps/web/app/pages/admin/orders/index.vue` and `apps/web/app/components/admin/orders/AdminOrdersList*.vue`
+- [x] T029 [US4] Admin order detail page: customer (phone + WhatsApp chat link), items, totals, deposit, paid/remaining, payments with confirm/reject, status actions (only allowed transitions; cancel asks reason), history timeline, internal notes, WhatsApp status button (logs then opens) in `apps/web/app/pages/admin/orders/[id].vue` and `apps/web/app/components/admin/orders/AdminOrderDetail*.vue`
+- [x] T030 [US4] Internal invoice print page `apps/web/app/pages/admin/orders/[id]/invoice.vue` (store details placeholders, customer, items, VAT-inclusive totals, payments, remaining; print CSS)
+- [x] T031 [P] [US4] Admin sidebar entry and command-palette action for Orders in `apps/web/app/components/admin/` (existing nav files)
+- [x] T032 [US4] Browser e2e `tests/e2e/tests/order-admin.e2e.ts`: filter, confirm, dispatch, deliver, history entries, cancel restores stock, WhatsApp link href matches template, CSV download contains the order number
 
 ---
 

@@ -876,6 +876,139 @@
         "inUse": "Cannot delete spec template because it is assigned to categories"
       }
     },
+    "orders": {
+      "title": "Orders",
+      "searchPlaceholder": "Search by order no, customer, or phone…",
+      "exportCsv": "Export CSV",
+      "tabs": {
+        "all": "All",
+        "new": "New",
+        "awaiting_payment": "Awaiting Payment",
+        "awaiting_deposit": "Awaiting Deposit",
+        "payment_rejected": "Payment Rejected",
+        "confirmed": "Confirmed",
+        "out_for_delivery": "Out for Delivery",
+        "delivered": "Delivered",
+        "cancelled": "Cancelled"
+      },
+      "status": {
+        "new": "New",
+        "awaiting_payment": "Awaiting Payment",
+        "awaiting_deposit": "Awaiting Deposit",
+        "payment_rejected": "Payment Rejected",
+        "confirmed": "Confirmed",
+        "out_for_delivery": "Out for Delivery",
+        "delivered": "Delivered",
+        "cancelled": "Cancelled"
+      },
+      "filters": {
+        "allMethods": "All Payment Methods",
+        "from": "From Date",
+        "to": "To Date",
+        "clear": "Clear Filters"
+      },
+      "table": {
+        "orderNo": "Order No",
+        "date": "Date",
+        "customer": "Customer",
+        "phone": "Phone",
+        "items": "Items",
+        "total": "Total",
+        "paid": "Paid",
+        "method": "Payment Method",
+        "status": "Status",
+        "actions": "Actions",
+        "view": "View Details"
+      },
+      "empty": {
+        "title": "No Matching Orders",
+        "description": "No orders were found matching the selected filters."
+      },
+      "pagination": {
+        "showing": "Showing {from} to {to} of {total} orders",
+        "prev": "Previous",
+        "next": "Next"
+      },
+      "detail": {
+        "backToList": "Back to Orders",
+        "printInvoice": "Print Invoice",
+        "customerTitle": "Customer Details",
+        "customerName": "Customer Name",
+        "customerPhone": "Phone Number",
+        "chatWhatsapp": "WhatsApp Chat",
+        "address": "Address",
+        "customerNotes": "Customer Notes",
+        "noNotes": "No notes from customer",
+        "itemsTitle": "Order Items",
+        "item": "Product",
+        "modelCode": "Model Code",
+        "qty": "Qty",
+        "unitPrice": "Unit Price",
+        "lineTotal": "Line Total",
+        "totalsTitle": "Summary",
+        "subtotal": "Subtotal",
+        "discount": "Discount",
+        "deliveryFee": "Delivery Fee",
+        "total": "Total",
+        "deposit": "Required Deposit",
+        "paid": "Paid",
+        "remaining": "Remaining",
+        "paymentsTitle": "Payments Record",
+        "noPayments": "No payments recorded yet",
+        "confirmPayment": "Confirm New Payment",
+        "rejectPayment": "Reject Payment",
+        "paymentConfirmed": "Payment confirmed successfully",
+        "paymentRejected": "Payment rejected successfully",
+        "statusActionsTitle": "Status Actions",
+        "transition": {
+          "confirmed": "Confirm Order",
+          "out_for_delivery": "Out for Delivery",
+          "delivered": "Delivered",
+          "cancelled": "Cancel Order"
+        },
+        "statusChanged": "Order status changed to {status}",
+        "sendWhatsapp": "Send WhatsApp to Customer",
+        "historyTitle": "Order History Timeline",
+        "noHistory": "No events recorded",
+        "events": {
+          "payment_confirmed": "Payment Confirmed",
+          "payment_rejected": "Payment Rejected"
+        },
+        "internalNotesTitle": "Internal Admin Notes",
+        "internalNotesPlaceholder": "Enter confidential internal notes (max 2000 chars)…",
+        "saveNotes": "Save Notes",
+        "notesSaved": "Notes saved",
+        "whatsappMessagesTitle": "Logged WhatsApp Messages",
+        "noWhatsappMessages": "No logged WhatsApp messages for this order yet",
+        "shortagesWarning": "Stock shortage warning:",
+        "shortageItem": "{name}: requested {requested}, available was {taken}",
+        "noStatusActions": "No actions available for this status"
+      },
+      "dialogs": {
+        "cancelTitle": "Cancel Order",
+        "cancelDescription": "Enter the cancellation reason for the event log:",
+        "cancelReasonLabel": "Cancellation reason",
+        "cancelReasonPlaceholder": "Cancellation reason (at least 3 characters)…",
+        "confirmCancel": "Confirm Cancellation",
+        "confirmPaymentTitle": "Confirm Payment",
+        "confirmPaymentDescription": "Enter the paid amount and transaction notes:",
+        "amountLabel": "Paid Amount (EGP)",
+        "noteLabel": "Note (optional)",
+        "rejectTitle": "Reject Payment",
+        "rejectDescription": "Enter the rejection reason to send to customer:",
+        "reasonLabel": "Rejection Reason"
+      },
+      "invoice": {
+        "title": "Internal Invoice — Not a Tax Receipt",
+        "print": "Print",
+        "back": "Back to Order",
+        "showroomAddressPlaceholder": "[Showroom Address]",
+        "whatsappLabel": "WhatsApp",
+        "whatsappPlaceholder": "[WhatsApp Number]",
+        "customerInfo": "Customer Details",
+        "vatNotice": "VAT-Inclusive 14%"
+      }
+    },
     "confirm": {
       "pageTitle": "Confirm Order Payment",
       "header": "Confirm payment for order {no}",

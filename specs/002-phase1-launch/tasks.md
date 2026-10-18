@@ -42,7 +42,7 @@
 - [x] T030 A API cart quote (re-price, zone by governorate+city, coupon placeholder hook), order creation (idempotent), public token
 - [x] T031 A API payments: record/confirm/reject, partial payments, confirm tokens, large-COD deposit rule, status machine, stock movements
 - [x] T032 A [P] Web: cart drawer + `/cart`, `/checkout` (phone normalization, VAT label, deposit notice, on-request lead time), `/order/[no]/thanks`; funnel events `checkout_start`, `order_placed`
-- [ ] T033 A [P] Admin: orders list/detail, payment confirm/reject, status actions, WhatsApp template buttons, CSV export, internal invoice print
+- [x] T033 A [P] Admin: orders list/detail, payment confirm/reject, status actions, WhatsApp template buttons, CSV export, internal invoice print
 - [x] T034 A Admin: `/admin/confirm/[token]` mobile page with login redirect
 - [x] T035 A E2E: COD, transfer, large-COD deposit, confirm link (incl. reject then confirm), thank-you token secrecy, product → order under 90 s
 - [ ] T036 C Slice review
