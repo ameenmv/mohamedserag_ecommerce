@@ -22,6 +22,7 @@ import {
 } from '../auth/session.util.js'
 import type {
   SeedAdminSessionInput,
+  SeedFlashSaleInput,
   SeedOrderInput,
   SeedProductInput,
 } from './test-seed.dto.js'
@@ -276,6 +277,30 @@ export class TestSeedService {
       csrfToken,
       email: user.email,
     }
+  }
+
+  async seedFlashSale(input: SeedFlashSaleInput) {
+    const now = new Date()
+    const startsAt = input.startsAt ? new Date(input.startsAt) : new Date(now.getTime() - 60_000)
+    const endsAt = input.endsAt ? new Date(input.endsAt) : new Date(now.getTime() + 3600_000)
+    const name = input.name ?? `عرض فلاش E2E ${input.runId}`
+
+    return this.prisma.flashSale.create({
+      data: {
+        name,
+        startsAt,
+        endsAt,
+        items: {
+          create: input.items.map((item) => ({
+            productId: item.productId,
+            salePrice: egpToPiastres(item.salePriceEgp),
+          })),
+        },
+      },
+      include: {
+        items: true,
+      },
+    })
   }
 
   async deleteRun(runId: string) {

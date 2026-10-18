@@ -2,6 +2,7 @@ import type { BridalProductRecord } from '@serag/shared'
 import type { Prisma } from '../generated/prisma/client.js'
 import type { PrismaService } from '../prisma/prisma.service.js'
 
+// Bridal packages and reservation locks intentionally use regular product prices only per PRD US-4.4 / spec FR-006 (flash sale prices do not apply to bridal builder).
 export async function loadBridalProducts(
   db: PrismaService | Prisma.TransactionClient,
   ids: string[],

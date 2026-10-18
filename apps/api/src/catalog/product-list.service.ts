@@ -14,6 +14,7 @@ import {
 import { z } from 'zod'
 import { Prisma } from '../generated/prisma/client.js'
 import { PrismaService } from '../prisma/prisma.service.js'
+import { FlashPricingService } from '../promotions/flash-pricing.service.js'
 import {
   buildAvailabilitySqlCondition,
   buildSpecFilterSqlConditions,
@@ -47,6 +48,7 @@ export class ProductListService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly searchService: SearchService,
+    private readonly flashPricing: FlashPricingService,
   ) {}
 
   /**
@@ -95,7 +97,11 @@ export class ProductListService {
         .map((id) => productMap.get(id))
         .filter((p): p is NonNullable<typeof p> => p !== undefined)
 
-      const items = ordered.map(toProductCard)
+      const flashes = await this.flashPricing.activeFlashFor(
+        this.prisma,
+        ordered.map((p) => p.id),
+      )
+      const items = ordered.map((p) => toProductCard(p, flashes.get(p.id) ?? null))
 
       // IDs mode is used for wishlist/compare (US-2.4) and requires no live facet computation.
       return {
@@ -299,10 +305,11 @@ export class ProductListService {
         },
       })
       const map = new Map(productRecords.map((p) => [p.id, p]))
+      const flashes = await this.flashPricing.activeFlashFor(this.prisma, ids)
       items = ids
         .map((id) => map.get(id))
         .filter((p): p is NonNullable<typeof p> => p !== undefined)
-        .map(toProductCard)
+        .map((p) => toProductCard(p, flashes.get(p.id) ?? null))
     }
 
     // Compute live facets (also when total is 0, so the shopper can widen the filters) for the filtered set

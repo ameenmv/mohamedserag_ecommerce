@@ -9,6 +9,7 @@ import {
 } from '@serag/shared'
 import { z } from 'zod'
 import { PrismaService } from '../prisma/prisma.service.js'
+import { FlashPricingService } from '../promotions/flash-pricing.service.js'
 import {
   popularityJoinSql,
   searchMatchSql,
@@ -72,7 +73,10 @@ export class SearchService {
   private cachedSynonyms: string[][] = []
   private synonymsFetchedAt = 0
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly flashPricing: FlashPricingService,
+  ) {}
 
   /**
    * Returns search synonyms from the `searchSynonyms` Setting (cached in-memory for 60s).
@@ -158,10 +162,11 @@ export class SearchService {
         })
 
         const map = new Map(records.map((p) => [p.id, p]))
+        const flashes = await this.flashPricing.activeFlashFor(this.prisma, ids)
         items = ids
           .map((id) => map.get(id))
           .filter((p): p is NonNullable<typeof p> => p !== undefined)
-          .map(toProductCard)
+          .map((p) => toProductCard(p, flashes.get(p.id) ?? null))
       }
     }
 

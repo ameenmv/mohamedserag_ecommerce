@@ -48,6 +48,9 @@ describe('buildCartQuote', () => {
       name: 'ثلاجة شارب',
       modelCode: 'SH-101',
       price: 100_000, // 1,000 EGP
+      oldPrice: null,
+      categoryId: 'cat-1',
+      brandId: 'brand-1',
       taxRate: 14,
       stock: 10,
       lowStockThreshold: 2,
@@ -55,6 +58,7 @@ describe('buildCartQuote', () => {
       leadTimeText: null,
       imageUrl: '/images/p1.jpg',
       purchasable: true,
+      flash: null,
     },
     {
       id: 'p2',
@@ -62,6 +66,9 @@ describe('buildCartQuote', () => {
       name: 'غسالة توشيبا',
       modelCode: 'TS-202',
       price: 200_000, // 2,000 EGP
+      oldPrice: null,
+      categoryId: 'cat-1',
+      brandId: 'brand-1',
       taxRate: 14,
       stock: 0,
       lowStockThreshold: 2,
@@ -69,6 +76,7 @@ describe('buildCartQuote', () => {
       leadTimeText: null,
       imageUrl: '/images/p2.jpg',
       purchasable: true,
+      flash: null,
     },
     {
       id: 'p3',
@@ -76,6 +84,9 @@ describe('buildCartQuote', () => {
       name: 'تكييف إل جي',
       modelCode: 'LG-303',
       price: 300_000, // 3,000 EGP
+      oldPrice: null,
+      categoryId: 'cat-1',
+      brandId: 'brand-1',
       taxRate: 14,
       stock: 0,
       lowStockThreshold: 2,
@@ -83,6 +94,7 @@ describe('buildCartQuote', () => {
       leadTimeText: 'متاح بالطلب خلال 3-5 أيام',
       imageUrl: '/images/p3.jpg',
       purchasable: true,
+      flash: null,
     },
     {
       id: 'p4',
@@ -90,6 +102,9 @@ describe('buildCartQuote', () => {
       name: 'منتج مؤرشف',
       modelCode: 'ARC-404',
       price: 400_000,
+      oldPrice: null,
+      categoryId: 'cat-1',
+      brandId: 'brand-1',
       taxRate: 14,
       stock: 10,
       lowStockThreshold: 2,
@@ -97,6 +112,7 @@ describe('buildCartQuote', () => {
       leadTimeText: null,
       imageUrl: null,
       purchasable: false,
+      flash: null,
     },
     {
       id: 'p5',
@@ -104,6 +120,9 @@ describe('buildCartQuote', () => {
       name: 'بوتاجاز فريش',
       modelCode: 'FR-505',
       price: 50_000, // 500 EGP
+      oldPrice: null,
+      categoryId: 'cat-1',
+      brandId: 'brand-1',
       taxRate: 14,
       stock: 3,
       lowStockThreshold: 5,
@@ -111,6 +130,7 @@ describe('buildCartQuote', () => {
       leadTimeText: null,
       imageUrl: null,
       purchasable: true,
+      flash: null,
     },
     {
       id: 'pHighStock',
@@ -118,6 +138,9 @@ describe('buildCartQuote', () => {
       name: 'ثلاجة متوفرة بكثرة',
       modelCode: 'HS-101',
       price: 100_000,
+      oldPrice: null,
+      categoryId: 'cat-1',
+      brandId: 'brand-1',
       taxRate: 14,
       stock: 50,
       lowStockThreshold: 2,
@@ -125,6 +148,7 @@ describe('buildCartQuote', () => {
       leadTimeText: null,
       imageUrl: null,
       purchasable: true,
+      flash: null,
     },
     {
       id: 'pBigCod',
@@ -132,6 +156,9 @@ describe('buildCartQuote', () => {
       name: 'تكييف كبير',
       modelCode: 'BIG-101',
       price: 3_000_100, // 30,001 EGP (100 piastres above threshold)
+      oldPrice: null,
+      categoryId: 'cat-1',
+      brandId: 'brand-1',
       taxRate: 14,
       stock: 10,
       lowStockThreshold: 1,
@@ -139,6 +166,7 @@ describe('buildCartQuote', () => {
       leadTimeText: null,
       imageUrl: null,
       purchasable: true,
+      flash: null,
     },
   ]
 
@@ -397,6 +425,7 @@ describe('buildCartQuote', () => {
           status: 'applied',
           discount: 20_000,
           reason: null,
+          reasonCode: null,
         },
       },
     )

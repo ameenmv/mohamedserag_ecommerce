@@ -10,15 +10,15 @@ description: "Tasks for Slice 4 — Promotions & Stock Alerts"
 
 ## Phase 1: Foundational — shared promotions domain
 
-- [ ] T001 [P] `packages/shared/src/promotions.ts` (Zod-free): flash state helpers (`isFlashActive`, `flashStatus`), `effectivePriceFor`, coupon evaluation `evaluateCoupon(coupon, lines, { now, activeUses, phoneUses })` with reason codes and Egyptian Arabic messages, `couponStatus`; tests
-- [ ] T002 [P] `packages/shared/src/promotions-schema.ts`: flash sale input, coupon input (code normalization), notify-me input (phone via phone schema, honeypot), admin list queries; tests; export both
-- [ ] T003 `catalog.ts`/`cart.ts` types: `flash` on ProductCard/Detail; CartProductRecord gains `categoryId`, `brandId`, `oldPrice`, `flashPrice`; CartQuote coupon gains `reasonCode`
+- [x] T001 [P] `packages/shared/src/promotions.ts` (Zod-free): flash state helpers (`isFlashActive`, `flashStatus`), `effectivePriceFor`, coupon evaluation `evaluateCoupon(coupon, lines, { now, activeUses, phoneUses })` with reason codes and Egyptian Arabic messages, `couponStatus`; tests
+- [x] T002 [P] `packages/shared/src/promotions-schema.ts`: flash sale input, coupon input (code normalization), notify-me input (phone via phone schema, honeypot), admin list queries; tests; export both
+- [x] T003 `catalog.ts`/`cart.ts` types: `flash` on ProductCard/Detail; CartProductRecord gains `categoryId`, `brandId`, `oldPrice`, `flashPrice`; CartQuote coupon gains `reasonCode`
 
 ## Phase 2: User Story 1 — Flash sale prices (P1) 🎯
 
-- [ ] T004 [US1] API `promotions/flash-pricing.service.ts` (active sale prices for product ids in one query) used by catalog cards, product detail, search, cart quote and order creation; bridal stays on regular prices
-- [ ] T005 [US1] `GET /api/offers`
-- [ ] T006 [US1] API e2e: running/scheduled/ended sale prices on cards, detail, quote, order line; bridal unchanged; /offers
+- [x] T004 [US1] API `promotions/flash-pricing.service.ts` (active sale prices for product ids in one query) used by catalog cards, product detail, search, cart quote and order creation; bridal stays on regular prices
+- [x] T005 [US1] `GET /api/offers`
+- [x] T006 [US1] API e2e: running/scheduled/ended sale prices on cards, detail, quote, order line; bridal unchanged; /offers
 - [ ] T007 [US1] Web: price component shows flash state, badge and client countdown on cards and product page; `/offers` page (fixes the header link); i18n
 - [ ] T008 [US1] TesterArmy: flash price on card/product/cart/order, then revert after end
 

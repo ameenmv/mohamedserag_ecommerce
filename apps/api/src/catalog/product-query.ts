@@ -1,9 +1,11 @@
 import {
+  applyFlashToPrice,
   deriveAvailability,
   type AvailabilityMode,
   type AvailabilityState,
   type CatalogSort,
   type ProductCard,
+  type ProductFlash,
   type SpecTemplateField,
 } from '@serag/shared'
 import { Prisma } from '../generated/prisma/client.js'
@@ -336,11 +338,14 @@ export interface RawProductEntity {
 /**
  * Pure mapping from a database Product entity to the public `ProductCard` contract.
  */
-export function toProductCard(product: RawProductEntity): ProductCard {
-  const discountPercent =
-    product.oldPrice !== null && product.oldPrice > product.price
-      ? Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100)
-      : null
+export function toProductCard(
+  product: RawProductEntity,
+  flash: ProductFlash | null = null,
+): ProductCard {
+  const pricing = applyFlashToPrice(
+    { price: product.price, oldPrice: product.oldPrice },
+    flash,
+  )
 
   const firstImg = product.images[0]
   const image = firstImg
@@ -370,9 +375,9 @@ export function toProductCard(product: RawProductEntity): ProductCard {
       slug: product.category.slug,
       name: product.category.name,
     },
-    price: product.price,
-    oldPrice: product.oldPrice,
-    discountPercent,
+    price: pricing.price,
+    oldPrice: pricing.oldPrice,
+    discountPercent: pricing.discountPercent,
     image,
     availability: {
       state: derived.state,
@@ -380,5 +385,6 @@ export function toProductCard(product: RawProductEntity): ProductCard {
       maxQty: derived.maxQty,
       leadTimeText: product.leadTimeText,
     },
+    flash,
   }
 }

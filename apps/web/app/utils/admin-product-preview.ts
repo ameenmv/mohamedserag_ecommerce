@@ -97,5 +97,7 @@ export function buildProductCardPreview(
       maxQty: derivedAvail.maxQty,
       leadTimeText: draft.leadTimeText?.trim() || null,
     },
+    // The editor previews regular pricing; flash sales are managed separately.
+    flash: null,
   }
 }

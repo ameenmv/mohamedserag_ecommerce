@@ -10,6 +10,7 @@ import {
 } from '@serag/shared'
 import { z } from 'zod'
 import { PrismaService } from '../prisma/prisma.service.js'
+import { FlashPricingService } from '../promotions/flash-pricing.service.js'
 import { popularityJoinSql, toProductCard } from './product-query.js'
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
@@ -28,7 +29,10 @@ function inferSpecType(v: string | number | boolean): SpecFieldType {
 
 @Injectable()
 export class ProductDetailService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly flashPricing: FlashPricingService,
+  ) {}
 
   /**
    * Returns complete product detail with images, merged specs in template order,
@@ -64,7 +68,28 @@ export class ProductDetailService {
       throw new NotFoundException('المنتج غير موجود')
     }
 
-    const card = toProductCard(product)
+    // Related products: up to 8 visible products from same category, excluding itself, by popularity
+    const relatedRows = await this.prisma.$queryRaw<Array<{ id: string }>>`
+      SELECT p.id
+      FROM products p
+      JOIN brands b ON p.brand_id = b.id
+      JOIN categories c ON p.category_id = c.id
+      ${popularityJoinSql()}
+      WHERE p.category_id = ${product.category.id}
+        AND p.id != ${product.id}
+        AND p.visible = true
+        AND p.archived_at IS NULL
+        AND b.visible = true
+        AND c.visible = true
+      ORDER BY COALESCE(pop.units_sold, 0) DESC, p.created_at DESC
+      LIMIT 8
+    `
+
+    const relatedIds = relatedRows.map((r) => r.id)
+    const allProductIds = [product.id, ...relatedIds]
+    const flashes = await this.flashPricing.activeFlashFor(this.prisma, allProductIds)
+
+    const card = toProductCard(product, flashes.get(product.id) ?? null)
 
     // Merge specs in template order
     let templateFields: SpecTemplateField[] = []
@@ -102,26 +127,7 @@ export class ProductDetailService {
       }
     }
 
-    // Related products: up to 8 visible products from same category, excluding itself, by popularity
-    const relatedRows = await this.prisma.$queryRaw<Array<{ id: string }>>`
-      SELECT p.id
-      FROM products p
-      JOIN brands b ON p.brand_id = b.id
-      JOIN categories c ON p.category_id = c.id
-      ${popularityJoinSql()}
-      WHERE p.category_id = ${product.category.id}
-        AND p.id != ${product.id}
-        AND p.visible = true
-        AND p.archived_at IS NULL
-        AND b.visible = true
-        AND c.visible = true
-      ORDER BY COALESCE(pop.units_sold, 0) DESC, p.created_at DESC
-      LIMIT 8
-    `
-
-    const relatedIds = relatedRows.map((r) => r.id)
     let related: ProductCard[] = []
-
     if (relatedIds.length > 0) {
       const relatedProducts = await this.prisma.product.findMany({
         where: { id: { in: relatedIds } },
@@ -135,7 +141,7 @@ export class ProductDetailService {
       related = relatedIds
         .map((id) => relMap.get(id))
         .filter((p): p is NonNullable<typeof p> => p !== undefined)
-        .map(toProductCard)
+        .map((p) => toProductCard(p, flashes.get(p.id) ?? null))
     }
 
     const detailImages: ProductDetailImage[] = product.images.map((img) => ({
@@ -161,6 +167,7 @@ export class ProductDetailService {
       price: card.price,
       oldPrice: card.oldPrice,
       discountPercent: card.discountPercent,
+      flash: card.flash,
       image: card.image,
       availability: card.availability,
       images: detailImages,

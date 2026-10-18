@@ -11,6 +11,7 @@ import { CatalogModule } from './catalog/catalog.module.js'
 import { OrdersModule } from './orders/orders.module.js'
 import { BridalModule } from './bridal/bridal.module.js'
 import { SettingsModule } from './settings/settings.module.js'
+import { PromotionsModule } from './promotions/promotions.module.js'
 import { PermissionGuard } from './auth/permission.guard.js'
 import { SessionGuard } from './auth/session.guard.js'
 import { HealthController } from './health.controller.js'
@@ -24,6 +25,7 @@ import { TestSeedModule } from './test-seed/test-seed.module.js'
     ThrottlerModule.forRoot([{ ttl: 60_000, limit: 120 }]),
     PrismaModule,
     SettingsModule,
+    PromotionsModule,
     AuthModule,
     CatalogModule,
     AdminCatalogModule,

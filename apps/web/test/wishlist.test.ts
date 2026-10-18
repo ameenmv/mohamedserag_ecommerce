@@ -25,6 +25,7 @@ function mockProduct(id: string, price: number): ProductCard {
       maxQty: 5,
       leadTimeText: null,
     },
+    flash: null,
   }
 }
 

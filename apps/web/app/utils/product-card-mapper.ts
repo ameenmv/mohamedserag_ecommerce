@@ -32,5 +32,6 @@ export function toProductCard(detail: ProductDetail): ProductCard {
     discountPercent: detail.discountPercent,
     image: detail.image ?? fallbackImage,
     availability: detail.availability,
+    flash: detail.flash,
   }
 }

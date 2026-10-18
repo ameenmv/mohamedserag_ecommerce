@@ -14,6 +14,7 @@ export class CouponService {
       status: 'rejected',
       discount: 0,
       reason: 'الكوبونات هتتفعل قريب',
+      reasonCode: null,
     }
   }
 }

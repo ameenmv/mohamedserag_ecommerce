@@ -3,6 +3,7 @@ import { deriveAvailability, type AvailabilityResult } from './availability.js'
 import { findZone, type Zone } from './zones.js'
 import { initialStatus, type CodDepositRule } from './order-flow.js'
 import { mergeCartItems, type CartQuoteInput, type CartQuoteItemInput } from './cart-schema.js'
+import type { CouponReasonCode, ProductFlash } from './promotions.js'
 
 export interface CartProductRecord {
   id: string
@@ -10,6 +11,9 @@ export interface CartProductRecord {
   name: string
   modelCode: string
   price: number
+  oldPrice: number | null
+  categoryId: string
+  brandId: string
   taxRate: number
   stock: number
   lowStockThreshold: number
@@ -17,6 +21,7 @@ export interface CartProductRecord {
   leadTimeText: string | null
   imageUrl: string | null
   purchasable: boolean
+  flash: ProductFlash | null
 }
 
 export interface CouponEvaluation {
@@ -24,6 +29,7 @@ export interface CouponEvaluation {
   status: 'applied' | 'rejected'
   discount: number
   reason: string | null
+  reasonCode: CouponReasonCode | null
 }
 
 export interface CartQuoteContext {

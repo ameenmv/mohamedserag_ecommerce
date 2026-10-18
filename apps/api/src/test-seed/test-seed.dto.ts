@@ -52,4 +52,21 @@ export const seedAdminSessionSchema = z.object({
 
 export type SeedAdminSessionInput = z.output<typeof seedAdminSessionSchema>
 
+export const seedFlashSaleSchema = z.object({
+  runId: z.string().regex(RUN_ID_REGEX, { message: 'Invalid runId' }),
+  name: z.string().trim().min(1).optional(),
+  startsAt: z.string().datetime().optional(),
+  endsAt: z.string().datetime().optional(),
+  items: z
+    .array(
+      z.object({
+        productId: z.string().min(1, { message: 'productId is required' }),
+        salePriceEgp: z.number().positive({ message: 'salePriceEgp must be positive' }),
+      }),
+    )
+    .min(1, { message: 'Flash sale must have at least one item' }),
+})
+
+export type SeedFlashSaleInput = z.output<typeof seedFlashSaleSchema>
+
 export const runIdParamSchema = z.string().regex(RUN_ID_REGEX, { message: 'Invalid runId' })

@@ -27,6 +27,7 @@ function makeProductCard(overrides: Partial<ProductCard> = {}): ProductCard {
       maxQty: 5,
       leadTimeText: null,
     },
+    flash: null,
     ...overrides,
   }
 }
