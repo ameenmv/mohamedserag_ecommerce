@@ -4,6 +4,7 @@ import {
   BarChart3,
   ExternalLink,
   FilePenLine,
+  FolderTree,
   LayoutDashboard,
   Moon,
   Package,
@@ -32,11 +33,15 @@ const open = defineModel<boolean>('open', { default: false })
 const { t } = useI18n()
 const localePath = useLocalePath()
 const { isDark, toggleTheme } = useAdminTheme()
+const hydrated = useHydrated()
+
+const showDark = computed(() => hydrated.value && isDark.value)
 
 const iconByKey: Record<string, Component> = {
   h: LayoutDashboard,
   o: ShoppingBag,
   p: Package,
+  c: FolderTree,
   b: Sparkles,
   m: Tag,
   r: Star,
@@ -105,12 +110,12 @@ function handleOpenStorefront(): void {
           @select="handleToggleTheme"
         >
           <div class="flex items-center gap-2.5">
-            <Sun v-if="isDark" class="size-4 text-serag-gold-hi" aria-hidden="true" />
+            <Sun v-if="showDark" class="size-4 text-serag-gold-hi" aria-hidden="true" />
             <Moon v-else class="size-4 text-primary" aria-hidden="true" />
             <span class="font-semibold">{{ t('admin.commandPalette.toggleTheme') }}</span>
           </div>
           <span class="text-xs text-muted-foreground">
-            {{ isDark ? t('admin.commandPalette.lightMode') : t('admin.commandPalette.darkMode') }}
+            {{ showDark ? t('admin.commandPalette.lightMode') : t('admin.commandPalette.darkMode') }}
           </span>
         </CommandItem>
 

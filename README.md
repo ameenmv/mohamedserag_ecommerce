@@ -258,10 +258,10 @@ Type: **Lalezar** for display, **IBM Plex Sans Arabic** for text, **Outfit** for
 
 Phase 1 ships in slices. Each slice is usable on its own and covered by e2e tests.
 
-- [ ] **Slice 0 — Foundation:** monorepo, web and API, database, seed, admin auth, Docker, CI *(in progress)*
-- [ ] **Slice 1 — Catalog & discovery:** categories, brands, product pages, Arabic search, filters, compare, wishlist, admin products, CSV import
-- [ ] **Slice 2 — Cart, checkout & payments:** zones, COD, transfers, large-COD deposit, one-tap confirmation, order flow
-- [ ] **Slice 3 — «جهّز بيتك» bridal builder:** tiers, sharing, deposit and price lock
+- [x] **Slice 0 — Foundation:** monorepo, web and API, database, seed, admin auth, Docker, CI
+- [x] **Slice 1 — Catalog & discovery:** categories, brands, product pages, Arabic search, filters, compare, wishlist, admin products, CSV import
+- [x] **Slice 2 — Cart, checkout & payments:** zones, COD, transfers, large-COD deposit, one-tap confirmation, order flow
+- [x] **Slice 3 — «جهّز بيتك» bridal builder:** tiers, sharing, deposit and price lock
 - [ ] **Slice 4 — Promotions & stock alerts:** flash sales, coupons, notify-me
 - [ ] **Slice 5 — Reviews:** moderation and verified buyers
 - [ ] **Slice 6 — Content, CMS & SEO:** homepage CMS, guides, quiz, structured data, Merchant feed

@@ -1,3 +1,5 @@
+import { type Permission, PERMISSIONS } from '@serag/shared'
+
 export const ADMIN_SHORTCUT_WINDOW_MS = 1500
 
 export type AdminNavGroup = 'main' | 'store' | 'content' | 'system'
@@ -9,18 +11,20 @@ export interface AdminNavShortcut {
   labelKey: string
   to: string
   group: AdminNavGroup
+  permission?: Permission
 }
 
 export const ADMIN_NAV_SHORTCUTS: readonly AdminNavShortcut[] = [
   { key: 'h', hint: 'G H', paletteHint: 'G H', labelKey: 'admin.nav.overview', to: '/admin', group: 'main' },
-  { key: 'o', hint: 'G O', paletteHint: 'G O', labelKey: 'admin.nav.orders', to: '/admin/orders', group: 'store' },
-  { key: 'p', hint: 'G P', paletteHint: 'G P', labelKey: 'admin.nav.products', to: '/admin/products', group: 'store' },
-  { key: 'b', hint: 'G B', paletteHint: 'G B', labelKey: 'admin.nav.bridal', to: '/admin/bridal', group: 'store' },
-  { key: 'm', hint: 'G M', paletteHint: 'G M', labelKey: 'admin.nav.promotions', to: '/admin/promotions', group: 'store' },
-  { key: 'r', hint: 'G R', paletteHint: 'G R', labelKey: 'admin.nav.reviews', to: '/admin/reviews', group: 'store' },
-  { key: 'e', hint: 'G E', paletteHint: 'G E', labelKey: 'admin.nav.content', to: '/admin/content', group: 'content' },
-  { key: 't', hint: 'G T', paletteHint: 'G T', labelKey: 'admin.nav.reports', to: '/admin/reports', group: 'system' },
-  { key: 's', hint: 'G S', paletteHint: 'G S', labelKey: 'admin.nav.settings', to: '/admin/settings', group: 'system' },
+  { key: 'o', hint: 'G O', paletteHint: 'G O', labelKey: 'admin.nav.orders', to: '/admin/orders', group: 'store', permission: PERMISSIONS.orders.read },
+  { key: 'p', hint: 'G P', paletteHint: 'G P', labelKey: 'admin.nav.products', to: '/admin/products', group: 'store', permission: PERMISSIONS.products.read },
+  { key: 'c', hint: 'G C', paletteHint: 'G C', labelKey: 'admin.nav.catalog', to: '/admin/catalog', group: 'store', permission: PERMISSIONS.products.read },
+  { key: 'b', hint: 'G B', paletteHint: 'G B', labelKey: 'admin.nav.bridal', to: '/admin/bridal', group: 'store', permission: PERMISSIONS.bridal.manage },
+  { key: 'm', hint: 'G M', paletteHint: 'G M', labelKey: 'admin.nav.promotions', to: '/admin/promotions', group: 'store', permission: PERMISSIONS.promotions.manage },
+  { key: 'r', hint: 'G R', paletteHint: 'G R', labelKey: 'admin.nav.reviews', to: '/admin/reviews', group: 'store', permission: PERMISSIONS.reviews.moderate },
+  { key: 'e', hint: 'G E', paletteHint: 'G E', labelKey: 'admin.nav.content', to: '/admin/content', group: 'content', permission: PERMISSIONS.content.manage },
+  { key: 't', hint: 'G T', paletteHint: 'G T', labelKey: 'admin.nav.reports', to: '/admin/reports', group: 'system', permission: PERMISSIONS.reports.read },
+  { key: 's', hint: 'G S', paletteHint: 'G S', labelKey: 'admin.nav.settings', to: '/admin/settings', group: 'system', permission: PERMISSIONS.settings.manage },
 ] as const
 
 export const ADMIN_SHORTCUT_ROUTES: Readonly<Record<string, string>> = Object.freeze(

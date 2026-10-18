@@ -12,7 +12,19 @@
     "logout": "Logout",
     "undo": "Undo",
     "showPassword": "Show password",
-    "hidePassword": "Hide password"
+    "hidePassword": "Hide password",
+    "currency": "EGP",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "save": "Save",
+    "create": "Create",
+    "delete": "Delete",
+    "error": "Error",
+    "close": "Close",
+    "errors": {
+      "unexpected": "An unexpected error occurred",
+      "invalidValue": "Invalid value"
+    }
   },
   "locale": {
     "switch": "Change language",
@@ -30,11 +42,11 @@
       "offers": "Offers",
       "guides": "Buying Guide",
       "wishlist": "Wishlist",
-      "wishlistCount": "Wishlist, {count} items",
+      "wishlistCount": "Wishlist: {count}",
       "compare": "Compare",
-      "compareCount": "Compare, {count} items",
+      "compareCount": "Compare: {count}",
       "cart": "Cart",
-      "cartCount": "Cart, {count} items",
+      "cartCount": "Cart: {count}",
       "whatsapp": "WhatsApp",
       "whatsappAria": "Contact us via WhatsApp",
       "searchProduct": "Search for a product",
@@ -48,7 +60,11 @@
       "mobileMenuSubtitle": "SINCE 1972 · Mansoura",
       "browseSite": "Browse Site",
       "directWhatsapp": "Direct WhatsApp Chat",
-      "callShowroom": "Call Showroom"
+      "callShowroom": "Call Showroom",
+      "suggestedCategories": "Suggested categories",
+      "seeAllResults": "See all search results ({query})",
+      "resultsCount": "Results: {count}",
+      "askOnWhatsapp": "Ask us on WhatsApp"
     },
     "footer": {
       "whatsappPrefill": "Hello, I have an inquiry from Mohamed Serag Showroom website 👋",
@@ -83,9 +99,485 @@
     },
     "home": {
       "subtitle": "Home Appliances & Kitchenware — Mansoura",
+      "metaDescription": "Mohamed Serag Showroom, Mansoura, since 1972: home appliances and bridal packages with genuine warranty and delivery across Egypt.",
       "shopNow": "Shop Now",
       "bridalPackages": "Bridal Packages",
       "samplePrice": "28,900 EGP"
+    },
+    "product": {
+      "addToCart": "Add to cart",
+      "outOfStock": "Out of stock",
+      "discountBadge": "{percent}% off",
+      "realPhoto": "Real photo",
+      "oldPriceAria": "Original price: {price}"
+    },
+    "productPage": {
+      "modelCode": "Model: {code}",
+      "saving": "Save {amount}",
+      "vatIncluded": "Prices are VAT inclusive",
+      "installmentAvailable": "Installments available in showroom",
+      "askWhatsapp": "Ask on WhatsApp",
+      "quantity": "Quantity",
+      "decreaseQty": "Decrease quantity",
+      "increaseQty": "Increase quantity",
+      "qtyAria": "Quantity: {count}",
+      "brandLinkAria": "Browse {brand} products",
+      "gallery": {
+        "prev": "Previous image",
+        "next": "Next image",
+        "realPhoto": "Real photo from showroom",
+        "thumbnailAria": "Image {index} of {name}",
+        "placeholderAlt": "Product placeholder image"
+      },
+      "delivery": {
+        "title": "Showroom Truck Delivery",
+        "description": "Direct and fast delivery via Mohamed Serag fleet",
+        "zoneFee": "{zone}: {fee}"
+      },
+      "warranty": {
+        "title": "Warranty & Origin",
+        "warrantyTitle": "Certified Warranty",
+        "activationTitle": "Warranty Activation",
+        "originTitle": "Country of Origin"
+      },
+      "specs": {
+        "title": "Technical Specifications",
+        "caption": "Product technical specifications table",
+        "property": "Property",
+        "value": "Value",
+        "yes": "Yes",
+        "no": "No"
+      },
+      "setContents": {
+        "title": "Set Contents",
+        "caption": "Pieces included in the set",
+        "piece": "Piece",
+        "size": "Size",
+        "qty": "Quantity"
+      },
+      "stickyBar": {
+        "addToCartAria": "Add {name} to cart"
+      },
+      "related": {
+        "title": "Similar Products"
+      },
+      "meta": {
+        "fallbackDescription": "Buy {name} from {brand} with authentic warranty and best price from Mohamed Serag showroom in Mansoura."
+      }
+    },
+    "cart": {
+      "addedToCart": "Added to cart",
+      "pageTitle": "Shopping Cart",
+      "title": "Shopping Cart",
+      "drawerTitle": "Shopping Cart",
+      "drawerDescription": "Review items in your shopping cart",
+      "itemCount": "{count} item | {count} items",
+      "emptyTitle": "Your cart is empty",
+      "emptyDescription": "No items in your cart yet. Explore our latest appliances and home offers.",
+      "browseProducts": "Browse Products",
+      "viewCart": "View Cart",
+      "checkout": "Proceed to Checkout",
+      "subtotal": "Subtotal",
+      "discount": "Discount",
+      "deliveryFee": "Delivery Fee",
+      "deliveryFeeNextStep": "Calculated in next step",
+      "total": "Total",
+      "quantity": "Quantity",
+      "decreaseQty": "Decrease quantity",
+      "increaseQty": "Increase quantity",
+      "removeLine": "Remove item from cart",
+      "clearCart": "Clear cart",
+      "unitPrice": "Unit Price",
+      "leadTime": "Delivery estimate: {time}",
+      "onRequestNotice": "Available on request",
+      "issues": {
+        "outOfStock": "Out of stock — remove from cart",
+        "qtyCapped": "Only {count} available",
+        "priceChanged": "Price changed from {from} to {to}",
+        "unavailable": "This item is no longer available",
+        "blockingNotice": "Some items in your cart need review before proceeding"
+      },
+      "acknowledgePriceChange": "Accept new price"
+    },
+    "checkout": {
+      "pageTitle": "Checkout",
+      "title": "Checkout",
+      "subtitle": "One quick step to confirm your order and get it delivered to your door",
+      "emptyCartTitle": "Your cart is empty",
+      "emptyCartDescription": "You cannot proceed to checkout with an empty cart.",
+      "emptyCartError": "Shopping cart is empty",
+      "cartChangedError": "Cart items or totals have changed, please review before confirming",
+      "customerSection": "Delivery Details",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Enter your full name",
+      "phone": "Phone Number",
+      "phonePlaceholder": "010xxxxxxxx",
+      "phoneHint": "Egyptian mobile number reachable for delivery coordination",
+      "governorate": "Governorate",
+      "governoratePlaceholder": "Select governorate",
+      "city": "City / Center",
+      "cityPlaceholder": "Enter city or center (e.g. Mansoura, Talkha)",
+      "address": "Detailed Address",
+      "addressPlaceholder": "Street name, building number, apartment, landmark",
+      "notes": "Additional Notes",
+      "notesPlaceholder": "Any specific delivery instructions or preferred timing (optional)",
+      "specialDateHelp": "Need a specific delivery date? Contact us on WhatsApp",
+      "paymentSection": "Payment Method",
+      "paymentMethod": "Payment Method",
+      "orderSummary": "Order Summary",
+      "depositNotice": "This order is above {threshold}; a {pct}% deposit ({amount}) by transfer is required before dispatch, rest on delivery.",
+      "leadTimePrefix": "Preparation time:",
+      "vatNotice": "Prices include 14% VAT",
+      "couponPrompt": "Have a discount coupon?",
+      "couponCode": "Coupon Code",
+      "couponPlaceholder": "Enter coupon code here",
+      "applyCoupon": "Apply",
+      "placeOrder": "Place Order",
+      "placingOrder": "Placing order...",
+      "stickyTotal": "Total:",
+      "settingsError": "Could not load checkout options, please try again",
+      "retrySettings": "Retry",
+      "hints": {
+        "selectGovernorateFirst": "Select a governorate to calculate delivery",
+        "reviewCartFirst": "Review cart items first",
+        "updatingPrices": "Updating prices..."
+      }
+    },
+    "thanks": {
+      "pageTitle": "Order Received",
+      "orderReceived": "Thank you {name}, your order has been received",
+      "orderNumber": "Order Number:",
+      "copyOrderNo": "Copy order number",
+      "copied": "Copied!",
+      "statusLabel": "Order Status:",
+      "nextStepTitle": "Next Step",
+      "codNextStep": "We will call you to confirm your order",
+      "transferNextStep": "Transfer total via {method}",
+      "depositNextStep": "Transfer deposit via {method}",
+      "transferInstruction": "Please transfer {amount} to the following account and send the transfer receipt:",
+      "accountLabel": "Account / Wallet Number:",
+      "sendWhatsappProof": "Send proof of transfer on WhatsApp",
+      "summaryTitle": "Order Details",
+      "itemsTitle": "Ordered Items",
+      "depositRequired": "Required Deposit ({pct}%):",
+      "remainingOnDelivery": "Remaining upon Delivery:",
+      "paymentMethodLabel": "Payment Method:",
+      "backToHome": "Return to Home",
+      "browseShop": "Continue Shopping",
+      "invalidLinkTitle": "This link is invalid or expired",
+      "invalidLinkDescription": "Please make sure to open the valid link received after completing your order.",
+      "bridal": {
+        "title": "Your Bridal Appliances Have Been Reserved",
+        "subtitle": "We will call you to agree on delivery and installation dates",
+        "reservationNumber": "Reservation Number:",
+        "lockNotice": "Prices will be locked for {lockDays} days from deposit confirmation",
+        "installmentsTitle": "Showroom Installments Available",
+        "installmentsInquiry": "You can pay the remaining amount in installments at our showroom in Mansoura",
+        "installmentsButton": "Inquire About Installments on WhatsApp",
+        "installmentsWhatsapp": "Hello, I have an inquiry about installment plans for bridal reservation {no}"
+      }
+    },
+    "wishlist": {
+      "add": "Add to wishlist",
+      "remove": "Remove",
+      "addAria": "Add {name} to wishlist",
+      "removeAria": "Remove {name} from wishlist",
+      "addedNotice": "Saved to wishlist",
+      "removedNotice": "Removed from wishlist",
+      "priceDropped": "Price dropped",
+      "pageTitle": "Wishlist",
+      "title": "Wishlist",
+      "subtitle": "Your saved products to revisit anytime",
+      "emptyTitle": "Your wishlist is empty",
+      "emptyDescription": "Save products you are considering and we will notify you if prices drop.",
+      "browseProducts": "Browse products",
+      "moveToCart": "Move to cart",
+      "moveToCartAria": "Move {name} to cart",
+      "unavailableProduct": "This product is no longer available",
+      "removeUnavailable": "Remove unavailable product",
+      "movedToCartNotice": "Product moved to cart"
+    },
+    "compare": {
+      "add": "Add to compare",
+      "remove": "Remove from compare",
+      "addAria": "Add {name} to compare",
+      "removeAria": "Remove {name} from compare",
+      "addedNotice": "Added to compare",
+      "removedNotice": "Removed from compare",
+      "maxReached": "Maximum 3 products can be compared",
+      "fullNotice": "Compare list is full (3 products)",
+      "pageTitle": "Compare Products",
+      "title": "Compare Products",
+      "subtitle": "Compare up to 3 products side by side to see differences and details",
+      "barAria": "Product comparison bar",
+      "compareButton": "Compare ({count})",
+      "clear": "Clear",
+      "clearAria": "Clear all products from compare",
+      "emptyTitle": "No products in compare",
+      "emptyDescription": "Select products from the store to compare their specifications and prices side by side.",
+      "browseProducts": "Browse products",
+      "singleItemHint": "Add at least one more product to compare them.",
+      "mixedCategoriesNotice": "Products are from different categories; showing common specifications only.",
+      "showDifferencesOnly": "Show differences only",
+      "noDifferencesNotice": "No differences found in the displayed specifications.",
+      "differentValue": "Different values",
+      "replacedNotice": "Product replaced in compare",
+      "price": "Price",
+      "brand": "Brand",
+      "warranty": "Warranty",
+      "origin": "Country of origin",
+      "productColumn": "Specification",
+      "replaceDialog": {
+        "title": "Which product to replace?",
+        "description": "The compare list has 3 products. Select a product to replace with {name}",
+        "replaceButton": "Replace",
+        "replaceButtonAria": "Replace {name}",
+        "cancel": "Cancel"
+      }
+    },
+    "availability": {
+      "inStock": "In stock",
+      "low": "Limited stock",
+      "onRequest": "On request",
+      "outOfStock": "Out of stock"
+    },
+    "listing": {
+      "title": "Shop",
+      "resultsHeading": "Products",
+      "metaDescription": "Browse the latest home appliances and cookware with official warranty and best prices from Mohamed Serag in Mansoura.",
+      "searchResultsTitle": "Results for \"{query}\"",
+      "productCount": "Products: {count}",
+      "filters": "Filters",
+      "filtersTitle": "Filter Results",
+      "filterCountAria": "Applied filters: {count}",
+      "clearAll": "Clear all",
+      "clearFilters": "Clear filters",
+      "applyFilters": "Show {count} products",
+      "sort": "Sort",
+      "sortBy": "Sort by",
+      "sortOptions": {
+        "popular": "Most popular",
+        "price_asc": "Price: low to high",
+        "price_desc": "Price: high to low",
+        "discount": "Biggest discount",
+        "newest": "Newest",
+        "relevance": "Most relevant"
+      },
+      "brands": "Brand",
+      "price": "Price",
+      "priceRange": "Price range",
+      "minPrice": "Min price",
+      "maxPrice": "Max price",
+      "fromPrice": "From",
+      "upToPrice": "Up to",
+      "egpUnit": "EGP",
+      "availability": "Availability",
+      "offersAndSale": "Offers & Discounts",
+      "discountedOnly": "On sale only",
+      "specs": "Specifications",
+      "subcategories": "Sub-categories",
+      "empty": {
+        "noSearchResults": "No results found for \"{query}\"",
+        "noFilteredProducts": "No products match these filters",
+        "tryDifferentFilters": "Try changing or clearing filters to see all products.",
+        "tryDifferentSearch": "Check your spelling or browse our popular categories.",
+        "topCategories": "Popular categories",
+        "askOnWhatsapp": "Ask us on WhatsApp",
+        "whatsappPrefill": "Hello, I am looking for a product on your store 👋"
+      },
+      "pagination": {
+        "label": "Product pages",
+        "previous": "Previous",
+        "next": "Next",
+        "page": "Page {page}"
+      },
+      "breadcrumb": {
+        "label": "Breadcrumb",
+        "home": "Home",
+        "shop": "Shop"
+      },
+      "activeFilters": "Applied filters",
+      "removeFilter": "Remove filter {filter}",
+      "loading": "Loading products..."
+    },
+    "errorPage": {
+      "notFoundTitle": "This page doesn't exist",
+      "notFoundDescription": "It may have moved, or the link has a typo.",
+      "generalTitle": "Something went wrong",
+      "generalDescription": "Please try again in a moment.",
+      "home": "Home",
+      "shopAll": "Shop all products"
+    },
+    "bridal": {
+      "pageTitle": "Build Your Home — Bridal Packages",
+      "listPageTitle": "Your Bridal Package",
+      "metaDescription": "Build your home with Mohamed Serag showroom. Choose a bridal appliance package, customize room by room, share with family, and lock prices with a deposit.",
+      "hero": {
+        "title": "Build Your Home",
+        "subtitle": "Choose the right package for your home, customize each room to your taste, see the price changes live, and share it with family to decide together."
+      },
+      "continueBanner": {
+        "title": "You have a saved package on this device",
+        "hint": "Click here to return to your last saved list.",
+        "action": "Continue your list"
+      },
+      "tiers": {
+        "title": "Ready Bridal Appliance Packages",
+        "subtitle": "Start with a balanced package and customize appliances to fit your budget",
+        "mostPopular": "Most Popular",
+        "roomsCount": "{count} rooms",
+        "itemsCount": "{count} items",
+        "startWithTier": "Start with this tier",
+        "starting": "Preparing...",
+        "errorLoading": "Failed to load bridal packages, please try again later",
+        "retry": "Retry"
+      },
+      "scratch": {
+        "title": "Start from Scratch",
+        "description": "Prefer to choose every appliance yourself? Start with an empty list and add items to each room.",
+        "button": "Start from scratch",
+        "starting": "Starting..."
+      },
+      "rooms": {
+        "kitchen": "Kitchen",
+        "laundry": "Laundry",
+        "living": "Living Room",
+        "bedrooms": "Bedrooms (ACs)",
+        "small_appliances": "Small Appliances",
+        "kitchenware": "Kitchenware",
+        "subtotal": "Subtotal:",
+        "addItemToRoom": "Add appliance to this room",
+        "addRoomItem": "Add to a room"
+      },
+      "items": {
+        "unitPrice": "Unit price:",
+        "lineTotal": "Total:",
+        "qty": "Qty:",
+        "increaseQtyAria": "Increase quantity of {name}",
+        "decreaseQtyAria": "Decrease quantity of {name}",
+        "removeAria": "Remove {name} from list",
+        "swapAria": "Swap {name} with an alternative",
+        "swap": "Swap",
+        "remove": "Remove",
+        "outOfStockBadge": "Out of stock — choose alternative",
+        "onRequest": "Available on request",
+        "leadTimePrefix": "Lead time:"
+      },
+      "saveState": {
+        "saving": "Saving…",
+        "saved": "Saved",
+        "error": "Save failed, retrying on next change"
+      },
+      "totals": {
+        "title": "Package Summary",
+        "total": "Total:",
+        "itemCount": "Appliances:",
+        "itemsFormat": "{count} appliances",
+        "tierDifference": "Difference from tier:",
+        "tierDiffMore": "{amount} above the package",
+        "tierDiffLess": "{amount} below the package",
+        "tierDiffSame": "Same as the package",
+        "tierDiffIncrease": "+ {amount} increase",
+        "tierDiffDecrease": "- {amount} savings",
+        "tierDiffMatch": "Matches tier price",
+        "reserveButton": "Reserve with deposit"
+      },
+      "reserve": {
+        "unavailableReason": "Some items are out of stock, swap or remove them",
+        "emptyReason": "The list is empty",
+        "comingSoonReason": "Deposit reservations coming soon",
+        "priceChangedNotice": "Prices have changed, please review the new total"
+      },
+      "reserveSheet": {
+        "title": "Reserve Bridal List",
+        "description": "Reserve your bridal appliances with a deposit and lock prices",
+        "preferredDate": "Preferred Delivery Date (optional)",
+        "preferredDateHint": "We will call you to agree on delivery and installation dates",
+        "updatingQuote": "Updating quote...",
+        "subtotal": "Appliances Subtotal",
+        "deliveryFee": "Delivery Fee",
+        "lockedTotal": "Locked Total",
+        "depositAmount": "Required Deposit ({pct}%): {amount}",
+        "lockNotice": "Prices will be locked for {lockDays} days from deposit confirmation",
+        "noCouponsNotice": "Coupons cannot be applied to bridal reservations",
+        "installmentsNotice": "Installments are available in our showroom",
+        "chooseLocationHint": "Enter governorate and city to calculate delivery fee and confirm deposit",
+        "submitting": "Confirming reservation...",
+        "submitButton": "Confirm Reservation",
+        "quoteRequiredHint": "Enter address details to calculate delivery fees and deposit amount"
+      },
+      "share": {
+        "title": "Share your list",
+        "button": "Share on WhatsApp",
+        "copyLink": "Copy link",
+        "copied": "Link copied to clipboard!",
+        "copyFailed": "Failed to copy link",
+        "customList": "Bridal appliance list",
+        "message": "Hello, here is my bridal appliance list ({tierName}) from Mohamed Serag showroom. It has {count} items totaling {total}. You can view the appliances and prices here:\n{url}"
+      },
+      "view": {
+        "badge": "View only",
+        "contactShowroom": "Contact Showroom",
+        "contactMessage": "Hello, I am contacting you regarding my bridal package from the website totaling {total} to inquire about details.",
+        "startOwn": "Start your own package",
+        "readOnlyNotice": "You are viewing a read-only list. To customize appliances, start your own package."
+      },
+      "status": {
+        "draft": "Draft",
+        "awaitingDeposit": "Awaiting deposit",
+        "awaiting_deposit": "Awaiting deposit",
+        "reserved": "Reserved",
+        "locked": "Prices locked",
+        "deliveryAgreed": "Delivery date scheduled",
+        "delivered": "Delivered",
+        "cancelled": "Reservation cancelled",
+        "reservationNo": "Reservation No: {no}",
+        "depositProgress": "Deposit: {paid} paid of {required}",
+        "lockedUntil": "Prices locked until {date}",
+        "banner": "Reservation status: {status} — Reservation No: {no}"
+      },
+      "swapSheet": {
+        "title": "Choose an alternative for {name}",
+        "description": "Available alternatives from the same category with price differences",
+        "loading": "Loading alternatives...",
+        "empty": "No alternatives available in this category currently",
+        "priceDiffMore": "{amount} more",
+        "priceDiffLess": "{amount} less",
+        "priceDiffSame": "Same price",
+        "priceDiffPlus": "+{amount} vs current",
+        "priceDiffMinus": "-{amount} vs current",
+        "choose": "Select alternative",
+        "outOfStock": "Out of stock"
+      },
+      "addSheet": {
+        "title": "Add appliance to your list",
+        "description": "Choose the room and search the catalog to add an appliance",
+        "chooseRoom": "Room:",
+        "searchPlaceholder": "Search for refrigerator, washer, TV, cooker...",
+        "searching": "Searching...",
+        "noResults": "No matching results found",
+        "addButton": "Add",
+        "addedSuccess": "Added {name} to {room}",
+        "typeToSearch": "Type at least 2 characters to search appliances"
+      },
+      "empty": {
+        "title": "Your list is empty",
+        "description": "Add appliances to each room to calculate costs and share with your family.",
+        "addAppliance": "Add appliances to your list"
+      },
+      "notFound": {
+        "title": "List not found",
+        "description": "This link is invalid or the list was deleted. You can start a new bridal package at any time.",
+        "backButton": "Start a new package"
+      },
+      "productButton": {
+        "label": "Add to bridal list",
+        "adding": "Adding...",
+        "ariaLabel": "Add {name} to bridal list",
+        "addedToast": "Added to bridal list",
+        "openList": "Open list",
+        "errorToast": "Failed, please try again"
+      }
     }
   },
   "admin": {
@@ -105,6 +597,7 @@
       "overview": "Overview",
       "orders": "Orders",
       "products": "Products",
+      "catalog": "Categories & Brands",
       "bridal": "Bridal Packages",
       "promotions": "Promotions & Coupons",
       "reviews": "Reviews",
@@ -134,7 +627,13 @@
     "dashboard": {
       "welcome": "Welcome {name}",
       "subtitle": "Overview of showroom performance and daily orders",
-      "emptyState": "Dashboard activity will appear once orders start arriving"
+      "emptyState": "Dashboard activity will appear once orders start arriving",
+      "expiringLocks": {
+        "title": "Locks Expiring Soon",
+        "empty": "No price locks expiring this week",
+        "expired": "Expired",
+        "daysLeft": "{n} days left"
+      }
     },
     "topbar": {
       "portalSubtitle": "Admin Portal · Mohamed Serag Showroom",
@@ -168,12 +667,708 @@
       "openStore": "Open Storefront",
       "openStoreSearch": "open store storefront new tab main site",
       "inNewTab": "in new tab"
+    },
+    "products": {
+      "title": "Products",
+      "import": {
+        "title": "Bulk Price & Stock Update via CSV",
+        "subtitle": "Update selling prices and stock levels in bulk matched by model code, with a preview before applying",
+        "button": "CSV Import",
+        "backToProducts": "Back to products list",
+        "downloadCurrentCatalog": "Download Current Products CSV",
+        "instructions": {
+          "title": "Import Instructions & Data Rules",
+          "columns": "Supported columns: model code (required), price, old price, stock, and product name (optional).",
+          "pricing": "Prices are in Egyptian Pounds (EGP). Numbers can be written in Arabic or English with standard thousand separators.",
+          "emptyMeansNoChange": "An empty cell keeps the existing product value unchanged.",
+          "clearOldPrice": "To set or clear discounts: entering 0 or - in the old price column clears the previous price."
+        },
+        "dropzone": {
+          "ariaLabel": "CSV file upload dropzone for product import",
+          "prompt": "Click to choose a CSV file or drag and drop here",
+          "reading": "Reading file and preparing preview...",
+          "hint": "Accepts CSV files up to 2 MB and up to 2000 products",
+          "invalidType": "Please select a valid CSV file",
+          "fileTooLarge": "File size exceeds the 2 MB limit"
+        },
+        "summary": {
+          "title": "Preview Summary & Status Filters",
+          "filterLabel": "Filter preview rows by status",
+          "changesOnly": "Changes Only",
+          "allRows": "All Rows",
+          "updates": "Ready to Update",
+          "unchanged": "Unchanged",
+          "notFound": "Not Found",
+          "duplicate": "Duplicate in File",
+          "errors": "Data Errors"
+        },
+        "preview": {
+          "applyBarTitle": "Ready to Apply Changes",
+          "applyBarHint": "{count} products will be updated in the database and stock movements logged automatically.",
+          "applyButton": "Apply {count} changes"
+        },
+        "table": {
+          "product": "Product",
+          "price": "Selling Price",
+          "oldPrice": "Old Price",
+          "stock": "Stock",
+          "status": "Status & Notes",
+          "archived": "Archived",
+          "noMatchingRows": "No rows match the selected filter."
+        },
+        "status": {
+          "update": "Update",
+          "unchanged": "Unchanged",
+          "notFound": "Not Found",
+          "duplicate": "Duplicate",
+          "error": "Error"
+        },
+        "confirmDialog": {
+          "title": "Confirm Applying Changes",
+          "description": "You are about to apply {count} price and stock updates to the catalog. Stock movements will be logged automatically.",
+          "confirmAction": "Yes, Apply {count} Changes"
+        },
+        "result": {
+          "title": "Import Changes Applied Successfully",
+          "description": "Product prices and stock quantities were updated and inventory movements recorded.",
+          "skipped": "Skipped",
+          "importAnother": "Import Another File",
+          "backToProducts": "Back to Products",
+          "updated": "Updated"
+        },
+        "toasts": {
+          "appliedTitle": "Import Complete",
+          "appliedDescription": "{count} products were updated successfully."
+        },
+        "errors": {
+          "headerErrorTitle": "Could not process file due to a header error",
+          "headerMissing": "File header is missing or empty.",
+          "missingModelCodeHeader": "Model code column is missing. The file must include a model_code column.",
+          "noUpdatableColumns": "File has no updatable columns (must include price, old price, or stock).",
+          "maxRowsExceeded": "File exceeds the maximum limit of 2,000 data rows.",
+          "emptyFile": "The file is empty. Please select a file with data rows.",
+          "noDataRows": "The file contains only headers with no data rows.",
+          "missingModelCode": "Model code is missing on this row.",
+          "modelNotFound": "Model code was not found in the catalog.",
+          "duplicateModelCode": "Duplicate model code in this file (first occurrence applied; subsequent occurrences ignored).",
+          "invalidPrice": "Invalid price (must be a positive number greater than zero with up to 2 decimal places).",
+          "invalidOldPrice": "Invalid old price (must be a positive number, or 0 / - to clear).",
+          "invalidStock": "Invalid stock quantity (must be a non-negative integer).",
+          "oldPriceNotGreaterThanPrice": "Old price must be greater than the resulting selling price.",
+          "exportFailed": "Failed to download the current products file.",
+          "previewFailed": "Failed to generate import preview.",
+          "applyFailed": "Failed to apply import changes."
+        }
+      },
+      "newProduct": "New Product",
+      "newTitle": "Add New Product",
+      "editTitle": "Edit Product",
+      "backToList": "Back to products list",
+      "searchPlaceholder": "Product name or model code...",
+      "allCategories": "All Categories",
+      "allBrands": "All Brands",
+      "status": {
+        "all": "All Statuses",
+        "active": "Active",
+        "hidden": "Hidden",
+        "archived": "Archived"
+      },
+      "stockFilter": {
+        "all": "All Stock Levels",
+        "low": "Low Stock",
+        "out": "Out of Stock"
+      },
+      "sort": {
+        "label": "Sort by",
+        "updated": "Last Updated",
+        "name": "Name",
+        "price": "Price",
+        "stock": "Stock"
+      },
+      "list": {
+        "actionsFor": "Actions for \"{name}\""
+      },
+      "preview": {
+        "defaultName": "New Product Name",
+        "defaultBrand": "Brand",
+        "defaultCategory": "Category",
+        "defaultImageAlt": "Product image"
+      },
+      "validation": {
+        "nameRequired": "Product name is required",
+        "modelCodeRequired": "Model code is required",
+        "brandRequired": "Brand is required",
+        "categoryRequired": "Category is required"
+      },
+      "table": {
+        "product": "Product",
+        "category": "Category",
+        "brand": "Brand",
+        "price": "Price",
+        "stock": "Stock",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "actions": {
+        "edit": "Edit",
+        "show": "Show in Store",
+        "hide": "Hide from Store",
+        "archive": "Archive",
+        "unarchive": "Unarchive",
+        "delete": "Delete",
+        "confirmDeleteTitle": "Permanently Delete Product",
+        "confirmDeleteDescription": "Are you sure you want to delete \"{name}\"? This cannot be undone unless it is unreferenced in orders.",
+        "cancel": "Cancel",
+        "confirmDelete": "Yes, Delete"
+      },
+      "inOrdersDialog": {
+        "title": "Product Cannot Be Deleted",
+        "description": "This product is referenced in existing customer orders and cannot be deleted to preserve order records. You can archive it instead to hide it completely from the storefront.",
+        "archiveAction": "Archive instead of deleting",
+        "close": "Close"
+      },
+      "toasts": {
+        "hidden": "\"{name}\" was hidden from store",
+        "shown": "\"{name}\" is now visible in store",
+        "archived": "\"{name}\" was archived",
+        "unarchived": "\"{name}\" was unarchived",
+        "deleted": "\"{name}\" was successfully deleted",
+        "created": "Product created successfully",
+        "saved": "Changes saved successfully",
+        "imageUploaded": "Image uploaded successfully",
+        "imageDeleted": "Image deleted",
+        "imagesReordered": "Image order updated",
+        "imagePatched": "Image details updated"
+      },
+      "empty": {
+        "title": "No matching products found",
+        "description": "Try adjusting your search terms or applied filters.",
+        "clearFilters": "Clear Filters"
+      },
+      "loading": "Loading products...",
+      "pagination": {
+        "previous": "Previous",
+        "next": "Next",
+        "page": "Page {page} of {totalPages}",
+        "total": "{total} products in total"
+      },
+      "editor": {
+        "save": "Save Changes",
+        "saving": "Saving...",
+        "create": "Create Product",
+        "cancel": "Cancel",
+        "unsavedChanges": "You have unsaved changes. Do you want to leave and discard them?",
+        "unsavedBadge": "Unsaved changes",
+        "allSaved": "All changes saved",
+        "preview": {
+          "title": "Live Product Card Preview",
+          "subtitle": "How this product appears to customers in the store",
+          "mobileToggle": "Toggle Card Preview",
+          "unsavedBadge": "Unsaved Draft"
+        },
+        "basics": {
+          "title": "Basic Information",
+          "name": "Product Name",
+          "namePlaceholder": "e.g. LG 9kg Front Load Washer with Dryer",
+          "modelCode": "Model Code",
+          "modelCodePlaceholder": "e.g. F4R5VGG2E",
+          "slug": "Slug",
+          "slugPlaceholder": "Auto-generated if left blank",
+          "brand": "Brand",
+          "selectBrand": "Select a brand",
+          "category": "Category",
+          "selectCategory": "Select a category",
+          "categoryChangeWarnTitle": "Category Change Discards Specs",
+          "categoryChangeWarnDescription": "Changing category will reload technical spec fields and remove values not present in the new template. Proceed?"
+        },
+        "pricing": {
+          "title": "Pricing & Inventory",
+          "price": "Sale Price (EGP)",
+          "oldPrice": "Original Price (EGP)",
+          "oldPriceGreater": "Original price must be greater than sale price",
+          "discountPercent": "Calculated Discount",
+          "noDiscount": "No discount",
+          "stock": "Available Stock Quantity",
+          "lowStockThreshold": "Low Stock Alert Threshold",
+          "availabilityMode": "Availability Mode",
+          "modes": {
+            "auto": "Automatic based on inventory",
+            "on_request": "Available on request (Orderable)",
+            "out": "Out of stock (Unavailable)"
+          },
+          "leadTimeText": "Estimated Lead Time",
+          "leadTimePlaceholder": "e.g. Delivery within 3-5 business days",
+          "taxRate": "VAT Rate (%)"
+        },
+        "specs": {
+          "title": "Technical Specifications",
+          "noTemplate": "Selected category has no spec template assigned.",
+          "assignTemplateHint": "You can assign a spec template from the Categories & Brands page.",
+          "true": "Yes / Available",
+          "false": "No / Unavailable",
+          "selectOption": "Select an option"
+        },
+        "setContents": {
+          "title": "Set Contents",
+          "description": "Record pieces, sizes, and quantities included in this set for customer transparency",
+          "emptyHint": "No pieces added yet. Click \"Add Piece\" to begin.",
+          "item": "Piece Name",
+          "itemPlaceholder": "e.g. Cooking Pot with Lid",
+          "size": "Size / Capacity",
+          "sizePlaceholder": "e.g. 24 cm",
+          "qty": "Quantity",
+          "addRow": "Add Another Piece",
+          "removeRow": "Remove Piece"
+        },
+        "warranty": {
+          "title": "Warranty & Origin",
+          "warranty": "Warranty Duration & Terms",
+          "warrantyPlaceholder": "e.g. 10-year official distributor warranty",
+          "warrantyActivation": "Warranty Activation Instructions",
+          "warrantyActivationPlaceholder": "e.g. Call manufacturer hotline and stamp card",
+          "origin": "Country of Origin",
+          "originPlaceholder": "e.g. Egypt / Turkey / South Korea"
+        },
+        "images": {
+          "title": "Product Images",
+          "saveFirst": "Save the product first before uploading images",
+          "dragDrop": "Drag and drop images here, or click to browse",
+          "allowedTypes": "Supported formats: JPEG, PNG, WebP, AVIF — Max 5 MB per file",
+          "uploading": "Uploading images...",
+          "realPhoto": "Showroom Real Photo",
+          "alt": "Alt Text (SEO)",
+          "altPlaceholder": "Accurate description for search engines",
+          "moveStart": "Move towards start",
+          "moveEnd": "Move towards end",
+          "delete": "Delete image",
+          "primary": "Primary Image",
+          "maxSizeError": "Image size must not exceed 5 MB",
+          "typeError": "Unsupported image format. Allowed formats: JPEG, PNG, WebP, AVIF",
+          "moveStartN": "Move image {n} towards start",
+          "moveEndN": "Move image {n} towards end",
+          "realPhotoN": "Showroom real photo for image {n}",
+          "deleteN": "Delete image {n}",
+          "altN": "Alt text for image {n}"
+        },
+        "seo": {
+          "title": "Visibility & SEO",
+          "visible": "Visible in Storefront",
+          "visibleHint": "If disabled, hidden from catalog and search",
+          "featured": "Featured Product",
+          "featuredHint": "Highlighted in homepage featured showcases",
+          "seoTitle": "Google Page Title (SEO Title)",
+          "seoTitleHint": "Recommended ~60 characters",
+          "seoDescription": "Search Description (SEO Description)",
+          "seoDescriptionHint": "Recommended ~160 characters",
+          "chars": "{count} chars"
+        }
+      }
+    },
+    "catalog": {
+      "title": "Categories & Brands",
+      "tabs": {
+        "categories": "Categories",
+        "brands": "Brands",
+        "specTemplates": "Spec Templates"
+      },
+      "categories": {
+        "new": "New Category",
+        "edit": "Edit Category",
+        "name": "Category Name",
+        "slug": "Slug",
+        "parent": "Parent Category",
+        "noParent": "Root Category (No Parent)",
+        "specTemplate": "Assigned Spec Template",
+        "noSpecTemplate": "No Spec Template",
+        "intro": "Category Introduction",
+        "seoTitle": "SEO Title",
+        "seoDescription": "SEO Description",
+        "visible": "Visible in Store",
+        "productsCount": "{count} products",
+        "reorderSuccess": "Category order updated",
+        "created": "Category created successfully",
+        "updated": "Category updated successfully",
+        "deleted": "Category deleted successfully",
+        "confirmDelete": "Are you sure you want to delete category \"{name}\"?",
+        "empty": "No categories registered yet.",
+        "moveUpN": "Move category \"{name}\" up (position {n})",
+        "moveDownN": "Move category \"{name}\" down (position {n})",
+        "editNamed": "Edit category \"{name}\"",
+        "deleteNamed": "Delete category \"{name}\""
+      },
+      "brands": {
+        "new": "New Brand",
+        "edit": "Edit Brand",
+        "name": "Brand Name",
+        "slug": "Slug",
+        "logo": "Brand Logo",
+        "uploadLogo": "Upload Logo",
+        "logoHint": "PNG, WebP, or SVG format up to 5 MB",
+        "intro": "Brand Introduction",
+        "seoTitle": "SEO Title",
+        "seoDescription": "SEO Description",
+        "visible": "Visible in Store",
+        "productsCount": "{count} products",
+        "created": "Brand created successfully",
+        "updated": "Brand updated successfully",
+        "deleted": "Brand deleted successfully",
+        "confirmDelete": "Are you sure you want to delete brand \"{name}\"?",
+        "empty": "No brands registered yet.",
+        "logoSizeError": "Logo size must not exceed 5 MB",
+        "logoUploaded": "Logo uploaded successfully",
+        "editNamed": "Edit brand \"{name}\"",
+        "deleteNamed": "Delete brand \"{name}\""
+      },
+      "specTemplates": {
+        "new": "New Spec Template",
+        "edit": "Edit Spec Template",
+        "name": "Template Name",
+        "fieldsCount": "{count} fields",
+        "usedIn": "Used in {count} categories",
+        "fields": "Template Spec Fields",
+        "addField": "Add Field",
+        "removeField": "Remove",
+        "key": "Field Key",
+        "keyPlaceholder": "e.g. capacity",
+        "label": "Display Label",
+        "labelPlaceholder": "e.g. Capacity (Liters)",
+        "type": "Type",
+        "unit": "Unit",
+        "unitPlaceholder": "e.g. Liters, Watts",
+        "options": "Options (comma-separated)",
+        "optionsPlaceholder": "e.g. White, Silver, Black",
+        "filterable": "Store Filter",
+        "comparable": "Compare",
+        "emptyHint": "Click \"Add Field\" to add the first spec definition to this template.",
+        "types": {
+          "text": "Text",
+          "number": "Number",
+          "boolean": "Yes/No (Boolean)",
+          "choice": "Single Choice"
+        },
+        "created": "Spec template created successfully",
+        "updated": "Spec template updated successfully",
+        "deleted": "Spec template deleted successfully",
+        "confirmDelete": "Are you sure you want to delete spec template \"{name}\"?",
+        "empty": "No spec templates registered yet.",
+        "editNamed": "Edit spec template \"{name}\"",
+        "deleteNamed": "Delete spec template \"{name}\"",
+        "moveUpN": "Move field {n} up",
+        "moveDownN": "Move field {n} down",
+        "removeFieldN": "Remove field {n}"
+      },
+      "errors": {
+        "hasRelations": "Cannot delete category because it contains products or subcategories",
+        "hasProducts": "Cannot delete brand because it is associated with products",
+        "inUse": "Cannot delete spec template because it is assigned to categories"
+      }
+    },
+    "orders": {
+      "title": "Orders",
+      "searchPlaceholder": "Search by order no, customer, or phone…",
+      "exportCsv": "Export CSV",
+      "tabs": {
+        "all": "All",
+        "new": "New",
+        "awaiting_payment": "Awaiting Payment",
+        "awaiting_deposit": "Awaiting Deposit",
+        "payment_rejected": "Payment Rejected",
+        "confirmed": "Confirmed",
+        "out_for_delivery": "Out for Delivery",
+        "delivered": "Delivered",
+        "cancelled": "Cancelled"
+      },
+      "status": {
+        "new": "New",
+        "awaiting_payment": "Awaiting Payment",
+        "awaiting_deposit": "Awaiting Deposit",
+        "payment_rejected": "Payment Rejected",
+        "confirmed": "Confirmed",
+        "out_for_delivery": "Out for Delivery",
+        "delivered": "Delivered",
+        "cancelled": "Cancelled"
+      },
+      "types": {
+        "order": "Orders",
+        "bridal": "Bridal"
+      },
+      "filters": {
+        "allTypes": "All Types",
+        "allMethods": "All Payment Methods",
+        "from": "From Date",
+        "to": "To Date",
+        "clear": "Clear Filters"
+      },
+      "bridal": {
+        "lockExpired": "Price lock expired",
+        "daysLeft": "{n} days left",
+        "outForDeliveryBlockedReason": "Out for delivery is not available until a delivery date is agreed"
+      },
+      "table": {
+        "orderNo": "Order No",
+        "date": "Date",
+        "customer": "Customer",
+        "phone": "Phone",
+        "items": "Items",
+        "total": "Total",
+        "paid": "Paid",
+        "method": "Payment Method",
+        "status": "Status",
+        "actions": "Actions",
+        "view": "View Details"
+      },
+      "empty": {
+        "title": "No Matching Orders",
+        "description": "No orders were found matching the selected filters."
+      },
+      "pagination": {
+        "showing": "Showing {from} to {to} of {total} orders",
+        "prev": "Previous",
+        "next": "Next"
+      },
+      "detail": {
+        "backToList": "Back to Orders",
+        "printInvoice": "Print Invoice",
+        "customerTitle": "Customer Details",
+        "customerName": "Customer Name",
+        "customerPhone": "Phone Number",
+        "chatWhatsapp": "WhatsApp Chat",
+        "address": "Address",
+        "customerNotes": "Customer Notes",
+        "noNotes": "No notes from customer",
+        "itemsTitle": "Order Items",
+        "item": "Product",
+        "modelCode": "Model Code",
+        "qty": "Qty",
+        "unitPrice": "Unit Price",
+        "lineTotal": "Line Total",
+        "totalsTitle": "Summary",
+        "subtotal": "Subtotal",
+        "discount": "Discount",
+        "deliveryFee": "Delivery Fee",
+        "total": "Total",
+        "deposit": "Required Deposit",
+        "paid": "Paid",
+        "remaining": "Remaining",
+        "paymentsTitle": "Payments Record",
+        "noPayments": "No payments recorded yet",
+        "confirmPayment": "Confirm New Payment",
+        "rejectPayment": "Reject Payment",
+        "paymentConfirmed": "Payment confirmed successfully",
+        "paymentRejected": "Payment rejected successfully",
+        "statusActionsTitle": "Status Actions",
+        "transition": {
+          "confirmed": "Confirm Order",
+          "out_for_delivery": "Out for Delivery",
+          "delivered": "Delivered",
+          "cancelled": "Cancel Order"
+        },
+        "statusChanged": "Order status changed to {status}",
+        "sendWhatsapp": "Send WhatsApp to Customer",
+        "historyTitle": "Order History Timeline",
+        "noHistory": "No events recorded",
+        "events": {
+          "payment_confirmed": "Payment Confirmed",
+          "payment_rejected": "Payment Rejected"
+        },
+        "internalNotesTitle": "Internal Admin Notes",
+        "internalNotesPlaceholder": "Enter confidential internal notes (max 2000 chars)…",
+        "saveNotes": "Save Notes",
+        "notesSaved": "Notes saved",
+        "whatsappMessagesTitle": "Logged WhatsApp Messages",
+        "noWhatsappMessages": "No logged WhatsApp messages for this order yet",
+        "shortagesWarning": "Stock shortage warning:",
+        "shortageItem": "{name}: requested {requested}, available was {taken}",
+        "noStatusActions": "No actions available for this status"
+      },
+      "dialogs": {
+        "cancelTitle": "Cancel Order",
+        "cancelDescription": "Enter the cancellation reason for the event log:",
+        "cancelReasonLabel": "Cancellation reason",
+        "cancelReasonPlaceholder": "Cancellation reason (at least 3 characters)…",
+        "confirmCancel": "Confirm Cancellation",
+        "confirmPaymentTitle": "Confirm Payment",
+        "confirmPaymentDescription": "Enter the paid amount and transaction notes:",
+        "amountLabel": "Paid Amount (EGP)",
+        "noteLabel": "Note (optional)",
+        "rejectTitle": "Reject Payment",
+        "rejectDescription": "Enter the rejection reason to send to customer:",
+        "reasonLabel": "Rejection Reason"
+      },
+      "invoice": {
+        "title": "Internal Invoice — Not a Tax Receipt",
+        "print": "Print",
+        "back": "Back to Order",
+        "showroomAddressPlaceholder": "[Showroom Address]",
+        "whatsappLabel": "WhatsApp",
+        "whatsappPlaceholder": "[WhatsApp Number]",
+        "customerInfo": "Customer Details",
+        "vatNotice": "VAT-Inclusive 14%"
+      },
+      "paymentMethods": {
+        "cod": "Cash on delivery",
+        "instapay": "InstaPay",
+        "vodafone_cash": "Vodafone Cash",
+        "fawry": "Fawry"
+      }
+    },
+    "confirm": {
+      "pageTitle": "Confirm Order Payment",
+      "header": "Confirm payment for order {no}",
+      "notFound": "This confirmation link is invalid or expired",
+      "backToDashboard": "Back to Dashboard",
+      "notActionable": "This order is {status}; no confirmation is needed",
+      "partialDepositRecorded": "Recorded {amount} — {remaining} remaining of deposit",
+      "summary": {
+        "title": "Payment Details",
+        "customer": "Customer",
+        "method": "Payment Method",
+        "total": "Order Total",
+        "paid": "Already Paid",
+        "expected": "Expected Amount",
+        "depositExpected": "Required Deposit ({pct}%)",
+        "depositRequired": "Required Deposit",
+        "depositPaid": "Deposit Paid",
+        "depositRemaining": "Deposit Remaining",
+        "remaining": "Remaining"
+      },
+      "actions": {
+        "amountLabel": "Paid Amount (EGP)",
+        "amountPlaceholder": "e.g. 500",
+        "noteLabel": "Note (optional)",
+        "notePlaceholder": "Any note regarding the transfer",
+        "confirmButton": "Confirm Payment",
+        "confirming": "Confirming...",
+        "rejectButton": "Reject"
+      },
+      "dialog": {
+        "title": "Reject Payment",
+        "description": "Enter the rejection reason to send to the customer",
+        "reasonLabel": "Rejection Reason",
+        "reasonPlaceholder": "e.g. Image not clear, amount does not match",
+        "confirmReject": "Confirm Rejection",
+        "rejecting": "Rejecting...",
+        "cancel": "Cancel"
+      },
+      "result": {
+        "confirmedTitle": "Payment Confirmed",
+        "rejectedTitle": "Payment Rejected",
+        "statusLabel": "Order status now:",
+        "paidAmount": "Paid:",
+        "remainingAmount": "Remaining:",
+        "bridalLockedNotice": "Prices locked until {date}",
+        "sendBridalLockedWhatsapp": "Send price lock WhatsApp message",
+        "openOrder": "Open Order",
+        "sendWhatsapp": "Send WhatsApp to Customer",
+        "shortageWarning": "Stock shortage warning:",
+        "shortageItem": "{name}: requested {requested}, available was {taken}"
+      },
+      "errors": {
+        "generic": "An unexpected error occurred. Please try again.",
+        "notFound": "This confirmation link is invalid or expired.",
+        "conflict": "Order was updated. Please refresh the page.",
+        "badRequest": "Invalid amount or exceeds remaining balance.",
+        "forbidden": "You do not have permission to confirm payment.",
+        "unauthorized": "Please log in first.",
+        "amountRequired": "Please enter the amount.",
+        "invalidAmount": "Please enter a valid number.",
+        "amountPositive": "Amount must be greater than zero.",
+        "amountExceedsRemaining": "Amount exceeds remaining balance.",
+        "reasonRequired": "Rejection reason must be at least 3 characters.",
+        "reasonTooLong": "Rejection reason must not exceed 300 characters."
+      }
+    },
+    "bridal": {
+      "pageTitle": "Bridal Packages & Settings",
+      "panelTitle": "Bridal Reservation Details",
+      "tiersTabsAria": "Bridal package tiers",
+      "daysCount": "{days} days",
+      "viewListLink": "View bride's list",
+      "status": {
+        "draft": "Draft",
+        "awaiting_deposit": "Awaiting Deposit",
+        "locked": "Reserved (Price Locked)",
+        "delivery_agreed": "Delivery Agreed",
+        "delivered": "Delivered",
+        "cancelled": "Cancelled",
+        "lock_expired": "Lock Expired"
+      },
+      "detail": {
+        "lockEndDate": "Lock Expiration Date",
+        "lockDays": "Lock Duration",
+        "preferredDate": "Preferred Delivery Date",
+        "agreedDeliveryDate": "Agreed Delivery Date",
+        "listLink": "Bridal List Link",
+        "openBrideList": "Open bride's list (view-only)"
+      },
+      "actions": {
+        "setDeliveryDate": "Set Delivery Date",
+        "setDeliveryDateNotice": "Setting a delivery date deducts items from inventory and moves status to delivery agreed.",
+        "deliveryDateLabel": "Delivery Date",
+        "deliveryDateSuccess": "Delivery date set successfully",
+        "extendLock": "Extend Lock",
+        "extendLockNotice": "Select a new date for price lock expiration.",
+        "extendLockUntilLabel": "New Lock Date",
+        "extendLockSuccess": "Price lock extended successfully",
+        "reprice": "Reprice",
+        "repriceConfirmNotice": "List items will take current catalog prices and a new lock period starts today for the bride.",
+        "confirmReprice": "Confirm Reprice",
+        "repriceSuccess": "Prices updated successfully"
+      },
+      "reprice": {
+        "resultTitle": "Reprice Result",
+        "resultDescription": "List prices updated and a new lock period started.",
+        "oldTotal": "Old Total",
+        "newTotal": "New Total",
+        "difference": "Price Difference",
+        "increased": "Increased by {amount}",
+        "decreased": "Decreased by {amount}",
+        "noDifference": "No difference",
+        "sendWhatsapp": "Send to Bride on WhatsApp"
+      },
+      "editor": {
+        "totalLabel": "Package Total (at current prices)",
+        "dirtyBadge": "Unsaved changes",
+        "cleanBadge": "All changes saved",
+        "saveTier": "Save Package",
+        "tierSavedSuccess": "Package changes saved successfully",
+        "basicsTitle": "Basic Package Info",
+        "nameLabel": "Package Name",
+        "highlightsLabel": "Features & Guarantees",
+        "addHighlight": "Add feature",
+        "highlightPlaceholder": "Feature {n} (e.g. Essential appliances with official warranty)",
+        "roomsTitle": "Room Products",
+        "addProduct": "Add product",
+        "roomEmpty": "No products added to this room yet",
+        "flaggedBadge": "Out of stock / hidden",
+        "addProductTitle": "Add product to {room}",
+        "addProductDescription": "Search the catalog to add a product to this room.",
+        "searchPlaceholder": "Search by name or model code…",
+        "noProductsFound": "No matching products found"
+      },
+      "settings": {
+        "title": "Bridal Reservation Settings",
+        "depositPctLabel": "Required Deposit Percentage",
+        "depositPctHint": "Percentage of reservation total (between 1% and 50%)",
+        "lockDaysLabel": "Price Lock Duration (days)",
+        "lockDaysHint": "Number of days price is locked after deposit (between 7 and 180 days)",
+        "notice": "Existing reservations will not be affected",
+        "saveButton": "Save Settings",
+        "savedSuccess": "Bridal settings saved successfully",
+        "depositPctError": "Deposit percentage must be between 1 and 50",
+        "lockDaysError": "Lock duration must be between 7 and 180 days"
+      },
+      "errors": {
+        "deliveryDateInvalid": "Please choose a valid delivery date not earlier than today",
+        "extendDateInvalid": "Extension date must be after today"
+      }
     }
   },
   "validation": {
     "emailRequired": "Please enter your email",
     "emailInvalid": "Invalid email address",
-    "passwordRequired": "Please enter your password"
+    "passwordRequired": "Please enter your password",
+    "priceRequired": "Please enter a valid price"
   },
   "errors": {
     "generic": "An unexpected error occurred. Please try again."

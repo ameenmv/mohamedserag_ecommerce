@@ -4,6 +4,7 @@ export const FUNNEL_EVENTS = [
   'checkout_start',
   'order_placed',
   'bridal_list_created',
+  'bridal_list_shared',
   'bridal_reserved',
   'whatsapp_click',
   'search',

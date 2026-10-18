@@ -1,5 +1,3 @@
-import { z } from 'zod'
-
 /**
  * Converts an amount in EGP to integer piastres, rounded to the nearest piastre.
  */
@@ -40,8 +38,3 @@ export function formatEgp(p: number): string {
 export function formatEgpWithUnit(p: number): string {
   return `${formatEgp(p)} ج.م`
 }
-
-/**
- * Non-negative integer piastre amount schema.
- */
-export const moneySchema = z.number().int().nonnegative()

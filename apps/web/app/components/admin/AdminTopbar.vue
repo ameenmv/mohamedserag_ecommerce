@@ -20,6 +20,9 @@ const localePath = useLocalePath()
 const pageTitle = useAdminPageTitle()
 const { isDark, toggleTheme } = useAdminTheme()
 const adminUser = useAdminUser()
+const hydrated = useHydrated()
+
+const showDark = computed(() => hydrated.value && isDark.value)
 
 async function handleLogout(): Promise<void> {
   await adminUser.logout()
@@ -84,11 +87,11 @@ async function handleLogout(): Promise<void> {
       <!-- Theme toggle -->
       <button
         type="button"
-        :aria-label="isDark ? t('admin.commandPalette.lightMode') : t('admin.commandPalette.darkMode')"
+        :aria-label="showDark ? t('admin.commandPalette.lightMode') : t('admin.commandPalette.darkMode')"
         class="inline-flex size-11 shrink-0 items-center justify-center rounded-full border border-border bg-card text-primary transition-colors hover:border-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-reduce:transition-none"
         @click="toggleTheme()"
       >
-        <Sun v-if="isDark" class="size-5 text-serag-gold-hi" aria-hidden="true" />
+        <Sun v-if="showDark" class="size-5 text-serag-gold-hi" aria-hidden="true" />
         <Moon v-else class="size-5" aria-hidden="true" />
       </button>
 
