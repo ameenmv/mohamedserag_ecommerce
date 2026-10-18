@@ -1,0 +1,81 @@
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common'
+import { canTransition, type OrderStatus, type OrderStockShortage } from '@serag/shared'
+import { Prisma } from '../generated/prisma/client.js'
+import { PrismaService } from '../prisma/prisma.service.js'
+import { OrderStockService } from './order-stock.service.js'
+
+export interface TransitionParams {
+  orderId: string
+  to: OrderStatus
+  userId?: string | null
+  note?: string | null
+}
+
+@Injectable()
+export class OrderStatusService {
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly orderStockService: OrderStockService,
+  ) {}
+
+  /**
+   * Performs an atomic, conditionally checked status transition on an order.
+   * Concurrency-safe: updateMany ensures winner proceeds and loser gets 409.
+   */
+  async transition(
+    tx: Prisma.TransactionClient,
+    params: TransitionParams,
+  ): Promise<{ shortages: OrderStockShortage[] }> {
+    const order = await tx.order.findUnique({
+      where: { id: params.orderId },
+      select: { id: true, status: true },
+    })
+
+    if (!order) {
+      throw new NotFoundException('الطلب مش موجود')
+    }
+
+    const current = order.status
+    if (!canTransition(current, params.to)) {
+      throw new ConflictException('الحالة دي مش مسموحة للطلب ده')
+    }
+
+    const updated = await tx.order.updateMany({
+      where: { id: params.orderId, status: current },
+      data: { status: params.to },
+    })
+
+    if (updated.count === 0) {
+      throw new ConflictException('الطلب اتحدث، حدّث الصفحة')
+    }
+
+    await tx.orderEvent.create({
+      data: {
+        orderId: params.orderId,
+        status: params.to,
+        note: params.note ?? null,
+        userId: params.userId ?? null,
+      },
+    })
+
+    if (params.to === 'confirmed') {
+      return this.orderStockService.deductForOrder(tx, params.orderId, params.userId)
+    }
+
+    if (params.to === 'cancelled') {
+      await this.orderStockService.restoreForOrder(tx, params.orderId, params.userId)
+      return { shortages: [] }
+    }
+
+    return { shortages: [] }
+  }
+
+  /**
+   * Convenience wrapper that executes a transition in its own transaction.
+   */
+  async transitionOrder(params: TransitionParams): Promise<{ shortages: OrderStockShortage[] }> {
+    return this.prisma.$transaction(async (tx) => {
+      return this.transition(tx, params)
+    })
+  }
+}

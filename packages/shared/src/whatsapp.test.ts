@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { waLink, renderTemplate, DEFAULT_TEMPLATES } from './whatsapp.js'
+import { waLink, renderTemplate, DEFAULT_TEMPLATES, statusTemplateKey } from './whatsapp.js'
 
 describe('waLink', () => {
   it('builds a wa.me link from local Egyptian mobile or international 201... format', () => {
@@ -29,6 +29,7 @@ describe('renderTemplate & DEFAULT_TEMPLATES', () => {
       'order_confirmed',
       'order_out_for_delivery',
       'order_delivered',
+      'order_cancelled',
       'payment_rejected',
       'payment_proof',
       'bridal_locked',
@@ -36,6 +37,14 @@ describe('renderTemplate & DEFAULT_TEMPLATES', () => {
       'product_question',
       'traders_contact',
     ])
+
+    const cancelled = renderTemplate(DEFAULT_TEMPLATES.order_cancelled, {
+      customerName: 'أحمد',
+      orderNo: 'SR-2026-000100',
+    })
+    expect(cancelled).toContain('أحمد')
+    expect(cancelled).toContain('SR-2026-000100')
+    expect(cancelled).toContain('تم إلغاء طلبك')
 
     const proof = renderTemplate(DEFAULT_TEMPLATES.payment_proof, {
       orderNo: 'SR-2026-01',
@@ -56,3 +65,17 @@ describe('renderTemplate & DEFAULT_TEMPLATES', () => {
     expect(bridal).toContain('2026-11-15')
   })
 })
+
+describe('statusTemplateKey', () => {
+  it('maps order statuses to appropriate template keys', () => {
+    expect(statusTemplateKey('confirmed')).toBe('order_confirmed')
+    expect(statusTemplateKey('out_for_delivery')).toBe('order_out_for_delivery')
+    expect(statusTemplateKey('delivered')).toBe('order_delivered')
+    expect(statusTemplateKey('payment_rejected')).toBe('payment_rejected')
+    expect(statusTemplateKey('cancelled')).toBe('order_cancelled')
+    expect(statusTemplateKey('new')).toBeNull()
+    expect(statusTemplateKey('awaiting_payment')).toBeNull()
+    expect(statusTemplateKey('awaiting_deposit')).toBeNull()
+  })
+})
+

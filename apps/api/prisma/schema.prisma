@@ -376,6 +376,8 @@ model Order {
   zoneId             String             @map("zone_id")
   address            String
   notes              String?
+  /// Admin-only notes, never shown to the customer (max 2000 chars, validated in shared schema)
+  internalNotes      String?            @map("internal_notes")
   preferredDate      DateTime?          @map("preferred_date")
   agreedDeliveryDate DateTime?          @map("agreed_delivery_date")
   /// Items subtotal in integer piastres

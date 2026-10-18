@@ -4,6 +4,7 @@ import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core'
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
 import { AuditInterceptor } from './audit/audit.interceptor.js'
 import { AdminCatalogModule } from './admin-catalog/admin-catalog.module.js'
+import { AdminOrdersModule } from './admin-orders/admin-orders.module.js'
 import { AuthModule } from './auth/auth.module.js'
 import { CatalogModule } from './catalog/catalog.module.js'
 import { OrdersModule } from './orders/orders.module.js'
@@ -24,6 +25,7 @@ import { TestSeedModule } from './test-seed/test-seed.module.js'
     AuthModule,
     CatalogModule,
     AdminCatalogModule,
+    AdminOrdersModule,
     OrdersModule,
   ],
   controllers: [HealthController],
