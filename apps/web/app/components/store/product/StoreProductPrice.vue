@@ -32,7 +32,7 @@ const previousPrice = computed(() =>
 
       <span
         v-if="previousPrice"
-        class="num text-[11px] font-medium text-muted-foreground/75 line-through decoration-muted-foreground/60 ms-1 sm:text-xs"
+        class="num text-[11px] font-medium text-muted-foreground line-through decoration-muted-foreground/60 ms-1 sm:text-xs"
         :aria-label="t('store.product.oldPriceAria', { price: previousPrice.formatted })"
       >
         {{ previousPrice.digits }}
@@ -41,7 +41,7 @@ const previousPrice = computed(() =>
 
     <div v-if="discountPercent && discountPercent > 0" class="flex items-center">
       <span
-        class="num inline-flex items-center rounded-full bg-red-500/10 px-2 py-0.5 text-[10px] font-bold text-red-600 dark:bg-red-950/40 dark:text-red-400 sm:text-[11px]"
+        class="num inline-flex items-center rounded-full bg-red-500/10 px-2 py-0.5 text-[10px] font-bold text-red-700 dark:bg-red-950/40 dark:text-red-400 sm:text-[11px]"
       >
         {{ t('store.product.discountBadge', { percent: discountPercent }) }}
       </span>

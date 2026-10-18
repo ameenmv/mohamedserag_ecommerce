@@ -11,6 +11,8 @@ const props = withDefaults(
   },
 )
 
+const { t } = useI18n()
+
 // Prevent skeleton flash on SSR: only display skeletons on subsequent client pending states
 const isMounted = ref(false)
 if (import.meta.client) {
@@ -24,6 +26,10 @@ const showSkeletons = computed(() => isMounted.value && props.pending)
 
 <template>
   <div>
+    <h2 class="sr-only">
+      {{ t('store.listing.resultsHeading') }}
+    </h2>
+
     <!-- Client pending skeleton grid -->
     <div
       v-if="showSkeletons"

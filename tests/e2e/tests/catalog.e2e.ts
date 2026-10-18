@@ -99,6 +99,8 @@ test('mobile viewport filter button opens bottom sheet, live count updates, and 
 test('unknown category /c/nope shows the 404 page', async ({ app, screen }) => {
   await app.open('/c/nope');
   await expect(screen.getByText(/404/)).toBeVisible();
+  await expect(screen.getByRole('heading', 'الصفحة دي مش موجودة')).toBeVisible();
+  await expect(screen.getByRole('button', 'تسوّق كل المنتجات')).toBeVisible();
 });
 
 test('/en/c/refrigerators renders dir="ltr" with English UI text', async ({

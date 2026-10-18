@@ -6,6 +6,7 @@ import {
   parseCsv,
   piastresToEgp,
 } from '@serag/shared'
+import { Prisma } from '../generated/prisma/client.js'
 import { PrismaService } from '../prisma/prisma.service.js'
 
 function escapeCsvCell(val: string | number | null | undefined): string {
@@ -92,75 +93,78 @@ export class AdminProductImportService {
    * Logs a StockMovement record with reason: 'import' for each stock delta.
    */
   async apply(csv: string, adminUserId?: string): Promise<ImportApplyResult> {
-    const sources = await this.loadProductSources()
     const rows = parseCsv(csv)
-    const plan = buildImportPlan(rows, sources)
+    const initialSources = await this.loadProductSources()
+    const initialPlan = buildImportPlan(rows, initialSources)
 
-    if (plan.headerError) {
+    if (initialPlan.headerError) {
       throw new BadRequestException({
         message: 'خطأ في ترويسة ملف الاستيراد',
-        error: plan.headerError,
+        error: initialPlan.headerError,
       })
     }
 
-    const updateRows = plan.rows.filter((r) => r.status === 'update')
+    return this.prisma.$transaction(async (tx) => {
+      const sources = await this.loadProductSources(tx)
+      const plan = buildImportPlan(rows, sources)
 
-    if (updateRows.length > 0) {
-      await this.prisma.$transaction(async (tx) => {
-        for (const row of updateRows) {
-          if (!row.productId || !row.next) continue
+      const updateRows = plan.rows.filter((r) => r.status === 'update')
 
-          const updateData: {
-            price?: number
-            oldPrice?: number | null
-            stock?: number
-          } = {}
+      for (const row of updateRows) {
+        if (!row.productId || !row.next) continue
 
-          if (row.changes.includes('price')) {
-            updateData.price = row.next.price
-          }
-          if (row.changes.includes('oldPrice')) {
-            updateData.oldPrice = row.next.oldPrice
-          }
-          if (row.changes.includes('stock')) {
-            updateData.stock = row.next.stock
-          }
+        const updateData: {
+          price?: number
+          oldPrice?: number | null
+          stock?: number
+        } = {}
 
-          await tx.product.update({
-            where: { id: row.productId },
-            data: updateData,
-          })
-
-          if (row.changes.includes('stock') && row.current) {
-            const stockDiff = row.next.stock - row.current.stock
-            await tx.stockMovement.create({
-              data: {
-                productId: row.productId,
-                qty: stockDiff,
-                reason: 'import',
-                userId: adminUserId ?? null,
-              },
-            })
-          }
+        if (row.changes.includes('price')) {
+          updateData.price = row.next.price
         }
-      })
+        if (row.changes.includes('oldPrice')) {
+          updateData.oldPrice = row.next.oldPrice
+        }
+        if (row.changes.includes('stock')) {
+          updateData.stock = row.next.stock
+        }
+
+        await tx.product.update({
+          where: { id: row.productId },
+          data: updateData,
+        })
+
+        if (row.changes.includes('stock') && row.current) {
+          const stockDiff = row.next.stock - row.current.stock
+          await tx.stockMovement.create({
+            data: {
+              productId: row.productId,
+              qty: stockDiff,
+              reason: 'import',
+              userId: adminUserId ?? null,
+            },
+          })
+        }
+      }
 
       // No reindex: search text is built from name/brand/specs, not price or stock.
-    }
 
-    const updated = updateRows.length
-    const skipped = plan.summary.unchanged + plan.summary.duplicate + plan.summary.notFound
-    const errors = plan.summary.error
+      const updated = updateRows.length
+      const skipped = plan.summary.unchanged + plan.summary.duplicate + plan.summary.notFound
+      const errors = plan.summary.error
 
-    return {
-      updated,
-      skipped,
-      errors,
-    }
+      return {
+        updated,
+        skipped,
+        errors,
+      }
+    })
   }
 
-  private async loadProductSources(): Promise<ImportProductSource[]> {
-    const records = await this.prisma.product.findMany({
+  private async loadProductSources(
+    db: Pick<PrismaService, 'product'> | Prisma.TransactionClient = this.prisma,
+  ): Promise<ImportProductSource[]> {
+    const records = await db.product.findMany({
       select: {
         id: true,
         modelCode: true,

@@ -36,7 +36,7 @@
 - [x] T025 A Admin: products list/editor with live card preview, archive, images upload; categories, brands, spec templates
 - [x] T026 A Admin: CSV import with preview matched on model code (prices in EGP, converted to piastres)
 - [x] T027 A E2E: catalog, search, compare/wishlist, admin products specs
-- [ ] T028 C Slice review: gates, 375 px and 320 px checks, Lighthouse
+- [x] T028 C Slice review: gates, 375 px and 320 px checks, Lighthouse (a11y/SEO/best-practices 100; perf 63–70, LCP ≈ 4.2 s — follow-up before T091)
 
 ## Phase 2: Slice 2 — Cart, checkout & payments
 - [ ] T030 A API cart quote (re-price, zone by governorate+city, coupon placeholder hook), order creation (idempotent), public token

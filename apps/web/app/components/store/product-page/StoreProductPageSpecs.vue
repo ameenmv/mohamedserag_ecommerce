@@ -54,7 +54,7 @@ function isNumeric(spec: ProductDetailMergedSpec): boolean {
             </th>
             <td
               :class="[
-                'w-3/5 p-3.5 sm:px-5 sm:py-4 text-start text-muted-foreground',
+                'w-3/5 p-3.5 sm:px-5 sm:py-4 text-start text-foreground/80',
                 isNumeric(spec) ? 'num font-medium' : '',
               ]"
             >

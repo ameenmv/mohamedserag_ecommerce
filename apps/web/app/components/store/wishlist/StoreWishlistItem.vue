@@ -53,7 +53,7 @@ function handleRemove(): void {
     </div>
 
     <!-- Product Card Inner Content -->
-    <StoreProductCard :product="item.card" />
+    <StoreProductCard :product="item.card" :show-add-to-cart="false" />
 
     <!-- Wishlist Item Footer Actions -->
     <div class="mt-3 flex items-center gap-2 border-t border-border pt-2.5">

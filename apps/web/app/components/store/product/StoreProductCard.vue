@@ -6,9 +6,11 @@ const props = withDefaults(
   defineProps<{
     product: ProductCard
     priority?: boolean
+    showAddToCart?: boolean
   }>(),
   {
     priority: false,
+    showAddToCart: true,
   },
 )
 
@@ -111,7 +113,7 @@ const productUrl = computed(() => localePath(`/p/${props.product.slug}`))
         :discount-percent="product.discountPercent"
       />
 
-      <StoreProductAddToCart :product="product" />
+      <StoreProductAddToCart v-if="showAddToCart" :product="product" />
     </div>
   </article>
 </template>
