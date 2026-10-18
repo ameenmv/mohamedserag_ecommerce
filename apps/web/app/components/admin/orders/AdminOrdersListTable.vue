@@ -4,7 +4,7 @@ import type {
   AdminOrderRow,
 } from '@serag/shared'
 import { ArrowLeft } from '@lucide/vue'
-import { statusBadgeClass } from '~/utils/admin-orders'
+import { bridalStatusBadgeClass, statusBadgeClass } from '~/utils/admin-orders'
 
 defineProps<{
   items: AdminOrderRow[]
@@ -42,12 +42,20 @@ const localePath = useLocalePath()
             class="transition-colors hover:bg-muted/30"
           >
             <td class="px-4 py-3 font-mono font-bold text-foreground whitespace-nowrap">
-              <NuxtLink
-                :to="localePath(`/admin/orders/${order.id}`)"
-                class="hover:underline text-serag-night dark:text-serag-gold"
-              >
-                {{ order.no }}
-              </NuxtLink>
+              <div class="flex items-center gap-2">
+                <NuxtLink
+                  :to="localePath(`/admin/orders/${order.id}`)"
+                  class="hover:underline text-serag-night dark:text-serag-gold"
+                >
+                  {{ order.no }}
+                </NuxtLink>
+                <span
+                  v-if="order.type === 'bridal'"
+                  class="inline-flex items-center px-1.5 py-0.5 rounded-md text-[10px] font-bold border border-serag-night/20 bg-serag-night/5 text-serag-night dark:border-serag-gold/30 dark:bg-serag-gold/10 dark:text-serag-gold"
+                >
+                  {{ t('admin.orders.types.bridal') }}
+                </span>
+              </div>
             </td>
             <td class="px-4 py-3 text-muted-foreground whitespace-nowrap">
               {{ formatDate(order.createdAt, locale) }}
@@ -74,12 +82,35 @@ const localePath = useLocalePath()
               {{ t(`admin.orders.paymentMethods.${order.paymentMethod}`) }}
             </td>
             <td class="px-4 py-3 whitespace-nowrap">
-              <span
-                class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold"
-                :class="statusBadgeClass(order.status)"
-              >
-                {{ t(`admin.orders.status.${order.status}`) }}
-              </span>
+              <div class="flex flex-col gap-1 items-start">
+                <span
+                  class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold"
+                  :class="statusBadgeClass(order.status)"
+                >
+                  {{ t(`admin.orders.status.${order.status}`) }}
+                </span>
+                <template v-if="order.type === 'bridal'">
+                  <span
+                    v-if="order.bridalStatus"
+                    class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold"
+                    :class="bridalStatusBadgeClass(order.bridalStatus)"
+                  >
+                    {{ t(`admin.bridal.status.${order.bridalStatus}`) }}
+                  </span>
+                  <span
+                    v-if="order.lockExpired"
+                    class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-destructive/10 text-destructive border border-destructive/20"
+                  >
+                    {{ t('admin.orders.bridal.lockExpired') }}
+                  </span>
+                  <span
+                    v-else-if="order.lockDaysLeft !== null && order.lockDaysLeft !== undefined"
+                    class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium text-muted-foreground bg-muted"
+                  >
+                    {{ t('admin.orders.bridal.daysLeft', { n: order.lockDaysLeft }) }}
+                  </span>
+                </template>
+              </div>
             </td>
             <td class="px-4 py-3 text-end whitespace-nowrap">
               <NuxtLink
@@ -103,18 +134,47 @@ const localePath = useLocalePath()
         class="flex flex-col gap-3 rounded-2xl border border-border/80 bg-card p-4 shadow-xs min-w-0"
       >
         <div class="flex items-center justify-between gap-2 flex-wrap">
-          <NuxtLink
-            :to="localePath(`/admin/orders/${order.id}`)"
-            class="font-mono text-sm font-bold text-serag-night dark:text-serag-gold hover:underline"
-          >
-            {{ order.no }}
-          </NuxtLink>
-          <span
-            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold"
-            :class="statusBadgeClass(order.status)"
-          >
-            {{ t(`admin.orders.status.${order.status}`) }}
-          </span>
+          <div class="flex items-center gap-2">
+            <NuxtLink
+              :to="localePath(`/admin/orders/${order.id}`)"
+              class="font-mono text-sm font-bold text-serag-night dark:text-serag-gold hover:underline"
+            >
+              {{ order.no }}
+            </NuxtLink>
+            <span
+              v-if="order.type === 'bridal'"
+              class="inline-flex items-center px-1.5 py-0.5 rounded-md text-[10px] font-bold border border-serag-night/20 bg-serag-night/5 text-serag-night dark:border-serag-gold/30 dark:bg-serag-gold/10 dark:text-serag-gold"
+            >
+              {{ t('admin.orders.types.bridal') }}
+            </span>
+          </div>
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <span
+              class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold"
+              :class="statusBadgeClass(order.status)"
+            >
+              {{ t(`admin.orders.status.${order.status}`) }}
+            </span>
+            <span
+              v-if="order.type === 'bridal' && order.bridalStatus"
+              class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold"
+              :class="bridalStatusBadgeClass(order.bridalStatus)"
+            >
+              {{ t(`admin.bridal.status.${order.bridalStatus}`) }}
+            </span>
+            <span
+              v-if="order.type === 'bridal' && order.lockExpired"
+              class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-destructive/10 text-destructive border border-destructive/20"
+            >
+              {{ t('admin.orders.bridal.lockExpired') }}
+            </span>
+            <span
+              v-else-if="order.type === 'bridal' && order.lockDaysLeft !== null && order.lockDaysLeft !== undefined"
+              class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium text-muted-foreground bg-muted"
+            >
+              {{ t('admin.orders.bridal.daysLeft', { n: order.lockDaysLeft }) }}
+            </span>
+          </div>
         </div>
 
         <div class="flex items-center justify-between text-xs text-muted-foreground border-b border-border/60 pb-2">

@@ -170,6 +170,7 @@ describe('admin-orders utils - actionsFor', () => {
 describe('admin-orders utils - query serialization and deserialization', () => {
   it('deserializes route query parameters into clean types', () => {
     const res = deserializeOrdersQuery({
+      type: 'bridal',
       q: '  SR-2026  ',
       status: 'awaiting_payment',
       paymentMethod: 'instapay',
@@ -179,6 +180,7 @@ describe('admin-orders utils - query serialization and deserialization', () => {
       pageSize: '50',
     })
     expect(res).toEqual({
+      type: 'bridal',
       q: 'SR-2026',
       status: 'awaiting_payment',
       paymentMethod: 'instapay',
@@ -191,12 +193,14 @@ describe('admin-orders utils - query serialization and deserialization', () => {
 
   it('serializes state into URL query params, skipping defaults and empties', () => {
     const query = serializeOrdersQuery({
+      type: 'bridal',
       q: 'SR-2026',
       status: 'confirmed',
       page: 2,
       pageSize: 20, // default, should not be in query
     })
     expect(query).toEqual({
+      type: 'bridal',
       q: 'SR-2026',
       status: 'confirmed',
       page: 2,

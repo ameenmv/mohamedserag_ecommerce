@@ -619,7 +619,13 @@
     "dashboard": {
       "welcome": "أهلاً {name}",
       "subtitle": "نظرة عامة على أداء المعرض والطلبات اليومية",
-      "emptyState": "لوحة التحكم هتتملي لما الطلبات تبدأ توصل"
+      "emptyState": "لوحة التحكم هتتملي لما الطلبات تبدأ توصل",
+      "expiringLocks": {
+        "title": "تثبيتات تنتهي قريباً",
+        "empty": "مفيش تثبيت هيخلص الأسبوع ده",
+        "expired": "انتهى",
+        "daysLeft": "باقي {n} يوم"
+      }
     },
     "topbar": {
       "portalSubtitle": "لوحة التحكم · معرض محمد سراج",
@@ -1074,11 +1080,21 @@
         "delivered": "تم التسليم",
         "cancelled": "ملغي"
       },
+      "types": {
+        "order": "طلبات",
+        "bridal": "جهاز عروسة"
+      },
       "filters": {
+        "allTypes": "كل الأنواع",
         "allMethods": "كل طرق الدفع",
         "from": "من تاريخ",
         "to": "إلى تاريخ",
         "clear": "مسح الفلاتر"
+      },
+      "bridal": {
+        "lockExpired": "انتهى تثبيت السعر",
+        "daysLeft": "باقي {n} يوم",
+        "outForDeliveryBlockedReason": "«خرج للتوصيل» بيتفعل بعد ما نتفق على ميعاد التوصيل"
       },
       "table": {
         "orderNo": "رقم الطلب",
@@ -1252,6 +1268,91 @@
         "amountExceedsRemaining": "المبلغ أكبر من المتبقي",
         "reasonRequired": "سبب الرفض يجب أن يكون 3 أحرف على الأقل",
         "reasonTooLong": "سبب الرفض لا يزيد عن 300 حرف"
+      }
+    },
+    "bridal": {
+      "pageTitle": "إدارة باقات وإعدادات العروسة",
+      "panelTitle": "بيانات حجز العروسة",
+      "tiersTabsAria": "باقات جهاز العروسة",
+      "daysCount": "{days} يوم",
+      "viewListLink": "عرض قائمة العروسة",
+      "status": {
+        "draft": "مسودة",
+        "awaiting_deposit": "بانتظار العربون",
+        "locked": "محجوز (السعر مثبت)",
+        "delivery_agreed": "اتفقنا على التوصيل",
+        "delivered": "تم التسليم",
+        "cancelled": "ملغي",
+        "lock_expired": "انتهى التثبيت"
+      },
+      "detail": {
+        "lockEndDate": "تاريخ انتهاء التثبيت",
+        "lockDays": "مدة التثبيت",
+        "preferredDate": "ميعاد التوصيل المفضل",
+        "agreedDeliveryDate": "ميعاد التوصيل المتفق عليه",
+        "listLink": "رابط قائمة العروسة",
+        "openBrideList": "افتح قائمة العروسة (للقراءة)"
+      },
+      "actions": {
+        "setDeliveryDate": "تحديد ميعاد التوصيل",
+        "setDeliveryDateNotice": "تحديد ميعاد التوصيل يخصم المنتجات من المخزون ويحول حالة الحجز إلى اتفقنا على التوصيل.",
+        "deliveryDateLabel": "تاريخ التوصيل",
+        "deliveryDateSuccess": "تم تحديد ميعاد التوصيل بنجاح",
+        "extendLock": "مدّ التثبيت",
+        "extendLockNotice": "اختر تاريخاً جديداً لانتهاء فترة تثبيت السعر.",
+        "extendLockUntilLabel": "تاريخ التثبيت الجديد",
+        "extendLockSuccess": "تم تمديد فترة التثبيت بنجاح",
+        "reprice": "حدّث الأسعار",
+        "repriceConfirmNotice": "سيتم تحديث أسعار الأجهزة بالأسعار الحالية في الكتالوج وبدء فترة تثبيت جديدة من اليوم لحساب العروسة.",
+        "confirmReprice": "تأكيد تحديث الأسعار",
+        "repriceSuccess": "تم تحديث الأسعار بنجاح"
+      },
+      "reprice": {
+        "resultTitle": "نتيجة تحديث الأسعار",
+        "resultDescription": "تم تحديث أسعار القائمة وبدء فترة تثبيت جديدة.",
+        "oldTotal": "الإجمالي القديم",
+        "newTotal": "الإجمالي الجديد",
+        "difference": "فرق السعر",
+        "increased": "زاد {amount}",
+        "decreased": "قل {amount}",
+        "noDifference": "مفيش فرق",
+        "sendWhatsapp": "ابعت للعروسة على واتساب"
+      },
+      "editor": {
+        "totalLabel": "إجمالي الباقة (بالأسعار الحالية)",
+        "dirtyBadge": "تعديلات غير محفوظة",
+        "cleanBadge": "كل التعديلات محفوظة",
+        "saveTier": "حفظ الباقة",
+        "tierSavedSuccess": "تم حفظ تعديلات الباقة بنجاح",
+        "basicsTitle": "بيانات الباقة الأساسية",
+        "nameLabel": "اسم الباقة",
+        "highlightsLabel": "الميزات والضمانات",
+        "addHighlight": "أضف ميزة",
+        "highlightPlaceholder": "ميزة {n} (مثال: أجهزة أساسية بضمان معتمد)",
+        "roomsTitle": "منتجات الغرف",
+        "addProduct": "أضف منتج",
+        "roomEmpty": "لا توجد منتجات مضافة لهذه الغرفة بعد",
+        "flaggedBadge": "نفذ/مخفي",
+        "addProductTitle": "إضافة منتج إلى {room}",
+        "addProductDescription": "ابحث عن المنتج من الكتالوج لإضافته لهذه الغرفة.",
+        "searchPlaceholder": "ابحث بالاسم أو كود الموديل…",
+        "noProductsFound": "لا توجد منتجات مطابقة للبحث"
+      },
+      "settings": {
+        "title": "إعدادات حجز العروسة",
+        "depositPctLabel": "نسبة العربون المطلوب",
+        "depositPctHint": "النسبة المئوية من إجمالي الحجز (بين 1% و50%)",
+        "lockDaysLabel": "مدة تثبيت الأسعار (أيام)",
+        "lockDaysHint": "عدد أيام تثبيت السعر بعد دفع العربون (بين 7 و180 يوماً)",
+        "notice": "الحجوزات الحالية مش هتتأثر",
+        "saveButton": "حفظ الإعدادات",
+        "savedSuccess": "تم حفظ إعدادات العروسة بنجاح",
+        "depositPctError": "نسبة العربون يجب أن تكون بين 1 و50",
+        "lockDaysError": "مدة التثبيت يجب أن تكون بين 7 و180 يوماً"
+      },
+      "errors": {
+        "deliveryDateInvalid": "يرجى اختيار تاريخ توصيل صحيح لا يسبق اليوم",
+        "extendDateInvalid": "تاريخ التمديد يجب أن يكون بعد تاريخ اليوم"
       }
     }
   },

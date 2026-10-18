@@ -15,6 +15,7 @@ const {
   tabs,
   loading,
   searchQuery,
+  selectedType,
   selectedMethod,
   dateFrom,
   dateTo,
@@ -56,11 +57,13 @@ const showingTo = computed(() => Math.min(currentPage.value * pageSize.value, to
     <!-- Toolbar -->
     <AdminOrdersListToolbar
       :search-query="searchQuery"
+      :selected-type="selectedType"
       :selected-method="selectedMethod"
       :date-from="dateFrom"
       :date-to="dateTo"
       :export-href="exportHref"
       @update:search-query="onSearchInput"
+      @update:selected-type="selectedType = $event"
       @update:selected-method="selectedMethod = $event"
       @update:date-from="dateFrom = $event"
       @update:date-to="dateTo = $event"

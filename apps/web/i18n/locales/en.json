@@ -619,7 +619,13 @@
     "dashboard": {
       "welcome": "Welcome {name}",
       "subtitle": "Overview of showroom performance and daily orders",
-      "emptyState": "Dashboard activity will appear once orders start arriving"
+      "emptyState": "Dashboard activity will appear once orders start arriving",
+      "expiringLocks": {
+        "title": "Locks Expiring Soon",
+        "empty": "No price locks expiring this week",
+        "expired": "Expired",
+        "daysLeft": "{n} days left"
+      }
     },
     "topbar": {
       "portalSubtitle": "Admin Portal · Mohamed Serag Showroom",
@@ -1074,11 +1080,21 @@
         "delivered": "Delivered",
         "cancelled": "Cancelled"
       },
+      "types": {
+        "order": "Orders",
+        "bridal": "Bridal"
+      },
       "filters": {
+        "allTypes": "All Types",
         "allMethods": "All Payment Methods",
         "from": "From Date",
         "to": "To Date",
         "clear": "Clear Filters"
+      },
+      "bridal": {
+        "lockExpired": "Price lock expired",
+        "daysLeft": "{n} days left",
+        "outForDeliveryBlockedReason": "Out for delivery is not available until a delivery date is agreed"
       },
       "table": {
         "orderNo": "Order No",
@@ -1252,6 +1268,91 @@
         "amountExceedsRemaining": "Amount exceeds remaining balance.",
         "reasonRequired": "Rejection reason must be at least 3 characters.",
         "reasonTooLong": "Rejection reason must not exceed 300 characters."
+      }
+    },
+    "bridal": {
+      "pageTitle": "Bridal Packages & Settings",
+      "panelTitle": "Bridal Reservation Details",
+      "tiersTabsAria": "Bridal package tiers",
+      "daysCount": "{days} days",
+      "viewListLink": "View bride's list",
+      "status": {
+        "draft": "Draft",
+        "awaiting_deposit": "Awaiting Deposit",
+        "locked": "Reserved (Price Locked)",
+        "delivery_agreed": "Delivery Agreed",
+        "delivered": "Delivered",
+        "cancelled": "Cancelled",
+        "lock_expired": "Lock Expired"
+      },
+      "detail": {
+        "lockEndDate": "Lock Expiration Date",
+        "lockDays": "Lock Duration",
+        "preferredDate": "Preferred Delivery Date",
+        "agreedDeliveryDate": "Agreed Delivery Date",
+        "listLink": "Bridal List Link",
+        "openBrideList": "Open bride's list (view-only)"
+      },
+      "actions": {
+        "setDeliveryDate": "Set Delivery Date",
+        "setDeliveryDateNotice": "Setting a delivery date deducts items from inventory and moves status to delivery agreed.",
+        "deliveryDateLabel": "Delivery Date",
+        "deliveryDateSuccess": "Delivery date set successfully",
+        "extendLock": "Extend Lock",
+        "extendLockNotice": "Select a new date for price lock expiration.",
+        "extendLockUntilLabel": "New Lock Date",
+        "extendLockSuccess": "Price lock extended successfully",
+        "reprice": "Reprice",
+        "repriceConfirmNotice": "List items will take current catalog prices and a new lock period starts today for the bride.",
+        "confirmReprice": "Confirm Reprice",
+        "repriceSuccess": "Prices updated successfully"
+      },
+      "reprice": {
+        "resultTitle": "Reprice Result",
+        "resultDescription": "List prices updated and a new lock period started.",
+        "oldTotal": "Old Total",
+        "newTotal": "New Total",
+        "difference": "Price Difference",
+        "increased": "Increased by {amount}",
+        "decreased": "Decreased by {amount}",
+        "noDifference": "No difference",
+        "sendWhatsapp": "Send to Bride on WhatsApp"
+      },
+      "editor": {
+        "totalLabel": "Package Total (at current prices)",
+        "dirtyBadge": "Unsaved changes",
+        "cleanBadge": "All changes saved",
+        "saveTier": "Save Package",
+        "tierSavedSuccess": "Package changes saved successfully",
+        "basicsTitle": "Basic Package Info",
+        "nameLabel": "Package Name",
+        "highlightsLabel": "Features & Guarantees",
+        "addHighlight": "Add feature",
+        "highlightPlaceholder": "Feature {n} (e.g. Essential appliances with official warranty)",
+        "roomsTitle": "Room Products",
+        "addProduct": "Add product",
+        "roomEmpty": "No products added to this room yet",
+        "flaggedBadge": "Out of stock / hidden",
+        "addProductTitle": "Add product to {room}",
+        "addProductDescription": "Search the catalog to add a product to this room.",
+        "searchPlaceholder": "Search by name or model code…",
+        "noProductsFound": "No matching products found"
+      },
+      "settings": {
+        "title": "Bridal Reservation Settings",
+        "depositPctLabel": "Required Deposit Percentage",
+        "depositPctHint": "Percentage of reservation total (between 1% and 50%)",
+        "lockDaysLabel": "Price Lock Duration (days)",
+        "lockDaysHint": "Number of days price is locked after deposit (between 7 and 180 days)",
+        "notice": "Existing reservations will not be affected",
+        "saveButton": "Save Settings",
+        "savedSuccess": "Bridal settings saved successfully",
+        "depositPctError": "Deposit percentage must be between 1 and 50",
+        "lockDaysError": "Lock duration must be between 7 and 180 days"
+      },
+      "errors": {
+        "deliveryDateInvalid": "Please choose a valid delivery date not earlier than today",
+        "extendDateInvalid": "Extension date must be after today"
       }
     }
   },

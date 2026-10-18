@@ -52,13 +52,13 @@ description: "Tasks for Slice 3 — «جهّز بيتك» Bridal Builder"
 
 - [x] T019 [US4] `apps/api/src/admin-bridal/bridal-reservation.service.ts` + controller: delivery-date (stock reason `bridal_delivery_agreed`, shortages), lock-extend, reprice (WhatsApp url), `GET /admin/bridal/expiring`; cancel marks list cancelled; order list `type` filter + bridal columns; detail `bridal` block
 - [x] T020 [US4] API e2e `apps/api/test/admin-bridal.e2e-spec.ts`: permissions/CSRF, delivery date stock + cancel restore, extend validation, reprice totals and new lock, expiring list
-- [ ] T021 [US4] Web admin: orders list type filter + bridal status/days-left badges; order detail bridal panel (status, lock end, days left, expired badge, actions dialogs: delivery date, extend, re-price with old/new totals + WhatsApp button); dashboard card `AdminDashboardExpiringLocks`
-- [ ] T022 [US4] TesterArmy `tests/e2e/tests/bridal-admin.e2e.ts`: filter, agree delivery, extend/re-price on an expired seeded reservation, dashboard card
+- [x] T021 [US4] Web admin: orders list type filter + bridal status/days-left badges; order detail bridal panel (status, lock end, days left, expired badge, actions dialogs: delivery date, extend, re-price with old/new totals + WhatsApp button); dashboard card `AdminDashboardExpiringLocks`
+- [x] T022 [US4] TesterArmy `tests/e2e/tests/bridal-admin.e2e.ts`: filter, agree delivery, extend/re-price on an expired seeded reservation, dashboard card
 
 ## Phase 7: User Story 5 — Tiers and settings (P2)
 
 - [x] T023 [US5] `admin-bridal-tiers.controller.ts`/service: tiers GET/PUT, settings GET/PUT (`bridal.manage`, CSRF, audit) + API e2e
-- [ ] T024 [US5] `pages/admin/bridal.vue` + `components/admin/bridal/*`: three tier tabs, per-room product list with search add, qty, remove, flagged items, highlights, settings form; nav entry already at `/admin/bridal`
+- [x] T024 [US5] `pages/admin/bridal.vue` + `components/admin/bridal/*`: three tier tabs, per-room product list with search add, qty, remove, flagged items, highlights, settings form; nav entry already at `/admin/bridal`
 
 ## Phase 8: User Story 6 — Product page button & funnel (P3)
 

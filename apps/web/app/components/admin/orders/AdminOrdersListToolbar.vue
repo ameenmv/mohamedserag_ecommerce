@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import {
   PAYMENT_METHODS,
+  type OrderType,
   type PaymentMethod,
 } from '@serag/shared'
 import { Download, RotateCcw, Search } from '@lucide/vue'
 
 defineProps<{
   searchQuery: string
+  selectedType: OrderType | 'all'
   selectedMethod: PaymentMethod | 'all'
   dateFrom: string
   dateTo: string
@@ -15,6 +17,7 @@ defineProps<{
 
 const emit = defineEmits<{
   'update:searchQuery': [val: string]
+  'update:selectedType': [val: OrderType | 'all']
   'update:selectedMethod': [val: PaymentMethod | 'all']
   'update:dateFrom': [val: string]
   'update:dateTo': [val: string]
@@ -56,8 +59,26 @@ const { t } = useI18n()
       </div>
     </div>
 
-    <!-- Filters row: Payment Method, Date Range, Clear -->
-    <div class="grid grid-cols-2 gap-2.5 sm:grid-cols-4 min-w-0">
+    <!-- Filters row: Type, Payment Method, Date Range, Clear -->
+    <div class="grid grid-cols-2 gap-2.5 sm:grid-cols-5 min-w-0">
+      <!-- Order Type Filter -->
+      <AdminFormSelect
+        :model-value="selectedType"
+        :aria-label="t('admin.orders.filters.allTypes')"
+        class="h-10 rounded-xl text-xs"
+        @update:model-value="emit('update:selectedType', $event as OrderType | 'all'); emit('change')"
+      >
+        <option value="all">
+          {{ t('admin.orders.filters.allTypes') }}
+        </option>
+        <option value="order">
+          {{ t('admin.orders.types.order') }}
+        </option>
+        <option value="bridal">
+          {{ t('admin.orders.types.bridal') }}
+        </option>
+      </AdminFormSelect>
+
       <!-- Payment Method Filter -->
       <AdminFormSelect
         :model-value="selectedMethod"

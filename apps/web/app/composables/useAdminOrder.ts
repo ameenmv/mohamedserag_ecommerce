@@ -1,6 +1,8 @@
 import type {
   AdminOrderDetail,
+  BridalRepriceResult,
   OrderStatus,
+  OrderStockShortage,
   WhatsAppTemplateKey,
 } from '@serag/shared'
 import { buildStatusWhatsappUrl } from '~/utils/admin-orders'
@@ -153,6 +155,73 @@ export function useAdminOrder(orderId: string) {
     }
   }
 
+  async function agreeDeliveryDate(
+    date: string,
+  ): Promise<{ shortages: OrderStockShortage[] } | null> {
+    actionPending.value = true
+    actionError.value = null
+    try {
+      const res = await adminFetch<{ shortages: OrderStockShortage[] }>(
+        `/admin/orders/${encodeURIComponent(orderId)}/delivery-date`,
+        {
+          method: 'POST',
+          body: { date },
+        },
+      )
+      await load()
+      return res
+    } catch (err) {
+      actionError.value = parseAdminApiError(err).message
+      notify.error(actionError.value)
+      return null
+    } finally {
+      actionPending.value = false
+    }
+  }
+
+  async function extendLock(until: string): Promise<{ lockedUntil: Date } | null> {
+    actionPending.value = true
+    actionError.value = null
+    try {
+      const res = await adminFetch<{ lockedUntil: Date }>(
+        `/admin/orders/${encodeURIComponent(orderId)}/lock-extend`,
+        {
+          method: 'POST',
+          body: { until },
+        },
+      )
+      await load()
+      return res
+    } catch (err) {
+      actionError.value = parseAdminApiError(err).message
+      notify.error(actionError.value)
+      return null
+    } finally {
+      actionPending.value = false
+    }
+  }
+
+  async function reprice(): Promise<BridalRepriceResult | null> {
+    actionPending.value = true
+    actionError.value = null
+    try {
+      const res = await adminFetch<BridalRepriceResult>(
+        `/admin/orders/${encodeURIComponent(orderId)}/reprice`,
+        {
+          method: 'POST',
+        },
+      )
+      await load()
+      return res
+    } catch (err) {
+      actionError.value = parseAdminApiError(err).message
+      notify.error(actionError.value)
+      return null
+    } finally {
+      actionPending.value = false
+    }
+  }
+
   return {
     detail,
     loading,
@@ -165,5 +234,8 @@ export function useAdminOrder(orderId: string) {
     saveNotes,
     logWhatsapp,
     sendWhatsapp,
+    agreeDeliveryDate,
+    extendLock,
+    reprice,
   }
 }

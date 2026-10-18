@@ -27,6 +27,9 @@ const {
   saveNotes,
   logWhatsapp,
   sendWhatsapp,
+  agreeDeliveryDate,
+  extendLock,
+  reprice,
 } = useAdminOrder(orderId)
 
 await load()
@@ -127,10 +130,26 @@ async function handleSendBridalLockedWhatsapp() {
           :remaining="detail.remaining"
         />
 
+        <!-- Bridal Reservation Panel (if detail.bridal is present) -->
+        <AdminOrdersDetailBridal
+          v-if="detail.bridal"
+          :bridal="detail.bridal"
+          :order-id="detail.id"
+          :order-no="detail.no"
+          :customer="detail.customer"
+          :action-pending="actionPending"
+          :agree-delivery-date="agreeDeliveryDate"
+          :extend-lock="extendLock"
+          :reprice="reprice"
+          :log-whatsapp="logWhatsapp"
+        />
+
         <!-- Status Transitions Actions -->
         <AdminOrdersDetailStatusActions
           :allowed-transitions="detail.allowedTransitions"
           :action-pending="actionPending"
+          :is-bridal="detail.type === 'bridal'"
+          :bridal-status="detail.bridal?.status"
           @change-status="handleStatusChange"
         />
 

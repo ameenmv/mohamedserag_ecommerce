@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { OrderStatus } from '@serag/shared'
+import type { BridalStatus, OrderStatus } from '@serag/shared'
 import { Ban, Check, ShieldAlert, Truck } from '@lucide/vue'
 import {
   Dialog,
@@ -11,9 +11,11 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 
-defineProps<{
+const props = defineProps<{
   allowedTransitions: OrderStatus[]
   actionPending?: boolean
+  isBridal?: boolean
+  bridalStatus?: BridalStatus | null
 }>()
 
 const emit = defineEmits<{
@@ -21,6 +23,13 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+
+function isTransitionBlocked(to: OrderStatus): boolean {
+  if (to === 'out_for_delivery' && props.isBridal && props.bridalStatus !== 'delivery_agreed') {
+    return true
+  }
+  return false
+}
 
 const cancelDialogOpen = ref(false)
 const cancelReason = ref('')
@@ -94,19 +103,27 @@ function transitionButtonClass(to: OrderStatus) {
       {{ t('admin.orders.detail.noStatusActions') }}
     </div>
 
-    <div v-else class="flex flex-wrap items-center gap-2.5">
-      <button
-        v-for="to in allowedTransitions"
-        :key="to"
-        type="button"
-        :disabled="actionPending"
-        class="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl px-4 text-xs font-bold transition-all disabled:opacity-50 shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        :class="transitionButtonClass(to)"
-        @click="onTransitionClick(to)"
+    <div v-else class="flex flex-col gap-2">
+      <div class="flex flex-wrap items-center gap-2.5">
+        <button
+          v-for="to in allowedTransitions"
+          :key="to"
+          type="button"
+          :disabled="actionPending || isTransitionBlocked(to)"
+          class="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl px-4 text-xs font-bold transition-all disabled:opacity-50 shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          :class="transitionButtonClass(to)"
+          @click="onTransitionClick(to)"
+        >
+          <component :is="transitionIcon(to)" class="size-4" aria-hidden="true" />
+          <span>{{ t(`admin.orders.detail.transition.${to}`) }}</span>
+        </button>
+      </div>
+      <p
+        v-if="isBridal && bridalStatus !== 'delivery_agreed' && allowedTransitions.includes('out_for_delivery')"
+        class="text-xs text-muted-foreground font-medium"
       >
-        <component :is="transitionIcon(to)" class="size-4" aria-hidden="true" />
-        <span>{{ t(`admin.orders.detail.transition.${to}`) }}</span>
-      </button>
+        {{ t('admin.orders.bridal.outForDeliveryBlockedReason') }}
+      </p>
     </div>
 
     <!-- Cancel dialog: shadcn Dialog gives role=dialog, focus trap and Escape to close. -->

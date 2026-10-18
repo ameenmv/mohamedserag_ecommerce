@@ -8,7 +8,9 @@ import {
   waLink,
   type AdminOrderDetail,
   type AdminOrderListQueryOutput,
+  type BridalStatus,
   type OrderStatus,
+  type OrderType,
   type PaymentMethod,
   type WhatsAppTemplateKey,
 } from '@serag/shared'
@@ -48,6 +50,25 @@ export function statusBadgeClass(status: OrderStatus): string {
     case 'payment_rejected':
       return 'bg-destructive text-white hover:bg-destructive/90'
     case 'awaiting_payment':
+    case 'awaiting_deposit':
+      return 'bg-amber-100 text-amber-900 border-amber-300 dark:bg-amber-950 dark:text-amber-200 dark:border-amber-800'
+    case 'cancelled':
+      return 'border-border text-muted-foreground'
+    default:
+      return 'bg-secondary text-secondary-foreground'
+  }
+}
+
+export function bridalStatusBadgeClass(status?: BridalStatus | null): string {
+  switch (status) {
+    case 'locked':
+      return 'bg-serag-night text-white hover:bg-serag-night/90 dark:bg-serag-gold dark:text-serag-ink font-bold'
+    case 'delivery_agreed':
+      return 'bg-sky-600 text-white hover:bg-sky-700 dark:bg-sky-600 dark:text-white font-bold'
+    case 'delivered':
+      return 'bg-emerald-600 text-white hover:bg-emerald-700 dark:bg-emerald-600 dark:text-white'
+    case 'lock_expired':
+      return 'bg-destructive/10 text-destructive border border-destructive/20 font-bold'
     case 'awaiting_deposit':
       return 'bg-amber-100 text-amber-900 border-amber-300 dark:bg-amber-950 dark:text-amber-200 dark:border-amber-800'
     case 'cancelled':
@@ -177,6 +198,7 @@ export function deserializeOrdersQuery(rawQuery: Record<string, unknown>): Admin
   }
 
   return {
+    type: pick(shape.type, rawQuery.type),
     q: pick(shape.q, rawQuery.q),
     status: pick(shape.status, rawQuery.status),
     paymentMethod: pick(shape.paymentMethod, rawQuery.paymentMethod),
@@ -187,8 +209,9 @@ export function deserializeOrdersQuery(rawQuery: Record<string, unknown>): Admin
   }
 }
 
-/** List filters as the UI holds them: `'all'` means "no filter" for status and method. */
+/** List filters as the UI holds them: `'all'` means "no filter" for type, status and method. */
 export interface OrdersListFilters {
+  type?: OrderType | 'all'
   q?: string
   status?: OrderStatus | 'all'
   paymentMethod?: PaymentMethod | 'all'
@@ -200,6 +223,7 @@ export interface OrdersListFilters {
 
 export function serializeOrdersQuery(input: OrdersListFilters): Record<string, string | number> {
   const query: Record<string, string | number> = {}
+  if (input.type && input.type !== 'all') query.type = input.type
   if (input.q && input.q.trim()) query.q = input.q.trim()
   if (input.status && input.status !== 'all') query.status = input.status
   if (input.paymentMethod && input.paymentMethod !== 'all') query.paymentMethod = input.paymentMethod

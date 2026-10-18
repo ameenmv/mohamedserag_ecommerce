@@ -2,6 +2,7 @@ import type {
   AdminOrderListResponse,
   AdminOrderRow,
   OrderStatus,
+  OrderType,
   PaymentMethod,
 } from '@serag/shared'
 import {
@@ -21,6 +22,7 @@ export function useAdminOrdersList() {
   const initial = deserializeOrdersQuery(route.query)
 
   const searchQuery = ref(initial.q ?? '')
+  const selectedType = ref<OrderType | 'all'>(initial.type ?? 'all')
   const selectedStatus = ref<OrderStatus | 'all'>(initial.status ?? 'all')
   const selectedMethod = ref<PaymentMethod | 'all'>(initial.paymentMethod ?? 'all')
   const dateFrom = ref(initial.from ?? '')
@@ -51,6 +53,7 @@ export function useAdminOrdersList() {
   const exportHref = computed(() => {
     const base = config.public.apiBase || '/api'
     const params = new URLSearchParams()
+    if (selectedType.value !== 'all') params.set('type', selectedType.value)
     if (selectedStatus.value !== 'all') params.set('status', selectedStatus.value)
     if (selectedMethod.value !== 'all') params.set('paymentMethod', selectedMethod.value)
     if (dateFrom.value) params.set('from', dateFrom.value)
@@ -88,6 +91,7 @@ export function useAdminOrdersList() {
 
   function clearFilters() {
     searchQuery.value = ''
+    selectedType.value = 'all'
     selectedStatus.value = 'all'
     selectedMethod.value = 'all'
     dateFrom.value = ''
@@ -98,6 +102,7 @@ export function useAdminOrdersList() {
 
   async function syncToUrlAndFetch() {
     const q = serializeOrdersQuery({
+      type: selectedType.value === 'all' ? undefined : selectedType.value,
       q: searchQuery.value,
       status: selectedStatus.value === 'all' ? undefined : selectedStatus.value,
       paymentMethod: selectedMethod.value === 'all' ? undefined : selectedMethod.value,
@@ -115,6 +120,7 @@ export function useAdminOrdersList() {
     loading.value = true
     try {
       const cleanQuery = serializeOrdersQuery({
+        type: selectedType.value === 'all' ? undefined : selectedType.value,
         q: searchQuery.value,
         status: selectedStatus.value === 'all' ? undefined : selectedStatus.value,
         paymentMethod: selectedMethod.value === 'all' ? undefined : selectedMethod.value,
@@ -146,6 +152,7 @@ export function useAdminOrdersList() {
     tabs,
     loading,
     searchQuery,
+    selectedType,
     selectedStatus,
     selectedMethod,
     dateFrom,
