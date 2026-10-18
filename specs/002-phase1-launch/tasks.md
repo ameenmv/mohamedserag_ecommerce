@@ -35,7 +35,7 @@
 - [x] T024 A [P] Web: live search dropdown, compare bar + `/compare`, wishlist with `priceAtAdd`
 - [x] T025 A Admin: products list/editor with live card preview, archive, images upload; categories, brands, spec templates
 - [x] T026 A Admin: CSV import with preview matched on model code (prices in EGP, converted to piastres)
-- [ ] T027 A E2E: catalog, search, compare/wishlist, admin products specs
+- [x] T027 A E2E: catalog, search, compare/wishlist, admin products specs
 - [ ] T028 C Slice review: gates, 375 px and 320 px checks, Lighthouse
 
 ## Phase 2: Slice 2 — Cart, checkout & payments
