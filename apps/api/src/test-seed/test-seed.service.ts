@@ -1,11 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
-import { z } from 'zod'
 import {
   DEFAULT_ZONES,
   findZone,
   egpToPiastres,
   expandSynonyms,
   OWNER_ROLE_KEY,
+  zonesSchema,
 } from '@serag/shared'
 import argon2 from 'argon2'
 import { nanoid } from 'nanoid'
@@ -44,20 +44,6 @@ const DEFAULT_SEARCH_SYNONYMS: string[][] = [
   ['نوفروست', 'نو فروست', 'no frost', 'nofrost'],
   ['ديفروست', 'defrost'],
 ]
-
-const zonePlaceSchema = z.object({
-  governorate: z.string(),
-  city: z.string().optional(),
-})
-
-const zoneSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  fee: z.number().int().min(0),
-  places: z.array(zonePlaceSchema),
-})
-
-const zonesSchema = z.array(zoneSchema)
 
 @Injectable()
 export class TestSeedService {

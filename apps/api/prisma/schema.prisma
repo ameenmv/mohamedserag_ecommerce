@@ -394,6 +394,8 @@ model Order {
   depositAmount      Int?               @map("deposit_amount")
   /// Sum of confirmed payments in integer piastres
   paidAmount         Int                @default(0) @map("paid_amount")
+  /// Client-generated key so a retried checkout returns the same order instead of a duplicate
+  idempotencyKey     String?            @unique @map("idempotency_key")
   publicToken        String             @unique @map("public_token")
   confirmToken       String             @unique @map("confirm_token")
   bridalListId       String?            @unique @map("bridal_list_id")
