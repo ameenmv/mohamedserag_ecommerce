@@ -342,6 +342,23 @@ export class TestSeedService {
 
       let deletedProductsCount = 0
       if (productIds.length > 0) {
+        // Find and delete any storefront orders created containing products from this test run
+        const ordersWithProducts = await tx.order.findMany({
+          where: { items: { some: { productId: { in: productIds } } } },
+          select: { id: true },
+        })
+        const orderIdsWithProducts = ordersWithProducts.map((o) => o.id)
+        if (orderIdsWithProducts.length > 0) {
+          await tx.payment.deleteMany({ where: { orderId: { in: orderIdsWithProducts } } })
+          await tx.stockMovement.deleteMany({ where: { orderId: { in: orderIdsWithProducts } } })
+          await tx.whatsAppMessage.deleteMany({ where: { orderId: { in: orderIdsWithProducts } } })
+          await tx.orderEvent.deleteMany({ where: { orderId: { in: orderIdsWithProducts } } })
+          await tx.orderItem.deleteMany({ where: { orderId: { in: orderIdsWithProducts } } })
+          await tx.couponRedemption.deleteMany({ where: { orderId: { in: orderIdsWithProducts } } })
+          const deletedStoreOrdersRes = await tx.order.deleteMany({ where: { id: { in: orderIdsWithProducts } } })
+          deletedOrdersCount += deletedStoreOrdersRes.count
+        }
+
         await tx.orderItem.deleteMany({ where: { productId: { in: productIds } } })
         await tx.productImage.deleteMany({ where: { productId: { in: productIds } } })
         await tx.flashSaleItem.deleteMany({ where: { productId: { in: productIds } } })
@@ -416,6 +433,22 @@ export class TestSeedService {
       const productIds = products.map((p) => p.id)
       let deletedProductsCount = 0
       if (productIds.length > 0) {
+        const ordersWithProducts = await tx.order.findMany({
+          where: { items: { some: { productId: { in: productIds } } } },
+          select: { id: true },
+        })
+        const orderIdsWithProducts = ordersWithProducts.map((o) => o.id)
+        if (orderIdsWithProducts.length > 0) {
+          await tx.payment.deleteMany({ where: { orderId: { in: orderIdsWithProducts } } })
+          await tx.stockMovement.deleteMany({ where: { orderId: { in: orderIdsWithProducts } } })
+          await tx.whatsAppMessage.deleteMany({ where: { orderId: { in: orderIdsWithProducts } } })
+          await tx.orderEvent.deleteMany({ where: { orderId: { in: orderIdsWithProducts } } })
+          await tx.orderItem.deleteMany({ where: { orderId: { in: orderIdsWithProducts } } })
+          await tx.couponRedemption.deleteMany({ where: { orderId: { in: orderIdsWithProducts } } })
+          const deletedStoreOrdersRes = await tx.order.deleteMany({ where: { id: { in: orderIdsWithProducts } } })
+          deletedOrdersCount += deletedStoreOrdersRes.count
+        }
+
         await tx.orderItem.deleteMany({ where: { productId: { in: productIds } } })
         await tx.productImage.deleteMany({ where: { productId: { in: productIds } } })
         await tx.flashSaleItem.deleteMany({ where: { productId: { in: productIds } } })

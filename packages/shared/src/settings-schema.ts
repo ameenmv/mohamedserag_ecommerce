@@ -72,3 +72,20 @@ export const DEFAULT_PAYMENTS: PaymentsSetting = {
     },
   },
 }
+
+export const checkoutPaymentMethodSchema = z.object({
+  method: paymentMethodSchema,
+  name: z.string(),
+  hint: z.string().nullable(),
+  account: z.string().nullable(),
+})
+export type CheckoutPaymentMethod = z.infer<typeof checkoutPaymentMethodSchema>
+
+export const checkoutSettingsSchema = z.object({
+  paymentMethods: z.array(checkoutPaymentMethodSchema),
+  codDeposit: codDepositSchema,
+  storeWhatsapp: z.string().optional(),
+  governorates: z.array(z.string()),
+  citySuggestions: z.record(z.string(), z.array(z.string())),
+})
+export type CheckoutSettings = z.infer<typeof checkoutSettingsSchema>

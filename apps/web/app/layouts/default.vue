@@ -17,8 +17,10 @@ if (import.meta.client) {
 
 const showCompareBar = computed(() => {
   if (!isMounted.value || compareCount.value < 1) return false
-  const path = stripLocalePrefix(route.path)
-  return path !== '/compare' && path !== '/compare/'
+  const path = stripLocalePrefix(route.path).replace(/\/$/, '')
+  // Hidden where it would compete with the page's own sticky actions (checkout total, cart, thank-you).
+  const hiddenOn = ['/compare', '/cart', '/checkout']
+  return !hiddenOn.includes(path) && !path.startsWith('/order/')
 })
 
 const isProductRoute = computed(() => {
@@ -51,10 +53,12 @@ const isProductRoute = computed(() => {
       <slot />
     </div>
 
-    <!-- Client-only Floating Compare Bar & Replace Dialog -->
+    <!-- Client-only Floating Compare Bar, Replace Dialog, Cart Drawer & Quote Sync -->
     <ClientOnly>
       <LazyStoreCompareBar v-if="showCompareBar" />
       <LazyStoreCompareReplaceDialog v-if="pendingCompare" />
+      <LazyStoreCartDrawer />
+      <LazyStoreCartQuoteSync />
     </ClientOnly>
 
     <LazyStoreFooter hydrate-on-visible />

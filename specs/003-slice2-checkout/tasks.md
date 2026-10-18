@@ -47,15 +47,15 @@ description: "Tasks for Slice 2 — Cart, Checkout & Payments"
 
 **Independent Test**: add two products → checkout with الدقهلية/طلخا and COD → thank-you shows «هنكلمك نأكد الطلب»; the order exists at «جديد».
 
-- [ ] T011 [P] [US1] Public `GET /api/settings/checkout` (enabled payment methods with name/hint/account, codDeposit, storeWhatsapp, governorates from zones + a static Egypt governorates list) in `apps/api/src/settings/checkout-settings.controller.ts` + e2e in `apps/api/test/checkout-settings.e2e-spec.ts`
-- [ ] T012 [P] [US1] `useCartQuote` composable (debounced `POST /api/cart/quote` with `knownPrice` per line, keeps last quote, applies capped quantities back to the cart) in `apps/web/app/composables/useCartQuote.ts` + unit test
-- [ ] T013 [US1] Cart drawer and `/cart` page sharing `useCart` + `useCartQuote`: qty stepper, remove, line issues («نفذ», «الكمية المتاحة N», «السعر اتغير من X لـ Y»), subtotal/discount/fee/total in `apps/web/app/components/store/cart/*` and `apps/web/app/pages/cart.vue`
-- [ ] T014 [US1] `useCheckout` composable: form state with shared `createOrderInputSchema` client validation, idempotency key generated once per attempt and kept until success, place order with `expectedTotal`, 409 handling (show fresh quote), redirect to thank-you in `apps/web/app/composables/useCheckout.ts` + unit test
-- [ ] T015 [US1] `/checkout` page: fields name, mobile («٠١٠…» accepted), governorate select, city/markaz, address, notes; payment methods from settings; deposit notice when `quote.codDeposit.required`; lead time for on-request lines; «لو محتاج يوم معيّن كلّمنا على واتساب» link; coupon field returning the placeholder; sticky mobile total + place button; empty-cart state in `apps/web/app/pages/checkout.vue` and `apps/web/app/components/store/checkout/*`
-- [ ] T016 [US1] Thank-you page `/order/[no]/thanks?t=` showing number, items, totals, method, next step; COD «هنكلمك نأكد الطلب»; not-found state for wrong/missing token (no order data, `noindex`) in `apps/web/app/pages/order/[no]/thanks.vue` and `apps/web/app/components/store/thanks/*`
-- [ ] T017 [US1] Clear the cart after a successful order; header cart badge updates in `apps/web/app/composables/useCheckout.ts`
-- [ ] T018 [P] [US1] i18n keys for cart/checkout/thanks in both `apps/web/i18n/locales/ar.json` and `en.json`
-- [ ] T019 [US1] Browser e2e `tests/e2e/tests/checkout-cod.e2e.ts`: two products → Talkha fee → COD → thank-you; double-click place order → one order; product page → placed order < 90 s; 320 px no horizontal scroll on `/checkout`
+- [x] T011 [P] [US1] Public `GET /api/settings/checkout` (enabled payment methods with name/hint/account, codDeposit, storeWhatsapp, governorates from zones + a static Egypt governorates list) in `apps/api/src/settings/checkout-settings.controller.ts` + e2e in `apps/api/test/checkout-settings.e2e-spec.ts`
+- [x] T012 [P] [US1] `useCartQuote` composable (debounced `POST /api/cart/quote` with `knownPrice` per line, keeps last quote, applies capped quantities back to the cart) in `apps/web/app/composables/useCartQuote.ts` + unit test
+- [x] T013 [US1] Cart drawer and `/cart` page sharing `useCart` + `useCartQuote`: qty stepper, remove, line issues («نفذ», «الكمية المتاحة N», «السعر اتغير من X لـ Y»), subtotal/discount/fee/total in `apps/web/app/components/store/cart/*` and `apps/web/app/pages/cart.vue`
+- [x] T014 [US1] `useCheckout` composable: form state with shared `createOrderInputSchema` client validation, idempotency key generated once per attempt and kept until success, place order with `expectedTotal`, 409 handling (show fresh quote), redirect to thank-you in `apps/web/app/composables/useCheckout.ts` + unit test
+- [x] T015 [US1] `/checkout` page: fields name, mobile («٠١٠…» accepted), governorate select, city/markaz, address, notes; payment methods from settings; deposit notice when `quote.codDeposit.required`; lead time for on-request lines; «لو محتاج يوم معيّن كلّمنا على واتساب» link; coupon field returning the placeholder; sticky mobile total + place button; empty-cart state in `apps/web/app/pages/checkout.vue` and `apps/web/app/components/store/checkout/*`
+- [x] T016 [US1] Thank-you page `/order/[no]/thanks?t=` showing number, items, totals, method, next step; COD «هنكلمك نأكد الطلب»; not-found state for wrong/missing token (no order data, `noindex`) in `apps/web/app/pages/order/[no]/thanks.vue` and `apps/web/app/components/store/thanks/*`
+- [x] T017 [US1] Clear the cart after a successful order; header cart badge updates in `apps/web/app/composables/useCheckout.ts`
+- [x] T018 [P] [US1] i18n keys for cart/checkout/thanks in both `apps/web/i18n/locales/ar.json` and `en.json`
+- [x] T019 [US1] Browser e2e `tests/e2e/tests/checkout-cod.e2e.ts`: two products → Talkha fee → COD → thank-you; double-click place order → one order; product page → placed order < 90 s; 320 px no horizontal scroll on `/checkout`
 
 **Checkpoint**: Shoppers can place COD orders end to end.
 
@@ -68,7 +68,7 @@ description: "Tasks for Slice 2 — Cart, Checkout & Payments"
 **Independent Test**: InstaPay order → WhatsApp proof link has number, amount, confirm URL → admin confirms from the link → «مؤكد», payment recorded, stock reduced.
 
 - [x] T020 [US2] Admin confirm-link API `GET /api/admin/confirm/:token`, `POST …/confirm`, `POST …/reject` (permission `orders.confirmPayment`, CSRF, `@HttpCode(200)`, uses `OrderPaymentsService`; reject response includes `rejectWhatsappUrl` from the `payment_rejected` template) in `apps/api/src/admin-orders/admin-confirm.controller.ts` + e2e `apps/api/test/admin-confirm.e2e-spec.ts` (401 without session, 404 unknown token, confirmed order shows status only)
-- [ ] T021 [US2] Thank-you transfer block: account details, amount (deposit amount for deposit orders), «ابعت إثبات التحويل على واتساب» built with `waLink` + `payment_proof` template including `<origin>/admin/confirm/<confirmToken>` in `apps/web/app/components/store/thanks/StoreThanksTransfer.vue`
+- [x] T021 [US2] Thank-you transfer block: account details, amount (deposit amount for deposit orders), «ابعت إثبات التحويل على واتساب» built with `waLink` + `payment_proof` template including `<origin>/admin/confirm/<confirmToken>` in `apps/web/app/components/store/thanks/StoreThanksTransfer.vue`
 - [ ] T022 [US2] Mobile page `/admin/confirm/[token]` (auth middleware redirects to login with `returnTo` and back): summary, expected amount (editable), «تأكيد الدفع», «رفض» with required reason, then prefilled WhatsApp reply; status-only view when not confirmable in `apps/web/app/pages/admin/confirm/[token].vue` + `apps/web/app/components/admin/confirm/*`
 - [ ] T023 [US2] Browser e2e `tests/e2e/tests/checkout-transfer.e2e.ts` (InstaPay order, WhatsApp proof href contains order no and confirm URL) and `tests/e2e/tests/confirm-link.e2e.ts` (login redirect returns to the page, reject with reason then confirm → «مؤكد», stock reduced)
 
@@ -103,7 +103,7 @@ description: "Tasks for Slice 2 — Cart, Checkout & Payments"
 
 ## Phase 7: User Story 5 — Funnel events (P3)
 
-- [ ] T033 [US5] Send `checkout_start` once per checkout visit and `order_placed` once (total, item count, no PII) via `useAnalytics` in `apps/web/app/composables/useCheckout.ts` + unit test
+- [x] T033 [US5] Send `checkout_start` once per checkout visit and `order_placed` once (total, item count, no PII) via `useAnalytics` in `apps/web/app/composables/useCheckout.ts` + unit test
 - [ ] T034 [US5] Assert events in `tests/e2e/tests/checkout-cod.e2e.ts` (analytics stub)
 
 ---
