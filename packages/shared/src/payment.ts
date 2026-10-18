@@ -85,6 +85,9 @@ export function manualStatusTargets(status: OrderStatus): OrderStatus[] {
     if (target === 'confirmed' && isConfirmable) {
       return false
     }
+    if (target === 'awaiting_deposit') {
+      return false
+    }
     return true
   })
 }

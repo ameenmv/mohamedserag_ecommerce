@@ -4,9 +4,11 @@ import {
   BRIDAL_MAX_QTY,
   BRIDAL_MAX_ROOM_ITEMS,
   BRIDAL_ROOM_KEYS,
+  cairoToday,
   normalizeRooms,
   type BridalRooms,
 } from './bridal.js'
+import { orderCustomerSchema } from './order-schema.js'
 
 export const bridalRoomItemInputSchema = z.object({
   productId: z
@@ -110,3 +112,40 @@ export const bridalAlternativesQuerySchema = z.object({
 })
 
 export type BridalAlternativesQuery = z.infer<typeof bridalAlternativesQuerySchema>
+
+export const bridalReservePaymentMethodSchema = z.enum(
+  ['instapay', 'vodafone_cash', 'fawry'],
+  { message: 'طريقة الدفع غير صالحة' },
+)
+
+export type BridalReservePaymentMethod = z.infer<typeof bridalReservePaymentMethodSchema>
+
+export const bridalPreferredDateSchema = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/, { message: 'صيغة التاريخ غير صالحة (YYYY-MM-DD)' })
+  .refine((val) => val >= cairoToday(), {
+    message: 'تاريخ التوصيل المفضل لا يمكن أن يكون في الماضي',
+  })
+  .optional()
+
+export const bridalReserveSchema = z.object({
+  customer: orderCustomerSchema,
+  preferredDate: bridalPreferredDateSchema,
+  paymentMethod: bridalReservePaymentMethodSchema,
+  idempotencyKey: z
+    .string({ message: 'مفتاح منع التكرار مطلوب' })
+    .uuid({ message: 'مفتاح منع التكرار غير صالح' }),
+  expectedTotal: z
+    .number()
+    .int({ message: 'المجموع المتوقع يجب أن يكون عدداً صحيحاً' })
+    .min(0, { message: 'المجموع المتوقع يجب أن يكون موجباً' }),
+})
+
+export type BridalReserveInput = z.infer<typeof bridalReserveSchema>
+
+export const bridalReserveQuoteQuerySchema = z.object({
+  governorate: orderCustomerSchema.shape.governorate,
+  city: orderCustomerSchema.shape.city,
+})
+
+export type BridalReserveQuoteQuery = z.infer<typeof bridalReserveQuoteQuerySchema>

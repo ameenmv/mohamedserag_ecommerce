@@ -9,16 +9,23 @@ import {
   Patch,
   Post,
   Query,
+  Res,
 } from '@nestjs/common'
 import { Throttle } from '@nestjs/throttler'
+import type { Response } from 'express'
 import {
   bridalAlternativesQuerySchema,
+  bridalReserveQuoteQuerySchema,
+  bridalReserveSchema,
   bridalTokenSchema,
   createBridalListSchema,
   saveBridalListSchema,
   type BridalAlternative,
   type BridalAlternativesQuery,
   type BridalListView,
+  type BridalReserveInput,
+  type BridalReserveQuote,
+  type BridalReserveQuoteQuery,
   type BridalTierSummary,
   type CreateBridalListInput,
   type SaveBridalListInput,
@@ -26,6 +33,7 @@ import {
 import { Public } from '../auth/decorators.js'
 import { ZodValidationPipe } from '../common/zod-validation.pipe.js'
 import { BridalListsService } from './bridal-lists.service.js'
+import { BridalReserveService } from './bridal-reserve.service.js'
 import { BridalTiersService } from './bridal-tiers.service.js'
 
 @Controller('bridal')
@@ -33,6 +41,7 @@ export class BridalController {
   constructor(
     private readonly tiersService: BridalTiersService,
     private readonly listsService: BridalListsService,
+    private readonly reserveService: BridalReserveService,
   ) {}
 
   @Get('tiers')
@@ -77,4 +86,28 @@ export class BridalController {
   ): Promise<{ items: BridalAlternative[] }> {
     return this.listsService.alternatives(query.productId)
   }
+
+  @Get('reserve-quote/:token')
+  @Public()
+  @Header('Cache-Control', 'no-store')
+  async getReserveQuote(
+    @Param('token', new ZodValidationPipe(bridalTokenSchema)) token: string,
+    @Query(new ZodValidationPipe(bridalReserveQuoteQuerySchema)) query: BridalReserveQuoteQuery,
+  ): Promise<BridalReserveQuote> {
+    return this.reserveService.getReserveQuote(token, query)
+  }
+
+  @Post('lists/:token/reserve')
+  @Public()
+  @Throttle({ default: { limit: 10, ttl: 60_000 } })
+  async reserve(
+    @Param('token', new ZodValidationPipe(bridalTokenSchema)) token: string,
+    @Body(new ZodValidationPipe(bridalReserveSchema)) body: BridalReserveInput,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<{ orderNo: string; publicToken: string }> {
+    const outcome = await this.reserveService.reserve(token, body)
+    res.status(outcome.isNew ? HttpStatus.CREATED : HttpStatus.OK)
+    return { orderNo: outcome.orderNo, publicToken: outcome.publicToken }
+  }
 }
+

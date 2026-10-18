@@ -107,10 +107,18 @@ export class BridalListsService {
             no: true,
             status: true,
             bridalStatus: true,
+            subtotal: true,
             total: true,
             depositAmount: true,
             paidAmount: true,
+            lockDays: true,
             lockedUntil: true,
+            items: {
+              select: {
+                productId: true,
+                unitPrice: true,
+              },
+            },
           },
         },
       },
@@ -132,6 +140,41 @@ export class BridalListsService {
     const pricedList = priceRooms(storedRooms, productsMap)
     const pricedTier = list.tier ? priceRooms(tierRooms, productsMap) : null
 
+    let pricedRoomsList = pricedList.rooms
+    let displayTotal = pricedList.total
+    let unavailableCount = pricedList.unavailable
+
+    if (list.order) {
+      const orderItemMap = new Map(
+        list.order.items
+          .filter((i): i is typeof i & { productId: string } => Boolean(i.productId))
+          .map((i) => [i.productId, i.unitPrice]),
+      )
+
+      pricedRoomsList = pricedRoomsList.map((room) => {
+        let roomSubtotal = 0
+        const updatedItems = room.items.map((item) => {
+          const lockedUnitPrice = orderItemMap.get(item.productId) ?? item.unitPrice
+          const lineTotal = item.qty * lockedUnitPrice
+          roomSubtotal += lineTotal
+          return {
+            ...item,
+            unitPrice: lockedUnitPrice,
+            lineTotal,
+            available: true,
+          }
+        })
+        return {
+          ...room,
+          subtotal: roomSubtotal,
+          items: updatedItems,
+        }
+      })
+
+      displayTotal = list.order.subtotal
+      unavailableCount = 0
+    }
+
     const view: BridalListView = {
       mode,
       ...(mode === 'edit' ? { editToken: list.editToken } : {}),
@@ -145,11 +188,11 @@ export class BridalListsService {
               total: pricedTier.total,
             }
           : null,
-      rooms: pricedList.rooms,
+      rooms: pricedRoomsList,
       itemCount: pricedList.itemCount,
-      total: pricedList.total,
+      total: displayTotal,
       issues: {
-        unavailable: pricedList.unavailable,
+        unavailable: unavailableCount,
       },
       reservation: list.order
         ? {
@@ -159,6 +202,7 @@ export class BridalListsService {
             total: list.order.total,
             depositAmount: list.order.depositAmount,
             paidAmount: list.order.paidAmount,
+            lockDays: list.order.lockDays ?? null,
             lockedUntil: list.order.lockedUntil,
           }
         : null,

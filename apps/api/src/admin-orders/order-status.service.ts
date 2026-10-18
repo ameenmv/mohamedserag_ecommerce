@@ -28,7 +28,7 @@ export class OrderStatusService {
   ): Promise<{ shortages: OrderStockShortage[] }> {
     const order = await tx.order.findUnique({
       where: { id: params.orderId },
-      select: { id: true, status: true },
+      select: { id: true, status: true, type: true, bridalListId: true },
     })
 
     if (!order) {
@@ -58,7 +58,25 @@ export class OrderStatusService {
       },
     })
 
+    if (order.type === 'bridal') {
+      if (params.to === 'cancelled' || params.to === 'delivered') {
+        await tx.order.update({
+          where: { id: params.orderId },
+          data: { bridalStatus: params.to },
+        })
+        if (order.bridalListId) {
+          await tx.bridalList.update({
+            where: { id: order.bridalListId },
+            data: { status: params.to },
+          })
+        }
+      }
+    }
+
     if (params.to === 'confirmed') {
+      if (order.type === 'bridal') {
+        return { shortages: [] }
+      }
       return this.orderStockService.deductForOrder(tx, params.orderId, params.userId)
     }
 

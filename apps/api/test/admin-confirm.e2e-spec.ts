@@ -292,7 +292,13 @@ describe('Admin Confirm API E2E (/api/admin/confirm)', () => {
       .expect(200)
 
     expect(res.body.expectedAmount).toBe(350_000)
-    expect(res.body.deposit).toEqual({ pct: 10, amount: 350_000 })
+    expect(res.body.deposit).toMatchObject({
+      pct: 10,
+      amount: 350_000,
+      paid: 0,
+      required: 350_000,
+      remaining: 350_000,
+    })
     expect(res.body.canConfirm).toBe(true)
     expect(res.body.canReject).toBe(true)
   })

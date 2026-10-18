@@ -10,8 +10,10 @@ import {
   Post,
 } from '@nestjs/common'
 import {
+  cairoToday,
   confirmPaymentInputSchema,
   defaultConfirmAmount,
+  depositRemaining,
   DEFAULT_TEMPLATES,
   isPaymentConfirmable,
   ORDER_STATUS_LABELS,
@@ -23,6 +25,7 @@ import {
   type AdminConfirmSummary,
   type ConfirmPaymentInput,
   type OrderStatus,
+  type OrderType,
   type PaymentMethod,
   type RejectPaymentInput,
 } from '@serag/shared'
@@ -35,6 +38,7 @@ import { OrderPaymentsService } from './order-payments.service.js'
 function toConfirmSummary(order: {
   id: string
   no: string
+  type: OrderType
   status: OrderStatus
   customerName: string
   total: number
@@ -42,22 +46,35 @@ function toConfirmSummary(order: {
   paymentMethod: PaymentMethod
   depositAmount: number | null
   depositPct: number | null
+  lockDays: number | null
+  lockedUntil: Date | null
 }): AdminConfirmSummary {
   const canConfirm = isPaymentConfirmable(order.status)
   const canReject = order.status === 'awaiting_payment' || order.status === 'awaiting_deposit'
   const customerFirstName = order.customerName.trim().split(/\s+/)[0] ?? order.customerName
+
+  const depositRem =
+    order.depositAmount !== null && order.depositAmount > 0
+      ? depositRemaining({ depositAmount: order.depositAmount, paidAmount: order.paidAmount })
+      : undefined
 
   const deposit =
     order.depositAmount !== null && order.depositAmount > 0
       ? {
           pct: order.depositPct ?? 0,
           amount: order.depositAmount,
+          paid: order.paidAmount,
+          required: order.depositAmount,
+          remaining: depositRem ?? 0,
         }
       : null
+
+  const locked = order.lockedUntil ? { lockedUntil: order.lockedUntil } : null
 
   return {
     orderId: order.id,
     no: order.no,
+    type: order.type,
     status: order.status,
     statusLabel: ORDER_STATUS_LABELS[order.status] ?? order.status,
     customerFirstName,
@@ -67,6 +84,10 @@ function toConfirmSummary(order: {
     method: order.paymentMethod,
     methodLabel: PAYMENT_METHOD_LABELS[order.paymentMethod] ?? order.paymentMethod,
     deposit,
+    depositAmount: order.depositAmount,
+    depositRemaining: depositRem,
+    lockDays: order.lockDays ?? null,
+    locked,
     canConfirm,
     canReject,
   }
@@ -121,9 +142,35 @@ export class AdminConfirmController {
       where: { id: order.id },
     })
 
+    const summary = toConfirmSummary(updated)
+
+    let confirmWhatsappUrl: string | undefined
+    if (result.locked) {
+      const templates = await this.settingsService.getTemplates()
+      const template = templates.bridal_locked ?? DEFAULT_TEMPLATES.bridal_locked
+      const lockedDateFormatted = cairoToday(new Date(result.locked.lockedUntil))
+      const text = renderTemplate(template, {
+        customerName: updated.customerName,
+        orderNo: updated.no,
+        date: lockedDateFormatted,
+        lockedUntil: lockedDateFormatted,
+      })
+      confirmWhatsappUrl = waLink(updated.customerPhone, text)
+    }
+
     return {
-      ...toConfirmSummary(updated),
+      ...summary,
       shortages: result.shortages,
+      deposit: result.deposit
+        ? {
+            ...summary.deposit,
+            ...result.deposit,
+            pct: summary.deposit?.pct ?? 0,
+            amount: summary.deposit?.amount ?? result.deposit.required,
+          }
+        : summary.deposit,
+      locked: result.locked ?? summary.locked,
+      ...(confirmWhatsappUrl ? { confirmWhatsappUrl } : {}),
     }
   }
 

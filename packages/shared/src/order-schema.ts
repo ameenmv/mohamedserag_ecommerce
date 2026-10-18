@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { phoneSchema } from './phone-schema.js'
 import { paymentMethodSchema } from './enums-schema.js'
-import type { OrderStatus, PaymentMethod } from './enums.js'
+import type { OrderStatus, OrderType, PaymentMethod } from './enums.js'
 import { cartQuoteItemInputSchema, mergeCartItems } from './cart-schema.js'
 
 export const orderCustomerSchema = z.object({
@@ -81,6 +81,7 @@ export interface OrderThanksDeposit {
 
 export interface OrderThanks {
   no: string
+  type: OrderType
   status: OrderStatus
   createdAt: Date | string
   paymentMethod: PaymentMethod
@@ -93,4 +94,5 @@ export interface OrderThanks {
   payment: OrderThanksPayment
   confirmToken: string | null
   customerFirstName: string
+  lockDays: number | null
 }

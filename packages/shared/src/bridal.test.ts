@@ -7,6 +7,8 @@ import {
   CATEGORY_ROOM,
   addItemToRooms,
   bridalDeposit,
+  buildBridalReserveQuote,
+  cairoToday,
   lockEndDate,
   lockState,
   normalizeRooms,
@@ -300,6 +302,49 @@ describe('bridal domain helpers', () => {
       const stateExpired = lockState({ bridalStatus: 'locked', lockedUntil }, nowExpired)
       expect(stateExpired.expired).toBe(true)
       expect(stateExpired.daysLeft).toBe(0)
+    })
+  })
+
+  describe('cairoToday', () => {
+    it('returns YYYY-MM-DD formatted date in Africa/Cairo', () => {
+      // 2026-10-18 22:30 UTC is 2026-10-19 01:30 Cairo (+3)
+      const dateLateUtc = new Date('2026-10-18T22:30:00Z')
+      expect(cairoToday(dateLateUtc)).toBe('2026-10-19')
+
+      const dateEarlyUtc = new Date('2026-10-18T10:00:00Z')
+      expect(cairoToday(dateEarlyUtc)).toBe('2026-10-18')
+
+      expect(cairoToday()).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+    })
+  })
+
+  describe('buildBridalReserveQuote', () => {
+    it('correctly calculates totals, delivery fee, and deposit amount', () => {
+      const priced = {
+        rooms: [],
+        itemCount: 5,
+        total: 500_000, // 5,000 EGP
+        unavailable: 0,
+      }
+      const zone = {
+        name: 'المنصورة',
+        fee: 10_000, // 100 EGP
+      }
+      const settings = {
+        depositPct: 10,
+        lockDays: 30,
+      }
+
+      const quote = buildBridalReserveQuote(priced, zone, settings)
+      expect(quote).toEqual({
+        subtotal: 500_000,
+        deliveryFee: 10_000,
+        total: 510_000,
+        depositPct: 10,
+        depositAmount: 51_000, // Math.round(510_000 * 0.1)
+        lockDays: 30,
+        zoneName: 'المنصورة',
+      })
     })
   })
 })

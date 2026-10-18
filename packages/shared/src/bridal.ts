@@ -136,6 +136,7 @@ export interface BridalProductRecord {
   availabilityMode: AvailabilityMode
   leadTimeText: string | null
   purchasable: boolean
+  taxRate?: number
 }
 
 export interface PricedBridalItem {
@@ -263,6 +264,47 @@ function getCairoDateParts(d: Date): { year: number; month: number; day: number 
   return { year, month, day }
 }
 
+export function cairoToday(now: Date = new Date()): string {
+  const { year, month, day } = getCairoDateParts(now)
+  const mm = String(month).padStart(2, '0')
+  const dd = String(day).padStart(2, '0')
+  return `${year}-${mm}-${dd}`
+}
+
+export interface BridalReserveQuote {
+  subtotal: number
+  deliveryFee: number
+  total: number
+  depositPct: number
+  depositAmount: number
+  lockDays: number
+  zoneName: string
+}
+
+export function buildBridalReserveQuote(
+  priced: PricedRoomsResult,
+  zone: { name: string; fee: number },
+  settings: { depositPct: number; lockDays: number },
+): BridalReserveQuote {
+  const subtotal = priced.total
+  const deliveryFee = zone.fee
+  const total = subtotal + deliveryFee
+  const depositPct = settings.depositPct
+  const depositAmount = bridalDeposit(total, depositPct)
+  const lockDays = settings.lockDays
+  const zoneName = zone.name
+
+  return {
+    subtotal,
+    deliveryFee,
+    total,
+    depositPct,
+    depositAmount,
+    lockDays,
+    zoneName,
+  }
+}
+
 function getCairoOffsetMs(utcDate: Date): number {
   const cairoFormatter = new Intl.DateTimeFormat('en-US', {
     timeZone: 'Africa/Cairo',
@@ -378,6 +420,7 @@ export interface BridalListView {
     total: number
     depositAmount: number | null
     paidAmount: number
+    lockDays: number | null
     lockedUntil: Date | string | null
   } | null
 }

@@ -13,6 +13,7 @@ import { PrismaService } from '../prisma/prisma.service.js'
 import { StoreSettingsService } from '../settings/store-settings.service.js'
 import { loadCartProducts } from './cart-products.js'
 import { CouponService } from './coupon.service.js'
+import { nextOrderNo } from './order-number.js'
 
 export const ORDER_RESULT_SELECT = {
   no: true,
@@ -107,10 +108,7 @@ export class OrdersService {
           })
         }
 
-        const seq = await tx.$queryRaw<Array<{ nextval: bigint | number | string }>>`SELECT nextval('order_no_seq')`
-        const rawNextVal = seq[0]?.nextval
-        if (rawNextVal === undefined) throw new Error('Failed to read next value from order_no_seq')
-        const no = `SR-${new Date().getFullYear()}-${String(Number(rawNextVal)).padStart(6, '0')}`
+        const no = await nextOrderNo(tx)
 
         const publicToken = nanoid(24)
         const confirmToken = nanoid(24)

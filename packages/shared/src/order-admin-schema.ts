@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { orderStatusSchema, paymentMethodSchema } from './enums-schema.js'
-import type { OrderStatus, PaymentMethod } from './enums.js'
+import type { OrderStatus, OrderType, PaymentMethod } from './enums.js'
 import { phoneSchema } from './phone-schema.js'
 import { DEFAULT_TEMPLATES, type WhatsAppTemplateKey } from './whatsapp.js'
 
@@ -178,9 +178,16 @@ export interface AdminOrderDetail {
   shortages?: OrderStockShortage[]
 }
 
+export interface AdminConfirmDepositDetails extends AdminOrderDeposit {
+  paid?: number
+  required?: number
+  remaining?: number
+}
+
 export interface AdminConfirmSummary {
   orderId: string
   no: string
+  type?: OrderType
   status: OrderStatus
   statusLabel: string
   customerFirstName: string
@@ -189,9 +196,16 @@ export interface AdminConfirmSummary {
   expectedAmount: number
   method: PaymentMethod
   methodLabel: string
-  deposit: AdminOrderDeposit | null
+  deposit: AdminConfirmDepositDetails | null
+  depositAmount?: number | null
+  depositRemaining?: number
+  lockDays?: number | null
   canConfirm: boolean
   canReject: boolean
   rejectWhatsappUrl?: string
+  confirmWhatsappUrl?: string
   shortages?: OrderStockShortage[]
+  locked?: {
+    lockedUntil: Date | string
+  } | null
 }

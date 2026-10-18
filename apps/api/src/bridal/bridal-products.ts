@@ -25,6 +25,7 @@ export async function loadBridalProducts(
       leadTimeText: true,
       visible: true,
       archivedAt: true,
+      taxRate: true,
       category: {
         select: { slug: true },
       },
@@ -49,6 +50,7 @@ export async function loadBridalProducts(
       availabilityMode: p.availabilityMode,
       leadTimeText: p.leadTimeText,
       purchasable: p.visible && p.archivedAt === null,
+      taxRate: p.taxRate,
     })
   }
 

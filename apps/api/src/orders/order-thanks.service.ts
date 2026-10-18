@@ -80,6 +80,8 @@ export class OrderThanksService {
 
     return {
       no: order.no,
+      type: order.type,
+      lockDays: order.lockDays ?? null,
       status: order.status,
       createdAt: order.createdAt,
       paymentMethod: order.paymentMethod,

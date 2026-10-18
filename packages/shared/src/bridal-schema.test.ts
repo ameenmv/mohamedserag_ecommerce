@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import {
   bridalAlternativesQuerySchema,
+  bridalReserveQuoteQuerySchema,
+  bridalReserveSchema,
   bridalRoomsSchema,
   bridalSettingsSchema,
   bridalTierUpdateSchema,
@@ -192,6 +194,100 @@ describe('bridal-schema validation', () => {
       expect(bridalAlternativesQuerySchema.safeParse({ productId: 'p1' }).success).toBe(true)
       expect(bridalAlternativesQuerySchema.safeParse({ productId: '' }).success).toBe(false)
       expect(bridalAlternativesQuerySchema.safeParse({}).success).toBe(false)
+    })
+  })
+
+  describe('bridalReserveSchema', () => {
+    const validCustomer = {
+      name: 'فاطمة سراج',
+      phone: '01012345678',
+      governorate: 'الدقهلية',
+      city: 'المنصورة',
+      address: 'شارع الجمهورية',
+    }
+
+    it('accepts valid reserve input with transfer payment methods', () => {
+      const valid = {
+        customer: validCustomer,
+        paymentMethod: 'instapay',
+        idempotencyKey: '123e4567-e89b-12d3-a456-426614174000',
+        expectedTotal: 500000,
+      }
+      expect(bridalReserveSchema.safeParse(valid).success).toBe(true)
+
+      const withVodafone = { ...valid, paymentMethod: 'vodafone_cash' }
+      expect(bridalReserveSchema.safeParse(withVodafone).success).toBe(true)
+
+      const withFawry = { ...valid, paymentMethod: 'fawry' }
+      expect(bridalReserveSchema.safeParse(withFawry).success).toBe(true)
+    })
+
+    it('rejects cod as payment method', () => {
+      const invalid = {
+        customer: validCustomer,
+        paymentMethod: 'cod',
+        idempotencyKey: '123e4567-e89b-12d3-a456-426614174000',
+        expectedTotal: 500000,
+      }
+      expect(bridalReserveSchema.safeParse(invalid).success).toBe(false)
+    })
+
+    it('rejects invalid uuid idempotencyKey', () => {
+      const invalid = {
+        customer: validCustomer,
+        paymentMethod: 'instapay',
+        idempotencyKey: 'not-a-uuid',
+        expectedTotal: 500000,
+      }
+      expect(bridalReserveSchema.safeParse(invalid).success).toBe(false)
+    })
+
+    it('validates preferredDate: allows future or today date, rejects past date', () => {
+      const validFuture = {
+        customer: validCustomer,
+        preferredDate: '2099-12-31',
+        paymentMethod: 'instapay',
+        idempotencyKey: '123e4567-e89b-12d3-a456-426614174000',
+        expectedTotal: 500000,
+      }
+      expect(bridalReserveSchema.safeParse(validFuture).success).toBe(true)
+
+      const invalidPast = {
+        ...validFuture,
+        preferredDate: '2020-01-01',
+      }
+      expect(bridalReserveSchema.safeParse(invalidPast).success).toBe(false)
+
+      const invalidFormat = {
+        ...validFuture,
+        preferredDate: '31/12/2099',
+      }
+      expect(bridalReserveSchema.safeParse(invalidFormat).success).toBe(false)
+    })
+  })
+
+  describe('bridalReserveQuoteQuerySchema', () => {
+    it('requires valid governorate and city', () => {
+      expect(
+        bridalReserveQuoteQuerySchema.safeParse({
+          governorate: 'الدقهلية',
+          city: 'المنصورة',
+        }).success,
+      ).toBe(true)
+
+      expect(
+        bridalReserveQuoteQuerySchema.safeParse({
+          governorate: '',
+          city: 'المنصورة',
+        }).success,
+      ).toBe(false)
+
+      expect(
+        bridalReserveQuoteQuerySchema.safeParse({
+          governorate: 'الدقهلية',
+          city: '',
+        }).success,
+      ).toBe(false)
     })
   })
 })
