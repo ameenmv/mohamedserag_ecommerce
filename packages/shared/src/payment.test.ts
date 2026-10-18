@@ -8,6 +8,7 @@ import {
   depositRemaining,
   defaultConfirmAmount,
   manualStatusTargets,
+  reachesDeposit,
 } from './payment.js'
 import {
   confirmPaymentInputSchema,
@@ -192,6 +193,25 @@ describe('manualStatusTargets and status groups', () => {
     expect(isPaymentAddable('awaiting_deposit')).toBe(false)
     expect(isPaymentAddable('payment_rejected')).toBe(false)
     expect(isPaymentAddable('cancelled')).toBe(false)
+  })
+
+  describe('reachesDeposit', () => {
+    it('returns true when paidAmount + amount >= depositAmount', () => {
+      expect(reachesDeposit({ paidAmount: 50000, depositAmount: 100000 }, 50000)).toBe(true)
+      expect(reachesDeposit({ paidAmount: 50000, depositAmount: 100000 }, 60000)).toBe(true)
+      expect(reachesDeposit({ paidAmount: 0, depositAmount: 100000 }, 100000)).toBe(true)
+    })
+
+    it('returns false when paidAmount + amount < depositAmount', () => {
+      expect(reachesDeposit({ paidAmount: 30000, depositAmount: 100000 }, 40000)).toBe(false)
+      expect(reachesDeposit({ paidAmount: 0, depositAmount: 100000 }, 99999)).toBe(false)
+    })
+
+    it('returns true when depositAmount is null, undefined, or <= 0', () => {
+      expect(reachesDeposit({ paidAmount: 0, depositAmount: null }, 1000)).toBe(true)
+      expect(reachesDeposit({ paidAmount: 0, depositAmount: undefined }, 1000)).toBe(true)
+      expect(reachesDeposit({ paidAmount: 0, depositAmount: 0 }, 0)).toBe(true)
+    })
   })
 })
 

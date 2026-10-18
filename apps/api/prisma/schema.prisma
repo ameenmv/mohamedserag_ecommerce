@@ -322,15 +322,16 @@ model CouponRedemption {
 
 // PRD §9 — US-4.1, US-12.5: Bridal package starting tiers (أساسية / ذهبية / القصر)
 model BridalTier {
-  id        String       @id @default(cuid())
-  name      String
-  slug      String       @unique
-  sort      Int          @default(0)
-  /// Array of [{key, label, items: [{productId, qty}]}]
-  rooms     Json         @default("[]")
-  lists     BridalList[]
-  createdAt DateTime     @default(now()) @map("created_at")
-  updatedAt DateTime     @updatedAt @map("updated_at")
+  id         String       @id @default(cuid())
+  name       String
+  slug       String       @unique
+  sort       Int          @default(0)
+  highlights Json         @default("[]")
+  /// Array of [{key, items: [{productId, qty}]}]
+  rooms      Json         @default("[]")
+  lists      BridalList[]
+  createdAt  DateTime     @default(now()) @map("created_at")
+  updatedAt  DateTime     @updatedAt @map("updated_at")
 
   @@index([sort])
   @@map("bridal_tiers")
@@ -343,7 +344,7 @@ model BridalList {
   shareToken    String       @unique @map("share_token")
   tierId        String?      @map("tier_id")
   tier          BridalTier?  @relation(fields: [tierId], references: [id], onDelete: SetNull)
-  /// Array of [{key, label, items: [{productId, qty}]}]
+  /// Array of [{key, items: [{productId, qty}]}]
   rooms         Json         @default("[]")
   status        BridalStatus @default(draft)
   customerName  String?      @map("customer_name")
@@ -394,6 +395,7 @@ model Order {
   depositPct         Int?               @map("deposit_pct")
   /// Required deposit amount in integer piastres (bridal reservation or large COD)
   depositAmount      Int?               @map("deposit_amount")
+  lockDays           Int?               @map("lock_days")
   /// Sum of confirmed payments in integer piastres
   paidAmount         Int                @default(0) @map("paid_amount")
   /// Client-generated key so a retried checkout returns the same order instead of a duplicate

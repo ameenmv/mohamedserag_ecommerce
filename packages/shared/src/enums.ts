@@ -39,6 +39,7 @@ export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
 export const orderStatusLabels = ORDER_STATUS_LABELS
 
 export const BRIDAL_STATUSES = [
+  'draft',
   'awaiting_deposit',
   'locked',
   'delivery_agreed',
@@ -50,6 +51,7 @@ export const bridalStatuses = BRIDAL_STATUSES
 export type BridalStatus = (typeof BRIDAL_STATUSES)[number]
 
 export const BRIDAL_STATUS_LABELS: Record<BridalStatus, string> = {
+  draft: 'مسودة',
   awaiting_deposit: 'بانتظار العربون',
   locked: 'محجوز (السعر مثبت)',
   delivery_agreed: 'اتفقنا على التوصيل',

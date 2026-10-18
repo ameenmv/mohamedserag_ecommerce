@@ -24,6 +24,7 @@ describe('enums-schema', () => {
   })
 
   it('validates bridalStatusSchema', () => {
+    expect(bridalStatusSchema.safeParse('draft').success).toBe(true)
     expect(bridalStatusSchema.safeParse('locked').success).toBe(true)
     expect(bridalStatusSchema.safeParse('lock_expired').success).toBe(true)
     expect(bridalStatusSchema.safeParse('invalid').success).toBe(false)

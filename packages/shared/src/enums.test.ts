@@ -45,6 +45,7 @@ describe('enums and Arabic labels', () => {
 
   it('maps every BridalStatus to its exact Arabic label', () => {
     expect(BRIDAL_STATUSES).toEqual([
+      'draft',
       'awaiting_deposit',
       'locked',
       'delivery_agreed',
@@ -53,6 +54,7 @@ describe('enums and Arabic labels', () => {
       'lock_expired',
     ])
     expect(BRIDAL_STATUS_LABELS).toEqual({
+      draft: 'مسودة',
       awaiting_deposit: 'بانتظار العربون',
       locked: 'محجوز (السعر مثبت)',
       delivery_agreed: 'اتفقنا على التوصيل',

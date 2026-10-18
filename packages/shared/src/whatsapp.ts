@@ -58,6 +58,8 @@ export const DEFAULT_TEMPLATES = {
     'السلام عليكم، ده إثبات تحويل مبلغ {{amount}} عن طريق {{method}} للطلب رقم {{orderNo}}.\nرابط تأكيد الدفع للإدارة: {{confirmUrl}}',
   bridal_locked:
     'ألف مبروك يا {{customerName}}! تم تأكيد عربون قائمة جهاز العروسة رقم {{orderNo}} وتثبيت الأسعار لحد يوم {{lockedUntil}}. هنكلمك نتفق على ميعاد التوصيل والتركيب.',
+  bridal_repriced:
+    'أهلاً {{customerName}}، بخصوص قائمة جهاز العروسة رقم {{orderNo}}، بعد انتهاء فترة تثبيت السعر تم تحديث أسعار الأجهزة من {{oldTotal}} إلى {{newTotal}}. والأسعار الجديدة متثبتة لحد {{lockedUntil}}.',
   notify_back_in_stock:
     'أهلاً {{customerName}}، المنتج اللي طلبت يتبلّغك بيه «{{productName}}» بقى متوفر دلوقتي في معرض محمد سراج: {{productUrl}}',
   product_question: 'السلام عليكم، عندي استفسار عن {{productName}} ({{productUrl}})',

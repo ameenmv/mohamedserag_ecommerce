@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common'
 import {
+  DEFAULT_BRIDAL_SETTINGS,
   DEFAULT_COD_DEPOSIT,
   DEFAULT_PAYMENTS,
   DEFAULT_TEMPLATES,
   DEFAULT_ZONES,
+  bridalSettingsSchema,
   codDepositSchema,
   paymentsSettingSchema,
   zonesSchema,
+  type BridalSettings,
   type CodDepositSetting,
   type PaymentsSetting,
   type Zone,
@@ -56,6 +59,14 @@ export class StoreSettingsService {
     })
     const parsed = z.object({ whatsapp: z.string().optional() }).safeParse(row?.value)
     return parsed.success && parsed.data.whatsapp ? parsed.data.whatsapp : ''
+  }
+
+  async getBridal(): Promise<BridalSettings> {
+    const row = await this.prisma.setting.findUnique({
+      where: { key: 'bridal' },
+    })
+    const parsed = bridalSettingsSchema.safeParse(row?.value)
+    return parsed.success ? parsed.data : DEFAULT_BRIDAL_SETTINGS
   }
 }
 

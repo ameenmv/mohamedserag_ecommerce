@@ -1177,26 +1177,34 @@ async function main() {
       slug: 'basic',
       name: 'أساسية',
       sort: 1,
+      highlights: [
+        'كل الأساسيات لبيت جديد بأفضل سعر',
+        'أجهزة مضمونة فرز أول بضمان الوكيل الرسمي',
+        'طقم حلل جرانيت تركي أصلي للمطبخ',
+      ],
       rooms: [
         {
           key: 'kitchen',
-          label: 'المطبخ',
           items: [
             { productId: requireProductId('SR-S4'), qty: 1 },
-            { productId: requireProductId('SR-S7'), qty: 1 },
             { productId: requireProductId('SR-S15'), qty: 1 },
-            { productId: requireProductId('SR-C4'), qty: 1 },
           ],
         },
         {
+          key: 'laundry',
+          items: [{ productId: requireProductId('SR-S7'), qty: 1 }],
+        },
+        {
           key: 'living',
-          label: 'الريسبشن',
           items: [{ productId: requireProductId('SR-S9'), qty: 1 }],
         },
         {
-          key: 'bedroom',
-          label: 'أوضة النوم',
+          key: 'bedrooms',
           items: [{ productId: requireProductId('SR-F4'), qty: 1 }],
+        },
+        {
+          key: 'kitchenware',
+          items: [{ productId: requireProductId('SR-C4'), qty: 1 }],
         },
       ],
     },
@@ -1204,29 +1212,38 @@ async function main() {
       slug: 'golden',
       name: 'ذهبية',
       sort: 2,
+      highlights: [
+        'المزيج المثالي بين المواصفات العالية والسعر المناسب',
+        'أجهزة أوتوماتيك وانفرتر موفرة للكهرباء',
+        'شاشة سمارت 4K وتكييف للريسبشن وغرفة النوم',
+        'طقم جرانيت تركي فاخر متكامل',
+      ],
       rooms: [
         {
           key: 'kitchen',
-          label: 'المطبخ',
           items: [
             { productId: requireProductId('SR-S1'), qty: 1 },
-            { productId: requireProductId('SR-S5'), qty: 1 },
             { productId: requireProductId('SR-S16'), qty: 1 },
-            { productId: requireProductId('SR-C1'), qty: 1 },
           ],
+        },
+        {
+          key: 'laundry',
+          items: [{ productId: requireProductId('SR-S5'), qty: 1 }],
         },
         {
           key: 'living',
-          label: 'الريسبشن',
+          items: [{ productId: requireProductId('SR-S8'), qty: 1 }],
+        },
+        {
+          key: 'bedrooms',
           items: [
-            { productId: requireProductId('SR-S8'), qty: 1 },
             { productId: requireProductId('SR-S11'), qty: 1 },
+            { productId: requireProductId('SR-F4'), qty: 1 },
           ],
         },
         {
-          key: 'bedroom',
-          label: 'أوضة النوم',
-          items: [{ productId: requireProductId('SR-F4'), qty: 1 }],
+          key: 'kitchenware',
+          items: [{ productId: requireProductId('SR-C1'), qty: 1 }],
         },
       ],
     },
@@ -1234,30 +1251,41 @@ async function main() {
       slug: 'palace',
       name: 'القصر',
       sort: 3,
+      highlights: [
+        'أعلى فئة لتجهيز متكامل بأرقى الماركات العالمية',
+        'شاشة QLED عملاقة مع تكييفات لجميع الغرف',
+        'ثلاجة وغسالة ذكية بأحدث تكنولوجيا',
+        'طقمين أواني طهي تركي جرانيت وستانلس أصلي',
+      ],
       rooms: [
         {
           key: 'kitchen',
-          label: 'المطبخ',
           items: [
             { productId: requireProductId('SR-S3'), qty: 1 },
-            { productId: requireProductId('SR-S6'), qty: 1 },
             { productId: requireProductId('SR-S14'), qty: 1 },
-            { productId: requireProductId('SR-C2'), qty: 1 },
-            { productId: requireProductId('SR-C3'), qty: 1 },
           ],
+        },
+        {
+          key: 'laundry',
+          items: [{ productId: requireProductId('SR-S6'), qty: 1 }],
         },
         {
           key: 'living',
-          label: 'الريسبشن',
+          items: [{ productId: requireProductId('SR-S10'), qty: 1 }],
+        },
+        {
+          key: 'bedrooms',
           items: [
-            { productId: requireProductId('SR-S10'), qty: 1 },
             { productId: requireProductId('SR-S13'), qty: 1 },
+            { productId: requireProductId('SR-S12'), qty: 2 },
           ],
         },
         {
-          key: 'bedroom',
-          label: 'أوضة النوم',
-          items: [{ productId: requireProductId('SR-S12'), qty: 2 }],
+          key: 'kitchenware',
+          items: [
+            { productId: requireProductId('SR-C2'), qty: 1 },
+            { productId: requireProductId('SR-C3'), qty: 1 },
+          ],
         },
       ],
     },
@@ -1265,17 +1293,20 @@ async function main() {
 
   for (const tier of bridalTierDefs) {
     const roomsJson = tier.rooms as unknown as Prisma.InputJsonValue
+    const highlightsJson = tier.highlights as unknown as Prisma.InputJsonValue
     await prisma.bridalTier.upsert({
       where: { slug: tier.slug },
       update: {
         name: tier.name,
         sort: tier.sort,
+        highlights: highlightsJson,
         rooms: roomsJson,
       },
       create: {
         slug: tier.slug,
         name: tier.name,
         sort: tier.sort,
+        highlights: highlightsJson,
         rooms: roomsJson,
       },
     })

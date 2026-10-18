@@ -43,6 +43,19 @@ export function depositRemaining(order: OrderDepositInput): number {
   return Math.max(0, (order.depositAmount ?? 0) - order.paidAmount)
 }
 
+export interface ReachesDepositInput {
+  paidAmount: number
+  depositAmount?: number | null
+}
+
+export function reachesDeposit(order: ReachesDepositInput, amount: number): boolean {
+  const deposit = order.depositAmount ?? 0
+  if (deposit <= 0) {
+    return true
+  }
+  return order.paidAmount + amount >= deposit
+}
+
 export interface OrderConfirmAmountInput {
   status: OrderStatus
   total: number

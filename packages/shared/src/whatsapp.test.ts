@@ -33,6 +33,7 @@ describe('renderTemplate & DEFAULT_TEMPLATES', () => {
       'payment_rejected',
       'payment_proof',
       'bridal_locked',
+      'bridal_repriced',
       'notify_back_in_stock',
       'product_question',
       'traders_contact',
@@ -63,6 +64,19 @@ describe('renderTemplate & DEFAULT_TEMPLATES', () => {
       lockedUntil: '2026-11-15',
     })
     expect(bridal).toContain('2026-11-15')
+
+    const repriced = renderTemplate(DEFAULT_TEMPLATES.bridal_repriced, {
+      customerName: 'سلمى',
+      orderNo: 'BR-12',
+      oldTotal: '150,000 ج.م',
+      newTotal: '155,000 ج.م',
+      lockedUntil: '2026-12-01',
+    })
+    expect(repriced).toContain('سلمى')
+    expect(repriced).toContain('BR-12')
+    expect(repriced).toContain('150,000 ج.م')
+    expect(repriced).toContain('155,000 ج.م')
+    expect(repriced).toContain('2026-12-01')
   })
 })
 
