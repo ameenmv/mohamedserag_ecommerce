@@ -67,9 +67,9 @@ description: "Tasks for Slice 3 — «جهّز بيتك» Bridal Builder"
 
 ## Phase 9: Polish & Cross-Cutting
 
-- [ ] T027 English pass, 320 px pass, a11y labels, Lighthouse check of /bridal
+- [x] T027 English pass, 320 px pass, a11y labels, Lighthouse check of /bridal
 - [x] T028 Docs: `docs/PHASE-1.md` slice 3 status, README roadmap box
-- [ ] T029 Review: security (tokens, PII on share page), speckit-analyze consistency
+- [x] T029 Review: security (tokens, PII on share page), speckit-analyze consistency
 
 ---
 

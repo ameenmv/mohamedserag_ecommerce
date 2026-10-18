@@ -10,11 +10,6 @@ const storeSettings = useStoreSettings()
 const no = computed(() => String(route.params.no))
 const token = computed(() => (typeof route.query.t === 'string' ? route.query.t : undefined))
 
-useSeoMeta({
-  title: () => t('store.thanks.pageTitle'),
-  robots: 'noindex, nofollow',
-})
-
 const baseURL = getApiBaseUrl()
 const { data: order, error } = await useAsyncData<OrderThanks | null>(
   `order-thanks-${no.value}`,
@@ -30,6 +25,12 @@ const { data: order, error } = await useAsyncData<OrderThanks | null>(
 
 const isSuccess = computed(() => Boolean(order.value && !error.value))
 const isBridal = computed(() => order.value?.type === 'bridal')
+const pageTitle = computed(() => (isBridal.value ? t('store.thanks.bridal.title') : t('store.thanks.pageTitle')))
+
+useSeoMeta({
+  title: () => pageTitle.value,
+  robots: 'noindex, nofollow',
+})
 
 const bridalInstallmentsWhatsappUrl = computed(() => {
   if (!order.value) return ''
@@ -57,7 +58,7 @@ async function copyOrderNo(): Promise<void> {
     <!-- Breadcrumb -->
     <div class="border-b border-border bg-card">
       <div class="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
-        <StoreListingBreadcrumb :items="[{ label: t('store.thanks.pageTitle') }]" />
+        <StoreListingBreadcrumb :items="[{ label: pageTitle }]" />
       </div>
     </div>
 
@@ -114,9 +115,6 @@ async function copyOrderNo(): Promise<void> {
               {{ t('store.thanks.bridal.lockNotice', { lockDays: order.lockDays ?? 30 }) }}
             </h2>
           </div>
-          <p class="text-xs font-medium text-muted-foreground">
-            {{ t('store.thanks.bridal.subtitle') }}
-          </p>
         </div>
 
         <!-- Next Step: COD Without Deposit -->
