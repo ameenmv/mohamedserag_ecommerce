@@ -37,7 +37,8 @@ export interface ProductCard {
   availability: ProductCardAvailability
 }
 
-export type SpecFieldType = 'text' | 'number' | 'boolean' | 'choice'
+export const SPEC_FIELD_TYPES = ['text', 'number', 'boolean', 'choice'] as const
+export type SpecFieldType = (typeof SPEC_FIELD_TYPES)[number]
 
 export interface SpecTemplateField {
   key: string
@@ -177,5 +178,8 @@ export interface ProductDetail {
   related: ProductCard[]
 }
 
-export type CatalogSort = 'popular' | 'price_asc' | 'price_desc' | 'discount' | 'newest' | 'relevance'
-export type CatalogAvailabilityFilter = 'in_stock' | 'low' | 'on_request' | 'out'
+export const CATALOG_SORTS = ['popular', 'price_asc', 'price_desc', 'discount', 'newest', 'relevance'] as const
+export type CatalogSort = (typeof CATALOG_SORTS)[number]
+
+export const CATALOG_AVAILABILITY_FILTERS = ['in_stock', 'low', 'on_request', 'out'] as const
+export type CatalogAvailabilityFilter = (typeof CATALOG_AVAILABILITY_FILTERS)[number]

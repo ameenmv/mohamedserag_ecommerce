@@ -9,8 +9,9 @@ const props = defineProps<{
 const { t } = useI18n()
 const notify = useNotify()
 const { has, toggle } = useWishlist()
+const hydrated = useHydrated()
 
-const isSaved = computed(() => has(props.product.id))
+const isSaved = computed(() => hydrated.value && has(props.product.id))
 
 function onToggle(): void {
   const added = toggle(props.product)

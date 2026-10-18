@@ -13,10 +13,11 @@ const emit = defineEmits<{
 const { t } = useI18n()
 const notify = useNotify()
 const { has, toggle } = useCompare()
+const hydrated = useHydrated()
 
 const pendingCompare = useState<ProductCard | null>('compare-pending', () => null)
 
-const isCompared = computed(() => has(props.product.id))
+const isCompared = computed(() => hydrated.value && has(props.product.id))
 
 function onToggle(): void {
   const result = toggle(props.product)

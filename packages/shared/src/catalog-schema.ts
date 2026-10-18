@@ -1,13 +1,13 @@
 import { z } from 'zod'
-import type { CatalogSort } from './catalog.js'
+import {
+  CATALOG_SORTS,
+  CATALOG_AVAILABILITY_FILTERS,
+  SPEC_FIELD_TYPES,
+  type CatalogSort,
+} from './catalog.js'
 
-export const CATALOG_SORTS = ['popular', 'price_asc', 'price_desc', 'discount', 'newest', 'relevance'] as const
 export const catalogSortSchema = z.enum(CATALOG_SORTS)
-
-export const CATALOG_AVAILABILITY_FILTERS = ['in_stock', 'low', 'on_request', 'out'] as const
 export const catalogAvailabilityFilterSchema = z.enum(CATALOG_AVAILABILITY_FILTERS)
-
-export const SPEC_FIELD_TYPES = ['text', 'number', 'boolean', 'choice'] as const
 export const specFieldTypeSchema = z.enum(SPEC_FIELD_TYPES)
 
 /**

@@ -6,7 +6,12 @@
   "sideEffects": false,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "dev": "tsc -p tsconfig.build.json --watch",
@@ -14,11 +19,14 @@
     "lint": "eslint .",
     "test": "vitest run"
   },
-  "dependencies": { "zod": "catalog:" },
+  "dependencies": {
+    "zod": "catalog:"
+  },
   "devDependencies": {
     "@serag/config": "workspace:*",
     "eslint": "catalog:",
     "typescript": "catalog:",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
+    "@types/node": "catalog:"
   }
 }

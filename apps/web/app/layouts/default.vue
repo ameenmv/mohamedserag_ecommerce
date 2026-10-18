@@ -7,16 +7,10 @@ const { t } = useI18n()
 const route = useRoute()
 const { count: compareCount } = useCompare()
 const pendingCompare = useState<ProductCard | null>('compare-pending', () => null)
-
-const isMounted = ref(false)
-if (import.meta.client) {
-  onMounted(() => {
-    isMounted.value = true
-  })
-}
+const hydrated = useHydrated()
 
 const showCompareBar = computed(() => {
-  if (!isMounted.value || compareCount.value < 1) return false
+  if (!hydrated.value || compareCount.value < 1) return false
   const path = stripLocalePrefix(route.path).replace(/\/$/, '')
   // Hidden where it would compete with the page's own sticky actions (checkout total, cart, thank-you).
   const hiddenOn = ['/compare', '/cart', '/checkout']

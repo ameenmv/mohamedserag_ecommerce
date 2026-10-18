@@ -104,6 +104,9 @@ export default defineNuxtConfig({
         const file = manifest[key]
         if (file) {
           file.prefetch = false
+          // No <link rel="modulepreload"> for non-entry chunks: on slow connections 40+ preloads
+          // competed with CSS/fonts before first paint. The entry still imports them right after.
+          if (!file.isEntry) file.preload = false
         }
       }
     },

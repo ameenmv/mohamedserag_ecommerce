@@ -10,6 +10,7 @@ defineProps<{
 }>()
 
 const localePath = useLocalePath()
+const hydrated = useHydrated()
 </script>
 
 <template>
@@ -20,7 +21,7 @@ const localePath = useLocalePath()
     <component :is="icon" class="size-5" aria-hidden="true" />
     <span class="sr-only">{{ srText || label }}</span>
     <span
-      v-if="count > 0"
+      v-if="hydrated && count > 0"
       aria-hidden="true"
       class="num absolute -top-1.5 -start-1.5 inline-flex min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[11px] font-bold text-primary-foreground"
     >

@@ -1,5 +1,6 @@
 import { z } from 'zod'
-import { orderStatusSchema, type OrderStatus } from './enums.js'
+import { orderStatusSchema } from './enums-schema.js'
+import type { OrderStatus } from './enums.js'
 
 export const confirmPaymentInputSchema = z.object({
   amount: z

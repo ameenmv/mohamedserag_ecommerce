@@ -6,6 +6,7 @@ const { t } = useI18n()
 const localePath = useLocalePath()
 const { cart } = useHeaderBadges()
 const { isActive } = useNavActive('/')
+const hydrated = useHydrated()
 
 const items: { labelKey: string; to: string; icon: Component; showCartBadge?: boolean }[] = [
   { labelKey: 'store.header.home', to: '/', icon: Home },
@@ -36,7 +37,7 @@ const items: { labelKey: string; to: string; icon: Component; showCartBadge?: bo
       <div class="relative flex items-center justify-center">
         <component :is="item.icon" class="size-5" aria-hidden="true" />
         <span
-          v-if="item.showCartBadge && cart > 0"
+          v-if="item.showCartBadge && hydrated && cart > 0"
           aria-hidden="true"
           class="num absolute -top-1.5 -start-2.5 inline-flex min-w-4.5 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-extrabold text-accent-foreground"
         >

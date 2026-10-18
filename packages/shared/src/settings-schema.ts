@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { paymentMethodSchema } from './enums.js'
+import { paymentMethodSchema } from './enums-schema.js'
 
 export const zonePlaceSchema = z.object({
   governorate: z.string().trim().min(1, { message: 'اسم المحافظة مطلوب' }),

@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { phoneSchema } from './phone-schema.js'
-import { paymentMethodSchema, type OrderStatus, type PaymentMethod } from './enums.js'
+import { paymentMethodSchema } from './enums-schema.js'
+import type { OrderStatus, PaymentMethod } from './enums.js'
 import { cartQuoteItemInputSchema, mergeCartItems } from './cart-schema.js'
 
 export const orderCustomerSchema = z.object({

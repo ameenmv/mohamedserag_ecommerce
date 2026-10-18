@@ -113,14 +113,15 @@ const summaryRef = ref<{ addToCartButton: HTMLElement | null } | null>(null)
 
     <!-- Product Details: Specs, Set Contents, Warranty, Delivery -->
     <div class="mt-10 flex max-w-4xl flex-col gap-6 lg:mt-12">
-      <StoreProductPageSpecs :specs="product.specs" />
-      <StoreProductPageSetContents :set-contents="product.setContents" />
-      <StoreProductPageWarranty
+      <LazyStoreProductPageSpecs hydrate-never :specs="product.specs" />
+      <LazyStoreProductPageSetContents hydrate-never :set-contents="product.setContents" />
+      <LazyStoreProductPageWarranty
+        hydrate-never
         :warranty="product.warranty"
         :warranty-activation="product.warrantyActivation"
         :origin="product.origin"
       />
-      <StoreProductPageDelivery />
+      <LazyStoreProductPageDelivery hydrate-never />
     </div>
 
     <!-- Related Products -->

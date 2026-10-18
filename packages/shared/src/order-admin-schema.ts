@@ -1,10 +1,6 @@
 import { z } from 'zod'
-import {
-  orderStatusSchema,
-  paymentMethodSchema,
-  type OrderStatus,
-  type PaymentMethod,
-} from './enums.js'
+import { orderStatusSchema, paymentMethodSchema } from './enums-schema.js'
+import type { OrderStatus, PaymentMethod } from './enums.js'
 import { phoneSchema } from './phone-schema.js'
 import { DEFAULT_TEMPLATES, type WhatsAppTemplateKey } from './whatsapp.js'
 

@@ -14,13 +14,7 @@ export interface HeaderBadges {
  * Renders counts only after mount to prevent SSR hydration mismatches (server renders without a number).
  */
 export function useHeaderBadges(): HeaderBadges {
-  const isMounted = ref(false)
-
-  if (import.meta.client) {
-    onMounted(() => {
-      isMounted.value = true
-    })
-  }
+  const hydrated = useHydrated()
 
   const lines = useCartLines()
   const wishlistEntries = useWishlistEntries()
@@ -30,9 +24,9 @@ export function useHeaderBadges(): HeaderBadges {
   const rawWishlistCount = computed(() => wishlistEntries.value.length)
   const rawCompareCount = computed(() => compareEntries.value.length)
 
-  const cart = computed(() => (isMounted.value ? rawCartCount.value : 0))
-  const wishlist = computed(() => (isMounted.value ? rawWishlistCount.value : 0))
-  const compare = computed(() => (isMounted.value ? rawCompareCount.value : 0))
+  const cart = computed(() => (hydrated.value ? rawCartCount.value : 0))
+  const wishlist = computed(() => (hydrated.value ? rawWishlistCount.value : 0))
+  const compare = computed(() => (hydrated.value ? rawCompareCount.value : 0))
 
   return {
     wishlist,

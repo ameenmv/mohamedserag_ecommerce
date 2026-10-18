@@ -1,23 +1,19 @@
 <script setup lang="ts">
 import { ShoppingCart } from '@lucide/vue'
 
-defineProps<{
+const props = defineProps<{
   count: number
 }>()
 
 const { t } = useI18n()
 const localePath = useLocalePath()
 const { open: openDrawer } = useCartDrawer()
+const hydrated = useHydrated()
 
-const isMounted = ref(false)
-if (import.meta.client) {
-  onMounted(() => {
-    isMounted.value = true
-  })
-}
+const displayCount = computed(() => (hydrated.value ? props.count : 0))
 
 function handleClick(event: MouseEvent): void {
-  if (isMounted.value) {
+  if (hydrated.value) {
     event.preventDefault()
     openDrawer()
   }
@@ -34,10 +30,10 @@ function handleClick(event: MouseEvent): void {
       @click="handleClick"
     >
     <ShoppingCart class="size-5" aria-hidden="true" />
-    <span class="sr-only">{{ t('store.header.cartCount', { count }) }}</span>
+    <span class="sr-only">{{ t('store.header.cartCount', { count: displayCount }) }}</span>
     <span class="hidden text-sm sm:inline" aria-hidden="true">{{ t('store.header.cart') }}</span>
     <span
-      v-if="count > 0"
+      v-if="hydrated && count > 0"
       aria-hidden="true"
       class="num inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-serag-ink px-1.5 text-xs font-extrabold text-serag-gold-hi"
     >

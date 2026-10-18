@@ -1,4 +1,3 @@
-import { z } from 'zod'
 import { normalizeArabic } from './arabic.js'
 import { egpToPiastres } from './money.js'
 
@@ -74,13 +73,6 @@ export interface ImportHeaderMapping {
   name: number
 }
 
-export const productImportInputSchema = z.object({
-  csv: z
-    .string({ error: 'نص الملف مطلوب' })
-    .max(2 * 1024 * 1024, 'حجم الملف يجب ألا يتجاوز 2 ميجابايت'),
-})
-
-export type ProductImportInput = z.infer<typeof productImportInputSchema>
 
 /**
  * Parses raw CSV text according to RFC 4180 basics:

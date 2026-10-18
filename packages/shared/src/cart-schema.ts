@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { paymentMethodSchema } from './enums.js'
+import { paymentMethodSchema } from './enums-schema.js'
 
 export const cartQuoteItemInputSchema = z.object({
   productId: z.string().trim().min(1, { message: 'معرف المنتج مطلوب' }),
