@@ -317,7 +317,7 @@ describe('Bridal Reserve API E2E (/api/bridal/reserve-quote, /api/bridal/lists/:
   it('rejects cod paymentMethod with 400', async () => {
     const { editToken } = await createDraftList([{ productId: prodInStock1Id, qty: 1 }])
 
-    const res = await request(app.getHttpServer())
+    await request(app.getHttpServer())
       .post(`/api/bridal/lists/${editToken}/reserve`)
       .set('X-Forwarded-For', nextIp())
       .send({

@@ -11,19 +11,23 @@ const props = defineProps<{
   hasUnavailableItems?: boolean
   isEmpty?: boolean
   editable?: boolean
+  canReserve?: boolean
 }>()
 
 const { t } = useI18n()
 const localePath = useLocalePath()
 
 const reserveReason = computed(() => {
+  if (props.canReserve) {
+    return null
+  }
   if (props.hasUnavailableItems) {
     return t('store.bridal.reserve.unavailableReason')
   }
   if (props.isEmpty) {
     return t('store.bridal.reserve.emptyReason')
   }
-  return t('store.bridal.reserve.comingSoonReason')
+  return null
 })
 </script>
 
@@ -33,16 +37,17 @@ const reserveReason = computed(() => {
   >
     <!-- Edit Mode: Reserve reason text + Share controls -->
     <template v-if="editable">
-      <!-- Small line in page body explaining why reserve is disabled -->
-      <p
-        id="bridal-reserve-reason"
-        :class="[
-          'text-center text-xs font-semibold leading-relaxed',
-          hasUnavailableItems ? 'text-destructive' : 'text-muted-foreground',
-        ]"
-      >
-        {{ reserveReason }}
-      </p>
+       <!-- Small line in page body explaining why reserve is disabled -->
+       <p
+         v-if="reserveReason"
+         id="bridal-reserve-reason"
+         :class="[
+           'text-center text-xs font-semibold leading-relaxed',
+           hasUnavailableItems ? 'text-destructive' : 'text-muted-foreground',
+         ]"
+       >
+         {{ reserveReason }}
+       </p>
 
       <!-- Share controls -->
       <div class="border-t border-border/60 pt-3">

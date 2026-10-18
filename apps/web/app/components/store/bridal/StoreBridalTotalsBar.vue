@@ -9,6 +9,12 @@ const props = defineProps<{
   itemCount: number
   tierDifference?: number | null
   editable?: boolean
+  canReserve?: boolean
+  reserveDisabledReason?: string | null
+}>()
+
+const emit = defineEmits<{
+  reserve: []
 }>()
 
 const { t } = useI18n()
@@ -120,14 +126,20 @@ const contactWhatsAppLink = computed(() => {
 
     <!-- Primary Action Button -->
     <div class="shrink-0 lg:w-full">
-      <!-- Edit Mode: Reserve button (disabled) -->
+      <!-- Edit Mode: Reserve button -->
       <button
         v-if="editable"
         id="bridal-reserve-button"
         type="button"
-        disabled
-        aria-describedby="bridal-reserve-reason"
-        class="inline-flex min-h-11 shrink-0 items-center justify-center gap-1.5 rounded-xl bg-serag-gold px-3 text-xs font-bold text-serag-night shadow-xs opacity-50 cursor-not-allowed sm:px-4 sm:text-sm lg:w-full"
+        :disabled="!canReserve"
+        :aria-describedby="!canReserve && reserveDisabledReason ? 'bridal-reserve-reason' : undefined"
+        :class="[
+          'inline-flex min-h-11 shrink-0 items-center justify-center gap-1.5 rounded-xl bg-serag-gold px-3 text-xs font-bold text-serag-night shadow-xs transition-colors sm:px-4 sm:text-sm lg:w-full',
+          canReserve
+            ? 'hover:bg-serag-gold-hi focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer'
+            : 'opacity-50 cursor-not-allowed',
+        ]"
+        @click="emit('reserve')"
       >
         <ShieldCheck class="size-4 shrink-0" aria-hidden="true" />
         <span>{{ t('store.bridal.totals.reserveButton') }}</span>

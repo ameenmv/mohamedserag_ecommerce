@@ -1,5 +1,6 @@
 import type {
   BridalListView,
+  BridalReserveQuote,
   BridalRoom,
   BridalRoomKey,
   BridalRooms,
@@ -188,4 +189,53 @@ export function classifyDiff(diff: number): DiffClassification {
   if (diff > 0) return 'more'
   if (diff < 0) return 'less'
   return 'same'
+}
+
+export interface BridalConflictResult {
+  code: 'PRICE_CHANGED' | 'UNAVAILABLE' | 'NOT_DRAFT' | string
+  message: string
+  quote?: BridalReserveQuote
+}
+
+/**
+ * Extracts and validates a 409 Conflict error payload from a failed bridal reservation.
+ * Handles both $fetch { data } and { response: { _data } } shapes.
+ */
+export function parseBridalConflict(error: unknown): BridalConflictResult | null {
+  if (!error || typeof error !== 'object') {
+    return null
+  }
+
+  let payload: unknown = error
+  if ('data' in error && error.data && typeof error.data === 'object') {
+    payload = error.data
+  } else if (
+    'response' in error &&
+    error.response &&
+    typeof error.response === 'object' &&
+    '_data' in error.response
+  ) {
+    payload = (error.response as { _data: unknown })._data
+  }
+
+  if (!payload || typeof payload !== 'object') {
+    return null
+  }
+
+  const p = payload as { code?: unknown; message?: unknown; quote?: unknown }
+  if (typeof p.code === 'string') {
+    const message =
+      typeof p.message === 'string'
+        ? p.message
+        : Array.isArray(p.message) && typeof p.message[0] === 'string'
+          ? p.message[0]
+          : ''
+    return {
+      code: p.code,
+      message,
+      quote: (p.quote as BridalReserveQuote | undefined) ?? undefined,
+    }
+  }
+
+  return null
 }

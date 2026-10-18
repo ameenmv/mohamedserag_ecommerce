@@ -87,7 +87,10 @@ export async function useBridalList(token: Ref<string>) {
 
   const mode = computed(() => lastServerView.value?.mode ?? 'view')
   const status = computed(() => lastServerView.value?.status ?? 'draft')
-  const isEditable = computed(() => mode.value === 'edit' && status.value === 'draft')
+  const hasReservation = computed(() => Boolean(lastServerView.value?.reservation))
+  const isEditable = computed(
+    () => mode.value === 'edit' && status.value === 'draft' && !hasReservation.value,
+  )
   const isReadOnly = computed(() => !isEditable.value)
 
   function syncMetaFromView(view: BridalListView): void {
@@ -111,26 +114,15 @@ export async function useBridalList(token: Ref<string>) {
     productMeta.value = next
   }
 
-  function flushPendingSave(): void {
-    if (!isEditable.value || !hasPendingEdits) return
+  async function flushPendingSave(): Promise<boolean> {
+    if (!isEditable.value || !hasPendingEdits) return true
     if (saveTimer) {
       clearTimeout(saveTimer)
       saveTimer = null
     }
-    const url = `${baseURL}/bridal/lists/${encodeURIComponent(token.value)}`
-    try {
-      void fetch(url, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ rooms: rooms.value }),
-        keepalive: true,
-      })
-    } catch {
-      // Ignore keepalive error on unmount
-    }
-    hasPendingEdits = false
+    const seq = ++currentSeq
+    await triggerSave(seq)
+    return saveState.value !== 'error'
   }
 
   // 2. Lifecycle hooks registered BEFORE any await to preserve component instance

@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import type { OrderStatus } from '@serag/shared'
+import {
+  DEFAULT_TEMPLATES,
+  renderTemplate,
+  waLink,
+  type OrderStatus,
+} from '@serag/shared'
 import { useAdminOrder } from '~/composables/useAdminOrder'
 
 definePageMeta({ layout: 'admin', middleware: 'admin-auth' })
@@ -8,6 +13,7 @@ const route = useRoute()
 const orderId = String(route.params.id)
 
 const { t } = useI18n()
+const { money } = usePrice()
 const notify = useNotify()
 
 const {
@@ -19,6 +25,7 @@ const {
   confirmPayment,
   rejectPayment,
   saveNotes,
+  logWhatsapp,
   sendWhatsapp,
 } = useAdminOrder(orderId)
 
@@ -38,8 +45,17 @@ async function handleStatusChange(to: OrderStatus, reason?: string) {
 
 async function handlePaymentConfirm(amount: number, note?: string) {
   const ok = await confirmPayment(amount, note)
-  if (ok) {
-    notify.success(t('admin.orders.detail.paymentConfirmed'))
+  if (ok && detail.value) {
+    if (detail.value.deposit && detail.value.depositRemaining > 0) {
+      notify.success(
+        t('admin.confirm.partialDepositRecorded', {
+          amount: money(amount),
+          remaining: money(detail.value.depositRemaining),
+        }),
+      )
+    } else {
+      notify.success(t('admin.orders.detail.paymentConfirmed'))
+    }
   }
 }
 
@@ -54,6 +70,26 @@ async function handleNotesSave(notes: string) {
   const ok = await saveNotes(notes)
   if (ok) {
     notify.success(t('admin.orders.detail.notesSaved'))
+  }
+}
+
+async function handleSendBridalLockedWhatsapp() {
+  if (!detail.value) return
+  const bridalLockedEvent = detail.value.events.find((e) => e.status === 'bridal_locked')
+  if (!bridalLockedEvent) return
+  const firstName = detail.value.customer.name.trim().split(/\s+/)[0] || detail.value.customer.name
+  const lockedDate = bridalLockedEvent.note ?? ''
+  const variables = {
+    customerName: firstName,
+    orderNo: detail.value.no,
+    date: lockedDate,
+    lockedUntil: lockedDate,
+  }
+  const text = renderTemplate(DEFAULT_TEMPLATES.bridal_locked, variables)
+  const url = waLink(detail.value.customer.phone, text)
+  await logWhatsapp('bridal_locked', variables)
+  if (typeof window !== 'undefined') {
+    window.open(url, '_blank', 'noopener')
   }
 }
 </script>
@@ -106,8 +142,16 @@ async function handleNotesSave(notes: string) {
           :default-confirm-amount="detail.defaultConfirmAmount"
           :shortages="detail.shortages"
           :action-pending="actionPending"
+          :deposit="detail.deposit"
+          :paid-amount="detail.paidAmount"
+          :deposit-remaining="detail.depositRemaining"
+          :events="detail.events"
+          :customer-phone="detail.customer.phone"
+          :customer-name="detail.customer.name"
+          :order-no="detail.no"
           @confirm="handlePaymentConfirm"
           @reject="handlePaymentReject"
+          @send-bridal-locked-whatsapp="handleSendBridalLockedWhatsapp"
         />
       </div>
 

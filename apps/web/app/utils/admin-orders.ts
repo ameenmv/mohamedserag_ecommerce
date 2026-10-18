@@ -89,6 +89,22 @@ export function buildStatusWhatsappUrl(
   templates?: Record<string, string>,
   opts?: { reason?: string },
 ): { url: string; templateKey: WhatsAppTemplateKey; variables: Record<string, string | number> } | null {
+  const bridalLockedEvent = detail.events?.find((e) => e.status === 'bridal_locked')
+  if (detail.status === 'confirmed' && bridalLockedEvent) {
+    const firstName = detail.customer.name.trim().split(/\s+/)[0] || detail.customer.name
+    const templateText = templates?.bridal_locked ?? DEFAULT_TEMPLATES.bridal_locked
+    const lockedDate = bridalLockedEvent.note ?? ''
+    const variables: Record<string, string | number> = {
+      customerName: firstName,
+      orderNo: detail.no,
+      date: lockedDate,
+      lockedUntil: lockedDate,
+    }
+    const rendered = renderTemplate(templateText, variables)
+    const url = waLink(detail.customer.phone, rendered)
+    return { url, templateKey: 'bridal_locked', variables }
+  }
+
   const key = statusTemplateKey(detail.status)
   if (!key) return null
 

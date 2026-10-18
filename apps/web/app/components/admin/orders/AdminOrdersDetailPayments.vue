@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import { formatDateTime } from '~/utils/date-format'
+import { computed, ref } from 'vue'
+import { formatDate, formatDateTime } from '~/utils/date-format'
 import {
   piastresToEgp,
+  type AdminOrderDeposit,
+  type AdminOrderEvent,
   type AdminOrderPayment,
   type OrderStockShortage,
 } from '@serag/shared'
-import { AlertTriangle, CheckCircle, CreditCard, XCircle } from '@lucide/vue'
+import { AlertTriangle, Calendar, CheckCircle, CreditCard, MessageCircle, XCircle } from '@lucide/vue'
 import { parseConfirmAmountEgp } from '~/utils/admin-confirm'
 
 const props = defineProps<{
@@ -15,11 +18,19 @@ const props = defineProps<{
   defaultConfirmAmount: number
   shortages?: OrderStockShortage[]
   actionPending?: boolean
+  deposit?: AdminOrderDeposit | null
+  paidAmount?: number
+  depositRemaining?: number
+  events?: AdminOrderEvent[]
+  customerPhone?: string
+  customerName?: string
+  orderNo?: string
 }>()
 
 const emit = defineEmits<{
   confirm: [amountPiastres: number, note?: string]
   reject: [reason: string]
+  sendBridalLockedWhatsapp: []
 }>()
 
 const { t, locale } = useI18n()
@@ -29,10 +40,20 @@ const confirmDialogOpen = ref(false)
 const confirmAmountInput = ref('')
 const confirmNoteInput = ref('')
 const confirmError = ref<string | null>(null)
+const lastConfirmedAmount = ref<number | null>(null)
 
 const rejectDialogOpen = ref(false)
 const rejectReasonInput = ref('')
 const rejectError = ref<string | null>(null)
+
+const depositPaid = computed(() => {
+  if (!props.deposit) return 0
+  return Math.max(0, props.deposit.amount - (props.depositRemaining ?? 0))
+})
+
+const bridalLockedEvent = computed(() => {
+  return props.events?.find((e) => e.status === 'bridal_locked')
+})
 
 function openConfirmDialog() {
   confirmAmountInput.value = String(piastresToEgp(props.defaultConfirmAmount))
@@ -49,6 +70,7 @@ function handleConfirmSubmit() {
   }
   confirmError.value = null
   confirmDialogOpen.value = false
+  lastConfirmedAmount.value = parsed.piastres
   emit('confirm', parsed.piastres, confirmNoteInput.value.trim() || undefined)
 }
 
@@ -72,7 +94,6 @@ function handleRejectSubmit() {
   rejectDialogOpen.value = false
   emit('reject', reason)
 }
-
 </script>
 
 <template>
@@ -108,6 +129,62 @@ function handleRejectSubmit() {
           <span>{{ t('admin.orders.detail.rejectPayment') }}</span>
         </button>
       </div>
+    </div>
+
+    <!-- Deposit Breakdown (if deposit order) -->
+    <div
+      v-if="deposit"
+      class="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-serag-gold/30 bg-serag-gold/5 p-3.5 text-xs"
+    >
+      <div class="flex flex-col gap-0.5">
+        <span class="text-muted-foreground">{{ t('admin.confirm.summary.depositRequired') }}</span>
+        <span class="num text-sm font-bold text-foreground">{{ money(deposit.amount) }}</span>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-muted-foreground">{{ t('admin.confirm.summary.depositPaid') }}</span>
+        <span class="num text-sm font-bold text-foreground">{{ money(depositPaid) }}</span>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-muted-foreground">{{ t('admin.confirm.summary.depositRemaining') }}</span>
+        <span class="num text-sm font-bold text-foreground">{{ money(depositRemaining ?? 0) }}</span>
+      </div>
+    </div>
+
+    <!-- Partial Deposit Alert -->
+    <div
+      v-if="deposit && (depositRemaining ?? 0) > 0 && lastConfirmedAmount"
+      role="alert"
+      class="flex items-center gap-2 rounded-xl border border-amber-500/40 bg-amber-500/10 p-3 text-xs font-bold text-amber-900 dark:text-amber-200"
+    >
+      <AlertTriangle class="size-4 shrink-0 text-amber-600" aria-hidden="true" />
+      <span>
+        {{
+          t('admin.confirm.partialDepositRecorded', {
+            amount: money(lastConfirmedAmount),
+            remaining: money(depositRemaining ?? 0),
+          })
+        }}
+      </span>
+    </div>
+
+    <!-- Bridal Lock Notice -->
+    <div
+      v-if="bridalLockedEvent"
+      class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 rounded-xl border border-serag-gold/40 bg-serag-gold/10 p-3.5 text-xs text-foreground"
+    >
+      <div class="flex items-center gap-2 font-bold">
+        <Calendar class="size-4 shrink-0 text-serag-gold" aria-hidden="true" />
+        <span>{{ t('admin.confirm.result.bridalLockedNotice', { date: formatDate(bridalLockedEvent.note ?? '', locale) }) }}</span>
+      </div>
+      <button
+        type="button"
+        :disabled="actionPending"
+        class="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl bg-[#25D366] px-3.5 text-xs font-bold text-white hover:bg-[#20ba5a] transition-colors disabled:opacity-50 shadow-xs"
+        @click="emit('sendBridalLockedWhatsapp')"
+      >
+        <MessageCircle class="size-3.5" aria-hidden="true" />
+        <span>{{ t('admin.confirm.result.sendBridalLockedWhatsapp') }}</span>
+      </button>
     </div>
 
     <div

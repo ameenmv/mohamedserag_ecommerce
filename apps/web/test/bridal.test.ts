@@ -4,6 +4,7 @@ import {
   applyQty,
   classifyDiff,
   estimateTotals,
+  parseBridalConflict,
   removeItem,
   swapItem,
   toRooms,
@@ -218,3 +219,69 @@ describe('bridal utils - classifyDiff', () => {
     expect(classifyDiff(-0)).toBe('same')
   })
 })
+
+describe('bridal utils - parseBridalConflict', () => {
+  const mockQuote = {
+    subtotal: 5000000,
+    deliveryFee: 15000,
+    total: 5015000,
+    depositPct: 10,
+    depositAmount: 501500,
+    lockDays: 30,
+    zoneName: 'المنصورة',
+  }
+
+  it('extracts PRICE_CHANGED conflict with quote from data', () => {
+    const error = {
+      statusCode: 409,
+      data: {
+        code: 'PRICE_CHANGED',
+        message: 'الأسعار اتغيرت، راجعي الإجمالي الجديد',
+        quote: mockQuote,
+      },
+    }
+    const res = parseBridalConflict(error)
+    expect(res).not.toBeNull()
+    expect(res?.code).toBe('PRICE_CHANGED')
+    expect(res?.message).toBe('الأسعار اتغيرت، راجعي الإجمالي الجديد')
+    expect(res?.quote).toEqual(mockQuote)
+  })
+
+  it('extracts UNAVAILABLE conflict from response._data', () => {
+    const error = {
+      response: {
+        status: 409,
+        _data: {
+          code: 'UNAVAILABLE',
+          message: 'فيه منتجات نفذت، بدّليها أو شيليها',
+        },
+      },
+    }
+    const res = parseBridalConflict(error)
+    expect(res).not.toBeNull()
+    expect(res?.code).toBe('UNAVAILABLE')
+    expect(res?.message).toBe('فيه منتجات نفذت، بدّليها أو شيليها')
+    expect(res?.quote).toBeUndefined()
+  })
+
+  it('extracts NOT_DRAFT conflict', () => {
+    const error = {
+      data: {
+        code: 'NOT_DRAFT',
+        message: 'القايمة اتحجزت قبل كده',
+      },
+    }
+    const res = parseBridalConflict(error)
+    expect(res).not.toBeNull()
+    expect(res?.code).toBe('NOT_DRAFT')
+    expect(res?.message).toBe('القايمة اتحجزت قبل كده')
+  })
+
+  it('returns null for non-conflict or malformed errors', () => {
+    expect(parseBridalConflict(null)).toBeNull()
+    expect(parseBridalConflict('error string')).toBeNull()
+    expect(parseBridalConflict({})).toBeNull()
+    expect(parseBridalConflict({ data: { other: 123 } })).toBeNull()
+  })
+})
+

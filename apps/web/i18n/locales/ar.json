@@ -265,7 +265,17 @@
       "backToHome": "الرجوع للرئيسية",
       "browseShop": "متابعة التسوق",
       "invalidLinkTitle": "الرابط ده مش صحيح أو انتهى",
-      "invalidLinkDescription": "تأكد من فتح الرابط الصحيح الذي وصلك بعد إتمام الطلب."
+      "invalidLinkDescription": "تأكد من فتح الرابط الصحيح الذي وصلك بعد إتمام الطلب.",
+      "bridal": {
+        "title": "تم حجز جهازك",
+        "subtitle": "هنكلمك نتفق على ميعاد التوصيل والتركيب",
+        "reservationNumber": "رقم حجز الجهاز:",
+        "lockNotice": "الأسعار هتتثبت {lockDays} يوم من تأكيد العربون",
+        "installmentsTitle": "التقسيط متاح في المعرض",
+        "installmentsInquiry": "تقدري تقسطي باقي المبلغ في معرض محمد سراج بالمنصورة",
+        "installmentsButton": "استفسري عن التقسيط على واتساب",
+        "installmentsWhatsapp": "السلام عليكم، عندي استفسار عن تقسيط باقي مبلغ حجز الجهاز رقم {no}"
+      }
     },
     "wishlist": {
       "add": "إضافة للمفضلة",
@@ -475,7 +485,26 @@
       "reserve": {
         "unavailableReason": "فيه منتجات نفذت، بدّليها أو شيليها",
         "emptyReason": "القايمة فاضية",
-        "comingSoonReason": "الحجز بالعربون قريب"
+        "comingSoonReason": "الحجز بالعربون قريب",
+        "priceChangedNotice": "الأسعار اتغيرت، راجعي الإجمالي الجديد"
+      },
+      "reserveSheet": {
+        "title": "حجز جهاز العروسة",
+        "description": "احجزي جهازك بعربون وثبّتي الأسعار",
+        "preferredDate": "ميعاد التوصيل المفضّل (اختياري)",
+        "preferredDateHint": "هنكلمك نتفق على ميعاد التوصيل والتركيب",
+        "updatingQuote": "جاري تحديث الحسبة...",
+        "subtotal": "إجمالي الأجهزة",
+        "deliveryFee": "مصاريف التوصيل",
+        "lockedTotal": "الإجمالي المثبّت",
+        "depositAmount": "العربون المطلوب ({pct}%): {amount}",
+        "lockNotice": "الأسعار هتتثبت {lockDays} يوم من تأكيد العربون",
+        "noCouponsNotice": "الكوبونات مش بتتطبق على حجز الجهاز",
+        "installmentsNotice": "التقسيط متاح في المعرض",
+        "chooseLocationHint": "اكتبي المحافظة والمدينة لحساب مصاريف التوصيل وتأكيد العربون",
+        "submitting": "جاري تأكيد الحجز...",
+        "submitButton": "تأكيد الحجز",
+        "quoteRequiredHint": "اكتبي بيانات العنوان لمعرفة مصاريف التوصيل وحساب العربون"
       },
       "share": {
         "title": "شاركي قايمتك",
@@ -495,11 +524,16 @@
       },
       "status": {
         "draft": "مسودة",
-        "awaitingDeposit": "بانتظار دفع العربون",
+        "awaitingDeposit": "بانتظار العربون",
+        "awaiting_deposit": "بانتظار العربون",
+        "reserved": "تم الحجز",
         "locked": "محجوز (السعر مثبت)",
-        "deliveryAgreed": "تم الاتفاق على ميعاد التوصيل",
+        "deliveryAgreed": "اتفقنا على التوصيل",
         "delivered": "تم التسليم",
-        "cancelled": "الحجز ملغي",
+        "cancelled": "ملغي",
+        "reservationNo": "رقم الحجز: {no}",
+        "depositProgress": "العربون: تم سداد {paid} من {required}",
+        "lockedUntil": "الأسعار متثبتة لحد {date}",
         "banner": "حالة الحجز: {status} — رقم الحجز: {no}"
       },
       "swapSheet": {
@@ -1160,6 +1194,7 @@
       "notFound": "الرابط ده مش صحيح أو انتهى",
       "backToDashboard": "رجوع للوحة التحكم",
       "notActionable": "الطلب ده {status}، مفيش حاجة محتاجة تأكيد",
+      "partialDepositRecorded": "اتسجل {amount} — فاضل {remaining} من العربون",
       "summary": {
         "title": "تفاصيل الدفع",
         "customer": "العميل",
@@ -1168,6 +1203,9 @@
         "paid": "المدفوع حالياً",
         "expected": "المبلغ المطلوب",
         "depositExpected": "العربون المطلوب ({pct}%)",
+        "depositRequired": "العربون المطلوب",
+        "depositPaid": "المدفوع من العربون",
+        "depositRemaining": "المتبقي من العربون",
         "remaining": "المتبقي"
       },
       "actions": {
@@ -1194,6 +1232,8 @@
         "statusLabel": "حالة الطلب الآن:",
         "paidAmount": "تم دفع:",
         "remainingAmount": "المتبقي:",
+        "bridalLockedNotice": "الأسعار اتثبتت لحد {date}",
+        "sendBridalLockedWhatsapp": "ابعت رسالة تثبيت الأسعار على واتساب",
         "openOrder": "افتح الطلب",
         "sendWhatsapp": "ابعت للعميل على واتساب",
         "shortageWarning": "تنبيه نقص في المخزون:",

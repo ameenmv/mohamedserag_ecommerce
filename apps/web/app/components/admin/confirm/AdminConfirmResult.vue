@@ -5,10 +5,12 @@ import type {
   OrderStockShortage,
 } from '@serag/shared'
 import { remainingPiastres } from '~/utils/admin-confirm'
+import { formatDate } from '~/utils/date-format'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import {
   AlertTriangle,
+  Calendar,
   CheckCircle2,
   ExternalLink,
   LayoutDashboard,
@@ -21,13 +23,17 @@ const props = defineProps<{
   summary: AdminConfirmSummary
   shortages: OrderStockShortage[]
   rejectWhatsappUrl: string | null
+  lastConfirmedAmount?: number | null
 }>()
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const { money } = usePrice()
 const localePath = useLocalePath()
 
 const remaining = computed(() => remainingPiastres(props.summary))
+const hasDeposit = computed(() =>
+  Boolean(props.summary.deposit || (props.summary.depositAmount && props.summary.depositAmount > 0)),
+)
 </script>
 
 <template>
@@ -65,6 +71,46 @@ const remaining = computed(() => remainingPiastres(props.summary))
                 {{ money(remaining) }}
               </span>
             </div>
+            <template v-if="hasDeposit">
+              <div class="flex flex-col gap-0.5">
+                <span class="text-muted-foreground">{{ t('admin.confirm.summary.depositRequired') }}</span>
+                <span class="num text-sm font-extrabold text-foreground">
+                  {{ money(summary.deposit?.required ?? summary.depositAmount ?? 0) }}
+                </span>
+              </div>
+              <div class="flex flex-col gap-0.5">
+                <span class="text-muted-foreground">{{ t('admin.confirm.summary.depositRemaining') }}</span>
+                <span class="num text-sm font-extrabold text-foreground">
+                  {{ money(summary.deposit?.remaining ?? summary.depositRemaining ?? 0) }}
+                </span>
+              </div>
+            </template>
+          </div>
+
+          <!-- Partial Deposit Alert (if not fully reached) -->
+          <div
+            v-if="summary.deposit && (summary.deposit.remaining ?? 0) > 0"
+            role="alert"
+            class="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border border-amber-500/40 bg-amber-500/10 p-3 text-xs sm:text-sm font-bold text-amber-900 dark:text-amber-200"
+          >
+            <AlertTriangle class="size-4 shrink-0 text-amber-600" aria-hidden="true" />
+            <span>
+              {{
+                t('admin.confirm.partialDepositRecorded', {
+                  amount: money(lastConfirmedAmount ?? summary.paidAmount),
+                  remaining: money(summary.deposit.remaining ?? 0),
+                })
+              }}
+            </span>
+          </div>
+
+          <!-- Price Lock Notice -->
+          <div
+            v-if="summary.locked"
+            class="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border border-serag-gold/40 bg-serag-gold/10 p-3 text-xs sm:text-sm font-bold text-foreground"
+          >
+            <Calendar class="size-4 shrink-0 text-serag-gold" aria-hidden="true" />
+            <span>{{ t('admin.confirm.result.bridalLockedNotice', { date: formatDate(summary.locked.lockedUntil, locale) }) }}</span>
           </div>
         </CardContent>
       </Card>
@@ -94,6 +140,18 @@ const remaining = computed(() => remainingPiastres(props.summary))
 
       <!-- Action Navigation Links -->
       <div class="flex flex-col gap-3 pt-2">
+        <!-- WhatsApp Button for Bridal Locked if present -->
+        <a
+          v-if="summary.confirmWhatsappUrl"
+          :href="summary.confirmWhatsappUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] px-6 text-sm font-bold text-white shadow-sm transition-colors hover:bg-[#20ba5a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <MessageCircle class="size-5" aria-hidden="true" />
+          <span>{{ t('admin.confirm.result.sendBridalLockedWhatsapp') }}</span>
+        </a>
+
         <NuxtLink
           :to="localePath(`/admin/orders/${summary.orderId}`)"
           class="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground shadow-xs transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"

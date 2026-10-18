@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { formatDate } from '~/utils/date-format'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
-import { AlertCircle, LayoutDashboard } from '@lucide/vue'
+import { AlertCircle, Calendar, CheckCircle2, LayoutDashboard } from '@lucide/vue'
 
 definePageMeta({ layout: 'admin', middleware: 'admin-auth' })
 
 const route = useRoute()
 const token = String(route.params.token)
-const { t } = useI18n()
+const { t, locale } = useI18n()
+const { money } = usePrice()
 const localePath = useLocalePath()
 
 const {
@@ -41,12 +43,24 @@ onMounted(() => {
 })
 
 const justConfirmed = ref(false)
+const lastConfirmedAmount = ref<number | null>(null)
+const partialConfirmNotice = ref<{ amount: number; remaining: number } | null>(null)
 const rejectDialogOpen = ref(false)
 
 async function handleConfirm(amountPiastres: number, note?: string): Promise<void> {
   const ok = await confirm(amountPiastres, note)
-  if (ok) {
-    justConfirmed.value = true
+  if (ok && summary.value) {
+    lastConfirmedAmount.value = amountPiastres
+    if (summary.value.canConfirm) {
+      const remainingDeposit = summary.value.deposit?.remaining ?? summary.value.depositRemaining ?? 0
+      partialConfirmNotice.value = {
+        amount: amountPiastres,
+        remaining: remainingDeposit,
+      }
+    } else {
+      partialConfirmNotice.value = null
+      justConfirmed.value = true
+    }
   }
 }
 
@@ -94,6 +108,7 @@ async function handleReject(reason: string): Promise<void> {
         :summary="summary"
         :shortages="shortages"
         :reject-whatsapp-url="null"
+        :last-confirmed-amount="lastConfirmedAmount"
       />
 
       <!-- Rejected State (just rejected) -->
@@ -125,6 +140,15 @@ async function handleReject(reason: string): Promise<void> {
           <p class="text-foreground font-semibold">
             {{ t('admin.confirm.notActionable', { status: t(`admin.orders.status.${summary.status}`) }) }}
           </p>
+
+          <div
+            v-if="summary.locked"
+            class="mt-3 flex items-center justify-center gap-2 rounded-xl border border-serag-gold/40 bg-serag-gold/10 p-3 text-xs sm:text-sm font-bold text-foreground"
+          >
+            <Calendar class="size-4 shrink-0 text-serag-gold" aria-hidden="true" />
+            <span>{{ t('admin.confirm.result.bridalLockedNotice', { date: formatDate(summary.locked.lockedUntil, locale) }) }}</span>
+          </div>
+
           <NuxtLink
             :to="localePath('/admin')"
             class="mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-input bg-background px-4 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
@@ -151,6 +175,23 @@ async function handleReject(reason: string): Promise<void> {
             </Badge>
           </div>
         </header>
+
+        <!-- Partial Deposit Success Alert -->
+        <div
+          v-if="partialConfirmNotice"
+          role="alert"
+          class="flex items-center gap-2 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-4 text-xs sm:text-sm font-bold text-emerald-800 dark:text-emerald-300"
+        >
+          <CheckCircle2 class="size-4 shrink-0 text-emerald-600" aria-hidden="true" />
+          <span>
+            {{
+              t('admin.confirm.partialDepositRecorded', {
+                amount: money(partialConfirmNotice.amount),
+                remaining: money(partialConfirmNotice.remaining),
+              })
+            }}
+          </span>
+        </div>
 
         <!-- Summary Card -->
         <AdminConfirmSummary :summary="summary" />

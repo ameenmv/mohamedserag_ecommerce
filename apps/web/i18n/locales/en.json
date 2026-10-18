@@ -265,7 +265,17 @@
       "backToHome": "Return to Home",
       "browseShop": "Continue Shopping",
       "invalidLinkTitle": "This link is invalid or expired",
-      "invalidLinkDescription": "Please make sure to open the valid link received after completing your order."
+      "invalidLinkDescription": "Please make sure to open the valid link received after completing your order.",
+      "bridal": {
+        "title": "Your Bridal Appliances Have Been Reserved",
+        "subtitle": "We will call you to agree on delivery and installation dates",
+        "reservationNumber": "Reservation Number:",
+        "lockNotice": "Prices will be locked for {lockDays} days from deposit confirmation",
+        "installmentsTitle": "Showroom Installments Available",
+        "installmentsInquiry": "You can pay the remaining amount in installments at our showroom in Mansoura",
+        "installmentsButton": "Inquire About Installments on WhatsApp",
+        "installmentsWhatsapp": "Hello, I have an inquiry about installment plans for bridal reservation {no}"
+      }
     },
     "wishlist": {
       "add": "Add to wishlist",
@@ -475,7 +485,26 @@
       "reserve": {
         "unavailableReason": "Some items are out of stock, swap or remove them",
         "emptyReason": "The list is empty",
-        "comingSoonReason": "Deposit reservations coming soon"
+        "comingSoonReason": "Deposit reservations coming soon",
+        "priceChangedNotice": "Prices have changed, please review the new total"
+      },
+      "reserveSheet": {
+        "title": "Reserve Bridal List",
+        "description": "Reserve your bridal appliances with a deposit and lock prices",
+        "preferredDate": "Preferred Delivery Date (optional)",
+        "preferredDateHint": "We will call you to agree on delivery and installation dates",
+        "updatingQuote": "Updating quote...",
+        "subtotal": "Appliances Subtotal",
+        "deliveryFee": "Delivery Fee",
+        "lockedTotal": "Locked Total",
+        "depositAmount": "Required Deposit ({pct}%): {amount}",
+        "lockNotice": "Prices will be locked for {lockDays} days from deposit confirmation",
+        "noCouponsNotice": "Coupons cannot be applied to bridal reservations",
+        "installmentsNotice": "Installments are available in our showroom",
+        "chooseLocationHint": "Enter governorate and city to calculate delivery fee and confirm deposit",
+        "submitting": "Confirming reservation...",
+        "submitButton": "Confirm Reservation",
+        "quoteRequiredHint": "Enter address details to calculate delivery fees and deposit amount"
       },
       "share": {
         "title": "Share your list",
@@ -496,10 +525,15 @@
       "status": {
         "draft": "Draft",
         "awaitingDeposit": "Awaiting deposit",
-        "locked": "Reserved (Price locked)",
+        "awaiting_deposit": "Awaiting deposit",
+        "reserved": "Reserved",
+        "locked": "Prices locked",
         "deliveryAgreed": "Delivery date scheduled",
         "delivered": "Delivered",
         "cancelled": "Reservation cancelled",
+        "reservationNo": "Reservation No: {no}",
+        "depositProgress": "Deposit: {paid} paid of {required}",
+        "lockedUntil": "Prices locked until {date}",
         "banner": "Reservation status: {status} — Reservation No: {no}"
       },
       "swapSheet": {
@@ -1160,6 +1194,7 @@
       "notFound": "This confirmation link is invalid or expired",
       "backToDashboard": "Back to Dashboard",
       "notActionable": "This order is {status}; no confirmation is needed",
+      "partialDepositRecorded": "Recorded {amount} — {remaining} remaining of deposit",
       "summary": {
         "title": "Payment Details",
         "customer": "Customer",
@@ -1168,6 +1203,9 @@
         "paid": "Already Paid",
         "expected": "Expected Amount",
         "depositExpected": "Required Deposit ({pct}%)",
+        "depositRequired": "Required Deposit",
+        "depositPaid": "Deposit Paid",
+        "depositRemaining": "Deposit Remaining",
         "remaining": "Remaining"
       },
       "actions": {
@@ -1194,6 +1232,8 @@
         "statusLabel": "Order status now:",
         "paidAmount": "Paid:",
         "remainingAmount": "Remaining:",
+        "bridalLockedNotice": "Prices locked until {date}",
+        "sendBridalLockedWhatsapp": "Send price lock WhatsApp message",
         "openOrder": "Open Order",
         "sendWhatsapp": "Send WhatsApp to Customer",
         "shortageWarning": "Stock shortage warning:",

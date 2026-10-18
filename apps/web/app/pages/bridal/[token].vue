@@ -16,6 +16,7 @@ import StoreBridalSwapSheet from '~/components/store/bridal/StoreBridalSwapSheet
 import StoreBridalAddSheet from '~/components/store/bridal/StoreBridalAddSheet.vue'
 import StoreBridalStatusBanner from '~/components/store/bridal/StoreBridalStatusBanner.vue'
 import StoreBridalNotFound from '~/components/store/bridal/StoreBridalNotFound.vue'
+import StoreBridalReserveSheet from '~/components/store/bridal/StoreBridalReserveSheet.vue'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -38,6 +39,8 @@ const {
   removeItem,
   swapItem,
   addItem,
+  refresh,
+  flushPendingSave,
 } = await useBridalList(tokenParam)
 
 useSeoMeta({
@@ -78,6 +81,26 @@ function handleOpenAdd(roomKey?: BridalRoomKey): void {
 
 function handleApplyAdd(roomKey: BridalRoomKey, product: ProductCard): void {
   addItem(roomKey, product)
+}
+
+// Reserve Sheet state
+const reserveSheetOpen = ref(false)
+
+const canReserve = computed(() => {
+  return (
+    isEditable.value &&
+    displayItemCount.value > 0 &&
+    !hasUnavailableItems.value &&
+    saveState.value !== 'error'
+  )
+})
+
+async function handleOpenReserve(): Promise<void> {
+  if (!canReserve.value) return
+  const ok = await flushPendingSave()
+  if (ok) {
+    reserveSheetOpen.value = true
+  }
 }
 </script>
 
@@ -219,6 +242,8 @@ function handleApplyAdd(roomKey: BridalRoomKey, product: ProductCard): void {
             :item-count="displayItemCount"
             :tier-difference="displayTierDifference"
             :editable="isEditable"
+            :can-reserve="canReserve"
+            @reserve="handleOpenReserve"
           />
 
           <StoreBridalActionsCard
@@ -229,6 +254,7 @@ function handleApplyAdd(roomKey: BridalRoomKey, product: ProductCard): void {
             :has-unavailable-items="hasUnavailableItems"
             :is-empty="isEmpty"
             :editable="isEditable"
+            :can-reserve="canReserve"
           />
         </aside>
       </div>
@@ -248,6 +274,14 @@ function handleApplyAdd(roomKey: BridalRoomKey, product: ProductCard): void {
       :preselected-room="addPreselectedRoom"
       @update:open="(val) => (addSheetOpen = val)"
       @add="handleApplyAdd"
+    />
+
+    <!-- Reserve Sheet -->
+    <StoreBridalReserveSheet
+      :open="reserveSheetOpen"
+      :token="tokenParam"
+      @update:open="(val) => (reserveSheetOpen = val)"
+      @refresh-list="() => refresh()"
     />
   </main>
 </template>
