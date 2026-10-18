@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common'
 import {
+  lockState,
   normalizePhone,
   type AdminOrderListQueryOutput,
   type AdminOrderListResponse,
   type AdminOrderRow,
+  type BridalStatus,
   type OrderStatus,
 } from '@serag/shared'
 import { Prisma } from '../generated/prisma/client.js'
@@ -18,9 +20,13 @@ export class AdminOrdersListService {
    * This base filter is shared between the status counts calculation and the items query.
    */
   buildBaseWhere(
-    query: Pick<AdminOrderListQueryOutput, 'paymentMethod' | 'from' | 'to' | 'q'>,
+    query: Pick<AdminOrderListQueryOutput, 'type' | 'paymentMethod' | 'from' | 'to' | 'q'>,
   ): Prisma.OrderWhereInput {
     const where: Prisma.OrderWhereInput = {}
+
+    if (query.type) {
+      where.type = query.type
+    }
 
     if (query.paymentMethod) {
       where.paymentMethod = query.paymentMethod
@@ -115,6 +121,7 @@ export class AdminOrdersListService {
         select: {
           id: true,
           no: true,
+          type: true,
           createdAt: true,
           customerName: true,
           customerPhone: true,
@@ -124,6 +131,8 @@ export class AdminOrdersListService {
           paidAmount: true,
           paymentMethod: true,
           status: true,
+          bridalStatus: true,
+          lockedUntil: true,
           items: {
             select: { qty: true },
           },
@@ -131,20 +140,41 @@ export class AdminOrdersListService {
       }),
     ])
 
-    const items: AdminOrderRow[] = orders.map((o) => ({
-      id: o.id,
-      no: o.no,
-      createdAt: o.createdAt,
-      customerName: o.customerName,
-      customerPhone: o.customerPhone,
-      governorate: o.governorate,
-      city: o.city,
-      itemCount: o.items.reduce((sum, item) => sum + item.qty, 0),
-      total: o.total,
-      paidAmount: o.paidAmount,
-      paymentMethod: o.paymentMethod,
-      status: o.status,
-    }))
+    const now = new Date()
+    const items: AdminOrderRow[] = orders.map((o) => {
+      let bridalStatus: BridalStatus | null = null
+      let lockExpired: boolean | undefined = undefined
+      let lockDaysLeft: number | null = null
+
+      if (o.type === 'bridal') {
+        bridalStatus = o.bridalStatus ?? null
+        const state = lockState(
+          { bridalStatus: o.bridalStatus, lockedUntil: o.lockedUntil },
+          now,
+        )
+        lockExpired = state.expired
+        lockDaysLeft = state.daysLeft
+      }
+
+      return {
+        id: o.id,
+        no: o.no,
+        type: o.type,
+        createdAt: o.createdAt,
+        customerName: o.customerName,
+        customerPhone: o.customerPhone,
+        governorate: o.governorate,
+        city: o.city,
+        itemCount: o.items.reduce((sum, item) => sum + item.qty, 0),
+        total: o.total,
+        paidAmount: o.paidAmount,
+        paymentMethod: o.paymentMethod,
+        status: o.status,
+        bridalStatus,
+        lockExpired,
+        lockDaysLeft,
+      }
+    })
 
     return {
       items,

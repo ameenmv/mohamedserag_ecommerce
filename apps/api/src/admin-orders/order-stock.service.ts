@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common'
 import type { OrderStockShortage } from '@serag/shared'
-import { Prisma } from '../generated/prisma/client.js'
+import { Prisma, type StockReason } from '../generated/prisma/client.js'
 
 @Injectable()
 export class OrderStockService {
   /**
-   * Deducts stock upon entering 'confirmed'.
+   * Deducts stock upon entering 'confirmed' or agreeing on bridal delivery date.
    * Locks product rows with SELECT ... FOR UPDATE in deterministic order to prevent stock race conditions.
-   * Per item: taken = min(qty, current stock); writes a negative StockMovement (reason: order_confirmed).
+   * Per item: taken = min(qty, current stock); writes a negative StockMovement (reason: order_confirmed by default).
    * Items without a productId are skipped.
    * Returns list of shortages where taken < requested.
    */
@@ -15,6 +15,7 @@ export class OrderStockService {
     tx: Prisma.TransactionClient,
     orderId: string,
     userId?: string | null,
+    reason: StockReason = 'order_confirmed',
   ): Promise<{ shortages: OrderStockShortage[] }> {
     const items = await tx.orderItem.findMany({
       where: { orderId },
@@ -53,7 +54,7 @@ export class OrderStockService {
         data: {
           productId: item.productId,
           qty: -taken,
-          reason: 'order_confirmed',
+          reason,
           orderId,
           userId: userId ?? null,
         },
@@ -74,7 +75,7 @@ export class OrderStockService {
 
   /**
    * Restores deducted stock upon entering 'cancelled'.
-   * For each product: restore = -SUM(order_confirmed) - SUM(order_cancelled).
+   * For each product: restore = -SUM(deducted) - SUM(order_cancelled).
    * Only restores what was actually deducted and not yet restored.
    */
   async restoreForOrder(
@@ -92,7 +93,11 @@ export class OrderStockService {
 
     for (const productId of productIds) {
       const confirmed = movements
-        .filter((m) => m.reason === 'order_confirmed' && m.productId === productId)
+        .filter(
+          (m) =>
+            (m.reason === 'order_confirmed' || m.reason === 'bridal_delivery_agreed') &&
+            m.productId === productId,
+        )
         .reduce((sum, m) => sum + m.qty, 0)
       const cancelled = movements
         .filter((m) => m.reason === 'order_cancelled' && m.productId === productId)

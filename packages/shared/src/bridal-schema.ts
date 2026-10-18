@@ -149,3 +149,25 @@ export const bridalReserveQuoteQuerySchema = z.object({
 })
 
 export type BridalReserveQuoteQuery = z.infer<typeof bridalReserveQuoteQuerySchema>
+
+export const bridalDeliveryDateSchema = z.object({
+  date: z
+    .string({ message: 'تاريخ التوصيل مطلوب' })
+    .regex(/^\d{4}-\d{2}-\d{2}$/, { message: 'صيغة التاريخ غير صالحة (YYYY-MM-DD)' })
+    .refine((val) => val >= cairoToday(), {
+      message: 'تاريخ التوصيل لا يمكن أن يكون في الماضي',
+    }),
+})
+
+export type BridalDeliveryDateInput = z.infer<typeof bridalDeliveryDateSchema>
+
+export const bridalLockExtendSchema = z.object({
+  until: z
+    .string({ message: 'تاريخ تمديد التثبيت مطلوب' })
+    .regex(/^\d{4}-\d{2}-\d{2}$/, { message: 'صيغة التاريخ غير صالحة (YYYY-MM-DD)' })
+    .refine((val) => val > cairoToday(), {
+      message: 'تاريخ تمديد التثبيت يجب أن يكون بعد تاريخ اليوم',
+    }),
+})
+
+export type BridalLockExtendInput = z.infer<typeof bridalLockExtendSchema>

@@ -17,8 +17,8 @@ import {
   type BridalRooms,
   type CreateBridalListInput,
 } from '@serag/shared'
-import type { Prisma } from '../generated/prisma/client.js'
 import { PrismaService } from '../prisma/prisma.service.js'
+import { roomsToJson } from './bridal-json.js'
 import { loadBridalProducts } from './bridal-products.js'
 
 @Injectable()
@@ -45,7 +45,7 @@ export class BridalListsService {
           editToken,
           shareToken,
           tierId: tier.id,
-          rooms: rooms as unknown as Prisma.InputJsonValue,
+          rooms: roomsToJson(rooms),
           status: 'draft',
         },
       })
@@ -75,7 +75,7 @@ export class BridalListsService {
         data: {
           editToken,
           shareToken,
-          rooms: rooms as unknown as Prisma.InputJsonValue,
+          rooms: roomsToJson(rooms),
           status: 'draft',
         },
       })
@@ -87,7 +87,7 @@ export class BridalListsService {
       data: {
         editToken,
         shareToken,
-        rooms: [] as unknown as Prisma.InputJsonValue,
+        rooms: [],
         status: 'draft',
       },
     })
@@ -244,7 +244,7 @@ export class BridalListsService {
     await this.prisma.bridalList.update({
       where: { id: list.id },
       data: {
-        rooms: normalized as unknown as Prisma.InputJsonValue,
+        rooms: roomsToJson(normalized),
       },
     })
 

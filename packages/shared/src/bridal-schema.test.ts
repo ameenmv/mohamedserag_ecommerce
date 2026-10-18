@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import {
   bridalAlternativesQuerySchema,
+  bridalDeliveryDateSchema,
+  bridalLockExtendSchema,
   bridalReserveQuoteQuerySchema,
   bridalReserveSchema,
   bridalRoomsSchema,
@@ -290,4 +292,45 @@ describe('bridal-schema validation', () => {
       ).toBe(false)
     })
   })
+
+  describe('bridalDeliveryDateSchema', () => {
+    it('accepts valid date in the future or today', () => {
+      const futureDate = '2099-12-31'
+      const parsed = bridalDeliveryDateSchema.safeParse({ date: futureDate })
+      expect(parsed.success).toBe(true)
+    })
+
+    it('rejects past date', () => {
+      const pastDate = '2020-01-01'
+      const parsed = bridalDeliveryDateSchema.safeParse({ date: pastDate })
+      expect(parsed.success).toBe(false)
+    })
+
+    it('rejects invalid format', () => {
+      expect(bridalDeliveryDateSchema.safeParse({ date: 'invalid' }).success).toBe(false)
+      expect(bridalDeliveryDateSchema.safeParse({ date: '31-12-2099' }).success).toBe(false)
+      expect(bridalDeliveryDateSchema.safeParse({}).success).toBe(false)
+    })
+  })
+
+  describe('bridalLockExtendSchema', () => {
+    it('accepts date strictly after today', () => {
+      const futureDate = '2099-12-31'
+      const parsed = bridalLockExtendSchema.safeParse({ until: futureDate })
+      expect(parsed.success).toBe(true)
+    })
+
+    it('rejects past date', () => {
+      const pastDate = '2020-01-01'
+      const parsed = bridalLockExtendSchema.safeParse({ until: pastDate })
+      expect(parsed.success).toBe(false)
+    })
+
+    it('rejects invalid format', () => {
+      expect(bridalLockExtendSchema.safeParse({ until: 'invalid' }).success).toBe(false)
+      expect(bridalLockExtendSchema.safeParse({ until: '31/12/2099' }).success).toBe(false)
+      expect(bridalLockExtendSchema.safeParse({}).success).toBe(false)
+    })
+  })
 })
+

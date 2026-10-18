@@ -1,6 +1,6 @@
 import { z } from 'zod'
-import { orderStatusSchema, paymentMethodSchema } from './enums-schema.js'
-import type { OrderStatus, OrderType, PaymentMethod } from './enums.js'
+import { orderStatusSchema, orderTypeSchema, paymentMethodSchema } from './enums-schema.js'
+import type { BridalStatus, OrderStatus, OrderType, PaymentMethod } from './enums.js'
 import { phoneSchema } from './phone-schema.js'
 import { DEFAULT_TEMPLATES, type WhatsAppTemplateKey } from './whatsapp.js'
 
@@ -12,6 +12,7 @@ export const ISO_DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/
  * (from 00:00:00.000Z to 23:59:59.999Z). Inclusive Cairo timezone day range is not needed.
  */
 export const adminOrderListQuerySchema = z.object({
+  type: orderTypeSchema.optional(),
   status: orderStatusSchema.optional(),
   paymentMethod: paymentMethodSchema.optional(),
   from: z
@@ -74,6 +75,7 @@ export type WhatsAppLogOutput = z.output<typeof whatsappLogSchema>
 export interface AdminOrderRow {
   id: string
   no: string
+  type: OrderType
   createdAt: Date | string
   customerName: string
   customerPhone: string
@@ -84,6 +86,9 @@ export interface AdminOrderRow {
   paidAmount: number
   paymentMethod: PaymentMethod
   status: OrderStatus
+  bridalStatus?: BridalStatus | null
+  lockExpired?: boolean
+  lockDaysLeft?: number | null
 }
 
 export interface AdminOrderListResponse {
@@ -148,9 +153,22 @@ export interface AdminOrderWhatsAppMessage {
   adminName: string | null
 }
 
+export interface AdminOrderBridalDetail {
+  status: BridalStatus | null
+  lockDays: number | null
+  lockedUntil: Date | string | null
+  lockExpired: boolean
+  lockDaysLeft: number | null
+  preferredDate: Date | string | null
+  agreedDeliveryDate: Date | string | null
+  listShareToken: string | null
+}
+
 export interface AdminOrderDetail {
   id: string
   no: string
+  type: OrderType
+  bridal: AdminOrderBridalDetail | null
   status: OrderStatus
   statusLabel: string
   createdAt: Date | string

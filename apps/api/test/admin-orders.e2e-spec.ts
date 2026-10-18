@@ -394,10 +394,11 @@ describe('Admin Orders API E2E (/api/admin/orders)', () => {
     expect(text.charCodeAt(0)).toBe(0xfeff)
 
     // Contains Arabic headers
-    expect(text).toContain('رقم الطلب,التاريخ,العميل,الموبايل,المحافظة,المدينة,عدد القطع,الإجمالي (ج.م),المدفوع (ج.م),طريقة الدفع,الحالة')
+    expect(text).toContain('رقم الطلب,النوع,التاريخ,العميل,الموبايل,المحافظة,المدينة,عدد القطع,الإجمالي (ج.م),المدفوع (ج.م),طريقة الدفع,الحالة')
 
     // Contains seeded order details
     expect(text).toContain(o.no)
+    expect(text).toContain('طلب')
     expect(text).toContain(o.customerName)
     expect(text).toContain(o.customerPhone)
     expect(text).toContain(String(piastresToEgp(o.total)))

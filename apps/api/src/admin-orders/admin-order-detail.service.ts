@@ -4,9 +4,11 @@ import {
   depositRemaining,
   isPaymentAddable,
   isPaymentConfirmable,
+  lockState,
   manualStatusTargets,
   ORDER_STATUS_LABELS,
   remainingAmount,
+  type AdminOrderBridalDetail,
   type AdminOrderDetail,
 } from '@serag/shared'
 import { PrismaService } from '../prisma/prisma.service.js'
@@ -22,6 +24,7 @@ export class AdminOrderDetailService {
     const order = await this.prisma.order.findUnique({
       where: { id: orderId },
       include: {
+        bridalList: { select: { shareToken: true } },
         items: true,
         payments: {
           include: { user: { select: { name: true } } },
@@ -90,9 +93,29 @@ export class AdminOrderDetailService {
       adminName: w.user?.name ?? null,
     }))
 
+    let bridal: AdminOrderBridalDetail | null = null
+    if (order.type === 'bridal') {
+      const lockRes = lockState(
+        { bridalStatus: order.bridalStatus, lockedUntil: order.lockedUntil },
+        new Date(),
+      )
+      bridal = {
+        status: order.bridalStatus ?? null,
+        lockDays: order.lockDays ?? null,
+        lockedUntil: order.lockedUntil,
+        lockExpired: lockRes.expired,
+        lockDaysLeft: lockRes.daysLeft,
+        preferredDate: order.preferredDate,
+        agreedDeliveryDate: order.agreedDeliveryDate,
+        listShareToken: order.bridalList?.shareToken ?? null,
+      }
+    }
+
     return {
       id: order.id,
       no: order.no,
+      type: order.type,
+      bridal,
       status: order.status,
       statusLabel: ORDER_STATUS_LABELS[order.status] ?? order.status,
       createdAt: order.createdAt,

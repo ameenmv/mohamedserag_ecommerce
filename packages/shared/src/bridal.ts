@@ -348,6 +348,18 @@ export function lockEndDate(from: Date, days: number): Date {
   return new Date(nominalUtc - offsetMs)
 }
 
+export function cairoEndOfDay(dateStr: string): Date {
+  const [yearStr, monthStr, dayStr] = dateStr.split('-')
+  const targetY = Number.parseInt(yearStr ?? '', 10)
+  const targetM = Number.parseInt(monthStr ?? '', 10)
+  const targetD = Number.parseInt(dayStr ?? '', 10)
+
+  const nominalUtc = Date.UTC(targetY, targetM - 1, targetD, 23, 59, 59, 999)
+  const approxUtc = new Date(nominalUtc - 2.5 * 3600 * 1000)
+  const offsetMs = getCairoOffsetMs(approxUtc)
+  return new Date(nominalUtc - offsetMs)
+}
+
 export interface LockStateInput {
   bridalStatus?: BridalStatus | null
   lockedUntil?: Date | string | null
@@ -423,4 +435,44 @@ export interface BridalListView {
     lockDays: number | null
     lockedUntil: Date | string | null
   } | null
+}
+
+export interface BridalRepriceResult {
+  oldTotal: number
+  newTotal: number
+  difference: number
+  lockedUntil: Date | string
+  whatsappUrl: string
+}
+
+export interface BridalExpiringItem {
+  id: string
+  no: string
+  customerName: string
+  lockedUntil: Date | string
+  lockDaysLeft: number | null
+  lockExpired: boolean
+}
+
+export interface AdminBridalTierItem {
+  productId: string
+  name: string
+  modelCode: string
+  price: number
+  qty: number
+  flagged: boolean
+}
+
+export interface AdminBridalTierRoom {
+  key: BridalRoomKey
+  items: AdminBridalTierItem[]
+}
+
+export interface AdminBridalTier {
+  id: string
+  slug: string
+  name: string
+  highlights: string[]
+  rooms: AdminBridalTierRoom[]
+  total: number
 }

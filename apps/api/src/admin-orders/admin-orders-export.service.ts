@@ -36,6 +36,7 @@ export class AdminOrdersExportService {
       take: 5000,
       select: {
         no: true,
+        type: true,
         createdAt: true,
         customerName: true,
         customerPhone: true,
@@ -52,10 +53,11 @@ export class AdminOrdersExportService {
     })
 
     const header =
-      'رقم الطلب,التاريخ,العميل,الموبايل,المحافظة,المدينة,عدد القطع,الإجمالي (ج.م),المدفوع (ج.م),طريقة الدفع,الحالة'
+      'رقم الطلب,النوع,التاريخ,العميل,الموبايل,المحافظة,المدينة,عدد القطع,الإجمالي (ج.م),المدفوع (ج.م),طريقة الدفع,الحالة'
     const lines = [header]
 
     for (const order of orders) {
+      const typeLabel = order.type === 'bridal' ? 'جهاز عروسة' : 'طلب'
       const itemCount = order.items.reduce((acc, it) => acc + it.qty, 0)
       const dateStr = order.createdAt.toISOString().slice(0, 10)
       const totalEgp = piastresToEgp(order.total)
@@ -65,6 +67,7 @@ export class AdminOrdersExportService {
 
       const row = [
         escapeCsvCell(order.no),
+        escapeCsvCell(typeLabel),
         escapeCsvCell(dateStr),
         escapeCsvCell(order.customerName),
         escapeCsvCell(order.customerPhone),

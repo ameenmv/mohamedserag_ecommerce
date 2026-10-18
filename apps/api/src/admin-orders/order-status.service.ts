@@ -28,7 +28,7 @@ export class OrderStatusService {
   ): Promise<{ shortages: OrderStockShortage[] }> {
     const order = await tx.order.findUnique({
       where: { id: params.orderId },
-      select: { id: true, status: true, type: true, bridalListId: true },
+      select: { id: true, status: true, type: true, bridalListId: true, bridalStatus: true },
     })
 
     if (!order) {
@@ -38,6 +38,12 @@ export class OrderStatusService {
     const current = order.status
     if (!canTransition(current, params.to)) {
       throw new ConflictException('الحالة دي مش مسموحة للطلب ده')
+    }
+
+    if (order.type === 'bridal' && params.to === 'out_for_delivery') {
+      if (order.bridalStatus !== 'delivery_agreed') {
+        throw new ConflictException('لازم تحدد ميعاد التوصيل الأول')
+      }
     }
 
     const updated = await tx.order.updateMany({

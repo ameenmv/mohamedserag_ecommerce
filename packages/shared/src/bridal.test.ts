@@ -8,6 +8,7 @@ import {
   addItemToRooms,
   bridalDeposit,
   buildBridalReserveQuote,
+  cairoEndOfDay,
   cairoToday,
   lockEndDate,
   lockState,
@@ -347,4 +348,22 @@ describe('bridal domain helpers', () => {
       })
     })
   })
+
+  describe('cairoEndOfDay', () => {
+    it('returns a Date object corresponding to the end of the specified Cairo day', () => {
+      const dateStr = '2026-11-15'
+      const endOfDay = cairoEndOfDay(dateStr)
+
+      // When formatted in Cairo time zone, date must match dateStr
+      expect(cairoToday(endOfDay)).toBe(dateStr)
+
+      // Milliseconds should end with 999
+      expect(endOfDay.getUTCMilliseconds()).toBe(999)
+
+      // Adding 1 millisecond moves to the next day in Cairo
+      const nextDay = new Date(endOfDay.getTime() + 1)
+      expect(cairoToday(nextDay)).toBe('2026-11-16')
+    })
+  })
 })
+
