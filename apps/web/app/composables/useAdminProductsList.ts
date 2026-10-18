@@ -94,7 +94,12 @@ export function useAdminProductsList() {
     await fetchProducts()
   }
 
+  // Only the latest request may write the list: a slower, older response (e.g. a debounced search)
+  // must not overwrite the result of an archive/undo that happened after it.
+  let fetchSeq = 0
+
   async function fetchProducts() {
+    const seq = ++fetchSeq
     loading.value = true
     try {
       const queryPayload: AdminProductListQuery = {
@@ -109,12 +114,14 @@ export function useAdminProductsList() {
       if (selectedStock.value) queryPayload.stock = selectedStock.value
 
       const res = await productsApi.list(queryPayload)
+      if (seq !== fetchSeq) return
       items.value = res.items
       total.value = res.total
     } catch (err) {
+      if (seq !== fetchSeq) return
       notify.error(parseAdminApiError(err).message)
     } finally {
-      loading.value = false
+      if (seq === fetchSeq) loading.value = false
     }
   }
 
@@ -145,7 +152,7 @@ export function useAdminProductsList() {
       undoToast(msg, {
         onUndo: async () => {
           await productsApi.update(product.id, { visible: !nextVal })
-          product.visible = !nextVal
+          await fetchProducts()
         },
       })
     } catch (err) {
@@ -163,17 +170,19 @@ export function useAdminProductsList() {
         undoToast(t('admin.products.toasts.unarchived', { name: product.name }), {
           onUndo: async () => {
             await productsApi.archive(product.id)
-            product.archived = true
+            await fetchProducts()
           },
         })
       } else {
+        // Archiving also hides the product; undo must bring back the visibility it had before.
+        const wasVisible = product.visible
         await productsApi.archive(product.id)
         product.archived = true
         undoToast(t('admin.products.toasts.archived', { name: product.name }), {
           onUndo: async () => {
             await productsApi.unarchive(product.id)
-            product.archived = false
-            product.archivedAt = null
+            if (wasVisible) await productsApi.update(product.id, { visible: true })
+            await fetchProducts()
           },
         })
       }
