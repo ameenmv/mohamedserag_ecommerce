@@ -70,7 +70,7 @@ test('bridal reserve flow: create list, fill reserve form, thanks page, read-onl
   await expect(browser).toHaveURL(/\/order\/SR-\d{4}-\d{6}\/thanks\?t=/)
   await waitForHydration(browser)
 
-  await expect(screen.getByText('تم حجز جهازك')).toBeVisible()
+  await expect(screen.getByRole('heading', 'تم حجز جهازك')).toBeVisible()
 
   const thanksUrl = await browser.evaluate(() => window.location.href)
   const match = thanksUrl.match(/\/order\/(SR-\d{4}-\d{6})\/thanks\?t=([^&]+)/)
