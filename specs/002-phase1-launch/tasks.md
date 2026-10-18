@@ -38,7 +38,7 @@
 - [x] T027 A E2E: catalog, search, compare/wishlist, admin products specs
 - [x] T028 C Slice review: gates, 375 px and 320 px checks, Lighthouse (a11y/SEO/best-practices 100; perf 63–70, LCP ≈ 4.2 s — follow-up before T091)
 
-## Phase 2: Slice 2 — Cart, checkout & payments
+## Phase 2: Slice 2 — Cart, checkout & payments (detailed in [003-slice2-checkout](../003-slice2-checkout/tasks.md))
 - [x] T030 A API cart quote (re-price, zone by governorate+city, coupon placeholder hook), order creation (idempotent), public token
 - [ ] T031 A API payments: record/confirm/reject, partial payments, confirm tokens, large-COD deposit rule, status machine, stock movements
 - [ ] T032 A [P] Web: cart drawer + `/cart`, `/checkout` (phone normalization, VAT label, deposit notice, on-request lead time), `/order/[no]/thanks`; funnel events `checkout_start`, `order_placed`
