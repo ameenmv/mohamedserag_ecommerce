@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { formatDateTime } from '~/utils/date-format'
-import {
-  ORDER_STATUS_LABELS,
-  type AdminOrderEvent,
-  type OrderStatus,
-} from '@serag/shared'
+import { isOrderStatus, type AdminOrderEvent } from '@serag/shared'
 import { History } from '@lucide/vue'
 
 defineProps<{
@@ -20,7 +16,7 @@ function eventLabel(status: string): string {
   if (status === 'payment_rejected') {
     return t('admin.orders.detail.events.payment_rejected')
   }
-  return ORDER_STATUS_LABELS[status as OrderStatus] ?? status
+  return isOrderStatus(status) ? t(`admin.orders.status.${status}`) : status
 }
 
 </script>

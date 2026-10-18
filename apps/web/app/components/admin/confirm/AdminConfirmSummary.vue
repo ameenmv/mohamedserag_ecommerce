@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { formatEgpWithUnit, type AdminConfirmSummary as AdminConfirmSummaryType } from '@serag/shared'
+import type { AdminConfirmSummary as AdminConfirmSummaryType } from '@serag/shared'
 import { remainingPiastres } from '~/utils/admin-confirm'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
@@ -9,6 +9,7 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
+const { money } = usePrice()
 
 const remaining = computed(() => remainingPiastres(props.summary))
 const expectedLabel = computed(() => {
@@ -36,33 +37,33 @@ const expectedLabel = computed(() => {
       <!-- Payment Method -->
       <div class="flex items-center justify-between py-2.5">
         <span class="text-muted-foreground">{{ t('admin.confirm.summary.method') }}</span>
-        <span class="font-bold text-foreground">{{ summary.methodLabel }}</span>
+        <span class="font-bold text-foreground">{{ t(`admin.orders.paymentMethods.${summary.method}`) }}</span>
       </div>
 
       <!-- Order Total -->
       <div class="flex items-center justify-between py-2.5">
         <span class="text-muted-foreground">{{ t('admin.confirm.summary.total') }}</span>
-        <span class="num font-bold text-foreground">{{ formatEgpWithUnit(summary.total) }}</span>
+        <span class="num font-bold text-foreground">{{ money(summary.total) }}</span>
       </div>
 
       <!-- Already Paid -->
       <div class="flex items-center justify-between py-2.5">
         <span class="text-muted-foreground">{{ t('admin.confirm.summary.paid') }}</span>
-        <span class="num font-medium text-foreground">{{ formatEgpWithUnit(summary.paidAmount) }}</span>
+        <span class="num font-medium text-foreground">{{ money(summary.paidAmount) }}</span>
       </div>
 
       <!-- Expected Amount (Highlight) -->
       <div class="flex items-center justify-between py-3 bg-serag-gold/5 -mx-4 px-4 sm:-mx-6 sm:px-6">
         <span class="font-semibold text-foreground">{{ expectedLabel }}</span>
         <span class="num text-base font-extrabold text-foreground">
-          {{ formatEgpWithUnit(summary.expectedAmount) }}
+          {{ money(summary.expectedAmount) }}
         </span>
       </div>
 
       <!-- Remaining Amount -->
       <div class="flex items-center justify-between py-2.5">
         <span class="text-muted-foreground">{{ t('admin.confirm.summary.remaining') }}</span>
-        <span class="num font-bold text-foreground">{{ formatEgpWithUnit(remaining) }}</span>
+        <span class="num font-bold text-foreground">{{ money(remaining) }}</span>
       </div>
     </CardContent>
   </Card>

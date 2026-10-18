@@ -116,14 +116,14 @@ async function handleReject(reason: string): Promise<void> {
               {{ t('admin.confirm.header', { no: summary.no }) }}
             </h1>
             <Badge variant="outline" class="font-bold">
-              {{ summary.statusLabel }}
+              {{ t(`admin.orders.status.${summary.status}`) }}
             </Badge>
           </div>
         </div>
 
         <div class="rounded-2xl border border-border bg-card p-6 text-center text-sm font-medium text-muted-foreground shadow-xs">
           <p class="text-foreground font-semibold">
-            {{ t('admin.confirm.notActionable', { status: summary.statusLabel }) }}
+            {{ t('admin.confirm.notActionable', { status: t(`admin.orders.status.${summary.status}`) }) }}
           </p>
           <NuxtLink
             :to="localePath('/admin')"
@@ -147,7 +147,7 @@ async function handleReject(reason: string): Promise<void> {
               :variant="summary.status === 'payment_rejected' ? 'destructive' : 'outline'"
               class="font-bold"
             >
-              {{ summary.statusLabel }}
+              {{ t(`admin.orders.status.${summary.status}`) }}
             </Badge>
           </div>
         </header>

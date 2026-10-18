@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { formatDate } from '~/utils/date-format'
-import {
-  formatEgpWithUnit,
-  ORDER_STATUS_LABELS,
-  PAYMENT_METHOD_LABELS,
-  type AdminOrderRow,
+import type {
+  AdminOrderRow,
 } from '@serag/shared'
 import { ArrowLeft } from '@lucide/vue'
 import { statusBadgeClass } from '~/utils/admin-orders'
@@ -14,6 +11,7 @@ defineProps<{
 }>()
 
 const { t, locale } = useI18n()
+const { money } = usePrice()
 const localePath = useLocalePath()
 
 </script>
@@ -67,20 +65,20 @@ const localePath = useLocalePath()
               {{ order.itemCount }}
             </td>
             <td class="px-4 py-3 num font-bold text-foreground whitespace-nowrap">
-              {{ formatEgpWithUnit(order.total) }}
+              {{ money(order.total) }}
             </td>
             <td class="px-4 py-3 num font-bold text-muted-foreground whitespace-nowrap">
-              {{ formatEgpWithUnit(order.paidAmount) }}
+              {{ money(order.paidAmount) }}
             </td>
             <td class="px-4 py-3 whitespace-nowrap text-xs">
-              {{ PAYMENT_METHOD_LABELS[order.paymentMethod] ?? order.paymentMethod }}
+              {{ t(`admin.orders.paymentMethods.${order.paymentMethod}`) }}
             </td>
             <td class="px-4 py-3 whitespace-nowrap">
               <span
                 class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold"
                 :class="statusBadgeClass(order.status)"
               >
-                {{ ORDER_STATUS_LABELS[order.status] ?? order.status }}
+                {{ t(`admin.orders.status.${order.status}`) }}
               </span>
             </td>
             <td class="px-4 py-3 text-end whitespace-nowrap">
@@ -115,7 +113,7 @@ const localePath = useLocalePath()
             class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold"
             :class="statusBadgeClass(order.status)"
           >
-            {{ ORDER_STATUS_LABELS[order.status] ?? order.status }}
+            {{ t(`admin.orders.status.${order.status}`) }}
           </span>
         </div>
 
@@ -135,17 +133,17 @@ const localePath = useLocalePath()
           </div>
           <div>
             <span class="text-muted-foreground">{{ t('admin.orders.table.total') }}:</span>
-            <span class="num font-bold text-foreground ms-1">{{ formatEgpWithUnit(order.total) }}</span>
+            <span class="num font-bold text-foreground ms-1">{{ money(order.total) }}</span>
           </div>
           <div>
             <span class="text-muted-foreground">{{ t('admin.orders.table.paid') }}:</span>
-            <span class="num font-bold text-muted-foreground ms-1">{{ formatEgpWithUnit(order.paidAmount) }}</span>
+            <span class="num font-bold text-muted-foreground ms-1">{{ money(order.paidAmount) }}</span>
           </div>
         </div>
 
         <div class="flex items-center justify-between pt-1 border-t border-border/60">
           <span class="text-xs text-muted-foreground">
-            {{ PAYMENT_METHOD_LABELS[order.paymentMethod] ?? order.paymentMethod }}
+            {{ t(`admin.orders.paymentMethods.${order.paymentMethod}`) }}
           </span>
           <NuxtLink
             :to="localePath(`/admin/orders/${order.id}`)"

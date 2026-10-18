@@ -1007,6 +1007,12 @@
         "whatsappPlaceholder": "[WhatsApp Number]",
         "customerInfo": "Customer Details",
         "vatNotice": "VAT-Inclusive 14%"
+      },
+      "paymentMethods": {
+        "cod": "Cash on delivery",
+        "instapay": "InstaPay",
+        "vodafone_cash": "Vodafone Cash",
+        "fawry": "Fawry"
       }
     },
     "confirm": {

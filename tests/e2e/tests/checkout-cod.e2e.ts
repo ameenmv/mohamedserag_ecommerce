@@ -108,3 +108,50 @@ test('guest checkout COD end-to-end: add two products, fill Talkha address, plac
   await expect(screen.getByText('الرابط ده مش صحيح أو انتهى')).toBeVisible()
   await expect(screen.getByText(orderNo)).toBeHidden()
 })
+
+test('funnel events: checkout_start and order_placed fire once each without personal data', async ({
+  app,
+  screen,
+  browser,
+}) => {
+  const p = await seed.product({ name: `منتج قياس ${seed.runId}`, priceEgp: 3000, stock: 4 })
+
+  await app.open(`/p/${p.slug}`)
+  await waitForHydration(browser)
+  await browser.locator('#main-add-to-cart-button').tap()
+  await expect(screen.getByRole('link', /السلة:\s*1/)).toBeVisible()
+
+  // Stub the analytics tracker; client-side navigation below keeps it alive.
+  await browser.evaluate(() => {
+    const w = window as unknown as { __events: Array<{ event: string; data?: Record<string, unknown> }>; umami: unknown }
+    w.__events = []
+    w.umami = { track: (event: string, data?: Record<string, unknown>) => w.__events.push({ event, data }) }
+  })
+
+  // Header cart opens the drawer; «كمّل الطلب» goes to /checkout without a reload.
+  await screen.getByRole('link', /السلة:\s*1/).tap()
+  await screen.getByRole('dialog').getByRole('link', /كمّل الطلب/).tap()
+  await expect(browser).toHaveURL(/\/checkout$/)
+  await waitForHydration(browser)
+
+  await browser.locator('#checkout-name').fill('سارة محمود اختبار')
+  await browser.locator('#checkout-phone').fill('01098765432')
+  await browser.locator('#checkout-governorate').selectOption('الدقهلية')
+  await browser.locator('#checkout-city').fill('المنصورة')
+  await browser.locator('#checkout-address').fill('شارع الجمهورية عمارة 3')
+  await expect(screen.getByText('100 ج.م').first()).toBeVisible()
+  await screen.getByRole('button', 'تأكيد الطلب').first().tap()
+  await expect(browser).toHaveURL(/\/order\/SR-\d{4}-\d{6}\/thanks\?t=/)
+
+  // evaluate() results must be JSON-safe, so events without data report null.
+  const events = await browser.evaluate(() =>
+    (window as unknown as { __events: Array<{ event: string; data?: Record<string, unknown> }> }).__events.map(
+      (e) => ({ event: e.event, data: e.data ?? null }),
+    ),
+  )
+  expect(events.filter((e) => e.event === 'checkout_start')).toHaveLength(1)
+  const placed = events.filter((e) => e.event === 'order_placed')
+  expect(placed).toHaveLength(1)
+  expect(Object.keys(placed[0]!.data ?? {}).sort()).toEqual(['itemCount', 'total'])
+  expect(JSON.stringify(events)).not.toMatch(/01098765432|سارة/)
+})

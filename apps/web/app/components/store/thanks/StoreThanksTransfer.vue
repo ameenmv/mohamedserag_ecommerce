@@ -18,6 +18,7 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
+const { money } = usePrice()
 const storeSettings = useStoreSettings()
 const copiedAccount = ref(false)
 
@@ -65,7 +66,7 @@ async function copyAccount(): Promise<void> {
     <p class="text-sm text-foreground">
       {{
         t('store.thanks.transferInstruction', {
-          amount: formatEgpWithUnit(amountToTransfer),
+          amount: money(amountToTransfer),
         })
       }}
     </p>

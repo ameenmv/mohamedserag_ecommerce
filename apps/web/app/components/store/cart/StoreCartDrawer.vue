@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ShoppingBag, ArrowRight, ArrowLeft } from '@lucide/vue'
-import { formatEgpWithUnit } from '@serag/shared'
 import Sheet from '~/components/ui/sheet/Sheet.vue'
 import SheetContent from '~/components/ui/sheet/SheetContent.vue'
 import SheetHeader from '~/components/ui/sheet/SheetHeader.vue'
 import SheetTitle from '~/components/ui/sheet/SheetTitle.vue'
 
 const { t, locale } = useI18n()
+const { money } = usePrice()
 const localePath = useLocalePath()
 const { lines, count, subtotal, setQty, remove } = useCart()
 const { quote, priceChanges, dismissPriceChange } = useCartQuote()
@@ -14,16 +14,6 @@ const { isOpen, close } = useCartDrawer()
 
 // Physical side matching logical 'end'
 const sheetSide = computed(() => (locale.value === 'ar' ? 'left' : 'right'))
-
-function handleCheckout(): void {
-  close()
-  navigateTo(localePath('/checkout'))
-}
-
-function handleViewCart(): void {
-  close()
-  navigateTo(localePath('/cart'))
-}
 
 function handleBrowseShop(): void {
   close()
@@ -99,16 +89,16 @@ function handleBrowseShop(): void {
         <div class="flex items-center justify-between text-sm">
           <span class="font-medium text-muted-foreground">{{ t('store.cart.subtotal') }}</span>
           <span class="num text-lg font-extrabold text-serag-night dark:text-serag-gold">
-            {{ formatEgpWithUnit(quote?.subtotal ?? subtotal) }}
+            {{ money(quote?.subtotal ?? subtotal) }}
           </span>
         </div>
 
         <!-- Actions -->
         <div class="flex flex-col gap-2">
-          <button
-            type="button"
+          <NuxtLink
+            :to="localePath('/checkout')"
             class="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-serag-gold px-4 text-base font-bold text-serag-night shadow-sm transition-colors hover:bg-serag-gold-hi focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-            @click="handleCheckout"
+            @click="close"
           >
             <span>{{ t('store.cart.checkout') }}</span>
             <component
@@ -116,15 +106,15 @@ function handleBrowseShop(): void {
               class="size-4"
               aria-hidden="true"
             />
-          </button>
+          </NuxtLink>
 
-          <button
-            type="button"
+          <NuxtLink
+            :to="localePath('/cart')"
             class="inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-input bg-background px-4 text-sm font-bold text-foreground transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-            @click="handleViewCart"
+            @click="close"
           >
             {{ t('store.cart.viewCart') }}
-          </button>
+          </NuxtLink>
         </div>
       </div>
     </SheetContent>

@@ -1007,6 +1007,12 @@
         "whatsappPlaceholder": "[رقم الواتساب]",
         "customerInfo": "بيانات العميل",
         "vatNotice": "شامل ضريبة القيمة المضافة 14%"
+      },
+      "paymentMethods": {
+        "cod": "الدفع عند الاستلام",
+        "instapay": "إنستا باي",
+        "vodafone_cash": "فودافون كاش",
+        "fawry": "فوري"
       }
     },
     "confirm": {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ChevronDown, Tag, AlertTriangle, ShieldCheck } from '@lucide/vue'
-import { formatEgpWithUnit, type CartQuote } from '@serag/shared'
+import type { CartQuote } from '@serag/shared'
 import type { CartLine } from '~/utils/cart'
 
 const props = defineProps<{
@@ -21,6 +21,7 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const { money } = usePrice()
 const localePath = useLocalePath()
 
 const showCoupon = ref(false)
@@ -92,7 +93,7 @@ function handleApplyCoupon(): void {
 
         <div class="text-end shrink-0">
           <span class="num text-sm font-bold text-foreground">
-            {{ formatEgpWithUnit(line.price * line.qty) }}
+            {{ money(line.price * line.qty) }}
           </span>
         </div>
       </div>
@@ -154,9 +155,9 @@ function handleApplyCoupon(): void {
       <p class="leading-relaxed">
         {{
           t('store.checkout.depositNotice', {
-            threshold: formatEgpWithUnit(codDeposit.threshold),
+            threshold: money(codDeposit.threshold),
             pct: codDeposit.pct,
-            amount: formatEgpWithUnit(codDeposit.amount),
+            amount: money(codDeposit.amount),
           })
         }}
       </p>
@@ -166,18 +167,18 @@ function handleApplyCoupon(): void {
     <div class="flex flex-col gap-2.5 border-t border-border/60 pt-4 text-sm">
       <div class="flex items-center justify-between">
         <span class="text-muted-foreground">{{ t('store.cart.subtotal') }}</span>
-        <span class="num font-bold text-foreground">{{ formatEgpWithUnit(displaySubtotal) }}</span>
+        <span class="num font-bold text-foreground">{{ money(displaySubtotal) }}</span>
       </div>
 
       <div v-if="displayDiscount > 0" class="flex items-center justify-between text-emerald-700 dark:text-emerald-400">
         <span>{{ t('store.cart.discount') }}</span>
-        <span class="num font-bold">-{{ formatEgpWithUnit(displayDiscount) }}</span>
+        <span class="num font-bold">-{{ money(displayDiscount) }}</span>
       </div>
 
       <div class="flex items-center justify-between">
         <span class="text-muted-foreground">{{ t('store.cart.deliveryFee') }}</span>
         <span v-if="hasZone" class="num font-bold text-foreground">
-          {{ formatEgpWithUnit(deliveryFee) }}
+          {{ money(deliveryFee) }}
         </span>
         <span v-else class="text-xs text-muted-foreground">
           {{ t('store.cart.deliveryFeeNextStep') }}
@@ -189,7 +190,7 @@ function handleApplyCoupon(): void {
       <div class="flex items-baseline justify-between">
         <span class="text-base font-bold text-foreground">{{ t('store.cart.total') }}</span>
         <span class="num text-xl font-extrabold text-serag-night dark:text-serag-gold">
-          {{ formatEgpWithUnit(displayTotal) }}
+          {{ money(displayTotal) }}
         </span>
       </div>
 

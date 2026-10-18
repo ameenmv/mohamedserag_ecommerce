@@ -32,7 +32,7 @@ useAdminPageTitle('admin.nav.orders')
 async function handleStatusChange(to: OrderStatus, reason?: string) {
   const ok = await changeStatus(to, reason)
   if (ok && detail.value) {
-    notify.success(t('admin.orders.detail.statusChanged', { status: detail.value.statusLabel }))
+    notify.success(t('admin.orders.detail.statusChanged', { status: t(`admin.orders.status.${detail.value.status}`) }))
   }
 }
 

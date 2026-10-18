@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {
   PAYMENT_METHODS,
-  PAYMENT_METHOD_LABELS,
   type PaymentMethod,
 } from '@serag/shared'
 import { Download, RotateCcw, Search } from '@lucide/vue'
@@ -70,7 +69,7 @@ const { t } = useI18n()
           {{ t('admin.orders.filters.allMethods') }}
         </option>
         <option v-for="method in PAYMENT_METHODS" :key="method" :value="method">
-          {{ PAYMENT_METHOD_LABELS[method] }}
+          {{ t(`admin.orders.paymentMethods.${method}`) }}
         </option>
       </AdminFormSelect>
 

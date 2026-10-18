@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ShoppingCart, Trash2, TrendingDown } from '@lucide/vue'
 import type { ProductCard } from '@serag/shared'
-import { formatEgpWithUnit } from '@serag/shared'
 import type { WishlistItem } from '~/composables/useWishlist'
 
 const props = defineProps<{
@@ -14,6 +13,7 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const { money } = usePrice()
 
 const isOrderable = computed(() => props.item.card?.availability.orderable ?? false)
 
@@ -46,9 +46,9 @@ function handleRemove(): void {
       </span>
       <span
         class="num text-[11px] font-medium line-through opacity-80"
-        :aria-label="t('store.product.oldPriceAria', { price: formatEgpWithUnit(item.entry.priceAtAdd) })"
+        :aria-label="t('store.product.oldPriceAria', { price: money(item.entry.priceAtAdd) })"
       >
-        {{ formatEgpWithUnit(item.entry.priceAtAdd) }}
+        {{ money(item.entry.priceAtAdd) }}
       </span>
     </div>
 

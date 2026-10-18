@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ShieldCheck, RefreshCw, AlertCircle } from '@lucide/vue'
-import { formatEgpWithUnit } from '@serag/shared'
 
 const { t } = useI18n()
+const { money } = usePrice()
 const { lines, subtotal } = useCart()
 const {
   form,
@@ -148,7 +148,7 @@ if (import.meta.client) {
         <div class="flex flex-col min-w-0">
           <span class="text-[11px] font-semibold text-muted-foreground">{{ t('store.checkout.stickyTotal') }}</span>
           <span class="num text-lg font-extrabold text-serag-night dark:text-serag-gold truncate">
-            {{ formatEgpWithUnit(displayTotal) }}
+            {{ money(displayTotal) }}
           </span>
         </div>
 

@@ -104,17 +104,17 @@ description: "Tasks for Slice 2 — Cart, Checkout & Payments"
 ## Phase 7: User Story 5 — Funnel events (P3)
 
 - [x] T033 [US5] Send `checkout_start` once per checkout visit and `order_placed` once (total, item count, no PII) via `useAnalytics` in `apps/web/app/composables/useCheckout.ts` + unit test
-- [ ] T034 [US5] Assert events in `tests/e2e/tests/checkout-cod.e2e.ts` (analytics stub)
+- [x] T034 [US5] Assert events in `tests/e2e/tests/checkout-cod.e2e.ts` (analytics stub)
 
 ---
 
 ## Phase 8: Polish & Cross-Cutting
 
-- [ ] T035 [P] English locale pass for all new pages (`/en/cart`, `/en/checkout`, `/en/order/...`) and RTL/LTR icon flips
-- [ ] T036 [P] Update `docs/` and `specs/002-phase1-launch/tasks.md` (tick T030–T036 as their mapped tasks finish)
-- [ ] T037 Slice review: all gates, `pnpm test:e2e` twice, 375/320 px checks on cart/checkout/thanks/confirm, Lighthouse a11y on `/checkout`
-- [ ] T038 Run `quickstart.md` scenarios manually in the browser (ar + en)
-- [ ] T039 Security pass: token secrecy (thanks/confirm), CSRF on every admin mutation, permissions on every admin route, no phone in public responses
+- [x] T035 [P] English locale pass for all new pages (`/en/cart`, `/en/checkout`, `/en/order/...`) and RTL/LTR icon flips
+- [x] T036 [P] Update `docs/` and `specs/002-phase1-launch/tasks.md` (tick T030–T036 as their mapped tasks finish)
+- [x] T037 Slice review: all gates, `pnpm test:e2e` twice, 375/320 px checks on cart/checkout/thanks/confirm, Lighthouse a11y on `/checkout`
+- [x] T038 Run `quickstart.md` scenarios manually in the browser (ar + en)
+- [x] T039 Security pass: token secrecy (thanks/confirm), CSRF on every admin mutation, permissions on every admin route, no phone in public responses
 
 ---
 

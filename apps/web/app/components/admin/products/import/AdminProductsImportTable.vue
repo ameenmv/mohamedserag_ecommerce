@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { ImportPlanRow, ImportRowStatus } from '@serag/shared'
-import { formatEgpWithUnit } from '@serag/shared'
 import { AlertCircle, Archive, ArrowRight, CheckCircle2, Copy, HelpCircle, MinusCircle } from '@lucide/vue'
 
 defineProps<{
@@ -8,10 +7,11 @@ defineProps<{
 }>()
 
 const { t } = useI18n()
+const { money } = usePrice()
 
 function formatPriceCell(piastres: number | null | undefined): string {
   if (piastres === null || piastres === undefined) return '—'
-  return formatEgpWithUnit(piastres)
+  return money(piastres)
 }
 
 function formatStockCell(stock: number | null | undefined): string {

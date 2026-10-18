@@ -1,16 +1,17 @@
 # Phase 1 — Launch: progress
 
-> المرحلة الأولى (الإطلاق) — **Slice 0: الأساس خلصت بالكامل** (١٠٠٪ من الكود، والـ CI أخضر على GitHub بعد دمج PR #1 في main). كل حاجة شغالة ومتحققة: المستودع، الموقع، الـ API، قاعدة البيانات، دخول الأدمن، بيانات الاختبار، التحليلات، والدكّر، وكل اختبارات المتصفح 7/7 ناجحة على الديف وعلى الدكّر.
+> المرحلة الأولى (الإطلاق) — **Slice 0 (الأساس) و Slice 1 (الكتالوج) و Slice 2 (السلة والدفع) خلصوا بالكامل**.
+> في Slice 2: السلة والـ checkout، صفحة الشكر بالتوكن، الدفع عند الاستلام والتحويل والعربون، تأكيد الدفع من رابط واتساب، لوحة الطلبات وتصدير CSV والفاتورة.
 
-**Updated:** 17 Oct 2026 · **Branch:** `002-phase1-launch` · **Source of truth:** [PRD](PRD.md) · [spec](../specs/002-phase1-launch/spec.md) · [plan](../specs/002-phase1-launch/plan.md) · [tasks](../specs/002-phase1-launch/tasks.md)
+**Updated:** 18 Oct 2026 · **Branch:** `003-slice2-checkout` · **Source of truth:** [PRD](PRD.md) · [spec](../specs/002-phase1-launch/spec.md) · [plan](../specs/002-phase1-launch/plan.md) · [tasks](../specs/002-phase1-launch/tasks.md) · [Slice 2 spec](../specs/003-slice2-checkout/spec.md) · [Slice 2 tasks](../specs/003-slice2-checkout/tasks.md)
 
 ## Where we are
 
 | Slice | Scope | Status |
 |---|---|---|
 | **0 — Foundation** | Monorepo, web + API, database, seed, admin auth, Docker, CI | ✅ **Done** (CI green on GitHub, PR #1 merged into main) |
-| 1 — Catalog & discovery | Categories, brands, product pages, Arabic search, filters, compare, wishlist, admin products | 🟡 In progress |
-| 2 — Cart, checkout & payments | Zones, COD, transfers, large-COD deposit, one-tap confirm | ⚪ Planned |
+| 1 — Catalog & discovery | Categories, brands, product pages, Arabic search, filters, compare, wishlist, admin products | ✅ **Done** (branch `002-slice1-catalog`) |
+| 2 — Cart, checkout & payments | Zones, COD, transfers, large-COD deposit, one-tap confirm | ✅ **Done** (branch `003-slice2-checkout`) |
 | 3 — Bridal builder «جهّز بيتك» | Tiers, sharing, deposit and price lock | ⚪ Planned |
 | 4 — Promotions & stock alerts | Flash sales, coupons, notify-me | ⚪ Planned |
 | 5 — Reviews | Moderation, verified buyers | ⚪ Planned |
@@ -45,16 +46,35 @@
 
 **Slice 0 status:** Code-complete (100%), verified locally, in Docker, and green in GitHub Actions CI after merging PR #1 into main. `docker compose up` brings the stack up, `/` shows the RTL brand shell, `/admin` redirects to login, the seeded admin reaches the dashboard, and browser e2e 7/7 passes on dev and against the Docker stack.
 
+## Slice 1 — status
+
+- Catalog, category, and brand pages with filters and facets.
+- Arabic search with typo tolerance and trigram similarity matching.
+- Product detail page, compare, and wishlist.
+- Admin products management + bulk CSV import.
+- End-to-end test coverage across all catalog features; Lighthouse a11y/SEO/best-practices 100 (performance 63–70 tracked separately).
+
+## Slice 2 — status
+
+- Cart drawer + `/cart` with server re-pricing.
+- `/checkout` with zones by governorate+city, Arabic-digit phones, idempotent orders, and large-COD deposit.
+- Thank-you page protected by a public token.
+- One-tap `/admin/confirm/:token` with login redirect, reject with reason + WhatsApp reply.
+- Status flow with history and stock movements (no negative stock, exact restore on cancel, race-safe).
+- Admin orders list/detail, WhatsApp status messages, CSV export with formula-injection protection, printable internal invoice.
+- Funnel events without personal data.
+- Tests: API e2e 116, browser e2e 32 (stable 3/3 full runs), unit 171 shared + 193 web + 74 api.
+
 ## Quality gates (verified)
 
 | Gate | Result |
 |---|---|
 | Lint + typecheck (all packages) | ✅ |
-| Unit tests: shared 47 · ui 3 · web 38 · api 26 (114 total) | ✅ |
-| API tests against real test DB (seeded in global setup) | ✅ 17/17 |
-| Browser e2e (smoke 4, admin login 2, test-seed signed-in 1) | ✅ 7/7 |
+| Unit tests: shared 171 · web 193 · api 74 · ui 3 (441 total) | ✅ |
+| API e2e tests against real test DB | ✅ 116 |
+| Browser e2e | ✅ 32 |
 | Production builds (API, web) | ✅ |
-| Docker stack (`docker compose build` + up with e2e overlay) | ✅ All services healthy (db, migrate exits 0, api, web, umami, caddy); `/api/health` ok, RTL home, `/admin` → login, `/stats/script.js` 200, `/api/test/*` 403 without secret, `seed` tool service works, browser e2e 7/7 against Docker |
+| Docker stack (`docker compose build` + up with e2e overlay) — last verified in Slice 0 | ✅ All services healthy (db, migrate exits 0, api, web, umami, caddy); `/api/health` ok, RTL home, `/admin` → login, `/stats/script.js` 200, `/api/test/*` 403 without secret, `seed` tool service works, browser e2e 32 against Docker |
 | Lighthouse CI budgets (perf ≥ 0.9, a11y = 1, LCP < 2.5 s, CLS < 0.1 on `/`) | ✅ Verified in CI |
 
 ## Found and fixed during review

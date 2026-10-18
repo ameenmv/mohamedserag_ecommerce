@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { AdminProductListItem } from '@serag/shared'
 import { Package } from '@lucide/vue'
-import { formatEgpWithUnit } from '@serag/shared'
 import { calculateDiscountPercent } from '~/utils/admin-money'
 
 defineProps<{
@@ -16,6 +15,7 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const { money } = usePrice()
 const localePath = useLocalePath()
 </script>
 
@@ -99,13 +99,13 @@ const localePath = useLocalePath()
             <td class="px-3 py-3">
               <div class="flex flex-col">
                 <span class="num font-bold text-foreground">
-                  {{ formatEgpWithUnit(p.price) }}
+                  {{ money(p.price) }}
                 </span>
                 <span
                   v-if="p.oldPrice && p.oldPrice > p.price"
                   class="num text-xs text-muted-foreground line-through"
                 >
-                  {{ formatEgpWithUnit(p.oldPrice) }}
+                  {{ money(p.oldPrice) }}
                   <span class="text-serag-green dark:text-serag-gold font-bold">
                     (-{{ calculateDiscountPercent(p.price, p.oldPrice) }}%)
                   </span>
@@ -220,13 +220,13 @@ const localePath = useLocalePath()
         <div class="flex flex-wrap items-center justify-between gap-2 border-t border-border pt-2 text-xs">
           <div class="flex items-center gap-2">
             <span class="num font-bold text-foreground text-sm">
-              {{ formatEgpWithUnit(p.price) }}
+              {{ money(p.price) }}
             </span>
             <span
               v-if="p.oldPrice && p.oldPrice > p.price"
               class="num text-xs text-muted-foreground line-through"
             >
-              {{ formatEgpWithUnit(p.oldPrice) }}
+              {{ money(p.oldPrice) }}
             </span>
           </div>
 

@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import {
-  formatEgpWithUnit,
-  type AdminConfirmSummary,
-  type OrderStockShortage,
+import type {
+  AdminConfirmSummary,
+  OrderStockShortage,
 } from '@serag/shared'
 import { remainingPiastres } from '~/utils/admin-confirm'
 import { Badge } from '@/components/ui/badge'
@@ -25,6 +24,7 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
+const { money } = usePrice()
 const localePath = useLocalePath()
 
 const remaining = computed(() => remainingPiastres(props.summary))
@@ -47,7 +47,7 @@ const remaining = computed(() => remainingPiastres(props.summary))
           <div class="flex items-center gap-2 pt-1">
             <span class="text-xs text-muted-foreground">{{ t('admin.confirm.result.statusLabel') }}</span>
             <Badge variant="outline" class="font-bold border-emerald-500/40 text-emerald-700 bg-emerald-500/10">
-              {{ summary.statusLabel }}
+              {{ t(`admin.orders.status.${summary.status}`) }}
             </Badge>
           </div>
 
@@ -56,13 +56,13 @@ const remaining = computed(() => remainingPiastres(props.summary))
             <div class="flex flex-col gap-0.5">
               <span class="text-muted-foreground">{{ t('admin.confirm.result.paidAmount') }}</span>
               <span class="num text-sm font-extrabold text-foreground">
-                {{ formatEgpWithUnit(summary.paidAmount) }}
+                {{ money(summary.paidAmount) }}
               </span>
             </div>
             <div class="flex flex-col gap-0.5">
               <span class="text-muted-foreground">{{ t('admin.confirm.result.remainingAmount') }}</span>
               <span class="num text-sm font-extrabold text-foreground">
-                {{ formatEgpWithUnit(remaining) }}
+                {{ money(remaining) }}
               </span>
             </div>
           </div>
@@ -127,7 +127,7 @@ const remaining = computed(() => remainingPiastres(props.summary))
           <div class="flex items-center gap-2 pt-1">
             <span class="text-xs text-muted-foreground">{{ t('admin.confirm.result.statusLabel') }}</span>
             <Badge variant="destructive" class="font-bold">
-              {{ summary.statusLabel }}
+              {{ t(`admin.orders.status.${summary.status}`) }}
             </Badge>
           </div>
         </CardContent>

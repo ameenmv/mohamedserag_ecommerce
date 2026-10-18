@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ArrowLeft, ArrowRight, AlertCircle } from '@lucide/vue'
-import { formatEgpWithUnit, type CartQuote } from '@serag/shared'
+import type { CartQuote } from '@serag/shared'
 
 const props = defineProps<{
   quote?: CartQuote | null
@@ -14,6 +14,7 @@ const emit = defineEmits<{
 }>()
 
 const { t, locale } = useI18n()
+const { money } = usePrice()
 
 const displaySubtotal = computed(() => props.quote?.subtotal ?? props.subtotal)
 const displayDiscount = computed(() => props.quote?.discount ?? 0)
@@ -32,20 +33,20 @@ const deliveryFee = computed(() => props.quote?.deliveryFee ?? 0)
       <!-- Subtotal -->
       <div class="flex items-center justify-between">
         <span class="text-muted-foreground">{{ t('store.cart.subtotal') }}</span>
-        <span class="num font-bold text-foreground">{{ formatEgpWithUnit(displaySubtotal) }}</span>
+        <span class="num font-bold text-foreground">{{ money(displaySubtotal) }}</span>
       </div>
 
       <!-- Discount -->
       <div v-if="displayDiscount > 0" class="flex items-center justify-between text-emerald-700 dark:text-emerald-400">
         <span>{{ t('store.cart.discount') }}</span>
-        <span class="num font-bold">-{{ formatEgpWithUnit(displayDiscount) }}</span>
+        <span class="num font-bold">-{{ money(displayDiscount) }}</span>
       </div>
 
       <!-- Delivery Fee -->
       <div class="flex items-center justify-between">
         <span class="text-muted-foreground">{{ t('store.cart.deliveryFee') }}</span>
         <span v-if="hasZone" class="num font-bold text-foreground">
-          {{ formatEgpWithUnit(deliveryFee) }}
+          {{ money(deliveryFee) }}
         </span>
         <span v-else class="text-xs text-muted-foreground">
           {{ t('store.cart.deliveryFeeNextStep') }}
@@ -58,7 +59,7 @@ const deliveryFee = computed(() => props.quote?.deliveryFee ?? 0)
       <div class="flex items-baseline justify-between">
         <span class="text-base font-bold text-foreground">{{ t('store.cart.total') }}</span>
         <span class="num text-xl font-extrabold text-serag-night dark:text-serag-gold">
-          {{ formatEgpWithUnit(displayTotal) }}
+          {{ money(displayTotal) }}
         </span>
       </div>
 

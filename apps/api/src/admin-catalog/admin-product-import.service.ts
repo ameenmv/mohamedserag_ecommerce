@@ -8,21 +8,8 @@ import {
 } from '@serag/shared'
 import { Prisma } from '../generated/prisma/client.js'
 import { PrismaService } from '../prisma/prisma.service.js'
+import { escapeCsvCell } from '../common/csv-cell.js'
 
-function escapeCsvCell(val: string | number | null | undefined): string {
-  if (val === null || val === undefined) return ''
-  const str = String(val)
-  if (
-    str.includes('"') ||
-    str.includes(',') ||
-    str.includes(';') ||
-    str.includes('\n') ||
-    str.includes('\r')
-  ) {
-    return `"${str.replace(/"/g, '""')}"`
-  }
-  return str
-}
 
 export interface ImportApplyResult {
   updated: number

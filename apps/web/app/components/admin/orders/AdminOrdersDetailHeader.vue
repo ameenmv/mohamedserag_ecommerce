@@ -65,7 +65,7 @@ const hasWhatsappTemplate = computed(() => {
           class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold"
           :class="statusBadgeClass(detail.status)"
         >
-          {{ detail.statusLabel }}
+          {{ t(`admin.orders.status.${detail.status}`) }}
         </span>
       </div>
 

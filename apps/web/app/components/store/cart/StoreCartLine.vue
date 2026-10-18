@@ -2,7 +2,6 @@
 import type { CartLine } from '~/utils/cart'
 import type { CartQuoteLine } from '@serag/shared'
 import { Minus, Plus, Trash2 } from '@lucide/vue'
-import { formatEgpWithUnit } from '@serag/shared'
 import type { PriceChange } from '~/composables/useCartQuote'
 
 const props = defineProps<{
@@ -18,6 +17,7 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const { money } = usePrice()
 const localePath = useLocalePath()
 
 const effectiveMaxQty = computed(() => props.quoteLine?.availability.maxQty ?? props.line.maxQty)
@@ -105,7 +105,7 @@ function increase(): void {
         <!-- Unit Price -->
         <div class="flex items-baseline gap-1 text-xs text-muted-foreground">
           <span>{{ t('store.cart.unitPrice') }}:</span>
-          <span class="num font-semibold text-foreground">{{ formatEgpWithUnit(line.price) }}</span>
+          <span class="num font-semibold text-foreground">{{ money(line.price) }}</span>
         </div>
 
         <!-- Lead time if on-request -->
@@ -148,7 +148,7 @@ function increase(): void {
           <!-- Total for Line -->
           <div class="text-end">
             <span class="num text-base font-extrabold text-serag-night dark:text-serag-gold">
-              {{ formatEgpWithUnit(line.price * line.qty) }}
+              {{ money(line.price * line.qty) }}
             </span>
           </div>
         </div>
@@ -181,8 +181,8 @@ function increase(): void {
         <span>
           {{
             t('store.cart.issues.priceChanged', {
-              from: formatEgpWithUnit(priceChangeData.from),
-              to: formatEgpWithUnit(priceChangeData.to),
+              from: money(priceChangeData.from),
+              to: money(priceChangeData.to),
             })
           }}
         </span>

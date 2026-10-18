@@ -45,7 +45,7 @@
 - [x] T033 A [P] Admin: orders list/detail, payment confirm/reject, status actions, WhatsApp template buttons, CSV export, internal invoice print
 - [x] T034 A Admin: `/admin/confirm/[token]` mobile page with login redirect
 - [x] T035 A E2E: COD, transfer, large-COD deposit, confirm link (incl. reject then confirm), thank-you token secrecy, product → order under 90 s
-- [ ] T036 C Slice review
+- [x] T036 C Slice review
 
 ## Phase 3: Slice 3 — Bridal builder
 - [ ] T040 A API bridal: tiers, lists (edit/share tokens, mode), swaps, freeze on reserve, reservation order, lock start on paid ≥ deposit, extend, reprice, agreed date → stock

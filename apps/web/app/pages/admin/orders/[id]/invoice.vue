@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { formatDate } from '~/utils/date-format'
-import {
-  formatEgpWithUnit,
-  type AdminOrderDetail,
+import type {
+  AdminOrderDetail,
 } from '@serag/shared'
 import { ArrowRight, Printer } from '@lucide/vue'
 
@@ -12,6 +11,7 @@ const route = useRoute()
 const orderId = String(route.params.id)
 
 const { t, locale } = useI18n()
+const { money } = usePrice()
 const localePath = useLocalePath()
 
 const detail = ref<AdminOrderDetail | null>(null)
@@ -130,10 +130,10 @@ function handlePrint() {
               <td class="py-3 font-mono text-muted-foreground print:text-gray-600 pe-3">{{ it.modelCode }}</td>
               <td class="py-3 text-center num font-bold px-2">{{ it.qty }}</td>
               <td class="py-3 num whitespace-nowrap text-muted-foreground print:text-gray-600 pe-3">
-                {{ formatEgpWithUnit(it.unitPrice) }}
+                {{ money(it.unitPrice) }}
               </td>
               <td class="py-3 num font-bold text-foreground print:text-black text-end whitespace-nowrap">
-                {{ formatEgpWithUnit(it.lineTotal) }}
+                {{ money(it.lineTotal) }}
               </td>
             </tr>
           </tbody>
@@ -144,17 +144,17 @@ function handlePrint() {
       <div class="border-t-2 border-border pt-4 flex flex-col gap-2 max-w-xs ms-auto w-full text-xs sm:text-sm">
         <div class="flex justify-between items-center text-muted-foreground print:text-gray-600">
           <span>{{ t('admin.orders.detail.subtotal') }}:</span>
-          <span class="num font-semibold">{{ formatEgpWithUnit(detail.subtotal) }}</span>
+          <span class="num font-semibold">{{ money(detail.subtotal) }}</span>
         </div>
 
         <div v-if="detail.discount > 0" class="flex justify-between items-center text-emerald-700">
           <span>{{ t('admin.orders.detail.discount') }}:</span>
-          <span class="num font-semibold">-{{ formatEgpWithUnit(detail.discount) }}</span>
+          <span class="num font-semibold">-{{ money(detail.discount) }}</span>
         </div>
 
         <div class="flex justify-between items-center text-muted-foreground print:text-gray-600">
           <span>{{ t('admin.orders.detail.deliveryFee') }}:</span>
-          <span class="num font-semibold">{{ formatEgpWithUnit(detail.deliveryFee) }}</span>
+          <span class="num font-semibold">{{ money(detail.deliveryFee) }}</span>
         </div>
 
         <div class="flex justify-between items-center font-bold text-foreground print:text-black border-t border-border pt-2 text-base">
@@ -165,19 +165,19 @@ function handlePrint() {
             </div>
           </div>
           <span class="num font-bold text-serag-night dark:text-serag-gold print:text-black">
-            {{ formatEgpWithUnit(detail.total) }}
+            {{ money(detail.total) }}
           </span>
         </div>
 
         <div class="flex justify-between items-center text-muted-foreground print:text-gray-600 pt-1">
           <span>{{ t('admin.orders.detail.paid') }}:</span>
-          <span class="num font-bold">{{ formatEgpWithUnit(detail.paidAmount) }}</span>
+          <span class="num font-bold">{{ money(detail.paidAmount) }}</span>
         </div>
 
         <div class="flex justify-between items-center font-bold border-t border-dashed border-border pt-1">
           <span>{{ t('admin.orders.detail.remaining') }}:</span>
           <span class="num font-bold text-base" :class="detail.remaining > 0 ? 'text-destructive print:text-black' : 'text-emerald-700 print:text-black'">
-            {{ formatEgpWithUnit(detail.remaining) }}
+            {{ money(detail.remaining) }}
           </span>
         </div>
       </div>

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { X } from '@lucide/vue'
 import type { ProductDetail } from '@serag/shared'
-import { formatEgpWithUnit } from '@serag/shared'
 import {
   formatCompareValue,
   type CompareTableRow,
@@ -26,6 +25,7 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const { money } = usePrice()
 const localePath = useLocalePath()
 
 function getRowLabel(row: { key: string; label: string; type: string }): string {
@@ -206,7 +206,7 @@ function getRowLabel(row: { key: string; label: string; type: string }): string 
                   v-if="row.type === 'price'"
                   class="num font-bold text-foreground text-sm sm:text-base"
                 >
-                  {{ formatEgpWithUnit(val as number) }}
+                  {{ money(val as number) }}
                 </span>
                 <span v-else class="text-xs sm:text-sm">
                   {{

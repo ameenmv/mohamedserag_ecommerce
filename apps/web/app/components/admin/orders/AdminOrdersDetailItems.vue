@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import {
-  formatEgpWithUnit,
-  type AdminOrderDeposit,
-  type AdminOrderItem,
+import type {
+  AdminOrderDeposit,
+  AdminOrderItem,
 } from '@serag/shared'
 import { Package } from '@lucide/vue'
 
@@ -18,6 +17,7 @@ defineProps<{
 }>()
 
 const { t } = useI18n()
+const { money } = usePrice()
 </script>
 
 <template>
@@ -53,10 +53,10 @@ const { t } = useI18n()
               {{ it.qty }}
             </td>
             <td class="py-3 num whitespace-nowrap text-muted-foreground pe-3">
-              {{ formatEgpWithUnit(it.unitPrice) }}
+              {{ money(it.unitPrice) }}
             </td>
             <td class="py-3 num font-bold text-foreground text-end whitespace-nowrap">
-              {{ formatEgpWithUnit(it.lineTotal) }}
+              {{ money(it.lineTotal) }}
             </td>
           </tr>
         </tbody>
@@ -67,40 +67,40 @@ const { t } = useI18n()
     <div class="border-t border-border/60 pt-4 flex flex-col gap-2 max-w-sm ms-auto w-full text-xs">
       <div class="flex justify-between items-center text-muted-foreground">
         <span>{{ t('admin.orders.detail.subtotal') }}:</span>
-        <span class="num font-semibold">{{ formatEgpWithUnit(subtotal) }}</span>
+        <span class="num font-semibold">{{ money(subtotal) }}</span>
       </div>
 
       <div v-if="discount > 0" class="flex justify-between items-center text-emerald-700 dark:text-emerald-400">
         <span>{{ t('admin.orders.detail.discount') }}:</span>
-        <span class="num font-semibold">-{{ formatEgpWithUnit(discount) }}</span>
+        <span class="num font-semibold">-{{ money(discount) }}</span>
       </div>
 
       <div class="flex justify-between items-center text-muted-foreground">
         <span>{{ t('admin.orders.detail.deliveryFee') }}:</span>
-        <span class="num font-semibold">{{ formatEgpWithUnit(deliveryFee) }}</span>
+        <span class="num font-semibold">{{ money(deliveryFee) }}</span>
       </div>
 
       <div class="flex justify-between items-center text-base font-bold text-foreground border-t border-border/80 pt-2">
         <span>{{ t('admin.orders.detail.total') }}:</span>
         <span class="num text-serag-night dark:text-serag-gold font-bold">
-          {{ formatEgpWithUnit(total) }}
+          {{ money(total) }}
         </span>
       </div>
 
       <div v-if="deposit" class="flex justify-between items-center text-amber-800 dark:text-amber-300">
         <span>{{ t('admin.orders.detail.deposit') }} ({{ deposit.pct }}%):</span>
-        <span class="num font-bold">{{ formatEgpWithUnit(deposit.amount) }}</span>
+        <span class="num font-bold">{{ money(deposit.amount) }}</span>
       </div>
 
       <div class="flex justify-between items-center text-muted-foreground">
         <span>{{ t('admin.orders.detail.paid') }}:</span>
-        <span class="num font-bold text-foreground">{{ formatEgpWithUnit(paidAmount) }}</span>
+        <span class="num font-bold text-foreground">{{ money(paidAmount) }}</span>
       </div>
 
       <div class="flex justify-between items-center text-xs font-bold border-t border-dashed border-border/80 pt-1.5">
         <span>{{ t('admin.orders.detail.remaining') }}:</span>
         <span class="num text-base font-bold" :class="remaining > 0 ? 'text-destructive' : 'text-emerald-700 dark:text-emerald-400'">
-          {{ formatEgpWithUnit(remaining) }}
+          {{ money(remaining) }}
         </span>
       </div>
     </div>

@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { formatDateTime } from '~/utils/date-format'
 import {
-  formatEgpWithUnit,
-  PAYMENT_METHOD_LABELS,
   piastresToEgp,
   type AdminOrderPayment,
   type OrderStockShortage,
@@ -25,6 +23,7 @@ const emit = defineEmits<{
 }>()
 
 const { t, locale } = useI18n()
+const { money } = usePrice()
 
 const confirmDialogOpen = ref(false)
 const confirmAmountInput = ref('')
@@ -135,8 +134,8 @@ function handleRejectSubmit() {
       <div v-for="p in payments" :key="p.id" class="py-3 flex flex-col gap-1 text-xs">
         <div class="flex items-center justify-between gap-2">
           <div class="flex items-center gap-2">
-            <span class="num font-bold text-sm text-foreground">{{ formatEgpWithUnit(p.amount) }}</span>
-            <span class="text-muted-foreground">({{ PAYMENT_METHOD_LABELS[p.method] ?? p.method }})</span>
+            <span class="num font-bold text-sm text-foreground">{{ money(p.amount) }}</span>
+            <span class="text-muted-foreground">({{ t(`admin.orders.paymentMethods.${p.method}`) }})</span>
           </div>
           <span
             class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold"

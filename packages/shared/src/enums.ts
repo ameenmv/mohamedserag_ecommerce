@@ -23,6 +23,11 @@ export const ORDER_STATUSES = [
 ] as const
 export const orderStatuses = ORDER_STATUSES
 export type OrderStatus = (typeof ORDER_STATUSES)[number]
+
+/** Narrows an arbitrary string (e.g. an order-history marker) to an OrderStatus. */
+export function isOrderStatus(value: string): value is OrderStatus {
+  return (ORDER_STATUSES as readonly string[]).includes(value)
+}
 export const orderStatusSchema = z.enum(ORDER_STATUSES)
 
 export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {

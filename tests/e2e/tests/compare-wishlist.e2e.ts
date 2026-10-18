@@ -3,6 +3,16 @@ import { expect } from 'e2e';
 import { createSeed } from './support/seed.js';
 import { waitForHydration } from './support/hydration.js';
 
+
+// Stable seeded catalog fridges. Tests running in parallel seed (and then delete) their own products
+// in the same category, so "the first card" can be another test's temporary product.
+const CATALOG_FRIDGES = [
+  'ثلاجة ديفروست 14 قدم',
+  'ثلاجة ديفروست 350 لتر',
+  'ثلاجة نوفروست بابين 450 لتر',
+  'ثلاجة نوفروست ديجيتال 400 لتر',
+] as const;
+
 let seed = createSeed();
 
 afterEach(async () => {
@@ -19,9 +29,10 @@ test('compare: adding 2 products shows compare bar and navigates to compare tabl
   await waitForHydration(browser);
 
   // Add 2 products to compare
-  const compareToggles = browser.locator('article button[aria-label*="للمقارنة"]');
-  await compareToggles.nth(0).tap();
-  await compareToggles.nth(1).tap();
+  for (const [i, name] of CATALOG_FRIDGES.slice(0, 2).entries()) {
+    await browser.locator(`button[aria-label="إضافة ${name} للمقارنة"]`).tap();
+    await expect(screen.getByRole('link', `المقارنة: ${i + 1}`)).toBeVisible();
+  }
 
   // The compare bar appears with count 2
   const compareBarLink = screen.getByRole('link', 'قارن (2)');
@@ -44,17 +55,13 @@ test('replace dialog: adding a 4th product opens replacement dialog and choosing
   await app.open('/c/refrigerators');
   await waitForHydration(browser);
 
-  const compareToggles = browser.locator('article button[aria-label*="للمقارنة"]');
-  // A toggle's label changes once its product is added, so nth(0) is always the next product not yet compared.
-  await compareToggles.nth(0).tap();
-  await compareToggles.nth(0).tap();
-  await compareToggles.nth(0).tap();
-
-  // 3 products are in compare
-  await expect(screen.getByRole('link', 'قارن (3)')).toBeVisible();
+  for (const [i, name] of CATALOG_FRIDGES.slice(0, 3).entries()) {
+    await browser.locator(`button[aria-label="إضافة ${name} للمقارنة"]`).tap();
+    await expect(screen.getByRole('link', `المقارنة: ${i + 1}`)).toBeVisible();
+  }
 
   // Adding a 4th product opens the «تبدّل أنهي منتج؟» dialog
-  await compareToggles.nth(0).tap();
+  await browser.locator(`button[aria-label="إضافة ${CATALOG_FRIDGES[3]} للمقارنة"]`).tap();
   await expect(screen.getByRole('heading', 'تبدّل أنهي منتج؟')).toBeVisible();
 
   // Choose one to replace

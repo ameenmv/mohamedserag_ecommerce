@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { formatEgpWithUnit, type OrderThanksItem, type OrderThanksDeposit } from '@serag/shared'
+import type { OrderThanksItem, OrderThanksDeposit } from '@serag/shared'
 
 const props = defineProps<{
   items: OrderThanksItem[]
@@ -12,6 +12,7 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
+const { money } = usePrice()
 
 const remainingAmount = computed(() => {
   if (!props.deposit) return 0
@@ -41,13 +42,13 @@ const remainingAmount = computed(() => {
             <span>•</span>
             <span>{{ t('store.cart.quantity') }}: <strong class="num text-foreground">{{ item.qty }}</strong></span>
             <span>•</span>
-            <span class="num">{{ formatEgpWithUnit(item.unitPrice) }}</span>
+            <span class="num">{{ money(item.unitPrice) }}</span>
           </div>
         </div>
 
         <div class="text-end shrink-0">
           <span class="num text-sm font-bold text-foreground">
-            {{ formatEgpWithUnit(item.lineTotal) }}
+            {{ money(item.lineTotal) }}
           </span>
         </div>
       </div>
@@ -58,19 +59,19 @@ const remainingAmount = computed(() => {
       <!-- Subtotal -->
       <div class="flex items-center justify-between">
         <span class="text-muted-foreground">{{ t('store.cart.subtotal') }}</span>
-        <span class="num font-bold text-foreground">{{ formatEgpWithUnit(subtotal) }}</span>
+        <span class="num font-bold text-foreground">{{ money(subtotal) }}</span>
       </div>
 
       <!-- Discount -->
       <div v-if="discount > 0" class="flex items-center justify-between text-emerald-700 dark:text-emerald-400">
         <span>{{ t('store.cart.discount') }}</span>
-        <span class="num font-bold">-{{ formatEgpWithUnit(discount) }}</span>
+        <span class="num font-bold">-{{ money(discount) }}</span>
       </div>
 
       <!-- Delivery Fee -->
       <div class="flex items-center justify-between">
         <span class="text-muted-foreground">{{ t('store.cart.deliveryFee') }}</span>
-        <span class="num font-bold text-foreground">{{ formatEgpWithUnit(deliveryFee) }}</span>
+        <span class="num font-bold text-foreground">{{ money(deliveryFee) }}</span>
       </div>
 
       <div class="my-1 border-t border-border/60" />
@@ -79,7 +80,7 @@ const remainingAmount = computed(() => {
       <div class="flex items-baseline justify-between">
         <span class="text-base font-bold text-foreground">{{ t('store.cart.total') }}</span>
         <span class="num text-xl font-extrabold text-serag-night dark:text-serag-gold">
-          {{ formatEgpWithUnit(total) }}
+          {{ money(total) }}
         </span>
       </div>
 
@@ -90,11 +91,11 @@ const remainingAmount = computed(() => {
       >
         <div class="flex items-center justify-between font-bold text-amber-900 dark:text-amber-300">
           <span>{{ t('store.thanks.depositRequired', { pct: deposit.pct }) }}</span>
-          <span class="num font-extrabold">{{ formatEgpWithUnit(deposit.amount) }}</span>
+          <span class="num font-extrabold">{{ money(deposit.amount) }}</span>
         </div>
         <div class="flex items-center justify-between text-muted-foreground font-semibold">
           <span>{{ t('store.thanks.remainingOnDelivery') }}</span>
-          <span class="num font-bold text-foreground">{{ formatEgpWithUnit(remainingAmount) }}</span>
+          <span class="num font-bold text-foreground">{{ money(remainingAmount) }}</span>
         </div>
       </div>
 

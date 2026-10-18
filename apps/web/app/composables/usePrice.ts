@@ -9,7 +9,13 @@ export function usePrice() {
     return formatPrice(piastres, t)
   }
 
+  /** Display string with the unit in the current locale («28,900 ج.م» / «28,900 EGP»). */
+  function money(piastres: number): string {
+    return format(piastres).formatted
+  }
+
   return {
     format,
+    money,
   }
 }

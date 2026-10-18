@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import {
   ORDER_TYPES,
   ORDER_STATUSES,
+  isOrderStatus,
   ORDER_STATUS_LABELS,
   BRIDAL_STATUSES,
   BRIDAL_STATUS_LABELS,
@@ -95,5 +96,12 @@ describe('enums and Arabic labels', () => {
     expect(ALL_PERMISSIONS).toContain('notify.manage')
     expect(ALL_PERMISSIONS).toContain('users.manage')
     expect(ALL_PERMISSIONS).toHaveLength(14)
+  })
+})
+
+describe('isOrderStatus', () => {
+  it('accepts order statuses and rejects history markers', () => {
+    expect(isOrderStatus('confirmed')).toBe(true)
+    expect(isOrderStatus('payment_confirmed')).toBe(false)
   })
 })
