@@ -875,6 +875,66 @@
         "hasProducts": "لا يمكن حذف الماركة لأنها مرتبطة بمنتجات",
         "inUse": "لا يمكن حذف قالب المواصفات لأنه مستخدم في أقسام"
       }
+    },
+    "confirm": {
+      "pageTitle": "تأكيد دفع الطلب",
+      "header": "تأكيد دفع الطلب {no}",
+      "notFound": "الرابط ده مش صحيح أو انتهى",
+      "backToDashboard": "رجوع للوحة التحكم",
+      "notActionable": "الطلب ده {status}، مفيش حاجة محتاجة تأكيد",
+      "summary": {
+        "title": "تفاصيل الدفع",
+        "customer": "العميل",
+        "method": "طريقة الدفع",
+        "total": "إجمالي الطلب",
+        "paid": "المدفوع حالياً",
+        "expected": "المبلغ المطلوب",
+        "depositExpected": "العربون المطلوب ({pct}%)",
+        "remaining": "المتبقي"
+      },
+      "actions": {
+        "amountLabel": "المبلغ المدفوع (ج.م)",
+        "amountPlaceholder": "مثال: 500",
+        "noteLabel": "ملاحظة (اختياري)",
+        "notePlaceholder": "أي ملاحظة تخص التحويل أو المعاملة",
+        "confirmButton": "تأكيد الدفع",
+        "confirming": "جاري التأكيد...",
+        "rejectButton": "رفض"
+      },
+      "dialog": {
+        "title": "رفض الدفع",
+        "description": "اكتب سبب رفض التحويل، وهيتم إرساله للعميل للتوضيح",
+        "reasonLabel": "سبب الرفض",
+        "reasonPlaceholder": "مثال: الصورة مش واضحة، المبلغ غير مطابق",
+        "confirmReject": "تأكيد الرفض",
+        "rejecting": "جاري الرفض...",
+        "cancel": "إلغاء"
+      },
+      "result": {
+        "confirmedTitle": "اتأكد الدفع",
+        "rejectedTitle": "اترفض الدفع",
+        "statusLabel": "حالة الطلب الآن:",
+        "paidAmount": "تم دفع:",
+        "remainingAmount": "المتبقي:",
+        "openOrder": "افتح الطلب",
+        "sendWhatsapp": "ابعت للعميل على واتساب",
+        "shortageWarning": "تنبيه نقص في المخزون:",
+        "shortageItem": "{name}: المطلوب {requested}، المتاح كان {taken}"
+      },
+      "errors": {
+        "generic": "حدث خطأ غير متوقع، يرجى المحاولة مرة أخرى",
+        "notFound": "الرابط ده مش صحيح أو انتهى",
+        "conflict": "الطلب اتحدث، حدّث الصفحة",
+        "badRequest": "المبلغ غير صحيح أو أكبر من الباقي",
+        "forbidden": "ليس لديك صلاحية لتأكيد الدفع",
+        "unauthorized": "يرجى تسجيل الدخول أولاً",
+        "amountRequired": "يرجى إدخال المبلغ",
+        "invalidAmount": "يرجى إدخال رقم صحيح",
+        "amountPositive": "المبلغ يجب أن يكون أكبر من صفر",
+        "amountExceedsRemaining": "المبلغ أكبر من المتبقي",
+        "reasonRequired": "سبب الرفض يجب أن يكون 3 أحرف على الأقل",
+        "reasonTooLong": "سبب الرفض لا يزيد عن 300 حرف"
+      }
     }
   },
   "validation": {

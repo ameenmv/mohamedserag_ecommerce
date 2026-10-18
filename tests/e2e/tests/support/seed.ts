@@ -62,12 +62,26 @@ export interface SeedCleanupResult {
   sessions: number;
 }
 
+export interface SeedProductDetailResult {
+  id: string;
+  slug: string;
+  modelCode: string;
+  price: number;
+  availability: {
+    state: string;
+    label: string;
+    orderable: boolean;
+    maxQty: number | null;
+  };
+}
+
 export interface SeedHelper {
   readonly runId: string;
   product(input?: SeedProductInput): Promise<SeedProductResult>;
   order(input: SeedOrderInput): Promise<SeedOrderResult>;
   adminSession(): Promise<SeedAdminSessionResult>;
   cleanup(): Promise<SeedCleanupResult>;
+  getProduct(slug: string): Promise<SeedProductDetailResult>;
 }
 
 export function createSeed(): SeedHelper {
@@ -141,6 +155,14 @@ export function createSeed(): SeedHelper {
         throw new Error(`Failed to cleanup run ${runId} (${res.status}): ${errorText}`);
       }
       return res.json() as Promise<SeedCleanupResult>;
+    },
+    async getProduct(slug: string): Promise<SeedProductDetailResult> {
+      const res = await fetch(url(`/api/products/${slug}`));
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(`Failed to get product ${slug} (${res.status}): ${errorText}`);
+      }
+      return res.json() as Promise<SeedProductDetailResult>;
     },
   };
 }

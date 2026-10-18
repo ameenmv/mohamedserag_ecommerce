@@ -69,8 +69,8 @@ description: "Tasks for Slice 2 — Cart, Checkout & Payments"
 
 - [x] T020 [US2] Admin confirm-link API `GET /api/admin/confirm/:token`, `POST …/confirm`, `POST …/reject` (permission `orders.confirmPayment`, CSRF, `@HttpCode(200)`, uses `OrderPaymentsService`; reject response includes `rejectWhatsappUrl` from the `payment_rejected` template) in `apps/api/src/admin-orders/admin-confirm.controller.ts` + e2e `apps/api/test/admin-confirm.e2e-spec.ts` (401 without session, 404 unknown token, confirmed order shows status only)
 - [x] T021 [US2] Thank-you transfer block: account details, amount (deposit amount for deposit orders), «ابعت إثبات التحويل على واتساب» built with `waLink` + `payment_proof` template including `<origin>/admin/confirm/<confirmToken>` in `apps/web/app/components/store/thanks/StoreThanksTransfer.vue`
-- [ ] T022 [US2] Mobile page `/admin/confirm/[token]` (auth middleware redirects to login with `returnTo` and back): summary, expected amount (editable), «تأكيد الدفع», «رفض» with required reason, then prefilled WhatsApp reply; status-only view when not confirmable in `apps/web/app/pages/admin/confirm/[token].vue` + `apps/web/app/components/admin/confirm/*`
-- [ ] T023 [US2] Browser e2e `tests/e2e/tests/checkout-transfer.e2e.ts` (InstaPay order, WhatsApp proof href contains order no and confirm URL) and `tests/e2e/tests/confirm-link.e2e.ts` (login redirect returns to the page, reject with reason then confirm → «مؤكد», stock reduced)
+- [x] T022 [US2] Mobile page `/admin/confirm/[token]` (auth middleware redirects to login with `returnTo` and back): summary, expected amount (editable), «تأكيد الدفع», «رفض» with required reason, then prefilled WhatsApp reply; status-only view when not confirmable in `apps/web/app/pages/admin/confirm/[token].vue` + `apps/web/app/components/admin/confirm/*`
+- [x] T023 [US2] Browser e2e `tests/e2e/tests/checkout-transfer.e2e.ts` (InstaPay order, WhatsApp proof href contains order no and confirm URL) and `tests/e2e/tests/confirm-link.e2e.ts` (login redirect returns to the page, reject with reason then confirm → «مؤكد», stock reduced)
 
 **Checkpoint**: Transfers can be confirmed from a phone.
 
@@ -80,7 +80,7 @@ description: "Tasks for Slice 2 — Cart, Checkout & Payments"
 
 **Independent Test**: COD cart above 30,000 ج.م → deposit explained → «بانتظار العربون» → confirm deposit → «مؤكد» with remaining amount.
 
-- [ ] T024 [US3] Browser e2e `tests/e2e/tests/cod-deposit.e2e.ts`: deposit notice with amount before placing, thank-you shows deposit transfer block, confirm deposit via link → «مؤكد», admin shows paid = deposit and remaining; two partial confirmations add up (API-level assertion via test seed)
+- [x] T024 [US3] Browser e2e `tests/e2e/tests/cod-deposit.e2e.ts`: deposit notice with amount before placing, thank-you shows deposit transfer block, confirm deposit via link → «مؤكد», admin shows paid = deposit and remaining; two partial confirmations add up (API-level assertion via test seed)
 
 (Deposit logic itself is delivered by T003, T009, T015, T021.)
 

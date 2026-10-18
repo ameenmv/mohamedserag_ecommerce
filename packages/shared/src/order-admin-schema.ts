@@ -99,4 +99,5 @@ export interface AdminConfirmSummary {
   canConfirm: boolean
   canReject: boolean
   rejectWhatsappUrl?: string
+  shortages?: OrderStockShortage[]
 }

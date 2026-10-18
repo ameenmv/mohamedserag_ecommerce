@@ -317,6 +317,7 @@ describe('Admin Confirm API E2E (/api/admin/confirm)', () => {
     expect(confirmRes.body.paidAmount).toBe(50_000)
     expect(confirmRes.body.canConfirm).toBe(false)
     expect(confirmRes.body.canReject).toBe(false)
+    expect(confirmRes.body.shortages).toEqual([])
 
     // GET still returns 200 with canConfirm=false
     const getRes = await request(app.getHttpServer())
@@ -326,6 +327,31 @@ describe('Admin Confirm API E2E (/api/admin/confirm)', () => {
 
     expect(getRes.body.status).toBe('confirmed')
     expect(getRes.body.canConfirm).toBe(false)
+  })
+
+  it('confirms order and returns shortages when product stock is less than requested', async () => {
+    const prodId = await createTestProduct(1)
+    const { confirmToken } = await createTestOrder({
+      status: 'awaiting_payment',
+      paymentMethod: 'instapay',
+      total: 100_000,
+      items: [{ productId: prodId, qty: 2, unitPrice: 50_000 }],
+    })
+
+    const confirmRes = await request(app.getHttpServer())
+      .post(`/api/admin/confirm/${confirmToken}/confirm`)
+      .set('Cookie', sessionCookie)
+      .set('x-csrf-token', csrfToken)
+      .send({ amount: 100_000 })
+      .expect(200)
+
+    expect(confirmRes.body.status).toBe('confirmed')
+    expect(confirmRes.body.shortages).toHaveLength(1)
+    expect(confirmRes.body.shortages[0]).toMatchObject({
+      productId: prodId,
+      requested: 2,
+      taken: 1,
+    })
   })
 
   it('rejects order with reason and returns rejectWhatsappUrl starting https://wa.me/2010', async () => {

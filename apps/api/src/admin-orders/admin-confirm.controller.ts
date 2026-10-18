@@ -115,13 +115,16 @@ export class AdminConfirmController {
       throw new ConflictException('مينفعش تأكيد دفع للطلب ده دلوقتي')
     }
 
-    await this.paymentsService.confirm(order.id, body, admin?.userId)
+    const result = await this.paymentsService.confirm(order.id, body, admin?.userId)
 
     const updated = await this.prisma.order.findUniqueOrThrow({
       where: { id: order.id },
     })
 
-    return toConfirmSummary(updated)
+    return {
+      ...toConfirmSummary(updated),
+      shortages: result.shortages,
+    }
   }
 
   @Post(':token/reject')

@@ -875,6 +875,66 @@
         "hasProducts": "Cannot delete brand because it is associated with products",
         "inUse": "Cannot delete spec template because it is assigned to categories"
       }
+    },
+    "confirm": {
+      "pageTitle": "Confirm Order Payment",
+      "header": "Confirm payment for order {no}",
+      "notFound": "This confirmation link is invalid or expired",
+      "backToDashboard": "Back to Dashboard",
+      "notActionable": "This order is {status}; no confirmation is needed",
+      "summary": {
+        "title": "Payment Details",
+        "customer": "Customer",
+        "method": "Payment Method",
+        "total": "Order Total",
+        "paid": "Already Paid",
+        "expected": "Expected Amount",
+        "depositExpected": "Required Deposit ({pct}%)",
+        "remaining": "Remaining"
+      },
+      "actions": {
+        "amountLabel": "Paid Amount (EGP)",
+        "amountPlaceholder": "e.g. 500",
+        "noteLabel": "Note (optional)",
+        "notePlaceholder": "Any note regarding the transfer",
+        "confirmButton": "Confirm Payment",
+        "confirming": "Confirming...",
+        "rejectButton": "Reject"
+      },
+      "dialog": {
+        "title": "Reject Payment",
+        "description": "Enter the rejection reason to send to the customer",
+        "reasonLabel": "Rejection Reason",
+        "reasonPlaceholder": "e.g. Image not clear, amount does not match",
+        "confirmReject": "Confirm Rejection",
+        "rejecting": "Rejecting...",
+        "cancel": "Cancel"
+      },
+      "result": {
+        "confirmedTitle": "Payment Confirmed",
+        "rejectedTitle": "Payment Rejected",
+        "statusLabel": "Order status now:",
+        "paidAmount": "Paid:",
+        "remainingAmount": "Remaining:",
+        "openOrder": "Open Order",
+        "sendWhatsapp": "Send WhatsApp to Customer",
+        "shortageWarning": "Stock shortage warning:",
+        "shortageItem": "{name}: requested {requested}, available was {taken}"
+      },
+      "errors": {
+        "generic": "An unexpected error occurred. Please try again.",
+        "notFound": "This confirmation link is invalid or expired.",
+        "conflict": "Order was updated. Please refresh the page.",
+        "badRequest": "Invalid amount or exceeds remaining balance.",
+        "forbidden": "You do not have permission to confirm payment.",
+        "unauthorized": "Please log in first.",
+        "amountRequired": "Please enter the amount.",
+        "invalidAmount": "Please enter a valid number.",
+        "amountPositive": "Amount must be greater than zero.",
+        "amountExceedsRemaining": "Amount exceeds remaining balance.",
+        "reasonRequired": "Rejection reason must be at least 3 characters.",
+        "reasonTooLong": "Rejection reason must not exceed 300 characters."
+      }
     }
   },
   "validation": {
