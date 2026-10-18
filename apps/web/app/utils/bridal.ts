@@ -1,0 +1,191 @@
+import type {
+  BridalListView,
+  BridalRoom,
+  BridalRoomKey,
+  BridalRooms,
+} from '@serag/shared'
+import {
+  BRIDAL_MAX_QTY,
+  BRIDAL_ROOM_KEYS,
+  normalizeRooms,
+} from '@serag/shared'
+
+export interface PriceIndexEntry {
+  unitPrice: number
+  available: boolean
+}
+
+export type PriceIndex = Record<string, PriceIndexEntry>
+
+export interface EstimatedTotals {
+  total: number
+  itemCount: number
+  unavailable: number
+  roomSubtotals: Record<BridalRoomKey, number>
+}
+
+/**
+ * Converts a server-provided BridalListView back into client BridalRooms.
+ */
+export function toRooms(view: BridalListView): BridalRooms {
+  const rooms: BridalRoom[] = []
+  for (const r of view.rooms) {
+    if (r.items.length > 0) {
+      rooms.push({
+        key: r.key,
+        items: r.items.map((i) => ({ productId: i.productId, qty: i.qty })),
+      })
+    }
+  }
+  return normalizeRooms(rooms)
+}
+
+/**
+ * Updates the quantity for a single product in a given room.
+ * Clamps quantity to 1..BRIDAL_MAX_QTY.
+ */
+export function applyQty(
+  rooms: readonly BridalRoom[],
+  roomKey: BridalRoomKey,
+  productId: string,
+  qty: number,
+): BridalRooms {
+  const validQty = Math.max(1, Math.min(BRIDAL_MAX_QTY, Math.floor(qty) || 1))
+  const cloned: BridalRoom[] = rooms.map((r) => ({
+    key: r.key,
+    items: r.items.map((i) =>
+      r.key === roomKey && i.productId === productId
+        ? { productId: i.productId, qty: validQty }
+        : { productId: i.productId, qty: i.qty },
+    ),
+  }))
+  return normalizeRooms(cloned)
+}
+
+/**
+ * Removes an item from the specified room and drops empty rooms.
+ */
+export function removeItem(
+  rooms: readonly BridalRoom[],
+  roomKey: BridalRoomKey,
+  productId: string,
+): BridalRooms {
+  const cloned: BridalRoom[] = rooms.map((r) => ({
+    key: r.key,
+    items:
+      r.key === roomKey
+        ? r.items.filter((i) => i.productId !== productId)
+        : r.items.map((i) => ({ productId: i.productId, qty: i.qty })),
+  }))
+  return normalizeRooms(cloned)
+}
+
+/**
+ * Swaps `fromId` with `toId` in `roomKey`, keeping the current item's quantity.
+ * If `toId` is already present in `roomKey`, quantities merge and cap at BRIDAL_MAX_QTY.
+ */
+export function swapItem(
+  rooms: readonly BridalRoom[],
+  roomKey: BridalRoomKey,
+  fromId: string,
+  toId: string,
+): BridalRooms {
+  const room = rooms.find((r) => r.key === roomKey)
+  if (!room) {
+    return normalizeRooms(rooms)
+  }
+
+  const existingItem = room.items.find((i) => i.productId === fromId)
+  if (!existingItem) {
+    return normalizeRooms(rooms)
+  }
+
+  const keptQty = existingItem.qty
+
+  const cloned: BridalRoom[] = rooms.map((r) => {
+    if (r.key !== roomKey) {
+      return {
+        key: r.key,
+        items: r.items.map((i) => ({ productId: i.productId, qty: i.qty })),
+      }
+    }
+
+    const remainingItems = r.items
+      .filter((i) => i.productId !== fromId)
+      .map((i) => ({ productId: i.productId, qty: i.qty }))
+
+    remainingItems.push({ productId: toId, qty: keptQty })
+
+    return {
+      key: r.key,
+      items: remainingItems,
+    }
+  })
+
+  return normalizeRooms(cloned)
+}
+
+/**
+ * Estimates totals locally from a known priceIndex while debounced saves are in-flight.
+ * Unknown products count as 0 until the server view confirms their prices.
+ */
+export function estimateTotals(
+  rooms: readonly BridalRoom[],
+  priceIndex: PriceIndex,
+): EstimatedTotals {
+  let total = 0
+  let itemCount = 0
+  let unavailable = 0
+  const roomSubtotals: Record<BridalRoomKey, number> = {
+    kitchen: 0,
+    laundry: 0,
+    living: 0,
+    bedrooms: 0,
+    small_appliances: 0,
+    kitchenware: 0,
+  }
+
+  for (const room of rooms) {
+    let subtotal = 0
+    for (const item of room.items) {
+      itemCount += item.qty
+      const info = priceIndex[item.productId]
+      if (info) {
+        if (info.available) {
+          const line = info.unitPrice * item.qty
+          subtotal += line
+          total += line
+        } else {
+          unavailable += 1
+        }
+      }
+    }
+    if (BRIDAL_ROOM_KEYS.includes(room.key)) {
+      roomSubtotals[room.key] = subtotal
+    }
+  }
+
+  return { total, itemCount, unavailable, roomSubtotals }
+}
+
+/**
+ * Builds a WhatsApp share link without a recipient phone number,
+ * opening WhatsApp's contact picker.
+ */
+export function waShareLink(text: string): string {
+  return `https://wa.me/?text=${encodeURIComponent(text)}`
+}
+
+export type DiffClassification = 'more' | 'less' | 'same'
+
+/**
+ * Classifies a price difference:
+ * - 'more' if diff > 0
+ * - 'less' if diff < 0
+ * - 'same' if diff === 0
+ */
+export function classifyDiff(diff: number): DiffClassification {
+  if (diff > 0) return 'more'
+  if (diff < 0) return 'less'
+  return 'same'
+}

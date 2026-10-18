@@ -12,9 +12,9 @@ const hydrated = useHydrated()
 const showCompareBar = computed(() => {
   if (!hydrated.value || compareCount.value < 1) return false
   const path = stripLocalePrefix(route.path).replace(/\/$/, '')
-  // Hidden where it would compete with the page's own sticky actions (checkout total, cart, thank-you).
+  // Hidden where it would compete with the page's own sticky actions (checkout total, cart, thank-you, bridal).
   const hiddenOn = ['/compare', '/cart', '/checkout']
-  return !hiddenOn.includes(path) && !path.startsWith('/order/')
+  return !hiddenOn.includes(path) && !path.startsWith('/order/') && !path.startsWith('/bridal')
 })
 
 const isProductRoute = computed(() => {

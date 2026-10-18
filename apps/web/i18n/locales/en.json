@@ -397,6 +397,145 @@
       "generalDescription": "Please try again in a moment.",
       "home": "Home",
       "shopAll": "Shop all products"
+    },
+    "bridal": {
+      "pageTitle": "Build Your Home — Bridal Packages",
+      "listPageTitle": "Your Bridal Package",
+      "metaDescription": "Build your home with Mohamed Serag showroom. Choose a bridal appliance package, customize room by room, share with family, and lock prices with a deposit.",
+      "hero": {
+        "title": "Build Your Home",
+        "subtitle": "Choose the right package for your home, customize each room to your taste, see the price changes live, and share it with family to decide together."
+      },
+      "continueBanner": {
+        "title": "You have a saved package on this device",
+        "hint": "Click here to return to your last saved list.",
+        "action": "Continue your list"
+      },
+      "tiers": {
+        "title": "Ready Bridal Appliance Packages",
+        "subtitle": "Start with a balanced package and customize appliances to fit your budget",
+        "mostPopular": "Most Popular",
+        "roomsCount": "{count} rooms",
+        "itemsCount": "{count} items",
+        "startWithTier": "Start with this tier",
+        "starting": "Preparing...",
+        "errorLoading": "Failed to load bridal packages, please try again later",
+        "retry": "Retry"
+      },
+      "scratch": {
+        "title": "Start from Scratch",
+        "description": "Prefer to choose every appliance yourself? Start with an empty list and add items to each room.",
+        "button": "Start from scratch",
+        "starting": "Starting..."
+      },
+      "rooms": {
+        "kitchen": "Kitchen",
+        "laundry": "Laundry",
+        "living": "Living Room",
+        "bedrooms": "Bedrooms (ACs)",
+        "small_appliances": "Small Appliances",
+        "kitchenware": "Kitchenware",
+        "subtotal": "Subtotal:",
+        "addItemToRoom": "Add appliance to this room",
+        "addRoomItem": "Add to a room"
+      },
+      "items": {
+        "unitPrice": "Unit price:",
+        "lineTotal": "Total:",
+        "qty": "Qty:",
+        "increaseQtyAria": "Increase quantity of {name}",
+        "decreaseQtyAria": "Decrease quantity of {name}",
+        "removeAria": "Remove {name} from list",
+        "swapAria": "Swap {name} with an alternative",
+        "swap": "Swap",
+        "remove": "Remove",
+        "outOfStockBadge": "Out of stock — choose alternative",
+        "onRequest": "Available on request",
+        "leadTimePrefix": "Lead time:"
+      },
+      "saveState": {
+        "saving": "Saving…",
+        "saved": "Saved",
+        "error": "Save failed, retrying on next change"
+      },
+      "totals": {
+        "title": "Package Summary",
+        "total": "Total:",
+        "itemCount": "Appliances:",
+        "itemsFormat": "{count} appliances",
+        "tierDifference": "Difference from tier:",
+        "tierDiffMore": "{amount} above the package",
+        "tierDiffLess": "{amount} below the package",
+        "tierDiffSame": "Same as the package",
+        "tierDiffIncrease": "+ {amount} increase",
+        "tierDiffDecrease": "- {amount} savings",
+        "tierDiffMatch": "Matches tier price",
+        "reserveButton": "Reserve with deposit"
+      },
+      "reserve": {
+        "unavailableReason": "Some items are out of stock, swap or remove them",
+        "emptyReason": "The list is empty",
+        "comingSoonReason": "Deposit reservations coming soon"
+      },
+      "share": {
+        "title": "Share your list",
+        "button": "Share on WhatsApp",
+        "copyLink": "Copy link",
+        "copied": "Link copied to clipboard!",
+        "copyFailed": "Failed to copy link",
+        "customList": "Bridal appliance list",
+        "message": "Hello, here is my bridal appliance list ({tierName}) from Mohamed Serag showroom. It has {count} items totaling {total}. You can view the appliances and prices here:\n{url}"
+      },
+      "view": {
+        "badge": "View only",
+        "contactShowroom": "Contact Showroom",
+        "contactMessage": "Hello, I am contacting you regarding my bridal package from the website totaling {total} to inquire about details.",
+        "startOwn": "Start your own package",
+        "readOnlyNotice": "You are viewing a read-only list. To customize appliances, start your own package."
+      },
+      "status": {
+        "draft": "Draft",
+        "awaitingDeposit": "Awaiting deposit",
+        "locked": "Reserved (Price locked)",
+        "deliveryAgreed": "Delivery date scheduled",
+        "delivered": "Delivered",
+        "cancelled": "Reservation cancelled",
+        "banner": "Reservation status: {status} — Reservation No: {no}"
+      },
+      "swapSheet": {
+        "title": "Choose an alternative for {name}",
+        "description": "Available alternatives from the same category with price differences",
+        "loading": "Loading alternatives...",
+        "empty": "No alternatives available in this category currently",
+        "priceDiffMore": "{amount} more",
+        "priceDiffLess": "{amount} less",
+        "priceDiffSame": "Same price",
+        "priceDiffPlus": "+{amount} vs current",
+        "priceDiffMinus": "-{amount} vs current",
+        "choose": "Select alternative",
+        "outOfStock": "Out of stock"
+      },
+      "addSheet": {
+        "title": "Add appliance to your list",
+        "description": "Choose the room and search the catalog to add an appliance",
+        "chooseRoom": "Room:",
+        "searchPlaceholder": "Search for refrigerator, washer, TV, cooker...",
+        "searching": "Searching...",
+        "noResults": "No matching results found",
+        "addButton": "Add",
+        "addedSuccess": "Added {name} to {room}",
+        "typeToSearch": "Type at least 2 characters to search appliances"
+      },
+      "empty": {
+        "title": "Your list is empty",
+        "description": "Add appliances to each room to calculate costs and share with your family.",
+        "addAppliance": "Add appliances to your list"
+      },
+      "notFound": {
+        "title": "List not found",
+        "description": "This link is invalid or the list was deleted. You can start a new bridal package at any time.",
+        "backButton": "Start a new package"
+      }
     }
   },
   "admin": {

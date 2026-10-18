@@ -397,6 +397,145 @@
       "generalDescription": "جرّب تاني بعد شوية.",
       "home": "الرئيسية",
       "shopAll": "تسوّق كل المنتجات"
+    },
+    "bridal": {
+      "pageTitle": "جهّز بيتك — جهاز العروسة",
+      "listPageTitle": "قائمة جهاز بيتك",
+      "metaDescription": "جهّزي بيتك مع معرض محمد سراج. اختاري باقة جهاز العروسة المناسبة، عدّلي فيها أوضة أوضة، شاركيها مع أهلك واحجزيها بعربون يثبّت الأسعار.",
+      "hero": {
+        "title": "جهّز بيتك",
+        "subtitle": "اختاري باقتك المناسبة لبيتك، عدّلي فيها على ذوقك وشوفي الفرق لحظة بلحظة، وشاركيها مع أهلك عشان تقرروا سوا."
+      },
+      "continueBanner": {
+        "title": "عندك قايمة محفوظة على الجهاز ده",
+        "hint": "اضغطي هنا للرجوع لآخر تعديل قمتِ بيه.",
+        "action": "كمّلي قايمتك"
+      },
+      "tiers": {
+        "title": "باقات جهاز العروسة الجاهزة",
+        "subtitle": "ابدئي بباقة متوازنة وعدّلي أجهزتها حسب احتياجك وميزانيتك",
+        "mostPopular": "الأكتر طلباً",
+        "roomsCount": "{count} غرف",
+        "itemsCount": "{count} أجهزة",
+        "startWithTier": "ابدئي بالباقة دي",
+        "starting": "جاري التجهيز...",
+        "errorLoading": "تعذر تحميل الباقات، يرجى المحاولة لاحقاً",
+        "retry": "إعادة المحاولة"
+      },
+      "scratch": {
+        "title": "ابدئي من الصفر",
+        "description": "عايزة تختاري أجهزتك بنفسك؟ ابدئي قايمتك من الصفر وأضيفي الأجهزة اللي محتاجاها لكل أوضة.",
+        "button": "ابدئي من الصفر",
+        "starting": "جاري الإنشاء..."
+      },
+      "rooms": {
+        "kitchen": "المطبخ",
+        "laundry": "الغسيل",
+        "living": "الصالة",
+        "bedrooms": "أوض النوم (تكييفات)",
+        "small_appliances": "أجهزة صغيرة",
+        "kitchenware": "أدوات المطبخ",
+        "subtotal": "المجموع:",
+        "addItemToRoom": "أضيفي جهاز للأوضة دي",
+        "addRoomItem": "أضيفي لأوضة"
+      },
+      "items": {
+        "unitPrice": "سعر القطعة:",
+        "lineTotal": "الإجمالي:",
+        "qty": "الكمية:",
+        "increaseQtyAria": "زيادة كمية {name}",
+        "decreaseQtyAria": "تقليل كمية {name}",
+        "removeAria": "إزالة {name} من القائمة",
+        "swapAria": "تبديل {name} ببديل آخر",
+        "swap": "بدّلي",
+        "remove": "إزالة",
+        "outOfStockBadge": "نفذ — اختاري بديل",
+        "onRequest": "متاح بالطلب",
+        "leadTimePrefix": "مدة التجهيز:"
+      },
+      "saveState": {
+        "saving": "بيتحفظ…",
+        "saved": "اتحفظ",
+        "error": "محصلش حفظ، هنحاول تاني"
+      },
+      "totals": {
+        "title": "ملخص القايمة",
+        "total": "الإجمالي:",
+        "itemCount": "عدد الأجهزة:",
+        "itemsFormat": "{count} أجهزة",
+        "tierDifference": "الفرق عن الباقة:",
+        "tierDiffMore": "أغلى من الباقة بـ {amount}",
+        "tierDiffLess": "أوفر من الباقة بـ {amount}",
+        "tierDiffSame": "نفس سعر الباقة",
+        "tierDiffIncrease": "+ {amount} زيادة",
+        "tierDiffDecrease": "- {amount} وفر",
+        "tierDiffMatch": "مطابق لسعر الباقة",
+        "reserveButton": "احجزي بعربون"
+      },
+      "reserve": {
+        "unavailableReason": "فيه منتجات نفذت، بدّليها أو شيليها",
+        "emptyReason": "القايمة فاضية",
+        "comingSoonReason": "الحجز بالعربون قريب"
+      },
+      "share": {
+        "title": "شاركي قايمتك",
+        "button": "شاركيها على واتساب",
+        "copyLink": "انسخي اللينك",
+        "copied": "تم نسخ الرابط بنجاح!",
+        "copyFailed": "تعذر نسخ الرابط",
+        "customList": "قايمة جهاز العروسة",
+        "message": "السلام عليكم، دي قايمة جهاز بيتي ({tierName}) من معرض محمد سراج. فيها {count} أجهزة بإجمالي {total}. تقدري تشوفي الأجهزة والأسعار من هنا:\n{url}"
+      },
+      "view": {
+        "badge": "معاينة فقط",
+        "contactShowroom": "كلّموا المعرض",
+        "contactMessage": "السلام عليكم، بتواصل معاكم بخصوص قايمة جهاز بيتي من على الموقع بإجمالي {total} وحابين نستفسر عن التفاصيل.",
+        "startOwn": "ابدئي قايمتك",
+        "readOnlyNotice": "أنتِ بتشوفي نسخة للعرض فقط. عشان تقدري تعدّلي وتختاري أجهزتك، ابدئي قايمتك الخاصة."
+      },
+      "status": {
+        "draft": "مسودة",
+        "awaitingDeposit": "بانتظار دفع العربون",
+        "locked": "محجوز (السعر مثبت)",
+        "deliveryAgreed": "تم الاتفاق على ميعاد التوصيل",
+        "delivered": "تم التسليم",
+        "cancelled": "الحجز ملغي",
+        "banner": "حالة الحجز: {status} — رقم الحجز: {no}"
+      },
+      "swapSheet": {
+        "title": "اختاري بديل لـ {name}",
+        "description": "بدائل متوفرة من نفس القسم مع توضيح فرق السعر",
+        "loading": "جاري تحميل البدائل...",
+        "empty": "مفيش بدائل متاحة لنفس القسم حالياً",
+        "priceDiffMore": "أغلى بـ {amount}",
+        "priceDiffLess": "أوفر بـ {amount}",
+        "priceDiffSame": "نفس السعر",
+        "priceDiffPlus": "+{amount} عن الحالي",
+        "priceDiffMinus": "-{amount} عن الحالي",
+        "choose": "اختيار البديل",
+        "outOfStock": "نفذ"
+      },
+      "addSheet": {
+        "title": "إضافة جهاز لقايمتك",
+        "description": "اختاري الأوضة وابحثي عن أي جهاز في الكتالوج لإضافته",
+        "chooseRoom": "الأوضة:",
+        "searchPlaceholder": "ابحثي عن ثلاجة، غسالة، شاشة، بوتاجاز...",
+        "searching": "جاري البحث...",
+        "noResults": "مفيش نتائج مطابقة للبحث",
+        "addButton": "أضيفي",
+        "addedSuccess": "تمت إضافة {name} إلى {room}",
+        "typeToSearch": "اكتبي حرفين على الأقل للبحث عن أجهزة"
+      },
+      "empty": {
+        "title": "قايمتك لسه فاضية",
+        "description": "أضيفي أجهزة لكل أوضة عشان تحسبي تكلفتها وتشاركيها مع أهلك.",
+        "addAppliance": "أضيفي أجهزة لقايمتك"
+      },
+      "notFound": {
+        "title": "القايمة دي مش موجودة",
+        "description": "الرابط ده مش مظبوط أو القايمة اتحذفت. تقدري تبدئي قايمة جديدة لجهاز بيتك في أي وقت.",
+        "backButton": "ابدئي قايمة جديدة"
+      }
     }
   },
   "admin": {

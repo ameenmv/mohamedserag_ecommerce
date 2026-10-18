@@ -31,14 +31,14 @@ description: "Tasks for Slice 3 — «جهّز بيتك» Bridal Builder"
 
 - [x] T007 [US1] `apps/api/src/bridal/` module: `bridal-pricing.ts` (load products incl. category slug, visible/archived, price; uses shared `priceRooms`), `bridal-tiers.service.ts` (`GET /bridal/tiers`), `bridal-lists.service.ts` (create from tier or product, read by token with mode, save draft only), `GET /bridal/alternatives`, controller with throttling; register in `app.module.ts`
 - [x] T008 [US1] API e2e `apps/api/test/bridal-lists.e2e-spec.ts`: tiers totals, create, read edit vs share (no editToken), save validation (room keys, qty, size), share-token PATCH 403, alternatives same category
-- [ ] T009 [P] [US1] `pages/bridal/index.vue` + `components/store/bridal/StoreBridalTierCard.vue`, `StoreBridalTiers.vue`, «ابدئي من الصفر», «كمّلي قايمتك» via `composables/useBridalDevice.ts` (localStorage `serag:bridal:edit`, after hydration)
-- [ ] T010 [US1] `pages/bridal/[token].vue` + `composables/useBridalList.ts` (state, optimistic edits, debounced 600 ms PATCH, save status) + components `StoreBridalRoom`, `StoreBridalItemRow` (qty stepper, remove, «بدّلي», «نفذ — اختاري بديل»), `StoreBridalSwapSheet` (alternatives with price difference), `StoreBridalAddSheet` (search + room picker), `StoreBridalTotalsBar` (sticky on mobile: total, «الفرق عن الباقة», reserve disabled reasons); i18n ar/en under `store.bridal`
-- [ ] T011 [US1] TesterArmy `tests/e2e/tests/bridal-builder.e2e.ts`: start from a tier, swap, remove, qty, add, totals, reload keeps list, 375/320 px no horizontal scroll
+- [x] T009 [P] [US1] `pages/bridal/index.vue` + `components/store/bridal/StoreBridalTierCard.vue`, `StoreBridalTiers.vue`, «ابدئي من الصفر», «كمّلي قايمتك» via `composables/useBridalDevice.ts` (localStorage `serag:bridal:edit`, after hydration)
+- [x] T010 [US1] `pages/bridal/[token].vue` + `composables/useBridalList.ts` (state, optimistic edits, debounced 600 ms PATCH, save status) + components `StoreBridalRoom`, `StoreBridalItemRow` (qty stepper, remove, «بدّلي», «نفذ — اختاري بديل»), `StoreBridalSwapSheet` (alternatives with price difference), `StoreBridalAddSheet` (search + room picker), `StoreBridalTotalsBar` (sticky on mobile: total, «الفرق عن الباقة», reserve disabled reasons); i18n ar/en under `store.bridal`
+- [x] T011 [US1] TesterArmy `tests/e2e/tests/bridal-builder.e2e.ts`: start from a tier, swap, remove, qty, add, totals, reload keeps list, 375/320 px no horizontal scroll
 
 ## Phase 4: User Story 2 — Share with family (P1)
 
-- [ ] T012 [US2] View mode on `pages/bridal/[token].vue` (no edit controls, «كلّموا المعرض»), `StoreBridalShareButton` (wa.me text with count, total, share link), not-found state «القايمة دي مش موجودة»
-- [ ] T013 [US2] TesterArmy `tests/e2e/tests/bridal-share.e2e.ts`: share link read-only, response has no editToken, wrong token page
+- [x] T012 [US2] View mode on `pages/bridal/[token].vue` (no edit controls, «كلّموا المعرض»), `StoreBridalShareButton` (wa.me text with count, total, share link), not-found state «القايمة دي مش موجودة»
+- [x] T013 [US2] TesterArmy `tests/e2e/tests/bridal-share.e2e.ts`: share link read-only, response has no editToken, wrong token page
 
 ## Phase 5: User Story 3 — Reserve with deposit and lock (P1)
 
