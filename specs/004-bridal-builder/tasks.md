@@ -62,13 +62,13 @@ description: "Tasks for Slice 3 — «جهّز بيتك» Bridal Builder"
 
 ## Phase 8: User Story 6 — Product page button & funnel (P3)
 
-- [ ] T025 [US6] `StoreProductPageBridalButton.vue` on `pages/p/[slug].vue` (eager; adds to device draft list or creates one; toast with link); analytics events `bridal_list_created`, `bridal_list_shared`, `bridal_reserved`
-- [ ] T026 [US6] TesterArmy: add from product page and funnel events (umami stub)
+- [x] T025 [US6] `StoreProductPageBridalButton.vue` on `pages/p/[slug].vue` (eager; adds to device draft list or creates one; toast with link); analytics events `bridal_list_created`, `bridal_list_shared`, `bridal_reserved`
+- [x] T026 [US6] TesterArmy: add from product page and funnel events (umami stub)
 
 ## Phase 9: Polish & Cross-Cutting
 
 - [ ] T027 English pass, 320 px pass, a11y labels, Lighthouse check of /bridal
-- [ ] T028 Docs: `docs/PHASE-1.md` slice 3 status, README roadmap box
+- [x] T028 Docs: `docs/PHASE-1.md` slice 3 status, README roadmap box
 - [ ] T029 Review: security (tokens, PII on share page), speckit-analyze consistency
 
 ---

@@ -5,6 +5,24 @@ export interface UndoToastOptions {
   actionLabel?: string
 }
 
+export interface ActionToastOptions {
+  actionLabel: string
+  onAction: () => void | Promise<void>
+  durationMs?: number
+  description?: string
+}
+
+export interface ToastAction {
+  label: string
+  onClick: (event?: MouseEvent) => void | Promise<void>
+}
+
+export interface ToastOptions {
+  description?: string
+  action?: ToastAction
+  durationMs?: number
+}
+
 let sonnerModulePromise: Promise<typeof import('vue-sonner')> | null = null
 
 function getSonnerModule(): Promise<typeof import('vue-sonner')> | null {
@@ -22,11 +40,27 @@ function getSonnerModule(): Promise<typeof import('vue-sonner')> | null {
  * Prevents vue-sonner and its components from leaking into the storefront SSR/initial entry chunk.
  */
 export function useNotify() {
-  function success(message: string, description?: string): void {
+  function success(message: string, descriptionOrOptions?: string | ToastOptions): void {
     const mod = getSonnerModule()
     if (!mod) return
+    const options: ToastOptions =
+      typeof descriptionOrOptions === 'string'
+        ? { description: descriptionOrOptions }
+        : descriptionOrOptions ?? {}
+
     void mod.then(({ toast }) => {
-      toast.success(message, description ? { description } : undefined)
+      toast.success(message, {
+        description: options.description,
+        duration: options.durationMs,
+        action: options.action
+          ? {
+              label: options.action.label,
+              onClick: (e) => {
+                void options.action?.onClick(e)
+              },
+            }
+          : undefined,
+      })
     })
   }
 
@@ -74,11 +108,24 @@ export function useNotify() {
     })
   }
 
+  function action(message: string, options: ActionToastOptions): void {
+    success(message, {
+      description: options.description,
+      durationMs: options.durationMs,
+      action: {
+        label: options.actionLabel,
+        onClick: options.onAction,
+      },
+    })
+  }
+
   return {
     success,
     info,
     warning,
     error,
     undo,
+    action,
   }
 }
+

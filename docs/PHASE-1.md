@@ -1,9 +1,9 @@
 # Phase 1 — Launch: progress
 
-> المرحلة الأولى (الإطلاق) — **Slice 0 (الأساس) و Slice 1 (الكتالوج) و Slice 2 (السلة والدفع) خلصوا بالكامل**.
-> في Slice 2: السلة والـ checkout، صفحة الشكر بالتوكن، الدفع عند الاستلام والتحويل والعربون، تأكيد الدفع من رابط واتساب، لوحة الطلبات وتصدير CSV والفاتورة.
+> المرحلة الأولى (الإطلاق) — **Slice 0 (الأساس) و Slice 1 (الكتالوج) و Slice 2 (السلة والدفع) و Slice 3 (جهّز بيتك) خلصوا بالكامل**.
+> في Slice 3: باقات جهاز العروسة وتعديلها أوضة أوضة مع الحفظ التلقائي، رابط المشاركة العائلي، الحجز بالعربون وتثبيت الأسعار 30 يوم، حجز المخزون عند ميعاد التوصيل، إدارة وتمديد وتحديث أسعار الحجوزات، محرر الباقات والإعدادات.
 
-**Updated:** 18 Oct 2026 · **Branch:** `003-slice2-checkout` · **Source of truth:** [PRD](PRD.md) · [spec](../specs/002-phase1-launch/spec.md) · [plan](../specs/002-phase1-launch/plan.md) · [tasks](../specs/002-phase1-launch/tasks.md) · [Slice 2 spec](../specs/003-slice2-checkout/spec.md) · [Slice 2 tasks](../specs/003-slice2-checkout/tasks.md)
+**Updated:** 18 Oct 2026 · **Branch:** `004-bridal-builder` · **Source of truth:** [PRD](PRD.md) · [spec](../specs/004-bridal-builder/spec.md) · [plan](../specs/004-bridal-builder/plan.md) · [tasks](../specs/004-bridal-builder/tasks.md)
 
 ## Where we are
 
@@ -12,7 +12,7 @@
 | **0 — Foundation** | Monorepo, web + API, database, seed, admin auth, Docker, CI | ✅ **Done** (CI green on GitHub, PR #1 merged into main) |
 | 1 — Catalog & discovery | Categories, brands, product pages, Arabic search, filters, compare, wishlist, admin products | ✅ **Done** (branch `002-slice1-catalog`) |
 | 2 — Cart, checkout & payments | Zones, COD, transfers, large-COD deposit, one-tap confirm | ✅ **Done** (branch `003-slice2-checkout`) |
-| 3 — Bridal builder «جهّز بيتك» | Tiers, sharing, deposit and price lock | ⚪ Planned |
+| 3 — Bridal builder «جهّز بيتك» | Tiers, sharing, deposit and price lock | ✅ **Done** (branch `004-bridal-builder`) |
 | 4 — Promotions & stock alerts | Flash sales, coupons, notify-me | ⚪ Planned |
 | 5 — Reviews | Moderation, verified buyers | ⚪ Planned |
 | 6 — Content, CMS & SEO | Homepage CMS, guides, quiz, Merchant feed | ⚪ Planned |
@@ -64,6 +64,19 @@
 - Admin orders list/detail, WhatsApp status messages, CSV export with formula-injection protection, printable internal invoice.
 - Funnel events without personal data.
 - Tests: API e2e 116, browser e2e 32 (stable 3/3 full runs), unit 171 shared + 193 web + 74 api.
+
+## Slice 3 — status
+
+- Three active tiers (أساسية، ذهبية، القصر) with per-room product catalogs and highlights, plus start from scratch.
+- Room-by-room editing (المطبخ، الغسيل، الصالة، أوض النوم، أجهزة صغيرة، أدوات المطبخ) with real-time totals, room subtotals, difference from tier, and debounced autosave.
+- In-place item swap with category alternatives and price differences, quantity stepper (1–10), and search-based catalog add.
+- Dual-token list security: private edit link with auto-save vs. clean read-only share link (with showroom WhatsApp inquiry) never exposing the edit token.
+- Product-page eager «أضيفي لجهاز العروسة» button with category-to-room auto-placement, device list memory, and toast/inline confirmation link.
+- Bridal reservation with deposit (10% default) and 30-day regular price lock; partial electronic deposit support (moves to locked only when fully paid).
+- Stock reservation deferred to agreed delivery date (`bridal_delivery_agreed` stock movement) with shortage warnings and exact cancel restoration.
+- Admin bridal operations: order type filter, days-left badges, agreed delivery date recording, lock extension, re-pricing with WhatsApp explanation, and dashboard expiring locks card.
+- Admin bridal settings and tier editor (`/admin/bridal`) protected by `bridal.manage` permission and CSRF.
+- Funnel events (`bridal_list_created`, `bridal_list_shared`, `bridal_reserved`) without personal data or tokens.
 
 ## Quality gates (verified)
 

@@ -7,6 +7,7 @@ import {
   type ProductDetail,
 } from '@serag/shared'
 import { toProductCard } from '~/utils/product-card-mapper'
+import StoreProductPageBridalButton from './StoreProductPageBridalButton.vue'
 
 const props = defineProps<{
   product: ProductDetail
@@ -220,6 +221,9 @@ const showInstallment = computed(
           <StoreProductCompareToggle :product="card" />
         </div>
       </div>
+
+      <!-- Add to Bridal List Button -->
+      <StoreProductPageBridalButton :product="product" />
 
       <!-- WhatsApp Ask Button -->
       <a

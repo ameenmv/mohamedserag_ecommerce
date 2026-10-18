@@ -569,6 +569,14 @@
         "title": "List not found",
         "description": "This link is invalid or the list was deleted. You can start a new bridal package at any time.",
         "backButton": "Start a new package"
+      },
+      "productButton": {
+        "label": "Add to bridal list",
+        "adding": "Adding...",
+        "ariaLabel": "Add {name} to bridal list",
+        "addedToast": "Added to bridal list",
+        "openList": "Open list",
+        "errorToast": "Failed, please try again"
       }
     }
   },

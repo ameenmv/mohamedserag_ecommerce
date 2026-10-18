@@ -8,7 +8,9 @@ import type {
 import {
   BRIDAL_MAX_QTY,
   BRIDAL_ROOM_KEYS,
+  addItemToRooms,
   normalizeRooms,
+  roomForCategory,
 } from '@serag/shared'
 
 export interface PriceIndexEntry {
@@ -239,3 +241,51 @@ export function parseBridalConflict(error: unknown): BridalConflictResult | null
 
   return null
 }
+
+/**
+ * Determines if a fetched bridal list view can have products appended to it.
+ * Must be in 'edit' mode and 'draft' status.
+ */
+export function canAppendToBridalList(
+  view: BridalListView | null | undefined,
+): boolean {
+  return Boolean(view && view.mode === 'edit' && view.status === 'draft')
+}
+
+/**
+ * Adds a product to the appropriate room according to its category slug.
+ * Uses shared roomForCategory to pick the room and addItemToRooms to handle insertion / quantity merging.
+ */
+export function addCategoryProductToRooms(
+  rooms: readonly BridalRoom[],
+  categorySlug: string | null | undefined,
+  productId: string,
+  qty = 1,
+): BridalRoom[] {
+  const roomKey = roomForCategory(categorySlug)
+  return addItemToRooms(rooms, roomKey, productId, qty)
+}
+
+/**
+ * Checks if an API error from fetching or patching a bridal list is recoverable
+ * by falling through to creating a fresh list (specifically 404 Not Found or 409 Conflict).
+ */
+export function isRecoverableBridalError(error: unknown): boolean {
+  if (!error || typeof error !== 'object') {
+    return false
+  }
+
+  const errObj = error as Record<string, unknown>
+  const status =
+    (typeof errObj.status === 'number' ? errObj.status : null) ??
+    (typeof errObj.statusCode === 'number' ? errObj.statusCode : null) ??
+    (errObj.response &&
+    typeof errObj.response === 'object' &&
+    'status' in errObj.response &&
+    typeof (errObj.response as Record<string, unknown>).status === 'number'
+      ? ((errObj.response as Record<string, unknown>).status as number)
+      : null)
+
+  return status === 404 || status === 409
+}
+

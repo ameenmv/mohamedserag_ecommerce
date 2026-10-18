@@ -2,8 +2,11 @@ import { describe, expect, it } from 'vitest'
 import type { BridalListView, BridalRoom } from '@serag/shared'
 import {
   applyQty,
+  addCategoryProductToRooms,
+  canAppendToBridalList,
   classifyDiff,
   estimateTotals,
+  isRecoverableBridalError,
   parseBridalConflict,
   removeItem,
   swapItem,
@@ -284,4 +287,109 @@ describe('bridal utils - parseBridalConflict', () => {
     expect(parseBridalConflict({ data: { other: 123 } })).toBeNull()
   })
 })
+
+describe('bridal utils - canAppendToBridalList', () => {
+  it('returns true when mode is edit and status is draft', () => {
+    const view: Partial<BridalListView> = {
+      mode: 'edit',
+      status: 'draft',
+    }
+    expect(canAppendToBridalList(view as BridalListView)).toBe(true)
+  })
+
+  it('returns false when mode is view', () => {
+    const view: Partial<BridalListView> = {
+      mode: 'view',
+      status: 'draft',
+    }
+    expect(canAppendToBridalList(view as BridalListView)).toBe(false)
+  })
+
+  it('returns false when status is not draft', () => {
+    expect(canAppendToBridalList({ mode: 'edit', status: 'locked' } as BridalListView)).toBe(false)
+    expect(canAppendToBridalList({ mode: 'edit', status: 'awaiting_deposit' } as BridalListView)).toBe(false)
+    expect(canAppendToBridalList({ mode: 'edit', status: 'cancelled' } as BridalListView)).toBe(false)
+  })
+
+  it('returns false for null or undefined', () => {
+    expect(canAppendToBridalList(null)).toBe(false)
+    expect(canAppendToBridalList(undefined)).toBe(false)
+  })
+})
+
+describe('bridal utils - addCategoryProductToRooms', () => {
+  it('places product into matching room based on category slug', () => {
+    const rooms: BridalRoom[] = []
+    const updatedWashers = addCategoryProductToRooms(rooms, 'washers', 'p-wash-1', 1)
+    expect(updatedWashers.map((r) => r.key)).toEqual(['laundry'])
+    expect(updatedWashers[0]?.items).toEqual([{ productId: 'p-wash-1', qty: 1 }])
+
+    const updatedFridges = addCategoryProductToRooms(rooms, 'refrigerators', 'p-fridge-1', 1)
+    expect(updatedFridges.map((r) => r.key)).toEqual(['kitchen'])
+    expect(updatedFridges[0]?.items).toEqual([{ productId: 'p-fridge-1', qty: 1 }])
+
+    const updatedTvs = addCategoryProductToRooms(rooms, 'tvs', 'p-tv-1', 1)
+    expect(updatedTvs.map((r) => r.key)).toEqual(['living'])
+
+    const updatedAcs = addCategoryProductToRooms(rooms, 'acs', 'p-ac-1', 1)
+    expect(updatedAcs.map((r) => r.key)).toEqual(['bedrooms'])
+
+    const updatedCookware = addCategoryProductToRooms(rooms, 'cookware', 'p-pot-1', 1)
+    expect(updatedCookware.map((r) => r.key)).toEqual(['kitchenware'])
+  })
+
+  it('falls back to small_appliances when category slug is unmapped or missing', () => {
+    const updated1 = addCategoryProductToRooms([], 'blenders', 'p-blend-1', 1)
+    expect(updated1.map((r) => r.key)).toEqual(['small_appliances'])
+
+    const updated2 = addCategoryProductToRooms([], null, 'p-unknown-1', 1)
+    expect(updated2.map((r) => r.key)).toEqual(['small_appliances'])
+  })
+
+  it('increments quantity and caps at BRIDAL_MAX_QTY (10) when product already exists in that room', () => {
+    const initial: BridalRoom[] = [
+      {
+        key: 'laundry',
+        items: [{ productId: 'p-wash-1', qty: 3 }],
+      },
+    ]
+
+    const updated = addCategoryProductToRooms(initial, 'washers', 'p-wash-1', 1)
+    expect(updated[0]?.items).toEqual([{ productId: 'p-wash-1', qty: 4 }])
+
+    const atNine: BridalRoom[] = [
+      {
+        key: 'laundry',
+        items: [{ productId: 'p-wash-1', qty: 9 }],
+      },
+    ]
+    const cappedTen = addCategoryProductToRooms(atNine, 'washers', 'p-wash-1', 1)
+    expect(cappedTen[0]?.items).toEqual([{ productId: 'p-wash-1', qty: 10 }])
+
+    const alreadyTen = addCategoryProductToRooms(cappedTen, 'washers', 'p-wash-1', 1)
+    expect(alreadyTen[0]?.items).toEqual([{ productId: 'p-wash-1', qty: 10 }])
+  })
+})
+
+describe('bridal utils - isRecoverableBridalError', () => {
+  it('identifies 404 and 409 errors as recoverable across status property variants', () => {
+    expect(isRecoverableBridalError({ status: 404 })).toBe(true)
+    expect(isRecoverableBridalError({ status: 409 })).toBe(true)
+    expect(isRecoverableBridalError({ statusCode: 404 })).toBe(true)
+    expect(isRecoverableBridalError({ statusCode: 409 })).toBe(true)
+    expect(isRecoverableBridalError({ response: { status: 404 } })).toBe(true)
+    expect(isRecoverableBridalError({ response: { status: 409 } })).toBe(true)
+  })
+
+  it('returns false for non-recoverable status codes and invalid error formats', () => {
+    expect(isRecoverableBridalError({ status: 500 })).toBe(false)
+    expect(isRecoverableBridalError({ statusCode: 400 })).toBe(false)
+    expect(isRecoverableBridalError({ response: { status: 403 } })).toBe(false)
+    expect(isRecoverableBridalError(null)).toBe(false)
+    expect(isRecoverableBridalError(undefined)).toBe(false)
+    expect(isRecoverableBridalError('error')).toBe(false)
+    expect(isRecoverableBridalError(500)).toBe(false)
+  })
+})
+
 
