@@ -85,7 +85,7 @@
 - Admin `/admin/promotions` (flash sales with overlap check and end-now, coupons with usage stats and deactivate-instead-of-delete, shadcn confirm dialogs).
 - Notify-me (form on out-of-stock products with honeypot + throttle + one entry per product/phone, `/admin/notify` waiting lists back-in-stock first, prefilled WhatsApp send that marks sent and logs the message, `notify_me_requested` event).
 - Security review outcome (coupon guessing limiter, phone masking in audit snapshots, XFF not spoofable behind Caddy because only Caddy's ports are published).
-- Tests: API e2e 212, browser e2e 49 (all on isolated servers), unit 262 shared + 82 api + 253 web; production build clean.
+- Tests: API e2e 212, browser e2e 50 (all on isolated servers, incl. no horizontal scroll on admin pages at 320px), unit 262 shared + 82 api + 253 web; production build clean.
 
 ## Quality gates (verified)
 
