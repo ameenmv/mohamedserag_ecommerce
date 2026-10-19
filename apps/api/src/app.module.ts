@@ -8,6 +8,7 @@ import { AdminOrdersModule } from './admin-orders/admin-orders.module.js'
 import { AdminBridalModule } from './admin-bridal/admin-bridal.module.js'
 import { AdminPromotionsModule } from './admin-promotions/admin-promotions.module.js'
 import { AdminNotifyModule } from './admin-notify/admin-notify.module.js'
+import { AdminReviewsModule } from './admin-reviews/admin-reviews.module.js'
 import { AuthModule } from './auth/auth.module.js'
 import { CatalogModule } from './catalog/catalog.module.js'
 import { OrdersModule } from './orders/orders.module.js'
@@ -37,6 +38,7 @@ import { TestSeedModule } from './test-seed/test-seed.module.js'
     AdminBridalModule,
     AdminPromotionsModule,
     AdminNotifyModule,
+    AdminReviewsModule,
     OrdersModule,
     BridalModule,
   ],
