@@ -10,13 +10,13 @@ description: "Tasks for Slice 5 — Reviews"
 
 ## Phase 1: Foundational — shared reviews domain
 
-- [ ] T001 [P] `packages/shared/src/reviews.ts` (Zod-free): `PublicReview`, `ReviewRatingSummary`, `AdminReviewRow`, `AdminReviewListResponse` types; `summarizeRatings(starsCounts)` (average 1 decimal, distribution 1–5, null when empty); tests
-- [ ] T002 [P] `packages/shared/src/reviews-schema.ts`: `reviewInputSchema` (stars 1–5 int, text trimmed 20–1000, name 2–60, phone via phone schema, honeypot `website`), `adminReviewListQuerySchema` (status, q, stars, page, pageSize), `reviewReplySchema` (≤ 500, empty → null); tests; export both
-- [ ] T003 `analytics.ts` + `'review_submitted'` (the catalog `rating` field moves to T010, where it is filled)
+- [x] T001 [P] `packages/shared/src/reviews.ts` (Zod-free): `PublicReview`, `ReviewRatingSummary`, `AdminReviewRow`, `AdminReviewListResponse` types; `summarizeRatings(starsCounts)` (average 1 decimal, distribution 1–5, null when empty); tests
+- [x] T002 [P] `packages/shared/src/reviews-schema.ts`: `reviewInputSchema` (stars 1–5 int, text trimmed 20–1000, name 2–60, phone via phone schema, honeypot `website`), `adminReviewListQuerySchema` (status, q, stars, page, pageSize), `reviewReplySchema` (≤ 500, empty → null); tests; export both
+- [x] T003 `analytics.ts` + `'review_submitted'` (the catalog `rating` field moves to T010, where it is filled)
 
 ## Phase 2: User Story 1 — Write a review (P1) 🎯
 
-- [ ] T004 [US1] API public `POST /reviews` (throttle 3/min/IP, honeypot, 404 hidden/archived, 409 repeat, verifiedBuyer at submit, store ip) + API e2e
+- [x] T004 [US1] API public `POST /reviews` (throttle 3/min/IP, honeypot, 404 hidden/archived, 409 repeat, verifiedBuyer at submit, store ip) + API e2e
 - [ ] T005 [US1] Web review form on the product page (lazy, «اكتب تقييمك», accessible star radio group, client checks mirroring limits, thank-you state, 409/429 messages, `review_submitted` without PII); i18n
 - [ ] T006 [US1] TesterArmy: submit valid review → thank-you; repeat same phone → refused; invalid inputs blocked; event without PII
 

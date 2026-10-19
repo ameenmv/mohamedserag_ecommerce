@@ -14,6 +14,7 @@ import { OrdersModule } from './orders/orders.module.js'
 import { BridalModule } from './bridal/bridal.module.js'
 import { SettingsModule } from './settings/settings.module.js'
 import { PromotionsModule } from './promotions/promotions.module.js'
+import { ReviewsModule } from './reviews/reviews.module.js'
 import { PermissionGuard } from './auth/permission.guard.js'
 import { SessionGuard } from './auth/session.guard.js'
 import { HealthController } from './health.controller.js'
@@ -28,6 +29,7 @@ import { TestSeedModule } from './test-seed/test-seed.module.js'
     PrismaModule,
     SettingsModule,
     PromotionsModule,
+    ReviewsModule,
     AuthModule,
     CatalogModule,
     AdminCatalogModule,
