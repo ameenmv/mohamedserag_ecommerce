@@ -8,6 +8,8 @@ export interface SeedProductInput {
   availabilityMode?: 'auto' | 'on_request' | 'out';
   leadTimeText?: string;
   visible?: boolean;
+  withImage?: boolean;
+  flashSale?: { salePriceEgp: number; startsInMinutes?: number; endsInMinutes?: number };
 }
 
 export interface SeedProductResult {

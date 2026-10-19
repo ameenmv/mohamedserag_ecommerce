@@ -3,7 +3,7 @@ import { BookOpen } from '@lucide/vue'
 
 const { t } = useI18n()
 
-useSeoMeta({
+useSeoPage({
   title: () => t('store.guides.seoTitle'),
   description: () => t('store.guides.subtitle'),
 })

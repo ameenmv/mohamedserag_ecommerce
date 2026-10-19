@@ -21,6 +21,8 @@ export const seedProductSchema = z.object({
   availabilityMode: z.enum(['auto', 'on_request', 'out']).optional(),
   leadTimeText: z.string().trim().optional(),
   visible: z.boolean().optional(),
+  /** Adds one image row (URL only, no file) so the product qualifies for the Merchant feed. */
+  withImage: z.boolean().optional(),
   flashSale: seedProductFlashSaleSchema.optional(),
 })
 

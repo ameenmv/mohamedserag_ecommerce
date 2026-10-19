@@ -11,7 +11,7 @@ const teaser = computed(
   () => home.value?.sections.tradersTeaser ?? DEFAULT_HOME_CONTENT.tradersTeaser,
 )
 
-useSeoMeta({
+useSeoPage({
   title: () => t('store.traders.seoTitle'),
   description: () => t('store.traders.seoDescription'),
 })

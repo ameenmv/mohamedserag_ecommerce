@@ -3,11 +3,9 @@ const { t } = useI18n()
 
 const { page, title, seoTitle, seoDescription, updatedLabel } = await useContentPage()
 
-useSeoMeta({
+useSeoPage({
   title: () => seoTitle.value,
   description: () => seoDescription.value,
-  ogTitle: () => seoTitle.value,
-  ogDescription: () => seoDescription.value,
 })
 </script>
 

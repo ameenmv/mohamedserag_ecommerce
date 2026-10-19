@@ -1,10 +1,14 @@
 <script setup lang="ts">
+import type { BreadcrumbItem } from '@serag/shared'
+import { buildBreadcrumbList } from '@serag/shared'
 import { buildProductJsonLd } from '~/utils/product-jsonld'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const route = useRoute()
 const storeApi = useStoreApi()
 const requestUrl = useRequestURL()
+const config = useRuntimeConfig()
+const siteUrl = String(config.public.siteUrl)
 
 const slug = computed(() => String(route.params.slug ?? ''))
 
@@ -36,12 +40,10 @@ const ogImage = computed(
   () => product.value?.images[0]?.url || product.value?.image?.url || undefined,
 )
 
-useSeoMeta({
+useSeoPage({
   title: () => pageTitle.value,
   description: () => pageDescription.value,
-  ogTitle: () => pageTitle.value,
-  ogDescription: () => pageDescription.value,
-  ogImage: () => ogImage.value,
+  image: () => ogImage.value,
 })
 
 // Schema.org Product structured data
@@ -55,6 +57,21 @@ useHead({
           : '',
     },
   ],
+})
+
+useJsonLd('ld-breadcrumb', () => {
+  const current = product.value
+  if (!current) return null
+  const prefix = locale.value === 'en' ? '/en' : ''
+  const items: BreadcrumbItem[] = [
+    { name: t('store.listing.breadcrumb.home'), path: prefix || '/' },
+  ]
+  if (current.category.parent) {
+    items.push({ name: current.category.parent.name, path: `${prefix}/c/${current.category.parent.slug}` })
+  }
+  items.push({ name: current.category.name, path: `${prefix}/c/${current.category.slug}` })
+  items.push({ name: current.name, path: `${prefix}/p/${current.slug}` })
+  return buildBreadcrumbList(items, siteUrl)
 })
 
 // Breadcrumbs: Home (automatic) › parent category › category › product

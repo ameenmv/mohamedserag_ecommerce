@@ -124,6 +124,9 @@ export class TestSeedService {
         visible: input.visible ?? true,
         taxRate: 14,
         searchText,
+        ...(input.withImage
+          ? { images: { create: [{ url: `/uploads/test/${slug}.png`, alt: productName }] } }
+          : {}),
       },
       select: {
         id: true,

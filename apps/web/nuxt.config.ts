@@ -36,6 +36,10 @@ export default defineNuxtConfig({
     apiInternalBase: 'http://localhost:4000/api',
     public: {
       apiBase: 'http://localhost:4000/api',
+      // Public origin used for canonical URLs, sitemap, robots and JSON-LD.
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+      // 'true' only on the production origin; otherwise robots.txt answers `Disallow: /`.
+      siteIndexable: process.env.NUXT_PUBLIC_SITE_INDEXABLE || 'false',
       umamiHost: '',
       umamiWebsiteId: '',
       // Only populated in nuxt dev via $development; empty in production.
@@ -149,5 +153,8 @@ export default defineNuxtConfig({
   routeRules: {
     '/': { swr: 60 },
     '/en': { swr: 60 },
+    '/sitemap.xml': { swr: 3600 },
+    '/robots.txt': { swr: 3600 },
+    '/feeds/google.xml': { swr: 3600 },
   },
 })

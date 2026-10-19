@@ -21,9 +21,10 @@ const pageTitle = computed(() => {
 
 const pageDescription = computed(() => t('store.listing.metaDescription'))
 
-useSeoMeta({
+useSeoPage({
   title: () => pageTitle.value,
   description: () => pageDescription.value,
+  noindex: () => Boolean(filters.value.q),
 })
 
 function handleSortUpdate(sort: CatalogSort) {

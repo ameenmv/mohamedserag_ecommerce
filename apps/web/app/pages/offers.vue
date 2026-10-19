@@ -4,7 +4,7 @@ import { Percent } from '@lucide/vue'
 const { t } = useI18n()
 const localePath = useLocalePath()
 
-useSeoMeta({
+useSeoPage({
   title: () => t('store.offers.seoTitle'),
   description: () => t('store.offers.subtitle'),
 })

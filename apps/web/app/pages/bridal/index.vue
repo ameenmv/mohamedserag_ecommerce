@@ -14,7 +14,7 @@ const notify = useNotify()
 const analytics = useAnalytics()
 const bridalDevice = useBridalDevice()
 
-useSeoMeta({
+useSeoPage({
   title: () => t('store.bridal.pageTitle'),
   description: () => t('store.bridal.metaDescription'),
 })

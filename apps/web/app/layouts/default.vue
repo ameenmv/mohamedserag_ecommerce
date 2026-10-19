@@ -9,6 +9,8 @@ const { count: compareCount } = useCompare()
 const pendingCompare = useState<ProductCard | null>('compare-pending', () => null)
 const hydrated = useHydrated()
 
+useLocalBusinessJsonLd()
+
 const showCompareBar = computed(() => {
   if (!hydrated.value || compareCount.value < 1) return false
   const path = stripLocalePrefix(route.path).replace(/\/$/, '')

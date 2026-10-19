@@ -1,17 +1,19 @@
 <script setup lang="ts">
+import type { BreadcrumbItem } from '@serag/shared'
+import { buildBreadcrumbList } from '@serag/shared'
 import { buildGuideJsonLd } from '~/utils/guide-jsonld'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const requestUrl = useRequestURL()
+const config = useRuntimeConfig()
+const siteUrl = String(config.public.siteUrl)
 
 const { guide, title, seoTitle, seoDescription, ogImage, publishedLabel } = await useGuide()
 
-useSeoMeta({
+useSeoPage({
   title: () => seoTitle.value,
   description: () => seoDescription.value,
-  ogTitle: () => seoTitle.value,
-  ogDescription: () => seoDescription.value,
-  ogImage: () => ogImage.value,
+  image: () => ogImage.value,
 })
 
 useHead({
@@ -22,6 +24,18 @@ useHead({
         guide.value ? JSON.stringify(buildGuideJsonLd(guide.value, requestUrl.href, t('brand.storeName'))) : '',
     },
   ],
+})
+
+useJsonLd('ld-breadcrumb', () => {
+  const current = guide.value
+  if (!current) return null
+  const prefix = locale.value === 'en' ? '/en' : ''
+  const items: BreadcrumbItem[] = [
+    { name: t('store.listing.breadcrumb.home'), path: prefix || '/' },
+    { name: t('store.guides.heading'), path: `${prefix}/guides` },
+    { name: title.value, path: `${prefix}/guides/${current.slug}` },
+  ]
+  return buildBreadcrumbList(items, siteUrl)
 })
 
 const breadcrumbItems = computed(() => [{ label: t('store.guides.heading'), to: '/guides' }, { label: title.value }])

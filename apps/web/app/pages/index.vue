@@ -1,10 +1,9 @@
 <script setup lang="ts">
 const { t } = useI18n()
 
-useSeoMeta({
+useSeoPage({
   title: () => t('brand.storeName'),
   description: () => t('store.home.metaDescription'),
-  ogDescription: () => t('store.home.metaDescription'),
 })
 
 const { sections, visibleSections, flashProducts, featuredCategories, partners, guides } =

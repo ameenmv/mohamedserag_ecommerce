@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import type { CatalogSort } from '@serag/shared'
+import type { BreadcrumbItem, CatalogSort } from '@serag/shared'
+import { buildBreadcrumbList } from '@serag/shared'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const route = useRoute()
 const storeApi = useStoreApi()
+const config = useRuntimeConfig()
+const siteUrl = String(config.public.siteUrl)
 
 const slug = computed(() => String(route.params.slug ?? ''))
 
@@ -41,9 +44,20 @@ const pageDescription = computed(
     t('store.listing.metaDescription'),
 )
 
-useSeoMeta({
+useSeoPage({
   title: () => pageTitle.value,
   description: () => pageDescription.value,
+})
+
+useJsonLd('ld-breadcrumb', () => {
+  const current = brand.value
+  if (!current) return null
+  const prefix = locale.value === 'en' ? '/en' : ''
+  const items: BreadcrumbItem[] = [
+    { name: t('store.listing.breadcrumb.home'), path: prefix || '/' },
+    { name: current.name, path: `${prefix}/b/${current.slug}` },
+  ]
+  return buildBreadcrumbList(items, siteUrl)
 })
 
 const breadcrumbItems = computed(() => [

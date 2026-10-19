@@ -42,10 +42,10 @@ description: "Tasks for Slice 6 — Content, CMS & SEO"
 
 ## Phase 6: User Stories 6 + 7 — SEO and Merchant feed (P1)
 
-- [ ] T018 [US6] Web SEO layer: `useSeoPage` (title, description, canonical via `canonicalPath`, OG, hreflang) applied to home, shop, offers, bridal, traders, category, brand, product, pages, guides; search/listing filters canonicalized; `noindex` kept on private pages; site-wide `LocalBusiness`; `BreadcrumbList` on product/category/brand/guide; `NUXT_PUBLIC_SITE_URL` + `NUXT_PUBLIC_SITE_INDEXABLE` runtime config
-- [ ] T019 [US6/US7] API `GET /seo/sitemap-entries` and `GET /feeds/google.xml` (in-stock visible products with an image, flash sale price + dates, escaped text, absolute URLs from `PUBLIC_SITE_URL`); API e2e (hidden/archived/out/on-request/no-image excluded, flash fields, XML well-formed)
-- [ ] T020 [US6/US7] Nuxt server routes `/sitemap.xml` (ar + en alternates, index split > 45k), `/robots.txt` (disallow list, sitemap line, staging `Disallow: /`), `/feeds/google.xml` proxy; `routeRules` `swr: 3600`; tests
-- [ ] T021 [US6/US7] TesterArmy: sitemap contains/omits the right URLs; robots disallows private paths; filtered listing canonical; product page JSON-LD has Product, Offer, BreadcrumbList (+ AggregateRating after an approved review); feed lists an in-stock product and the flash sale price, omits a hidden one
+- [x] T018 [US6] Web SEO layer: `useSeoPage` (title, description, canonical via `canonicalPath`, OG, hreflang) applied to home, shop, offers, bridal, traders, category, brand, product, pages, guides; search/listing filters canonicalized; `noindex` kept on private pages; site-wide `LocalBusiness`; `BreadcrumbList` on product/category/brand/guide; `NUXT_PUBLIC_SITE_URL` + `NUXT_PUBLIC_SITE_INDEXABLE` runtime config
+- [x] T019 [US6/US7] API `GET /seo/sitemap-entries` and `GET /feeds/google.xml` (in-stock visible products with an image, flash sale price + dates, escaped text, absolute URLs from `PUBLIC_SITE_URL`); API e2e (hidden/archived/out/on-request/no-image excluded, flash fields, XML well-formed)
+- [x] T020 [US6/US7] Nuxt server routes `/sitemap.xml` (ar + en alternates, index split > 45k), `/robots.txt` (disallow list, sitemap line, staging `Disallow: /`), `/feeds/google.xml` proxy; `routeRules` `swr: 3600`; tests
+- [x] T021 [US6/US7] TesterArmy: sitemap contains/omits the right URLs; robots disallows private paths; filtered listing canonical; product page JSON-LD has Product, Offer, BreadcrumbList (+ AggregateRating after an approved review); feed lists an in-stock product and the flash sale price, omits a hidden one
 
 ## Phase 7: Polish
 

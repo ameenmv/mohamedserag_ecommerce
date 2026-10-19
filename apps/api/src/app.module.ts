@@ -14,6 +14,7 @@ import { AuthModule } from './auth/auth.module.js'
 import { CatalogModule } from './catalog/catalog.module.js'
 import { ContentModule } from './content/content.module.js'
 import { QuizModule } from './quiz/quiz.module.js'
+import { SeoModule } from './seo/seo.module.js'
 import { OrdersModule } from './orders/orders.module.js'
 import { BridalModule } from './bridal/bridal.module.js'
 import { SettingsModule } from './settings/settings.module.js'
@@ -38,6 +39,7 @@ import { TestSeedModule } from './test-seed/test-seed.module.js'
     CatalogModule,
     ContentModule,
     QuizModule,
+    SeoModule,
     AdminCatalogModule,
     AdminOrdersModule,
     AdminBridalModule,
