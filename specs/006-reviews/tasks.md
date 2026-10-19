@@ -12,7 +12,7 @@ description: "Tasks for Slice 5 — Reviews"
 
 - [ ] T001 [P] `packages/shared/src/reviews.ts` (Zod-free): `PublicReview`, `ReviewRatingSummary`, `AdminReviewRow`, `AdminReviewListResponse` types; `summarizeRatings(starsCounts)` (average 1 decimal, distribution 1–5, null when empty); tests
 - [ ] T002 [P] `packages/shared/src/reviews-schema.ts`: `reviewInputSchema` (stars 1–5 int, text trimmed 20–1000, name 2–60, phone via phone schema, honeypot `website`), `adminReviewListQuerySchema` (status, q, stars, page, pageSize), `reviewReplySchema` (≤ 500, empty → null); tests; export both
-- [ ] T003 `catalog.ts`: `rating: { average, count } | null` on ProductCard/ProductDetail; `analytics.ts` + `'review_submitted'`
+- [ ] T003 `analytics.ts` + `'review_submitted'` (the catalog `rating` field moves to T010, where it is filled)
 
 ## Phase 2: User Story 1 — Write a review (P1) 🎯
 
@@ -28,7 +28,7 @@ description: "Tasks for Slice 5 — Reviews"
 
 ## Phase 4: User Story 3 — Read reviews (P1)
 
-- [ ] T010 [US3] API `GET /products/:slug/reviews` (summary + paged approved list, no phone/ip) and rating summary on cards/detail via one grouped query; API e2e (pending/rejected never counted, distribution, paging)
+- [ ] T010 [US3] `catalog.ts`: `rating: { average, count } | null` on ProductCard/ProductDetail; API `GET /products/:slug/reviews` (summary + paged approved list, no phone/ip) and rating summary on cards/detail via one grouped query; API e2e (pending/rejected never counted, distribution, paging)
 - [ ] T011 [US3] Web: `StoreProductRating` on cards, product-page summary + distribution + list + load more + empty state, verified tag, store reply; `aggregateRating` in product JSON-LD only when count > 0
 - [ ] T012 [US3] TesterArmy: three approved reviews → average and count on card and page, buyer tag, load more, empty state on another product, JSON-LD present only after approval
 
