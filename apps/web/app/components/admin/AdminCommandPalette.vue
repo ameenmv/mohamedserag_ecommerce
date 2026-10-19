@@ -2,6 +2,7 @@
 import type { Component } from 'vue'
 import {
   BarChart3,
+  BellRing,
   ExternalLink,
   FilePenLine,
   FolderTree,
@@ -44,6 +45,7 @@ const iconByKey: Record<string, Component> = {
   c: FolderTree,
   b: Sparkles,
   m: Tag,
+  n: BellRing,
   r: Star,
   e: FilePenLine,
   t: BarChart3,

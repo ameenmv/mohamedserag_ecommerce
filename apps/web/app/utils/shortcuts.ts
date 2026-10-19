@@ -21,6 +21,7 @@ export const ADMIN_NAV_SHORTCUTS: readonly AdminNavShortcut[] = [
   { key: 'c', hint: 'G C', paletteHint: 'G C', labelKey: 'admin.nav.catalog', to: '/admin/catalog', group: 'store', permission: PERMISSIONS.products.read },
   { key: 'b', hint: 'G B', paletteHint: 'G B', labelKey: 'admin.nav.bridal', to: '/admin/bridal', group: 'store', permission: PERMISSIONS.bridal.manage },
   { key: 'm', hint: 'G M', paletteHint: 'G M', labelKey: 'admin.nav.promotions', to: '/admin/promotions', group: 'store', permission: PERMISSIONS.promotions.manage },
+  { key: 'n', hint: 'G N', paletteHint: 'G N', labelKey: 'admin.nav.notify', to: '/admin/notify', group: 'store', permission: PERMISSIONS.notify.manage },
   { key: 'r', hint: 'G R', paletteHint: 'G R', labelKey: 'admin.nav.reviews', to: '/admin/reviews', group: 'store', permission: PERMISSIONS.reviews.moderate },
   { key: 'e', hint: 'G E', paletteHint: 'G E', labelKey: 'admin.nav.content', to: '/admin/content', group: 'content', permission: PERMISSIONS.content.manage },
   { key: 't', hint: 'G T', paletteHint: 'G T', labelKey: 'admin.nav.reports', to: '/admin/reports', group: 'system', permission: PERMISSIONS.reports.read },

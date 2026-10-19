@@ -61,16 +61,16 @@ test('quantity stepper plus add to cart updates header cart badge and localStora
   expect(cartItems[0].qty).toBe(2);
 });
 
-test('out-of-stock product edessa-cookware-7pc-c6 disables add button and displays set contents', async ({
+test('out-of-stock product edessa-cookware-7pc-c6 offers notify-me instead of add to cart and displays set contents', async ({
   app,
   screen,
+  browser,
 }) => {
   await app.open('/p/edessa-cookware-7pc-c6');
 
-  // Add button is disabled with out-of-stock copy «نفذ»
-  const outOfStockButton = screen.getByRole('button', 'نفذ');
-  await expect(outOfStockButton).toBeVisible();
-  await expect(outOfStockButton).toBeDisabled();
+  // Out of stock: the add-to-cart area is replaced by the notify-me form (Slice 4 US3)
+  await expect(browser.locator('#main-add-to-cart-button')).toBeHidden();
+  await expect(browser.locator('#notify-me-form')).toBeVisible();
 
   // Set contents section «محتويات الطقم» is visible
   await expect(screen.getByRole('heading', 'محتويات الطقم')).toBeVisible();

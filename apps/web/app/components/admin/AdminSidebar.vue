@@ -3,6 +3,7 @@ import type { Component } from 'vue'
 import type { AdminNavGroup } from '~/utils/shortcuts'
 import {
   BarChart3,
+  BellRing,
   FilePenLine,
   FolderTree,
   LayoutDashboard,
@@ -29,6 +30,7 @@ const iconByKey: Record<string, Component> = {
   c: FolderTree,
   b: Sparkles,
   m: Tag,
+  n: BellRing,
   r: Star,
   e: FilePenLine,
   t: BarChart3,

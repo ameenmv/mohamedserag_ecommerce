@@ -264,6 +264,7 @@
           "limit": "This code has been fully used",
           "phone_limit": "You've already used this code",
           "no_eligible": "This code doesn't apply to the items in your cart",
+          "too_many_attempts": "Too many codes tried — wait 15 minutes and try again",
           "generic": "This code isn't valid"
         }
       },
@@ -613,6 +614,25 @@
         "openList": "Open list",
         "errorToast": "Failed, please try again"
       }
+    },
+    "notifyMe": {
+      "title": "Notify me when available",
+      "subtitle": "Leave your details and we'll send you a WhatsApp message as soon as this item is back in stock.",
+      "nameLabel": "Name",
+      "namePlaceholder": "Enter your name",
+      "phoneLabel": "Mobile Number (WhatsApp)",
+      "phonePlaceholder": "010xxxxxxxx",
+      "submit": "Notify me when available",
+      "submitting": "Submitting...",
+      "successTitle": "Done! We'll message you on WhatsApp as soon as it arrives",
+      "successDesc": "We have recorded your request and will message you via WhatsApp when the item is back in stock.",
+      "inStockMessage": "The product is now in stock — please refresh the page",
+      "throttledMessage": "Too many attempts, please wait a minute and try again",
+      "notFoundMessage": "Product not found",
+      "genericError": "Something went wrong, please try again",
+      "stickyButton": "Notify me",
+      "stickyButtonAria": "Notify me when {name} is back in stock",
+      "botFieldLabel": "Leave this field blank"
     }
   },
   "admin": {
@@ -635,6 +655,7 @@
       "catalog": "Categories & Brands",
       "bridal": "Bridal Packages",
       "promotions": "Promotions & Coupons",
+      "notify": "Notify Me",
       "reviews": "Reviews",
       "content": "Site Editor",
       "reports": "Reports",
@@ -1527,6 +1548,48 @@
       "searchPlaceholder": "Search by name or model code…",
       "noResults": "No matching products found",
       "loading": "Searching…"
+    },
+    "notify": {
+      "pageTitle": "Notify Requests",
+      "subtitle": "Track customer back-in-stock notifications and contact them via WhatsApp",
+      "searchPlaceholder": "Search by product name or model code…",
+      "empty": "No notify requests yet",
+      "errorLoading": "Failed to load notify requests. Please try again later.",
+      "retry": "Retry",
+      "refresh": "Refresh",
+      "table": {
+        "product": "Product",
+        "modelCode": "Model Code",
+        "stock": "Stock",
+        "availability": "Availability",
+        "waiting": "Waiting",
+        "sent": "Sent",
+        "lastRequest": "Last Request",
+        "actions": "Actions"
+      },
+      "badge": {
+        "available": "In Stock",
+        "outOfStock": "Out of Stock",
+        "waiting": "Waiting",
+        "sent": "Sent",
+        "ready": "Back in Stock"
+      },
+      "detail": {
+        "title": "Product Notification Requests",
+        "productInfo": "Product Info",
+        "customerName": "Customer Name",
+        "phone": "Phone Number",
+        "status": "Status",
+        "requestDate": "Request Date",
+        "sentDate": "Sent Date",
+        "sendWhatsapp": "Send on WhatsApp",
+        "resendWhatsapp": "Resend on WhatsApp",
+        "notAvailableHelper": "Product is not available yet",
+        "notAvailableNotice": "This product is not back in stock yet. Notifications can only be sent once restocked.",
+        "sentSuccess": "Marked as sent and opened WhatsApp chat successfully",
+        "empty": "No requests recorded for this product",
+        "openRequests": "View requests ({count})"
+      }
     }
   },
   "validation": {

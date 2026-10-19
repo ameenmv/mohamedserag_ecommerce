@@ -161,7 +161,8 @@ const showInstallment = computed(
 
     <!-- Purchase Actions: Stepper + Add to Cart + Wishlist/Compare -->
     <div class="flex flex-col gap-3">
-      <div class="flex flex-wrap items-center gap-2.5">
+      <!-- Orderable: Stepper + Add to Cart + Wishlist/Compare -->
+      <div v-if="product.availability.state !== 'out'" class="flex flex-wrap items-center gap-2.5">
         <!-- Quantity stepper -->
         <div
           class="flex items-center rounded-xl border border-border bg-background p-1"
@@ -199,7 +200,6 @@ const showInstallment = computed(
 
         <!-- Add to cart button -->
         <button
-          v-if="isOrderable"
           id="main-add-to-cart-button"
           ref="addToCartButton"
           type="button"
@@ -210,22 +210,22 @@ const showInstallment = computed(
           <span>{{ t('store.product.addToCart') }}</span>
         </button>
 
-        <button
-          v-else
-          id="main-add-to-cart-button"
-          ref="addToCartButton"
-          type="button"
-          disabled
-          aria-disabled="true"
-          class="flex-1 inline-flex min-h-11 cursor-not-allowed items-center justify-center rounded-xl border border-border bg-muted/70 px-5 text-sm font-bold text-muted-foreground"
-        >
-          <span>{{ t('store.product.outOfStock') }}</span>
-        </button>
-
         <!-- Wishlist & Compare Toggles -->
         <div class="flex items-center gap-1.5">
           <StoreProductWishlistToggle :product="card" />
           <StoreProductCompareToggle :product="card" />
+        </div>
+      </div>
+
+      <!-- Out of Stock: Notify Me Form in place of disabled button + Wishlist/Compare toggles -->
+      <div v-else class="flex flex-col gap-3">
+        <div class="flex items-center justify-end gap-1.5">
+          <StoreProductWishlistToggle :product="card" />
+          <StoreProductCompareToggle :product="card" />
+        </div>
+
+        <div ref="addToCartButton">
+          <StoreProductPageNotifyForm :product="product" />
         </div>
       </div>
 

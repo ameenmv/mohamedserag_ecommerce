@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useIntersectionObserver } from '@vueuse/core'
-import { ShoppingCart } from '@lucide/vue'
+import { BellRing, ShoppingCart } from '@lucide/vue'
 import type { ProductDetail } from '@serag/shared'
 import { toProductCard } from '~/utils/product-card-mapper'
 
@@ -19,7 +19,7 @@ const isOrderable = computed(() => props.product.availability.orderable)
 if (import.meta.client) {
   const observeTarget = computed(() => {
     if (props.targetRef) return props.targetRef
-    return document.getElementById('main-add-to-cart-button')
+    return document.getElementById('main-add-to-cart-button') || document.getElementById('notify-me-form')
   })
 
   useIntersectionObserver(
@@ -35,6 +35,17 @@ if (import.meta.client) {
 function handleAddToCart(): void {
   if (isOrderable.value) {
     add(card.value, 1)
+  }
+}
+
+function scrollToNotifyForm(): void {
+  if (import.meta.client) {
+    const el = document.getElementById('notify-me-form')
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+    const nameInput = document.getElementById('notify-name') as HTMLInputElement | null
+    nameInput?.focus()
   }
 }
 </script>
@@ -79,6 +90,17 @@ function handleAddToCart(): void {
         >
           <ShoppingCart class="size-4 shrink-0 text-serag-gold-hi" aria-hidden="true" />
           <span>{{ t('store.product.addToCart') }}</span>
+        </button>
+
+        <button
+          v-else-if="product.availability.state === 'out'"
+          type="button"
+          class="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl bg-serag-night px-4 text-xs font-bold text-serag-ivory shadow-xs transition-colors hover:bg-serag-green focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none dark:bg-serag-green dark:hover:bg-serag-night cursor-pointer"
+          :aria-label="t('store.notifyMe.stickyButtonAria', { name: product.name })"
+          @click="scrollToNotifyForm"
+        >
+          <BellRing class="size-4 shrink-0 text-serag-gold-hi" aria-hidden="true" />
+          <span>{{ t('store.notifyMe.stickyButton') }}</span>
         </button>
 
         <button
