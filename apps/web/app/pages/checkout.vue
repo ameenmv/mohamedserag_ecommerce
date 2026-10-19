@@ -13,6 +13,7 @@ const {
   placeOrderHint,
   displayTotal,
   quote,
+  quotePending,
   governorates,
   citySuggestions,
   paymentMethods,
@@ -20,6 +21,7 @@ const {
   settingsError,
   refreshSettings,
   refreshQuote,
+  removeCoupon,
   placeOrder,
   trackCheckoutStart,
 } = useCheckout()
@@ -131,8 +133,10 @@ if (import.meta.client) {
             :hydrated="hydrated"
             :disabled="!canPlaceOrder"
             :hint="placeOrderHint"
+            :quote-pending="quotePending"
             @update:coupon-code="(c) => (form.couponCode = c)"
             @apply-coupon="refreshQuote"
+            @remove-coupon="removeCoupon"
             @submit="placeOrder"
           />
         </div>

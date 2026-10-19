@@ -3,6 +3,7 @@ import type { CartQuote } from '@serag/shared'
 import type { CartLine } from '../app/utils/cart'
 import {
   buildCreateOrderPayload,
+  couponReasonKey,
   orderPlacedEvent,
   parseOrderConflict,
   placeOrderBlockReason,
@@ -168,7 +169,7 @@ describe('checkout utils - buildCreateOrderPayload', () => {
 })
 
 describe('checkout utils - parseOrderConflict', () => {
-  it('accepts 409 responses with CART_CHANGED or TOTAL_CHANGED and a valid quote', () => {
+  it('accepts 409 responses with CART_CHANGED, TOTAL_CHANGED, or COUPON_REJECTED and a valid quote', () => {
     const quote = makeMockQuote()
 
     // 1. CART_CHANGED via data
@@ -199,6 +200,20 @@ describe('checkout utils - parseOrderConflict', () => {
     expect(resTotal).not.toBeNull()
     expect(resTotal?.code).toBe('TOTAL_CHANGED')
     expect(resTotal?.message).toBe('تغير إجمالي الطلب')
+
+    // 3. COUPON_REJECTED via data
+    const resCoupon = parseOrderConflict({
+      statusCode: 409,
+      data: {
+        code: 'COUPON_REJECTED',
+        message: 'الكود انتهى',
+        quote,
+      },
+    })
+    expect(resCoupon).not.toBeNull()
+    expect(resCoupon?.code).toBe('COUPON_REJECTED')
+    expect(resCoupon?.message).toBe('الكود انتهى')
+    expect(resCoupon?.quote).toEqual(quote)
   })
 
   it('rejects other HTTP statuses even if payload shape matches', () => {
@@ -267,5 +282,25 @@ describe('checkout utils - orderPlacedEvent analytics', () => {
     expect(event).not.toHaveProperty('governorate')
     expect(event).not.toHaveProperty('city')
     expect(event).not.toHaveProperty('address')
+  })
+})
+
+describe('checkout utils - couponReasonKey', () => {
+  it('maps all defined coupon reason codes to their corresponding i18n keys', () => {
+    expect(couponReasonKey('not_found')).toBe('store.checkout.coupon.reasons.not_found')
+    expect(couponReasonKey('expired')).toBe('store.checkout.coupon.reasons.expired')
+    expect(couponReasonKey('not_started')).toBe('store.checkout.coupon.reasons.not_started')
+    expect(couponReasonKey('min_order')).toBe('store.checkout.coupon.reasons.min_order')
+    expect(couponReasonKey('limit')).toBe('store.checkout.coupon.reasons.limit')
+    expect(couponReasonKey('phone_limit')).toBe('store.checkout.coupon.reasons.phone_limit')
+    expect(couponReasonKey('no_eligible')).toBe('store.checkout.coupon.reasons.no_eligible')
+  })
+
+  it('falls back to generic reason key for null, undefined, empty, or unknown codes', () => {
+    expect(couponReasonKey(null)).toBe('store.checkout.coupon.reasons.generic')
+    expect(couponReasonKey(undefined)).toBe('store.checkout.coupon.reasons.generic')
+    expect(couponReasonKey('')).toBe('store.checkout.coupon.reasons.generic')
+    expect(couponReasonKey('unknown_code')).toBe('store.checkout.coupon.reasons.generic')
+    expect(couponReasonKey('INVALID_REASON')).toBe('store.checkout.coupon.reasons.generic')
   })
 })

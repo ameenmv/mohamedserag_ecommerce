@@ -26,8 +26,8 @@ description: "Tasks for Slice 4 — Promotions & Stock Alerts"
 
 - [x] T009 [US2] API real `CouponService` (quote evaluation) + order transaction (row lock, limits, redemption, 409s); redemption release/re-activate in `OrderStatusService`; coupons excluded from bridal
 - [x] T010 [US2] API e2e: percent/fixed/min order/dates/scope/flash+old-price exclusion, total limit under parallel orders, per-phone limit, release on cancel/reject and re-activate on confirm
-- [ ] T011 [US2] Web checkout coupon field (apply/remove, reason messages, saving line), `coupon_applied` event
-- [ ] T012 [US2] TesterArmy: apply valid/invalid codes, eligible-only discount, order shows discount
+- [x] T011 [US2] Web checkout coupon field (apply/remove, reason messages, saving line), `coupon_applied` event
+- [x] T012 [US2] TesterArmy: apply valid/invalid codes, eligible-only discount, order shows discount
 
 ## Phase 4: User Story 4 — Admin promotions (P1)
 

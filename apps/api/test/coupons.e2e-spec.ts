@@ -301,6 +301,7 @@ describe('Coupons API E2E (/api/cart/quote, /api/orders)', () => {
       discount: 10_000,
       reason: null,
       reasonCode: null,
+      minOrder: null,
     })
     expect(res.body.discount).toBe(10_000)
     expect(res.body.total).toBe(290_000)
@@ -338,6 +339,7 @@ describe('Coupons API E2E (/api/cart/quote, /api/orders)', () => {
       discount: 5_000, // Capped at 5,000
       reason: null,
       reasonCode: null,
+      minOrder: null,
     })
     expect(res.body.discount).toBe(5_000)
     expect(res.body.total).toBe(0)
@@ -375,6 +377,7 @@ describe('Coupons API E2E (/api/cart/quote, /api/orders)', () => {
       discount: 0,
       reason: 'الحد الأدنى للطلب 5,000 ج.م',
       reasonCode: 'min_order',
+      minOrder: 500_000,
     })
     expect(res.body.discount).toBe(0)
   })
@@ -411,6 +414,7 @@ describe('Coupons API E2E (/api/cart/quote, /api/orders)', () => {
         discount: 0,
         reason: 'الكود لسه مبدأش',
         reasonCode: 'not_started',
+        minOrder: null,
       })
     })
 
@@ -443,6 +447,7 @@ describe('Coupons API E2E (/api/cart/quote, /api/orders)', () => {
         discount: 0,
         reason: 'الكود انتهى',
         reasonCode: 'expired',
+        minOrder: null,
       })
     })
 
@@ -473,6 +478,7 @@ describe('Coupons API E2E (/api/cart/quote, /api/orders)', () => {
         discount: 0,
         reason: 'الكود انتهى',
         reasonCode: 'expired',
+        minOrder: null,
       })
     })
   })
@@ -496,6 +502,7 @@ describe('Coupons API E2E (/api/cart/quote, /api/orders)', () => {
       discount: 0,
       reason: 'الكود ده مش موجود',
       reasonCode: 'not_found',
+      minOrder: null,
     })
   })
 
@@ -533,6 +540,7 @@ describe('Coupons API E2E (/api/cart/quote, /api/orders)', () => {
         discount: 0,
         reason: 'الكود ده مش على المنتجات اللي في السلة',
         reasonCode: 'no_eligible',
+        minOrder: null,
       })
 
       // B: Item matches Cat A, Brand B -> fails brand scope
@@ -551,6 +559,7 @@ describe('Coupons API E2E (/api/cart/quote, /api/orders)', () => {
         discount: 0,
         reason: 'الكود ده مش على المنتجات اللي في السلة',
         reasonCode: 'no_eligible',
+        minOrder: null,
       })
 
       // C: Item matches Cat A and Brand A -> passes both!
@@ -569,6 +578,7 @@ describe('Coupons API E2E (/api/cart/quote, /api/orders)', () => {
         discount: 10_000,
         reason: null,
         reasonCode: null,
+        minOrder: null,
       })
     })
   })

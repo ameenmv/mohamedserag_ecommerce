@@ -2,6 +2,7 @@ export const FUNNEL_EVENTS = [
   'product_view',
   'add_to_cart',
   'checkout_start',
+  'coupon_applied',
   'order_placed',
   'bridal_list_created',
   'bridal_list_shared',

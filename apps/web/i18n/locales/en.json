@@ -251,6 +251,22 @@
       "couponCode": "Coupon Code",
       "couponPlaceholder": "Enter coupon code here",
       "applyCoupon": "Apply",
+      "coupon": {
+        "applied": "Code {code} applied",
+        "saving": "You saved {amount}",
+        "remove": "Remove code",
+        "removeAria": "Remove code {code}",
+        "reasons": {
+          "not_found": "This code doesn't exist",
+          "expired": "This code has expired",
+          "not_started": "This code isn't active yet",
+          "min_order": "Minimum order is {amount}",
+          "limit": "This code has been fully used",
+          "phone_limit": "You've already used this code",
+          "no_eligible": "This code doesn't apply to the items in your cart",
+          "generic": "This code isn't valid"
+        }
+      },
       "placeOrder": "Place Order",
       "placingOrder": "Placing order...",
       "stickyTotal": "Total:",

@@ -30,6 +30,7 @@ export interface CouponEvaluation {
   discount: number
   reason: string | null
   reasonCode: CouponReasonCode | null
+  minOrder: number | null
 }
 
 export interface CartQuoteContext {

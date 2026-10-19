@@ -149,6 +149,7 @@ export class CouponService {
       discount: result.discount,
       reason: result.reason,
       reasonCode: result.reasonCode,
+      minOrder: coupon.minOrder > 0 ? coupon.minOrder : null,
     }
   }
 }
@@ -160,5 +161,6 @@ function notFound(code: string): CouponEvaluation {
     discount: 0,
     reason: COUPON_REASON_MESSAGES.not_found,
     reasonCode: 'not_found',
+    minOrder: null,
   }
 }

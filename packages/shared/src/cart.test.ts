@@ -426,6 +426,7 @@ describe('buildCartQuote', () => {
           discount: 20_000,
           reason: null,
           reasonCode: null,
+          minOrder: null,
         },
       },
     )

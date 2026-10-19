@@ -251,6 +251,22 @@
       "couponCode": "كود الخصم",
       "couponPlaceholder": "اكتب الكود هنا",
       "applyCoupon": "تطبيق",
+      "coupon": {
+        "applied": "تم تطبيق الكود {code}",
+        "saving": "وفّرت {amount}",
+        "remove": "إزالة الكود",
+        "removeAria": "إزالة الكود {code}",
+        "reasons": {
+          "not_found": "الكود ده مش موجود",
+          "expired": "الكود انتهى",
+          "not_started": "الكود لسه مبدأش",
+          "min_order": "الحد الأدنى للطلب {amount}",
+          "limit": "الكود ده خلص",
+          "phone_limit": "استخدمت الكود ده قبل كده",
+          "no_eligible": "الكود ده مش على المنتجات اللي في السلة",
+          "generic": "الكود ده مش صالح"
+        }
+      },
       "placeOrder": "تأكيد الطلب",
       "placingOrder": "جاري تأكيد الطلب...",
       "stickyTotal": "الإجمالي:",

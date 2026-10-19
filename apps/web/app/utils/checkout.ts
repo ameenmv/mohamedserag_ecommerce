@@ -1,6 +1,8 @@
 import { z } from 'zod'
+import { COUPON_REASON_MESSAGES } from '@serag/shared'
 import type {
   CartQuote,
+  CouponReasonCode,
   CreateOrderInput,
   CreateOrderResult,
   OrderCustomerInput,
@@ -38,14 +40,16 @@ export type OrderPlacedAnalyticsEvent = {
   itemCount: number
 }
 
+export type OrderConflictCode = 'CART_CHANGED' | 'TOTAL_CHANGED' | 'COUPON_REJECTED'
+
 export interface OrderConflictResult {
-  code: 'CART_CHANGED' | 'TOTAL_CHANGED'
+  code: OrderConflictCode
   message: string
   quote: CartQuote
 }
 
 const orderConflictSchema = z.object({
-  code: z.enum(['CART_CHANGED', 'TOTAL_CHANGED']),
+  code: z.enum(['CART_CHANGED', 'TOTAL_CHANGED', 'COUPON_REJECTED']),
   message: z.string(),
   quote: z.custom<CartQuote>(
     (val) => Boolean(val && typeof val === 'object' && 'lines' in val && 'total' in val),
@@ -172,4 +176,15 @@ export function orderPlacedEvent(
     total: result.total,
     itemCount: cartCount(lines),
   }
+}
+
+/**
+ * Pure mapping helper converting a CouponReasonCode to its localized i18n key.
+ * Falls back to generic error key if code is unknown, empty, or undefined.
+ */
+export function couponReasonKey(reasonCode?: CouponReasonCode | string | null): string {
+  if (reasonCode && Object.hasOwn(COUPON_REASON_MESSAGES, reasonCode)) {
+    return `store.checkout.coupon.reasons.${reasonCode}`
+  }
+  return 'store.checkout.coupon.reasons.generic'
 }

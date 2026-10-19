@@ -297,6 +297,7 @@ describe('Orders and Cart API E2E (/api/cart, /api/orders)', () => {
         discount: 0,
         reason: 'الكود ده مش موجود',
         reasonCode: 'not_found',
+        minOrder: null,
       })
       expect(res.body.discount).toBe(0)
     })

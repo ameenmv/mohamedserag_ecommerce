@@ -2,11 +2,12 @@ import { describe, expect, it } from 'vitest'
 import { FUNNEL_EVENTS, isFunnelEvent, type FunnelEvent, type FunnelEventData } from './analytics.js'
 
 describe('analytics shared types and constants', () => {
-  it('defines the 9 canonical funnel events', () => {
+  it('defines the 10 canonical funnel events', () => {
     expect(FUNNEL_EVENTS).toEqual([
       'product_view',
       'add_to_cart',
       'checkout_start',
+      'coupon_applied',
       'order_placed',
       'bridal_list_created',
       'bridal_list_shared',
@@ -19,6 +20,7 @@ describe('analytics shared types and constants', () => {
   it('validates funnel events with isFunnelEvent type guard', () => {
     expect(isFunnelEvent('whatsapp_click')).toBe(true)
     expect(isFunnelEvent('product_view')).toBe(true)
+    expect(isFunnelEvent('coupon_applied')).toBe(true)
     expect(isFunnelEvent('order_placed')).toBe(true)
     expect(isFunnelEvent('checkout_start')).toBe(true)
     expect(isFunnelEvent('unknown_event')).toBe(false)

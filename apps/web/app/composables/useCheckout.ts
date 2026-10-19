@@ -98,6 +98,28 @@ export function useCheckout(options?: { hydrated?: Ref<boolean> }) {
     resetQuoteContext()
   })
 
+  // Track coupon_applied funnel event once per distinct applied code
+  const trackedCouponCodes = new Set<string>()
+  watch(
+    () => quote.value?.coupon,
+    (coupon) => {
+      if (coupon && coupon.status === 'applied' && coupon.code) {
+        const normalized = coupon.code.trim().toUpperCase()
+        if (!trackedCouponCodes.has(normalized)) {
+          trackedCouponCodes.add(normalized)
+          analytics.track('coupon_applied', {
+            code: coupon.code,
+            discount: coupon.discount,
+          })
+        }
+      }
+    },
+  )
+
+  function removeCoupon(): void {
+    form.value.couponCode = ''
+  }
+
   const errors = ref<Record<string, string>>({})
   const submitting = ref(false)
   let checkoutStartTracked = false
@@ -236,8 +258,14 @@ export function useCheckout(options?: { hydrated?: Ref<boolean> }) {
       if (conflict) {
         quote.value = conflict.quote
         applyQuoteToCart(conflict.quote)
-        const msg = conflict.message.trim()
-        notify.error(msg.length > 0 ? msg : t('store.checkout.cartChangedError'))
+        if (conflict.code === 'COUPON_REJECTED') {
+          form.value.couponCode = ''
+          const msg = conflict.message.trim()
+          notify.error(msg.length > 0 ? msg : t('store.checkout.coupon.reasons.generic'))
+        } else {
+          const msg = conflict.message.trim()
+          notify.error(msg.length > 0 ? msg : t('store.checkout.cartChangedError'))
+        }
       } else {
         let serverMessage: string | null = null
         if (err && typeof err === 'object' && 'data' in err && err.data && typeof err.data === 'object') {
@@ -265,6 +293,7 @@ export function useCheckout(options?: { hydrated?: Ref<boolean> }) {
     placeOrderHint,
     displayTotal,
     quote,
+    quotePending,
     governorates,
     citySuggestions,
     paymentMethods,
@@ -272,6 +301,7 @@ export function useCheckout(options?: { hydrated?: Ref<boolean> }) {
     settingsError,
     refreshSettings,
     refreshQuote,
+    removeCoupon,
     validate,
     placeOrder,
     trackCheckoutStart,
