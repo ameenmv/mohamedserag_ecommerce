@@ -1,9 +1,9 @@
 # Phase 1 — Launch: progress
 
-> المرحلة الأولى (الإطلاق) — **Slice 0 (الأساس) و Slice 1 (الكتالوج) و Slice 2 (السلة والدفع) و Slice 3 (جهّز بيتك) خلصوا بالكامل**.
-> في Slice 3: باقات جهاز العروسة وتعديلها أوضة أوضة مع الحفظ التلقائي، رابط المشاركة العائلي، الحجز بالعربون وتثبيت الأسعار 30 يوم، حجز المخزون عند ميعاد التوصيل، إدارة وتمديد وتحديث أسعار الحجوزات، محرر الباقات والإعدادات.
+> المرحلة الأولى (الإطلاق) — **Slice 0 (الأساس) و Slice 1 (الكتالوج) و Slice 2 (السلة والدفع) و Slice 3 (جهّز بيتك) و Slice 4 (العروض وتنبيهات التوفر) خلصوا بالكامل**.
+> في Slice 4: العروض لفترة محدودة بالعد التنازلي المباشر وتحديث الأسعار التلقائي، كوبونات الخصم وقواعد الأهلية وحدود الاستخدام مع حماية التخمين، وتنبيهات توفر المنتجات عبر واتساب.
 
-**Updated:** 18 Oct 2026 · **Branch:** `004-bridal-builder` · **Source of truth:** [PRD](PRD.md) · [spec](../specs/004-bridal-builder/spec.md) · [plan](../specs/004-bridal-builder/plan.md) · [tasks](../specs/004-bridal-builder/tasks.md)
+**Updated:** 19 Oct 2026 · **Branch:** `005-promotions-alerts` · **Source of truth:** [PRD](PRD.md) · [spec](../specs/005-promotions-alerts/spec.md) · [plan](../specs/005-promotions-alerts/plan.md) · [tasks](../specs/005-promotions-alerts/tasks.md)
 
 ## Where we are
 
@@ -13,7 +13,7 @@
 | 1 — Catalog & discovery | Categories, brands, product pages, Arabic search, filters, compare, wishlist, admin products | ✅ **Done** (branch `002-slice1-catalog`) |
 | 2 — Cart, checkout & payments | Zones, COD, transfers, large-COD deposit, one-tap confirm | ✅ **Done** (branch `003-slice2-checkout`) |
 | 3 — Bridal builder «جهّز بيتك» | Tiers, sharing, deposit and price lock | ✅ **Done** (branch `004-bridal-builder`) |
-| 4 — Promotions & stock alerts | Flash sales, coupons, notify-me | ⚪ Planned |
+| **4 — Promotions & stock alerts** | Flash sales, coupons, notify-me | ✅ **Done** (branch `005-promotions-alerts`) |
 | 5 — Reviews | Moderation, verified buyers | ⚪ Planned |
 | 6 — Content, CMS & SEO | Homepage CMS, guides, quiz, Merchant feed | ⚪ Planned |
 | 7 — Dashboard, reports & settings | Counters, reports, settings | ⚪ Planned |
@@ -78,6 +78,15 @@
 - Admin bridal settings and tier editor (`/admin/bridal`) protected by `bridal.manage` permission and CSRF.
 - Funnel events (`bridal_list_created`, `bridal_list_shared`, `bridal_reserved`) without personal data or tokens.
 
+## Slice 4 — status
+
+- Flash sales with effective pricing everywhere (cards, product, search, cart, orders; bridal keeps regular prices), live countdown that swaps prices at zero without reload, `/offers`.
+- Coupons (percent/fixed, min order, dates, total + per-phone limits, category/brand scope, flash/old-price items excluded, row-locked in the order transaction, released on cancel/payment rejection and re-activated on confirm, localized refusal reasons, 409 recovery at checkout, `coupon_applied` event).
+- Admin `/admin/promotions` (flash sales with overlap check and end-now, coupons with usage stats and deactivate-instead-of-delete, shadcn confirm dialogs).
+- Notify-me (form on out-of-stock products with honeypot + throttle + one entry per product/phone, `/admin/notify` waiting lists back-in-stock first, prefilled WhatsApp send that marks sent and logs the message, `notify_me_requested` event).
+- Security review outcome (coupon guessing limiter, phone masking in audit snapshots, XFF not spoofable behind Caddy because only Caddy's ports are published).
+- Tests: API e2e 212, browser e2e 49 (all on isolated servers), unit 262 shared + 82 api + 253 web; production build clean.
+
 ## Quality gates (verified)
 
 | Gate | Result |
@@ -137,14 +146,11 @@
 
 ## Next steps
 
-1. Continue **Slice 1 (Catalog & discovery)** in exact order:
-   - `T020`: API catalog (categories, brands, spec templates, products list/filters/pagination/detail) — [Slice 1 in progress]
-   - `T021`: API Arabic search (trigram similarity on `searchText`, synonyms from settings)
-   - `T021b`: Web shared pieces (`ProductCard`, `useApi`, `useCart`, `useWishlist`, `useCompare`, header badges)
-   - `T022`–`T024`: Web pages (`/shop`, `/c/[slug]`, `/b/[slug]`, `/p/[slug]`, compare, wishlist)
-   - `T025`–`T026`: Admin products editor, image uploads, and CSV import
-   - `T027`: Browser e2e tests for catalog, search, compare, and admin products
-   - `T028`: Slice review and quality gates
+1. Continue with **Slice 5 (Reviews)**:
+   - `T060`: API reviews (submission rate limit, honeypot, one per phone/product, moderation status, verified-buyer check, unpublish/delete, rating aggregates)
+   - `T061`: Web review form + approved reviews list on product page; admin moderation queue
+   - `T062`: Browser and API E2E reviews specs
+   - `T063`: Slice review and quality gates
 
 ## How to check it yourself
 

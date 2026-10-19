@@ -48,18 +48,18 @@
 - [x] T036 C Slice review
 
 ## Phase 3: Slice 3 — Bridal builder
-- [ ] T040 A API bridal: tiers, lists (edit/share tokens, mode), swaps, freeze on reserve, reservation order, lock start on paid ≥ deposit, extend, reprice, agreed date → stock
-- [ ] T041 A Web: `/bridal` tiers, `/bridal/[token]` editor and read-only view, «نفذ — اختاري بديل» blocking reserve until swapped, WhatsApp share, reserve form
-- [ ] T042 A Admin: tier editor, bridal settings, reservation actions inside orders, expiring-locks list
-- [ ] T043 A E2E: build/share, out-of-stock item blocks reserve, reserve with two partial transfers, lock holds after catalog price change, expiry + extend
-- [ ] T044 C Slice review
+- [x] T040 A API bridal: tiers, lists (edit/share tokens, mode), swaps, freeze on reserve, reservation order, lock start on paid ≥ deposit, extend, reprice, agreed date → stock
+- [x] T041 A Web: `/bridal` tiers, `/bridal/[token]` editor and read-only view, «نفذ — اختاري بديل» blocking reserve until swapped, WhatsApp share, reserve form
+- [x] T042 A Admin: tier editor, bridal settings, reservation actions inside orders, expiring-locks list
+- [x] T043 A E2E: build/share, out-of-stock item blocks reserve, reserve with two partial transfers, lock holds after catalog price change, expiry + extend
+- [x] T044 C Slice review
 
 ## Phase 4: Slice 4 — Promotions & stock alerts
-- [ ] T050 A API flash sales (scheduler, overlap check), coupons with eligibility and redemptions, notify-me (dedupe, mark sent)
-- [ ] T051 A [P] Web: flash countdown on home and product, coupon field in checkout, notify-me form
-- [ ] T052 A [P] Admin: flash sales, coupons, notify-me lists
-- [ ] T053 A E2E: flash sale revert, coupon eligibility, notify-me
-- [ ] T054 C Slice review
+- [x] T050 A API flash sales (scheduler, overlap check), coupons with eligibility and redemptions, notify-me (dedupe, mark sent)
+- [x] T051 A [P] Web: flash countdown on home and product, coupon field in checkout, notify-me form
+- [x] T052 A [P] Admin: flash sales, coupons, notify-me lists
+- [x] T053 A E2E: flash sale revert, coupon eligibility, notify-me
+- [x] T054 C Slice review
 
 ## Phase 5: Slice 5 — Reviews
 - [ ] T060 A API reviews: submit (rate limit, honeypot, one per phone/product), moderation, verified-buyer rule, unpublish/delete, rating aggregate

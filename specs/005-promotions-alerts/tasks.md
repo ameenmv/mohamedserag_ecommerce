@@ -37,15 +37,15 @@ description: "Tasks for Slice 4 — Promotions & Stock Alerts"
 
 ## Phase 5: User Story 3 — Notify me (P2)
 
-- [ ] T016 [US3] API public `POST /notify-me` + admin list/detail/mark-sent (WhatsApp log) + API e2e
-- [ ] T017 [US3] Web product-page notify form on out-of-stock products; `/admin/notify` page; `notify_me_requested` event
-- [ ] T018 [US3] TesterArmy: request twice → one entry; restock → send link marks sent
+- [x] T016 [US3] API public `POST /notify-me` + admin list/detail/mark-sent (WhatsApp log) + API e2e
+- [x] T017 [US3] Web product-page notify form on out-of-stock products; `/admin/notify` page; `notify_me_requested` event
+- [x] T018 [US3] TesterArmy: request twice → one entry; restock → send link marks sent
 
 ## Phase 6: Polish
 
-- [ ] T019 English + 320 px pass, a11y, hydration check of countdowns
-- [ ] T020 Docs: docs/PHASE-1.md Slice 4; README roadmap
-- [ ] T021 Review: security (coupon limits, notify spam, PII in admin list), consistency with spec
+- [x] T019 English + 320 px pass, a11y, hydration check of countdowns
+- [x] T020 Docs: docs/PHASE-1.md Slice 4; README roadmap
+- [x] T021 Review: security (coupon limits, notify spam, PII in admin list), consistency with spec
 
 ## Dependencies & Strategy
 
