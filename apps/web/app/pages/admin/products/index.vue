@@ -128,7 +128,7 @@ const {
             class="gap-1 rounded-lg text-xs"
             @click="onPageChange(currentPage - 1)"
           >
-            <ChevronRight class="size-4 rtl:-scale-x-100" aria-hidden="true" />
+            <ChevronLeft class="size-4 rtl:-scale-x-100" aria-hidden="true" />
             <span>{{ t('admin.products.pagination.previous') }}</span>
           </Button>
 
@@ -141,7 +141,7 @@ const {
             @click="onPageChange(currentPage + 1)"
           >
             <span>{{ t('admin.products.pagination.next') }}</span>
-            <ChevronLeft class="size-4 rtl:-scale-x-100" aria-hidden="true" />
+            <ChevronRight class="size-4 rtl:-scale-x-100" aria-hidden="true" />
           </Button>
         </div>
       </div>

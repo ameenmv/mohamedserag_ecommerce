@@ -407,7 +407,7 @@ function goToPage(p: number) {
             class="h-8 rounded-lg px-2 text-xs"
             @click="goToPage(page - 1)"
           >
-            <ChevronRight class="size-4 rtl:-scale-x-100" aria-hidden="true" />
+            <ChevronLeft class="size-4 rtl:-scale-x-100" aria-hidden="true" />
             <span>{{ t('common.previous') }}</span>
           </Button>
 
@@ -420,7 +420,7 @@ function goToPage(p: number) {
             @click="goToPage(page + 1)"
           >
             <span>{{ t('common.next') }}</span>
-            <ChevronLeft class="size-4 rtl:-scale-x-100" aria-hidden="true" />
+            <ChevronRight class="size-4 rtl:-scale-x-100" aria-hidden="true" />
           </Button>
         </div>
       </div>
