@@ -62,10 +62,10 @@
 - [x] T054 C Slice review
 
 ## Phase 5: Slice 5 — Reviews
-- [ ] T060 A API reviews: submit (rate limit, honeypot, one per phone/product), moderation, verified-buyer rule, unpublish/delete, rating aggregate
-- [ ] T061 A Web review form + list; admin moderation queue
-- [ ] T062 A E2E reviews
-- [ ] T063 C Slice review
+- [x] T060 A API reviews: submit (rate limit, honeypot, one per phone/product), moderation, verified-buyer rule, unpublish/delete, rating aggregate
+- [x] T061 A Web review form + list; admin moderation queue
+- [x] T062 A E2E reviews
+- [x] T063 C Slice review
 
 ## Phase 6: Slice 6 — Content, CMS & SEO
 - [ ] T070 A API content: home sections draft/publish/versions, pages, guides, quiz rules

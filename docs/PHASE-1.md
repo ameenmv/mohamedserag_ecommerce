@@ -1,9 +1,9 @@
 # Phase 1 — Launch: progress
 
-> المرحلة الأولى (الإطلاق) — **Slice 0 (الأساس) و Slice 1 (الكتالوج) و Slice 2 (السلة والدفع) و Slice 3 (جهّز بيتك) و Slice 4 (العروض وتنبيهات التوفر) خلصوا بالكامل**.
-> في Slice 4: العروض لفترة محدودة بالعد التنازلي المباشر وتحديث الأسعار التلقائي، كوبونات الخصم وقواعد الأهلية وحدود الاستخدام مع حماية التخمين، وتنبيهات توفر المنتجات عبر واتساب.
+> المرحلة الأولى (الإطلاق) — **Slice 0 (الأساس) و Slice 1 (الكتالوج) و Slice 2 (السلة والدفع) و Slice 3 (جهّز بيتك) و Slice 4 (العروض وتنبيهات التوفر) و Slice 5 (التقييمات) خلصوا بالكامل**.
+> في Slice 5: العميل يكتب تقييمه من صفحة المنتج، والأدمن يراجعه ويعتمده أو يخفيه ويرد عليه، والتقييمات المعتمدة بس هي اللي بتظهر بالنجوم ومتوسط التقييم على الكروت وصفحة المنتج، مع علامة «اشترى من المعرض» ورقم الموبايل عمره ما بيظهر للزوار.
 
-**Updated:** 19 Oct 2026 · **Branch:** `005-promotions-alerts` · **Source of truth:** [PRD](PRD.md) · [spec](../specs/005-promotions-alerts/spec.md) · [plan](../specs/005-promotions-alerts/plan.md) · [tasks](../specs/005-promotions-alerts/tasks.md)
+**Updated:** 19 Oct 2026 · **Branch:** `006-reviews` · **Source of truth:** [PRD](PRD.md) · [spec](../specs/006-reviews/spec.md) · [plan](../specs/006-reviews/plan.md) · [tasks](../specs/006-reviews/tasks.md)
 
 ## Where we are
 
@@ -14,7 +14,7 @@
 | 2 — Cart, checkout & payments | Zones, COD, transfers, large-COD deposit, one-tap confirm | ✅ **Done** (branch `003-slice2-checkout`) |
 | 3 — Bridal builder «جهّز بيتك» | Tiers, sharing, deposit and price lock | ✅ **Done** (branch `004-bridal-builder`) |
 | **4 — Promotions & stock alerts** | Flash sales, coupons, notify-me | ✅ **Done** (branch `005-promotions-alerts`) |
-| 5 — Reviews | Moderation, verified buyers | ⚪ Planned |
+| **5 — Reviews** | Review form, moderation, verified buyers, ratings | ✅ **Done** (branch `006-reviews`) |
 | 6 — Content, CMS & SEO | Homepage CMS, guides, quiz, Merchant feed | ⚪ Planned |
 | 7 — Dashboard, reports & settings | Counters, reports, settings | ⚪ Planned |
 
@@ -87,6 +87,14 @@
 - Security review outcome (coupon guessing limiter, phone masking in audit snapshots, XFF not spoofable behind Caddy because only Caddy's ports are published).
 - Tests: API e2e 212, browser e2e 50 (all on isolated servers, incl. no horizontal scroll on admin pages at 320px), unit 262 shared + 82 api + 253 web; production build clean.
 
+## Slice 5 — status
+
+- Review form on every product page (lazy, accessible star radio group with arrow keys, client checks mirroring the server limits, honeypot, 3 submissions/min/IP, one review per phone per product, `review_submitted` event with only product and stars).
+- Admin `/admin/reviews` behind `reviews.moderate`: pending / approved / rejected tabs with counts, product search and stars filter, approve (re-checks the verified-buyer flag), reject or hide, store reply, delete in a shadcn confirm dialog (frees the phone to review again), live pending badge in the sidebar and a dashboard card. Every change is audited with the phone masked.
+- Storefront: stars and count on every product card and near the price, summary with star breakdown, approved reviews newest first with «اشترى من المعرض» and the store reply, «تحميل المزيد» 10 at a time, empty state, `aggregateRating` in the product JSON-LD only when there are approved reviews. Ratings for a whole page come from one grouped query.
+- Security review outcome: the public API never returns phone, IP or status; review text and names render as plain text (`dir="auto"`), with bidi-override and control characters stripped before storing; submitting uses the same visibility rule as the public pages; audit snapshots mask phones. A 409 on a repeat review tells a caller that a phone already reviewed that product; with 3 tries a minute this is accepted as low risk. Reviewer IPs are stored for spam handling and have no retention job yet.
+- Tests: API e2e 267, browser e2e 56 (isolated servers, incl. English and 320px), unit 294 shared + 87 api + 258 web + 3 ui; production build clean.
+
 ## Quality gates (verified)
 
 | Gate | Result |
@@ -146,11 +154,13 @@
 
 ## Next steps
 
-1. Continue with **Slice 5 (Reviews)**:
-   - `T060`: API reviews (submission rate limit, honeypot, one per phone/product, moderation status, verified-buyer check, unpublish/delete, rating aggregates)
-   - `T061`: Web review form + approved reviews list on product page; admin moderation queue
-   - `T062`: Browser and API E2E reviews specs
-   - `T063`: Slice review and quality gates
+1. Continue with **Slice 6 (Content, CMS & SEO)**:
+   - `T070`: API content (home sections draft/publish/versions, pages, guides, quiz rules)
+   - `T071`: Web CMS-driven home, pages, guides, traders page, quiz
+   - `T072`: Admin CMS, pages/guides and quiz editors
+   - `T073`: SEO (meta, structured data, sitemap, robots, canonical, Google Merchant feed)
+   - `T074`: E2E for CMS publish, quiz, SEO and feed
+   - `T075`: Slice review
 
 ## How to check it yourself
 

@@ -263,7 +263,7 @@ Phase 1 ships in slices. Each slice is usable on its own and covered by e2e test
 - [x] **Slice 2 — Cart, checkout & payments:** zones, COD, transfers, large-COD deposit, one-tap confirmation, order flow
 - [x] **Slice 3 — «جهّز بيتك» bridal builder:** tiers, sharing, deposit and price lock
 - [x] **Slice 4 — Promotions & stock alerts:** flash sales with live countdowns, coupons with limits and scope, admin promotions, notify-me with WhatsApp
-- [ ] **Slice 5 — Reviews:** moderation and verified buyers
+- [x] **Slice 5 — Reviews:** review form, moderation with store replies, verified buyers, ratings on cards and product pages
 - [ ] **Slice 6 — Content, CMS & SEO:** homepage CMS, guides, quiz, structured data, Merchant feed
 - [ ] **Slice 7 — Dashboard, reports & settings**
 
