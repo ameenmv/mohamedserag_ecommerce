@@ -15,6 +15,7 @@ import {
   Tag,
 } from '@lucide/vue'
 import { ADMIN_NAV_SHORTCUTS } from '~/utils/shortcuts'
+import { PERMISSIONS } from '@serag/shared'
 
 const emit = defineEmits<{
   navigate: []
@@ -38,6 +39,23 @@ const iconByKey: Record<string, Component> = {
 }
 
 const { can } = useAdminAuth()
+const reviewsApi = useAdminReviews()
+const pendingReviewsCount = useAdminPendingReviewsCount()
+
+onMounted(async () => {
+  if (can(PERMISSIONS.reviews.moderate)) {
+    try {
+      const res = await reviewsApi.pendingCount()
+      pendingReviewsCount.value = res.count
+    } catch {
+      // Failure -> no badge, no error UI
+    }
+  }
+})
+
+const badges = computed<Record<string, number>>(() => ({
+  r: pendingReviewsCount.value,
+}))
 
 const groupsOrder: readonly AdminNavGroup[] = ['main', 'store', 'content', 'system']
 
@@ -68,6 +86,7 @@ const groupedNav = computed(() =>
           :items="section.items"
           :icon-by-key="iconByKey"
           :is-active="isActive"
+          :badges="badges"
           @navigate="emit('navigate')"
         />
       </nav>

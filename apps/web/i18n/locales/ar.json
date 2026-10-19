@@ -24,7 +24,10 @@
     "errors": {
       "unexpected": "حدث خطأ غير متوقع",
       "invalidValue": "قيمة غير صالحة"
-    }
+    },
+    "previous": "السابق",
+    "next": "التالي",
+    "retry": "إعادة المحاولة"
   },
   "locale": {
     "switch": "تغيير اللغة",
@@ -727,6 +730,12 @@
         "empty": "مفيش تثبيت هيخلص الأسبوع ده",
         "expired": "انتهى",
         "daysLeft": "باقي {n} يوم"
+      },
+      "pendingReviews": {
+        "title": "تقييمات بانتظار المراجعة",
+        "empty": "مفيش تقييمات مستنية",
+        "countDescription": "يوجد {count} تقييم يحتاج للمراجعة والاعتماد",
+        "reviewAction": "راجع التقييمات"
       }
     },
     "topbar": {
@@ -1627,6 +1636,63 @@
         "sentSuccess": "تم تسجيل الإرسال وفتح محادثة واتساب بنجاح",
         "empty": "لا توجد طلبات مسجلة لهذا المنتج",
         "openRequests": "عرض الطلبات ({count})"
+      }
+    },
+    "reviews": {
+      "pageTitle": "التقييمات",
+      "subtitle": "مراجعة تقييمات العملاء واعتمادها أو إخفاؤها والرد عليها",
+      "pendingBadgeSr": "{count} تقييم مستني المراجعة",
+      "searchPlaceholder": "ابحث باسم المنتج…",
+      "starsSelectLabel": "تصفية حسب عدد النجوم",
+      "starsAll": "كل التقييمات",
+      "starsFilter": "{stars} نجوم",
+      "starsSr": "{stars} من {total} نجوم",
+      "verifiedBuyer": "اشترى من المعرض",
+      "replyTitle": "رد المعرض",
+      "replyAction": "رد المعرض",
+      "editReply": "تعديل الرد",
+      "approve": "اعتماد",
+      "reject": "رفض",
+      "hide": "إخفاء",
+      "delete": "حذف",
+      "refresh": "تحديث",
+      "tabs": {
+        "ariaLabel": "تبويبات حالة التقييمات",
+        "pending": "بانتظار المراجعة",
+        "approved": "معتمدة",
+        "rejected": "مرفوضة ومخفية"
+      },
+      "empty": {
+        "pending": "مفيش تقييمات جديدة بانتظار المراجعة",
+        "approved": "مفيش تقييمات معتمدة حتى الآن",
+        "rejected": "مفيش تقييمات مرفوضة أو مخفية"
+      },
+      "table": {
+        "product": "المنتج",
+        "reviewer": "العميل",
+        "rating": "التقييم",
+        "text": "نص التقييم",
+        "date": "التاريخ",
+        "actions": "إجراءات"
+      },
+      "replyDialog": {
+        "title": "الرد على تقييم {name}",
+        "description": "الرد هيظهر تحت التقييم في صفحة المنتج لكل الزوار باسم المعرض.",
+        "label": "نص الرد",
+        "placeholder": "اكتب رد المعرض على التقييم…",
+        "charCount": "{current} / {max} حرف",
+        "save": "حفظ الرد",
+        "clearReply": "مسح الرد",
+        "tooLong": "الرد لازم يكون {max} حرف أو أقل"
+      },
+      "confirmDeleteTitle": "حذف التقييم",
+      "confirmDeleteDesc": "هل أنت متأكد من حذف تقييم العميل «{name}» لمنتج «{product}»؟ لا يمكن التراجع عن هذا الإجراء.",
+      "notifications": {
+        "approved": "تم اعتماد التقييم بنجاح",
+        "rejected": "تم رفض التقييم وإخفاؤه",
+        "replySaved": "تم حفظ رد المعرض بنجاح",
+        "replyCleared": "تم مسح رد المعرض",
+        "deleted": "تم حذف التقييم بنجاح"
       }
     }
   },

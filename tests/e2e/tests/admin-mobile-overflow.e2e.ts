@@ -21,10 +21,12 @@ const ADMIN_MOBILE_PATHS = [
   '/admin/promotions',
   '/admin/promotions?tab=coupons',
   '/admin/notify',
+  '/admin/reviews',
   '/en/admin',
   '/en/admin/catalog',
   '/en/admin/promotions',
   '/en/admin/notify',
+  '/en/admin/reviews',
 ] as const;
 
 test('admin portal pages do not horizontally overflow at 320px viewport in RTL and LTR', async ({

@@ -22,9 +22,9 @@ description: "Tasks for Slice 5 — Reviews"
 
 ## Phase 3: User Story 2 — Moderate (P1)
 
-- [ ] T007 [US2] API admin list (status tabs, counts, q/stars filters, paging, ordering) + approve (re-check verified) / reject / unpublish / reply / delete / pending-count; permission + CSRF + audit + API e2e
-- [ ] T008 [US2] Web `/admin/reviews` (tabs, filters, rows with phone and verified tag, reply editor, shadcn confirm dialogs, pending badge in sidebar); i18n
-- [ ] T009 [US2] TesterArmy: approve with reply → visible on product; unpublish → hidden; delete → phone can review again
+- [x] T007 [US2] API admin list (status tabs, counts, q/stars filters, paging, ordering) + approve (re-check verified) / reject / unpublish / reply / delete / pending-count; permission + CSRF + audit + API e2e
+- [x] T008 [US2] Web `/admin/reviews` (tabs, filters, rows with phone and verified tag, reply editor, shadcn confirm dialogs, pending badge in sidebar); i18n
+- [x] T009 [US2] TesterArmy: approve with reply → shown in the approved tab; unpublish → rejected tab; delete → phone can review again (the product-page check moves to T012, where display lands)
 
 ## Phase 4: User Story 3 — Read reviews (P1)
 

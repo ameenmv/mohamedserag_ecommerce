@@ -24,7 +24,10 @@
     "errors": {
       "unexpected": "An unexpected error occurred",
       "invalidValue": "Invalid value"
-    }
+    },
+    "previous": "Previous",
+    "next": "Next",
+    "retry": "Retry"
   },
   "locale": {
     "switch": "Change language",
@@ -727,6 +730,12 @@
         "empty": "No price locks expiring this week",
         "expired": "Expired",
         "daysLeft": "{n} days left"
+      },
+      "pendingReviews": {
+        "title": "Reviews Pending Moderation",
+        "empty": "No reviews pending moderation",
+        "countDescription": "{count} reviews waiting for moderation",
+        "reviewAction": "Moderate Reviews"
       }
     },
     "topbar": {
@@ -1627,6 +1636,63 @@
         "sentSuccess": "Marked as sent and opened WhatsApp chat successfully",
         "empty": "No requests recorded for this product",
         "openRequests": "View requests ({count})"
+      }
+    },
+    "reviews": {
+      "pageTitle": "Reviews",
+      "subtitle": "Moderate customer reviews, approve or hide them, and post official replies",
+      "pendingBadgeSr": "{count} reviews pending moderation",
+      "searchPlaceholder": "Search by product name…",
+      "starsSelectLabel": "Filter by rating",
+      "starsAll": "All ratings",
+      "starsFilter": "{stars} stars",
+      "starsSr": "{stars} out of {total} stars",
+      "verifiedBuyer": "Verified Buyer",
+      "replyTitle": "Store Reply",
+      "replyAction": "Store Reply",
+      "editReply": "Edit Reply",
+      "approve": "Approve",
+      "reject": "Reject",
+      "hide": "Hide",
+      "delete": "Delete",
+      "refresh": "Refresh",
+      "tabs": {
+        "ariaLabel": "Review status tabs",
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected & Hidden"
+      },
+      "empty": {
+        "pending": "No reviews pending moderation",
+        "approved": "No approved reviews yet",
+        "rejected": "No rejected or hidden reviews"
+      },
+      "table": {
+        "product": "Product",
+        "reviewer": "Customer",
+        "rating": "Rating",
+        "text": "Review",
+        "date": "Date",
+        "actions": "Actions"
+      },
+      "replyDialog": {
+        "title": "Reply to {name}'s review",
+        "description": "Your reply will appear under the review on the product page as an official showroom response.",
+        "label": "Reply text",
+        "placeholder": "Write the showroom reply to this review…",
+        "charCount": "{current} / {max} characters",
+        "save": "Save Reply",
+        "clearReply": "Clear Reply",
+        "tooLong": "The reply must be {max} characters or fewer"
+      },
+      "confirmDeleteTitle": "Delete Review",
+      "confirmDeleteDesc": "Are you sure you want to delete {name}'s review for \"{product}\"? This action cannot be undone.",
+      "notifications": {
+        "approved": "Review approved successfully",
+        "rejected": "Review rejected and hidden",
+        "replySaved": "Showroom reply saved successfully",
+        "replyCleared": "Showroom reply cleared",
+        "deleted": "Review deleted successfully"
       }
     }
   },
