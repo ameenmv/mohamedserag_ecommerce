@@ -332,6 +332,13 @@ describe('toProductCard', () => {
     expect(card.availability.state).toBe('in_stock')
     expect(card.availability.orderable).toBe(true)
     expect(card.availability.maxQty).toBe(5)
+    expect(card.rating).toBeNull()
+  })
+
+  it('attaches rating when provided', () => {
+    const rating = { average: 4.8, count: 5 }
+    const withRating = toProductCard(dummyProduct, null, rating)
+    expect(withRating.rating).toEqual(rating)
   })
 
   it('sets discountPercent to null when no oldPrice exists', () => {

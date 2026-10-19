@@ -11,6 +11,7 @@ import {
 import { z } from 'zod'
 import { PrismaService } from '../prisma/prisma.service.js'
 import { FlashPricingService } from '../promotions/flash-pricing.service.js'
+import { ReviewRatingsService } from '../reviews/review-ratings.service.js'
 import { popularityJoinSql, toProductCard } from './product-query.js'
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
@@ -32,6 +33,7 @@ export class ProductDetailService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly flashPricing: FlashPricingService,
+    private readonly reviewRatings: ReviewRatingsService,
   ) {}
 
   /**
@@ -87,9 +89,16 @@ export class ProductDetailService {
 
     const relatedIds = relatedRows.map((r) => r.id)
     const allProductIds = [product.id, ...relatedIds]
-    const flashes = await this.flashPricing.activeFlashFor(this.prisma, allProductIds)
+    const [flashes, ratings] = await Promise.all([
+      this.flashPricing.activeFlashFor(this.prisma, allProductIds),
+      this.reviewRatings.ratingsFor(allProductIds),
+    ])
 
-    const card = toProductCard(product, flashes.get(product.id) ?? null)
+    const card = toProductCard(
+      product,
+      flashes.get(product.id) ?? null,
+      ratings.get(product.id) ?? null,
+    )
 
     // Merge specs in template order
     let templateFields: SpecTemplateField[] = []
@@ -141,7 +150,13 @@ export class ProductDetailService {
       related = relatedIds
         .map((id) => relMap.get(id))
         .filter((p): p is NonNullable<typeof p> => p !== undefined)
-        .map((p) => toProductCard(p, flashes.get(p.id) ?? null))
+        .map((p) =>
+          toProductCard(
+            p,
+            flashes.get(p.id) ?? null,
+            ratings.get(p.id) ?? null,
+          ),
+        )
     }
 
     const detailImages: ProductDetailImage[] = product.images.map((img) => ({
@@ -170,6 +185,7 @@ export class ProductDetailService {
       flash: card.flash,
       image: card.image,
       availability: card.availability,
+      rating: card.rating,
       images: detailImages,
       specs: mergedSpecs,
       setContents,

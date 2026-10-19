@@ -2,11 +2,15 @@ import { Injectable } from '@nestjs/common'
 import type { OffersResponse, ProductCard } from '@serag/shared'
 import { Prisma } from '../generated/prisma/client.js'
 import { PrismaService } from '../prisma/prisma.service.js'
+import { ReviewRatingsService } from '../reviews/review-ratings.service.js'
 import { toProductCard } from '../catalog/product-query.js'
 
 @Injectable()
 export class OffersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly reviewRatings: ReviewRatingsService,
+  ) {}
 
   async getOffers(now: Date = new Date()): Promise<OffersResponse> {
     // 1. Running flash sales ordered by endsAt asc
@@ -31,13 +35,9 @@ export class OffersService {
       },
     })
 
-    const flashGroups: OffersResponse['flash'] = []
     const runningProductIds = new Set<string>()
 
     for (const sale of runningSales) {
-      const endsAtIso = sale.endsAt.toISOString()
-      const visibleProducts: ProductCard[] = []
-
       for (const item of sale.items) {
         const p = item.product
         if (
@@ -47,22 +47,7 @@ export class OffersService {
           p.category.visible
         ) {
           runningProductIds.add(p.id)
-          visibleProducts.push(
-            toProductCard(p, {
-              salePrice: item.salePrice,
-              endsAt: endsAtIso,
-            }),
-          )
         }
-      }
-
-      if (visibleProducts.length > 0) {
-        flashGroups.push({
-          id: sale.id,
-          name: sale.name,
-          endsAt: endsAtIso,
-          products: visibleProducts,
-        })
       }
     }
 
@@ -90,6 +75,48 @@ export class OffersService {
     `
 
     const discountedIds = discountedRows.map((r) => r.id)
+
+    // Fetch ratings for all candidate product IDs in one single query
+    const allProductIds = Array.from(new Set([...runningIdsArray, ...discountedIds]))
+    const ratings = await this.reviewRatings.ratingsFor(allProductIds)
+
+    const flashGroups: OffersResponse['flash'] = []
+
+    for (const sale of runningSales) {
+      const endsAtIso = sale.endsAt.toISOString()
+      const visibleProducts: ProductCard[] = []
+
+      for (const item of sale.items) {
+        const p = item.product
+        if (
+          p.visible &&
+          p.archivedAt === null &&
+          p.brand.visible &&
+          p.category.visible
+        ) {
+          visibleProducts.push(
+            toProductCard(
+              p,
+              {
+                salePrice: item.salePrice,
+                endsAt: endsAtIso,
+              },
+              ratings.get(p.id) ?? null,
+            ),
+          )
+        }
+      }
+
+      if (visibleProducts.length > 0) {
+        flashGroups.push({
+          id: sale.id,
+          name: sale.name,
+          endsAt: endsAtIso,
+          products: visibleProducts,
+        })
+      }
+    }
+
     let discounted: ProductCard[] = []
 
     if (discountedIds.length > 0) {
@@ -106,7 +133,7 @@ export class OffersService {
       discounted = discountedIds
         .map((id) => productMap.get(id))
         .filter((p): p is NonNullable<typeof p> => p !== undefined)
-        .map((p) => toProductCard(p, null))
+        .map((p) => toProductCard(p, null, ratings.get(p.id) ?? null))
     }
 
     return {

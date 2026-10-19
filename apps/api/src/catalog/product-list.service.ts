@@ -15,6 +15,7 @@ import { z } from 'zod'
 import { Prisma } from '../generated/prisma/client.js'
 import { PrismaService } from '../prisma/prisma.service.js'
 import { FlashPricingService } from '../promotions/flash-pricing.service.js'
+import { ReviewRatingsService } from '../reviews/review-ratings.service.js'
 import {
   buildAvailabilitySqlCondition,
   buildSpecFilterSqlConditions,
@@ -49,6 +50,7 @@ export class ProductListService {
     private readonly prisma: PrismaService,
     private readonly searchService: SearchService,
     private readonly flashPricing: FlashPricingService,
+    private readonly reviewRatings: ReviewRatingsService,
   ) {}
 
   /**
@@ -97,11 +99,14 @@ export class ProductListService {
         .map((id) => productMap.get(id))
         .filter((p): p is NonNullable<typeof p> => p !== undefined)
 
-      const flashes = await this.flashPricing.activeFlashFor(
-        this.prisma,
-        ordered.map((p) => p.id),
+      const orderedIds = ordered.map((p) => p.id)
+      const [flashes, ratings] = await Promise.all([
+        this.flashPricing.activeFlashFor(this.prisma, orderedIds),
+        this.reviewRatings.ratingsFor(orderedIds),
+      ])
+      const items = ordered.map((p) =>
+        toProductCard(p, flashes.get(p.id) ?? null, ratings.get(p.id) ?? null),
       )
-      const items = ordered.map((p) => toProductCard(p, flashes.get(p.id) ?? null))
 
       // IDs mode is used for wishlist/compare (US-2.4) and requires no live facet computation.
       return {
@@ -305,11 +310,16 @@ export class ProductListService {
         },
       })
       const map = new Map(productRecords.map((p) => [p.id, p]))
-      const flashes = await this.flashPricing.activeFlashFor(this.prisma, ids)
+      const [flashes, ratings] = await Promise.all([
+        this.flashPricing.activeFlashFor(this.prisma, ids),
+        this.reviewRatings.ratingsFor(ids),
+      ])
       items = ids
         .map((id) => map.get(id))
         .filter((p): p is NonNullable<typeof p> => p !== undefined)
-        .map((p) => toProductCard(p, flashes.get(p.id) ?? null))
+        .map((p) =>
+          toProductCard(p, flashes.get(p.id) ?? null, ratings.get(p.id) ?? null),
+        )
     }
 
     // Compute live facets (also when total is 0, so the shopper can widen the filters) for the filtered set

@@ -95,4 +95,20 @@ export const seedCouponSchema = z.object({
 
 export type SeedCouponInput = z.output<typeof seedCouponSchema>
 
+export const seedReviewSchema = z.object({
+  runId: z.string().regex(RUN_ID_REGEX, { message: 'Invalid runId' }),
+  productId: z.string().min(1, { message: 'productId is required' }),
+  name: z.string().trim().min(1).optional(),
+  phone: z.string().trim().optional(),
+  stars: z.number().int().min(1).max(5),
+  text: z.string().trim().min(1).optional(),
+  status: z.enum(['pending', 'approved', 'rejected']).optional().default('pending'),
+  verifiedBuyer: z.boolean().optional().default(false),
+  reply: z.string().trim().nullable().optional(),
+  createdAt: z.string().datetime().optional(),
+})
+
+export type SeedReviewInput = z.output<typeof seedReviewSchema>
+
 export const runIdParamSchema = z.string().regex(RUN_ID_REGEX, { message: 'Invalid runId' })
+

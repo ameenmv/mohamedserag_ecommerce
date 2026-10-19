@@ -1,5 +1,10 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common'
-import type { ReviewInput } from '@serag/shared'
+import {
+  summarizeRatings,
+  type PublicReview,
+  type PublicReviewListResponse,
+  type ReviewInput,
+} from '@serag/shared'
 import { Prisma } from '../generated/prisma/client.js'
 import { PrismaService } from '../prisma/prisma.service.js'
 
@@ -91,5 +96,86 @@ export class ReviewsService {
     }
 
     return { ok: true }
+  }
+
+  /**
+   * Returns approved reviews and rating summary for a public product.
+   * 404 «المنتج مش موجود» for unknown, hidden or archived products.
+   * Returns items newest first (createdAt desc, tie-break id desc).
+   * Strips all private data (phone, ip, status).
+   */
+  async listPublic(
+    slug: string,
+    page: number,
+    pageSize: number,
+  ): Promise<PublicReviewListResponse> {
+    const product = await this.prisma.product.findFirst({
+      where: {
+        slug,
+        visible: true,
+        archivedAt: null,
+        brand: { visible: true },
+        category: { visible: true },
+      },
+      select: { id: true },
+    })
+
+    if (!product) {
+      throw new NotFoundException('المنتج مش موجود')
+    }
+
+    const [grouped, items] = await Promise.all([
+      this.prisma.review.groupBy({
+        by: ['stars'],
+        where: {
+          productId: product.id,
+          status: 'approved',
+        },
+        _count: { _all: true },
+      }),
+      this.prisma.review.findMany({
+        where: {
+          productId: product.id,
+          status: 'approved',
+        },
+        orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+        select: {
+          id: true,
+          name: true,
+          stars: true,
+          text: true,
+          reply: true,
+          verifiedBuyer: true,
+          createdAt: true,
+        },
+      }),
+    ])
+
+    const counts: Partial<Record<number, number>> = {}
+    for (const row of grouped) {
+      counts[row.stars] = row._count?._all ?? 0
+    }
+
+    const summary = summarizeRatings(counts)
+
+    const publicItems: PublicReview[] = items.map((r) => ({
+      id: r.id,
+      name: r.name,
+      stars: r.stars,
+      text: r.text,
+      reply: r.reply,
+      verifiedBuyer: r.verifiedBuyer,
+      createdAt: r.createdAt.toISOString(),
+    }))
+
+    return {
+      summary,
+      items: publicItems,
+      total: summary.count,
+      page,
+      pageSize,
+    }
   }
 }

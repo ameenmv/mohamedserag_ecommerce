@@ -6,6 +6,7 @@ import {
   type CatalogSort,
   type ProductCard,
   type ProductFlash,
+  type ProductRating,
   type SpecTemplateField,
 } from '@serag/shared'
 import { Prisma } from '../generated/prisma/client.js'
@@ -341,6 +342,7 @@ export interface RawProductEntity {
 export function toProductCard(
   product: RawProductEntity,
   flash: ProductFlash | null = null,
+  rating: ProductRating | null = null,
 ): ProductCard {
   const pricing = applyFlashToPrice(
     { price: product.price, oldPrice: product.oldPrice },
@@ -386,5 +388,6 @@ export function toProductCard(
       leadTimeText: product.leadTimeText,
     },
     flash,
+    rating,
   }
 }

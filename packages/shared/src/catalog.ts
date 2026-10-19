@@ -1,5 +1,6 @@
 import type { AvailabilityState } from './availability.js'
 import type { ProductFlash } from './promotions.js'
+import type { ProductRating } from './reviews.js'
 
 export interface ProductCardBrand {
   slug: string
@@ -37,6 +38,7 @@ export interface ProductCard {
   image: ProductCardImage | null
   availability: ProductCardAvailability
   flash: ProductFlash | null
+  rating: ProductRating | null // approved reviews only; null when there are none
 }
 
 export const SPEC_FIELD_TYPES = ['text', 'number', 'boolean', 'choice'] as const
@@ -158,6 +160,7 @@ export interface ProductDetail {
   image: ProductCardImage | null
   availability: ProductCardAvailability
   flash: ProductFlash | null
+  rating: ProductRating | null // approved reviews only; null when there are none
   images: ProductDetailImage[]
   specs: ProductDetailMergedSpec[]
   setContents: unknown[] | null

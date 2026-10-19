@@ -17,11 +17,13 @@ import {
   seedFlashSaleSchema,
   seedOrderSchema,
   seedProductSchema,
+  seedReviewSchema,
   type SeedAdminSessionInput,
   type SeedCouponInput,
   type SeedFlashSaleInput,
   type SeedOrderInput,
   type SeedProductInput,
+  type SeedReviewInput,
 } from './test-seed.dto.js'
 import { TestSeedGuard } from './test-seed.guard.js'
 import { TestSeedService } from './test-seed.service.js'
@@ -65,6 +67,13 @@ export class TestSeedController {
     @Body(new ZodValidationPipe(seedCouponSchema)) body: SeedCouponInput,
   ) {
     return this.service.seedCoupon(body)
+  }
+
+  @Post('seed/review')
+  async seedReview(
+    @Body(new ZodValidationPipe(seedReviewSchema)) body: SeedReviewInput,
+  ) {
+    return this.service.seedReview(body)
   }
 
   @Delete('run/:runId')

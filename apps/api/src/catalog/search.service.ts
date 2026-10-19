@@ -10,6 +10,7 @@ import {
 import { z } from 'zod'
 import { PrismaService } from '../prisma/prisma.service.js'
 import { FlashPricingService } from '../promotions/flash-pricing.service.js'
+import { ReviewRatingsService } from '../reviews/review-ratings.service.js'
 import {
   popularityJoinSql,
   searchMatchSql,
@@ -76,6 +77,7 @@ export class SearchService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly flashPricing: FlashPricingService,
+    private readonly reviewRatings: ReviewRatingsService,
   ) {}
 
   /**
@@ -162,11 +164,16 @@ export class SearchService {
         })
 
         const map = new Map(records.map((p) => [p.id, p]))
-        const flashes = await this.flashPricing.activeFlashFor(this.prisma, ids)
+        const [flashes, ratings] = await Promise.all([
+          this.flashPricing.activeFlashFor(this.prisma, ids),
+          this.reviewRatings.ratingsFor(ids),
+        ])
         items = ids
           .map((id) => map.get(id))
           .filter((p): p is NonNullable<typeof p> => p !== undefined)
-          .map((p) => toProductCard(p, flashes.get(p.id) ?? null))
+          .map((p) =>
+            toProductCard(p, flashes.get(p.id) ?? null, ratings.get(p.id) ?? null),
+          )
       }
     }
 

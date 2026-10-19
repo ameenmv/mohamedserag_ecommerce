@@ -14,6 +14,7 @@ import {
   type AvailabilityMode,
   type OrderStatus,
   type PaymentMethod,
+  type ReviewStatus,
 } from '../generated/prisma/client.js'
 import { PrismaService } from '../prisma/prisma.service.js'
 import {
@@ -27,6 +28,7 @@ import type {
   SeedFlashSaleInput,
   SeedOrderInput,
   SeedProductInput,
+  SeedReviewInput,
 } from './test-seed.dto.js'
 
 const DEFAULT_SEARCH_SYNONYMS: string[][] = [
@@ -375,6 +377,41 @@ export class TestSeedService {
         active: input.active ?? true,
       },
     })
+  }
+
+  async seedReview(input: SeedReviewInput): Promise<{ id: string }> {
+    const product = await this.prisma.product.findUnique({
+      where: { id: input.productId },
+      select: { id: true },
+    })
+    if (!product) {
+      throw new BadRequestException(`Product not found: ${input.productId}`)
+    }
+
+    const name = input.name ?? 'عميل تجريبي'
+    const randomDigits = Math.floor(10000000 + Math.random() * 90000000).toString()
+    const phone = input.phone ?? `010${randomDigits}`
+    const text = input.text ?? 'تقييم تجريبي لاختبار النظام بالتفصيل'
+    const status: ReviewStatus = input.status ?? 'pending'
+    const verifiedBuyer = input.verifiedBuyer ?? false
+    const reply = input.reply !== undefined ? input.reply : null
+
+    const review = await this.prisma.review.create({
+      data: {
+        productId: input.productId,
+        name,
+        phone,
+        stars: input.stars,
+        text,
+        status,
+        verifiedBuyer,
+        reply,
+        ...(input.createdAt ? { createdAt: new Date(input.createdAt) } : {}),
+      },
+      select: { id: true },
+    })
+
+    return { id: review.id }
   }
 
   async deleteRun(runId: string) {
