@@ -49,13 +49,8 @@ const {
   removeSetContentRow,
 } = productFormCtx
 
+// The route-leave guard in useProductForm asks about unsaved changes.
 function handleCancel() {
-  if (isDirty.value) {
-    const ok = window.confirm(
-      t('admin.products.editor.unsavedChanges'),
-    )
-    if (!ok) return
-  }
   void router.push(localePath('/admin/products'))
 }
 </script>

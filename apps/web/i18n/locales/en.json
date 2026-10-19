@@ -892,7 +892,12 @@
         "saving": "Saving...",
         "create": "Create Product",
         "cancel": "Cancel",
-        "unsavedChanges": "You have unsaved changes. Do you want to leave and discard them?",
+        "leaveDialog": {
+          "title": "Unsaved changes",
+          "description": "If you leave now, the changes you made to this product will be lost.",
+          "confirm": "Leave without saving",
+          "cancel": "Keep editing"
+        },
         "unsavedBadge": "Unsaved changes",
         "allSaved": "All changes saved",
         "preview": {

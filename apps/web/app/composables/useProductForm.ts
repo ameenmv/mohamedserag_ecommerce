@@ -42,6 +42,7 @@ export interface ProductFormState {
 export function useProductForm(initialDetail?: AdminProductDetail | null) {
   const { t } = useI18n()
   const router = useRouter()
+  const { confirm } = useConfirmDialog()
   const localePath = useLocalePath()
   const productsApi = useAdminProducts()
   const categoriesApi = useAdminCategories()
@@ -440,6 +441,7 @@ export function useProductForm(initialDetail?: AdminProductDetail | null) {
     }
   })
 
+  // Tab close/reload stays native: browsers only allow their own built-in prompt here.
   function handleBeforeUnload(e: BeforeUnloadEvent) {
     if (isDirty.value) {
       e.preventDefault()
@@ -447,16 +449,15 @@ export function useProductForm(initialDetail?: AdminProductDetail | null) {
     }
   }
 
-  onBeforeRouteLeave((_to, _from, next) => {
-    if (isDirty.value) {
-      const answer = window.confirm(
-        t('admin.products.editor.unsavedChanges'),
-      )
-      if (answer) next()
-      else next(false)
-    } else {
-      next()
-    }
+  onBeforeRouteLeave(async () => {
+    if (!isDirty.value) return true
+    return await confirm({
+      title: t('admin.products.editor.leaveDialog.title'),
+      description: t('admin.products.editor.leaveDialog.description'),
+      confirmLabel: t('admin.products.editor.leaveDialog.confirm'),
+      cancelLabel: t('admin.products.editor.leaveDialog.cancel'),
+      tone: 'destructive',
+    })
   })
 
   return {

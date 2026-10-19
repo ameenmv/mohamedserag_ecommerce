@@ -78,5 +78,8 @@ const side = computed<'right' | 'left'>(() => (localeProperties.value.dir === 'l
 
     <!-- Keyboard Shortcuts Help Dialog (?) -->
     <AdminShortcutsDialog v-model:open="shortcutsDialogOpen" />
+
+    <!-- App-wide confirm dialog driven by useConfirmDialog() -->
+    <AdminConfirmDialog />
   </div>
 </template>

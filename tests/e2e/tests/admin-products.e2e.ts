@@ -175,3 +175,45 @@ test('CSV import preview shows 1 update and 1 not found without applying', async
 
   // Do NOT apply
 });
+
+test('unsaved changes: leaving an edited product shows the custom dialog; cancel stays, confirm leaves', async ({
+  app,
+  screen,
+  browser,
+}) => {
+  const product = await seed.product({
+    name: `منتج تعديلات غير محفوظة ${seed.runId}`,
+    priceEgp: 6000,
+  });
+
+  // Any native confirm/alert would land here instead of the custom dialog.
+  const nativeDialogs: string[] = [];
+  await browser.onDialog(async (dialog) => {
+    nativeDialogs.push(dialog.message);
+    await dialog.dismiss();
+  });
+
+  await loginWithAdminSession(browser, seed, app);
+  await app.open(`/admin/products/${product.id}`);
+  await waitForHydration(browser);
+
+  const editedName = `اسم معدل ${seed.runId}`;
+  const nameInput = screen.getByLabel('اسم المنتج');
+  await nameInput.fill(editedName);
+
+  // Cancel in the dialog keeps the page and the edit
+  await screen.getByRole('button', 'إلغاء').tap();
+  await expect(screen.getByRole('alertdialog')).toBeVisible();
+  await expect(screen.getByRole('heading', 'تعديلات مش محفوظة')).toBeVisible();
+  await screen.getByRole('button', 'كمّل تعديل').tap();
+  await expect(screen.getByRole('alertdialog')).toBeHidden();
+  await expect(browser).toHaveURL(new RegExp(`/admin/products/${product.id}$`));
+  await expect(nameInput).toHaveValue(editedName);
+
+  // Confirm leaves without saving
+  await screen.getByRole('button', 'إلغاء').tap();
+  await screen.getByRole('button', 'اخرج من غير حفظ').tap();
+  await expect(browser).toHaveURL(/\/admin\/products$/);
+
+  expect(nativeDialogs).toEqual([]);
+});

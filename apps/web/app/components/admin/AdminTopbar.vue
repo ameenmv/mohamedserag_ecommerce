@@ -69,7 +69,7 @@ async function handleLogout(): Promise<void> {
     </button>
 
     <!-- Actions: Locale switcher, Shortcuts help, Theme toggle, Open storefront, Admin user dropdown -->
-    <div class="flex items-center gap-2">
+    <div class="flex flex-wrap items-center gap-2">
       <!-- Locale Switcher -->
       <CommonLocaleSwitcher variant="pill" />
 
