@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { paymentMethodSchema } from './enums-schema.js'
+import { normalizePhone, PHONE_ERROR_MESSAGE } from './phone.js'
 
 export const cartQuoteItemInputSchema = z.object({
   productId: z.string().trim().min(1, { message: 'معرف المنتج مطلوب' }),
@@ -45,6 +46,15 @@ export const cartQuoteInputSchema = z.object({
     .transform((items) => mergeCartItems(items)),
   governorate: z.string().trim().max(60, { message: 'اسم المحافظة لا يزيد عن 60 حرفاً' }).optional(),
   city: z.string().trim().max(60, { message: 'اسم المدينة لا يزيد عن 60 حرفاً' }).optional(),
+  // Optional: lets the quote check per-phone coupon limits before checkout is submitted
+  phone: z
+    .string()
+    .trim()
+    .refine((val) => val === '' || normalizePhone(val) !== null, {
+      message: PHONE_ERROR_MESSAGE,
+    })
+    .transform((val) => normalizePhone(val) ?? undefined)
+    .nullish(),
   paymentMethod: paymentMethodSchema.optional(),
   couponCode: z.string().trim().max(40, { message: 'كود الكوبون لا يزيد عن 40 حرفاً' }).optional(),
 })

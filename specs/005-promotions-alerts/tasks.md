@@ -19,13 +19,13 @@ description: "Tasks for Slice 4 — Promotions & Stock Alerts"
 - [x] T004 [US1] API `promotions/flash-pricing.service.ts` (active sale prices for product ids in one query) used by catalog cards, product detail, search, cart quote and order creation; bridal stays on regular prices
 - [x] T005 [US1] `GET /api/offers`
 - [x] T006 [US1] API e2e: running/scheduled/ended sale prices on cards, detail, quote, order line; bridal unchanged; /offers
-- [ ] T007 [US1] Web: price component shows flash state, badge and client countdown on cards and product page; `/offers` page (fixes the header link); i18n
-- [ ] T008 [US1] TesterArmy: flash price on card/product/cart/order, then revert after end
+- [x] T007 [US1] Web: price component shows flash state, badge and client countdown on cards and product page; `/offers` page (fixes the header link); i18n
+- [x] T008 [US1] TesterArmy: flash price on card/product/cart/order, then revert after end
 
 ## Phase 3: User Story 2 — Coupons (P1)
 
-- [ ] T009 [US2] API real `CouponService` (quote evaluation) + order transaction (row lock, limits, redemption, 409s); redemption release/re-activate in `OrderStatusService`; coupons excluded from bridal
-- [ ] T010 [US2] API e2e: percent/fixed/min order/dates/scope/flash+old-price exclusion, total limit under parallel orders, per-phone limit, release on cancel/reject and re-activate on confirm
+- [x] T009 [US2] API real `CouponService` (quote evaluation) + order transaction (row lock, limits, redemption, 409s); redemption release/re-activate in `OrderStatusService`; coupons excluded from bridal
+- [x] T010 [US2] API e2e: percent/fixed/min order/dates/scope/flash+old-price exclusion, total limit under parallel orders, per-phone limit, release on cancel/reject and re-activate on confirm
 - [ ] T011 [US2] Web checkout coupon field (apply/remove, reason messages, saving line), `coupon_applied` event
 - [ ] T012 [US2] TesterArmy: apply valid/invalid codes, eligible-only discount, order shows discount
 

@@ -78,7 +78,33 @@ export class OrdersService {
 
         const productIds = input.items.map((i) => i.productId)
         const products = await loadCartProducts(tx, productIds)
-        const coupon = this.couponService.evaluate(input.couponCode)
+        const couponResult = await this.couponService.applyInOrderTx(
+          tx,
+          input.couponCode,
+          products,
+          input.items,
+          input.customer.phone,
+        )
+
+        const hasClientCode = Boolean(input.couponCode && input.couponCode.trim().length > 0)
+        if (hasClientCode && couponResult.evaluation?.status === 'rejected') {
+          const quoteWithoutCoupon = buildCartQuote(
+            {
+              items: input.items,
+              governorate: input.customer.governorate,
+              city: input.customer.city,
+              paymentMethod: input.paymentMethod,
+            },
+            products,
+            { zones, codDeposit, coupon: null },
+          )
+          throw new ConflictException({
+            code: 'COUPON_REJECTED',
+            message: couponResult.evaluation.reason ?? 'الكوبون غير صالح',
+            quote: quoteWithoutCoupon,
+          })
+        }
+
         const quote = buildCartQuote(
           {
             items: input.items,
@@ -88,7 +114,7 @@ export class OrdersService {
             couponCode: input.couponCode,
           },
           products,
-          { zones, codDeposit, coupon },
+          { zones, codDeposit, coupon: couponResult.evaluation },
         )
 
         const countableLines = quote.lines.filter((l) => l.qty > 0)
@@ -128,6 +154,22 @@ export class OrdersService {
           taxRate: productMap.get(line.productId)?.taxRate ?? 14,
         }))
 
+        const appliedCouponId =
+          couponResult.evaluation?.status === 'applied' ? couponResult.couponId : null
+
+        const couponRedemptions = appliedCouponId
+          ? {
+              create: [
+                {
+                  couponId: appliedCouponId,
+                  customerPhone: input.customer.phone,
+                  amount: quote.discount,
+                  status: 'active' as const,
+                },
+              ],
+            }
+          : undefined
+
         const created = await tx.order.create({
           data: {
             no,
@@ -144,7 +186,7 @@ export class OrdersService {
             discount: quote.discount,
             deliveryFee: quote.deliveryFee,
             total: quote.total,
-            couponId: null,
+            couponId: appliedCouponId,
             paymentMethod: input.paymentMethod,
             depositPct,
             depositAmount,
@@ -156,6 +198,7 @@ export class OrdersService {
             events: {
               create: [{ status, note: 'إنشاء الطلب', userId: null }],
             },
+            ...(couponRedemptions ? { couponRedemptions } : {}),
           },
           select: ORDER_RESULT_SELECT,
         })

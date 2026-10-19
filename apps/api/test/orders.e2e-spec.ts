@@ -281,7 +281,7 @@ describe('Orders and Cart API E2E (/api/cart, /api/orders)', () => {
       expect(res.body.codDeposit.amount).toBe(351_000)
     })
 
-    it('returns rejected coupon placeholder when coupon code is provided', async () => {
+    it('returns rejected coupon not_found when unknown coupon code is provided', async () => {
       const res = await request(app.getHttpServer())
         .post('/api/cart/quote')
         .set('X-Forwarded-For', nextIp())
@@ -295,8 +295,8 @@ describe('Orders and Cart API E2E (/api/cart, /api/orders)', () => {
         code: 'WELCOME2026',
         status: 'rejected',
         discount: 0,
-        reason: 'الكوبونات هتتفعل قريب',
-        reasonCode: null,
+        reason: 'الكود ده مش موجود',
+        reasonCode: 'not_found',
       })
       expect(res.body.discount).toBe(0)
     })

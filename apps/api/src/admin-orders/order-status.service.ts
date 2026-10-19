@@ -64,6 +64,22 @@ export class OrderStatusService {
       },
     })
 
+    // Redemption lifecycle: release on cancel/payment_rejected; restore to active on payment recovery
+    if (params.to === 'cancelled' || params.to === 'payment_rejected') {
+      await tx.couponRedemption.updateMany({
+        where: { orderId: params.orderId },
+        data: { status: 'released' },
+      })
+    } else if (
+      current === 'payment_rejected' &&
+      (params.to === 'confirmed' || params.to === 'awaiting_deposit')
+    ) {
+      await tx.couponRedemption.updateMany({
+        where: { orderId: params.orderId },
+        data: { status: 'active' },
+      })
+    }
+
     if (order.type === 'bridal') {
       if (params.to === 'cancelled' || params.to === 'delivered') {
         await tx.order.update({

@@ -13,10 +13,12 @@ import { ZodValidationPipe } from '../common/zod-validation.pipe.js'
 import {
   runIdParamSchema,
   seedAdminSessionSchema,
+  seedCouponSchema,
   seedFlashSaleSchema,
   seedOrderSchema,
   seedProductSchema,
   type SeedAdminSessionInput,
+  type SeedCouponInput,
   type SeedFlashSaleInput,
   type SeedOrderInput,
   type SeedProductInput,
@@ -56,6 +58,13 @@ export class TestSeedController {
     @Body(new ZodValidationPipe(seedFlashSaleSchema)) body: SeedFlashSaleInput,
   ) {
     return this.service.seedFlashSale(body)
+  }
+
+  @Post('seed/coupon')
+  async seedCoupon(
+    @Body(new ZodValidationPipe(seedCouponSchema)) body: SeedCouponInput,
+  ) {
+    return this.service.seedCoupon(body)
   }
 
   @Delete('run/:runId')

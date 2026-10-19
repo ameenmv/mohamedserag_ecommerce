@@ -2,6 +2,14 @@ import { z } from 'zod'
 
 export const RUN_ID_REGEX = /^[a-z0-9-]{4,40}$/
 
+export const seedProductFlashSaleSchema = z.object({
+  salePriceEgp: z.number().positive({ message: 'salePriceEgp must be positive' }),
+  startsInMinutes: z.number().optional().default(-1),
+  endsInMinutes: z.number().optional().default(60),
+})
+
+export type SeedProductFlashSaleInput = z.output<typeof seedProductFlashSaleSchema>
+
 export const seedProductSchema = z.object({
   runId: z.string().regex(RUN_ID_REGEX, { message: 'Invalid runId' }),
   name: z.string().trim().min(1).optional(),
@@ -13,6 +21,7 @@ export const seedProductSchema = z.object({
   availabilityMode: z.enum(['auto', 'on_request', 'out']).optional(),
   leadTimeText: z.string().trim().optional(),
   visible: z.boolean().optional(),
+  flashSale: seedProductFlashSaleSchema.optional(),
 })
 
 export type SeedProductInput = z.output<typeof seedProductSchema>
@@ -68,5 +77,22 @@ export const seedFlashSaleSchema = z.object({
 })
 
 export type SeedFlashSaleInput = z.output<typeof seedFlashSaleSchema>
+
+export const seedCouponSchema = z.object({
+  runId: z.string().regex(RUN_ID_REGEX, { message: 'Invalid runId' }),
+  code: z.string().trim().min(1).optional(),
+  type: z.enum(['percent', 'fixed']).optional().default('percent'),
+  value: z.number().positive({ message: 'value must be positive' }),
+  minOrderEgp: z.number().nonnegative().optional(),
+  maxUses: z.number().int().positive().optional(),
+  maxUsesPerPhone: z.number().int().positive().optional(),
+  startsAt: z.string().datetime().optional(),
+  endsAt: z.string().datetime().optional(),
+  categorySlugs: z.array(z.string().trim().min(1)).optional(),
+  brandSlugs: z.array(z.string().trim().min(1)).optional(),
+  active: z.boolean().optional().default(true),
+})
+
+export type SeedCouponInput = z.output<typeof seedCouponSchema>
 
 export const runIdParamSchema = z.string().regex(RUN_ID_REGEX, { message: 'Invalid runId' })

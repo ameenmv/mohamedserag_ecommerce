@@ -24,12 +24,16 @@ export class CartQuoteService {
     const productIds = input.items.map((i) => i.productId)
     const products = await loadCartProducts(this.prisma, productIds)
 
-    const [zones, codDeposit] = await Promise.all([
+    const [zones, codDeposit, coupon] = await Promise.all([
       this.settingsService.getZones(),
       this.settingsService.getCodDeposit(),
+      this.couponService.evaluateForQuote(
+        input.couponCode,
+        products,
+        input.items,
+        input.phone,
+      ),
     ])
-
-    const coupon = this.couponService.evaluate(input.couponCode)
 
     return buildCartQuote(input, products, { zones, codDeposit, coupon })
   }
