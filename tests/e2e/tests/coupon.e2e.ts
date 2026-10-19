@@ -1,7 +1,8 @@
-import { afterEach, test } from '@e2e-dev/web'
+import { afterEach, test, type Browser } from '@e2e-dev/web'
 import { expect } from 'e2e'
 import { createSeed } from './support/seed.js'
 import { waitForHydration } from './support/hydration.js'
+import { apiUrl } from './api-url.js'
 
 let seed = createSeed()
 
@@ -147,4 +148,116 @@ test('coupon refusals (unknown code, min order requirement) and remove applied c
   await removeBtn.tap()
   await expect(screen.getByText(/-500/)).toBeHidden()
   await expect(browser.locator('#checkout-coupon')).toBeVisible()
+})
+
+type TrackedEvent = { event: string; data?: Record<string, unknown> }
+
+async function fillTalkhaCheckout(browser: Browser, phone: string): Promise<void> {
+  await browser.locator('#checkout-name').fill('محمود أحمد سراج')
+  await browser.locator('#checkout-phone').fill(phone)
+  await browser.locator('#checkout-governorate').selectOption('الدقهلية')
+  await browser.locator('#checkout-city').fill('طلخا')
+  await browser.locator('#checkout-address').fill('شارع البحر بجوار كوبري طلخا')
+}
+
+test('coupon taken by another order during checkout: 409 clears the code, totals drop the discount, and the retry places the order', async ({
+  app,
+  screen,
+  browser,
+}) => {
+  const product = await seed.product({ name: `ثلاجة حد الكود ${seed.runId}`, priceEgp: 6000, stock: 5 })
+  const coupon = await seed.coupon({ type: 'fixed', value: 500, maxUses: 1 })
+
+  await app.open(`/p/${product.slug}`)
+  await waitForHydration(browser)
+  await browser.locator('#main-add-to-cart-button').tap()
+  await expect(screen.getByRole('link', /السلة:\s*1/)).toBeVisible()
+
+  await app.open('/checkout')
+  await waitForHydration(browser)
+  await fillTalkhaCheckout(browser, '01012345678')
+  await expect(screen.getByText('100 ج.م').first()).toBeVisible()
+  await browser.locator('input[type="radio"][value="cod"]').check()
+
+  await screen.getByText('عندك كود خصم؟').tap()
+  await browser.locator('#checkout-coupon').fill(coupon.code)
+  await screen.getByRole('button', 'تطبيق').tap()
+  await expect(screen.getByText(/تم تطبيق الكود/)).toBeVisible()
+  await expect(screen.getByText('5,600 ج.م').first()).toBeVisible()
+
+  // Another shopper uses the last redemption while this checkout is still open.
+  const items = [{ productId: product.id, qty: 1 }]
+  const quoteRes = await fetch(apiUrl('/api/cart/quote'), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ items, governorate: 'الدقهلية', city: 'طلخا', paymentMethod: 'cod', couponCode: coupon.code }),
+  })
+  expect(quoteRes.ok).toBe(true)
+  const quote = (await quoteRes.json()) as { total: number }
+  const orderRes = await fetch(apiUrl('/api/orders'), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      items,
+      customer: { name: 'منافس اختبار', phone: '01198765432', governorate: 'الدقهلية', city: 'طلخا', address: 'شارع الجيش عمارة 5' },
+      paymentMethod: 'cod',
+      couponCode: coupon.code,
+      idempotencyKey: `e2e-race-${seed.runId}-0000`,
+      expectedTotal: quote.total,
+    }),
+  })
+  expect(orderRes.status).toBe(201)
+
+  // This shopper's order is refused: the code is cleared and totals re-quoted without it.
+  await screen.getByRole('button', 'تأكيد الطلب').first().tap()
+  await expect(screen.getByText('الكود ده خلص').first()).toBeVisible()
+  await expect(browser).toHaveURL(/\/checkout$/)
+  await expect(browser.locator('#checkout-coupon')).toHaveValue('')
+  await expect(screen.getByText('-500 ج.م')).toBeHidden()
+  await expect(screen.getByText('6,100 ج.م').first()).toBeVisible()
+
+  // Retrying places the order at the full price.
+  await screen.getByRole('button', 'تأكيد الطلب').first().tap()
+  await expect(browser).toHaveURL(/\/order\/SR-\d{4}-\d{6}\/thanks\?t=/)
+  await expect(screen.getByText('6,100 ج.م').first()).toBeVisible()
+  await expect(screen.getByText('-500 ج.م')).toBeHidden()
+})
+
+test('coupon_applied fires once per code with only code and discount', async ({ app, screen, browser }) => {
+  const product = await seed.product({ name: `ثلاجة حدث الكود ${seed.runId}`, priceEgp: 6000, stock: 5 })
+  const coupon = await seed.coupon({ type: 'fixed', value: 500 })
+
+  await app.open(`/p/${product.slug}`)
+  await waitForHydration(browser)
+  await browser.locator('#main-add-to-cart-button').tap()
+  await expect(screen.getByRole('link', /السلة:\s*1/)).toBeVisible()
+
+  await app.open('/checkout')
+  await waitForHydration(browser)
+  await browser.evaluate(() => {
+    const w = window as unknown as { __events: TrackedEvent[]; umami: unknown }
+    w.__events = []
+    w.umami = { track: (event: string, data?: Record<string, unknown>) => w.__events.push({ event, data }) }
+  })
+
+  await fillTalkhaCheckout(browser, '01055554444')
+  await screen.getByText('عندك كود خصم؟').tap()
+
+  // Apply, remove, apply the same code again: still one event.
+  await browser.locator('#checkout-coupon').fill(coupon.code)
+  await screen.getByRole('button', 'تطبيق').tap()
+  await expect(screen.getByText(/تم تطبيق الكود/)).toBeVisible()
+  await screen.getByRole('button', /إزالة الكود/).tap()
+  await expect(browser.locator('#checkout-coupon')).toBeVisible()
+  await browser.locator('#checkout-coupon').fill(coupon.code)
+  await screen.getByRole('button', 'تطبيق').tap()
+  await expect(screen.getByText(/تم تطبيق الكود/)).toBeVisible()
+
+  const events = await browser.evaluate(() =>
+    (window as unknown as { __events: TrackedEvent[] }).__events.map((e) => ({ event: e.event, data: e.data ?? null })),
+  )
+  const applied = events.filter((e) => e.event === 'coupon_applied')
+  expect(applied).toHaveLength(1)
+  expect(applied[0]!.data).toEqual({ code: coupon.code, discount: 50_000 })
+  expect(JSON.stringify(events)).not.toMatch(/01055554444|محمود/)
 })

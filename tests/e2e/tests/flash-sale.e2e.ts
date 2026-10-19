@@ -128,3 +128,30 @@ test('flash sale: an ended sale reverts to the regular price with no badge or co
   await expect(productMain).not.toContainText('عرض لفترة محدودة')
   await expect(productMain).not.toContainText('العرض بيخلص خلال')
 })
+
+test('flash sale: a live countdown reaching zero swaps the product page back to the regular price', async ({
+  app,
+  browser,
+}) => {
+  const productName = `غسالة فلاش لايف ${seed.runId}`
+  const product = await seed.product({ name: productName, priceEgp: 9000, stock: 3 })
+
+  await seed.flashSale({
+    name: `عرض لايف ${seed.runId}`,
+    endsAt: new Date(Date.now() + 20_000).toISOString(),
+    items: [{ productId: product.id, salePriceEgp: 7500 }],
+  })
+
+  await app.open(`/p/${product.slug}`)
+  await waitForHydration(browser)
+
+  const productMain = browser.locator('main').first()
+  await expect(productMain).toContainText('7,500')
+  await expect(productMain).toContainText('العرض بيخلص خلال')
+
+  // No reload: the countdown's end refreshes the product data in place.
+  await expect(productMain).not.toContainText('العرض بيخلص خلال', { timeout: 45_000 })
+  await expect(productMain).not.toContainText('7,500')
+  await expect(productMain).not.toContainText('عرض لفترة محدودة')
+  await expect(productMain).toContainText('9,000')
+})
