@@ -195,6 +195,35 @@ describe('TestSeedModule E2E (/api/test)', () => {
       expect(meRes.body.csrfToken).toBe(adminRes.body.csrfToken)
     })
 
+    it('creates a review for that product tagged with runId', async () => {
+      const revRes = await request(app.getHttpServer())
+        .post('/api/test/seed/review')
+        .set('x-test-seed-secret', validSecret)
+        .send({
+          runId,
+          productId: seededProductId,
+          stars: 5,
+          status: 'approved',
+          verifiedBuyer: true,
+          reply: 'شكراً لك',
+        })
+        .expect(201)
+
+      expect(revRes.body).toMatchObject({
+        id: expect.any(String),
+      })
+
+      const reviewInDb = await prisma.review.findUnique({
+        where: { id: revRes.body.id },
+      })
+      expect(reviewInDb).not.toBeNull()
+      expect(reviewInDb?.productId).toBe(seededProductId)
+      expect(reviewInDb?.stars).toBe(5)
+      expect(reviewInDb?.status).toBe('approved')
+      expect(reviewInDb?.verifiedBuyer).toBe(true)
+      expect(reviewInDb?.reply).toBe('شكراً لك')
+    })
+
     it('deletes the run data and leaves the seeded catalog untouched', async () => {
       const delRes = await request(app.getHttpServer())
         .delete(`/api/test/run/${runId}`)

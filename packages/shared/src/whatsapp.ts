@@ -1,3 +1,4 @@
+import type { OrderStatus } from './enums.js'
 import { normalizePhone } from './phone.js'
 
 /**
@@ -49,12 +50,16 @@ export const DEFAULT_TEMPLATES = {
     'أهلاً {{customerName}}، طلبك رقم {{orderNo}} خرج للتوصيل بعربيات معرض محمد سراج وهيوصلك النهارده إن شاء الله.',
   order_delivered:
     'أهلاً {{customerName}}، تم تسليم طلبك رقم {{orderNo}} من معرض محمد سراج. مبروك عليك ونتشرف بتقييمك للمنتج على الموقع!',
+  order_cancelled:
+    'أهلاً {{customerName}}، تم إلغاء طلبك رقم {{orderNo}} من معرض محمد سراج. لو عندك أي استفسار تقدر تتواصل معانا في أي وقت.',
   payment_rejected:
     'أهلاً {{customerName}}، بخصوص طلبك رقم {{orderNo}}، تعذر تأكيد التحويل ({{reason}}). يا ريت تبعتلنا صورة إيصال التحويل تاني للتأكيد.',
   payment_proof:
     'السلام عليكم، ده إثبات تحويل مبلغ {{amount}} عن طريق {{method}} للطلب رقم {{orderNo}}.\nرابط تأكيد الدفع للإدارة: {{confirmUrl}}',
   bridal_locked:
     'ألف مبروك يا {{customerName}}! تم تأكيد عربون قائمة جهاز العروسة رقم {{orderNo}} وتثبيت الأسعار لحد يوم {{lockedUntil}}. هنكلمك نتفق على ميعاد التوصيل والتركيب.',
+  bridal_repriced:
+    'أهلاً {{customerName}}، بخصوص قائمة جهاز العروسة رقم {{orderNo}}، بعد انتهاء فترة تثبيت السعر تم تحديث أسعار الأجهزة من {{oldTotal}} إلى {{newTotal}}. والأسعار الجديدة متثبتة لحد {{lockedUntil}}.',
   notify_back_in_stock:
     'أهلاً {{customerName}}، المنتج اللي طلبت يتبلّغك بيه «{{productName}}» بقى متوفر دلوقتي في معرض محمد سراج: {{productUrl}}',
   product_question: 'السلام عليكم، عندي استفسار عن {{productName}} ({{productUrl}})',
@@ -63,3 +68,20 @@ export const DEFAULT_TEMPLATES = {
 } as const
 
 export type WhatsAppTemplateKey = keyof typeof DEFAULT_TEMPLATES
+
+export function statusTemplateKey(status: OrderStatus): WhatsAppTemplateKey | null {
+  switch (status) {
+    case 'confirmed':
+      return 'order_confirmed'
+    case 'out_for_delivery':
+      return 'order_out_for_delivery'
+    case 'delivered':
+      return 'order_delivered'
+    case 'payment_rejected':
+      return 'payment_rejected'
+    case 'cancelled':
+      return 'order_cancelled'
+    default:
+      return null
+  }
+}

@@ -27,45 +27,45 @@
 **Checkpoint**: smoke e2e green; `docker compose up` works.
 
 ## Phase 1: Slice 1 — Catalog & discovery
-- [ ] T020 A API catalog: categories, brands, spec templates, products (list with filters/sort/pagination, by slug, by ids), availability derivation
-- [ ] T021 A API search: query the `searchText` column with trigram similarity, synonyms from settings, keep `searchText` updated on product create/update
-- [ ] T021b A Web shared pieces before the page tasks: `ProductCard`, `useApi`, `useCart`, `useWishlist`, `useCompare`, header badges
-- [ ] T022 A [P] Web: product card component, `/shop`, `/c/[slug]`, `/b/[slug]` with URL-synced filters and mobile filter sheet
-- [ ] T023 A [P] Web: `/p/[slug]` product page (gallery, specs, cookware set contents, warranty + activation note, VAT label, availability incl. on-request lead time, zone delivery cost, WhatsApp ask, sticky mobile bar, related)
-- [ ] T024 A [P] Web: live search dropdown, compare bar + `/compare`, wishlist with `priceAtAdd`
-- [ ] T025 A Admin: products list/editor with live card preview, archive, images upload; categories, brands, spec templates
-- [ ] T026 A Admin: CSV import with preview matched on model code (prices in EGP, converted to piastres)
-- [ ] T027 A E2E: catalog, search, compare/wishlist, admin products specs
-- [ ] T028 C Slice review: gates, 375 px and 320 px checks, Lighthouse
+- [x] T020 F API catalog: categories, brands, spec templates, products (list with filters/sort/pagination, by slug, by ids), availability derivation
+- [x] T021 F API search: query the `searchText` column with trigram similarity, synonyms from settings, keep `searchText` updated on product create/update
+- [x] T021b F Web shared pieces before the page tasks: `ProductCard`, `useApi`, `useCart`, `useWishlist`, `useCompare`, header badges
+- [x] T022 A [P] Web: product card component, `/shop`, `/c/[slug]`, `/b/[slug]` with URL-synced filters and mobile filter sheet
+- [x] T023 A [P] Web: `/p/[slug]` product page (gallery, specs, cookware set contents, warranty + activation note, VAT label, availability incl. on-request lead time, zone delivery cost, WhatsApp ask, sticky mobile bar, related)
+- [x] T024 A [P] Web: live search dropdown, compare bar + `/compare`, wishlist with `priceAtAdd`
+- [x] T025 A Admin: products list/editor with live card preview, archive, images upload; categories, brands, spec templates
+- [x] T026 A Admin: CSV import with preview matched on model code (prices in EGP, converted to piastres)
+- [x] T027 A E2E: catalog, search, compare/wishlist, admin products specs
+- [x] T028 C Slice review: gates, 375 px and 320 px checks, Lighthouse (a11y/SEO/best-practices 100; perf 63–70, LCP ≈ 4.2 s — follow-up before T091)
 
-## Phase 2: Slice 2 — Cart, checkout & payments
-- [ ] T030 A API cart quote (re-price, zone by governorate+city, coupon placeholder hook), order creation (idempotent), public token
-- [ ] T031 A API payments: record/confirm/reject, partial payments, confirm tokens, large-COD deposit rule, status machine, stock movements
-- [ ] T032 A [P] Web: cart drawer + `/cart`, `/checkout` (phone normalization, VAT label, deposit notice, on-request lead time), `/order/[no]/thanks`; funnel events `checkout_start`, `order_placed`
-- [ ] T033 A [P] Admin: orders list/detail, payment confirm/reject, status actions, WhatsApp template buttons, CSV export, internal invoice print
-- [ ] T034 A Admin: `/admin/confirm/[token]` mobile page with login redirect
-- [ ] T035 A E2E: COD, transfer, large-COD deposit, confirm link (incl. reject then confirm), thank-you token secrecy, product → order under 90 s
-- [ ] T036 C Slice review
+## Phase 2: Slice 2 — Cart, checkout & payments (detailed in [003-slice2-checkout](../003-slice2-checkout/tasks.md))
+- [x] T030 A API cart quote (re-price, zone by governorate+city, coupon placeholder hook), order creation (idempotent), public token
+- [x] T031 A API payments: record/confirm/reject, partial payments, confirm tokens, large-COD deposit rule, status machine, stock movements
+- [x] T032 A [P] Web: cart drawer + `/cart`, `/checkout` (phone normalization, VAT label, deposit notice, on-request lead time), `/order/[no]/thanks`; funnel events `checkout_start`, `order_placed`
+- [x] T033 A [P] Admin: orders list/detail, payment confirm/reject, status actions, WhatsApp template buttons, CSV export, internal invoice print
+- [x] T034 A Admin: `/admin/confirm/[token]` mobile page with login redirect
+- [x] T035 A E2E: COD, transfer, large-COD deposit, confirm link (incl. reject then confirm), thank-you token secrecy, product → order under 90 s
+- [x] T036 C Slice review
 
 ## Phase 3: Slice 3 — Bridal builder
-- [ ] T040 A API bridal: tiers, lists (edit/share tokens, mode), swaps, freeze on reserve, reservation order, lock start on paid ≥ deposit, extend, reprice, agreed date → stock
-- [ ] T041 A Web: `/bridal` tiers, `/bridal/[token]` editor and read-only view, «نفذ — اختاري بديل» blocking reserve until swapped, WhatsApp share, reserve form
-- [ ] T042 A Admin: tier editor, bridal settings, reservation actions inside orders, expiring-locks list
-- [ ] T043 A E2E: build/share, out-of-stock item blocks reserve, reserve with two partial transfers, lock holds after catalog price change, expiry + extend
-- [ ] T044 C Slice review
+- [x] T040 A API bridal: tiers, lists (edit/share tokens, mode), swaps, freeze on reserve, reservation order, lock start on paid ≥ deposit, extend, reprice, agreed date → stock
+- [x] T041 A Web: `/bridal` tiers, `/bridal/[token]` editor and read-only view, «نفذ — اختاري بديل» blocking reserve until swapped, WhatsApp share, reserve form
+- [x] T042 A Admin: tier editor, bridal settings, reservation actions inside orders, expiring-locks list
+- [x] T043 A E2E: build/share, out-of-stock item blocks reserve, reserve with two partial transfers, lock holds after catalog price change, expiry + extend
+- [x] T044 C Slice review
 
 ## Phase 4: Slice 4 — Promotions & stock alerts
-- [ ] T050 A API flash sales (scheduler, overlap check), coupons with eligibility and redemptions, notify-me (dedupe, mark sent)
-- [ ] T051 A [P] Web: flash countdown on home and product, coupon field in checkout, notify-me form
-- [ ] T052 A [P] Admin: flash sales, coupons, notify-me lists
-- [ ] T053 A E2E: flash sale revert, coupon eligibility, notify-me
-- [ ] T054 C Slice review
+- [x] T050 A API flash sales (scheduler, overlap check), coupons with eligibility and redemptions, notify-me (dedupe, mark sent)
+- [x] T051 A [P] Web: flash countdown on home and product, coupon field in checkout, notify-me form
+- [x] T052 A [P] Admin: flash sales, coupons, notify-me lists
+- [x] T053 A E2E: flash sale revert, coupon eligibility, notify-me
+- [x] T054 C Slice review
 
 ## Phase 5: Slice 5 — Reviews
-- [ ] T060 A API reviews: submit (rate limit, honeypot, one per phone/product), moderation, verified-buyer rule, unpublish/delete, rating aggregate
-- [ ] T061 A Web review form + list; admin moderation queue
-- [ ] T062 A E2E reviews
-- [ ] T063 C Slice review
+- [x] T060 A API reviews: submit (rate limit, honeypot, one per phone/product), moderation, verified-buyer rule, unpublish/delete, rating aggregate
+- [x] T061 A Web review form + list; admin moderation queue
+- [x] T062 A E2E reviews
+- [x] T063 C Slice review
 
 ## Phase 6: Slice 6 — Content, CMS & SEO
 - [ ] T070 A API content: home sections draft/publish/versions, pages, guides, quiz rules

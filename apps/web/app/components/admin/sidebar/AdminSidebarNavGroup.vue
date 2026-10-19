@@ -8,6 +8,7 @@ defineProps<{
   items: readonly AdminNavShortcut[]
   iconByKey: Record<string, Component>
   isActive: (to: string) => boolean
+  badges?: Record<string, number>
 }>()
 
 const emit = defineEmits<{
@@ -28,6 +29,7 @@ const { t } = useI18n()
       :item="item"
       :is-active="isActive(item.to)"
       :icon="iconByKey[item.key] ?? LayoutDashboard"
+      :badge="badges?.[item.key]"
       @navigate="emit('navigate')"
     />
   </div>

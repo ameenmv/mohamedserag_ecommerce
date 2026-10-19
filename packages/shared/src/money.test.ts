@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { egpToPiastres, piastresToEgp, formatEgp, formatEgpWithUnit, moneySchema } from './money.js'
+import { egpToPiastres, piastresToEgp, formatEgp, formatEgpWithUnit } from './money.js'
+import { moneySchema } from './money-schema.js'
 
 describe('money helpers', () => {
   it('converts EGP to integer piastres rounded to nearest piastre', () => {

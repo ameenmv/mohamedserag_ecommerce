@@ -1,7 +1,7 @@
 export interface SpecFieldDef {
   key: string
   label: string
-  type: 'number' | 'text' | 'select' | 'boolean'
+  type: 'number' | 'text' | 'choice' | 'boolean'
   unit?: string
   options?: string[]
   filterable: boolean

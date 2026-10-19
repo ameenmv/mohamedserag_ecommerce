@@ -105,4 +105,106 @@ describe('AuditInterceptor', () => {
     expect(truncated._truncated).toBe(true)
     expect(truncated.preview?.length).toBe(20_480)
   })
+
+  it('redacts customer phones and whatsapp URLs in audit snapshot while preserving non-PII fields', () => {
+    const rawPayload = {
+      id: 'order-123',
+      customerPhone: '01012345678',
+      phone: '01298765432',
+      PHONE: '01511223344',
+      CustomerPhone: '+201012345678',
+      whatsappUrl: 'https://wa.me/201012345678?text=%D8%A3%D9%87%D9%84%D8%A7',
+      to: '01012345678',
+      nonPhoneTo: 'support-team',
+      entry: {
+        id: 'entry-1',
+        name: 'عميل سراج',
+        phone: '01055554444',
+      },
+      items: [
+        { productId: 'prod-1', customerPhone: '01099998888' },
+      ],
+      amount: 150000,
+      status: 'confirmed',
+    }
+
+    const snapshot = truncateAuditAfter(rawPayload) as Record<string, unknown>
+
+    expect(snapshot.id).toBe('order-123')
+    expect(snapshot.customerPhone).toBe('010******78')
+    expect(snapshot.phone).toBe('012******32')
+    expect(snapshot.PHONE).toBe('015******44')
+    expect(snapshot.CustomerPhone).toBe('+20********78')
+    expect(snapshot.whatsappUrl).toBe('[redacted]')
+    expect(snapshot.to).toBe('[redacted]')
+    expect(snapshot.nonPhoneTo).toBe('support-team')
+    expect((snapshot.entry as Record<string, unknown>).phone).toBe('010******44')
+    expect((snapshot.entry as Record<string, unknown>).name).toBe('عميل سراج')
+    expect(((snapshot.items as Array<Record<string, unknown>>)[0])?.customerPhone).toBe('010******88')
+    expect(snapshot.amount).toBe(150000)
+    expect(snapshot.status).toBe('confirmed')
+  })
+
+  it('AuditInterceptor saves redacted snapshot in auditLog.create data.after', async () => {
+    const reflector = new Reflector()
+    vi.spyOn(reflector, 'getAllAndOverride').mockReturnValue('notify_request')
+    const createMock = vi.fn().mockResolvedValue({ id: 'audit-2' })
+    const prisma = {
+      auditLog: { create: createMock },
+    } as unknown as PrismaService
+
+    const interceptor = new AuditInterceptor(reflector, prisma)
+    const handler = Object.defineProperty(() => undefined, 'name', { value: 'markSent' })
+    const ctx = {
+      getHandler: () => handler,
+      getClass: () => class AdminNotifyController {},
+      switchToHttp: () => ({
+        getRequest: () => ({
+          path: '/api/admin/notify-me/req-10',
+          method: 'PATCH',
+          params: { id: 'req-10' },
+          ip: '10.0.0.5',
+          admin: { userId: 'admin-1' },
+        }),
+      }),
+    } as unknown as ExecutionContext
+
+    const responsePayload = {
+      whatsappUrl: 'https://wa.me/201012345678?text=test',
+      entry: {
+        id: 'req-10',
+        name: 'عميل الإشعار',
+        phone: '01012345678',
+        status: 'sent',
+      },
+    }
+
+    const next: CallHandler = {
+      handle: () => of(responsePayload),
+    }
+
+    const res = await firstValueFrom(interceptor.intercept(ctx, next))
+    // The HTTP response returned to the caller retains its original body
+    expect(res).toEqual(responsePayload)
+
+    // The audit record persisted to the database contains the redacted after field
+    expect(createMock).toHaveBeenCalledWith({
+      data: {
+        userId: 'admin-1',
+        action: 'notify_request.markSent',
+        entity: 'notify_request',
+        entityId: 'req-10',
+        after: {
+          whatsappUrl: '[redacted]',
+          entry: {
+            id: 'req-10',
+            name: 'عميل الإشعار',
+            phone: '010******78',
+            status: 'sent',
+          },
+        },
+        ip: '10.0.0.5',
+      },
+    })
+  })
 })

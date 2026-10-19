@@ -6,6 +6,7 @@ defineProps<{
   item: AdminNavShortcut
   isActive: boolean
   icon: Component
+  badge?: number
 }>()
 
 const emit = defineEmits<{
@@ -34,6 +35,13 @@ const localePath = useLocalePath()
       aria-hidden="true"
     />
     <span class="flex-1">{{ t(item.labelKey) }}</span>
+    <span
+      v-if="badge !== undefined && badge > 0"
+      class="num rounded-full bg-serag-gold text-serag-night px-2 py-0.5 text-xs font-bold leading-none shrink-0"
+    >
+      <span class="sr-only">{{ t('admin.reviews.pendingBadgeSr', { count: badge }) }}</span>
+      <span aria-hidden="true">{{ badge }}</span>
+    </span>
     <kbd
       :class="[
         'num rounded px-1.5 py-0.5 text-[11px] font-semibold',
