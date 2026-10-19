@@ -98,6 +98,9 @@ function handleSortUpdate(sort: CatalogSort) {
         </p>
       </div>
 
+      <!-- Quiz entry (hidden when this category has no quiz) -->
+      <StoreQuizEntry :slug="slug" />
+
       <!-- Sub-category chips linking to /c/<child> inside semantic <nav> -->
       <nav
         v-if="category?.children && category.children.length > 0"

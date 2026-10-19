@@ -13,7 +13,10 @@ import type {
   PublicHome,
   PublicPage,
   PublicPageLink,
+  PublicQuiz,
   PublicStoreInfo,
+  QuizAnswers,
+  QuizResultsResponse,
   SearchResponse,
 } from '@serag/shared'
 
@@ -222,6 +225,30 @@ export function useStoreApi() {
       return $fetch<PublicGuide>(`/guides/${encodeURIComponent(slug)}`, {
         baseURL,
         method: 'GET',
+      })
+    },
+
+    /**
+     * GET /quiz/:categorySlug
+     * Returns the «ساعدني أختار» quiz questions for a category (rules are never exposed).
+     * Rejects with a 404 when the category has no quiz or is hidden.
+     */
+    quiz(categorySlug: string): Promise<PublicQuiz> {
+      return $fetch<PublicQuiz>(`/quiz/${encodeURIComponent(categorySlug)}`, {
+        baseURL,
+        method: 'GET',
+      })
+    },
+
+    /**
+     * POST /quiz/:categorySlug/results
+     * Scores the shopper's answers and returns up to three recommended product cards.
+     */
+    quizResults(categorySlug: string, answers: QuizAnswers): Promise<QuizResultsResponse> {
+      return $fetch<QuizResultsResponse>(`/quiz/${encodeURIComponent(categorySlug)}/results`, {
+        baseURL,
+        method: 'POST',
+        body: { answers },
       })
     },
   }

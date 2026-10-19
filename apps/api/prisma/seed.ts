@@ -28,6 +28,7 @@ import {
   findZone,
   type Permission,
 } from '@serag/shared'
+import { seedQuizzes } from './seed-quizzes.js'
 import {
   buildModelCode,
   buildProductSlug,
@@ -1530,6 +1531,11 @@ async function main() {
       },
     })
   }
+
+  // --------------------------------------------------------------------------
+  // 6.7c «ساعدني أختار» quizzes (refrigerators, washers, tvs, acs)
+  // --------------------------------------------------------------------------
+  await seedQuizzes(prisma)
 
   // --------------------------------------------------------------------------
   // 6.8 Demo Orders (6 orders: SR-2026-000101..106)

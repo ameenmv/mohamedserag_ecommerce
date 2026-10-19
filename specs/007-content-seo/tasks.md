@@ -36,9 +36,9 @@ description: "Tasks for Slice 6 — Content, CMS & SEO"
 
 ## Phase 5: User Story 5 — Quiz (P2)
 
-- [ ] T015 [US5] API quiz: public get + results (loads orderable products with spec values + popularity, calls `scoreQuiz`, throttle), admin list/get/put/delete with spec-template validation and warnings; seed quizzes for refrigerators, washers, tvs, acs; API e2e
-- [ ] T016 [US5] Web `/help-me-choose/[category]` + entry button on the four category pages (only when a quiz exists), result cards with reasons + «شوف كل النتايج», `quiz_completed` event (no PII); admin quiz tab (`/admin/content?tab=quiz`) editor (questions/answers/rules, field + operator pickers from the spec template); i18n
-- [ ] T017 [US5] TesterArmy: seeded fridges → answers → expected top product and reason; all «مش متأكد» → popularity order; edit a rule in the admin → ranking changes
+- [x] T015 [US5] API quiz: public get + results (loads orderable products with spec values + popularity, calls `scoreQuiz`, throttle), admin list/get/put/delete with spec-template validation and warnings; seed quizzes for refrigerators, washers, tvs, acs; API e2e
+- [x] T016 [US5] Web `/help-me-choose/[category]` + entry button on the four category pages (only when a quiz exists), result cards with reasons + «شوف كل النتايج», `quiz_completed` event (no PII); admin quiz tab (`/admin/content?tab=quiz`) editor (questions/answers/rules, field + operator pickers from the spec template); i18n
+- [x] T017 [US5] TesterArmy: seeded fridges → answers → expected top product and reason; all «مش متأكد» → popularity order; edit a rule in the admin → ranking changes
 
 ## Phase 6: User Stories 6 + 7 — SEO and Merchant feed (P1)
 
