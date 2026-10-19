@@ -11,6 +11,7 @@ export const FUNNEL_EVENTS = [
   'search',
   'notify_me_requested',
   'review_submitted',
+  'quiz_completed',
 ] as const
 
 export type FunnelEvent = (typeof FUNNEL_EVENTS)[number]

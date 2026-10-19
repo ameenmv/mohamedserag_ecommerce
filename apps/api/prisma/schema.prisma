@@ -605,6 +605,7 @@ model Guide {
   id             String    @id @default(cuid())
   slug           String    @unique
   title          String
+  summary        String?
   cover          String?
   body           String
   categoryIds    String[]  @default([]) @map("category_ids")

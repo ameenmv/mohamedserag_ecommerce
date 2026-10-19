@@ -34,4 +34,27 @@ if [ "$has_cd" = false ]; then
   args+=(--cd "$root")
 fi
 
-exec node "$root/.agents/skills/opencode-delegate/scripts/relay.mjs" --no-auto --pure "${args[@]}"
+has_out=false
+for arg in "${args[@]}"; do
+  case "$arg" in --out-dir|--out-dir=*) has_out=true ;; esac
+done
+if [ "$has_out" = false ]; then
+  out_dir="$(mktemp -d "${TMPDIR:-/tmp}/opencode-relay.XXXXXX")"
+  args+=(--out-dir "$out_dir")
+fi
+
+set +e
+node "$root/.agents/skills/opencode-delegate/scripts/relay.mjs" --no-auto --pure "${args[@]}"
+code=$?
+set -e
+
+# Free models sometimes stop mid-run with an empty step; the relay still says "completed".
+# Treat a run that ends without a final report as failed so the orchestrator re-dispatches it.
+if [ "$code" -eq 0 ] && [ "$has_out" = false ] && [ -f "$out_dir/result.json" ]; then
+  if node -e 'const r=require(process.argv[1]); process.exit((r.finalMessage ?? "").trim() ? 0 : 1)' "$out_dir/result.json"; then
+    exit 0
+  fi
+  echo "opencode-relay: the model stopped without a final report (likely a free-tier limit); treat this run as failed and re-dispatch." >&2
+  exit 3
+fi
+exit "$code"

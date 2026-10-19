@@ -21,14 +21,14 @@ Rules: publish = insert published row from draft in a transaction, then prune pu
 
 | Section | Fields (max length) |
 |---|---|
-| announce | text (120), link? (path/https) |
-| hero | eyebrow (40), title (80, required), subtitle (240), primaryCta {label 30, href}, secondaryCta? {label 30, href}, image? (/uploads/…), stats[≤3] {value 10, label 30} |
-| uspStrip | items[4] {title 30, description 90} |
+| announce | text (120), href (path/https or null) |
+| hero | eyebrow (60), title (80, required), subtitle (240), cta {label 30, href}, secondaryCta {label 30, href} or null, image (/uploads/…) or null, stats[≤3] {value 10, label 30} |
+| uspStrip | items[exactly 4] {title 30, description 90} |
 | featuredCategories | title (60), categorySlugs[≤8] |
 | flash | title (60), subtitle (120) — products from the running flash sale |
 | bridalTeaser | eyebrow (40), title (80), subtitle (300), cta {label, href} |
 | tradersTeaser | badge (30), title (80), subtitle (300), cta {label, href}, points[≤4] (60) — also feeds `/traders` |
-| aboutTeaser | eyebrow (40), title (80), subtitle (300), cta? {label, href} |
+| aboutTeaser | eyebrow (40), title (80), subtitle (300), cta {label, href} or null |
 | partners | title (60) — visible brands that have a logo |
 | guides | title (60) — latest 3 published guides |
 

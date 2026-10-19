@@ -10,14 +10,14 @@ description: "Tasks for Slice 6 — Content, CMS & SEO"
 
 ## Phase 1: Foundational — shared schemas, sanitizer, migration
 
-- [ ] T001 [P] `packages/shared/src/content.ts` + `content-schema.ts`: section ids, field metadata (label key, kind, max), `HomeContent`/`HomeLayout`/`PublicHome`/`AdminHomeState` types, defaults (= seed), `countHomeChanges(draft, published)`, safe link/image rules, `pageInputSchema`, `guideInputSchema`; tests
-- [ ] T002 [P] `packages/shared/src/quiz.ts` + `quiz-schema.ts`: types, `quizDefinitionSchema`, pure `scoreQuiz` (rules, unsure, ties by popularity, fallback, reason = top matched rule); tests
-- [ ] T003 [P] `packages/shared/src/seo.ts`: `canonicalPath`, breadcrumb builders, `buildLocalBusiness(store)` with placeholder detection, sitemap entry type; `analytics.ts` + `'quiz_completed'`; tests
-- [ ] T004 Claude: install `sanitize-html` (+ `@types/sanitize-html`) in `apps/api` and TipTap packages in `apps/web`; migration `guides.summary`; `apps/api/src/common/rich-text.ts` (pages / guides allowlists) + unit tests (scripts, handlers, styles, `javascript:`/`data:` URLs, external links get `rel`/`target`)
+- [x] T001 [P] `packages/shared/src/content.ts` + `content-schema.ts`: section ids, field metadata (label key, kind, max), `HomeContent`/`HomeLayout`/`PublicHome`/`AdminHomeState` types, defaults (= seed), `countHomeChanges(draft, published)`, safe link/image rules, `pageInputSchema`, `guideInputSchema`; tests
+- [x] T002 [P] `packages/shared/src/quiz.ts` + `quiz-schema.ts`: types, `quizDefinitionSchema`, pure `scoreQuiz` (rules, unsure, ties by popularity, fallback, reason = top matched rule); tests
+- [x] T003 [P] `packages/shared/src/seo.ts`: `canonicalPath`, breadcrumb builders, `buildLocalBusiness(store)` with placeholder detection, sitemap entry type; `analytics.ts` + `'quiz_completed'`; tests
+- [x] T004 Claude: install `sanitize-html` (+ `@types/sanitize-html`) in `apps/api` and TipTap packages in `apps/web`; migration `guides.summary`; `apps/api/src/common/rich-text.ts` (pages / guides allowlists) + unit tests (scripts, handlers, styles, `javascript:`/`data:` URLs, external links get `rel`/`target`)
 
 ## Phase 2: User Story 2 + 1 — Homepage CMS (P1) 🎯
 
-- [ ] T005 [US1/US2] API `content` (public `GET /content/home` with defaults fallback) + `admin-content` home: draft upsert, publish (transaction, prune to 20), discard, versions, restore, content image upload; `content.manage` + CSRF + audit; API e2e
+- [x] T005 [US1/US2] API `content` (public `GET /content/home` with defaults fallback) + `admin-content` home: draft upsert, publish (transaction, prune to 20), discard, versions, restore, content image upload; `content.manage` + CSRF + audit; API e2e
 - [ ] T006 [US1] Web CMS home: `pages/index.vue` (thin) + `components/store/home/StoreHome*` per section (from the prototype look), hidden/empty sections skipped, flash + guides + partners from live data, `routeRules['/'] = { swr: 60 }`; i18n; 320 px
 - [ ] T007 [US2] Web admin «محرر الموقع» `/admin/content` (existing nav entry, G E; accessible tabs `?tab=home|pages|guides|quiz`, home tab in this task): sections list (reorder, show/hide), field editor with changed markers + reset, image upload, desktop/mobile preview (reuses the storefront section components), publish bar (count, Ctrl/⌘+Enter), discard with undo toast, versions list + restore; i18n; shadcn dialogs only
 - [ ] T008 [US1/US2] TesterArmy: edit hero title → preview only → publish → `/` shows it; hide traders + reorder → publish → order/visibility on `/`; restore previous version → publish; empty flash section omitted
