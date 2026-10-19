@@ -364,9 +364,9 @@ function getRoomItems(key: BridalRoomKey) {
     </div>
 
     <!-- Product Picker Dialog -->
-    <AdminBridalProductPicker
+    <AdminProductPicker
       :open="pickerOpen"
-      :room-name="t(`store.bridal.rooms.${targetRoomKey}`)"
+      :title="t('admin.bridal.editor.addProductTitle', { room: t(`store.bridal.rooms.${targetRoomKey}`) })"
       @update:open="pickerOpen = $event"
       @select="handleProductPicked"
     />

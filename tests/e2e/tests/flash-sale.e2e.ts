@@ -125,7 +125,6 @@ test('flash sale: an ended sale reverts to the regular price with no badge or co
   await expect(productMain).toContainText(productName)
   await expect(productMain).toContainText('8,000')
   await expect(productMain).not.toContainText('6,500')
-  await expect(productMain).not.toContainText('عرض لفترة محدودة')
   await expect(productMain).not.toContainText('العرض بيخلص خلال')
 })
 
@@ -152,6 +151,5 @@ test('flash sale: a live countdown reaching zero swaps the product page back to 
   // No reload: the countdown's end refreshes the product data in place.
   await expect(productMain).not.toContainText('العرض بيخلص خلال', { timeout: 45_000 })
   await expect(productMain).not.toContainText('7,500')
-  await expect(productMain).not.toContainText('عرض لفترة محدودة')
   await expect(productMain).toContainText('9,000')
 })

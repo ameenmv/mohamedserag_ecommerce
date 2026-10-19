@@ -1376,10 +1376,7 @@
         "addProduct": "Add product",
         "roomEmpty": "No products added to this room yet",
         "flaggedBadge": "Out of stock / hidden",
-        "addProductTitle": "Add product to {room}",
-        "addProductDescription": "Search the catalog to add a product to this room.",
-        "searchPlaceholder": "Search by name or model code…",
-        "noProductsFound": "No matching products found"
+        "addProductTitle": "Add product to {room}"
       },
       "settings": {
         "title": "Bridal Reservation Settings",
@@ -1397,6 +1394,139 @@
         "deliveryDateInvalid": "Please choose a valid delivery date not earlier than today",
         "extendDateInvalid": "Extension date must be after today"
       }
+    },
+    "promotions": {
+      "pageTitle": "Promotions & Coupons",
+      "tabs": {
+        "flash": "Flash Sales",
+        "coupons": "Discount Coupons"
+      },
+      "flash": {
+        "title": "Flash Sales",
+        "new": "New Flash Sale",
+        "edit": "Edit Flash Sale",
+        "empty": "No flash sales registered yet.",
+        "searchPlaceholder": "Search by sale name…",
+        "table": {
+          "name": "Sale Name",
+          "status": "Status",
+          "startsAt": "Starts At",
+          "endsAt": "Ends At",
+          "itemCount": "Products",
+          "actions": "Actions"
+        },
+        "status": {
+          "running": "Running",
+          "scheduled": "Scheduled",
+          "ended": "Ended"
+        },
+        "itemsCount": "{count} products",
+        "endNow": "End Sale Now",
+        "confirmEndTitle": "End Sale Now",
+        "confirmEnd": "Are you sure you want to end this flash sale immediately?",
+        "confirmEndDesc": "Products will immediately revert to their regular catalog prices on the storefront.",
+        "ending": "Ending sale...",
+        "confirmDeleteTitle": "Delete Flash Sale",
+        "confirmDelete": "Are you sure you want to delete the flash sale «{name}»?",
+        "confirmDeleteDesc": "The flash sale will be removed and will no longer appear on the storefront.",
+        "deleting": "Deleting...",
+        "name": "Sale Name",
+        "namePlaceholder": "e.g. Summer Offers 2026",
+        "startsAt": "Start Date & Time",
+        "endsAt": "End Date & Time",
+        "productsTitle": "Sale Products",
+        "addProduct": "Add Product",
+        "addProductTitle": "Add Product to Flash Sale",
+        "addProductDescription": "Search products from the catalog to add to this flash sale.",
+        "noProducts": "No products added to this sale yet.",
+        "colProduct": "Product",
+        "colRegularPrice": "Regular Price",
+        "colSalePrice": "Sale Price (EGP)",
+        "colDiscount": "Discount",
+        "percentOff": "{percent}%",
+        "removeProduct": "Remove product",
+        "created": "Flash sale created successfully",
+        "updated": "Flash sale updated successfully",
+        "endedSuccess": "Flash sale ended successfully",
+        "deleted": "Flash sale deleted successfully",
+        "errors": {
+          "minItems": "At least one product must be added",
+          "salePriceRequired": "Sale price is required",
+          "salePriceGteRegular": "Sale price must be lower than regular price",
+          "salePricePositive": "Sale price must be greater than zero",
+          "overlap": "These products overlap with another flash sale during this period"
+        }
+      },
+      "coupons": {
+        "title": "Discount Coupons",
+        "new": "New Coupon",
+        "edit": "Edit Coupon",
+        "empty": "No discount coupons registered yet.",
+        "searchPlaceholder": "Search by coupon code…",
+        "table": {
+          "code": "Code",
+          "value": "Discount",
+          "minOrder": "Min Order",
+          "status": "Status",
+          "usage": "Usage",
+          "totalDiscount": "Total Discount",
+          "actions": "Actions"
+        },
+        "status": {
+          "running": "Running",
+          "scheduled": "Scheduled",
+          "expired": "Expired",
+          "inactive": "Disabled"
+        },
+        "types": {
+          "percent": "Percentage (%)",
+          "fixed": "Fixed Amount (EGP)"
+        },
+        "percentValue": "{value}%",
+        "fixedValue": "{value} EGP",
+        "unlimited": "∞",
+        "usageDisplay": "{active} / {max}",
+        "noMinOrder": "No minimum",
+        "confirmDeleteTitle": "Delete Coupon",
+        "confirmDelete": "Are you sure you want to delete coupon code «{code}»?",
+        "confirmDeleteDesc": "If this coupon was used in prior orders, it will be deactivated instead of deleted permanently.",
+        "deleting": "Deleting...",
+        "code": "Coupon Code",
+        "codePlaceholder": "e.g. SUMMER20",
+        "codeHint": "Latin letters, numbers, and dashes only",
+        "type": "Discount Type",
+        "valuePercent": "Discount Percentage (1 - 90%)",
+        "valueFixed": "Discount Amount (EGP)",
+        "minOrder": "Minimum Order (EGP)",
+        "minOrderPlaceholder": "0 for no minimum",
+        "startsAt": "Start Date (optional)",
+        "endsAt": "End Date (optional)",
+        "maxUses": "Max Uses (optional)",
+        "maxUsesPlaceholder": "Leave blank for unlimited",
+        "maxUsesPerPhone": "Max Uses Per Phone (optional)",
+        "maxUsesPerPhonePlaceholder": "Leave blank for unlimited",
+        "scopesTitle": "Scope Restrictions (optional)",
+        "allCategories": "All Categories",
+        "categories": "Eligible Categories",
+        "allBrands": "All Brands",
+        "brands": "Eligible Brands",
+        "active": "Coupon is Active",
+        "created": "Coupon created successfully",
+        "updated": "Coupon updated successfully",
+        "deleted": "Coupon deleted successfully",
+        "deactivated": "Coupon deactivated because it was used in past orders",
+        "errors": {
+          "duplicateCode": "This coupon code already exists",
+          "invalidPercent": "Discount percentage must be between 1 and 90%",
+          "invalidFixed": "Fixed discount must be greater than zero"
+        }
+      }
+    },
+    "productPicker": {
+      "description": "Search the catalog by name or model code and pick a product.",
+      "searchPlaceholder": "Search by name or model code…",
+      "noResults": "No matching products found",
+      "loading": "Searching…"
     }
   },
   "validation": {

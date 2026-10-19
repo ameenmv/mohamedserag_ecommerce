@@ -31,9 +31,9 @@ description: "Tasks for Slice 4 — Promotions & Stock Alerts"
 
 ## Phase 4: User Story 4 — Admin promotions (P1)
 
-- [ ] T013 [US4] API admin flash sales + coupons CRUD (overlap 409, end-now, deactivate-on-delete, usage stats) + API e2e
-- [ ] T014 [US4] Web `/admin/promotions` (tabs: flash sales, coupons) with editors; sidebar entry
-- [ ] T015 [US4] TesterArmy: create a flash sale and a coupon in admin, see them on the storefront/checkout
+- [x] T013 [US4] API admin flash sales + coupons CRUD (overlap 409, end-now, deactivate-on-delete, usage stats) + API e2e
+- [x] T014 [US4] Web `/admin/promotions` (tabs: flash sales, coupons) with editors; sidebar entry
+- [x] T015 [US4] TesterArmy: create a flash sale and a coupon in admin, see them on the storefront/checkout
 
 ## Phase 5: User Story 3 — Notify me (P2)
 

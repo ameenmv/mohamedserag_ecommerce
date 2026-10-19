@@ -1376,10 +1376,7 @@
         "addProduct": "أضف منتج",
         "roomEmpty": "لا توجد منتجات مضافة لهذه الغرفة بعد",
         "flaggedBadge": "نفذ/مخفي",
-        "addProductTitle": "إضافة منتج إلى {room}",
-        "addProductDescription": "ابحث عن المنتج من الكتالوج لإضافته لهذه الغرفة.",
-        "searchPlaceholder": "ابحث بالاسم أو كود الموديل…",
-        "noProductsFound": "لا توجد منتجات مطابقة للبحث"
+        "addProductTitle": "إضافة منتج إلى {room}"
       },
       "settings": {
         "title": "إعدادات حجز العروسة",
@@ -1397,6 +1394,139 @@
         "deliveryDateInvalid": "يرجى اختيار تاريخ توصيل صحيح لا يسبق اليوم",
         "extendDateInvalid": "تاريخ التمديد يجب أن يكون بعد تاريخ اليوم"
       }
+    },
+    "promotions": {
+      "pageTitle": "العروض والكوبونات",
+      "tabs": {
+        "flash": "عروض الفلاش",
+        "coupons": "كوبونات الخصم"
+      },
+      "flash": {
+        "title": "عروض الفلاش",
+        "new": "عرض جديد",
+        "edit": "تعديل العرض",
+        "empty": "لا توجد عروض فلاش حتى الآن.",
+        "searchPlaceholder": "ابحث باسم العرض…",
+        "table": {
+          "name": "اسم العرض",
+          "status": "الحالة",
+          "startsAt": "يبدأ في",
+          "endsAt": "ينتهي في",
+          "itemCount": "المنتجات",
+          "actions": "إجراءات"
+        },
+        "status": {
+          "running": "شغال",
+          "scheduled": "مجدول",
+          "ended": "منتهي"
+        },
+        "itemsCount": "{count} منتج",
+        "endNow": "إنهاء العرض دلوقتي",
+        "confirmEndTitle": "إنهاء العرض دلوقتي",
+        "confirmEnd": "هل أنت متأكد من إنهاء هذا العرض فوراً؟",
+        "confirmEndDesc": "المنتجات هترجع لسعرها الأصلي فوراً في المتجر.",
+        "ending": "جاري الإنهاء...",
+        "confirmDeleteTitle": "حذف عرض الفلاش",
+        "confirmDelete": "هل أنت متأكد من حذف عرض «{name}»؟",
+        "confirmDeleteDesc": "سيتم حذف العرض ولن يظهر في المتجر.",
+        "deleting": "جاري الحذف...",
+        "name": "اسم العرض",
+        "namePlaceholder": "مثال: عروض الصيف 2026",
+        "startsAt": "تاريخ ووقت البداية",
+        "endsAt": "تاريخ ووقت النهاية",
+        "productsTitle": "منتجات العرض",
+        "addProduct": "إضافة منتج",
+        "addProductTitle": "إضافة منتج لعرض الفلاش",
+        "addProductDescription": "ابحث عن المنتج من الكتالوج لإضافته للعرض.",
+        "noProducts": "لم يتم إضافة منتجات للعرض بعد.",
+        "colProduct": "المنتج",
+        "colRegularPrice": "السعر الأصلي",
+        "colSalePrice": "سعر العرض (ج.م)",
+        "colDiscount": "الخصم",
+        "percentOff": "{percent}%",
+        "removeProduct": "إزالة المنتج",
+        "created": "تم إنشاء العرض بنجاح",
+        "updated": "تم تحديث العرض بنجاح",
+        "endedSuccess": "تم إنهاء العرض بنجاح",
+        "deleted": "تم حذف العرض بنجاح",
+        "errors": {
+          "minItems": "يجب إضافة منتج واحد على الأقل",
+          "salePriceRequired": "سعر العرض مطلوب",
+          "salePriceGteRegular": "سعر العرض لازم يكون أقل من السعر الأصلي",
+          "salePricePositive": "سعر العرض يجب أن يكون أكبر من صفر",
+          "overlap": "المنتجات دي في عرض تاني في نفس الوقت"
+        }
+      },
+      "coupons": {
+        "title": "كوبونات الخصم",
+        "new": "كوبون جديد",
+        "edit": "تعديل الكوبون",
+        "empty": "لا توجد كوبونات مسجلة حتى الآن.",
+        "searchPlaceholder": "ابحث بكود الكوبون…",
+        "table": {
+          "code": "الكود",
+          "value": "قيمة الخصم",
+          "minOrder": "الحد الأدنى للطلب",
+          "status": "الحالة",
+          "usage": "الاستخدام",
+          "totalDiscount": "إجمالي الخصم",
+          "actions": "إجراءات"
+        },
+        "status": {
+          "running": "شغال",
+          "scheduled": "مجدول",
+          "expired": "منتهي",
+          "inactive": "معطل"
+        },
+        "types": {
+          "percent": "نسبة مئوية (%)",
+          "fixed": "مبلغ ثابت (ج.م)"
+        },
+        "percentValue": "{value}%",
+        "fixedValue": "{value} ج.م",
+        "unlimited": "∞",
+        "usageDisplay": "{active} / {max}",
+        "noMinOrder": "بدون حد أدنى",
+        "confirmDeleteTitle": "حذف الكوبون",
+        "confirmDelete": "هل أنت متأكد من حذف كود «{code}»؟",
+        "confirmDeleteDesc": "إذا كان الكود قد استُخدم سابقاً سيتم إيقافه فقط بدلاً من حذفه نهائياً.",
+        "deleting": "جاري الحذف...",
+        "code": "كود الخصم",
+        "codePlaceholder": "مثال: SUMMER20",
+        "codeHint": "حروف وأرقام إنجليزية وشرطات فقط",
+        "type": "نوع الخصم",
+        "valuePercent": "نسبة الخصم (1 - 90%)",
+        "valueFixed": "قيمة الخصم (ج.م)",
+        "minOrder": "الحد الأدنى للطلب (ج.م)",
+        "minOrderPlaceholder": "0 إذا مفيش حد أدنى",
+        "startsAt": "تاريخ البداية (اختياري)",
+        "endsAt": "تاريخ النهاية (اختياري)",
+        "maxUses": "الحد الأقصى لمرات الاستخدام (اختياري)",
+        "maxUsesPlaceholder": "اتركه فارغاً لاستخدام غير محدود",
+        "maxUsesPerPhone": "الحد الأقصى لكل رقم موبايل (اختياري)",
+        "maxUsesPerPhonePlaceholder": "اتركه فارغاً لاستخدام غير محدود",
+        "scopesTitle": "نطاق التطبيق (اختياري)",
+        "allCategories": "جميع الأقسام",
+        "categories": "الأقسام المشمولة",
+        "allBrands": "جميع الماركات",
+        "brands": "الماركات المشمولة",
+        "active": "الكوبون مفعل",
+        "created": "تم إنشاء الكوبون بنجاح",
+        "updated": "تم تحديث الكوبون بنجاح",
+        "deleted": "تم حذف الكوبون بنجاح",
+        "deactivated": "تم إيقاف الكوبون لأنه استُخدم في طلبات سابقة",
+        "errors": {
+          "duplicateCode": "الكود ده موجود بالفعل",
+          "invalidPercent": "نسبة الخصم يجب أن تكون بين 1 و 90%",
+          "invalidFixed": "قيمة الخصم يجب أن تكون أكبر من صفر"
+        }
+      }
+    },
+    "productPicker": {
+      "description": "ابحث في الكتالوج بالاسم أو كود الموديل واختار المنتج.",
+      "searchPlaceholder": "ابحث بالاسم أو كود الموديل…",
+      "noResults": "لا توجد منتجات مطابقة للبحث",
+      "loading": "جاري البحث…"
     }
   },
   "validation": {
