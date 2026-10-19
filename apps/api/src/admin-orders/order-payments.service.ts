@@ -68,6 +68,11 @@ export class OrderPaymentsService {
       }
 
       const remaining = remainingAmount(order)
+      // Nothing left to pay is a state conflict (e.g. a second confirm that read the order after a
+      // parallel one committed), not a bad amount: answer 409 like the conditional update below.
+      if (remaining === 0) {
+        throw new ConflictException('الطلب اتدفع بالكامل، حدّث الصفحة')
+      }
       if (input.amount > remaining) {
         throw new BadRequestException('المبلغ أكبر من الباقي')
       }

@@ -377,6 +377,27 @@ describe('Order Payment & Status Engine E2E (/api/admin/orders)', () => {
     expect(confirmRes.body.paidAmount).toBe(50_000)
   })
 
+  it('answers 409 (not 400) to a confirm on an order that is already fully paid', async () => {
+    const prodId = await createTestProduct(10)
+    const orderId = await createTestOrder({
+      status: 'confirmed',
+      paymentMethod: 'instapay',
+      total: 100_000,
+      paidAmount: 100_000,
+      items: [{ productId: prodId, qty: 2, unitPrice: 50_000 }],
+    })
+
+    const res = await request(app.getHttpServer())
+      .post(`/api/admin/orders/${orderId}/payments/confirm`)
+      .set('Cookie', sessionCookie)
+      .set('x-csrf-token', csrfToken)
+      .send({ amount: 100_000 })
+      .expect(409)
+
+    expect(res.body.message).toBe('الطلب اتدفع بالكامل، حدّث الصفحة')
+    expect(await prisma.payment.count({ where: { orderId } })).toBe(0)
+  })
+
   it('handles partial payments on confirmed orders and rejects amount > remaining with 400', async () => {
     const prodId = await createTestProduct(10)
     const orderId = await createTestOrder({
