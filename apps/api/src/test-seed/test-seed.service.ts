@@ -458,6 +458,20 @@ export class TestSeedService {
           deletedOrdersCount += deletedStoreOrdersRes.count
         }
 
+        const notifyRequests = await tx.notifyRequest.findMany({
+          where: { productId: { in: productIds } },
+          select: { phone: true },
+        })
+        const notifyPhones = notifyRequests.map((nr) => nr.phone)
+        if (notifyPhones.length > 0) {
+          await tx.whatsAppMessage.deleteMany({
+            where: {
+              templateKey: 'notify_back_in_stock',
+              to: { in: notifyPhones },
+            },
+          })
+        }
+
         await tx.orderItem.deleteMany({ where: { productId: { in: productIds } } })
         await tx.productImage.deleteMany({ where: { productId: { in: productIds } } })
         await tx.flashSaleItem.deleteMany({ where: { productId: { in: productIds } } })
@@ -582,6 +596,20 @@ export class TestSeedService {
           await tx.couponRedemption.deleteMany({ where: { orderId: { in: orderIdsWithProducts } } })
           const deletedStoreOrdersRes = await tx.order.deleteMany({ where: { id: { in: orderIdsWithProducts } } })
           deletedOrdersCount += deletedStoreOrdersRes.count
+        }
+
+        const notifyRequests = await tx.notifyRequest.findMany({
+          where: { productId: { in: productIds } },
+          select: { phone: true },
+        })
+        const notifyPhones = notifyRequests.map((nr) => nr.phone)
+        if (notifyPhones.length > 0) {
+          await tx.whatsAppMessage.deleteMany({
+            where: {
+              templateKey: 'notify_back_in_stock',
+              to: { in: notifyPhones },
+            },
+          })
         }
 
         await tx.orderItem.deleteMany({ where: { productId: { in: productIds } } })

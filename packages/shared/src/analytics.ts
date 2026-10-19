@@ -9,6 +9,7 @@ export const FUNNEL_EVENTS = [
   'bridal_reserved',
   'whatsapp_click',
   'search',
+  'notify_me_requested',
 ] as const
 
 export type FunnelEvent = (typeof FUNNEL_EVENTS)[number]
