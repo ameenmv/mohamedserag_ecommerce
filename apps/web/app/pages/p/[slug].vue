@@ -125,6 +125,9 @@ const summaryRef = ref<{ addToCartButton: HTMLElement | null } | null>(null)
       <LazyStoreProductPageDelivery hydrate-never />
     </div>
 
+    <!-- Product Reviews -->
+    <StoreProductPageReviews :product="product" />
+
     <!-- Related Products -->
     <section
       v-if="product.related && product.related.length > 0"

@@ -633,6 +633,44 @@
       "stickyButton": "Notify me",
       "stickyButtonAria": "Notify me when {name} is back in stock",
       "botFieldLabel": "Leave this field blank"
+    },
+    "reviews": {
+      "heading": "Reviews",
+      "subheading": "Share your thoughts on this product — your review helps others decide",
+      "writeReview": "Write a review",
+      "closeForm": "Close form",
+      "formTitle": "Add your review",
+      "formDesc": "Share your honest experience to help other showroom customers.",
+      "ratingLabel": "Star rating",
+      "starLabel": {
+        "1": "1 star",
+        "2": "2 stars",
+        "3": "3 stars",
+        "4": "4 stars",
+        "5": "5 stars"
+      },
+      "textLabel": "Your review",
+      "textPlaceholder": "Write about your experience with this product (at least 20 characters)",
+      "nameLabel": "Name",
+      "namePlaceholder": "Enter your name",
+      "phoneLabel": "Mobile number",
+      "phonePlaceholder": "010xxxxxxxx",
+      "phoneHint": "Your mobile number is private to the store and will never be shown publicly",
+      "botFieldLabel": "Leave this field empty",
+      "submit": "Submit review",
+      "submitting": "Submitting...",
+      "successTitle": "Thank you! Your review will appear after approval",
+      "successDesc": "The showroom team reviews submissions before publishing to ensure helpful content.",
+      "duplicateError": "You have already reviewed this product",
+      "throttledError": "Too many attempts, please wait a minute and try again",
+      "notFoundError": "Product not found",
+      "genericError": "Something went wrong, please try again",
+      "validation": {
+        "stars": "Please choose a rating",
+        "text": "Review must be at least 20 characters",
+        "name": "Name must be at least 2 characters",
+        "phone": "Invalid mobile number (010, 011, 012, 015)"
+      }
     }
   },
   "admin": {
