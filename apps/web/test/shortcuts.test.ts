@@ -9,11 +9,12 @@ import {
 } from '../app/utils/shortcuts'
 
 describe('ADMIN_NAV_SHORTCUTS', () => {
-  it('maps all nine admin routes to their expected G-chord letters', () => {
+  it('maps all ten admin routes to their expected G-chord letters', () => {
     expect(ADMIN_SHORTCUT_ROUTES).toEqual({
       h: '/admin',
       o: '/admin/orders',
       p: '/admin/products',
+      c: '/admin/catalog',
       b: '/admin/bridal',
       m: '/admin/promotions',
       r: '/admin/reviews',
@@ -21,7 +22,7 @@ describe('ADMIN_NAV_SHORTCUTS', () => {
       t: '/admin/reports',
       s: '/admin/settings',
     })
-    expect(ADMIN_NAV_SHORTCUTS).toHaveLength(9)
+    expect(ADMIN_NAV_SHORTCUTS).toHaveLength(10)
     for (const item of ADMIN_NAV_SHORTCUTS) {
       expect(item.labelKey).toMatch(/^admin\.nav\./)
       expect(['main', 'store', 'content', 'system']).toContain(item.group)

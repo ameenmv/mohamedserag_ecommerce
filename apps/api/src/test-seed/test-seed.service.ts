@@ -1,11 +1,12 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
-import { z } from 'zod'
 import {
   DEFAULT_ZONES,
   findZone,
   egpToPiastres,
   expandSynonyms,
+  normalizeCouponCode,
   OWNER_ROLE_KEY,
+  zonesSchema,
 } from '@serag/shared'
 import argon2 from 'argon2'
 import { nanoid } from 'nanoid'
@@ -22,6 +23,8 @@ import {
 } from '../auth/session.util.js'
 import type {
   SeedAdminSessionInput,
+  SeedCouponInput,
+  SeedFlashSaleInput,
   SeedOrderInput,
   SeedProductInput,
 } from './test-seed.dto.js'
@@ -44,20 +47,6 @@ const DEFAULT_SEARCH_SYNONYMS: string[][] = [
   ['نوفروست', 'نو فروست', 'no frost', 'nofrost'],
   ['ديفروست', 'defrost'],
 ]
-
-const zonePlaceSchema = z.object({
-  governorate: z.string(),
-  city: z.string().optional(),
-})
-
-const zoneSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  fee: z.number().int().min(0),
-  places: z.array(zonePlaceSchema),
-})
-
-const zonesSchema = z.array(zoneSchema)
 
 @Injectable()
 export class TestSeedService {
@@ -141,6 +130,31 @@ export class TestSeedService {
         price: true,
       },
     })
+
+    if (input.flashSale) {
+      const startsInMinutes = input.flashSale.startsInMinutes ?? -1
+      const endsInMinutes = input.flashSale.endsInMinutes ?? 60
+      const now = Date.now()
+      const startsAt = new Date(now + startsInMinutes * 60_000)
+      const endsAt = new Date(now + endsInMinutes * 60_000)
+      const salePrice = egpToPiastres(input.flashSale.salePriceEgp)
+
+      await this.prisma.flashSale.create({
+        data: {
+          name: `عرض فلاش E2E ${input.runId}-${n}`,
+          startsAt,
+          endsAt,
+          items: {
+            create: [
+              {
+                productId: product.id,
+                salePrice,
+              },
+            ],
+          },
+        },
+      })
+    }
 
     return product
   }
@@ -292,6 +306,77 @@ export class TestSeedService {
     }
   }
 
+  async seedFlashSale(input: SeedFlashSaleInput) {
+    const now = new Date()
+    const startsAt = input.startsAt ? new Date(input.startsAt) : new Date(now.getTime() - 60_000)
+    const endsAt = input.endsAt ? new Date(input.endsAt) : new Date(now.getTime() + 3600_000)
+    const name = input.name ?? `عرض فلاش E2E ${input.runId}`
+
+    return this.prisma.flashSale.create({
+      data: {
+        name,
+        startsAt,
+        endsAt,
+        items: {
+          create: input.items.map((item) => ({
+            productId: item.productId,
+            salePrice: egpToPiastres(item.salePriceEgp),
+          })),
+        },
+      },
+      include: {
+        items: true,
+      },
+    })
+  }
+
+  async seedCoupon(input: SeedCouponInput) {
+    const count = await this.prisma.coupon.count({
+      where: { code: { startsWith: `E2E-${input.runId.toUpperCase()}-` } },
+    })
+    const n = count + 1
+    const rawCode = input.code ?? `E2E-${input.runId.toUpperCase()}-${n}`
+    const code = normalizeCouponCode(rawCode)
+
+    let categoryIds: string[] = []
+    if (input.categorySlugs && input.categorySlugs.length > 0) {
+      const categories = await this.prisma.category.findMany({
+        where: { slug: { in: input.categorySlugs } },
+        select: { id: true },
+      })
+      categoryIds = categories.map((c) => c.id)
+    }
+
+    let brandIds: string[] = []
+    if (input.brandSlugs && input.brandSlugs.length > 0) {
+      const brands = await this.prisma.brand.findMany({
+        where: { slug: { in: input.brandSlugs } },
+        select: { id: true },
+      })
+      brandIds = brands.map((b) => b.id)
+    }
+
+    const type = input.type ?? 'percent'
+    const value = type === 'fixed' ? egpToPiastres(input.value) : Math.round(input.value)
+    const minOrder = input.minOrderEgp ? egpToPiastres(input.minOrderEgp) : 0
+
+    return this.prisma.coupon.create({
+      data: {
+        code,
+        type,
+        value,
+        minOrder,
+        maxUses: input.maxUses ?? null,
+        maxUsesPerPhone: input.maxUsesPerPhone ?? null,
+        startsAt: input.startsAt ? new Date(input.startsAt) : null,
+        endsAt: input.endsAt ? new Date(input.endsAt) : null,
+        categoryIds,
+        brandIds,
+        active: input.active ?? true,
+      },
+    })
+  }
+
   async deleteRun(runId: string) {
     return await this.prisma.$transaction(async (tx) => {
       // 1. Delete users and sessions belonging to this run
@@ -356,6 +441,23 @@ export class TestSeedService {
 
       let deletedProductsCount = 0
       if (productIds.length > 0) {
+        // Find and delete any storefront orders created containing products from this test run
+        const ordersWithProducts = await tx.order.findMany({
+          where: { items: { some: { productId: { in: productIds } } } },
+          select: { id: true },
+        })
+        const orderIdsWithProducts = ordersWithProducts.map((o) => o.id)
+        if (orderIdsWithProducts.length > 0) {
+          await tx.payment.deleteMany({ where: { orderId: { in: orderIdsWithProducts } } })
+          await tx.stockMovement.deleteMany({ where: { orderId: { in: orderIdsWithProducts } } })
+          await tx.whatsAppMessage.deleteMany({ where: { orderId: { in: orderIdsWithProducts } } })
+          await tx.orderEvent.deleteMany({ where: { orderId: { in: orderIdsWithProducts } } })
+          await tx.orderItem.deleteMany({ where: { orderId: { in: orderIdsWithProducts } } })
+          await tx.couponRedemption.deleteMany({ where: { orderId: { in: orderIdsWithProducts } } })
+          const deletedStoreOrdersRes = await tx.order.deleteMany({ where: { id: { in: orderIdsWithProducts } } })
+          deletedOrdersCount += deletedStoreOrdersRes.count
+        }
+
         await tx.orderItem.deleteMany({ where: { productId: { in: productIds } } })
         await tx.productImage.deleteMany({ where: { productId: { in: productIds } } })
         await tx.flashSaleItem.deleteMany({ where: { productId: { in: productIds } } })
@@ -366,6 +468,42 @@ export class TestSeedService {
           where: { id: { in: productIds } },
         })
         deletedProductsCount = productsRes.count
+      }
+
+      // 4. Delete flash sales belonging to this run
+      const flashSales = await tx.flashSale.findMany({
+        where: {
+          OR: [
+            { name: { contains: runId } },
+            ...(productIds.length > 0 ? [{ items: { some: { productId: { in: productIds } } } }] : []),
+          ],
+        },
+        select: { id: true },
+      })
+      const flashSaleIds = flashSales.map((f) => f.id)
+      if (flashSaleIds.length > 0) {
+        await tx.flashSaleItem.deleteMany({ where: { flashSaleId: { in: flashSaleIds } } })
+        await tx.flashSale.deleteMany({ where: { id: { in: flashSaleIds } } })
+      }
+
+      // 5. Delete coupons belonging to this run
+      const coupons = await tx.coupon.findMany({
+        where: {
+          OR: [
+            { code: { startsWith: `E2E-${runId.toUpperCase()}` } },
+            { code: { contains: runId.toUpperCase() } },
+          ],
+        },
+        select: { id: true },
+      })
+      const couponIds = coupons.map((c) => c.id)
+      if (couponIds.length > 0) {
+        await tx.couponRedemption.deleteMany({ where: { couponId: { in: couponIds } } })
+        await tx.order.updateMany({
+          where: { couponId: { in: couponIds } },
+          data: { couponId: null },
+        })
+        await tx.coupon.deleteMany({ where: { id: { in: couponIds } } })
       }
 
       return {
@@ -430,6 +568,22 @@ export class TestSeedService {
       const productIds = products.map((p) => p.id)
       let deletedProductsCount = 0
       if (productIds.length > 0) {
+        const ordersWithProducts = await tx.order.findMany({
+          where: { items: { some: { productId: { in: productIds } } } },
+          select: { id: true },
+        })
+        const orderIdsWithProducts = ordersWithProducts.map((o) => o.id)
+        if (orderIdsWithProducts.length > 0) {
+          await tx.payment.deleteMany({ where: { orderId: { in: orderIdsWithProducts } } })
+          await tx.stockMovement.deleteMany({ where: { orderId: { in: orderIdsWithProducts } } })
+          await tx.whatsAppMessage.deleteMany({ where: { orderId: { in: orderIdsWithProducts } } })
+          await tx.orderEvent.deleteMany({ where: { orderId: { in: orderIdsWithProducts } } })
+          await tx.orderItem.deleteMany({ where: { orderId: { in: orderIdsWithProducts } } })
+          await tx.couponRedemption.deleteMany({ where: { orderId: { in: orderIdsWithProducts } } })
+          const deletedStoreOrdersRes = await tx.order.deleteMany({ where: { id: { in: orderIdsWithProducts } } })
+          deletedOrdersCount += deletedStoreOrdersRes.count
+        }
+
         await tx.orderItem.deleteMany({ where: { productId: { in: productIds } } })
         await tx.productImage.deleteMany({ where: { productId: { in: productIds } } })
         await tx.flashSaleItem.deleteMany({ where: { productId: { in: productIds } } })
@@ -438,6 +592,29 @@ export class TestSeedService {
         await tx.notifyRequest.deleteMany({ where: { productId: { in: productIds } } })
         const productsRes = await tx.product.deleteMany({ where: { id: { in: productIds } } })
         deletedProductsCount = productsRes.count
+      }
+
+      // 4. Delete all E2E flash sales
+      await tx.flashSaleItem.deleteMany({
+        where: { flashSale: { name: { startsWith: 'عرض فلاش E2E' } } },
+      })
+      await tx.flashSale.deleteMany({
+        where: { name: { startsWith: 'عرض فلاش E2E' } },
+      })
+
+      // 5. Delete all E2E coupons
+      const e2eCoupons = await tx.coupon.findMany({
+        where: { code: { startsWith: 'E2E-' } },
+        select: { id: true },
+      })
+      const e2eCouponIds = e2eCoupons.map((c) => c.id)
+      if (e2eCouponIds.length > 0) {
+        await tx.couponRedemption.deleteMany({ where: { couponId: { in: e2eCouponIds } } })
+        await tx.order.updateMany({
+          where: { couponId: { in: e2eCouponIds } },
+          data: { couponId: null },
+        })
+        await tx.coupon.deleteMany({ where: { id: { in: e2eCouponIds } } })
       }
 
       return {

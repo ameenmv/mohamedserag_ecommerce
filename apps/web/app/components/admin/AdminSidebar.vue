@@ -4,6 +4,7 @@ import type { AdminNavGroup } from '~/utils/shortcuts'
 import {
   BarChart3,
   FilePenLine,
+  FolderTree,
   LayoutDashboard,
   Package,
   Settings,
@@ -25,6 +26,7 @@ const iconByKey: Record<string, Component> = {
   h: LayoutDashboard,
   o: ShoppingBag,
   p: Package,
+  c: FolderTree,
   b: Sparkles,
   m: Tag,
   r: Star,
@@ -33,12 +35,18 @@ const iconByKey: Record<string, Component> = {
   s: Settings,
 }
 
+const { can } = useAdminAuth()
+
 const groupsOrder: readonly AdminNavGroup[] = ['main', 'store', 'content', 'system']
 
 const groupedNav = computed(() =>
   groupsOrder.map((group) => ({
     group,
-    items: ADMIN_NAV_SHORTCUTS.filter((item) => item.group === group),
+    items: ADMIN_NAV_SHORTCUTS.filter((item) => {
+      if (item.group !== group) return false
+      if (item.permission && !can(item.permission)) return false
+      return true
+    }),
   })),
 )
 </script>

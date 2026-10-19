@@ -21,8 +21,9 @@ describe('order-flow', () => {
     expect(canTransition('awaiting_deposit', 'out_for_delivery')).toBe(false)
   })
 
-  it('supports payment_rejected → confirmed | cancelled', () => {
+  it('supports payment_rejected → confirmed | awaiting_deposit | cancelled', () => {
     expect(canTransition('payment_rejected', 'confirmed')).toBe(true)
+    expect(canTransition('payment_rejected', 'awaiting_deposit')).toBe(true)
     expect(canTransition('payment_rejected', 'cancelled')).toBe(true)
     expect(canTransition('payment_rejected', 'out_for_delivery')).toBe(false)
   })

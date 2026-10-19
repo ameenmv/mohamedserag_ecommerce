@@ -6,6 +6,8 @@ const searchQuery = ref('')
 const localePath = useLocalePath()
 const { t } = useI18n()
 
+const { results, pending, error } = useLiveSearch(searchQuery)
+
 function handleSearch(): void {
   open.value = false
   navigateTo({
@@ -27,7 +29,7 @@ function handleSearch(): void {
         <span class="hidden sm:inline">{{ t('store.header.searchProductEllipsis') }}</span>
       </button>
     </SheetTrigger>
-    <LazySheetContent side="top" class="mx-auto max-w-3xl rounded-b-3xl bg-background p-6">
+    <LazySheetContent side="top" class="mx-auto max-h-[85vh] overflow-y-auto max-w-3xl rounded-b-3xl bg-background p-6">
       <SheetHeader class="text-start">
         <SheetTitle class="font-display text-2xl text-primary">
           {{ t('store.header.searchTitle') }}
@@ -47,6 +49,7 @@ function handleSearch(): void {
           type="search"
           :placeholder="t('store.header.searchPlaceholder')"
           class="min-h-12 flex-1 rounded-full px-5 text-base"
+          autocomplete="off"
         />
         <button
           type="submit"
@@ -56,7 +59,22 @@ function handleSearch(): void {
           <span>{{ t('common.search') }}</span>
         </button>
       </form>
-      <div class="mt-3 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+
+      <!-- Live Search Results (shown when query is 2+ characters) -->
+      <StoreHeaderSearchResults
+        v-if="searchQuery.trim().length >= 2"
+        :query="searchQuery.trim()"
+        :results="results"
+        :pending="pending"
+        :error="error"
+        @close="open = false"
+      />
+
+      <!-- Quick category chips (shown only while query is empty or < 2 characters) -->
+      <div
+        v-if="searchQuery.trim().length < 2"
+        class="mt-3 flex flex-wrap items-center gap-2 text-xs text-muted-foreground"
+      >
         <span>{{ t('store.header.quickCategories') }}</span>
         <SheetClose as-child>
           <NuxtLink

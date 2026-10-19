@@ -1,7 +1,11 @@
 <script setup lang="ts">
 // Placeholder home until T007 (store shell) and Slice 6 (CMS home) land.
 const { t } = useI18n()
-useSeoMeta({ title: () => t('brand.storeName') })
+useSeoMeta({
+  title: () => t('brand.storeName'),
+  description: () => t('store.home.metaDescription'),
+  ogDescription: () => t('store.home.metaDescription'),
+})
 </script>
 
 <template>

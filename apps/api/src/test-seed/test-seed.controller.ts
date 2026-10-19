@@ -13,9 +13,13 @@ import { ZodValidationPipe } from '../common/zod-validation.pipe.js'
 import {
   runIdParamSchema,
   seedAdminSessionSchema,
+  seedCouponSchema,
+  seedFlashSaleSchema,
   seedOrderSchema,
   seedProductSchema,
   type SeedAdminSessionInput,
+  type SeedCouponInput,
+  type SeedFlashSaleInput,
   type SeedOrderInput,
   type SeedProductInput,
 } from './test-seed.dto.js'
@@ -47,6 +51,20 @@ export class TestSeedController {
     @Body(new ZodValidationPipe(seedAdminSessionSchema)) body: SeedAdminSessionInput,
   ) {
     return this.service.seedAdminSession(body)
+  }
+
+  @Post('seed/flash-sale')
+  async seedFlashSale(
+    @Body(new ZodValidationPipe(seedFlashSaleSchema)) body: SeedFlashSaleInput,
+  ) {
+    return this.service.seedFlashSale(body)
+  }
+
+  @Post('seed/coupon')
+  async seedCoupon(
+    @Body(new ZodValidationPipe(seedCouponSchema)) body: SeedCouponInput,
+  ) {
+    return this.service.seedCoupon(body)
   }
 
   @Delete('run/:runId')

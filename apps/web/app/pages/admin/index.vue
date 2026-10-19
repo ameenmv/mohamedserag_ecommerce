@@ -10,6 +10,7 @@ const { user } = useAdminAuth()
 <template>
   <section class="flex flex-col gap-6 p-6">
     <AdminDashboardWelcomeHeader :name="user?.name" />
+    <AdminDashboardExpiringLocks />
     <AdminDashboardEmptyState />
   </section>
 </template>

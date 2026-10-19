@@ -13,7 +13,7 @@ export const allowedTransitions: Record<OrderStatus, OrderStatus[]> = {
   new: ['confirmed', 'cancelled'],
   awaiting_payment: ['confirmed', 'payment_rejected', 'cancelled'],
   awaiting_deposit: ['confirmed', 'payment_rejected', 'cancelled'],
-  payment_rejected: ['confirmed', 'cancelled'],
+  payment_rejected: ['confirmed', 'awaiting_deposit', 'cancelled'],
   confirmed: ['out_for_delivery', 'cancelled'],
   out_for_delivery: ['delivered', 'cancelled'],
   delivered: [],
