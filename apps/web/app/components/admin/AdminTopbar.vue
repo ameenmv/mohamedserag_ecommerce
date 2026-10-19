@@ -68,8 +68,10 @@ async function handleLogout(): Promise<void> {
       </kbd>
     </button>
 
-    <!-- Actions: Locale switcher, Shortcuts help, Theme toggle, Open storefront, Admin user dropdown -->
-    <div class="flex items-center gap-2">
+    <!-- Actions: Locale switcher, Shortcuts help, Theme toggle, Open storefront, Admin user dropdown.
+         Below sm this row gets its own 288px line at 320px, so shortcuts help and the menu chevron
+         are hidden there and flex-wrap keeps longer labels from widening the page. -->
+    <div class="flex flex-wrap items-center gap-2">
       <!-- Locale Switcher -->
       <CommonLocaleSwitcher variant="pill" />
 
@@ -78,7 +80,7 @@ async function handleLogout(): Promise<void> {
         type="button"
         :aria-label="t('admin.shortcuts.title')"
         :title="t('admin.topbar.shortcutsTitle')"
-        class="inline-flex size-11 shrink-0 items-center justify-center rounded-full border border-border bg-card text-primary transition-colors hover:border-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-reduce:transition-none"
+        class="hidden sm:inline-flex size-11 shrink-0 items-center justify-center rounded-full border border-border bg-card text-primary transition-colors hover:border-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-reduce:transition-none"
         @click="emit('openShortcutsHelp')"
       >
         <Keyboard class="size-5" aria-hidden="true" />

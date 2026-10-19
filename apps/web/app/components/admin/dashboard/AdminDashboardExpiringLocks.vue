@@ -56,7 +56,7 @@ onMounted(() => {
       </div>
 
       <!-- Error State -->
-      <div v-else-if="error" class="text-xs text-destructive py-3 text-center">
+      <div v-else-if="error" class="text-xs text-destructive py-3 text-center break-words">
         {{ error }}
       </div>
 

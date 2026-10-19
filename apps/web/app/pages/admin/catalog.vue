@@ -71,7 +71,7 @@ const loading = computed(() => status.value === 'pending')
       <div
         role="tablist"
         :aria-label="t('admin.catalog.title')"
-        class="flex items-center gap-2 -mb-px"
+        class="flex items-center gap-2 -mb-px overflow-x-auto"
       >
         <button
           id="tab-categories"
@@ -79,7 +79,7 @@ const loading = computed(() => status.value === 'pending')
           role="tab"
           :aria-selected="activeTab === 'categories'"
           aria-controls="panel-categories"
-          class="flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-bold transition-colors cursor-pointer"
+          class="flex shrink-0 whitespace-nowrap items-center gap-2 border-b-2 px-4 py-3 text-sm font-bold transition-colors cursor-pointer"
           :class="
             activeTab === 'categories'
               ? 'border-serag-green text-serag-green dark:border-serag-gold dark:text-serag-gold'
@@ -100,7 +100,7 @@ const loading = computed(() => status.value === 'pending')
           role="tab"
           :aria-selected="activeTab === 'brands'"
           aria-controls="panel-brands"
-          class="flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-bold transition-colors cursor-pointer"
+          class="flex shrink-0 whitespace-nowrap items-center gap-2 border-b-2 px-4 py-3 text-sm font-bold transition-colors cursor-pointer"
           :class="
             activeTab === 'brands'
               ? 'border-serag-green text-serag-green dark:border-serag-gold dark:text-serag-gold'
@@ -121,7 +121,7 @@ const loading = computed(() => status.value === 'pending')
           role="tab"
           :aria-selected="activeTab === 'spec-templates'"
           aria-controls="panel-spec-templates"
-          class="flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-bold transition-colors cursor-pointer"
+          class="flex shrink-0 whitespace-nowrap items-center gap-2 border-b-2 px-4 py-3 text-sm font-bold transition-colors cursor-pointer"
           :class="
             activeTab === 'spec-templates'
               ? 'border-serag-green text-serag-green dark:border-serag-gold dark:text-serag-gold'
