@@ -2,6 +2,8 @@ import { z } from 'zod'
 import { REVIEW_STATUSES } from './enums.js'
 import { phoneSchema } from './phone-schema.js'
 import {
+  cleanMultilineText,
+  cleanSingleLineText,
   REVIEW_NAME_MAX,
   REVIEW_NAME_MIN,
   REVIEW_REPLY_MAX,
@@ -10,7 +12,7 @@ import {
 } from './reviews.js'
 
 export const reviewInputSchema = z.object({
-  productId: z.string().min(1, 'معرف المنتج مطلوب'),
+  productId: z.string().min(1, 'معرف المنتج مطلوب').max(64, 'معرف المنتج غير صالح'),
   stars: z
     .number({ message: 'اختار عدد النجوم' })
     .int('اختار عدد النجوم')
@@ -18,7 +20,7 @@ export const reviewInputSchema = z.object({
     .max(5, 'اختار عدد النجوم'),
   text: z
     .string({ message: 'التقييم لازم يكون 20 حرف على الأقل' })
-    .transform((val) => val.trim())
+    .transform(cleanMultilineText)
     .pipe(
       z
         .string()
@@ -27,7 +29,7 @@ export const reviewInputSchema = z.object({
     ),
   name: z
     .string({ message: 'الاسم يجب أن يتكون من حرفين على الأقل' })
-    .transform((val) => val.trim())
+    .transform(cleanSingleLineText)
     .pipe(
       z
         .string()
@@ -69,8 +71,8 @@ export const reviewReplySchema = z.object({
     .nullable()
     .transform((val) => {
       if (val === null) return null
-      const trimmed = val.trim()
-      return trimmed.length === 0 ? null : trimmed
+      const cleaned = cleanMultilineText(val)
+      return cleaned.length === 0 ? null : cleaned
     })
     .pipe(
       z

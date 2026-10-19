@@ -33,10 +33,20 @@ export class ReviewsService {
     return deliveredOrder !== null
   }
 
+  private publicProductWhere(filter: Prisma.ProductWhereInput): Prisma.ProductWhereInput {
+    return {
+      ...filter,
+      visible: true,
+      archivedAt: null,
+      brand: { visible: true },
+      category: { visible: true },
+    }
+  }
+
   /**
    * Handles public shopper product review submission.
    * - Honeypot filled: silently accepts without touching the database.
-   * - Product must exist, be visible, and not archived (404).
+   * - Product must exist, be visible, not archived, with visible brand and category (404).
    * - Duplicate (productId, phone) in ANY status rejected (409).
    * - Computes verifiedBuyer flag.
    * - Persists review with status: 'pending'.
@@ -46,16 +56,12 @@ export class ReviewsService {
       return { ok: true }
     }
 
-    const product = await this.prisma.product.findUnique({
-      where: { id: body.productId },
-      select: {
-        id: true,
-        visible: true,
-        archivedAt: true,
-      },
+    const product = await this.prisma.product.findFirst({
+      where: this.publicProductWhere({ id: body.productId }),
+      select: { id: true },
     })
 
-    if (!product || !product.visible || product.archivedAt !== null) {
+    if (!product) {
       throw new NotFoundException('المنتج مش موجود')
     }
 

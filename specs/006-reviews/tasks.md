@@ -34,9 +34,9 @@ description: "Tasks for Slice 5 — Reviews"
 
 ## Phase 5: Polish
 
-- [ ] T013 English + 320 px pass, a11y (star input, focus, live regions), hydration check
-- [ ] T014 Docs: docs/PHASE-1.md Slice 5; README roadmap; tick umbrella T060–T063
-- [ ] T015 Review: security (phone never public, spam controls, plain-text rendering, audit masking), consistency with spec
+- [x] T013 English + 320 px pass, a11y (star input, focus, live regions), hydration check
+- [x] T014 Docs: docs/PHASE-1.md Slice 5; README roadmap; tick umbrella T060–T063
+- [x] T015 Review: security (phone never public, spam controls, plain-text rendering, audit masking), consistency with spec
 
 ## Dependencies & Strategy
 

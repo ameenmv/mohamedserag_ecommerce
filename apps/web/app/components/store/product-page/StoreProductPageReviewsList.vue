@@ -2,7 +2,7 @@
 import type { PublicReview } from '@serag/shared'
 import { AlertCircle, Loader2 } from '@lucide/vue'
 
-defineProps<{
+const props = defineProps<{
   reviews: PublicReview[]
   total: number
   hasMore: boolean
@@ -16,12 +16,33 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+
+const itemsEl = ref<HTMLElement | null>(null)
+// Index of the first review a load-more will append; focus moves there so keyboard
+// users are not dropped to <body> when the button disappears on the last page.
+const focusIndexAfterLoad = ref<number | null>(null)
+
+function requestMore(): void {
+  focusIndexAfterLoad.value = props.reviews.length
+  emit('loadMore')
+}
+
+watch(
+  () => props.reviews.length,
+  async (length) => {
+    const index = focusIndexAfterLoad.value
+    if (index === null || length <= index) return
+    focusIndexAfterLoad.value = null
+    await nextTick()
+    itemsEl.value?.querySelectorAll<HTMLElement>('[data-testid="review-item"]')[index]?.focus()
+  },
+)
 </script>
 
 <template>
   <div class="flex flex-col gap-4 sm:gap-5">
     <!-- List of review items -->
-    <div class="flex flex-col gap-3 sm:gap-4">
+    <div ref="itemsEl" class="flex flex-col gap-3 sm:gap-4">
       <StoreProductPageReviewsItem
         v-for="item in reviews"
         :key="item.id"
@@ -62,7 +83,7 @@ const { t } = useI18n()
         type="button"
         :disabled="loadingMore"
         class="inline-flex min-h-11 min-w-36 items-center justify-center gap-2 rounded-xl border border-border bg-card px-6 py-2.5 text-sm font-bold text-foreground shadow-xs transition-colors hover:bg-secondary hover:border-serag-gold/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
-        @click="emit('loadMore')"
+        @click="requestMore"
       >
         <Loader2 v-if="loadingMore" class="size-4 animate-spin text-serag-gold" aria-hidden="true" />
         <span>{{ loadingMore ? t('store.reviews.loadingMore') : t('store.reviews.loadMore') }}</span>

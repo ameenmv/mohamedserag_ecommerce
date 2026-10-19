@@ -260,4 +260,46 @@ describe('reviews-schema (T002)', () => {
       }
     })
   })
+
+  describe('invisible and control characters (security review)', () => {
+    const base = {
+      productId: 'prod-123',
+      stars: 4,
+      text: 'منتج ممتاز جداً وجودة الخامات ممتازة وأنصح بالشراء',
+      name: 'محمود عبد الله',
+      phone: '01012345678',
+    }
+
+    it('drops bidi overrides from the name and turns newlines into a space', () => {
+      const parsed = reviewInputSchema.parse({ ...base, name: '‮محمود\n\tعبد⁦ الله⁩' })
+      expect(parsed.name).toBe('محمود عبد الله')
+    })
+
+    it('normalizes line endings, strips controls and caps blank lines in the text', () => {
+      const parsed = reviewInputSchema.parse({
+        ...base,
+        text: 'سطر أول طويل كفاية للتقييم\r\nسطر\u0007 تاني‮\n\n\n\n\nسطر تالت',
+      })
+      expect(parsed.text).toBe('سطر أول طويل كفاية للتقييم\nسطر تاني\n\nسطر تالت')
+    })
+
+    it('keeps ZWJ/ZWNJ that Arabic and emoji rely on', () => {
+      const parsed = reviewInputSchema.parse({ ...base, text: `${base.text} 👨‍👩` })
+      expect(parsed.text.endsWith('👨‍👩')).toBe(true)
+    })
+
+    it('measures length after cleaning, so invisible padding cannot pass the minimum', () => {
+      const result = reviewInputSchema.safeParse({ ...base, text: `قصير${'‮​'.repeat(25)}` })
+      expect(result.success).toBe(false)
+    })
+
+    it('rejects a productId longer than 64 characters', () => {
+      expect(reviewInputSchema.safeParse({ ...base, productId: 'p'.repeat(65) }).success).toBe(false)
+    })
+
+    it('cleans the store reply the same way and maps an invisible-only reply to null', () => {
+      expect(reviewReplySchema.parse({ reply: '‮شكراً لذوقك!\r\n' }).reply).toBe('شكراً لذوقك!')
+      expect(reviewReplySchema.parse({ reply: '‏‪ ' }).reply).toBeNull()
+    })
+  })
 })

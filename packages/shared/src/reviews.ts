@@ -69,6 +69,57 @@ export const REVIEW_NAME_MIN = 2
 export const REVIEW_NAME_MAX = 60
 export const REVIEW_REPLY_MAX = 500
 
+// Bidi embedding/override/isolate controls and marks (incl. the Arabic letter mark) plus
+// zero-width space and BOM: invisible characters that can reorder or hide how a review reads.
+// ZWJ/ZWNJ (U+200C/U+200D) are kept because Arabic shaping and emoji rely on them.
+const INVISIBLE_FORMAT_CODES = new Set([0x061c, 0x200b, 0x200e, 0x200f, 0xfeff])
+
+function isInvisibleFormat(code: number): boolean {
+  return (
+    INVISIBLE_FORMAT_CODES.has(code) ||
+    (code >= 0x202a && code <= 0x202e) ||
+    (code >= 0x2066 && code <= 0x2069)
+  )
+}
+
+function isControl(code: number): boolean {
+  return code <= 0x1f || (code >= 0x7f && code <= 0x9f)
+}
+
+/** Maps each character through `fn`, which returns the replacement ('' to drop it). */
+function mapChars(value: string, fn: (char: string, code: number) => string): string {
+  let out = ''
+  for (const char of value) out += fn(char, char.codePointAt(0) ?? 0)
+  return out
+}
+
+/**
+ * Cleans shopper/admin multi-line text before storing: normalizes line endings,
+ * drops invisible bidi/format and control characters (keeps `\n`), caps blank
+ * lines at one, and trims. ZWJ/ZWNJ are kept because Arabic and emoji use them.
+ */
+export function cleanMultilineText(value: string): string {
+  const normalized = value.replace(/\r\n?/g, '\n')
+  return mapChars(normalized, (char, code) =>
+    isInvisibleFormat(code) || (isControl(code) && char !== '\n') ? '' : char,
+  )
+    .replace(/\n{3,}/g, '\n\n')
+    .trim()
+}
+
+/**
+ * Cleans a single-line value such as a reviewer name: control characters
+ * (newlines and tabs included) become spaces, invisible bidi/format characters
+ * are dropped, and whitespace runs collapse to one space.
+ */
+export function cleanSingleLineText(value: string): string {
+  return mapChars(value, (char, code) =>
+    isInvisibleFormat(code) ? '' : isControl(code) ? ' ' : char,
+  )
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
 /**
  * Aggregates a star counts distribution (1–5) into a ReviewRatingSummary.
  * - Ignores keys outside the 1–5 range.

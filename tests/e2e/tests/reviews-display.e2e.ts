@@ -182,6 +182,12 @@ test('Product B: 12 approved reviews show 10 initially, «تحميل المزي�
 
   await expect(reviewItems).toHaveCount(12)
   await expect(loadMoreButton).toBeHidden()
+
+  // Focus moves to the first newly loaded review instead of falling back to <body>
+  const focusedIsReview = await browser.evaluate(
+    () => document.activeElement?.getAttribute('data-testid') === 'review-item',
+  )
+  expect(focusedIsReview).toBe(true)
 })
 
 test('Product C: with only a pending review shows empty state, no top rating, no aggregateRating in JSON-LD, and card has no rating', async ({
@@ -224,4 +230,45 @@ test('Product C: with only a pending review shows empty state, no top rating, no
   const cardC = browser.locator('article').filter({ hasText: prodCName })
   await expect(cardC).toBeVisible()
   await expect(cardC).not.toContainText('تقييم')
+})
+
+test('English product page shows the rating and keeps Arabic review text in its own direction', async ({
+  app,
+  screen,
+  browser,
+}) => {
+  const prodName = `Toshiba fridge ${seed.runId}`
+  const prod = await seed.product({ name: prodName, priceEgp: 24000, stock: 5 })
+
+  await seed.review({
+    productId: prod.id,
+    name: 'منى السيد',
+    stars: 5,
+    text: 'التلاجة ممتازة وهادية جداً والتوصيل كان سريع ومحترم',
+    status: 'approved',
+    reply: 'شكراً لذوقك!',
+    createdAt: '2026-10-10T10:00:00.000Z',
+  })
+  await seed.review({
+    productId: prod.id,
+    name: 'Omar Hassan',
+    stars: 4,
+    text: 'Very quiet fridge and the delivery team was on time',
+    status: 'approved',
+    createdAt: '2026-10-12T10:00:00.000Z',
+  })
+
+  await app.open(`/en/p/${prod.slug}`)
+  await waitForHydration(browser)
+
+  await expect(screen.getByText('4.5').first()).toBeVisible()
+  await expect(screen.getByText('2 reviews').first()).toBeVisible()
+
+  const reviewItems = browser.locator('[data-testid="review-item"]')
+  await expect(reviewItems).toHaveCount(2)
+  await expect(screen.getByRole('button', 'Load more')).toBeHidden()
+
+  const arabicText = browser.locator('[data-testid="review-item"] p').filter({ hasText: 'التلاجة ممتازة وهادية جداً' })
+  await expect(arabicText).toHaveAttribute('dir', 'auto')
+  await expect(screen.getByText('شكراً لذوقك!')).toBeVisible()
 })

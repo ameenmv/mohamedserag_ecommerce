@@ -121,6 +121,7 @@ async function handleClearReply() {
           <textarea
             id="admin-review-reply-input"
             v-model="replyText"
+            dir="auto"
             rows="4"
             :maxlength="REVIEW_REPLY_MAX + 50"
             :placeholder="t('admin.reviews.replyDialog.placeholder')"

@@ -14,13 +14,14 @@ const formattedDate = computed(() => formatDate(props.review.createdAt, locale.v
 <template>
   <article
     data-testid="review-item"
-    class="flex flex-col gap-3 rounded-2xl border border-border bg-card p-4 sm:p-5 shadow-xs transition-shadow hover:shadow-sm"
+    tabindex="-1"
+    class="flex flex-col gap-3 rounded-2xl border border-border bg-card p-4 sm:p-5 shadow-xs transition-shadow hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
   >
     <!-- Header: Reviewer info, verified badge, and date -->
     <div class="flex flex-wrap items-center justify-between gap-2">
       <div class="flex flex-wrap items-center gap-2.5">
         <!-- Name as entered -->
-        <span class="font-bold text-foreground text-sm sm:text-base">
+        <span dir="auto" class="font-bold text-foreground text-sm sm:text-base">
           {{ review.name }}
         </span>
 
@@ -56,7 +57,7 @@ const formattedDate = computed(() => formatDate(props.review.createdAt, locale.v
     </div>
 
     <!-- Review Text (Plain text, preserved line breaks, NEVER v-html) -->
-    <p class="whitespace-pre-line break-words text-xs sm:text-sm text-foreground/90 leading-relaxed">
+    <p dir="auto" class="whitespace-pre-line break-words text-start text-xs sm:text-sm text-foreground/90 leading-relaxed">
       {{ review.text }}
     </p>
 
@@ -71,7 +72,7 @@ const formattedDate = computed(() => formatDate(props.review.createdAt, locale.v
           {{ t('store.reviews.storeReplyTitle') }}
         </span>
       </div>
-      <p class="whitespace-pre-line break-words text-xs sm:text-sm text-foreground/85 leading-relaxed">
+      <p dir="auto" class="whitespace-pre-line break-words text-start text-xs sm:text-sm text-foreground/85 leading-relaxed">
         {{ review.reply }}
       </p>
     </div>

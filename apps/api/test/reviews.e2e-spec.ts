@@ -575,6 +575,65 @@ describe('Reviews API E2E (POST /api/reviews)', () => {
       expect(res.body.message).toBe('المنتج مش موجود')
     })
 
+    it('returns 404 when the product brand or category is hidden (same rule as the public pages)', async () => {
+      const hiddenBrand = await prisma.brand.create({
+        data: { name: `ماركة مخفية ${runId}`, slug: `rev-hidden-brand-${runId}`, visible: false },
+      })
+      const hiddenCategory = await prisma.category.create({
+        data: { name: `قسم مخفي ${runId}`, slug: `rev-hidden-cat-${runId}`, visible: false },
+      })
+      try {
+        const underHiddenBrand = await prisma.product.create({
+          data: {
+            modelCode: `REV-HBRAND-${runId}`,
+            slug: `rev-hbrand-${runId}`,
+            name: `منتج ماركته مخفية ${runId}`,
+            brandId: hiddenBrand.id,
+            categoryId,
+            price: 70_000,
+            stock: 10,
+            visible: true,
+            taxRate: 14,
+          },
+        })
+        const underHiddenCategory = await prisma.product.create({
+          data: {
+            modelCode: `REV-HCAT-${runId}`,
+            slug: `rev-hcat-${runId}`,
+            name: `منتج قسمه مخفي ${runId}`,
+            brandId,
+            categoryId: hiddenCategory.id,
+            price: 70_000,
+            stock: 10,
+            visible: true,
+            taxRate: 14,
+          },
+        })
+        createdProductIds.push(underHiddenBrand.id, underHiddenCategory.id)
+
+        for (const productId of [underHiddenBrand.id, underHiddenCategory.id]) {
+          const res = await request(app.getHttpServer())
+            .post('/api/reviews')
+            .set('X-Forwarded-For', nextIp())
+            .send({
+              productId,
+              stars: 4,
+              name: 'عميل تجريبي',
+              phone: '01011114444',
+              text: 'تقييم لمنتج ماركته أو قسمه مخفي لا يقل عن عشرين حرفاً',
+            })
+            .expect(404)
+          expect(res.body.message).toBe('المنتج مش موجود')
+        }
+      } finally {
+        await prisma.product.deleteMany({
+          where: { OR: [{ brandId: hiddenBrand.id }, { categoryId: hiddenCategory.id }] },
+        })
+        await prisma.brand.delete({ where: { id: hiddenBrand.id } })
+        await prisma.category.delete({ where: { id: hiddenCategory.id } })
+      }
+    })
+
     it('returns 404 for non-existent product ID', async () => {
       const res = await request(app.getHttpServer())
         .post('/api/reviews')

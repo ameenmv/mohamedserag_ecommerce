@@ -368,7 +368,7 @@ async function executeDelete() {
               <!-- Text & Store reply -->
               <td class="px-3 py-4 align-top max-w-md">
                 <div class="flex flex-col gap-2">
-                  <p class="whitespace-pre-line break-words text-sm text-foreground/90 leading-relaxed">
+                  <p dir="auto" class="whitespace-pre-line break-words text-start text-sm text-foreground/90 leading-relaxed">
                     {{ row.text }}
                   </p>
 
@@ -381,7 +381,7 @@ async function executeDelete() {
                       <MessageSquareQuote class="size-3.5" aria-hidden="true" />
                       <span>{{ t('admin.reviews.replyTitle') }}</span>
                     </div>
-                    <p class="whitespace-pre-line break-words text-muted-foreground leading-relaxed">
+                    <p dir="auto" class="whitespace-pre-line break-words text-start text-muted-foreground leading-relaxed">
                       {{ row.reply }}
                     </p>
                   </div>
@@ -391,7 +391,7 @@ async function executeDelete() {
               <!-- Reviewer Info -->
               <td class="px-3 py-4 align-top min-w-36">
                 <div class="flex flex-col gap-1 text-xs">
-                  <span class="font-bold text-foreground">{{ row.name }}</span>
+                  <span dir="auto" class="font-bold text-foreground">{{ row.name }}</span>
                   <span dir="ltr" class="num font-mono text-muted-foreground text-start">
                     {{ row.phone }}
                   </span>
@@ -536,7 +536,7 @@ async function executeDelete() {
 
           <!-- Review Text -->
           <div class="pt-1 border-t border-border/60">
-            <p class="whitespace-pre-line break-words text-sm text-foreground/90 leading-relaxed">
+            <p dir="auto" class="whitespace-pre-line break-words text-start text-sm text-foreground/90 leading-relaxed">
               {{ row.text }}
             </p>
           </div>
@@ -550,14 +550,14 @@ async function executeDelete() {
               <MessageSquareQuote class="size-3.5" aria-hidden="true" />
               <span>{{ t('admin.reviews.replyTitle') }}</span>
             </div>
-            <p class="whitespace-pre-line break-words text-muted-foreground leading-relaxed">
+            <p dir="auto" class="whitespace-pre-line break-words text-start text-muted-foreground leading-relaxed">
               {{ row.reply }}
             </p>
           </div>
 
           <!-- Customer details -->
           <div class="flex items-center justify-between text-xs text-muted-foreground pt-1 border-t border-border/60">
-            <span class="font-bold text-foreground">{{ row.name }}</span>
+            <span dir="auto" class="font-bold text-foreground">{{ row.name }}</span>
             <span dir="ltr" class="num font-mono">{{ row.phone }}</span>
           </div>
 
