@@ -294,6 +294,7 @@ describe('checkout utils - couponReasonKey', () => {
     expect(couponReasonKey('limit')).toBe('store.checkout.coupon.reasons.limit')
     expect(couponReasonKey('phone_limit')).toBe('store.checkout.coupon.reasons.phone_limit')
     expect(couponReasonKey('no_eligible')).toBe('store.checkout.coupon.reasons.no_eligible')
+    expect(couponReasonKey('too_many_attempts')).toBe('store.checkout.coupon.reasons.too_many_attempts')
   })
 
   it('falls back to generic reason key for null, undefined, empty, or unknown codes', () => {

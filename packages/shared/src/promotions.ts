@@ -106,6 +106,7 @@ export type CouponReasonCode =
   | 'limit'
   | 'phone_limit'
   | 'no_eligible'
+  | 'too_many_attempts'
 
 export const COUPON_REASON_MESSAGES: Record<CouponReasonCode, string> = {
   not_found: 'الكود ده مش موجود',
@@ -115,6 +116,7 @@ export const COUPON_REASON_MESSAGES: Record<CouponReasonCode, string> = {
   limit: 'الكود ده خلص',
   phone_limit: 'استخدمت الكود ده قبل كده',
   no_eligible: 'الكود ده مش على المنتجات اللي في السلة',
+  too_many_attempts: 'جربت أكواد كتير، استنى ربع ساعة وجرب تاني',
 }
 
 export interface EvaluateCouponContext {

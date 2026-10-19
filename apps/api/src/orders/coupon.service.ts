@@ -11,10 +11,14 @@ import {
 } from '@serag/shared'
 import { Prisma, type Coupon } from '../generated/prisma/client.js'
 import { PrismaService } from '../prisma/prisma.service.js'
+import { CouponAttemptLimiter } from './coupon-attempt-limiter.js'
 
 @Injectable()
 export class CouponService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly limiter: CouponAttemptLimiter,
+  ) {}
 
   /**
    * Builds normalized CouponLine items from cart products and ordered items.
@@ -61,14 +65,30 @@ export class CouponService {
     products: readonly CartProductRecord[] = [],
     items: readonly { productId: string; qty: number }[] = [],
     phone?: string | null,
+    ip?: string,
   ): Promise<CouponEvaluation | null> {
     if (!code || code.trim().length === 0) {
       return null
     }
 
     const normalizedCode = normalizeCouponCode(code)
+
+    if (ip && this.limiter.isBlocked(ip)) {
+      return {
+        code: normalizedCode,
+        status: 'rejected',
+        discount: 0,
+        reason: COUPON_REASON_MESSAGES.too_many_attempts,
+        reasonCode: 'too_many_attempts',
+        minOrder: null,
+      }
+    }
+
     const coupon = await this.prisma.coupon.findUnique({ where: { code: normalizedCode } })
     if (!coupon) {
+      if (ip) {
+        this.limiter.recordFailure(ip)
+      }
       return notFound(normalizedCode)
     }
     return this.evaluateRow(this.prisma, coupon, products, items, phone)

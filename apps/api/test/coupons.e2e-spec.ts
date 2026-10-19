@@ -987,4 +987,67 @@ describe('Coupons API E2E (/api/cart/quote, /api/orders)', () => {
     })
     expect(redemptionAfterConfirm?.status).toBe('active')
   })
+
+  // ==========================================================================
+  // 12. Coupon code guessing limiter (sliding window per IP)
+  // ==========================================================================
+  it('blocks coupon evaluation after 10 unknown codes from the same IP, returning too_many_attempts even for a valid code', async () => {
+    const validCode = `GUESS_VALID_${nanoid(6).toUpperCase()}`
+    const coupon = await prisma.coupon.create({
+      data: {
+        code: validCode,
+        type: 'percent',
+        value: 15,
+        active: true,
+      },
+    })
+    createdCouponIds.push(coupon.id)
+
+    const guesserIp = '198.51.100.99'
+
+    // 10 failed attempts with non-existent codes
+    for (let i = 0; i < 10; i++) {
+      const res = await request(app.getHttpServer())
+        .post('/api/cart/quote')
+        .set('X-Forwarded-For', guesserIp)
+        .send({
+          items: [{ productId: eligibleProdId, qty: 1 }],
+          couponCode: `UNKNOWN_CODE_${i}_${nanoid(6)}`,
+        })
+        .expect(200)
+
+      expect(res.body.coupon?.status).toBe('rejected')
+      expect(res.body.coupon?.reasonCode).toBe('not_found')
+    }
+
+    // 11th request from the same IP with a VALID code is blocked without applying the discount
+    const blockedRes = await request(app.getHttpServer())
+      .post('/api/cart/quote')
+      .set('X-Forwarded-For', guesserIp)
+      .send({
+        items: [{ productId: eligibleProdId, qty: 1 }],
+        couponCode: validCode,
+      })
+      .expect(200)
+
+    expect(blockedRes.body.coupon?.status).toBe('rejected')
+    expect(blockedRes.body.coupon?.reasonCode).toBe('too_many_attempts')
+    expect(blockedRes.body.coupon?.discount).toBe(0)
+    expect(blockedRes.body.discount).toBe(0)
+
+    // A different IP can still successfully apply the valid coupon (IP isolation)
+    const otherIpRes = await request(app.getHttpServer())
+      .post('/api/cart/quote')
+      .set('X-Forwarded-For', nextIp())
+      .send({
+        items: [{ productId: eligibleProdId, qty: 1 }],
+        couponCode: validCode,
+      })
+      .expect(200)
+
+    expect(otherIpRes.body.coupon?.status).toBe('applied')
+    expect(otherIpRes.body.coupon?.reasonCode).toBeNull()
+    expect(otherIpRes.body.coupon?.discount).toBe(15_000)
+    expect(otherIpRes.body.discount).toBe(15_000)
+  })
 })

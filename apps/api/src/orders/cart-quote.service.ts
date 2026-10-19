@@ -20,7 +20,7 @@ export class CartQuoteService {
   /**
    * Evaluates cart pricing, availability, zone fees, and coupons.
    */
-  async getCartQuote(input: CartQuoteInput): Promise<CartQuote> {
+  async getCartQuote(input: CartQuoteInput, ip?: string): Promise<CartQuote> {
     const productIds = input.items.map((i) => i.productId)
     const products = await loadCartProducts(this.prisma, productIds)
 
@@ -32,6 +32,7 @@ export class CartQuoteService {
         products,
         input.items,
         input.phone,
+        ip,
       ),
     ])
 

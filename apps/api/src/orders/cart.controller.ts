@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common'
+import { Body, Controller, HttpCode, HttpStatus, Ip, Post } from '@nestjs/common'
 import {
   cartQuoteInputSchema,
   type CartQuote,
@@ -21,7 +21,8 @@ export class CartController {
   @HttpCode(HttpStatus.OK)
   async getQuote(
     @Body(new ZodValidationPipe(cartQuoteInputSchema)) body: CartQuoteInput,
+    @Ip() ip: string,
   ): Promise<CartQuote> {
-    return this.cartQuoteService.getCartQuote(body)
+    return this.cartQuoteService.getCartQuote(body, ip)
   }
 }
