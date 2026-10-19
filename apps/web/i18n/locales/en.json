@@ -1722,6 +1722,153 @@
         "replyCleared": "Showroom reply cleared",
         "deleted": "Review deleted successfully"
       }
+    },
+    "content": {
+      "loading": "Loading the editor…",
+      "tabs": {
+        "home": "Home page"
+      },
+      "sections": {
+        "title": "Page sections",
+        "subtitle": "Reorder, hide, or open to edit",
+        "announce": "Announcement bar",
+        "hero": "Main hero",
+        "uspStrip": "Promises strip",
+        "featuredCategories": "Featured categories",
+        "flash": "Flash offers",
+        "bridalTeaser": "Bridal preparation",
+        "tradersTeaser": "Traders section",
+        "aboutTeaser": "About us",
+        "partners": "Partner brands",
+        "guides": "Buying guides",
+        "moveUp": "Move \"{section}\" up",
+        "moveDown": "Move \"{section}\" down",
+        "open": "Open \"{section}\" to edit",
+        "toggleVisibility": "Show \"{section}\"",
+        "hiddenBadge": "Hidden from shoppers",
+        "fieldCount": "{count} fields",
+        "changedCount": "{count} changes"
+      },
+      "fields": {
+        "reset": "Reset",
+        "linkLabel": "Link label",
+        "linkHref": "Link (starts with / or https://)",
+        "linkInvalid": "The link must start with / or https://",
+        "addLink": "Add link",
+        "removeLink": "Remove link",
+        "upload": "Upload image",
+        "uploading": "Uploading…",
+        "removeImage": "Remove image",
+        "addItem": "Add item",
+        "removeItem": "Remove item",
+        "statValue": "Value",
+        "statLabel": "Label",
+        "uspTitle": "Title",
+        "uspDescription": "Description",
+        "noCategories": "No categories available right now",
+        "announce": {
+          "text": "Announcement text",
+          "href": "Announcement link"
+        },
+        "hero": {
+          "eyebrow": "Top line",
+          "title": "Title",
+          "subtitle": "Description",
+          "cta": "Primary button",
+          "secondaryCta": "Secondary button",
+          "image": "Hero image",
+          "stats": "Stats"
+        },
+        "uspStrip": {
+          "items": "Promises (4)"
+        },
+        "featuredCategories": {
+          "title": "Section title",
+          "categorySlugs": "Shown categories"
+        },
+        "flash": {
+          "title": "Section title",
+          "subtitle": "Description"
+        },
+        "bridalTeaser": {
+          "eyebrow": "Top line",
+          "title": "Title",
+          "subtitle": "Description",
+          "cta": "Button"
+        },
+        "tradersTeaser": {
+          "badge": "Badge text",
+          "title": "Title",
+          "subtitle": "Description",
+          "cta": "Button",
+          "points": "Points"
+        },
+        "aboutTeaser": {
+          "eyebrow": "Top line",
+          "title": "Title",
+          "subtitle": "Description",
+          "cta": "Button"
+        },
+        "partners": {
+          "title": "Section title"
+        },
+        "guides": {
+          "title": "Section title"
+        }
+      },
+      "preview": {
+        "label": "Live draft preview",
+        "toggle": "Preview",
+        "deviceGroup": "Preview size",
+        "desktop": "Desktop",
+        "mobile": "Mobile",
+        "frameTitle": "Home page preview"
+      },
+      "publishBar": {
+        "label": "Publish status",
+        "pageName": "Home page",
+        "pending": "{count} unpublished changes",
+        "allPublished": "Everything is published",
+        "idle": "Waiting for changes",
+        "saving": "Saving…",
+        "saved": "Draft saved",
+        "error": "Save failed",
+        "discard": "Discard changes",
+        "publish": "Publish"
+      },
+      "publishDialog": {
+        "title": "Publish changes",
+        "description": "A new version will be created and published to the site immediately.",
+        "labelLabel": "Version label (optional)",
+        "labelPlaceholder": "e.g. Summer offers update",
+        "confirm": "Publish now",
+        "publishing": "Publishing…"
+      },
+      "versions": {
+        "title": "Version history",
+        "description": "Restore any past version as a draft, then publish it later.",
+        "button": "Version history",
+        "empty": "No published versions yet",
+        "untitled": "Untitled version",
+        "current": "Current",
+        "unknownAuthor": "Unknown",
+        "restore": "Restore",
+        "confirmTitle": "Restore version",
+        "confirmDescription": "\"{label}\" will be restored as a draft. Publish it afterwards to show it to shoppers.",
+        "confirmAction": "Restore as draft"
+      },
+      "errors": {
+        "loadFailed": "Could not load the site editor",
+        "publishFailed": "Could not publish changes",
+        "discardFailed": "Could not discard changes",
+        "restoreFailed": "Could not restore the version",
+        "uploadFailed": "Could not upload the image"
+      },
+      "toasts": {
+        "published": "Changes published",
+        "discarded": "Changes discarded",
+        "restored": "Version restored as a draft, publish it to confirm"
+      }
     }
   },
   "validation": {

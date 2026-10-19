@@ -1722,6 +1722,153 @@
         "replyCleared": "تم مسح رد المعرض",
         "deleted": "تم حذف التقييم بنجاح"
       }
+    },
+    "content": {
+      "loading": "جاري تحميل المحرر…",
+      "tabs": {
+        "home": "الصفحة الرئيسية"
+      },
+      "sections": {
+        "title": "أقسام الصفحة",
+        "subtitle": "رتّب، أخفي، أو افتح للتعديل",
+        "announce": "شريط الإعلان",
+        "hero": "الهيرو الرئيسي",
+        "uspStrip": "شريط المميزات",
+        "featuredCategories": "الأقسام المميزة",
+        "flash": "عروض الفلاش",
+        "bridalTeaser": "تجهيز العرايس",
+        "tradersTeaser": "قسم التجار",
+        "aboutTeaser": "من نحن",
+        "partners": "الماركات الشريكة",
+        "guides": "دليل الشراء",
+        "moveUp": "طلّع «{section}» لفوق",
+        "moveDown": "نزّل «{section}» لتحت",
+        "open": "افتح «{section}» للتعديل",
+        "toggleVisibility": "إظهار «{section}»",
+        "hiddenBadge": "مخفي عن الزوار",
+        "fieldCount": "{count} حقول",
+        "changedCount": "{count} تعديل"
+      },
+      "fields": {
+        "reset": "رجّع",
+        "linkLabel": "نص الرابط",
+        "linkHref": "الرابط (يبدأ بـ / أو https://)",
+        "linkInvalid": "الرابط لازم يبدأ بـ / أو https://",
+        "addLink": "أضف رابط",
+        "removeLink": "امسح الرابط",
+        "upload": "ارفع صورة",
+        "uploading": "جاري الرفع…",
+        "removeImage": "امسح الصورة",
+        "addItem": "أضف عنصر",
+        "removeItem": "امسح العنصر",
+        "statValue": "القيمة",
+        "statLabel": "الوصف",
+        "uspTitle": "العنوان",
+        "uspDescription": "الوصف",
+        "noCategories": "مفيش أقسام متاحة دلوقتي",
+        "announce": {
+          "text": "نص الإعلان",
+          "href": "رابط الإعلان"
+        },
+        "hero": {
+          "eyebrow": "السطر العلوي",
+          "title": "العنوان",
+          "subtitle": "الوصف",
+          "cta": "الزر الأساسي",
+          "secondaryCta": "الزر الثانوي",
+          "image": "صورة الهيرو",
+          "stats": "الإحصائيات"
+        },
+        "uspStrip": {
+          "items": "المميزات (4)"
+        },
+        "featuredCategories": {
+          "title": "عنوان القسم",
+          "categorySlugs": "الأقسام المعروضة"
+        },
+        "flash": {
+          "title": "عنوان القسم",
+          "subtitle": "الوصف"
+        },
+        "bridalTeaser": {
+          "eyebrow": "السطر العلوي",
+          "title": "العنوان",
+          "subtitle": "الوصف",
+          "cta": "الزر"
+        },
+        "tradersTeaser": {
+          "badge": "نص الشارة",
+          "title": "العنوان",
+          "subtitle": "الوصف",
+          "cta": "الزر",
+          "points": "النقاط"
+        },
+        "aboutTeaser": {
+          "eyebrow": "السطر العلوي",
+          "title": "العنوان",
+          "subtitle": "الوصف",
+          "cta": "الزر"
+        },
+        "partners": {
+          "title": "عنوان القسم"
+        },
+        "guides": {
+          "title": "عنوان القسم"
+        }
+      },
+      "preview": {
+        "label": "معاينة حيّة للمسودة",
+        "toggle": "معاينة",
+        "deviceGroup": "مقاس المعاينة",
+        "desktop": "كمبيوتر",
+        "mobile": "موبايل",
+        "frameTitle": "معاينة الصفحة الرئيسية"
+      },
+      "publishBar": {
+        "label": "حالة النشر",
+        "pageName": "الصفحة الرئيسية",
+        "pending": "{count} تعديل مش منشور",
+        "allPublished": "كل حاجة منشورة",
+        "idle": "في انتظار التعديلات",
+        "saving": "جاري الحفظ…",
+        "saved": "اتحفظت المسودة",
+        "error": "تعذر الحفظ",
+        "discard": "تجاهل التعديلات",
+        "publish": "انشر"
+      },
+      "publishDialog": {
+        "title": "نشر التعديلات",
+        "description": "هيتم إنشاء إصدار جديد ونشره على الموقع فوراً.",
+        "labelLabel": "تسمية الإصدار (اختياري)",
+        "labelPlaceholder": "مثال: تحديث عروض الصيف",
+        "confirm": "انشر دلوقتي",
+        "publishing": "جاري النشر…"
+      },
+      "versions": {
+        "title": "سجل النسخ",
+        "description": "استرجع أي نسخة قديمة كمسودة، وانشرها بعدين.",
+        "button": "سجل النسخ",
+        "empty": "لسه مفيش نسخ منشورة",
+        "untitled": "نسخة بدون تسمية",
+        "current": "الحالية",
+        "unknownAuthor": "غير معروف",
+        "restore": "استرجع",
+        "confirmTitle": "استرجاع النسخة",
+        "confirmDescription": "هيتم استرجاع «{label}» كمسودة. انشرها بعد كده عشان تظهر للزوار.",
+        "confirmAction": "استرجع كمسودة"
+      },
+      "errors": {
+        "loadFailed": "تعذر تحميل محرر الموقع",
+        "publishFailed": "تعذر نشر التعديلات",
+        "discardFailed": "تعذر تجاهل التعديلات",
+        "restoreFailed": "تعذر استرجاع النسخة",
+        "uploadFailed": "تعذر رفع الصورة"
+      },
+      "toasts": {
+        "published": "اتنشرت التعديلات",
+        "discarded": "اتلغت التعديلات",
+        "restored": "اترجعت النسخة كمسودة، انشرها عشان تتأكد"
+      }
     }
   },
   "validation": {
