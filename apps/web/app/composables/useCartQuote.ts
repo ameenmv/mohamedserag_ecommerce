@@ -12,7 +12,6 @@ import {
   type PriceChange,
 } from '../utils/cart-quote'
 
-export type { CartQuoteContext, PriceChange }
 
 export interface UseCartQuoteControllerOptions {
   lines?: Ref<CartLine[]>

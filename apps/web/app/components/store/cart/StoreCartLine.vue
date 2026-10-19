@@ -2,7 +2,7 @@
 import type { CartLine } from '~/utils/cart'
 import type { CartQuoteLine } from '@serag/shared'
 import { Minus, Plus, Trash2 } from '@lucide/vue'
-import type { PriceChange } from '~/composables/useCartQuote'
+import type { PriceChange } from '~/utils/cart-quote'
 
 const props = defineProps<{
   line: CartLine
