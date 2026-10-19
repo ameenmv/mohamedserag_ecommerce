@@ -45,6 +45,8 @@ function createSampleDetail(overrides: Partial<ProductDetail> = {}): ProductDeta
       logoUrl: '/brands/samsung.svg',
     },
     related: [],
+    flash: null,
+    rating: null,
     ...overrides,
   }
 }
@@ -127,5 +129,32 @@ describe('product-jsonld: buildProductJsonLd', () => {
     const offers = jsonLd.offers as Record<string, unknown>
 
     expect(offers.availability).toBe('https://schema.org/PreOrder')
+  })
+
+  it('omits aggregateRating when product has no rating or rating count is 0', () => {
+    const detailNoRating = createSampleDetail({ rating: null })
+    const jsonLdNoRating = buildProductJsonLd(detailNoRating)
+    expect(jsonLdNoRating.aggregateRating).toBeUndefined()
+
+    const detailZeroCount = createSampleDetail({
+      rating: { average: 0, count: 0 },
+    })
+    const jsonLdZeroCount = buildProductJsonLd(detailZeroCount)
+    expect(jsonLdZeroCount.aggregateRating).toBeUndefined()
+  })
+
+  it('includes aggregateRating when product has valid rating with count > 0', () => {
+    const detailWithRating = createSampleDetail({
+      rating: { average: 4.2, count: 15 },
+    })
+    const jsonLd = buildProductJsonLd(detailWithRating)
+
+    expect(jsonLd.aggregateRating).toEqual({
+      '@type': 'AggregateRating',
+      ratingValue: 4.2,
+      reviewCount: 15,
+      bestRating: 5,
+      worstRating: 1,
+    })
   })
 })

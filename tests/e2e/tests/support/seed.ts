@@ -117,6 +117,22 @@ export interface SeedCouponResult {
   active: boolean;
 }
 
+export interface SeedReviewInput {
+  productId: string;
+  name?: string;
+  phone?: string;
+  stars: number;
+  text?: string;
+  status?: 'pending' | 'approved' | 'rejected';
+  verifiedBuyer?: boolean;
+  reply?: string;
+  createdAt?: string;
+}
+
+export interface SeedReviewResult {
+  id: string;
+}
+
 export interface SeedHelper {
   readonly runId: string;
   product(input?: SeedProductInput): Promise<SeedProductResult>;
@@ -126,6 +142,7 @@ export interface SeedHelper {
   getProduct(slug: string): Promise<SeedProductDetailResult>;
   flashSale(input: SeedFlashSaleInput): Promise<SeedFlashSaleResult>;
   coupon(input: SeedCouponInput): Promise<SeedCouponResult>;
+  review(input: SeedReviewInput): Promise<SeedReviewResult>;
 }
 
 export function createSeed(): SeedHelper {
@@ -237,6 +254,21 @@ export function createSeed(): SeedHelper {
         throw new Error(`Failed to seed coupon (${res.status}): ${errorText}`);
       }
       return res.json() as Promise<SeedCouponResult>;
+    },
+    async review(input: SeedReviewInput): Promise<SeedReviewResult> {
+      const res = await fetch(url('/api/test/seed/review'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-test-seed-secret': secret,
+        },
+        body: JSON.stringify({ runId, ...input }),
+      });
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(`Failed to seed review (${res.status}): ${errorText}`);
+      }
+      return res.json() as Promise<SeedReviewResult>;
     },
   };
 }

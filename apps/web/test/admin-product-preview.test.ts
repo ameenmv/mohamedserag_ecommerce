@@ -54,6 +54,7 @@ describe('buildProductCardPreview', () => {
     })
     expect(card.availability.state).toBe('in_stock')
     expect(card.availability.orderable).toBe(true)
+    expect(card.rating).toBeNull()
   })
 
   it('handles empty / new draft with graceful fallbacks and custom labels', () => {

@@ -673,7 +673,26 @@
         "text": "Review must be at least 20 characters",
         "name": "Name must be at least 2 characters",
         "phone": "Invalid mobile number (010, 011, 012, 015)"
-      }
+      },
+      "count": {
+        "zero": "No reviews",
+        "one": "{count} review",
+        "two": "{count} reviews",
+        "few": "{count} reviews",
+        "many": "{count} reviews",
+        "other": "{count} reviews"
+      },
+      "ratingSrText": "Rating {average} out of 5 — {count}",
+      "distributionLabel": "{stars}: {count}",
+      "starsOutOfFive": "{stars} out of 5",
+      "verifiedBuyer": "Verified buyer",
+      "storeReplyTitle": "Store reply",
+      "emptyState": "No reviews yet — be the first to review",
+      "loadMore": "Load more",
+      "loadingMore": "Loading...",
+      "showingCount": "Showing {shown} of {total}",
+      "loadError": "Failed to load reviews",
+      "retry": "Retry"
     }
   },
   "admin": {

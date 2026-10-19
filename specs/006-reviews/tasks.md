@@ -28,9 +28,9 @@ description: "Tasks for Slice 5 — Reviews"
 
 ## Phase 4: User Story 3 — Read reviews (P1)
 
-- [ ] T010 [US3] `catalog.ts`: `rating: { average, count } | null` on ProductCard/ProductDetail; API `GET /products/:slug/reviews` (summary + paged approved list, no phone/ip) and rating summary on cards/detail via one grouped query; API e2e (pending/rejected never counted, distribution, paging)
-- [ ] T011 [US3] Web: `StoreProductRating` on cards, product-page summary + distribution + list + load more + empty state, verified tag, store reply; `aggregateRating` in product JSON-LD only when count > 0
-- [ ] T012 [US3] TesterArmy: three approved reviews → average and count on card and page, buyer tag, load more, empty state on another product, JSON-LD present only after approval
+- [x] T010 [US3] `catalog.ts`: `rating: { average, count } | null` on ProductCard/ProductDetail; API `GET /products/:slug/reviews` (summary + paged approved list, no phone/ip) and rating summary on cards/detail via one grouped query; API e2e (pending/rejected never counted, distribution, paging)
+- [x] T011 [US3] Web: `StoreProductRating` on cards, product-page summary + distribution + list + load more + empty state, verified tag, store reply; `aggregateRating` in product JSON-LD only when count > 0
+- [x] T012 [US3] TesterArmy: three approved reviews → average and count on card and page, buyer tag, load more, empty state on another product, JSON-LD present only after approval
 
 ## Phase 5: Polish
 

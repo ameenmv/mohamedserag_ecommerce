@@ -103,6 +103,11 @@ const productUrl = computed(() => localePath(`/p/${props.product.slug}`))
           {{ product.name }}
         </NuxtLink>
       </h3>
+
+      <!-- Rating (approved reviews only; truthy check for backward compatibility) -->
+      <div v-if="product.rating" class="mt-1 flex items-center">
+        <StoreProductRating :rating="product.rating" size="sm" />
+      </div>
     </div>
 
     <!-- Bottom section: Price and Add to Cart -->

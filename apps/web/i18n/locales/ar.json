@@ -673,7 +673,26 @@
         "text": "التقييم لازم يكون 20 حرف على الأقل",
         "name": "الاسم يجب أن يتكون من حرفين على الأقل",
         "phone": "رقم الموبايل غير صحيح (010, 011, 012, 015)"
-      }
+      },
+      "count": {
+        "zero": "مفيش تقييمات",
+        "one": "تقييم واحد",
+        "two": "تقييمين",
+        "few": "{count} تقييمات",
+        "many": "{count} تقييم",
+        "other": "{count} تقييم"
+      },
+      "ratingSrText": "التقييم {average} من 5 — {count}",
+      "distributionLabel": "{stars}: {count}",
+      "starsOutOfFive": "{stars} من 5",
+      "verifiedBuyer": "اشترى من المعرض",
+      "storeReplyTitle": "رد المعرض",
+      "emptyState": "لسه مفيش تقييمات — كن أول واحد يقيّم",
+      "loadMore": "تحميل المزيد",
+      "loadingMore": "جاري التحميل...",
+      "showingCount": "ظهر {shown} من {total}",
+      "loadError": "تعذر تحميل التقييمات",
+      "retry": "إعادة المحاولة"
     }
   },
   "admin": {

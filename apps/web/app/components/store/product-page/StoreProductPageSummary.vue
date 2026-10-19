@@ -90,6 +90,15 @@ const whatsappUrl = computed(() => {
 const showInstallment = computed(
   () => props.product.price >= settings.installmentMinPrice,
 )
+
+function scrollToReviews(): void {
+  const el = document.getElementById('reviews-section')
+  if (!el) return
+  const prefersReduced =
+    typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  el.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth' })
+}
 </script>
 
 <template>
@@ -115,6 +124,17 @@ const showInstallment = computed(
     <h1 class="text-xl font-bold leading-snug text-foreground sm:text-2xl lg:text-3xl">
       {{ product.name }}
     </h1>
+
+    <!-- Rating link to reviews section -->
+    <div v-if="product.rating">
+      <a
+        href="#reviews-section"
+        class="inline-flex w-fit items-center gap-1.5 transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg cursor-pointer"
+        @click.prevent="scrollToReviews"
+      >
+        <StoreProductRating :rating="product.rating" size="md" />
+      </a>
+    </div>
 
     <!-- Availability Badge -->
     <div class="flex items-center gap-2">

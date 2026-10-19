@@ -72,5 +72,15 @@ export function buildProductJsonLd(
     jsonLd.url = url
   }
 
+  if (product.rating && product.rating.count > 0) {
+    jsonLd.aggregateRating = {
+      '@type': 'AggregateRating',
+      ratingValue: product.rating.average,
+      reviewCount: product.rating.count,
+      bestRating: 5,
+      worstRating: 1,
+    }
+  }
+
   return jsonLd
 }

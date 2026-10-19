@@ -44,6 +44,8 @@ function createTestProductDetail(overrides: Partial<ProductDetail> = {}): Produc
       logoUrl: '/brands/tac.svg',
     },
     related: [],
+    flash: null,
+    rating: null,
     ...overrides,
   }
 }
@@ -80,6 +82,8 @@ describe('product-card-mapper: toProductCard', () => {
         maxQty: 3,
         leadTimeText: null,
       },
+      flash: null,
+      rating: null,
     })
   })
 
@@ -107,5 +111,17 @@ describe('product-card-mapper: toProductCard', () => {
     const card = toProductCard(detail)
 
     expect(card.image).toBeNull()
+  })
+
+  it('maps rating from detail to card when present', () => {
+    const detail = createTestProductDetail({
+      rating: { average: 4.5, count: 12 },
+    })
+    const card = toProductCard(detail)
+
+    expect(card.rating).toEqual({
+      average: 4.5,
+      count: 12,
+    })
   })
 })

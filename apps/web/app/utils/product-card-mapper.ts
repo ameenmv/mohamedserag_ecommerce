@@ -33,5 +33,6 @@ export function toProductCard(detail: ProductDetail): ProductCard {
     image: detail.image ?? fallbackImage,
     availability: detail.availability,
     flash: detail.flash,
+    rating: detail.rating,
   }
 }

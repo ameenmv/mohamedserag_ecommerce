@@ -99,5 +99,6 @@ export function buildProductCardPreview(
     },
     // The editor previews regular pricing; flash sales are managed separately.
     flash: null,
+    rating: null,
   }
 }
