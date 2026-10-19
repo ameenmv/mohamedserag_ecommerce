@@ -107,6 +107,7 @@ const summaryRef = ref<{ addToCartButton: HTMLElement | null } | null>(null)
         <StoreProductPageSummary
           ref="summaryRef"
           :product="product"
+          @flash-ended="refreshNuxtData(`product:${slug}`)"
         />
       </div>
     </div>

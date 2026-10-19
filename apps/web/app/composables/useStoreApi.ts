@@ -3,6 +3,7 @@ import type {
   BrandSummary,
   CategoryDetail,
   CategoryTreeNode,
+  OffersResponse,
   ProductCard,
   ProductDetail,
   ProductListResponse,
@@ -114,6 +115,17 @@ export function useStoreApi() {
           q,
           ...(limit !== undefined ? { limit } : {}),
         },
+      })
+    },
+
+    /**
+     * GET /offers
+     * Returns running flash sales and discounted items.
+     */
+    offers(): Promise<OffersResponse> {
+      return $fetch<OffersResponse>('/offers', {
+        baseURL,
+        method: 'GET',
       })
     },
   }

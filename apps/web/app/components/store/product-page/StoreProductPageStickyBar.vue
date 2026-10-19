@@ -63,6 +63,7 @@ function handleAddToCart(): void {
           <StoreProductPrice
             :price="product.price"
             :old-price="product.oldPrice"
+            :flash="product.flash"
           />
         </div>
       </div>

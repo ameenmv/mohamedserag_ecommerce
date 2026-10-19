@@ -162,6 +162,7 @@ function getRowLabel(row: { key: string; label: string; type: string }): string 
                     :price="product.price"
                     :old-price="product.oldPrice"
                     :discount-percent="product.discountPercent"
+                    :flash="product.flash"
                   />
 
                   <!-- Add to Cart -->

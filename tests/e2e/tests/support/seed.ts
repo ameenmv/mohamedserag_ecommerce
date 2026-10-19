@@ -75,6 +75,25 @@ export interface SeedProductDetailResult {
   };
 }
 
+export interface SeedFlashSaleItemInput {
+  productId: string;
+  salePriceEgp: number;
+}
+
+export interface SeedFlashSaleInput {
+  name?: string;
+  startsAt?: string;
+  endsAt?: string;
+  items: SeedFlashSaleItemInput[];
+}
+
+export interface SeedFlashSaleResult {
+  id: string;
+  name: string;
+  startsAt: string;
+  endsAt: string;
+}
+
 export interface SeedHelper {
   readonly runId: string;
   product(input?: SeedProductInput): Promise<SeedProductResult>;
@@ -82,6 +101,7 @@ export interface SeedHelper {
   adminSession(): Promise<SeedAdminSessionResult>;
   cleanup(): Promise<SeedCleanupResult>;
   getProduct(slug: string): Promise<SeedProductDetailResult>;
+  flashSale(input: SeedFlashSaleInput): Promise<SeedFlashSaleResult>;
 }
 
 export function createSeed(): SeedHelper {
@@ -163,6 +183,21 @@ export function createSeed(): SeedHelper {
         throw new Error(`Failed to get product ${slug} (${res.status}): ${errorText}`);
       }
       return res.json() as Promise<SeedProductDetailResult>;
+    },
+    async flashSale(input: SeedFlashSaleInput): Promise<SeedFlashSaleResult> {
+      const res = await fetch(url('/api/test/seed/flash-sale'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-test-seed-secret': secret,
+        },
+        body: JSON.stringify({ runId, ...input }),
+      });
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(`Failed to seed flash sale (${res.status}): ${errorText}`);
+      }
+      return res.json() as Promise<SeedFlashSaleResult>;
     },
   };
 }

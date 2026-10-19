@@ -13,6 +13,10 @@ const props = defineProps<{
   product: ProductDetail
 }>()
 
+const emit = defineEmits<{
+  (e: 'flashEnded'): void
+}>()
+
 const { t } = useI18n()
 const localePath = useLocalePath()
 const { format } = usePrice()
@@ -124,6 +128,9 @@ const showInstallment = computed(
           :price="product.price"
           :old-price="product.oldPrice"
           :discount-percent="product.discountPercent"
+          :flash="product.flash"
+          countdown-variant="detail"
+          @flash-ended="emit('flashEnded')"
         />
 
         <div class="mt-1 flex flex-wrap items-center gap-2">

@@ -111,6 +111,25 @@
       "realPhoto": "صورة حقيقية",
       "oldPriceAria": "السعر الأصلي: {price}"
     },
+    "flash": {
+      "badge": "عرض لفترة محدودة",
+      "remaining": "باقي {time}",
+      "endsIn": "العرض بيخلص خلال {time}",
+      "endsAtAria": "العرض بيخلص {datetime}",
+      "ended": "العرض خلص",
+      "daysAndClock": "{days} يوم و {clock}"
+    },
+    "offers": {
+      "title": "العروض",
+      "seoTitle": "العروض",
+      "heading": "العروض والتخفيضات",
+      "subtitle": "أقوى عروض وتخفيضات معرض محمد سراج على الأجهزة المنزلية وجهاز العروسة",
+      "flashSectionTitle": "عروض لفترة محدودة",
+      "discountedSectionTitle": "تخفيضات مميزة",
+      "emptyTitle": "مفيش عروض دلوقتي — تابعنا قريب",
+      "emptyDescription": "تابعنا على فيسبوك وتليجرام عشان تعرف أول بأول لما عروض جديدة تنزل",
+      "browseShop": "تصفح كل المنتجات"
+    },
     "productPage": {
       "modelCode": "الموديل: {code}",
       "saving": "وفّر {amount}",

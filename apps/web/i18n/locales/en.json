@@ -111,6 +111,25 @@
       "realPhoto": "Real photo",
       "oldPriceAria": "Original price: {price}"
     },
+    "flash": {
+      "badge": "Limited-time offer",
+      "remaining": "Remaining {time}",
+      "endsIn": "Offer ends in {time}",
+      "endsAtAria": "Offer ends {datetime}",
+      "ended": "Offer ended",
+      "daysAndClock": "{days}d {clock}"
+    },
+    "offers": {
+      "title": "Offers",
+      "seoTitle": "Offers",
+      "heading": "Offers & Discounts",
+      "subtitle": "Best offers and discounts from Mohamed Serag on home appliances and bridal preparation",
+      "flashSectionTitle": "Limited-Time Offers",
+      "discountedSectionTitle": "Special Discounts",
+      "emptyTitle": "No active offers right now — check back soon",
+      "emptyDescription": "Follow us on social media to stay updated with our upcoming deals and promotions",
+      "browseShop": "Browse all products"
+    },
     "productPage": {
       "modelCode": "Model: {code}",
       "saving": "Save {amount}",

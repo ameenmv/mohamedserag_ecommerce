@@ -111,6 +111,8 @@ const productUrl = computed(() => localePath(`/p/${props.product.slug}`))
         :price="product.price"
         :old-price="product.oldPrice"
         :discount-percent="product.discountPercent"
+        :flash="product.flash"
+        countdown-variant="compact"
       />
 
       <StoreProductAddToCart v-if="showAddToCart" :product="product" />

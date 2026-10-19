@@ -155,6 +155,7 @@ const liveAnnouncement = computed(() => {
                 :price="item.price"
                 :old-price="item.oldPrice"
                 :discount-percent="item.discountPercent"
+                :flash="item.flash"
               />
             </div>
           </NuxtLink>
