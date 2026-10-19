@@ -113,8 +113,7 @@
       "partnersEyebrow": "وكلاء معتمدين",
       "authorizedDealer": "وكيل معتمد",
       "guidesEyebrow": "دليل الشراء",
-      "allGuides": "كل الأدلة",
-      "readGuide": "اقرأ الدليل"
+      "allGuides": "كل الأدلة"
     },
     "product": {
       "addToCart": "أضف للسلة",
@@ -125,6 +124,17 @@
     },
     "pages": {
       "updatedAt": "آخر تحديث: {date}"
+    },
+    "guides": {
+      "seoTitle": "دليل الشراء | معرض محمد سراج",
+      "heading": "دليل الشراء",
+      "subtitle": "أدلة ونصائح تساعدك تختار أحسن الأجهزة المنزلية وجهاز العروسة من معرض محمد سراج.",
+      "readGuide": "اقرأ الدليل",
+      "publishedAt": "نُشر: {date}",
+      "relatedProducts": "منتجات مرتبطة",
+      "emptyTitle": "لسه مفيش أدلة منشورة",
+      "emptyDescription": "تابعنا قريب، هننزّل أدلة شراء جديدة تساعدك تختار صح.",
+      "loadError": "تعذر تحميل الأدلة"
     },
     "traders": {
       "seoTitle": "الجملة والتجار | معرض محمد سراج",
@@ -1752,7 +1762,8 @@
       "loading": "جاري تحميل المحرر…",
       "tabs": {
         "home": "الصفحة الرئيسية",
-        "pages": "الصفحات"
+        "pages": "الصفحات",
+        "guides": "دليل الشراء"
       },
       "pages": {
         "listTitle": "صفحات الموقع",
@@ -1783,6 +1794,63 @@
         "savedToast": "اتحفظت الصفحة",
         "saveError": "تعذر حفظ الصفحة",
         "viewPage": "شوف الصفحة"
+      },
+      "guides": {
+        "listTitle": "أدلة الشراء",
+        "listSubtitle": "أنشئ وعدّل أدلة الشراء، وأضف الأقسام والمنتجات المرتبطة، وحدد حالة النشر.",
+        "loading": "جاري تحميل الأدلة…",
+        "empty": "لسه مفيش أدلة. ابدأ بإنشاء أول دليل.",
+        "loadError": "تعذر تحميل الأدلة",
+        "searchPlaceholder": "ابحث بالعنوان…",
+        "statusFilter": "فلترة حسب الحالة",
+        "status": {
+          "all": "الكل",
+          "published": "منشور",
+          "draft": "مسودة"
+        },
+        "new": "دليل جديد",
+        "published": "منشور",
+        "draft": "مسودة",
+        "edit": "تعديل",
+        "editNamed": "تعديل دليل «{title}»",
+        "updatedAt": "آخر تحديث: {date}",
+        "back": "رجوع للأدلة",
+        "editorHeading": "تعديل الدليل",
+        "editorCreateHeading": "دليل جديد",
+        "editorLoadError": "تعذر تحميل الدليل",
+        "fieldTitle": "عنوان الدليل",
+        "fieldSlug": "الرابط (slug)",
+        "fieldSummary": "ملخص الدليل",
+        "fieldCover": "صورة الغلاف",
+        "fieldBody": "محتوى الدليل",
+        "fieldCategories": "الأقسام المرتبطة",
+        "fieldProducts": "المنتجات المرتبطة",
+        "fieldSeoTitle": "عنوان SEO",
+        "fieldSeoDescription": "وصف SEO",
+        "fieldPublished": "الدليل منشور للزوار",
+        "pickCategory": "اختر قسم",
+        "addCategory": "أضف قسم",
+        "addProduct": "أضف منتج",
+        "productPickerTitle": "اختر منتج",
+        "removeTerm": "امسح «{name}»",
+        "maxTerms": "أقصى عدد أقسام أو منتجات 4",
+        "duplicateProduct": "المنتج مضاف بالفعل",
+        "titleRequired": "عنوان الدليل مطلوب",
+        "slugInvalid": "الرابط حروف إنجليزي صغيرة وأرقام وشرطة بس",
+        "counter": "{count}/{max}",
+        "snippetLabel": "معاينة نتيجة البحث",
+        "snippetUrl": "/guides/{slug}",
+        "previewTitleFallback": "عنوان الدليل",
+        "previewDescriptionFallback": "وصف مختصر للدليل يظهر في نتيجة البحث.",
+        "save": "احفظ",
+        "saving": "جاري الحفظ…",
+        "savedToast": "اتحفظ الدليل",
+        "saveError": "تعذر حفظ الدليل",
+        "deletedToast": "اتحذف الدليل",
+        "viewGuide": "شوف الدليل",
+        "delete": "احذف",
+        "confirmDeleteTitle": "حذف الدليل",
+        "confirmDelete": "هيتم حذف الدليل نهائياً ومش هيظهر للزوار. متأكد؟"
       },
       "sections": {
         "title": "أقسام الصفحة",

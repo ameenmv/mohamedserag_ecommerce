@@ -113,8 +113,7 @@
       "partnersEyebrow": "Authorized dealers",
       "authorizedDealer": "Authorized dealer",
       "guidesEyebrow": "Buying guides",
-      "allGuides": "All guides",
-      "readGuide": "Read the guide"
+      "allGuides": "All guides"
     },
     "product": {
       "addToCart": "Add to cart",
@@ -125,6 +124,17 @@
     },
     "pages": {
       "updatedAt": "Last updated: {date}"
+    },
+    "guides": {
+      "seoTitle": "Buying guides | Mohamed Serag",
+      "heading": "Buying guides",
+      "subtitle": "Guides and tips to help you choose the best home appliances and bridal essentials from Mohamed Serag.",
+      "readGuide": "Read the guide",
+      "publishedAt": "Published: {date}",
+      "relatedProducts": "Related products",
+      "emptyTitle": "No published guides yet",
+      "emptyDescription": "Check back soon — we are adding new buying guides to help you choose right.",
+      "loadError": "Could not load guides"
     },
     "traders": {
       "seoTitle": "Wholesale & Traders | Mohamed Serag",
@@ -1752,7 +1762,8 @@
       "loading": "Loading the editor…",
       "tabs": {
         "home": "Home page",
-        "pages": "Pages"
+        "pages": "Pages",
+        "guides": "Buying guides"
       },
       "pages": {
         "listTitle": "Site pages",
@@ -1783,6 +1794,63 @@
         "savedToast": "Page saved",
         "saveError": "Could not save the page",
         "viewPage": "View page"
+      },
+      "guides": {
+        "listTitle": "Buying guides",
+        "listSubtitle": "Create and edit buying guides, add linked categories and products, and set the publish state.",
+        "loading": "Loading guides…",
+        "empty": "No guides yet. Start by creating your first guide.",
+        "loadError": "Could not load guides",
+        "searchPlaceholder": "Search by title…",
+        "statusFilter": "Filter by status",
+        "status": {
+          "all": "All",
+          "published": "Published",
+          "draft": "Draft"
+        },
+        "new": "New guide",
+        "published": "Published",
+        "draft": "Draft",
+        "edit": "Edit",
+        "editNamed": "Edit guide \"{title}\"",
+        "updatedAt": "Last updated: {date}",
+        "back": "Back to guides",
+        "editorHeading": "Edit guide",
+        "editorCreateHeading": "New guide",
+        "editorLoadError": "Could not load the guide",
+        "fieldTitle": "Guide title",
+        "fieldSlug": "URL (slug)",
+        "fieldSummary": "Guide summary",
+        "fieldCover": "Cover image",
+        "fieldBody": "Guide content",
+        "fieldCategories": "Linked categories",
+        "fieldProducts": "Linked products",
+        "fieldSeoTitle": "SEO title",
+        "fieldSeoDescription": "SEO description",
+        "fieldPublished": "Guide is published to shoppers",
+        "pickCategory": "Choose a category",
+        "addCategory": "Add category",
+        "addProduct": "Add product",
+        "productPickerTitle": "Choose a product",
+        "removeTerm": "Remove \"{name}\"",
+        "maxTerms": "At most 4 categories or products",
+        "duplicateProduct": "Product already added",
+        "titleRequired": "Guide title is required",
+        "slugInvalid": "The URL allows lowercase English letters, numbers and hyphens only",
+        "counter": "{count}/{max}",
+        "snippetLabel": "Search result preview",
+        "snippetUrl": "/guides/{slug}",
+        "previewTitleFallback": "Guide title",
+        "previewDescriptionFallback": "A short description of the guide shown in search results.",
+        "save": "Save",
+        "saving": "Saving…",
+        "savedToast": "Guide saved",
+        "saveError": "Could not save the guide",
+        "deletedToast": "Guide deleted",
+        "viewGuide": "View guide",
+        "delete": "Delete",
+        "confirmDeleteTitle": "Delete guide",
+        "confirmDelete": "The guide will be permanently deleted and hidden from shoppers. Are you sure?"
       },
       "sections": {
         "title": "Page sections",

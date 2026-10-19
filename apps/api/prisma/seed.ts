@@ -1427,6 +1427,111 @@ async function main() {
   }
 
   // --------------------------------------------------------------------------
+  // 6.7b Buying Guides (3 published guides)
+  // --------------------------------------------------------------------------
+  interface GuideSeedDef {
+    slug: string
+    title: string
+    summary: string
+    body: string
+    categorySlug: string | null
+  }
+
+  const guideDefs: GuideSeedDef[] = [
+    {
+      slug: 'choose-refrigerator',
+      title: 'إزاي تختار الثلاجة المناسبة لبيتك؟',
+      summary:
+        'دليل سريع لاختيار الثلاجة: السعة المناسبة، الفرق بين النوفروست والانفرتر، استهلاك الكهرباء، والضمان — نصائح من خبراء معرض محمد سراج.',
+      body: `<h2>ابدأ بحجم البيت والاستخدام</h2>
+<p>ثلاجة 16 قدم مناسبة لبيت صغير، أما العائلات فالأفضل 20 قدم أو أكتر. اختار بين الباب العلوي والسفلي والـ Side by Side حسب المساحة المتاحة في مطبخك.</p>
+<h2>النوفروست والانفرتر بيفرقوا في إيه؟</h2>
+<ul>
+<li>النوفروست بيمنع تكوّن الثلج وبيقلل تنظيف الثلاجة.</li>
+<li>الانفرتر بيقلّل استهلاك الكهرباء وبيشتغل أهدأ.</li>
+<li>لو منطقتك فيها قطع كهرباء متكرر، اسأل عن حماية الفولت.</li>
+</ul>
+<h2>نصائح من معرض محمد سراج</h2>
+<p>اختار ماركة لها وكيل رسمي وضمان واضح في مصر، وقيس مساحة المطبخ قبل الشراء. في المعرض بنساعدك تقارن الموديلات والأسعار وتختار اللي يناسب بيتك.</p>`,
+      categorySlug: 'refrigerators',
+    },
+    {
+      slug: 'inverter-ac-guide',
+      title: 'دليل شراء التكييف الانفرتر',
+      summary:
+        'كل اللي محتاج تعرفه عن تكييف الانفرتر: قوة التبريد، استهلاك الكهرباء، سعة الـ BTU المناسبة للأوضة، ونصائح التركيب والصيانة.',
+      body: `<h2>ليه تختار الانفرتر؟</h2>
+<p>تكييف الانفرتر بيتحكم في سرعة الضاغط، فبيوصل للحرارة المطلوبة بسرعة وبعدين بيقلّل الاستهلاك، وده بيفرق في فاتورة الكهربا على المدى الطويل.</p>
+<h2>اختار سعة التبريد المناسبة</h2>
+<ul>
+<li>أوضة صغيرة لحد 14 متر مربع: 1.25 حصان كفاية.</li>
+<li>أوضة متوسطة من 14 لـ 18 متر مربع: 1.5 حصان.</li>
+<li>أوضة كبيرة أو فوق السطح: 2.25 حصان أو أكتر.</li>
+</ul>
+<h2>نصائح التركيب والصيانة</h2>
+<p>التركيب الصح بيفرق في عمر الجهاز واستهلاكه. متثبتش الوحدة قرب مصدر حرارة، ونظّف الفلاتر كل شهرين. في المعرض بنركّب ونخدم بخبرة من سنين.</p>`,
+      categorySlug: 'acs',
+    },
+    {
+      slug: 'bridal-checklist',
+      title: 'دليل تجهيز العروسة — قائمة كاملة',
+      summary:
+        'قائمة كاملة لتجهيز جهاز العروسة: من الأجهزة الكهربائية لأدوات المطبخ والحمام، مع نصائح ترتيب الأولويات والميزانية خطوة بخطوة.',
+      body: `<h2>ابدئي بالأساسيات</h2>
+<p>جهّزي الأول الأجهزة الكبيرة: ثلاجة، غسالة، تكييف، وبوتاجاز، لأنها بتاخد وقت في الاختيار والتوصيل.</p>
+<h2>القائمة على مراحل</h2>
+<ul>
+<li>المرحلة الأولى: الأجهزة الكهربائية الأساسية.</li>
+<li>المرحلة التانية: أدوات المطبخ والحلل والأجهزة الصغيرة.</li>
+<li>المرحلة التالتة: أجهزة الحمام والعناية الشخصية.</li>
+</ul>
+<h2>نصيحة مننا</h2>
+<p>متحاوليش تجهيزي كل حاجة مرة واحدة. رتّبي حسب الميزانية والأهم، وابدئي بباقة جاهزة لو حابة تمشي خطوة بخطوة.</p>`,
+      categorySlug: null,
+    },
+  ]
+
+  for (const guide of guideDefs) {
+    const category = guide.categorySlug
+      ? await prisma.category.findUnique({
+          where: { slug: guide.categorySlug },
+          select: { id: true },
+        })
+      : null
+
+    const guideProducts = category
+      ? await prisma.product.findMany({
+          where: { categoryId: category.id, visible: true, archivedAt: null },
+          take: 3,
+          orderBy: { createdAt: 'asc' },
+          select: { id: true },
+        })
+      : []
+
+    await prisma.guide.upsert({
+      where: { slug: guide.slug },
+      update: {
+        title: guide.title,
+        summary: guide.summary,
+        body: guide.body,
+        categoryIds: category ? [category.id] : [],
+        productIds: guideProducts.map((product) => product.id),
+        published: true,
+      },
+      create: {
+        slug: guide.slug,
+        title: guide.title,
+        summary: guide.summary,
+        body: guide.body,
+        categoryIds: category ? [category.id] : [],
+        productIds: guideProducts.map((product) => product.id),
+        published: true,
+        publishedAt: new Date(),
+      },
+    })
+  }
+
+  // --------------------------------------------------------------------------
   // 6.8 Demo Orders (6 orders: SR-2026-000101..106)
   // --------------------------------------------------------------------------
   interface DemoOrderSeedDef {

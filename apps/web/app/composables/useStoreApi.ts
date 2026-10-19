@@ -9,12 +9,20 @@ import type {
   ProductDetail,
   ProductListResponse,
   ProductQueryInput,
+  PublicGuide,
   PublicHome,
   PublicPage,
   PublicPageLink,
   PublicStoreInfo,
   SearchResponse,
 } from '@serag/shared'
+
+export interface GuidesPageResponse {
+  items: GuideCard[]
+  total: number
+  page: number
+  pageSize: number
+}
 
 /**
  * Public catalog API composable for the storefront.
@@ -191,6 +199,30 @@ export function useStoreApi() {
         query: { pageSize: limit },
       })
       return response.items
+    },
+
+    /**
+     * GET /guides
+     * Returns a page of published buying guides (12 per page by default).
+     */
+    guides(page = 1, pageSize = 12): Promise<GuidesPageResponse> {
+      return $fetch<GuidesPageResponse>('/guides', {
+        baseURL,
+        method: 'GET',
+        query: { page, pageSize },
+      })
+    },
+
+    /**
+     * GET /guides/:slug
+     * Returns one published guide with its body, categories and related product cards.
+     * Rejects with a 404 when the guide is unpublished or unknown.
+     */
+    guide(slug: string): Promise<PublicGuide> {
+      return $fetch<PublicGuide>(`/guides/${encodeURIComponent(slug)}`, {
+        baseURL,
+        method: 'GET',
+      })
     },
   }
 }

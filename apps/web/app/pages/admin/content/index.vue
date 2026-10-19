@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { PERMISSIONS } from '@serag/shared'
 import type { Component } from 'vue'
-import { FileText, LayoutDashboard } from '@lucide/vue'
+import { FileText, LayoutDashboard, BookOpen } from '@lucide/vue'
 
 definePageMeta({
   layout: 'admin',
@@ -30,7 +30,7 @@ interface ContentTab {
   available: boolean
 }
 
-// Later slice-6 tasks add `guides` and `quiz` tabs here; only `home` and `pages` exist now.
+// Later slice-6 tasks add the `quiz` tab here; `home`, `pages` and `guides` exist now.
 const TABS: ContentTab[] = [
   {
     id: 'home',
@@ -42,6 +42,12 @@ const TABS: ContentTab[] = [
     id: 'pages',
     labelKey: 'admin.content.tabs.pages',
     icon: FileText,
+    available: true,
+  },
+  {
+    id: 'guides',
+    labelKey: 'admin.content.tabs.guides',
+    icon: BookOpen,
     available: true,
   },
 ]
@@ -105,6 +111,15 @@ function setTab(tab: string): void {
       :class="activeTab === 'pages' ? 'block' : 'hidden'"
     >
       <AdminContentPages v-if="activeTab === 'pages'" />
+    </div>
+
+    <div
+      id="panel-guides"
+      role="tabpanel"
+      aria-labelledby="tab-guides"
+      :class="activeTab === 'guides' ? 'block' : 'hidden'"
+    >
+      <AdminContentGuides v-if="activeTab === 'guides'" />
     </div>
   </div>
 </template>

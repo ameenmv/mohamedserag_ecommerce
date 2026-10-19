@@ -30,9 +30,9 @@ description: "Tasks for Slice 6 — Content, CMS & SEO"
 
 ## Phase 4: User Story 4 — Guides (P2)
 
-- [ ] T012 [US4] API public guides list/detail (+ products as cards with flash/rating) and admin guides CRUD with slug uniqueness and sanitizing; seed 3 prototype guides with summaries; API e2e
-- [ ] T013 [US4] Web `/guides`, `/guides/[slug]` (Article JSON-LD), home guides section wired, admin guides tab (`/admin/content?tab=guides`) list + editor (cover upload, categories/products pickers, rich text with images); i18n
-- [ ] T014 [US4] TesterArmy: create + publish guide → list, home section, detail with 3 product cards; unpublish → 404 and gone from the list
+- [x] T012 [US4] API public guides list/detail (+ products as cards with flash/rating) and admin guides CRUD with slug uniqueness and sanitizing; seed 3 prototype guides with summaries; API e2e
+- [x] T013 [US4] Web `/guides`, `/guides/[slug]` (Article JSON-LD), home guides section wired, admin guides tab (`/admin/content?tab=guides`) list + editor (cover upload, categories/products pickers, rich text with images); i18n
+- [x] T014 [US4] TesterArmy: create + publish guide → list, home section, detail with 3 product cards; unpublish → 404 and gone from the list
 
 ## Phase 5: User Story 5 — Quiz (P2)
 
