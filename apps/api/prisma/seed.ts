@@ -18,6 +18,8 @@ import {
 } from '../src/generated/prisma/client.js'
 import {
   ALL_PERMISSIONS,
+  DEFAULT_HOME_CONTENT,
+  DEFAULT_HOME_LAYOUT,
   DEFAULT_TEMPLATES,
   DEFAULT_ZONES,
   OWNER_ROLE_KEY,
@@ -1315,66 +1317,8 @@ async function main() {
   // --------------------------------------------------------------------------
   // 6.7 Content (Published Home ContentVersion + 6 Policy/Info Pages)
   // --------------------------------------------------------------------------
-  const homeData: Prisma.InputJsonValue = {
-    announce: {
-      text: 'أصلي 100% وبضمان حقيقي · استلام من المعرض أو توصيل لحد باب البيت',
-    },
-    hero: {
-      eyebrow: 'أجهزة كهربائية وأدوات منزلية · المنصورة · منذ 1972',
-      title: 'ثقة لها تاريخ',
-      subtitle:
-        'من 1972 بنجهّز بيوت مصر. أجهزة وأدوات أصلية بضمان حقيقي، بسعر قطاعي أو جملة، من أول جهاز لحد تجهيز بيت كامل.',
-      cta: { label: 'تسوّق دلوقتي', href: '/shop' },
-      secondaryCta: { label: 'جهّز بيتك (جهاز العروسة)', href: '/bridal' },
-      stats: [
-        { value: '1972', label: 'سنة التأسيس' },
-        { value: '+50', label: 'سنة خبرة' },
-        { value: '100%', label: 'منتجات أصلية' },
-      ],
-    },
-    uspStrip: [
-      { title: 'ضمان حقيقي', description: 'ضمان مباشر على الأجهزة من الوكيل الرسمي' },
-      { title: 'أصلي 100%', description: 'من مصادر موثوقة ومعتمدة بفرز أول مختوم' },
-      { title: 'استلام أو توصيل', description: 'من المعرض أو لحد باب بيتك بعربيات المعرض' },
-      { title: 'الدفع عند الاستلام', description: 'ادفع وانت مطمّن بعد معاينة جهازك' },
-    ],
-    featuredCategorySlugs: ['refrigerators', 'washers', 'tvs', 'acs', 'cookers', 'cookware'],
-    bridalTeaser: {
-      eyebrow: 'BRIDAL PACKAGES',
-      title: 'تجهيز العرايس — جهّز بيتك',
-      subtitle:
-        'بدل ما تلف على كل حاجة لوحدها، اختاري باقة جاهزة (أساسية / ذهبية / القصر)، عدّليها أوضة أوضة، شاركيها مع أهلك على واتساب، واحجزيها بعربون يثبّت الأسعار 30 يوم.',
-      cta: { label: 'ابدئي حاسبة التجهيز', href: '/bridal' },
-    },
-    tradersTeaser: {
-      badge: 'للتجار والمعارض',
-      title: 'أسعار الجملة بتوصلك من المصدر',
-      subtitle:
-        'تعامل مباشر مع كبرى مصانع الأجهزة وأواني الطهي التركية المستوردة حصرياً لمعارض وتجار الدلتا ومصر.',
-      cta: { label: 'كلّم قسم الجملة على واتساب', href: '/traders' },
-    },
-    aboutTeaser: {
-      eyebrow: 'OUR STORY · SINCE 1972',
-      title: 'من نحن — معرض محمد سراج الرئيسي',
-      subtitle:
-        'من سنة 1972 واسم محمد سراج معروف في المنصورة لأجهزة وأدوات البيت. منتج أصلي، سعر عادل، وخدمة بتفضل معاك بعد ما تمشي.',
-    },
-  }
-
-  const homeLayout: Prisma.InputJsonValue = {
-    sections: [
-      'announce',
-      'hero',
-      'uspStrip',
-      'featuredCategories',
-      'flash',
-      'bridalTeaser',
-      'tradersTeaser',
-      'aboutTeaser',
-      'partners',
-      'guides',
-    ],
-  }
+  const homeData = JSON.parse(JSON.stringify(DEFAULT_HOME_CONTENT)) as Prisma.InputJsonValue
+  const homeLayout = JSON.parse(JSON.stringify(DEFAULT_HOME_LAYOUT)) as Prisma.InputJsonValue
 
   const existingHomeVersion = await prisma.contentVersion.findFirst({
     where: { page: 'home', status: 'published' },

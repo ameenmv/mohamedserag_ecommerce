@@ -4,6 +4,7 @@ import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core'
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
 import { AuditInterceptor } from './audit/audit.interceptor.js'
 import { AdminCatalogModule } from './admin-catalog/admin-catalog.module.js'
+import { AdminContentModule } from './admin-content/admin-content.module.js'
 import { AdminOrdersModule } from './admin-orders/admin-orders.module.js'
 import { AdminBridalModule } from './admin-bridal/admin-bridal.module.js'
 import { AdminPromotionsModule } from './admin-promotions/admin-promotions.module.js'
@@ -11,6 +12,7 @@ import { AdminNotifyModule } from './admin-notify/admin-notify.module.js'
 import { AdminReviewsModule } from './admin-reviews/admin-reviews.module.js'
 import { AuthModule } from './auth/auth.module.js'
 import { CatalogModule } from './catalog/catalog.module.js'
+import { ContentModule } from './content/content.module.js'
 import { OrdersModule } from './orders/orders.module.js'
 import { BridalModule } from './bridal/bridal.module.js'
 import { SettingsModule } from './settings/settings.module.js'
@@ -33,12 +35,14 @@ import { TestSeedModule } from './test-seed/test-seed.module.js'
     ReviewsModule,
     AuthModule,
     CatalogModule,
+    ContentModule,
     AdminCatalogModule,
     AdminOrdersModule,
     AdminBridalModule,
     AdminPromotionsModule,
     AdminNotifyModule,
     AdminReviewsModule,
+    AdminContentModule,
     OrdersModule,
     BridalModule,
   ],
