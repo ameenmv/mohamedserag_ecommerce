@@ -9,6 +9,12 @@ export interface FooterLinkItem {
   to: string
 }
 
+/** A footer link whose label is resolved at runtime (e.g. a CMS page title). */
+export interface FooterResolvedLink {
+  label: string
+  to: string
+}
+
 /**
  * Main customer navigation links for the storefront header, mobile menu, and quick-strip.
  */
@@ -21,17 +27,23 @@ export const STORE_NAV_ITEMS: readonly StoreNavItem[] = [
 ] as const
 
 /**
- * Essential informational and policy links shown in the storefront footer.
+ * Fixed fallback labels for the CMS content pages. The footer prefers the published
+ * page titles from `GET /pages`; these keys are used only when that request fails.
  */
-export const FOOTER_LINKS: readonly FooterLinkItem[] = [
-  { labelKey: 'store.footer.about', to: '/about' },
-  { labelKey: 'store.footer.delivery', to: '/delivery' },
-  { labelKey: 'store.footer.returns', to: '/returns' },
-  { labelKey: 'store.footer.warranty', to: '/warranty' },
-  { labelKey: 'store.footer.privacy', to: '/privacy' },
-  { labelKey: 'store.footer.faq', to: '/faq' },
-  { labelKey: 'store.footer.traders', to: '/traders' },
+export const FOOTER_PAGE_LINKS: readonly { slug: string; labelKey: string }[] = [
+  { slug: 'about', labelKey: 'store.footer.about' },
+  { slug: 'delivery', labelKey: 'store.footer.delivery' },
+  { slug: 'returns', labelKey: 'store.footer.returns' },
+  { slug: 'warranty', labelKey: 'store.footer.warranty' },
+  { slug: 'privacy', labelKey: 'store.footer.privacy' },
+  { slug: 'faq', labelKey: 'store.footer.faq' },
 ] as const
+
+/** The always-present traders entry point shown after the CMS pages. */
+export const FOOTER_TRADERS_LINK: FooterLinkItem = {
+  labelKey: 'store.footer.traders',
+  to: '/traders',
+}
 
 /**
  * Quick department links rendered under the "تسوّق" footer column.

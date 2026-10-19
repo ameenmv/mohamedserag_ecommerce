@@ -200,6 +200,18 @@ export function isUploadedImage(src: string): boolean {
   return true
 }
 
+/** Fixed order of the store's content pages (footer and admin list); other slugs follow by title. */
+export const PAGE_SLUG_ORDER = ['about', 'delivery', 'returns', 'warranty', 'privacy', 'faq'] as const
+
+function pageSlugRank(slug: string): number {
+  const index = PAGE_SLUG_ORDER.findIndex((known) => known === slug)
+  return index === -1 ? PAGE_SLUG_ORDER.length : index
+}
+
+export function comparePageOrder(a: { slug: string; title: string }, b: { slug: string; title: string }): number {
+  return pageSlugRank(a.slug) - pageSlugRank(b.slug) || a.title.localeCompare(b.title, 'ar')
+}
+
 // Public page / guide types
 export interface PublicPageLink {
   slug: string

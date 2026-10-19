@@ -123,6 +123,31 @@
       "realPhoto": "صورة حقيقية",
       "oldPriceAria": "السعر الأصلي: {price}"
     },
+    "pages": {
+      "updatedAt": "آخر تحديث: {date}"
+    },
+    "traders": {
+      "seoTitle": "الجملة والتجار | معرض محمد سراج",
+      "seoDescription": "أسعار جملة من المصدر لمعارض وتجار الدلتا ومصر، بفواتير رسمية وضمان الوكيل من معرض محمد سراج.",
+      "whatsappCta": "كلّم قسم الجملة على واتساب",
+      "whatsappMessage": "أهلاً، أنا تاجر ومهتم بأسعار الجملة من معرض محمد سراج",
+      "whatsappUnavailable": "رقم قسم الجملة مش متاح دلوقتي. جرّب تتواصل معانا على الواتساب الرئيسي.",
+      "steps": {
+        "title": "إزاي تطلب بالجملة؟",
+        "step1Title": "كلّمنا على واتساب",
+        "step1Desc": "ابعتلنا اسم نشاطك والمحافظة اللي بتشتغل فيها، وفريق قسم الجملة هيرد عليك.",
+        "step2Title": "استلم قائمة الأسعار",
+        "step2Desc": "هنبعتلك قائمة أسعار مخصوصة للكميات اللي محتاجها، بأفضل سعر جملة من المصدر.",
+        "step3Title": "توصيل لمعرضك",
+        "step3Desc": "بنوصّل لمعرضك بعربيات المعرض مع فاتورة رسمية وضمان الوكيل."
+      },
+      "contact": {
+        "title": "تواصل مع قسم الجملة",
+        "phone": "تليفون",
+        "address": "العنوان",
+        "hours": "مواعيد العمل"
+      }
+    },
     "flash": {
       "badge": "عرض لفترة محدودة",
       "remaining": "باقي {time}",
@@ -1726,7 +1751,38 @@
     "content": {
       "loading": "جاري تحميل المحرر…",
       "tabs": {
-        "home": "الصفحة الرئيسية"
+        "home": "الصفحة الرئيسية",
+        "pages": "الصفحات"
+      },
+      "pages": {
+        "listTitle": "صفحات الموقع",
+        "listSubtitle": "عدّل نصوص الصفحات وسيو كل صفحة، وحدد إذا كانت ظاهرة للزوار.",
+        "loading": "جاري تحميل الصفحات…",
+        "empty": "مفيش صفحات متاحة.",
+        "loadError": "تعذر تحميل الصفحات",
+        "published": "منشورة",
+        "draft": "مسودة",
+        "edit": "تعديل",
+        "editNamed": "تعديل صفحة «{title}»",
+        "updatedAt": "آخر تحديث: {date}",
+        "back": "رجوع للصفحات",
+        "editorHeading": "تعديل الصفحة",
+        "editorLoadError": "تعذر تحميل الصفحة",
+        "fieldTitle": "عنوان الصفحة",
+        "fieldBody": "محتوى الصفحة",
+        "fieldSeoTitle": "عنوان SEO",
+        "fieldSeoDescription": "وصف SEO",
+        "fieldPublished": "الصفحة منشورة للزوار",
+        "counter": "{count}/{max}",
+        "snippetLabel": "معاينة نتيجة البحث",
+        "snippetUrl": "/pages/{slug}",
+        "previewTitleFallback": "عنوان الصفحة",
+        "previewDescriptionFallback": "وصف مختصر للصفحة يظهر في نتيجة البحث.",
+        "save": "احفظ",
+        "saving": "جاري الحفظ…",
+        "savedToast": "اتحفظت الصفحة",
+        "saveError": "تعذر حفظ الصفحة",
+        "viewPage": "شوف الصفحة"
       },
       "sections": {
         "title": "أقسام الصفحة",
@@ -1869,6 +1925,31 @@
         "discarded": "اتلغت التعديلات",
         "restored": "اترجعت النسخة كمسودة، انشرها عشان تتأكد"
       }
+    },
+    "richText": {
+      "toolbar": "أدوات تنسيق النص",
+      "heading2": "عنوان رئيسي 2",
+      "heading3": "عنوان فرعي 3",
+      "heading4": "عنوان فرعي 4",
+      "paragraph": "فقرة عادية",
+      "bold": "نص عريض",
+      "italic": "نص مائل",
+      "bulletList": "قائمة نقط",
+      "orderedList": "قائمة أرقام",
+      "blockquote": "اقتباس",
+      "link": "إضافة رابط",
+      "linkTitle": "إضافة أو تعديل رابط",
+      "linkDescription": "اكتب رابط داخلي يبدأ بـ /، أو رابط خارجي يبدأ بـ https://، أو mailto: أو tel:.",
+      "linkUrl": "الرابط",
+      "linkPlaceholder": "/pages/about أو https://example.com",
+      "linkApply": "تطبيق الرابط",
+      "linkRemove": "امسح الرابط",
+      "linkInvalid": "الرابط لازم يبدأ بـ / أو https:// أو mailto: أو tel:",
+      "image": "إضافة صورة",
+      "imageError": "تعذر رفع الصورة",
+      "loading": "جاري تحميل المحرر…",
+      "undo": "تراجع",
+      "redo": "إعادة"
     }
   },
   "validation": {

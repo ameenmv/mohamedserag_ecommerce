@@ -282,5 +282,6 @@ export function useAdminHomeEditor() {
     resetField,
     setField,
     touch,
+    settleSaves,
   }
 }

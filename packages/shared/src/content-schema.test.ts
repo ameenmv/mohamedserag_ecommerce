@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   DEFAULT_HOME_CONTENT,
   DEFAULT_HOME_LAYOUT,
+  comparePageOrder,
   countHomeChanges,
   isSafeContentLink,
   isUploadedImage,
@@ -117,5 +118,16 @@ describe('content', () => {
     for (const bad of ['', 'http://x.test', '//evil.test', 'javascript:alert(1)', 'shop']) {
       expect(isSafeContentLink(bad)).toBe(false)
     }
+  })
+
+  it('comparePageOrder keeps the fixed slug order, then sorts other pages by title', () => {
+    const pages = [
+      { slug: 'faq', title: 'أسئلة' },
+      { slug: 'zeta', title: 'ب' },
+      { slug: 'about', title: 'من نحن' },
+      { slug: 'alpha', title: 'أ' },
+      { slug: 'returns', title: 'الاسترجاع' },
+    ]
+    expect([...pages].sort(comparePageOrder).map((p) => p.slug)).toEqual(['about', 'returns', 'faq', 'alpha', 'zeta'])
   })
 })

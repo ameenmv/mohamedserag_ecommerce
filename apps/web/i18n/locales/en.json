@@ -123,6 +123,31 @@
       "realPhoto": "Real photo",
       "oldPriceAria": "Original price: {price}"
     },
+    "pages": {
+      "updatedAt": "Last updated: {date}"
+    },
+    "traders": {
+      "seoTitle": "Wholesale & Traders | Mohamed Serag",
+      "seoDescription": "Wholesale prices straight from the source for showrooms and traders across the Delta and Egypt, with official invoices and dealer warranties.",
+      "whatsappCta": "Talk to our wholesale team on WhatsApp",
+      "whatsappMessage": "Hello, I'm a trader interested in wholesale prices at Mohamed Serag.",
+      "whatsappUnavailable": "The wholesale number is unavailable right now. Please contact us on our main WhatsApp number.",
+      "steps": {
+        "title": "How wholesale ordering works",
+        "step1Title": "Message us on WhatsApp",
+        "step1Desc": "Send us your business name and governorate, and our wholesale team will get back to you.",
+        "step2Title": "Get your price list",
+        "step2Desc": "We'll send a price list tailored to your quantities, with the best wholesale price from the source.",
+        "step3Title": "Delivery to your showroom",
+        "step3Desc": "We deliver to your showroom with the store's vehicles, an official invoice and the dealer's warranty."
+      },
+      "contact": {
+        "title": "Wholesale contact",
+        "phone": "Phone",
+        "address": "Address",
+        "hours": "Opening hours"
+      }
+    },
     "flash": {
       "badge": "Limited-time offer",
       "remaining": "Remaining {time}",
@@ -1726,7 +1751,38 @@
     "content": {
       "loading": "Loading the editor…",
       "tabs": {
-        "home": "Home page"
+        "home": "Home page",
+        "pages": "Pages"
+      },
+      "pages": {
+        "listTitle": "Site pages",
+        "listSubtitle": "Edit each page's text and SEO, and choose whether it is visible to shoppers.",
+        "loading": "Loading pages…",
+        "empty": "No pages available.",
+        "loadError": "Could not load pages",
+        "published": "Published",
+        "draft": "Draft",
+        "edit": "Edit",
+        "editNamed": "Edit page \"{title}\"",
+        "updatedAt": "Last updated: {date}",
+        "back": "Back to pages",
+        "editorHeading": "Edit page",
+        "editorLoadError": "Could not load the page",
+        "fieldTitle": "Page title",
+        "fieldBody": "Page content",
+        "fieldSeoTitle": "SEO title",
+        "fieldSeoDescription": "SEO description",
+        "fieldPublished": "Page is published to shoppers",
+        "counter": "{count}/{max}",
+        "snippetLabel": "Search result preview",
+        "snippetUrl": "/pages/{slug}",
+        "previewTitleFallback": "Page title",
+        "previewDescriptionFallback": "A short description of the page shown in search results.",
+        "save": "Save",
+        "saving": "Saving…",
+        "savedToast": "Page saved",
+        "saveError": "Could not save the page",
+        "viewPage": "View page"
       },
       "sections": {
         "title": "Page sections",
@@ -1869,6 +1925,31 @@
         "discarded": "Changes discarded",
         "restored": "Version restored as a draft, publish it to confirm"
       }
+    },
+    "richText": {
+      "toolbar": "Text formatting tools",
+      "heading2": "Heading 2",
+      "heading3": "Heading 3",
+      "heading4": "Heading 4",
+      "paragraph": "Paragraph",
+      "bold": "Bold",
+      "italic": "Italic",
+      "bulletList": "Bullet list",
+      "orderedList": "Numbered list",
+      "blockquote": "Blockquote",
+      "link": "Add link",
+      "linkTitle": "Add or edit a link",
+      "linkDescription": "Enter an internal link starting with /, or an external link starting with https://, mailto: or tel:.",
+      "linkUrl": "Link",
+      "linkPlaceholder": "/pages/about or https://example.com",
+      "linkApply": "Apply link",
+      "linkRemove": "Remove link",
+      "linkInvalid": "The link must start with /, https://, mailto: or tel:",
+      "image": "Add image",
+      "imageError": "Could not upload the image",
+      "loading": "Loading the editor…",
+      "undo": "Undo",
+      "redo": "Redo"
     }
   },
   "validation": {

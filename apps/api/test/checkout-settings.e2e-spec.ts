@@ -54,4 +54,12 @@ describe('Checkout Settings API E2E (GET /api/settings/checkout)', () => {
     expect(res.body.citySuggestions['الدقهلية']).toContain('المنصورة')
     expect(res.body.citySuggestions['الدقهلية']).toContain('طلخا')
   })
+
+  it('GET /api/settings/store returns the public store details as strings', async () => {
+    const res = await request(app.getHttpServer()).get('/api/settings/store').expect(200)
+    for (const key of ['name', 'phone', 'whatsapp', 'tradersWhatsapp', 'address', 'hours']) {
+      expect(typeof res.body[key]).toBe('string')
+    }
+    expect(res.body.name.length).toBeGreaterThan(0)
+  })
 })

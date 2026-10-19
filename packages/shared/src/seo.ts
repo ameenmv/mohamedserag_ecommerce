@@ -59,6 +59,12 @@ export interface StoreInfo {
   hours: string
 }
 
+/** `GET /settings/store`: public store details. Values may still hold `[…]` placeholders before launch. */
+export interface PublicStoreInfo extends StoreInfo {
+  whatsapp: string
+  tradersWhatsapp: string
+}
+
 export function hasPlaceholder(value: string | null | undefined): boolean {
   if (!value) return true
   const trimmed = value.trim()

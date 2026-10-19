@@ -48,6 +48,11 @@ onMounted(() => {
   void editor.load()
 })
 
+// Leaving the tab must not drop an edit still waiting for its debounced autosave
+onBeforeUnmount(() => {
+  void editor.settleSaves()
+})
+
 async function onPublish(label?: string): Promise<void> {
   publishing.value = true
   const ok = await editor.publish(label)

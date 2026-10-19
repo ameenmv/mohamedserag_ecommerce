@@ -12,6 +12,7 @@ import {
   type BridalSettings,
   type CodDepositSetting,
   type PaymentsSetting,
+  type PublicStoreInfo,
   type Zone,
 } from '@serag/shared'
 import { z } from 'zod'
@@ -59,6 +60,26 @@ export class StoreSettingsService {
     })
     const parsed = z.object({ whatsapp: z.string().optional() }).safeParse(row?.value)
     return parsed.success && parsed.data.whatsapp ? parsed.data.whatsapp : ''
+  }
+
+  /** Public store details; missing or malformed fields come back as empty strings. */
+  async getStoreInfo(): Promise<PublicStoreInfo> {
+    const row = await this.prisma.setting.findUnique({
+      where: { key: 'store' },
+    })
+    const text = z.string().catch('')
+    const parsed = z
+      .object({
+        name: text,
+        phone: text,
+        whatsapp: text,
+        tradersWhatsapp: text,
+        address: text,
+        hours: text,
+      })
+      .safeParse(row?.value ?? {})
+    if (parsed.success) return parsed.data
+    return { name: '', phone: '', whatsapp: '', tradersWhatsapp: '', address: '', hours: '' }
   }
 
   async getBridal(): Promise<BridalSettings> {

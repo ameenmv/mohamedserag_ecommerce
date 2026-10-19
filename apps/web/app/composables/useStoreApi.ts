@@ -10,6 +10,9 @@ import type {
   ProductListResponse,
   ProductQueryInput,
   PublicHome,
+  PublicPage,
+  PublicPageLink,
+  PublicStoreInfo,
   SearchResponse,
 } from '@serag/shared'
 
@@ -137,6 +140,41 @@ export function useStoreApi() {
      */
     home(): Promise<PublicHome> {
       return $fetch<PublicHome>('/content/home', {
+        baseURL,
+        method: 'GET',
+      })
+    },
+
+    /**
+     * GET /pages
+     * Returns the published content pages (slug + title) used by the footer.
+     */
+    pages(): Promise<{ items: PublicPageLink[] }> {
+      return $fetch<{ items: PublicPageLink[] }>('/pages', {
+        baseURL,
+        method: 'GET',
+      })
+    },
+
+    /**
+     * GET /pages/:slug
+     * Returns one published content page with its sanitized body and SEO fields.
+     * Rejects with a 404 when the page is unpublished or unknown.
+     */
+    page(slug: string): Promise<PublicPage> {
+      return $fetch<PublicPage>(`/pages/${encodeURIComponent(slug)}`, {
+        baseURL,
+        method: 'GET',
+      })
+    },
+
+    /**
+     * GET /settings/store
+     * Returns the public store details (name, phones, WhatsApp numbers, address, hours).
+     * Values may still hold `[…]` placeholders before launch; check with `hasPlaceholder`.
+     */
+    storeInfo(): Promise<PublicStoreInfo> {
+      return $fetch<PublicStoreInfo>('/settings/store', {
         baseURL,
         method: 'GET',
       })

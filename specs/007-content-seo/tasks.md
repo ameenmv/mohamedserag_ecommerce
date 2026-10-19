@@ -24,9 +24,9 @@ description: "Tasks for Slice 6 — Content, CMS & SEO"
 
 ## Phase 3: User Story 3 — Pages and traders (P1)
 
-- [ ] T009 [US3] API public `GET /pages`, `GET /pages/:slug`; admin pages list/get/patch with sanitizing; seed keeps the six pages; API e2e (unpublished 404, script/handler/style stripped, link rel)
-- [ ] T010 [US3] Web `/pages/[slug]` (prose styles, SEO fields, 404), footer links from `GET /pages`, `/traders` (texts from home traders section + store WhatsApp numbers, fallback to main), admin pages tab (`/admin/content?tab=pages`) list + editor with `AdminRichTextEditor` (TipTap, lazy, allowlist-shaped toolbar); i18n
-- [ ] T011 [US3] TesterArmy: edit returns policy (bold + list) + SEO title → `/pages/returns`; unpublish FAQ → 404 + footer; `/traders` WhatsApp link target and message
+- [x] T009 [US3] API public `GET /pages`, `GET /pages/:slug`; admin pages list/get/patch with sanitizing; seed keeps the six pages; API e2e (unpublished 404, script/handler/style stripped, link rel)
+- [x] T010 [US3] Web `/pages/[slug]` (prose styles, SEO fields, 404), footer links from `GET /pages`, `/traders` (texts from home traders section + store WhatsApp numbers, fallback to main), admin pages tab (`/admin/content?tab=pages`) list + editor with `AdminRichTextEditor` (TipTap, lazy, allowlist-shaped toolbar); i18n
+- [x] T011 [US3] TesterArmy: edit returns policy (bold + list) + SEO title → `/pages/returns`; unpublish FAQ → 404 + footer; `/traders` WhatsApp link target and message
 
 ## Phase 4: User Story 4 — Guides (P2)
 
