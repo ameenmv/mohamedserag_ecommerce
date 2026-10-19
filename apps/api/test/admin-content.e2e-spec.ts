@@ -483,7 +483,7 @@ describe('Admin Content API E2E (/api/admin/content + /api/content/home)', () =>
 
       const state: AdminHomeState = stateRes.body
       const body = cloneDraft(state)
-      body.layout.hidden = ['tradersTeaser']
+      body.layout.hidden = [...body.layout.hidden.filter((id) => id !== 'tradersTeaser'), 'tradersTeaser']
 
       const putRes = await request(app.getHttpServer())
         .put('/api/admin/content/home/draft')

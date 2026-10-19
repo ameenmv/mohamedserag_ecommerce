@@ -138,9 +138,10 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
   },
 }
 
+/** The announce bar starts hidden: the store header already carries the same promise strip. */
 export const DEFAULT_HOME_LAYOUT: HomeLayout = {
   order: [...HOME_SECTION_IDS],
-  hidden: [],
+  hidden: ['announce'],
 }
 
 export function countHomeChanges(

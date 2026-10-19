@@ -101,11 +101,20 @@
       "account": "حسابي"
     },
     "home": {
-      "subtitle": "أجهزة منزلية وأدوات مطبخ — المنصورة",
       "metaDescription": "معرض محمد سراج بالمنصورة من 1972: أجهزة كهربائية وجهاز العروسة بضمان معتمد وتوصيل لكل محافظات مصر.",
-      "shopNow": "تسوّق الآن",
-      "bridalPackages": "جهاز العروسة",
-      "samplePrice": "28,900 ج.م"
+      "uspHeading": "وعود معرض محمد سراج",
+      "categoriesEyebrow": "تسوّق حسب القسم",
+      "allCategories": "شوف كل الأقسام",
+      "allOffers": "شوف كل العروض",
+      "tradersTiers": "شرائح الأسعار",
+      "tradersAccount": "حساب تاجر",
+      "showroomName": "معرض محمد سراج الرئيسي",
+      "showroomLine": "المنصورة · صرح متكامل للأجهزة الكهربائية والأدوات المنزلية منذ 1972",
+      "partnersEyebrow": "وكلاء معتمدين",
+      "authorizedDealer": "وكيل معتمد",
+      "guidesEyebrow": "دليل الشراء",
+      "allGuides": "كل الأدلة",
+      "readGuide": "اقرأ الدليل"
     },
     "product": {
       "addToCart": "أضف للسلة",

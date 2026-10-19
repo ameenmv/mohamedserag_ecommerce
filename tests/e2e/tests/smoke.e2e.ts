@@ -8,11 +8,13 @@ test('API health reports the database is up', async () => {
   expect(await res.json()).toMatchObject({ status: 'ok', db: 'ok' });
 });
 
-test('home renders the Arabic RTL brand shell', async ({ app, browser, screen }) => {
+test('home renders the Arabic RTL CMS home', async ({ app, browser }) => {
   await app.open('/');
   await expect(browser.locator('html')).toHaveAttribute('dir', 'rtl');
   await expect(browser.locator('html')).toHaveAttribute('lang', /^ar(-|$)/);
-  await expect(screen.getByRole('heading', 'معرض محمد سراج')).toBeVisible();
+  // Exactly one h1: the hero title from the published home content (or the built-in default)
+  await expect(browser.locator('h1')).toHaveCount(1);
+  await expect(browser.locator('h1')).toBeVisible();
 });
 
 test('admin redirects to login when signed out', async ({ app, browser }) => {

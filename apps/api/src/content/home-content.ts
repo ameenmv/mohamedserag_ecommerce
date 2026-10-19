@@ -23,7 +23,8 @@ function readLegacySections(value: unknown): unknown[] | null {
 
 /**
  * Parses the stored layout JSON, tolerating the legacy `{ sections: string[] }` shape
- * by reading the known ids as `order` and appending any missing ids in canonical order.
+ * by reading the known ids as `order` and appending any missing ids in canonical order;
+ * hidden sections start from the defaults.
  */
 function parseLayout(value: unknown): HomeLayout {
   const parsed = homeLayoutSchema.safeParse(value)
@@ -50,7 +51,7 @@ function parseLayout(value: unknown): HomeLayout {
     }
   }
 
-  return { order, hidden: [] }
+  return { order, hidden: [...DEFAULT_HOME_LAYOUT.hidden] }
 }
 
 export interface StoredHome {

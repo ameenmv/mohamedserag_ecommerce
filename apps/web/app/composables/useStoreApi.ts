@@ -3,11 +3,13 @@ import type {
   BrandSummary,
   CategoryDetail,
   CategoryTreeNode,
+  GuideCard,
   OffersResponse,
   ProductCard,
   ProductDetail,
   ProductListResponse,
   ProductQueryInput,
+  PublicHome,
   SearchResponse,
 } from '@serag/shared'
 
@@ -127,6 +129,30 @@ export function useStoreApi() {
         baseURL,
         method: 'GET',
       })
+    },
+
+    /**
+     * GET /content/home
+     * Returns the published homepage layout and section content.
+     */
+    home(): Promise<PublicHome> {
+      return $fetch<PublicHome>('/content/home', {
+        baseURL,
+        method: 'GET',
+      })
+    },
+
+    /**
+     * GET /guides
+     * Returns the newest published buying guides.
+     */
+    async latestGuides(limit = 3): Promise<GuideCard[]> {
+      const response = await $fetch<{ items: GuideCard[] }>('/guides', {
+        baseURL,
+        method: 'GET',
+        query: { pageSize: limit },
+      })
+      return response.items
     },
   }
 }

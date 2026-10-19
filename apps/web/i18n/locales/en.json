@@ -101,11 +101,20 @@
       "account": "My Account"
     },
     "home": {
-      "subtitle": "Home Appliances & Kitchenware — Mansoura",
       "metaDescription": "Mohamed Serag Showroom, Mansoura, since 1972: home appliances and bridal packages with genuine warranty and delivery across Egypt.",
-      "shopNow": "Shop Now",
-      "bridalPackages": "Bridal Packages",
-      "samplePrice": "28,900 EGP"
+      "uspHeading": "Mohamed Serag promises",
+      "categoriesEyebrow": "Shop by category",
+      "allCategories": "See all categories",
+      "allOffers": "See all offers",
+      "tradersTiers": "Price tiers",
+      "tradersAccount": "Trader account",
+      "showroomName": "Mohamed Serag Main Showroom",
+      "showroomLine": "Mansoura · A complete home appliances and houseware destination since 1972",
+      "partnersEyebrow": "Authorized dealers",
+      "authorizedDealer": "Authorized dealer",
+      "guidesEyebrow": "Buying guides",
+      "allGuides": "All guides",
+      "readGuide": "Read the guide"
     },
     "product": {
       "addToCart": "Add to cart",

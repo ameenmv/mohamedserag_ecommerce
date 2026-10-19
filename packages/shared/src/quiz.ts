@@ -1,3 +1,5 @@
+import type { ProductCard, SpecFieldType } from './catalog.js'
+
 export const QUIZ_OPERATORS = ['eq', 'neq', 'gte', 'lte', 'contains', 'isTrue'] as const
 export type QuizOperator = (typeof QUIZ_OPERATORS)[number]
 
@@ -49,6 +51,33 @@ export interface QuizResult {
 export interface PublicQuiz {
   category: { slug: string; name: string }
   questions: QuizQuestion[]
+}
+
+/** `POST /quiz/:categorySlug/results`; `reason` is null on the popularity fallback. */
+export interface QuizResultsResponse {
+  items: { product: ProductCard; reason: string | null }[]
+  fallback: boolean
+}
+
+export interface AdminQuizRow {
+  categoryId: string
+  categorySlug: string
+  categoryName: string
+  hasQuiz: boolean
+  questionCount: number
+}
+
+export interface AdminQuizSpecField {
+  key: string
+  label: string
+  type: SpecFieldType
+}
+
+export interface AdminQuizState {
+  category: { id: string; slug: string; name: string }
+  specFields: AdminQuizSpecField[]
+  definition: QuizDefinition | null
+  warnings: string[]
 }
 
 type SpecValue = string | number | boolean | null | undefined

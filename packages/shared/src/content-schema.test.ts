@@ -104,10 +104,10 @@ describe('content', () => {
     draft2.sections.hero = { ...draft2.sections.hero, title: 'New Title' }
     expect(countHomeChanges(draft2, published)).toBe(1)
 
-    const draft3 = { sections: DEFAULT_HOME_CONTENT, layout: { order: [...HOME_SECTION_IDS].reverse(), hidden: [] } }
+    const draft3 = { sections: DEFAULT_HOME_CONTENT, layout: { order: [...HOME_SECTION_IDS].reverse(), hidden: [...DEFAULT_HOME_LAYOUT.hidden] } }
     expect(countHomeChanges(draft3, published)).toBe(1)
 
-    const draft4 = { sections: DEFAULT_HOME_CONTENT, layout: { order: [...HOME_SECTION_IDS], hidden: [HOME_SECTION_IDS[0], HOME_SECTION_IDS[1]] } }
+    const draft4 = { sections: DEFAULT_HOME_CONTENT, layout: { order: [...HOME_SECTION_IDS], hidden: [...DEFAULT_HOME_LAYOUT.hidden, 'hero' as const, 'uspStrip' as const] } }
     expect(countHomeChanges(draft4, published)).toBe(2)
   })
 

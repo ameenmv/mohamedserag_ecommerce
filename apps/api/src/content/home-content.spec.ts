@@ -40,7 +40,7 @@ describe('parseStoredHome', () => {
     expect(result.layout.order.slice(0, 2)).toEqual(['hero', 'announce'])
     expect(result.layout.order).toHaveLength(HOME_SECTION_IDS.length)
     expect(new Set(result.layout.order).size).toBe(HOME_SECTION_IDS.length)
-    expect(result.layout.hidden).toEqual([])
+    expect(result.layout.hidden).toEqual(DEFAULT_HOME_LAYOUT.hidden)
   })
 
   it('drops unknown and duplicate legacy ids, then appends the missing ones', () => {

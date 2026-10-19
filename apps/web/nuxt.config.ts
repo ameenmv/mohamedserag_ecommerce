@@ -145,4 +145,9 @@ export default defineNuxtConfig({
   },
 
   typescript: { strict: true },
+
+  routeRules: {
+    '/': { swr: 60 },
+    '/en': { swr: 60 },
+  },
 })
