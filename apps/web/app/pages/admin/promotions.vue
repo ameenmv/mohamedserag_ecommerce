@@ -52,7 +52,7 @@ function setTab(tab: PromotionTab) {
       <div
         role="tablist"
         :aria-label="t('admin.promotions.pageTitle')"
-        class="flex items-center gap-2 -mb-px"
+        class="flex items-center gap-2 -mb-px overflow-x-auto"
       >
         <button
           id="tab-flash"
@@ -60,7 +60,7 @@ function setTab(tab: PromotionTab) {
           role="tab"
           :aria-selected="activeTab === 'flash'"
           aria-controls="panel-flash"
-          class="flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-bold transition-colors cursor-pointer"
+          class="flex shrink-0 whitespace-nowrap items-center gap-2 border-b-2 px-4 py-3 text-sm font-bold transition-colors cursor-pointer"
           :class="
             activeTab === 'flash'
               ? 'border-serag-green text-serag-green dark:border-serag-gold dark:text-serag-gold'
@@ -78,7 +78,7 @@ function setTab(tab: PromotionTab) {
           role="tab"
           :aria-selected="activeTab === 'coupons'"
           aria-controls="panel-coupons"
-          class="flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-bold transition-colors cursor-pointer"
+          class="flex shrink-0 whitespace-nowrap items-center gap-2 border-b-2 px-4 py-3 text-sm font-bold transition-colors cursor-pointer"
           :class="
             activeTab === 'coupons'
               ? 'border-serag-green text-serag-green dark:border-serag-gold dark:text-serag-gold'
