@@ -1,5 +1,6 @@
 import { afterEach, test } from '@e2e-dev/web'
 import { expect } from 'e2e'
+import { ensureStoreContact } from './support/store-contact.js'
 import { createSeed } from './support/seed.js'
 import { waitForHydration } from './support/hydration.js'
 import { apiUrl } from './api-url.js'
@@ -16,6 +17,8 @@ test('bridal share: view mode omits edit controls, reveals showroom contact, sup
   screen,
   browser,
 }) => {
+  // WhatsApp links only render once the store numbers are real
+  await ensureStoreContact(seed)
   // 1. Create a list via API with a seeded product
   const product = await seed.product({
     name: `ثلاجة مشاركة تجربة ${seed.runId}`,

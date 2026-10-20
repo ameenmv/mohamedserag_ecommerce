@@ -21,6 +21,7 @@ import { escapeLikePattern } from '../catalog/product-query.js'
 import { SearchIndexService } from '../catalog/search-index.service.js'
 import { Prisma } from '../generated/prisma/client.js'
 import { PrismaService } from '../prisma/prisma.service.js'
+import { StoreSettingsService } from '../settings/store-settings.service.js'
 import {
   parseProductSetContents,
   parseProductSpecs,
@@ -47,6 +48,7 @@ export class AdminProductsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly searchIndexService: SearchIndexService,
+    private readonly storeSettings: StoreSettingsService,
   ) {}
 
   async list(query: AdminProductQueryOutput): Promise<AdminProductListResponse> {
@@ -269,6 +271,9 @@ export class AdminProductsService {
       slug = candidate
     }
 
+    const lowStockThreshold =
+      data.lowStockThreshold ?? (await this.storeSettings.getLowStock()).defaultThreshold
+
     const created = await this.prisma.product.create({
       data: {
         name: data.name,
@@ -280,7 +285,7 @@ export class AdminProductsService {
         price: data.price,
         oldPrice: data.oldPrice ?? null,
         stock: data.stock,
-        lowStockThreshold: data.lowStockThreshold,
+        lowStockThreshold,
         availabilityMode: data.availabilityMode,
         leadTimeText: data.leadTimeText ?? null,
         warranty: data.warranty ?? null,

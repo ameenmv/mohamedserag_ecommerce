@@ -17,6 +17,7 @@ const { t } = useI18n()
 const storeSettings = useStoreSettings()
 
 const whatsappDateUrl = computed(() => {
+  if (!storeSettings.whatsapp) return ''
   return waLink(
     storeSettings.whatsapp,
     t('store.checkout.specialDateHelp'),
@@ -248,7 +249,10 @@ const notes = computed({
       </div>
 
       <!-- Special Date WhatsApp Notice -->
-      <div class="flex items-center gap-2 rounded-2xl bg-muted/60 p-3 text-xs text-muted-foreground">
+      <div
+        v-if="whatsappDateUrl"
+        class="flex items-center gap-2 rounded-2xl bg-muted/60 p-3 text-xs text-muted-foreground"
+      >
         <MessageCircle class="size-4 shrink-0 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
         <span>
           <a

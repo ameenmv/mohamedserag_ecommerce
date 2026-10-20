@@ -15,7 +15,7 @@ const searchSheetOpen = ref(false)
 const mobileMenuOpen = ref(false)
 
 const whatsappUrl = computed(() =>
-  waLink(settings.whatsapp, t('store.footer.whatsappPrefill')),
+  settings.whatsapp ? waLink(settings.whatsapp, t('store.footer.whatsappPrefill')) : '',
 )
 </script>
 

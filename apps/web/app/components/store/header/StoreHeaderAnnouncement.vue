@@ -23,6 +23,7 @@ const { t } = useI18n()
       </div>
       <div class="flex items-center gap-3">
         <a
+          v-if="phone"
           :href="`tel:${phone}`"
           class="inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 transition-colors hover:text-serag-gold-hi focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-reduce:transition-none"
         >

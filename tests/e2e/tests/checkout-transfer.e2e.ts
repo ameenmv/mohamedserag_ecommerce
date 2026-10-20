@@ -1,5 +1,6 @@
 import { afterEach, test } from '@e2e-dev/web'
 import { expect } from 'e2e'
+import { ensureStoreContact } from './support/store-contact.js'
 import { createSeed } from './support/seed.js'
 import { waitForHydration } from './support/hydration.js'
 
@@ -15,6 +16,8 @@ test('guest checkout InstaPay transfer: place order through UI, verify account a
   screen,
   browser,
 }) => {
+  // WhatsApp links only render once the store numbers are real
+  await ensureStoreContact(seed)
   // 1. Seed product
   const p = await seed.product({
     name: `تلفزيون اختبار إنستاباي ${seed.runId}`,

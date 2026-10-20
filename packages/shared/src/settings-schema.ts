@@ -197,9 +197,8 @@ const adminZoneSchema = z.object({
     .int({ message: 'مصاريف التوصيل لازم تكون عدد صحيح' })
     .min(0, { message: 'مصاريف التوصيل مش ممكن تكون سالبة' })
     .max(100_000_000, { message: 'مصاريف التوصيل كبيرة أوي' }),
-  places: z
-    .array(adminZonePlaceSchema)
-    .min(1, { message: 'لازم محافظة واحدة على الأقل' }),
+  /** Empty places = the catch-all zone for every place no other zone covers (at most one). */
+  places: z.array(adminZonePlaceSchema),
 })
 
 export const adminZonesSettingSchema = z
@@ -210,8 +209,20 @@ export const adminZonesSettingSchema = z
     const zoneIds = new Set<string>()
     const wholeGovernorates = new Set<string>()
     const governorateCity = new Set<string>()
+    let catchAllSeen = false
 
     zones.forEach((zone, index) => {
+      if (zone.places.length === 0) {
+        if (catchAllSeen) {
+          ctx.addIssue({
+            code: 'custom',
+            message: 'مينفعش أكتر من منطقة واحدة لباقي الأماكن (من غير محافظات)',
+            path: [index, 'places'],
+          })
+        }
+        catchAllSeen = true
+      }
+
       if (zoneIds.has(zone.id)) {
         ctx.addIssue({
           code: 'custom',
@@ -290,7 +301,8 @@ export const searchSynonymsSettingSchema = z
   .max(200, { message: 'عدد المجموعات بيزيد عن 200' })
 export type SearchSynonymsSettingInput = z.infer<typeof searchSynonymsSettingSchema>
 
-const TEMPLATE_KEYS = [
+/** Every WhatsApp template key, in display order. */
+export const TEMPLATE_KEYS = [
   'order_confirmed',
   'order_out_for_delivery',
   'order_delivered',

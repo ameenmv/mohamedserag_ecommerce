@@ -1,5 +1,6 @@
 import { afterEach, test } from '@e2e-dev/web'
 import { credentials, expect } from 'e2e'
+import { ensureStoreContact } from './support/store-contact.js'
 import { createSeed } from './support/seed.js'
 import { waitForHydration } from './support/hydration.js'
 import { apiUrl } from './api-url.js'
@@ -16,6 +17,8 @@ test('bridal reserve flow: create list, fill reserve form, thanks page, read-onl
   screen,
   browser,
 }) => {
+  // WhatsApp links only render once the store numbers are real
+  await ensureStoreContact(seed)
   // Mobile viewport 375 px
   await browser.setViewport({ width: 375, height: 667 })
 

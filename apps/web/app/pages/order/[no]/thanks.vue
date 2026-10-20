@@ -33,7 +33,7 @@ useSeoMeta({
 })
 
 const bridalInstallmentsWhatsappUrl = computed(() => {
-  if (!order.value) return ''
+  if (!order.value || !storeSettings.whatsapp) return ''
   const text = t('store.thanks.bridal.installmentsInquiry', { no: order.value.no })
   return waLink(storeSettings.whatsapp, text)
 })
@@ -159,6 +159,7 @@ async function copyOrderNo(): Promise<void> {
             </span>
           </div>
           <a
+            v-if="bridalInstallmentsWhatsappUrl"
             :href="bridalInstallmentsWhatsappUrl"
             target="_blank"
             rel="noopener noreferrer"

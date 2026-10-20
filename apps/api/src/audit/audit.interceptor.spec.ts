@@ -145,6 +145,27 @@ describe('AuditInterceptor', () => {
     expect(snapshot.status).toBe('confirmed')
   })
 
+  it('redacts nested settings phone fields (phone, whatsapp, tradersWhatsapp)', () => {
+    const snapshot = truncateAuditAfter({
+      value: {
+        name: 'معرض محمد سراج',
+        phone: '01012345678',
+        whatsapp: '01098765432',
+        tradersWhatsapp: '01511223344',
+        address: 'المنصورة',
+      },
+      version: '2026-03-15T00:00:00.000Z',
+    }) as Record<string, unknown>
+
+    const value = snapshot.value as Record<string, unknown>
+    expect(value.name).toBe('معرض محمد سراج')
+    expect(value.phone).toBe('010******78')
+    expect(value.whatsapp).toBe('010******32')
+    expect(value.tradersWhatsapp).toBe('015******44')
+    expect(value.address).toBe('المنصورة')
+    expect(snapshot.version).toBe('2026-03-15T00:00:00.000Z')
+  })
+
   it('AuditInterceptor saves redacted snapshot in auditLog.create data.after', async () => {
     const reflector = new Reflector()
     vi.spyOn(reflector, 'getAllAndOverride').mockReturnValue('notify_request')

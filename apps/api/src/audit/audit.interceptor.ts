@@ -31,6 +31,9 @@ function isPhoneLike(val: string): boolean {
   return /^\+?\d{7,16}$/.test(stripped)
 }
 
+/** Object keys whose string values hold phone numbers and must be masked in audit snapshots. */
+const PHONE_MASK_KEYS = new Set(['phone', 'customerphone', 'whatsapp', 'traderswhatsapp'])
+
 /**
  * Deep-clones an object while redacting customer phone numbers and WhatsApp links.
  */
@@ -57,7 +60,7 @@ export function redactAuditSnapshot(value: unknown, seen = new WeakSet<object>()
   const result: Record<string, unknown> = {}
   for (const [key, val] of Object.entries(value)) {
     const lowerKey = key.toLowerCase()
-    if ((lowerKey === 'phone' || lowerKey === 'customerphone') && typeof val === 'string') {
+    if (PHONE_MASK_KEYS.has(lowerKey) && typeof val === 'string') {
       result[key] = maskPhone(val)
     } else if (
       (lowerKey === 'whatsappurl' || lowerKey === 'to') &&

@@ -57,6 +57,7 @@ const side = computed<'right' | 'left'>(() => (localeProperties.value.dir === 'l
       <div class="mt-auto flex flex-col gap-2 border-t border-border bg-secondary/50 p-4">
         <CommonLocaleSwitcher class="w-full justify-center" />
         <a
+          v-if="whatsappUrl"
           :href="whatsappUrl"
           target="_blank"
           rel="noopener noreferrer"
@@ -67,6 +68,7 @@ const side = computed<'right' | 'left'>(() => (localeProperties.value.dir === 'l
           <span>{{ t('store.header.directWhatsapp') }}</span>
         </a>
         <a
+          v-if="phone"
           :href="`tel:${phone}`"
           class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-primary px-4 font-bold text-primary transition-colors hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-reduce:transition-none"
         >

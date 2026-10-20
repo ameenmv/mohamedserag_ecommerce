@@ -2250,6 +2250,135 @@
       "loading": "Loading the editor…",
       "undo": "Undo",
       "redo": "Redo"
+    },
+    "settings": {
+      "pageTitle": "Settings",
+      "intro": "Edit the store details, payment methods, delivery zones and messages in one place, saving each section on its own.",
+      "sectionNavLabel": "Settings sections",
+      "dirty": "Unsaved draft",
+      "loading": "Loading settings…",
+      "loadError": "Could not load the settings. Try refreshing the page",
+      "sectionLoadError": "This section's data is invalid and can't be edited right now",
+      "saved": "Saved",
+      "saveFailed": "Could not save. Check the values and try again",
+      "discarded": "Changes discarded",
+      "saveBar": {
+        "unsaved": "You have unsaved changes",
+        "save": "Save",
+        "saving": "Saving…",
+        "discard": "Discard"
+      },
+      "conflict": {
+        "title": "These settings were changed elsewhere",
+        "description": "Newer changes exist for this section. Load the latest version before saving again.",
+        "loadLatest": "Load latest version",
+        "cancel": "Keep my version"
+      },
+      "leave": {
+        "title": "Unsaved changes",
+        "description": "If you leave this page, your changes will not be saved.",
+        "stay": "Stay here",
+        "leave": "Leave and discard"
+      },
+      "sections": {
+        "store": "Store details",
+        "payments": "Payment methods",
+        "zones": "Delivery zones",
+        "codDeposit": "Cash on delivery deposit",
+        "lowStock": "Stock alert",
+        "searchSynonyms": "Search synonyms",
+        "templates": "Message templates"
+      },
+      "store": {
+        "hint": "These details appear in the footer, contact page and WhatsApp messages.",
+        "name": "Store name",
+        "namePlaceholder": "Mohamed Serag Showroom",
+        "phone": "Phone number",
+        "phoneHint": "A local Egyptian number (01…) or an international number starting with +",
+        "whatsapp": "WhatsApp number",
+        "tradersWhatsapp": "Traders WhatsApp",
+        "tradersWhatsappHint": "Leave empty to fall back to the main WhatsApp number",
+        "address": "Address",
+        "hours": "Working hours",
+        "placeholderWarning": "This value still holds placeholder data. Update it before publishing"
+      },
+      "payments": {
+        "hint": "At least one payment method must be enabled so customers can complete their order.",
+        "methodsError": "At least one payment method must be enabled",
+        "enabled": "Enabled",
+        "enableAria": "Enable payment method",
+        "name": "Customer-facing name",
+        "account": "Account details",
+        "accountPlaceholder": "Wallet number or transfer account number",
+        "hintLabel": "Customer note",
+        "hintPlaceholder": "e.g. Transfer then send the receipt photo"
+      },
+      "zones": {
+        "hint": "Each zone has a delivery fee and a set of governorates (and optional cities) that belong to it.",
+        "add": "Add zone",
+        "remove": "Remove zone",
+        "removeAria": "Remove delivery zone",
+        "name": "Zone name",
+        "namePlaceholder": "e.g. Dakahlia and Damietta",
+        "fee": "Delivery fee (EGP)",
+        "places": "Governorates",
+        "addPlace": "Add governorate",
+        "removePlace": "Remove governorate",
+        "removePlaceAria": "Remove governorate",
+        "governorate": "Governorate",
+        "city": "City (optional)",
+        "cityPlaceholder": "Leave empty for the whole governorate",
+        "selectGovernorate": "Select a governorate",
+        "feeInvalid": "Enter a valid delivery fee",
+        "zonesError": "There is a problem with the delivery zones",
+        "placesError": "There is a problem with this zone's governorates",
+        "catchAll": "This zone has no governorates, so it covers every place no other zone lists."
+      },
+      "codDeposit": {
+        "hint": "When an order total exceeds this threshold, we ask the customer for a deposit.",
+        "threshold": "Order threshold (EGP)",
+        "pct": "Deposit percentage (%)",
+        "thresholdHint": "Orders above this amount require a deposit",
+        "thresholdInvalid": "Enter a valid amount greater than zero"
+      },
+      "lowStock": {
+        "hint": "The default stock alert threshold.",
+        "threshold": "Default threshold",
+        "appliesToHint": "Applies to new products; you can still override the threshold per product"
+      },
+      "synonyms": {
+        "hint": "Each word group is treated as equivalent in search, so “تلاجة, ثلاجة” return the same results.",
+        "addGroup": "Add group",
+        "removeGroup": "Remove group",
+        "removeGroupAria": "Remove word group",
+        "removeWord": "Remove word",
+        "removeWordAria": "Remove word",
+        "wordPlaceholder": "Add a word and press Enter",
+        "addWord": "Add",
+        "empty": "No words yet. Add a word to get started",
+        "minWords": "Each group needs at least two words"
+      },
+      "templates": {
+        "hint": "These templates are used in customer WhatsApp messages. Click any variable to insert it into the message.",
+        "variablesLabel": "Allowed variables",
+        "insertVariableAria": "Insert variable",
+        "preview": "Preview",
+        "previewError": "Could not refresh the preview, showing raw text with variables",
+        "unknown": "Disallowed variables",
+        "name": {
+          "order_confirmed": "Order confirmed",
+          "order_out_for_delivery": "Order out for delivery",
+          "order_delivered": "Order delivered",
+          "order_cancelled": "Order cancelled",
+          "payment_rejected": "Payment proof rejected",
+          "payment_proof": "Payment proof",
+          "bridal_locked": "Bridal list locked",
+          "bridal_repriced": "Bridal list repriced",
+          "notify_back_in_stock": "Back in stock notice",
+          "product_question": "Product question",
+          "traders_contact": "Traders contact"
+        }
+      }
     }
   },
   "validation": {

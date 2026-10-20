@@ -12,6 +12,7 @@ import {
   templatesSettingSchema,
 } from './settings-schema.js'
 import { DEFAULT_TEMPLATES } from './whatsapp.js'
+import { DEFAULT_ZONES } from './zones.js'
 
 describe('settingsPhoneSchema', () => {
   it('normalizes an Egyptian mobile', () => {
@@ -131,6 +132,18 @@ describe('adminZonesSettingSchema', () => {
       { id: 'z1', name: 'أ', fee: 0, places: [{ governorate: 'أتلانتس' }] },
     ])
     expect(result.success).toBe(false)
+  })
+
+  it('accepts one catch-all zone without places and rejects a second', () => {
+    const catchAll = { id: 'egypt', name: 'باقي مصر', fee: 40000, places: [] }
+    expect(adminZonesSettingSchema.safeParse([base, catchAll]).success).toBe(true)
+    expect(
+      adminZonesSettingSchema.safeParse([base, catchAll, { ...catchAll, id: 'egypt2' }]).success,
+    ).toBe(false)
+  })
+
+  it('accepts the default zones', () => {
+    expect(adminZonesSettingSchema.safeParse(DEFAULT_ZONES).success).toBe(true)
   })
 
   it('rejects an empty zone list', () => {

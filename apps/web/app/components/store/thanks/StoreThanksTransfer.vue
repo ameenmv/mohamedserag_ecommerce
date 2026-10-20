@@ -27,7 +27,7 @@ const amountToTransfer = computed(() => {
 })
 
 const whatsappProofUrl = computed(() => {
-  if (!props.confirmToken) return ''
+  if (!props.confirmToken || !storeSettings.whatsapp) return ''
   const origin = useRequestURL().origin
   const confirmUrl = `${origin}/admin/confirm/${props.confirmToken}`
   const text = renderTemplate(DEFAULT_TEMPLATES.payment_proof, {

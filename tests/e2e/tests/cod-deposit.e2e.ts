@@ -1,5 +1,6 @@
 import { afterEach, test } from '@e2e-dev/web'
 import { expect } from 'e2e'
+import { ensureStoreContact } from './support/store-contact.js'
 import { createSeed } from './support/seed.js'
 import { loginWithAdminSession, waitForHydration } from './support/auth.js'
 
@@ -15,6 +16,8 @@ test('large COD order requires 10% deposit: checkout explains deposit, thank-you
   screen,
   browser,
 }) => {
+  // WhatsApp links only render once the store numbers are real
+  await ensureStoreContact(seed)
   // 1. Seed high-priced product (35,000 EGP, above 30,000 EGP COD deposit threshold)
   const p = await seed.product({
     name: `ثلاجة فاخرة اختبار عربون ${seed.runId}`,

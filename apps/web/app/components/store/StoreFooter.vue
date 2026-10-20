@@ -9,7 +9,7 @@ const { track } = useAnalytics()
 const { links: infoLinks } = useFooterPages()
 
 const whatsappUrl = computed(() =>
-  waLink(settings.whatsapp, t('store.footer.whatsappPrefill')),
+  settings.whatsapp ? waLink(settings.whatsapp, t('store.footer.whatsappPrefill')) : '',
 )
 </script>
 
@@ -48,6 +48,7 @@ const whatsappUrl = computed(() =>
             </div>
           </div>
           <a
+            v-if="settings.phone"
             :href="`tel:${settings.phone}`"
             class="inline-flex min-h-11 items-center gap-2.5 rounded-lg px-1 text-base transition-colors hover:text-serag-gold-hi focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:outline-none motion-reduce:transition-none"
           >
@@ -55,6 +56,7 @@ const whatsappUrl = computed(() =>
             <span class="num">{{ settings.phone }}</span>
           </a>
           <a
+            v-if="whatsappUrl"
             :href="whatsappUrl"
             target="_blank"
             rel="noopener noreferrer"

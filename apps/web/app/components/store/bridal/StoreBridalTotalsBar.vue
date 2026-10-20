@@ -27,6 +27,7 @@ const diffType = computed(() => {
 })
 
 const contactWhatsAppLink = computed(() => {
+  if (!storeSettings.whatsapp) return ''
   const message = t('store.bridal.view.contactMessage', {
     total: money(props.total),
   })
@@ -147,7 +148,7 @@ const contactWhatsAppLink = computed(() => {
 
       <!-- View Mode: Contact WhatsApp button -->
       <a
-        v-else
+        v-else-if="contactWhatsAppLink"
         :href="contactWhatsAppLink"
         target="_blank"
         rel="noopener noreferrer"

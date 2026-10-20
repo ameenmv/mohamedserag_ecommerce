@@ -2,15 +2,18 @@ import { Injectable } from '@nestjs/common'
 import {
   DEFAULT_BRIDAL_SETTINGS,
   DEFAULT_COD_DEPOSIT,
+  DEFAULT_LOW_STOCK,
   DEFAULT_PAYMENTS,
   DEFAULT_TEMPLATES,
   DEFAULT_ZONES,
   bridalSettingsSchema,
   codDepositSchema,
+  lowStockSettingSchema,
   paymentsSettingSchema,
   zonesSchema,
   type BridalSettings,
   type CodDepositSetting,
+  type LowStockSetting,
   type PaymentsSetting,
   type PublicStoreInfo,
   type Zone,
@@ -89,5 +92,13 @@ export class StoreSettingsService {
     const parsed = bridalSettingsSchema.safeParse(row?.value)
     return parsed.success ? parsed.data : DEFAULT_BRIDAL_SETTINGS
   }
-}
 
+  /** Default low-stock threshold applied to new products; falls back to `DEFAULT_LOW_STOCK`. */
+  async getLowStock(): Promise<LowStockSetting> {
+    const row = await this.prisma.setting.findUnique({
+      where: { key: 'lowStock' },
+    })
+    const parsed = lowStockSettingSchema.safeParse(row?.value)
+    return parsed.success ? parsed.data : DEFAULT_LOW_STOCK
+  }
+}

@@ -48,7 +48,9 @@ const whatsappPrefill = computed(() => {
   return `${t('store.listing.empty.whatsappPrefill')} ("${props.query}")`
 })
 
-const whatsappUrl = computed(() => waLink(settings.whatsapp, whatsappPrefill.value))
+const whatsappUrl = computed(() =>
+  settings.whatsapp ? waLink(settings.whatsapp, whatsappPrefill.value) : '',
+)
 
 function handleAddToCart(item: ProductCard): void {
   addToCart(item, 1)
@@ -232,7 +234,7 @@ const liveAnnouncement = computed(() => {
         </div>
 
         <!-- WhatsApp Link -->
-        <div class="mt-5">
+        <div v-if="whatsappUrl" class="mt-5">
           <a
             :href="whatsappUrl"
             target="_blank"

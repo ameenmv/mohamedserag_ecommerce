@@ -1,11 +1,17 @@
 import { test } from '@e2e-dev/web';
 import { expect } from 'e2e';
 import { waitForHydration } from './support/hydration.js';
+import { createSeed } from './support/seed.js';
+import { ensureStoreContact } from './support/store-contact.js';
 
 test('/p/samsung-fridge-450l-s1 shows h1, model code, VAT note, specs table, and WhatsApp link', async ({
   app,
   screen,
 }) => {
+  // The WhatsApp link only renders once the store numbers are real
+  const seed = createSeed();
+  await ensureStoreContact(seed);
+  await seed.cleanup();
   await app.open('/p/samsung-fridge-450l-s1');
 
   // H1 contains product name

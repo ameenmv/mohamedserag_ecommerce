@@ -198,7 +198,7 @@ export const createProductSchema = z
       .number()
       .int()
       .min(0, 'حد المخزون المنخفض لا يمكن أن يكون سالباً')
-      .default(3),
+      .optional(),
     availabilityMode: z.enum(AVAILABILITY_MODES).default('auto'),
     leadTimeText: z.string().trim().nullable().optional(),
     warranty: z.string().trim().nullable().optional(),

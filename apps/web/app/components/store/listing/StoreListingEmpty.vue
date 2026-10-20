@@ -32,7 +32,9 @@ const whatsappPrefill = computed(() => {
     : t('store.listing.empty.whatsappPrefill')
 })
 
-const whatsappUrl = computed(() => waLink(settings.whatsapp, whatsappPrefill.value))
+const whatsappUrl = computed(() =>
+  settings.whatsapp ? waLink(settings.whatsapp, whatsappPrefill.value) : '',
+)
 </script>
 
 <template>
@@ -96,7 +98,7 @@ const whatsappUrl = computed(() => waLink(settings.whatsapp, whatsappPrefill.val
     </div>
 
     <!-- Ask us on WhatsApp button -->
-    <div class="mt-6">
+    <div v-if="whatsappUrl" class="mt-6">
       <a
         :href="whatsappUrl"
         target="_blank"

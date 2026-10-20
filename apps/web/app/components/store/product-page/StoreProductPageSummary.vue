@@ -79,6 +79,7 @@ const savingText = computed(() => {
 
 // WhatsApp link: waLink(settings.whatsapp, renderTemplate(DEFAULT_TEMPLATES.product_question, { productName, productUrl }))
 const whatsappUrl = computed(() => {
+  if (!settings.whatsapp) return ''
   const text = renderTemplate(DEFAULT_TEMPLATES.product_question, {
     productName: props.product.name,
     productUrl: requestUrl.href,
@@ -254,6 +255,7 @@ function scrollToReviews(): void {
 
       <!-- WhatsApp Ask Button -->
       <a
+        v-if="whatsappUrl"
         :href="whatsappUrl"
         target="_blank"
         rel="noopener noreferrer"
