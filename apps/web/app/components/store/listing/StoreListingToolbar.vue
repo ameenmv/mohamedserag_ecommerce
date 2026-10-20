@@ -48,7 +48,7 @@ function onSortChange(event: Event) {
     </div>
 
     <!-- Right/End section: Mobile Filter Trigger + Sort dropdown -->
-    <div class="flex items-center gap-2 sm:gap-4">
+    <div class="flex min-w-0 flex-wrap items-center gap-2 sm:gap-4">
       <!-- Mobile filters trigger button (hidden on desktop lg) -->
       <button
         type="button"
@@ -67,7 +67,7 @@ function onSortChange(event: Event) {
       </button>
 
       <!-- Sort dropdown with accessible label -->
-      <div class="flex items-center gap-1.5 sm:gap-2">
+      <div class="flex min-w-0 items-center gap-1.5 sm:gap-2">
         <label
           :for="sortSelectId"
           class="text-xs font-bold text-muted-foreground sm:text-sm whitespace-nowrap"

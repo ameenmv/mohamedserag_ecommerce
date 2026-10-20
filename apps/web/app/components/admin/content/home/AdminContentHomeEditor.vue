@@ -100,9 +100,9 @@ function onSelect(id: HomeSectionId): void {
 
     <template v-else>
       <div class="flex flex-wrap items-center justify-between gap-3">
-        <h1 class="font-display text-2xl font-bold text-foreground">
+        <h2 class="font-display text-2xl font-bold text-foreground">
           {{ t('admin.nav.content') }}
-        </h1>
+        </h2>
         <div class="flex items-center gap-2">
           <Button
             type="button"

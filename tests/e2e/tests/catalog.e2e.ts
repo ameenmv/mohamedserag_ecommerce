@@ -55,7 +55,8 @@ test('filters survive a reload with sort value and ascending prices', async ({
     const cards = Array.from(document.querySelectorAll('article'));
     return cards
       .map((card) => {
-        const numEl = card.querySelector('.num');
+        // The current price (cards with reviews also show a numeric rating count)
+        const numEl = card.querySelector('[data-price]');
         return numEl ? parseInt(numEl.textContent?.replace(/[^\d]/g, '') || '0', 10) : 0;
       })
       .filter((p) => p > 0);

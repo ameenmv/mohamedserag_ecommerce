@@ -126,9 +126,9 @@ onBeforeUnmount(() => {
   <div class="flex min-w-0 flex-col gap-5">
     <template v-if="!selectedId">
       <div class="flex flex-col gap-1">
-        <h1 class="font-display text-2xl font-bold text-foreground">
+        <h2 class="font-display text-2xl font-bold text-foreground">
           {{ t('admin.content.guides.listTitle') }}
-        </h1>
+        </h2>
         <p class="text-sm text-muted-foreground">
           {{ t('admin.content.guides.listSubtitle') }}
         </p>
