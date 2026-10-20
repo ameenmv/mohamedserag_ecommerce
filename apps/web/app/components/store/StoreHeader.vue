@@ -21,7 +21,7 @@ const whatsappUrl = computed(() =>
 
 <template>
   <!-- Top announcement bar -->
-  <StoreHeaderAnnouncement :phone="settings.phone" />
+  <LazyStoreHeaderAnnouncement hydrate-never :phone="settings.phone" />
 
   <!-- Sticky Header (frosted on scroll) -->
   <header
@@ -84,13 +84,14 @@ const whatsappUrl = computed(() =>
         <!-- WhatsApp button -->
         <StoreHeaderWhatsAppButton :href="whatsappUrl" />
 
-        <!-- Language switcher -->
-        <CommonLocaleSwitcher />
+        <!-- Language switcher (phones get it in the ☰ menu, so the action row fits at 320 px) -->
+        <CommonLocaleSwitcher class="hidden sm:inline-flex" />
       </div>
     </div>
 
     <!-- Secondary horizontal navigation strip for tablet/mobile below lg -->
-    <StoreHeaderQuickNav
+    <LazyStoreHeaderQuickNav
+      hydrate-on-idle
       :items="STORE_NAV_ITEMS"
       :is-active="isNavActive"
     />

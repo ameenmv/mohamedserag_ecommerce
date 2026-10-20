@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { MapPin, MessageCircle, Phone } from '@lucide/vue'
 import { waLink } from '@serag/shared'
-import { FOOTER_LINKS, FOOTER_STORE_SECTIONS } from '~/constants/navigation'
+import { FOOTER_STORE_SECTIONS } from '~/constants/navigation'
 
 const { t } = useI18n()
 const settings = useStoreSettings()
 const { track } = useAnalytics()
+const { links: infoLinks } = useFooterPages()
 
 const whatsappUrl = computed(() =>
   waLink(settings.whatsapp, t('store.footer.whatsappPrefill')),
@@ -30,7 +31,7 @@ const whatsappUrl = computed(() =>
         <StoreFooterColumn
           class="lg:col-span-3"
           :title="t('store.footer.infoTitle')"
-          :links="FOOTER_LINKS"
+          :links="infoLinks"
           grid-cols-class="grid grid-cols-2 gap-x-4 gap-y-1 sm:grid-cols-1"
         />
 

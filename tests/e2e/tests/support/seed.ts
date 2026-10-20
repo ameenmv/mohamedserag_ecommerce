@@ -8,6 +8,8 @@ export interface SeedProductInput {
   availabilityMode?: 'auto' | 'on_request' | 'out';
   leadTimeText?: string;
   visible?: boolean;
+  withImage?: boolean;
+  flashSale?: { salePriceEgp: number; startsInMinutes?: number; endsInMinutes?: number };
 }
 
 export interface SeedProductResult {
@@ -62,12 +64,87 @@ export interface SeedCleanupResult {
   sessions: number;
 }
 
+export interface SeedProductDetailResult {
+  id: string;
+  slug: string;
+  modelCode: string;
+  price: number;
+  availability: {
+    state: string;
+    label: string;
+    orderable: boolean;
+    maxQty: number | null;
+  };
+}
+
+export interface SeedFlashSaleItemInput {
+  productId: string;
+  salePriceEgp: number;
+}
+
+export interface SeedFlashSaleInput {
+  name?: string;
+  startsAt?: string;
+  endsAt?: string;
+  items: SeedFlashSaleItemInput[];
+}
+
+export interface SeedFlashSaleResult {
+  id: string;
+  name: string;
+  startsAt: string;
+  endsAt: string;
+}
+
+export interface SeedCouponInput {
+  code?: string;
+  type?: 'percent' | 'fixed';
+  value: number;
+  minOrderEgp?: number;
+  maxUses?: number;
+  maxUsesPerPhone?: number;
+  startsAt?: string;
+  endsAt?: string;
+  categorySlugs?: string[];
+  brandSlugs?: string[];
+  active?: boolean;
+}
+
+export interface SeedCouponResult {
+  id: string;
+  code: string;
+  type: 'percent' | 'fixed';
+  value: number;
+  minOrder: number;
+  active: boolean;
+}
+
+export interface SeedReviewInput {
+  productId: string;
+  name?: string;
+  phone?: string;
+  stars: number;
+  text?: string;
+  status?: 'pending' | 'approved' | 'rejected';
+  verifiedBuyer?: boolean;
+  reply?: string;
+  createdAt?: string;
+}
+
+export interface SeedReviewResult {
+  id: string;
+}
+
 export interface SeedHelper {
   readonly runId: string;
   product(input?: SeedProductInput): Promise<SeedProductResult>;
   order(input: SeedOrderInput): Promise<SeedOrderResult>;
   adminSession(): Promise<SeedAdminSessionResult>;
   cleanup(): Promise<SeedCleanupResult>;
+  getProduct(slug: string): Promise<SeedProductDetailResult>;
+  flashSale(input: SeedFlashSaleInput): Promise<SeedFlashSaleResult>;
+  coupon(input: SeedCouponInput): Promise<SeedCouponResult>;
+  review(input: SeedReviewInput): Promise<SeedReviewResult>;
 }
 
 export function createSeed(): SeedHelper {
@@ -141,6 +218,59 @@ export function createSeed(): SeedHelper {
         throw new Error(`Failed to cleanup run ${runId} (${res.status}): ${errorText}`);
       }
       return res.json() as Promise<SeedCleanupResult>;
+    },
+    async getProduct(slug: string): Promise<SeedProductDetailResult> {
+      const res = await fetch(url(`/api/products/${slug}`));
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(`Failed to get product ${slug} (${res.status}): ${errorText}`);
+      }
+      return res.json() as Promise<SeedProductDetailResult>;
+    },
+    async flashSale(input: SeedFlashSaleInput): Promise<SeedFlashSaleResult> {
+      const res = await fetch(url('/api/test/seed/flash-sale'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-test-seed-secret': secret,
+        },
+        body: JSON.stringify({ runId, ...input }),
+      });
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(`Failed to seed flash sale (${res.status}): ${errorText}`);
+      }
+      return res.json() as Promise<SeedFlashSaleResult>;
+    },
+    async coupon(input: SeedCouponInput): Promise<SeedCouponResult> {
+      const res = await fetch(url('/api/test/seed/coupon'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-test-seed-secret': secret,
+        },
+        body: JSON.stringify({ runId, ...input }),
+      });
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(`Failed to seed coupon (${res.status}): ${errorText}`);
+      }
+      return res.json() as Promise<SeedCouponResult>;
+    },
+    async review(input: SeedReviewInput): Promise<SeedReviewResult> {
+      const res = await fetch(url('/api/test/seed/review'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-test-seed-secret': secret,
+        },
+        body: JSON.stringify({ runId, ...input }),
+      });
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(`Failed to seed review (${res.status}): ${errorText}`);
+      }
+      return res.json() as Promise<SeedReviewResult>;
     },
   };
 }

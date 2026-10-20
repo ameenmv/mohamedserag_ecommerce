@@ -258,13 +258,13 @@ Type: **Lalezar** for display, **IBM Plex Sans Arabic** for text, **Outfit** for
 
 Phase 1 ships in slices. Each slice is usable on its own and covered by e2e tests.
 
-- [ ] **Slice 0 — Foundation:** monorepo, web and API, database, seed, admin auth, Docker, CI *(in progress)*
-- [ ] **Slice 1 — Catalog & discovery:** categories, brands, product pages, Arabic search, filters, compare, wishlist, admin products, CSV import
-- [ ] **Slice 2 — Cart, checkout & payments:** zones, COD, transfers, large-COD deposit, one-tap confirmation, order flow
-- [ ] **Slice 3 — «جهّز بيتك» bridal builder:** tiers, sharing, deposit and price lock
-- [ ] **Slice 4 — Promotions & stock alerts:** flash sales, coupons, notify-me
-- [ ] **Slice 5 — Reviews:** moderation and verified buyers
-- [ ] **Slice 6 — Content, CMS & SEO:** homepage CMS, guides, quiz, structured data, Merchant feed
+- [x] **Slice 0 — Foundation:** monorepo, web and API, database, seed, admin auth, Docker, CI
+- [x] **Slice 1 — Catalog & discovery:** categories, brands, product pages, Arabic search, filters, compare, wishlist, admin products, CSV import
+- [x] **Slice 2 — Cart, checkout & payments:** zones, COD, transfers, large-COD deposit, one-tap confirmation, order flow
+- [x] **Slice 3 — «جهّز بيتك» bridal builder:** tiers, sharing, deposit and price lock
+- [x] **Slice 4 — Promotions & stock alerts:** flash sales with live countdowns, coupons with limits and scope, admin promotions, notify-me with WhatsApp
+- [x] **Slice 5 — Reviews:** review form, moderation with store replies, verified buyers, ratings on cards and product pages
+- [x] **Slice 6 — Content, CMS & SEO:** homepage CMS with versions, pages, traders page, guides, «ساعدني أختار» quiz, structured data, sitemap, robots, Merchant feed
 - [ ] **Slice 7 — Dashboard, reports & settings**
 
 **Phase 2:** customer accounts, loyalty, an installable app (PWA), the WhatsApp Cloud API, e-receipts, and admin roles.

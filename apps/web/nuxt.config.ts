@@ -1,4 +1,8 @@
+import { fileURLToPath } from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
+
+// Absolute, because IPX resolves a relative dir from its own build output, not from this app.
+const uploadsDir = process.env.UPLOADS_DIR || fileURLToPath(new URL('../../uploads', import.meta.url))
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -32,6 +36,10 @@ export default defineNuxtConfig({
     apiInternalBase: 'http://localhost:4000/api',
     public: {
       apiBase: 'http://localhost:4000/api',
+      // Public origin used for canonical URLs, sitemap, robots and JSON-LD.
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+      // 'true' only on the production origin; otherwise robots.txt answers `Disallow: /`.
+      siteIndexable: process.env.NUXT_PUBLIC_SITE_INDEXABLE || 'false',
       umamiHost: '',
       umamiWebsiteId: '',
       // Only populated in nuxt dev via $development; empty in production.
@@ -100,6 +108,9 @@ export default defineNuxtConfig({
         const file = manifest[key]
         if (file) {
           file.prefetch = false
+          // No <link rel="modulepreload"> for non-entry chunks: on slow connections 40+ preloads
+          // competed with CSS/fonts before first paint. The entry still imports them right after.
+          if (!file.isEntry) file.preload = false
         }
       }
     },
@@ -109,12 +120,14 @@ export default defineNuxtConfig({
   nitro: {
     // Serve prebuilt gzip/brotli JS and CSS; Caddy compresses in production, this covers the bare node server.
     compressPublicAssets: { gzip: true, brotli: true },
-    publicAssets: [{ dir: process.env.UPLOADS_DIR || '../../uploads', baseURL: '/uploads', maxAge: 3600 }],
+    publicAssets: [{ dir: uploadsDir, baseURL: '/uploads', maxAge: 3600 }],
   },
 
   image: {
     // Uploaded product images live on the shared `uploads` volume (see docker/compose.yml).
-    ipx: { fs: { dir: process.env.UPLOADS_DIR || '../../uploads' } },
+    ipx: { fs: { dir: uploadsDir } },
+    // Stored URLs are `/uploads/...`; IPX reads from inside the uploads folder, so strip the prefix.
+    alias: { '/uploads': '/' },
     format: ['avif', 'webp'],
   },
 
@@ -136,4 +149,12 @@ export default defineNuxtConfig({
   },
 
   typescript: { strict: true },
+
+  routeRules: {
+    '/': { swr: 60 },
+    '/en': { swr: 60 },
+    '/sitemap.xml': { swr: 3600 },
+    '/robots.txt': { swr: 3600 },
+    '/feeds/google.xml': { swr: 3600 },
+  },
 })
