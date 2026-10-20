@@ -20,6 +20,9 @@ const localePath = useLocalePath()
 const pageTitle = useAdminPageTitle()
 const { isDark, toggleTheme } = useAdminTheme()
 const adminUser = useAdminUser()
+const hydrated = useHydrated()
+
+const showDark = computed(() => hydrated.value && isDark.value)
 
 async function handleLogout(): Promise<void> {
   await adminUser.logout()
@@ -65,8 +68,10 @@ async function handleLogout(): Promise<void> {
       </kbd>
     </button>
 
-    <!-- Actions: Locale switcher, Shortcuts help, Theme toggle, Open storefront, Admin user dropdown -->
-    <div class="flex items-center gap-2">
+    <!-- Actions: Locale switcher, Shortcuts help, Theme toggle, Open storefront, Admin user dropdown.
+         Below sm this row gets its own 288px line at 320px, so shortcuts help and the menu chevron
+         are hidden there and flex-wrap keeps longer labels from widening the page. -->
+    <div class="flex flex-wrap items-center gap-2">
       <!-- Locale Switcher -->
       <CommonLocaleSwitcher variant="pill" />
 
@@ -75,7 +80,7 @@ async function handleLogout(): Promise<void> {
         type="button"
         :aria-label="t('admin.shortcuts.title')"
         :title="t('admin.topbar.shortcutsTitle')"
-        class="inline-flex size-11 shrink-0 items-center justify-center rounded-full border border-border bg-card text-primary transition-colors hover:border-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-reduce:transition-none"
+        class="hidden sm:inline-flex size-11 shrink-0 items-center justify-center rounded-full border border-border bg-card text-primary transition-colors hover:border-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-reduce:transition-none"
         @click="emit('openShortcutsHelp')"
       >
         <Keyboard class="size-5" aria-hidden="true" />
@@ -84,11 +89,11 @@ async function handleLogout(): Promise<void> {
       <!-- Theme toggle -->
       <button
         type="button"
-        :aria-label="isDark ? t('admin.commandPalette.lightMode') : t('admin.commandPalette.darkMode')"
+        :aria-label="showDark ? t('admin.commandPalette.lightMode') : t('admin.commandPalette.darkMode')"
         class="inline-flex size-11 shrink-0 items-center justify-center rounded-full border border-border bg-card text-primary transition-colors hover:border-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-reduce:transition-none"
         @click="toggleTheme()"
       >
-        <Sun v-if="isDark" class="size-5 text-serag-gold-hi" aria-hidden="true" />
+        <Sun v-if="showDark" class="size-5 text-serag-gold-hi" aria-hidden="true" />
         <Moon v-else class="size-5" aria-hidden="true" />
       </button>
 

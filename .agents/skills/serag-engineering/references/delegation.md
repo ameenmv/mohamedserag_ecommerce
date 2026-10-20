@@ -35,6 +35,20 @@ In this repository, engineering work is split between two distinct agent roles:
 └────────────────────────────────────────────────────────┘
 ```
 
+### Second implementer: OpenCode (free models)
+
+When Antigravity is out of quota, the same loop runs through the OpenCode CLI with its free Zen models:
+
+```bash
+.agents/skills/serag-engineering/scripts/opencode-relay.sh --brief brief.txt            # default model: opencode/big-pickle
+.agents/skills/serag-engineering/scripts/opencode-relay.sh --brief brief.txt --model opencode/nemotron-3-ultra-free
+```
+
+- The wrapper calls the `opencode-delegate` relay (`result.json`, never commits) with `--no-auto` and loads `scripts/opencode-noshell.json` through `OPENCODE_CONFIG_CONTENT`, the highest-precedence config, so a project `opencode.json` cannot loosen it.
+- That file allows only read, search and edit inside the repo. Bash, web fetch/search, sub-agents, paths outside the repo, `.env` files and `.git/` are denied. Bash is removed from the toolset entirely, so a run never hangs on a prompt.
+- Free models come and go and sometimes return a server error. List the current ones with `opencode models | grep -E 'free|big-pickle'` and probe with a tiny read-only brief before a real one. As of 2026-10-19, `big-pickle` and `nemotron-3-ultra-free` work; the others returned errors.
+- The briefs, the "no shell commands" rule and Claude's review and gates are exactly the same as for agy.
+
 ### Delegation Principles:
 - **Implementer does NOT run shell commands**: Antigravity is instructed not to execute terminal commands (such as `pnpm install`, `pnpm test`, or `prisma migrate`).
 - **Implementer does NOT commit**: Only the orchestrator reviews the diff, verifies the gates, and creates git commits.

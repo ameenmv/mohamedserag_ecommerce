@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { MapPin, MessageCircle, Phone } from '@lucide/vue'
 import { waLink } from '@serag/shared'
-import { FOOTER_LINKS, FOOTER_STORE_SECTIONS } from '~/constants/navigation'
+import { FOOTER_STORE_SECTIONS } from '~/constants/navigation'
 
 const { t } = useI18n()
 const settings = useStoreSettings()
 const { track } = useAnalytics()
+const { links: infoLinks } = useFooterPages()
 
 const whatsappUrl = computed(() =>
-  waLink(settings.whatsapp, t('store.footer.whatsappPrefill')),
+  settings.whatsapp ? waLink(settings.whatsapp, t('store.footer.whatsappPrefill')) : '',
 )
 </script>
 
@@ -30,7 +31,7 @@ const whatsappUrl = computed(() =>
         <StoreFooterColumn
           class="lg:col-span-3"
           :title="t('store.footer.infoTitle')"
-          :links="FOOTER_LINKS"
+          :links="infoLinks"
           grid-cols-class="grid grid-cols-2 gap-x-4 gap-y-1 sm:grid-cols-1"
         />
 
@@ -47,6 +48,7 @@ const whatsappUrl = computed(() =>
             </div>
           </div>
           <a
+            v-if="settings.phone"
             :href="`tel:${settings.phone}`"
             class="inline-flex min-h-11 items-center gap-2.5 rounded-lg px-1 text-base transition-colors hover:text-serag-gold-hi focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:outline-none motion-reduce:transition-none"
           >
@@ -54,6 +56,7 @@ const whatsappUrl = computed(() =>
             <span class="num">{{ settings.phone }}</span>
           </a>
           <a
+            v-if="whatsappUrl"
             :href="whatsappUrl"
             target="_blank"
             rel="noopener noreferrer"

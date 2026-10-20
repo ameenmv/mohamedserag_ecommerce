@@ -3,7 +3,9 @@ import type { Component } from 'vue'
 import type { AdminNavGroup } from '~/utils/shortcuts'
 import {
   BarChart3,
+  BellRing,
   FilePenLine,
+  FolderTree,
   LayoutDashboard,
   Package,
   Settings,
@@ -13,6 +15,7 @@ import {
   Tag,
 } from '@lucide/vue'
 import { ADMIN_NAV_SHORTCUTS } from '~/utils/shortcuts'
+import { PERMISSIONS } from '@serag/shared'
 
 const emit = defineEmits<{
   navigate: []
@@ -25,20 +28,45 @@ const iconByKey: Record<string, Component> = {
   h: LayoutDashboard,
   o: ShoppingBag,
   p: Package,
+  c: FolderTree,
   b: Sparkles,
   m: Tag,
+  n: BellRing,
   r: Star,
   e: FilePenLine,
   t: BarChart3,
   s: Settings,
 }
 
+const { can } = useAdminAuth()
+const reviewsApi = useAdminReviews()
+const pendingReviewsCount = useAdminPendingReviewsCount()
+
+onMounted(async () => {
+  if (can(PERMISSIONS.reviews.moderate)) {
+    try {
+      const res = await reviewsApi.pendingCount()
+      pendingReviewsCount.value = res.count
+    } catch {
+      // Failure -> no badge, no error UI
+    }
+  }
+})
+
+const badges = computed<Record<string, number>>(() => ({
+  r: pendingReviewsCount.value,
+}))
+
 const groupsOrder: readonly AdminNavGroup[] = ['main', 'store', 'content', 'system']
 
 const groupedNav = computed(() =>
   groupsOrder.map((group) => ({
     group,
-    items: ADMIN_NAV_SHORTCUTS.filter((item) => item.group === group),
+    items: ADMIN_NAV_SHORTCUTS.filter((item) => {
+      if (item.group !== group) return false
+      if (item.permission && !can(item.permission)) return false
+      return true
+    }),
   })),
 )
 </script>
@@ -58,6 +86,7 @@ const groupedNav = computed(() =>
           :items="section.items"
           :icon-by-key="iconByKey"
           :is-active="isActive"
+          :badges="badges"
           @navigate="emit('navigate')"
         />
       </nav>

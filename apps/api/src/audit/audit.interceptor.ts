@@ -18,8 +18,67 @@ export { AUDIT_ENTITY_KEY, Audit }
 
 export const MAX_AUDIT_JSON_BYTES = 20_480
 
+function maskPhone(val: string): string {
+  if (val.length >= 5) {
+    const maskLen = val.length - 5
+    return `${val.slice(0, 3)}${'*'.repeat(maskLen > 0 ? maskLen : 1)}${val.slice(-2)}`
+  }
+  return '*'.repeat(val.length)
+}
+
+function isPhoneLike(val: string): boolean {
+  const stripped = val.replace(/[\s\-().]/g, '')
+  return /^\+?\d{7,16}$/.test(stripped)
+}
+
+/** Object keys whose string values hold phone numbers and must be masked in audit snapshots. */
+const PHONE_MASK_KEYS = new Set(['phone', 'customerphone', 'whatsapp', 'traderswhatsapp'])
+
+/**
+ * Deep-clones an object while redacting customer phone numbers and WhatsApp links.
+ */
+export function redactAuditSnapshot(value: unknown, seen = new WeakSet<object>()): unknown {
+  if (value === null || value === undefined) {
+    return value
+  }
+  if (typeof value !== 'object') {
+    return value
+  }
+  if (value instanceof Date) {
+    return value.toISOString()
+  }
+  if (seen.has(value)) {
+    return undefined
+  }
+  // Track only the current path so shared (non-cyclic) references are kept, cycles dropped
+  seen.add(value)
+  if (Array.isArray(value)) {
+    const items = value.map((item) => redactAuditSnapshot(item, seen))
+    seen.delete(value)
+    return items
+  }
+  const result: Record<string, unknown> = {}
+  for (const [key, val] of Object.entries(value)) {
+    const lowerKey = key.toLowerCase()
+    if (PHONE_MASK_KEYS.has(lowerKey) && typeof val === 'string') {
+      result[key] = maskPhone(val)
+    } else if (
+      (lowerKey === 'whatsappurl' || lowerKey === 'to') &&
+      typeof val === 'string' &&
+      (val.startsWith('https://wa.me/') || isPhoneLike(val))
+    ) {
+      result[key] = '[redacted]'
+    } else {
+      result[key] = redactAuditSnapshot(val, seen)
+    }
+  }
+  seen.delete(value)
+  return result
+}
+
 /**
  * Converts a response body into a JSON-serializable Prisma value truncated to ~20 KB.
+ * PII such as phones and WhatsApp URLs are redacted prior to snapshotting.
  */
 export function truncateAuditAfter(
   value: unknown,
@@ -32,7 +91,8 @@ export function truncateAuditAfter(
     return Prisma.JsonNull
   }
   try {
-    const serialized = JSON.stringify(value)
+    const redacted = redactAuditSnapshot(value)
+    const serialized = JSON.stringify(redacted)
     if (!serialized) {
       return undefined
     }

@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import {
   ORDER_TYPES,
   ORDER_STATUSES,
+  isOrderStatus,
   ORDER_STATUS_LABELS,
   BRIDAL_STATUSES,
   BRIDAL_STATUS_LABELS,
@@ -44,6 +45,7 @@ describe('enums and Arabic labels', () => {
 
   it('maps every BridalStatus to its exact Arabic label', () => {
     expect(BRIDAL_STATUSES).toEqual([
+      'draft',
       'awaiting_deposit',
       'locked',
       'delivery_agreed',
@@ -52,6 +54,7 @@ describe('enums and Arabic labels', () => {
       'lock_expired',
     ])
     expect(BRIDAL_STATUS_LABELS).toEqual({
+      draft: 'مسودة',
       awaiting_deposit: 'بانتظار العربون',
       locked: 'محجوز (السعر مثبت)',
       delivery_agreed: 'اتفقنا على التوصيل',
@@ -95,5 +98,12 @@ describe('enums and Arabic labels', () => {
     expect(ALL_PERMISSIONS).toContain('notify.manage')
     expect(ALL_PERMISSIONS).toContain('users.manage')
     expect(ALL_PERMISSIONS).toHaveLength(14)
+  })
+})
+
+describe('isOrderStatus', () => {
+  it('accepts order statuses and rejects history markers', () => {
+    expect(isOrderStatus('confirmed')).toBe(true)
+    expect(isOrderStatus('payment_confirmed')).toBe(false)
   })
 })

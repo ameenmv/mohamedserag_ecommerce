@@ -11,6 +11,7 @@ const { t } = useI18n()
 
 <template>
   <a
+    v-if="href"
     :href="href"
     target="_blank"
     rel="noopener noreferrer"
