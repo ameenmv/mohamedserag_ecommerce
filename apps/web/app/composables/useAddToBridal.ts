@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import type { BridalListView } from '@serag/shared'
-import { getApiBaseUrl } from '../utils/api'
+import { apiFetch } from '../utils/api'
 import {
   addCategoryProductToRooms,
   canAppendToBridalList,
@@ -24,7 +24,6 @@ export function useAddToBridal() {
   const analytics = useAnalytics()
   const localePath = useLocalePath()
   const { t } = useI18n()
-  const baseURL = getApiBaseUrl()
 
   async function addToBridal(product: AddToBridalProductInput): Promise<boolean> {
     if (pending.value) {
@@ -42,10 +41,9 @@ export function useAddToBridal() {
       if (existingToken) {
         const token = existingToken
         try {
-          const list = await $fetch<BridalListView>(
+          const list = await apiFetch<BridalListView>(
             `/bridal/lists/${encodeURIComponent(token)}`,
             {
-              baseURL,
               method: 'GET',
             },
           )
@@ -59,10 +57,9 @@ export function useAddToBridal() {
               1,
             )
 
-            await $fetch<BridalListView>(
+            await apiFetch<BridalListView>(
               `/bridal/lists/${encodeURIComponent(token)}`,
               {
-                baseURL,
                 method: 'PATCH',
                 body: { rooms: updatedRooms },
               },
@@ -81,8 +78,7 @@ export function useAddToBridal() {
       }
 
       if (!appended) {
-        const createRes = await $fetch<{ editToken: string }>('/bridal/lists', {
-          baseURL,
+        const createRes = await apiFetch<{ editToken: string }>('/bridal/lists', {
           method: 'POST',
           body: { productId: product.id },
         })

@@ -18,7 +18,7 @@ import {
   BRIDAL_ROOM_KEYS,
   addItemToRooms,
 } from '@serag/shared'
-import { getApiBaseUrl } from '../utils/api'
+import { apiFetch } from '../utils/api'
 import {
   applyQty as pureApplyQty,
   estimateTotals,
@@ -73,7 +73,6 @@ export type SaveState = 'idle' | 'saving' | 'saved' | 'error'
  * synchronously at the top BEFORE any `await` so Vue's active component instance is retained.
  */
 export async function useBridalList(token: Ref<string>) {
-  const baseURL = getApiBaseUrl()
   const bridalDevice = useBridalDevice()
 
   // 1. Core reactive state created synchronously
@@ -162,10 +161,9 @@ export async function useBridalList(token: Ref<string>) {
   async function triggerSave(seq: number): Promise<void> {
     if (!isEditable.value) return
     try {
-      const res = await $fetch<BridalListView>(
+      const res = await apiFetch<BridalListView>(
         `/bridal/lists/${encodeURIComponent(token.value)}`,
         {
-          baseURL,
           method: 'PATCH',
           body: { rooms: rooms.value },
         },
@@ -348,8 +346,7 @@ export async function useBridalList(token: Ref<string>) {
   } = await useAsyncData<BridalListView>(
     () => `bridal:list:${token.value}`,
     () =>
-      $fetch<BridalListView>(`/bridal/lists/${encodeURIComponent(token.value)}`, {
-        baseURL,
+      apiFetch<BridalListView>(`/bridal/lists/${encodeURIComponent(token.value)}`, {
         method: 'GET',
       }),
   )

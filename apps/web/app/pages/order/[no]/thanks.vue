@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { CheckCircle2, Copy, Check, PhoneCall, Home, ShoppingBag, MessageCircle, ShieldCheck } from '@lucide/vue'
 import { waLink, type OrderThanks } from '@serag/shared'
+import { apiFetch } from '~/utils/api'
 
 const route = useRoute()
 const { t } = useI18n()
@@ -10,13 +11,11 @@ const storeSettings = useStoreSettings()
 const no = computed(() => String(route.params.no))
 const token = computed(() => (typeof route.query.t === 'string' ? route.query.t : undefined))
 
-const baseURL = getApiBaseUrl()
 const { data: order, error } = await useAsyncData<OrderThanks | null>(
   `order-thanks-${no.value}`,
   async () => {
     if (!token.value) return null
-    return $fetch<OrderThanks>(`/orders/${encodeURIComponent(no.value)}/thanks`, {
-      baseURL,
+    return apiFetch<OrderThanks>(`/orders/${encodeURIComponent(no.value)}/thanks`, {
       method: 'GET',
       query: { t: token.value },
     })

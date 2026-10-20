@@ -1,5 +1,5 @@
 import type { NotifyMeInput } from '@serag/shared'
-import { getApiBaseUrl, getErrorStatus } from '../utils/api'
+import { apiFetch, getErrorStatus } from '../utils/api'
 
 export type NotifyMeResult =
   | { ok: true }
@@ -17,10 +17,8 @@ export function useNotifyMe() {
   const analytics = useAnalytics()
 
   async function submit(input: NotifyMeInput): Promise<NotifyMeResult> {
-    const baseURL = getApiBaseUrl()
     try {
-      await $fetch<{ ok: true }>('/notify-me', {
-        baseURL,
+      await apiFetch<{ ok: true }>('/notify-me', {
         method: 'POST',
         body: {
           productId: input.productId,

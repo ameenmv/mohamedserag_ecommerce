@@ -2,15 +2,14 @@ type FetchOptions = Parameters<typeof $fetch>[1]
 
 /**
  * Authenticated HTTP client for admin API calls.
- * Automatically injects CSRF tokens and forwards SSR session cookies.
- * Redirects to `/admin/login?next=...` on 401 Unauthorized responses.
+ * Automatically injects CSRF tokens, forwards SSR session cookies and the visitor IP,
+ * and redirects to `/admin/login?next=...` on 401 Unauthorized responses.
  */
 export async function adminFetch<T = unknown>(
   path: string,
   options: FetchOptions = {},
 ): Promise<T> {
   const { csrfToken, clearSession } = useAdminSession()
-  const baseURL = getApiBaseUrl()
   const method = String(options?.method ?? 'GET')
   const headers = buildRequestHeaders(
     options?.headers as HeadersInit | undefined,
@@ -19,9 +18,8 @@ export async function adminFetch<T = unknown>(
   )
 
   try {
-    return await ($fetch as <R>(url: string, opts?: FetchOptions) => Promise<R>)<T>(path, {
+    return await apiFetch<T>(path, {
       ...options,
-      baseURL,
       credentials: 'include',
       headers,
     })

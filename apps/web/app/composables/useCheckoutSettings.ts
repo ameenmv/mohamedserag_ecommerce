@@ -1,5 +1,5 @@
 import type { CheckoutPaymentMethod, CheckoutSettings } from '@serag/shared'
-import { getApiBaseUrl } from '../utils/api'
+import { apiFetch } from '../utils/api'
 
 /**
  * Public checkout settings composable.
@@ -7,10 +7,8 @@ import { getApiBaseUrl } from '../utils/api'
  * the 27 Egyptian governorates, and zone city suggestions.
  */
 export function useCheckoutSettings() {
-  const baseURL = getApiBaseUrl()
   const asyncData = useAsyncData<CheckoutSettings>('checkout-settings', () =>
-    $fetch<CheckoutSettings>('/settings/checkout', {
-      baseURL,
+    apiFetch<CheckoutSettings>('/settings/checkout', {
       method: 'GET',
     }),
   )

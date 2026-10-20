@@ -19,6 +19,7 @@ import type {
   QuizResultsResponse,
   SearchResponse,
 } from '@serag/shared'
+import { apiFetch } from '../utils/api'
 
 export interface GuidesPageResponse {
   items: GuideCard[]
@@ -29,19 +30,16 @@ export interface GuidesPageResponse {
 
 /**
  * Public catalog API composable for the storefront.
- * Exposes plain, typed $fetch helpers intended to be called inside `useAsyncData`.
+ * Exposes plain, typed fetch helpers intended to be called inside `useAsyncData`.
  */
 export function useStoreApi() {
-  const baseURL = getApiBaseUrl()
-
   return {
     /**
      * GET /products
      * Fetches paginated, filtered, sorted product list with live facets.
      */
     products(query?: ProductQueryInput | Record<string, unknown>): Promise<ProductListResponse> {
-      return $fetch<ProductListResponse>('/products', {
-        baseURL,
+      return apiFetch<ProductListResponse>('/products', {
         method: 'GET',
         query,
       })
@@ -56,8 +54,7 @@ export function useStoreApi() {
       if (cleanIds.length === 0) {
         return []
       }
-      const response = await $fetch<ProductListResponse>('/products', {
-        baseURL,
+      const response = await apiFetch<ProductListResponse>('/products', {
         method: 'GET',
         query: { ids: cleanIds.join(',') },
       })
@@ -69,8 +66,7 @@ export function useStoreApi() {
      * Fetches detailed product data with merged specs, gallery, and related items.
      */
     product(slug: string): Promise<ProductDetail> {
-      return $fetch<ProductDetail>(`/products/${encodeURIComponent(slug)}`, {
-        baseURL,
+      return apiFetch<ProductDetail>(`/products/${encodeURIComponent(slug)}`, {
         method: 'GET',
       })
     },
@@ -80,8 +76,7 @@ export function useStoreApi() {
      * Returns visible categories hierarchy tree.
      */
     categories(): Promise<CategoryTreeNode[]> {
-      return $fetch<CategoryTreeNode[]>('/categories', {
-        baseURL,
+      return apiFetch<CategoryTreeNode[]>('/categories', {
         method: 'GET',
       })
     },
@@ -91,8 +86,7 @@ export function useStoreApi() {
      * Returns a single category with breadcrumbs, children, and spec template fields.
      */
     category(slug: string): Promise<CategoryDetail> {
-      return $fetch<CategoryDetail>(`/categories/${encodeURIComponent(slug)}`, {
-        baseURL,
+      return apiFetch<CategoryDetail>(`/categories/${encodeURIComponent(slug)}`, {
         method: 'GET',
       })
     },
@@ -102,8 +96,7 @@ export function useStoreApi() {
      * Returns list of visible brands with non-zero product counts.
      */
     brands(): Promise<BrandSummary[]> {
-      return $fetch<BrandSummary[]>('/brands', {
-        baseURL,
+      return apiFetch<BrandSummary[]>('/brands', {
         method: 'GET',
       })
     },
@@ -113,8 +106,7 @@ export function useStoreApi() {
      * Returns brand details and SEO metadata.
      */
     brand(slug: string): Promise<BrandDetail> {
-      return $fetch<BrandDetail>(`/brands/${encodeURIComponent(slug)}`, {
-        baseURL,
+      return apiFetch<BrandDetail>(`/brands/${encodeURIComponent(slug)}`, {
         method: 'GET',
       })
     },
@@ -124,8 +116,7 @@ export function useStoreApi() {
      * Live search for products and category suggestions.
      */
     search(q: string, limit?: number): Promise<SearchResponse> {
-      return $fetch<SearchResponse>('/search', {
-        baseURL,
+      return apiFetch<SearchResponse>('/search', {
         method: 'GET',
         query: {
           q,
@@ -139,8 +130,7 @@ export function useStoreApi() {
      * Returns running flash sales and discounted items.
      */
     offers(): Promise<OffersResponse> {
-      return $fetch<OffersResponse>('/offers', {
-        baseURL,
+      return apiFetch<OffersResponse>('/offers', {
         method: 'GET',
       })
     },
@@ -150,8 +140,7 @@ export function useStoreApi() {
      * Returns the published homepage layout and section content.
      */
     home(): Promise<PublicHome> {
-      return $fetch<PublicHome>('/content/home', {
-        baseURL,
+      return apiFetch<PublicHome>('/content/home', {
         method: 'GET',
       })
     },
@@ -161,8 +150,7 @@ export function useStoreApi() {
      * Returns the published content pages (slug + title) used by the footer.
      */
     pages(): Promise<{ items: PublicPageLink[] }> {
-      return $fetch<{ items: PublicPageLink[] }>('/pages', {
-        baseURL,
+      return apiFetch<{ items: PublicPageLink[] }>('/pages', {
         method: 'GET',
       })
     },
@@ -173,8 +161,7 @@ export function useStoreApi() {
      * Rejects with a 404 when the page is unpublished or unknown.
      */
     page(slug: string): Promise<PublicPage> {
-      return $fetch<PublicPage>(`/pages/${encodeURIComponent(slug)}`, {
-        baseURL,
+      return apiFetch<PublicPage>(`/pages/${encodeURIComponent(slug)}`, {
         method: 'GET',
       })
     },
@@ -185,8 +172,7 @@ export function useStoreApi() {
      * Values may still hold `[…]` placeholders before launch; check with `hasPlaceholder`.
      */
     storeInfo(): Promise<PublicStoreInfo> {
-      return $fetch<PublicStoreInfo>('/settings/store', {
-        baseURL,
+      return apiFetch<PublicStoreInfo>('/settings/store', {
         method: 'GET',
       })
     },
@@ -196,8 +182,7 @@ export function useStoreApi() {
      * Returns the newest published buying guides.
      */
     async latestGuides(limit = 3): Promise<GuideCard[]> {
-      const response = await $fetch<{ items: GuideCard[] }>('/guides', {
-        baseURL,
+      const response = await apiFetch<{ items: GuideCard[] }>('/guides', {
         method: 'GET',
         query: { pageSize: limit },
       })
@@ -209,8 +194,7 @@ export function useStoreApi() {
      * Returns a page of published buying guides (12 per page by default).
      */
     guides(page = 1, pageSize = 12): Promise<GuidesPageResponse> {
-      return $fetch<GuidesPageResponse>('/guides', {
-        baseURL,
+      return apiFetch<GuidesPageResponse>('/guides', {
         method: 'GET',
         query: { page, pageSize },
       })
@@ -222,8 +206,7 @@ export function useStoreApi() {
      * Rejects with a 404 when the guide is unpublished or unknown.
      */
     guide(slug: string): Promise<PublicGuide> {
-      return $fetch<PublicGuide>(`/guides/${encodeURIComponent(slug)}`, {
-        baseURL,
+      return apiFetch<PublicGuide>(`/guides/${encodeURIComponent(slug)}`, {
         method: 'GET',
       })
     },
@@ -234,8 +217,7 @@ export function useStoreApi() {
      * Rejects with a 404 when the category has no quiz or is hidden.
      */
     quiz(categorySlug: string): Promise<PublicQuiz> {
-      return $fetch<PublicQuiz>(`/quiz/${encodeURIComponent(categorySlug)}`, {
-        baseURL,
+      return apiFetch<PublicQuiz>(`/quiz/${encodeURIComponent(categorySlug)}`, {
         method: 'GET',
       })
     },
@@ -245,8 +227,7 @@ export function useStoreApi() {
      * Scores the shopper's answers and returns up to three recommended product cards.
      */
     quizResults(categorySlug: string, answers: QuizAnswers): Promise<QuizResultsResponse> {
-      return $fetch<QuizResultsResponse>(`/quiz/${encodeURIComponent(categorySlug)}/results`, {
-        baseURL,
+      return apiFetch<QuizResultsResponse>(`/quiz/${encodeURIComponent(categorySlug)}/results`, {
         method: 'POST',
         body: { answers },
       })

@@ -6,7 +6,7 @@ import {
   type BridalReservePaymentMethod,
   type BridalReserveQuote,
 } from '@serag/shared'
-import { getApiBaseUrl } from '../utils/api'
+import { apiFetch } from '../utils/api'
 import { parseBridalConflict } from '../utils/bridal'
 import type { CheckoutFormState } from './useCheckout'
 
@@ -20,7 +20,6 @@ export function useBridalReserve(
   token: Ref<string>,
   options?: UseBridalReserveOptions,
 ) {
-  const baseURL = getApiBaseUrl()
   const notify = useNotify()
   const analytics = useAnalytics()
   const localePath = useLocalePath()
@@ -111,10 +110,9 @@ export function useBridalReserve(
 
       quoteTimer = setTimeout(async () => {
         try {
-          const res = await $fetch<BridalReserveQuote>(
+          const res = await apiFetch<BridalReserveQuote>(
             `/bridal/reserve-quote/${encodeURIComponent(token.value)}`,
             {
-              baseURL,
               method: 'GET',
               query: {
                 governorate: trimmedGov,
@@ -266,10 +264,9 @@ export function useBridalReserve(
         expectedTotal,
       }
 
-      const res = await $fetch<{ orderNo: string; publicToken: string }>(
+      const res = await apiFetch<{ orderNo: string; publicToken: string }>(
         `/bridal/lists/${encodeURIComponent(token.value)}/reserve`,
         {
-          baseURL,
           method: 'POST',
           body: payload,
         },

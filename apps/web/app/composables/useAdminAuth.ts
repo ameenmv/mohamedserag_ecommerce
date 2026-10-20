@@ -1,5 +1,6 @@
 import type { Permission } from '@serag/shared'
 import type { AdminAuthPayload, AdminUser } from '~/types/admin'
+import { apiFetch, buildRequestHeaders } from '../utils/api'
 
 /**
  * Admin authentication composable managing signed-in state, login/logout,
@@ -9,11 +10,9 @@ export function useAdminAuth() {
   const { user, permissions, csrfToken, setSession, clearSession } = useAdminSession()
 
   async function fetchMe(): Promise<AdminUser | null> {
-    const baseURL = getApiBaseUrl()
     const headers = buildRequestHeaders(undefined, 'GET', csrfToken.value)
     try {
-      const data = await $fetch<AdminAuthPayload>('/admin/auth/me', {
-        baseURL,
+      const data = await apiFetch<AdminAuthPayload>('/admin/auth/me', {
         method: 'GET',
         credentials: 'include',
         headers,
@@ -27,9 +26,7 @@ export function useAdminAuth() {
   }
 
   async function login(email: string, password: string): Promise<AdminAuthPayload> {
-    const baseURL = getApiBaseUrl()
-    const data = await $fetch<AdminAuthPayload>('/admin/auth/login', {
-      baseURL,
+    const data = await apiFetch<AdminAuthPayload>('/admin/auth/login', {
       method: 'POST',
       credentials: 'include',
       body: { email, password },
@@ -39,11 +36,9 @@ export function useAdminAuth() {
   }
 
   async function logout(): Promise<void> {
-    const baseURL = getApiBaseUrl()
     const headers = buildRequestHeaders(undefined, 'POST', csrfToken.value)
     try {
-      await $fetch('/admin/auth/logout', {
-        baseURL,
+      await apiFetch('/admin/auth/logout', {
         method: 'POST',
         credentials: 'include',
         headers,

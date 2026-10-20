@@ -1,4 +1,5 @@
 import type { ReviewInput } from '@serag/shared'
+import { apiFetch, getErrorStatus } from '../utils/api'
 
 export type ReviewSubmitResult =
   | { ok: true }
@@ -16,10 +17,8 @@ export function useReviewSubmit() {
   const analytics = useAnalytics()
 
   async function submit(input: ReviewInput): Promise<ReviewSubmitResult> {
-    const baseURL = getApiBaseUrl()
     try {
-      await $fetch<{ ok: true }>('/reviews', {
-        baseURL,
+      await apiFetch<{ ok: true }>('/reviews', {
         method: 'POST',
         body: {
           productId: input.productId,

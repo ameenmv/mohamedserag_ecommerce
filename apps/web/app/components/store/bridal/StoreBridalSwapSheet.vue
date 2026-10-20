@@ -8,7 +8,7 @@ import Sheet from '~/components/ui/sheet/Sheet.vue'
 import SheetContent from '~/components/ui/sheet/SheetContent.vue'
 import SheetHeader from '~/components/ui/sheet/SheetHeader.vue'
 import SheetTitle from '~/components/ui/sheet/SheetTitle.vue'
-import { getApiBaseUrl } from '~/utils/api'
+import { apiFetch } from '~/utils/api'
 import { classifyDiff } from '~/utils/bridal'
 
 const props = defineProps<{
@@ -45,8 +45,7 @@ watch(
     pending.value = true
     error.value = null
     try {
-      const res = await $fetch<{ items: BridalAlternative[] }>('/bridal/alternatives', {
-        baseURL: getApiBaseUrl(),
+      const res = await apiFetch<{ items: BridalAlternative[] }>('/bridal/alternatives', {
         method: 'GET',
         query: { productId: newId },
       })

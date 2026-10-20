@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { BridalTierSummary } from '@serag/shared'
 import { AlertCircle, RefreshCw } from '@lucide/vue'
-import { getApiBaseUrl } from '~/utils/api'
+import { apiFetch } from '~/utils/api'
 import StoreBridalHero from '~/components/store/bridal/StoreBridalHero.vue'
 import StoreBridalContinueBanner from '~/components/store/bridal/StoreBridalContinueBanner.vue'
 import StoreBridalTiers from '~/components/store/bridal/StoreBridalTiers.vue'
@@ -27,8 +27,8 @@ const {
   error: tiersError,
   refresh: refreshTiers,
 } = await useAsyncData<{ tiers: BridalTierSummary[] }>('store:bridal:tiers', () =>
-  $fetch<{ tiers: BridalTierSummary[] }>('/bridal/tiers', {
-    baseURL: getApiBaseUrl(),
+  apiFetch<{ tiers: BridalTierSummary[] }>('/bridal/tiers', {
+    method: 'GET',
   }),
 )
 
@@ -39,8 +39,7 @@ async function handleCreateList(tierId?: string): Promise<void> {
 
   creating.value = true
   try {
-    const res = await $fetch<{ editToken: string }>('/bridal/lists', {
-      baseURL: getApiBaseUrl(),
+    const res = await apiFetch<{ editToken: string }>('/bridal/lists', {
       method: 'POST',
       body: tierId ? { tierId } : {},
     })

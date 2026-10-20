@@ -1,7 +1,7 @@
 import type { Ref } from 'vue'
 import type { CreateOrderResult } from '@serag/shared'
 import { createOrderInputSchema } from '@serag/shared'
-import { getApiBaseUrl } from '../utils/api'
+import { apiFetch } from '../utils/api'
 import {
   buildCreateOrderPayload,
   orderPlacedEvent,
@@ -239,9 +239,7 @@ export function useCheckout(options?: { hydrated?: Ref<boolean> }) {
         expectedTotal,
       )
 
-      const baseURL = getApiBaseUrl()
-      const res = await $fetch<CreateOrderResult>('/orders', {
-        baseURL,
+      const res = await apiFetch<CreateOrderResult>('/orders', {
         method: 'POST',
         body: payload,
       })

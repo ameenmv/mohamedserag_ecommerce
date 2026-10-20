@@ -4,6 +4,7 @@ import type {
   PublicReviewListResponse,
   ReviewRatingSummary,
 } from '@serag/shared'
+import { apiFetch } from '../utils/api'
 
 /**
  * Pure fetcher loading a page of approved product reviews.
@@ -14,9 +15,7 @@ export async function loadProductReviews(
   page = 1,
   pageSize = 10,
 ): Promise<PublicReviewListResponse> {
-  const baseURL = getApiBaseUrl()
-  return await $fetch<PublicReviewListResponse>(`/products/${encodeURIComponent(slug)}/reviews`, {
-    baseURL,
+  return await apiFetch<PublicReviewListResponse>(`/products/${encodeURIComponent(slug)}/reviews`, {
     method: 'GET',
     query: { page, pageSize },
   })

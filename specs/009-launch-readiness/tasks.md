@@ -4,10 +4,10 @@
 
 ## Phase 1: Per-visitor throttling (US1, P1)
 
-- [ ] T001 [US1] `apps/web/server/utils/visitor-ip.ts`: derive the visitor IP (last `X-Forwarded-For` entry when the request came through the trusted proxy, else the socket address; strip ports/IPv6 brackets) + unit tests incl. spoofed leading entries
-- [ ] T002 [US1] Forward the visitor IP as `X-Forwarded-For` on every SSR API call (public `useStoreApi`, catalog/content fetchers, `adminFetch`), alongside the cookie; unit test the header builder
-- [ ] T003 [US1] API: document the trust boundary in `main.ts` (`trust proxy` 1), confirm `req.ip` and the throttler use it; API e2e: two forwarded IPs get separate budgets, a spoofed leading entry cannot reset a budget; justify the `GET /settings/store` exemption in code
-- [ ] T004 [US1] TesterArmy: the full suite passes with default parallel workers (no throttling flakes)
+- [x] T001 [US1] `apps/web/server/utils/visitor-ip.ts`: derive the visitor IP (last `X-Forwarded-For` entry when the request came through the trusted proxy, else the socket address; strip ports/IPv6 brackets) + unit tests incl. spoofed leading entries
+- [x] T002 [US1] Forward the visitor IP as `X-Forwarded-For` on every SSR API call (public `useStoreApi`, catalog/content fetchers, `adminFetch`), alongside the cookie; unit test the header builder
+- [x] T003 [US1] API: document the trust boundary in `main.ts` (`trust proxy` 1), confirm `req.ip` and the throttler use it; API e2e: two forwarded IPs get separate budgets, a spoofed leading entry cannot reset a budget; justify the `GET /settings/store` exemption in code
+- [x] T004 [US1] TesterArmy: the full suite passes with default parallel workers (no throttling flakes)
 
 ## Phase 2: Hardening (US2, P1)
 

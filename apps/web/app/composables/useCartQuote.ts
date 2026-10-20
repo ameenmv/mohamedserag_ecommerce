@@ -1,7 +1,7 @@
 import type { Ref } from 'vue'
 import type { CartQuote } from '@serag/shared'
 import type { CartLine } from '../utils/cart'
-import { getApiBaseUrl } from '../utils/api'
+import { apiFetch } from '../utils/api'
 import {
   applyQuoteToCartState,
   buildQuoteRequest,
@@ -52,11 +52,9 @@ export function useCartQuoteController(options: UseCartQuoteControllerOptions = 
     error.value = null
 
     try {
-      const baseURL = getApiBaseUrl()
       const payload = buildQuoteRequest(lines.value, context.value)
 
-      const res = await $fetch<CartQuote>('/cart/quote', {
-        baseURL,
+      const res = await apiFetch<CartQuote>('/cart/quote', {
         method: 'POST',
         body: payload,
       })
