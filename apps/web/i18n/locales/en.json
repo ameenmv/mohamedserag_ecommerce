@@ -1708,6 +1708,122 @@
         }
       }
     },
+    "reports": {
+      "pageTitle": "Reports",
+      "tabsLabel": "Report types",
+      "empty": "No data for this period",
+      "percent": "{value}%",
+      "tabs": {
+        "revenue": "Revenue",
+        "splits": "Splits",
+        "bestSellers": "Best Sellers",
+        "coupons": "Coupons",
+        "flashSales": "Flash Sales",
+        "bridalFunnel": "Bridal Funnel",
+        "repeatCustomers": "Repeat Customers"
+      },
+      "period": {
+        "label": "Period",
+        "presets": {
+          "today": "Today",
+          "d7": "7 days",
+          "d30": "30 days",
+          "d90": "90 days",
+          "thisMonth": "This month",
+          "lastMonth": "Last month",
+          "custom": "Custom"
+        },
+        "from": "From",
+        "to": "To",
+        "apply": "Apply",
+        "groupBy": "Group by",
+        "groupings": {
+          "day": "Day",
+          "week": "Week",
+          "month": "Month"
+        },
+        "exportCsv": "Export CSV"
+      },
+      "totals": {
+        "revenue": "Total revenue",
+        "orders": "Orders",
+        "aov": "Average order value"
+      },
+      "revenue": {
+        "revenueChart": "Revenue over time",
+        "ordersChart": "Orders over time",
+        "table": {
+          "caption": "Revenue by period",
+          "period": "Period",
+          "revenue": "Revenue",
+          "orders": "Orders",
+          "aov": "Avg. order"
+        },
+        "total": "Total"
+      },
+      "splits": {
+        "sections": {
+          "category": "By category",
+          "brand": "By brand",
+          "paymentMethod": "By payment method",
+          "zone": "By zone",
+          "type": "By type"
+        },
+        "table": {
+          "name": "Item",
+          "revenue": "Revenue",
+          "orders": "Orders"
+        },
+        "total": "Total",
+        "undefinedLabel": "Unspecified"
+      },
+      "bestSellers": {
+        "table": {
+          "name": "Product",
+          "modelCode": "Model code",
+          "units": "Units",
+          "revenue": "Revenue",
+          "stock": "Stock"
+        }
+      },
+      "coupons": {
+        "table": {
+          "code": "Coupon",
+          "uses": "Uses",
+          "discount": "Discount",
+          "revenue": "Revenue"
+        }
+      },
+      "flash": {
+        "table": {
+          "name": "Sale",
+          "period": "Period",
+          "units": "Units",
+          "revenue": "Revenue",
+          "discount": "Est. discount"
+        },
+        "discountNote": "The discount is an estimate, computed from the sale-time price minus the regular price."
+      },
+      "funnel": {
+        "table": {
+          "stage": "Stage",
+          "count": "Count",
+          "conversion": "Conversion"
+        },
+        "steps": {
+          "lists": "Lists created",
+          "reservations": "Reservations with deposit",
+          "delivered": "Delivered"
+        }
+      },
+      "repeat": {
+        "allTime": "All time",
+        "period": "Selected period",
+        "customers": "Customers",
+        "repeatCustomers": "Repeat customers",
+        "share": "Share"
+      }
+    },
     "productPicker": {
       "description": "Search the catalog by name or model code and pick a product.",
       "searchPlaceholder": "Search by name or model code…",

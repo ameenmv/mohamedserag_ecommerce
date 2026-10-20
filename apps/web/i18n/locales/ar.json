@@ -1708,6 +1708,122 @@
         }
       }
     },
+    "reports": {
+      "pageTitle": "التقارير",
+      "tabsLabel": "أنواع التقارير",
+      "empty": "مفيش بيانات في الفترة دي",
+      "percent": "{value}%",
+      "tabs": {
+        "revenue": "الإيرادات",
+        "splits": "التقسيمات",
+        "bestSellers": "الأكثر مبيعاً",
+        "coupons": "الكوبونات",
+        "flashSales": "عروض البرق",
+        "bridalFunnel": "مسار العروسة",
+        "repeatCustomers": "العملاء المتكررون"
+      },
+      "period": {
+        "label": "الفترة",
+        "presets": {
+          "today": "اليوم",
+          "d7": "7 أيام",
+          "d30": "30 يوم",
+          "d90": "90 يوم",
+          "thisMonth": "الشهر ده",
+          "lastMonth": "الشهر اللي فات",
+          "custom": "مخصص"
+        },
+        "from": "من",
+        "to": "إلى",
+        "apply": "تطبيق",
+        "groupBy": "تجميع حسب",
+        "groupings": {
+          "day": "يوم",
+          "week": "أسبوع",
+          "month": "شهر"
+        },
+        "exportCsv": "تصدير CSV"
+      },
+      "totals": {
+        "revenue": "إجمالي الإيراد",
+        "orders": "عدد الطلبات",
+        "aov": "متوسط قيمة الطلب"
+      },
+      "revenue": {
+        "revenueChart": "الإيراد بمرور الوقت",
+        "ordersChart": "الطلبات بمرور الوقت",
+        "table": {
+          "caption": "الإيراد حسب الفترة",
+          "period": "الفترة",
+          "revenue": "الإيراد",
+          "orders": "عدد الطلبات",
+          "aov": "متوسط الطلب"
+        },
+        "total": "الإجمالي"
+      },
+      "splits": {
+        "sections": {
+          "category": "حسب القسم",
+          "brand": "حسب الماركة",
+          "paymentMethod": "حسب طريقة الدفع",
+          "zone": "حسب المنطقة",
+          "type": "حسب النوع"
+        },
+        "table": {
+          "name": "البند",
+          "revenue": "الإيراد",
+          "orders": "عدد الطلبات"
+        },
+        "total": "الإجمالي",
+        "undefinedLabel": "غير محدد"
+      },
+      "bestSellers": {
+        "table": {
+          "name": "المنتج",
+          "modelCode": "كود الموديل",
+          "units": "الكمية",
+          "revenue": "الإيراد",
+          "stock": "المخزون"
+        }
+      },
+      "coupons": {
+        "table": {
+          "code": "الكوبون",
+          "uses": "الاستخدامات",
+          "discount": "الخصم",
+          "revenue": "الإيراد"
+        }
+      },
+      "flash": {
+        "table": {
+          "name": "العرض",
+          "period": "الفترة",
+          "units": "الكمية",
+          "revenue": "الإيراد",
+          "discount": "خصم تقريبي"
+        },
+        "discountNote": "الخصم تقريبي ويُحسب من فرق سعر البيع وقت العرض عن السعر العادي."
+      },
+      "funnel": {
+        "table": {
+          "stage": "المرحلة",
+          "count": "العدد",
+          "conversion": "نسبة التحويل"
+        },
+        "steps": {
+          "lists": "قوائم اتعملت",
+          "reservations": "حجوزات بعربون",
+          "delivered": "اتسلّمت"
+        }
+      },
+      "repeat": {
+        "allTime": "كل الفترات",
+        "period": "الفترة المختارة",
+        "customers": "عدد العملاء",
+        "repeatCustomers": "العملاء المتكررون",
+        "share": "النسبة"
+      }
+    },
     "productPicker": {
       "description": "ابحث في الكتالوج بالاسم أو كود الموديل واختار المنتج.",
       "searchPlaceholder": "ابحث بالاسم أو كود الموديل…",

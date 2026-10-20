@@ -27,6 +27,18 @@ export function formatDayMonth(value: Date | string, locale: string): string {
   })
 }
 
+/**
+ * Formats a `YYYY-MM` month key (report bucket key) as e.g. `Oct 2026`.
+ * Parses as UTC midnight so the month never shifts across time zones.
+ */
+export function formatMonthYear(monthKey: string, locale: string): string {
+  return new Date(`${monthKey}-01T00:00:00Z`).toLocaleDateString(intlLocale(locale), {
+    year: 'numeric',
+    month: 'short',
+    timeZone: 'UTC',
+  })
+}
+
 export function formatDateTime(value: Date | string, locale: string): string {
   return new Date(value).toLocaleString(intlLocale(locale), {
     year: 'numeric',

@@ -23,9 +23,9 @@ description: "Tasks for Slice 7 — Dashboard, reports & settings"
 
 ## Phase 3: User Story 2 — Reports (P1)
 
-- [ ] T008 [US2] API `admin-reports`: revenue, splits, best-sellers, coupons, flash-sales, bridal-funnel, repeat-customers per `reportQuerySchema`; CSV export endpoint per report (BOM, Arabic headers, formula-safe cells via `common/csv-cell.ts`, Cairo dates); `reports.read`; no phones/addresses; API e2e with seeded orders (splits sum to total, empty buckets zero, coupon/flash/bridal/repeat numbers, CSV headers + BOM, 403 without permission)
-- [ ] T009 [US2] Web `/admin/reports` (existing nav entry G T): period presets + custom range, groupBy, tabs per report (`?tab=`), tables + charts, export buttons, empty states; i18n; 375 px
-- [ ] T010 [US2] TesterArmy: seeded delivered orders → revenue/splits/best sellers/coupon/flash/bridal funnel/repeat match; export downloads a CSV with the same total
+- [x] T008 [US2] API `admin-reports`: revenue, splits, best-sellers, coupons, flash-sales, bridal-funnel, repeat-customers per `reportQuerySchema`; CSV export endpoint per report (BOM, Arabic headers, formula-safe cells via `common/csv-cell.ts`, Cairo dates); `reports.read`; no phones/addresses; API e2e with seeded orders (splits sum to total, empty buckets zero, coupon/flash/bridal/repeat numbers, CSV headers + BOM, 403 without permission)
+- [x] T009 [US2] Web `/admin/reports` (existing nav entry G T): period presets + custom range, groupBy, tabs per report (`?tab=`), tables + charts, export buttons, empty states; i18n; 375 px
+- [x] T010 [US2] TesterArmy: seeded delivered orders → revenue/splits/best sellers/coupon/flash/bridal funnel/repeat match; export downloads a CSV with the same total
 
 ## Phase 4: User Story 3 — Settings (P1)
 

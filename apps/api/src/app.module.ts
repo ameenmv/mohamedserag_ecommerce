@@ -6,6 +6,7 @@ import { AuditInterceptor } from './audit/audit.interceptor.js'
 import { AdminCatalogModule } from './admin-catalog/admin-catalog.module.js'
 import { AdminContentModule } from './admin-content/admin-content.module.js'
 import { AdminDashboardModule } from './admin-dashboard/admin-dashboard.module.js'
+import { AdminReportsModule } from './admin-reports/admin-reports.module.js'
 import { AdminOrdersModule } from './admin-orders/admin-orders.module.js'
 import { AdminBridalModule } from './admin-bridal/admin-bridal.module.js'
 import { AdminPromotionsModule } from './admin-promotions/admin-promotions.module.js'
@@ -49,6 +50,7 @@ import { TestSeedModule } from './test-seed/test-seed.module.js'
     AdminReviewsModule,
     AdminContentModule,
     AdminDashboardModule,
+    AdminReportsModule,
     OrdersModule,
     BridalModule,
   ],
