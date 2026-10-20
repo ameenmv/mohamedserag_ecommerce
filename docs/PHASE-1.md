@@ -1,9 +1,9 @@
 # Phase 1 — Launch: progress
 
-> المرحلة الأولى (الإطلاق) — **Slice 0 (الأساس) و Slice 1 (الكتالوج) و Slice 2 (السلة والدفع) و Slice 3 (جهّز بيتك) و Slice 4 (العروض وتنبيهات التوفر) و Slice 5 (التقييمات) خلصوا بالكامل**.
-> في Slice 5: العميل يكتب تقييمه من صفحة المنتج، والأدمن يراجعه ويعتمده أو يخفيه ويرد عليه، والتقييمات المعتمدة بس هي اللي بتظهر بالنجوم ومتوسط التقييم على الكروت وصفحة المنتج، مع علامة «اشترى من المعرض» ورقم الموبايل عمره ما بيظهر للزوار.
+> المرحلة الأولى (الإطلاق) — **Slice 0 (الأساس) و Slice 1 (الكتالوج) و Slice 2 (السلة والدفع) و Slice 3 (جهّز بيتك) و Slice 4 (العروض وتنبيهات التوفر) و Slice 5 (التقييمات) و Slice 6 (المحتوى والـSEO) خلصوا بالكامل**.
+> في Slice 6: صاحب المعرض بيعدّل الصفحة الرئيسية من «محرر الموقع» (مسودة بتتحفظ لوحدها ومعاينة موبايل وديسكتوب ونشر وسجل نسخ واسترجاع)، وبيعدّل صفحات السياسات و«من نحن» وأدلة الشراء واختبار «ساعدني أختار» لكل قسم. الموقع بقى فيه صفحة التجار، و sitemap و robots، وبيانات منظمة لجوجل، وفيد Google Merchant.
 
-**Updated:** 19 Oct 2026 · **Branch:** `006-reviews` · **Source of truth:** [PRD](PRD.md) · [spec](../specs/006-reviews/spec.md) · [plan](../specs/006-reviews/plan.md) · [tasks](../specs/006-reviews/tasks.md)
+**Updated:** 20 Oct 2026 · **Branch:** `007-content-seo` · **Source of truth:** [PRD](PRD.md) · [spec](../specs/007-content-seo/spec.md) · [plan](../specs/007-content-seo/plan.md) · [tasks](../specs/007-content-seo/tasks.md)
 
 ## Where we are
 
@@ -15,7 +15,7 @@
 | 3 — Bridal builder «جهّز بيتك» | Tiers, sharing, deposit and price lock | ✅ **Done** (branch `004-bridal-builder`) |
 | **4 — Promotions & stock alerts** | Flash sales, coupons, notify-me | ✅ **Done** (branch `005-promotions-alerts`) |
 | **5 — Reviews** | Review form, moderation, verified buyers, ratings | ✅ **Done** (branch `006-reviews`) |
-| 6 — Content, CMS & SEO | Homepage CMS, guides, quiz, Merchant feed | ⚪ Planned |
+| **6 — Content, CMS & SEO** | Homepage CMS, pages, guides, quiz, SEO, Merchant feed | ✅ **Done** (branch `007-content-seo`) |
 | 7 — Dashboard, reports & settings | Counters, reports, settings | ⚪ Planned |
 
 ## Slice 0 — task by task
@@ -95,6 +95,18 @@
 - Security review outcome: the public API never returns phone, IP or status; review text and names render as plain text (`dir="auto"`), with bidi-override and control characters stripped before storing; submitting uses the same visibility rule as the public pages; audit snapshots mask phones. A 409 on a repeat review tells a caller that a phone already reviewed that product; with 3 tries a minute this is accepted as low risk. Reviewer IPs are stored for spam handling and have no retention job yet.
 - Tests: API e2e 267, browser e2e 56 (isolated servers, incl. English and 320px), unit 294 shared + 87 api + 258 web + 3 ui; production build clean.
 
+## Slice 6 — status
+
+- **Homepage CMS:** the home is rendered from the published content version (10 sections in the layout order, hidden and empty sections skipped, flash / partners / guides / featured categories from live data, SWR 60 s). Admin «محرر الموقع» (`/admin/content`, `content.manage`): reorder and show/hide sections, field editor with changed markers, reset, counters and image upload, a draft that autosaves without overlapping saves and is flushed before publishing, desktop/mobile preview of the draft, publish (Ctrl/⌘+Enter, transaction, history kept to 20), discard with undo, version history with restore. The announce bar starts hidden because the header already carries that strip.
+- **Pages and traders:** `/pages/<slug>` for about, delivery, returns, warranty, privacy and FAQ with SEO fields; footer links come from the published pages; `/traders` uses the home traders texts and a WhatsApp button to the traders number (disabled while the store numbers are placeholders). Pages are edited with a lazy TipTap editor shaped like the server allowlist; bodies are sanitized with `sanitize-html` on save.
+- **Guides:** `/guides` and `/guides/<slug>` (Article JSON-LD, up to 4 linked product cards with flash and rating), latest 3 on the home, admin guides tab with cover upload, category/product pickers, rich text with uploaded images, publish date set on first publish. Three guides are seeded.
+- **«ساعدني أختار»:** quizzes for fridges, washers, TVs and ACs (seeded), one question at a time with «مش متأكد», top 3 orderable products scored by the shared rules with the reason of the strongest matching rule, popularity fallback, `quiz_completed` event with only category, fallback flag and result count. Entry card on category pages that have a quiz; admin quiz tab validates rule fields and operators against the category spec template.
+- **SEO and feed:** one canonical per page (filters and sort dropped, `page` ≥ 2 kept; search results `noindex`), OG tags, hreflang, BreadcrumbList on product/category/brand/guide pages, site-wide LocalBusiness from store settings (omitted while placeholders remain), `/sitemap.xml` with ar/en alternates (index split above 45,000 URLs), `/robots.txt` (`Disallow: /` unless `NUXT_PUBLIC_SITE_INDEXABLE=true`), `/feeds/google.xml` (RSS 2.0 + `g:` namespace, in-stock visible products with an image, flash sale price and dates), XML routes cached for an hour. New public endpoint `GET /api/settings/store` for the store details.
+- **Security review outcome:** every admin content endpoint (home, pages, guides, quiz, content uploads) requires `content.manage`, CSRF and writes an audit entry; public endpoints return published content only (no drafts, labels, authors or quiz rules); rich text is sanitized on the server (scripts, handlers, styles, `javascript:`/`data:` URLs removed, images only from `/uploads/`, external links get `rel="noopener noreferrer"`) and `v-html` is used only for that output; store texts elsewhere render as plain text; JSON-LD escapes `<`; content uploads reuse the product image sniffing and size limit; feed and sitemap text is XML-escaped with invalid characters dropped; quiz results are throttled 30/min/IP.
+- **Before launch:** set `PUBLIC_SITE_URL`, `NUXT_PUBLIC_SITE_URL` and `NUXT_PUBLIC_SITE_INDEXABLE=true` on production, replace the store placeholders (they also unlock LocalBusiness and the traders WhatsApp button), then validate a product and a guide in Google's Rich Results Test and submit the feed in Merchant Center (not possible from the dev machine).
+- Polish pass: English and 320 px sweep of every new page and the editor tabs (only Arabic store content shows on English pages, by design), single `<h1>` per page, the listing toolbar no longer overflows at 320 px, flaky catalog price test fixed. Local Lighthouse on `/` (bare Node server, no compression): accessibility 100, best practices 100, CLS 0; performance 59 there because responses are uncompressed — the CI budget runs behind Caddy and decides.
+- Tests: API e2e 314, browser e2e 61 (isolated servers, incl. English and 320 px), unit 327 shared + 114 api + 352 web + 3 ui; production build clean.
+
 ## Quality gates (verified)
 
 | Gate | Result |
@@ -154,13 +166,8 @@
 
 ## Next steps
 
-1. Continue with **Slice 6 (Content, CMS & SEO)**:
-   - `T070`: API content (home sections draft/publish/versions, pages, guides, quiz rules)
-   - `T071`: Web CMS-driven home, pages, guides, traders page, quiz
-   - `T072`: Admin CMS, pages/guides and quiz editors
-   - `T073`: SEO (meta, structured data, sitemap, robots, canonical, Google Merchant feed)
-   - `T074`: E2E for CMS publish, quiz, SEO and feed
-   - `T075`: Slice review
+1. Continue with **Slice 7 (Dashboard, reports & settings)**: dashboard counters and charts, reports with CSV export (revenue on delivered orders, deposits separate, repeat rate), and all settings pages (umbrella T080–T083).
+2. Then **launch readiness** (T090–T092): full regression at 1280/375/320 px, Lighthouse and security headers, real store data, VPS deploy and backups.
 
 ## How to check it yourself
 

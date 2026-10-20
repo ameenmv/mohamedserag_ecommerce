@@ -49,9 +49,9 @@ description: "Tasks for Slice 6 — Content, CMS & SEO"
 
 ## Phase 7: Polish
 
-- [ ] T022 English + 320 px pass on every new page and the editor, a11y (editor keyboard use, focus after publish/restore, live regions), hydration check, Lighthouse budget on `/`
-- [ ] T023 Docs: `docs/PHASE-1.md` Slice 6; README roadmap; tick umbrella T070–T075
-- [ ] T024 Review: security (sanitizer allowlist, upload validation, public endpoints never leak drafts, permissions/CSRF/audit), SEO validation (Rich Results, Merchant feed spec), consistency with spec
+- [x] T022 English + 320 px pass on every new page and the editor, a11y (editor keyboard use, focus after publish/restore, live regions), hydration check, Lighthouse budget on `/`
+- [x] T023 Docs: `docs/PHASE-1.md` Slice 6; README roadmap; tick umbrella T070–T075
+- [x] T024 Review: security (sanitizer allowlist, upload validation, public endpoints never leak drafts, permissions/CSRF/audit), SEO validation (Rich Results, Merchant feed spec), consistency with spec
 
 ## Dependencies & Strategy
 

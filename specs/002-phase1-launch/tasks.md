@@ -68,12 +68,12 @@
 - [x] T063 C Slice review
 
 ## Phase 6: Slice 6 — Content, CMS & SEO
-- [ ] T070 A API content: home sections draft/publish/versions, pages, guides, quiz rules
-- [ ] T071 A Web: CMS-driven home, pages, guides, traders page, quiz
-- [ ] T072 A Admin: CMS editor (from prototype), pages/guides editor, quiz editor
-- [ ] T073 A SEO: meta, structured data, sitemap, robots, canonical, Google Merchant feed
-- [ ] T074 A E2E: CMS publish, quiz, SEO/feed validation
-- [ ] T075 C Slice review
+- [x] T070 A API content: home sections draft/publish/versions, pages, guides, quiz rules
+- [x] T071 A Web: CMS-driven home, pages, guides, traders page, quiz
+- [x] T072 A Admin: CMS editor (from prototype), pages/guides editor, quiz editor
+- [x] T073 A SEO: meta, structured data, sitemap, robots, canonical, Google Merchant feed
+- [x] T074 A E2E: CMS publish, quiz, SEO/feed validation
+- [x] T075 C Slice review
 
 ## Phase 7: Slice 7 — Dashboard, reports & settings
 - [ ] T080 A API dashboard counters, reports (revenue on delivered, deposits separate, repeat rate) + CSV
