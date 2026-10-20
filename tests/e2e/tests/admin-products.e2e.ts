@@ -124,7 +124,20 @@ test('archive with undo on a seeded product restores product from archive', asyn
     name: new RegExp(`إجراءات المنتج «${productName}»`),
   });
   await expect(rowActionBtn).toBeVisible();
-  await rowActionBtn.tap();
+  // The debounced search can re-render the list right after the tap and close the menu: retry
+  const archiveItem = screen.getByRole('menuitem', 'أرشفة');
+  const menuOpened = async (): Promise<boolean> => {
+    for (let i = 0; i < 10; i++) {
+      if (await archiveItem.isVisible()) return true;
+      await new Promise((resolve) => setTimeout(resolve, 150));
+    }
+    return false;
+  };
+  for (let attempt = 0; attempt < 3; attempt++) {
+    await rowActionBtn.tap();
+    if (await menuOpened()) break;
+    await browser.keyboard.press('Escape');
+  }
 
   // Archive product
   await screen.getByRole('menuitem', 'أرشفة').tap();

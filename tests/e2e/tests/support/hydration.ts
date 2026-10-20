@@ -7,6 +7,20 @@ import type { Browser } from '@e2e-dev/web';
  * opening sheets, submitting forms) before hydration causes event listeners to be missing.
  */
 export async function waitForHydration(browser: Browser, timeoutMs = 15000): Promise<void> {
+  const deadline = Date.now() + timeoutMs;
+  // A client-side redirect or reload can replace the page while we poll; start over on the new one
+  for (;;) {
+    try {
+      await pollHydration(browser, Math.max(deadline - Date.now(), 1000));
+      return;
+    } catch (error) {
+      const navigated = error instanceof Error && /context was destroyed|navigation/i.test(error.message);
+      if (!navigated || Date.now() >= deadline) throw error;
+    }
+  }
+}
+
+async function pollHydration(browser: Browser, timeoutMs: number): Promise<void> {
   await browser.evaluate(async (timeout) => {
     const start = Date.now();
     while (Date.now() - start < timeout) {
