@@ -204,6 +204,7 @@ export function deserializeOrdersQuery(rawQuery: Record<string, unknown>): Admin
     paymentMethod: pick(shape.paymentMethod, rawQuery.paymentMethod),
     from: pick(shape.from, rawQuery.from),
     to: pick(shape.to, rawQuery.to),
+    lockExpiring: pick(shape.lockExpiring, rawQuery.lockExpiring),
     page: pick(shape.page, rawQuery.page) ?? 1,
     pageSize: pick(shape.pageSize, rawQuery.pageSize) ?? 20,
   }
@@ -217,6 +218,7 @@ export interface OrdersListFilters {
   paymentMethod?: PaymentMethod | 'all'
   from?: string
   to?: string
+  lockExpiring?: number
   page?: number
   pageSize?: number
 }
@@ -229,6 +231,7 @@ export function serializeOrdersQuery(input: OrdersListFilters): Record<string, s
   if (input.paymentMethod && input.paymentMethod !== 'all') query.paymentMethod = input.paymentMethod
   if (input.from) query.from = input.from
   if (input.to) query.to = input.to
+  if (input.lockExpiring) query.lockExpiring = input.lockExpiring
   if (input.page && input.page > 1) query.page = input.page
   if (input.pageSize && input.pageSize !== 20) query.pageSize = input.pageSize
   return query

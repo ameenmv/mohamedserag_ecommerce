@@ -10,6 +10,7 @@ import {
   MessageCircle,
   RefreshCw,
   Search,
+  X,
 } from '@lucide/vue'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -19,12 +20,15 @@ import { parseAdminApiError } from '~/utils/admin-api-errors'
 import { formatDateTime } from '~/utils/date-format'
 
 const { t, locale } = useI18n()
+const route = useRoute()
+const router = useRouter()
 const notifyApi = useAdminNotify()
 
 const rows = ref<AdminNotifyProductRow[]>([])
 const loading = ref(true)
 const error = ref<string | null>(null)
 const searchQuery = ref('')
+const readyOnly = ref(route.query.ready === '1')
 
 const selectedProductId = ref<string | null>(null)
 const sheetOpen = ref(false)
@@ -46,13 +50,20 @@ void fetchList()
 
 const filteredRows = computed(() => {
   const q = searchQuery.value.trim().toLowerCase()
-  if (!q) return rows.value
-  return rows.value.filter(
-    (r) =>
-      r.product.name.toLowerCase().includes(q) ||
-      r.product.modelCode.toLowerCase().includes(q),
-  )
+  return rows.value.filter((row) => {
+    if (readyOnly.value && !(row.product.available && row.waiting > 0)) return false
+    if (!q) return true
+    return (
+      row.product.name.toLowerCase().includes(q) ||
+      row.product.modelCode.toLowerCase().includes(q)
+    )
+  })
 })
+
+function clearReadyFilter(): void {
+  readyOnly.value = false
+  void router.replace({ query: { ...route.query, ready: undefined } })
+}
 
 function openDetail(productId: string): void {
   selectedProductId.value = productId
@@ -89,6 +100,21 @@ function handleEntrySent(_payload: AdminNotifyMarkSentResponse): void {
         <RefreshCw class="size-4 me-1.5" :class="{ 'animate-spin': loading }" aria-hidden="true" />
         <span>{{ t('admin.notify.refresh') }}</span>
       </Button>
+    </div>
+
+    <!-- Removable ready-to-send filter chip -->
+    <div v-if="readyOnly" class="flex items-center gap-2">
+      <span class="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 text-[11px] font-bold text-emerald-800 dark:text-emerald-400">
+        {{ t('admin.notify.readyFilter') }}
+        <button
+          type="button"
+          class="grid size-5 place-items-center rounded-full transition-colors hover:bg-emerald-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-reduce:transition-none"
+          :aria-label="t('admin.notify.removeReadyFilter')"
+          @click="clearReadyFilter"
+        >
+          <X class="size-3" aria-hidden="true" />
+        </button>
+      </span>
     </div>
 
     <!-- Loading Skeleton -->

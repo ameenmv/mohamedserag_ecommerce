@@ -53,6 +53,8 @@ export const seedOrderSchema = z.object({
     .optional(),
   governorate: z.string().trim().min(1).optional(),
   city: z.string().trim().min(1).optional(),
+  /** Required deposit (EGP) for a large COD order; sets `depositAmount` and `depositPct`. */
+  depositAmountEgp: z.number().int().positive().optional(),
 })
 
 export type SeedOrderInput = z.output<typeof seedOrderSchema>

@@ -809,18 +809,50 @@
       "welcome": "Welcome {name}",
       "subtitle": "Overview of showroom performance and daily orders",
       "emptyState": "Dashboard activity will appear once orders start arriving",
+      "calm": "Nothing is waiting for you",
+      "error": "Could not load the overview. Please try again later.",
+      "counters": {
+        "aria": "Actions awaiting you",
+        "newOrders": "New Orders",
+        "awaitingPayment": "Payments Awaiting Confirmation",
+        "awaitingDeposit": "Awaiting Deposit",
+        "locksExpiring": "Locks Expiring Within 7 Days",
+        "pendingReviews": "Reviews Pending Moderation",
+        "notifyReady": "“Notify Me” Requests Ready to Send",
+        "lowStock": "Low Stock Products"
+      },
+      "hero": {
+        "newOrders": "New orders waiting: {count}",
+        "calm": "Nothing is waiting for you"
+      },
+      "sales": {
+        "title": "Sales & Orders",
+        "rangeLabel": "Period",
+        "range7": "7 days",
+        "range30": "30 days",
+        "range90": "90 days",
+        "revenue": "Revenue",
+        "deliveredOrders": "Delivered Orders",
+        "deposits": "Deposits Received",
+        "vsPrevious": "{change}% vs previous period",
+        "noPrevious": "No data for the previous period",
+        "depositsNote": "Deposits are money received but not counted as revenue until delivery",
+        "revenueChart": "Daily Revenue",
+        "ordersChart": "Daily Delivered Orders",
+        "depositsChart": "Daily Deposits Received"
+      },
       "expiringLocks": {
         "title": "Locks Expiring Soon",
         "empty": "No price locks expiring this week",
         "expired": "Expired",
         "daysLeft": "{n} days left"
-      },
-      "pendingReviews": {
-        "title": "Reviews Pending Moderation",
-        "empty": "No reviews pending moderation",
-        "countDescription": "{count} reviews waiting for moderation",
-        "reviewAction": "Moderate Reviews"
       }
+    },
+    "charts": {
+      "showTable": "Show table",
+      "hideTable": "Hide table",
+      "tableDate": "Date",
+      "tableValue": "Value"
     },
     "topbar": {
       "portalSubtitle": "Admin Portal · Mohamed Serag Showroom",
@@ -1284,7 +1316,9 @@
         "allMethods": "All Payment Methods",
         "from": "From Date",
         "to": "To Date",
-        "clear": "Clear Filters"
+        "clear": "Clear Filters",
+        "lockExpiring": "Locks expiring within {days} days",
+        "removeLockExpiring": "Remove lock-expiry filter"
       },
       "bridal": {
         "lockExpired": "Price lock expired",
@@ -1688,6 +1722,8 @@
       "errorLoading": "Failed to load notify requests. Please try again later.",
       "retry": "Retry",
       "refresh": "Refresh",
+      "readyFilter": "Ready to send",
+      "removeReadyFilter": "Remove ready-to-send filter",
       "table": {
         "product": "Product",
         "modelCode": "Model Code",

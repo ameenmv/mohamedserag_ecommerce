@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import {
+  lockEndDate,
   lockState,
   normalizePhone,
   type AdminOrderListQueryOutput,
@@ -20,7 +21,10 @@ export class AdminOrdersListService {
    * This base filter is shared between the status counts calculation and the items query.
    */
   buildBaseWhere(
-    query: Pick<AdminOrderListQueryOutput, 'type' | 'paymentMethod' | 'from' | 'to' | 'q'>,
+    query: Pick<
+      AdminOrderListQueryOutput,
+      'type' | 'paymentMethod' | 'from' | 'to' | 'q' | 'lockExpiring'
+    >,
   ): Prisma.OrderWhereInput {
     const where: Prisma.OrderWhereInput = {}
 
@@ -30,6 +34,15 @@ export class AdminOrdersListService {
 
     if (query.paymentMethod) {
       where.paymentMethod = query.paymentMethod
+    }
+
+    if (query.lockExpiring === 7) {
+      // The dashboard «أقفال قربت تخلص» counter links orders whose lock ends within 7 Cairo days.
+      // The filter forces bridal reservations with an active lock, matching `getExpiringReservations`.
+      where.type = 'bridal'
+      where.status = 'confirmed'
+      where.bridalStatus = 'locked'
+      where.lockedUntil = { not: null, lte: lockEndDate(new Date(), 7) }
     }
 
     if (query.from || query.to) {

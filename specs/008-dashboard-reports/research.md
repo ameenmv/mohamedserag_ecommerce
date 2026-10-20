@@ -13,7 +13,7 @@
 
 ## R3. Time zone and buckets
 
-**Decision**: Compute ranges and buckets in SQL with `(ts AT TIME ZONE 'Africa/Cairo')` and `date_trunc('day'|'month', …)`; weeks start Saturday via `date_trunc('week', ts + interval '2 days') - interval '2 days'`. Fill empty buckets in shared code (`fillBuckets(range, groupBy, rows)`), so the API returns a dense series.
+**Decision**: Timestamps are `timestamp without time zone` holding UTC, so convert with `(ts AT TIME ZONE 'UTC' AT TIME ZONE 'Africa/Cairo')` before `::date` / `date_trunc('day'|'month', …)` (a single `AT TIME ZONE` would misread them as Cairo wall time); weeks start Saturday via `date_trunc('week', ts + interval '2 days') - interval '2 days'`. Fill empty buckets in shared code (`fillBuckets(range, groupBy, rows)`), so the API returns a dense series.
 **Rationale**: Egypt's store day; Saturday is the first working day of the week.
 
 ## R4. Splits that sum to the total

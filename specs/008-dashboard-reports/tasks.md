@@ -16,10 +16,10 @@ description: "Tasks for Slice 7 — Dashboard, reports & settings"
 
 ## Phase 2: User Story 1 — Dashboard (P1) 🎯
 
-- [ ] T004 [US1] API `admin-dashboard`: `GET /admin/dashboard/summary?range=` — seven counters (filtered by the caller's permissions) + dense Cairo-day series of revenue (delivered by delivery event), delivered orders and deposits, totals and previous-period totals; grouped SQL, no N+1; API e2e (counts match seeded data, delivered order lands on its delivery day, deposit separate, permission filtering)
-- [ ] T005 [US1] Filters the counters link to: orders list `?status=new|awaiting_payment|awaiting_deposit` (exists) and new `?lockExpiring=7` for bridal; products `?stock=low` (exists); reviews `?tab=pending`; notify page filter «جاهزة للإرسال»; verify each link lands on the matching list (API + web)
-- [ ] T006 [US1] Web «نظرة عامة»: counters grid (calm state at zero, hidden without permission), 7/30/90 switch, `AdminChartLine`/`AdminChartBar` SVG charts with table alternative, totals vs previous period; keep the welcome header, merge the existing pending-reviews and expiring-locks cards into counters; i18n; 375 px
-- [ ] T007 [US1] TesterArmy: seed one item per counter → counts and links; deliver an order → today's revenue includes it; deposit appears in the deposits series
+- [x] T004 [US1] API `admin-dashboard`: `GET /admin/dashboard/summary?range=` — seven counters (filtered by the caller's permissions) + dense Cairo-day series of revenue (delivered by delivery event), delivered orders and deposits, totals and previous-period totals; grouped SQL, no N+1; API e2e (counts match seeded data, delivered order lands on its delivery day, deposit separate, permission filtering)
+- [x] T005 [US1] Filters the counters link to: orders list `?status=new|awaiting_payment|awaiting_deposit` (exists) and new `?lockExpiring=7` for bridal; products `?stock=low` (exists); reviews `?tab=pending`; notify page filter «جاهزة للإرسال»; verify each link lands on the matching list (API + web)
+- [x] T006 [US1] Web «نظرة عامة»: counters grid (calm state at zero, hidden without permission), 7/30/90 switch, `AdminChartLine`/`AdminChartBar` SVG charts with table alternative, totals vs previous period; keep the welcome header, merge the existing pending-reviews and expiring-locks cards into counters; i18n; 375 px
+- [x] T007 [US1] TesterArmy: seed one item per counter → counts and links; deliver an order → today's revenue includes it; deposit appears in the deposits series
 
 ## Phase 3: User Story 2 — Reports (P1)
 

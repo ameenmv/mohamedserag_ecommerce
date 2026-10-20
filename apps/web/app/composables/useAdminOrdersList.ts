@@ -27,6 +27,7 @@ export function useAdminOrdersList() {
   const selectedMethod = ref<PaymentMethod | 'all'>(initial.paymentMethod ?? 'all')
   const dateFrom = ref(initial.from ?? '')
   const dateTo = ref(initial.to ?? '')
+  const lockExpiring = ref<number | undefined>(initial.lockExpiring)
   const currentPage = ref(initial.page ?? 1)
   const pageSize = ref(initial.pageSize ?? 20)
 
@@ -58,6 +59,7 @@ export function useAdminOrdersList() {
     if (selectedMethod.value !== 'all') params.set('paymentMethod', selectedMethod.value)
     if (dateFrom.value) params.set('from', dateFrom.value)
     if (dateTo.value) params.set('to', dateTo.value)
+    if (lockExpiring.value) params.set('lockExpiring', String(lockExpiring.value))
     if (searchQuery.value.trim()) params.set('q', searchQuery.value.trim())
     const qs = params.toString()
     return `${base}/admin/orders/export.csv${qs ? `?${qs}` : ''}`
@@ -96,6 +98,13 @@ export function useAdminOrdersList() {
     selectedMethod.value = 'all'
     dateFrom.value = ''
     dateTo.value = ''
+    lockExpiring.value = undefined
+    currentPage.value = 1
+    void syncToUrlAndFetch()
+  }
+
+  function clearLockExpiring() {
+    lockExpiring.value = undefined
     currentPage.value = 1
     void syncToUrlAndFetch()
   }
@@ -108,6 +117,7 @@ export function useAdminOrdersList() {
       paymentMethod: selectedMethod.value === 'all' ? undefined : selectedMethod.value,
       from: dateFrom.value || undefined,
       to: dateTo.value || undefined,
+      lockExpiring: lockExpiring.value,
       page: currentPage.value,
       pageSize: pageSize.value,
     })
@@ -126,6 +136,7 @@ export function useAdminOrdersList() {
         paymentMethod: selectedMethod.value === 'all' ? undefined : selectedMethod.value,
         from: dateFrom.value || undefined,
         to: dateTo.value || undefined,
+        lockExpiring: lockExpiring.value,
         page: currentPage.value,
         pageSize: pageSize.value,
       })
@@ -157,6 +168,7 @@ export function useAdminOrdersList() {
     selectedMethod,
     dateFrom,
     dateTo,
+    lockExpiring,
     currentPage,
     pageSize,
     exportHref,
@@ -165,6 +177,7 @@ export function useAdminOrdersList() {
     onFilterChange,
     onPageChange,
     clearFilters,
+    clearLockExpiring,
     fetchOrders,
   }
 }

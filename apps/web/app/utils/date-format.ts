@@ -18,6 +18,15 @@ export function formatDate(value: Date | string, locale: string): string {
   })
 }
 
+/** Day and short month only, for tight spots such as chart axes. */
+export function formatDayMonth(value: Date | string, locale: string): string {
+  return new Date(value).toLocaleDateString(intlLocale(locale), {
+    month: 'short',
+    day: 'numeric',
+    timeZone: STORE_TIME_ZONE,
+  })
+}
+
 export function formatDateTime(value: Date | string, locale: string): string {
   return new Date(value).toLocaleString(intlLocale(locale), {
     year: 'numeric',

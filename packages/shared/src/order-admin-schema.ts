@@ -30,6 +30,13 @@ export const adminOrderListQuerySchema = z.object({
     .trim()
     .max(60, 'نص البحث لا يمكن أن يتجاوز 60 حرف')
     .optional(),
+  lockExpiring: z.coerce
+    .number()
+    .int({ message: 'قيمة قفل العروسة لازم تكون 7 أيام' })
+    .refine((value) => value === 7, {
+      message: 'فلترة أقفال العروسة مدعومة لمدة 7 أيام فقط',
+    })
+    .optional(),
   page: z.coerce
     .number()
     .int()

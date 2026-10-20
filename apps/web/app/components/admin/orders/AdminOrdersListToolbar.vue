@@ -4,7 +4,7 @@ import {
   type OrderType,
   type PaymentMethod,
 } from '@serag/shared'
-import { Download, RotateCcw, Search } from '@lucide/vue'
+import { Download, RotateCcw, Search, X } from '@lucide/vue'
 
 defineProps<{
   searchQuery: string
@@ -12,6 +12,7 @@ defineProps<{
   selectedMethod: PaymentMethod | 'all'
   dateFrom: string
   dateTo: string
+  lockExpiring?: number
   exportHref: string
 }>()
 
@@ -23,6 +24,7 @@ const emit = defineEmits<{
   'update:dateTo': [val: string]
   change: []
   clear: []
+  clearLockExpiring: []
 }>()
 
 const { t } = useI18n()
@@ -127,6 +129,21 @@ const { t } = useI18n()
         <RotateCcw class="size-3.5" aria-hidden="true" />
         <span>{{ t('admin.orders.filters.clear') }}</span>
       </button>
+    </div>
+
+    <!-- Removable lock-expiry filter chip -->
+    <div v-if="lockExpiring" class="flex items-center gap-2">
+      <span class="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-serag-green/30 bg-serag-green/10 px-3 text-[11px] font-bold text-serag-green dark:border-serag-gold/30 dark:bg-serag-gold/10 dark:text-serag-gold">
+        {{ t('admin.orders.filters.lockExpiring', { days: 7 }) }}
+        <button
+          type="button"
+          class="grid size-5 place-items-center rounded-full transition-colors hover:bg-serag-green/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-reduce:transition-none"
+          :aria-label="t('admin.orders.filters.removeLockExpiring')"
+          @click="emit('clearLockExpiring')"
+        >
+          <X class="size-3" aria-hidden="true" />
+        </button>
+      </span>
     </div>
   </div>
 </template>

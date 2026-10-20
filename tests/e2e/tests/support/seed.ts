@@ -38,6 +38,8 @@ export interface SeedOrderInput {
     | 'cancelled';
   governorate?: string;
   city?: string;
+  /** Required deposit in EGP (large COD order). */
+  depositAmountEgp?: number;
 }
 
 export interface SeedOrderResult {

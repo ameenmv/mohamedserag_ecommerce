@@ -137,12 +137,14 @@ test('admin moderates reviews: pending approve and reply, unpublish to rejected,
   await app.open('/admin')
   await waitForHydration(browser)
 
-  // Dashboard card shows the pending count (other specs may leave pending reviews, so only assert it is not empty)
-  const dashboardCard = browser.locator('[data-testid="admin-dashboard-pending-reviews"]')
-  await expect(dashboardCard).toBeVisible()
-  await expect(dashboardCard).toContainText('تقييمات بانتظار المراجعة')
-  await expect(dashboardCard).not.toContainText('مفيش تقييمات مستنية')
-  await expect(dashboardCard.getByRole('link', 'راجع التقييمات')).toBeVisible()
+  // Dashboard counter shows a non-zero pending count (other specs may leave pending reviews) and opens the pending tab
+  const dashboardCounter = browser.locator('[data-testid="admin-dashboard-counter-pendingReviews"]')
+  await expect(dashboardCounter).toBeVisible()
+  const pendingCount = Number(
+    (await browser.locator('[data-testid="admin-dashboard-counter-pendingReviews"] .num').textContent())?.trim(),
+  )
+  expect(pendingCount).toBeGreaterThan(0)
+  expect(await dashboardCounter.getAttribute('href')).toMatch(/\/admin\/reviews\?tab=pending$/)
 
   // Sidebar «التقييمات» shows a pending badge
   const sidebarItem = browser.locator('nav a[href$="/admin/reviews"]').first()

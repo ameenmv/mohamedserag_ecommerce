@@ -19,6 +19,7 @@ const {
   selectedMethod,
   dateFrom,
   dateTo,
+  lockExpiring,
   currentPage,
   pageSize,
   exportHref,
@@ -27,6 +28,7 @@ const {
   onFilterChange,
   onPageChange,
   clearFilters,
+  clearLockExpiring,
   fetchOrders,
 } = useAdminOrdersList()
 
@@ -61,6 +63,7 @@ const showingTo = computed(() => Math.min(currentPage.value * pageSize.value, to
       :selected-method="selectedMethod"
       :date-from="dateFrom"
       :date-to="dateTo"
+      :lock-expiring="lockExpiring"
       :export-href="exportHref"
       @update:search-query="onSearchInput"
       @update:selected-type="selectedType = $event"
@@ -69,6 +72,7 @@ const showingTo = computed(() => Math.min(currentPage.value * pageSize.value, to
       @update:date-to="dateTo = $event"
       @change="onFilterChange"
       @clear="clearFilters"
+      @clear-lock-expiring="clearLockExpiring"
     />
 
     <!-- Loading State -->

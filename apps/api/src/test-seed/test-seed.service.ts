@@ -226,6 +226,12 @@ export class TestSeedService {
         total,
         paymentMethod: input.paymentMethod as PaymentMethod,
         paidAmount: status === 'delivered' || status === 'confirmed' ? total : 0,
+        ...(input.depositAmountEgp
+          ? {
+              depositAmount: input.depositAmountEgp * 100,
+              depositPct: Math.max(1, Math.round((input.depositAmountEgp * 100 * 100) / total)),
+            }
+          : {}),
         publicToken,
         confirmToken,
         items: {
