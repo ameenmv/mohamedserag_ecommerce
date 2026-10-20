@@ -826,6 +826,26 @@ describe('Admin Reports API E2E (/api/admin/reports)', () => {
     expect(res.text).toContain('5450.00')
   })
 
+  it('neutralises formula-like product names in the best-sellers CSV', async () => {
+    const product = await prisma.product.findUniqueOrThrow({ where: { id: productBId } })
+    await prisma.product.update({
+      where: { id: productBId },
+      data: { name: '=HYPERLINK("http://evil.test","اضغط")' },
+    })
+    try {
+      const res = await request(app.getHttpServer())
+        .get('/api/admin/reports/best-sellers/export')
+        .query(RANGE_QUERY)
+        .set('Cookie', ownerSessionCookie)
+        .expect(200)
+      // The cell is quoted (it contains commas/quotes) and starts with ' so Excel shows it as text
+      expect(res.text).toContain(`"'=HYPERLINK(""http://evil.test"",""اضغط"")"`)
+      expect(res.text).not.toMatch(/(^|,)=HYPERLINK/m)
+    } finally {
+      await prisma.product.update({ where: { id: productBId }, data: { name: product.name } })
+    }
+  })
+
   it('exports splits and bridal funnel CSVs', async () => {
     const splits = await request(app.getHttpServer())
       .get('/api/admin/reports/splits/export')

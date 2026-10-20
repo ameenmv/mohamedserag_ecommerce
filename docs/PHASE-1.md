@@ -1,9 +1,9 @@
 # Phase 1 — Launch: progress
 
-> المرحلة الأولى (الإطلاق) — **Slice 0 (الأساس) و Slice 1 (الكتالوج) و Slice 2 (السلة والدفع) و Slice 3 (جهّز بيتك) و Slice 4 (العروض وتنبيهات التوفر) و Slice 5 (التقييمات) و Slice 6 (المحتوى والـSEO) خلصوا بالكامل**.
-> في Slice 6: صاحب المعرض بيعدّل الصفحة الرئيسية من «محرر الموقع» (مسودة بتتحفظ لوحدها ومعاينة موبايل وديسكتوب ونشر وسجل نسخ واسترجاع)، وبيعدّل صفحات السياسات و«من نحن» وأدلة الشراء واختبار «ساعدني أختار» لكل قسم. الموقع بقى فيه صفحة التجار، و sitemap و robots، وبيانات منظمة لجوجل، وفيد Google Merchant.
+> المرحلة الأولى (الإطلاق) — **Slice 0 (الأساس) و Slice 1 (الكتالوج) و Slice 2 (السلة والدفع) و Slice 3 (جهّز بيتك) و Slice 4 (العروض وتنبيهات التوفر) و Slice 5 (التقييمات) و Slice 6 (المحتوى والـSEO) و Slice 7 (لوحة التحكم والتقارير والإعدادات) خلصوا بالكامل** — كل شرائح المرحلة الأولى خلصت، والباقي تجهيز الإطلاق.
+> في Slice 7: «نظرة عامة» بقت شاشة الصبح: عدادات للطلبات الجديدة والمدفوعات المستنية تأكيد والعرابين وتثبيتات العرايس اللي قربت تخلص والتقييمات وطلبات «بلّغني» الجاهزة والمنتجات اللي قربت تخلص، كل عداد بيفتح الصفحة متفلترة، ورسوم للإيراد (الطلبات المتسلمة بس) والعرابين لوحدها. صفحة «التقارير» فيها الإيراد والتقسيمات والأكثر مبيعاً والكوبونات والعروض ومسار العروسة والعملاء المتكررين، وكل تقرير بيتصدّر CSV بيفتح على Excel بالعربي. وصفحة «الإعدادات» بتخلّي صاحب المعرض يغيّر بيانات المعرض والأرقام وطرق الدفع ومناطق التوصيل والعربون وحد المخزون وكلمات البحث وقوالب الرسائل من غير مبرمج.
 
-**Updated:** 20 Oct 2026 · **Branch:** `007-content-seo` · **Source of truth:** [PRD](PRD.md) · [spec](../specs/007-content-seo/spec.md) · [plan](../specs/007-content-seo/plan.md) · [tasks](../specs/007-content-seo/tasks.md)
+**Updated:** 20 Oct 2026 · **Branch:** `008-dashboard-reports` · **Source of truth:** [PRD](PRD.md) · [spec](../specs/008-dashboard-reports/spec.md) · [plan](../specs/008-dashboard-reports/plan.md) · [tasks](../specs/008-dashboard-reports/tasks.md)
 
 ## Where we are
 
@@ -16,7 +16,7 @@
 | **4 — Promotions & stock alerts** | Flash sales, coupons, notify-me | ✅ **Done** (branch `005-promotions-alerts`) |
 | **5 — Reviews** | Review form, moderation, verified buyers, ratings | ✅ **Done** (branch `006-reviews`) |
 | **6 — Content, CMS & SEO** | Homepage CMS, pages, guides, quiz, SEO, Merchant feed | ✅ **Done** (branch `007-content-seo`) |
-| 7 — Dashboard, reports & settings | Counters, reports, settings | ⚪ Planned |
+| **7 — Dashboard, reports & settings** | Overview counters and charts, reports with CSV, settings | ✅ **Done** (branch `008-dashboard-reports`) |
 
 ## Slice 0 — task by task
 
@@ -107,6 +107,17 @@
 - Polish pass: English and 320 px sweep of every new page and the editor tabs (only Arabic store content shows on English pages, by design), single `<h1>` per page, the listing toolbar no longer overflows at 320 px, flaky catalog price test fixed. Local Lighthouse on `/` (bare Node server, no compression): accessibility 100, best practices 100, CLS 0; performance 59 there because responses are uncompressed — the CI budget runs behind Caddy and decides.
 - Tests: API e2e 314, browser e2e 61 (isolated servers, incl. English and 320 px), unit 327 shared + 114 api + 352 web + 3 ui; production build clean.
 
+## Slice 7 — status
+
+- **Overview «نظرة عامة»:** seven action counters (new orders, payments waiting for confirmation, deposits waiting, bridal locks ending within 7 days, pending reviews, notify-me lists ready to send, low-stock products), each hidden when the admin lacks the permission for the page it opens and linking to that page already filtered (new `lockExpiring=7` filter on the orders list and export, `?ready=1` on notify-me). Revenue, delivered orders and deposits for 7/30/90 days with the previous-period change; revenue counts delivered orders on their delivery day (Cairo time), deposits are confirmed payments on bridal or large-COD orders, shown separately. Charts are plain SVG with keyboard focus, tooltips and a table view; the axis runs right to left in Arabic.
+- **Reports «التقارير»** (`reports.read`): revenue, orders and AOV by day/week (weeks start Saturday)/month; splits by category and brand (current product category/brand, order discount split per line, delivery fees as their own row, so every split sums to the total) and by payment method, zone and order vs bridal; best sellers; coupons; flash sales (units at the sale price, discount labelled approximate because the regular price at sale time isn't stored); bridal funnel lists → paid reservations → delivered; repeat customers (counts only). Presets or a custom range up to 366 days, tabs synced to the URL, CSV export per report (UTF-8 BOM, Arabic headers, money in pounds, formula-like cells neutralised).
+- **Settings «الإعدادات»** (`settings.manage`): store info and WhatsApp numbers (main, traders), payment methods and account details, delivery zones (governorates from the list + optional city, fee; one zone without places catches everything else), large-COD deposit rule, low-stock default (applies to new products), search synonyms (saving reindexes search) and WhatsApp templates (allowed variables as chips, live preview). Each section saves on its own with field errors, changed markers, a leave guard and a conflict dialog when someone saved first (version check, 409 with the latest values). Every save is audited with phone numbers masked. The storefront header, footer, product page, checkout and thank-you pages now read the saved store numbers and hide phone/WhatsApp links while they are still placeholders.
+- **Review outcome:** every dashboard counter, report, export and settings route is permission-checked (fail-closed) and tested with a restricted admin; settings saves need CSRF and write an audit row; reports and CSVs carry no customer phones, names or addresses (repeat customers return counts only); CSV cells that start like a formula are prefixed with `'` (tested with a `=HYPERLINK` product name); settings validation covers bad phones, no enabled payment method, a governorate in two zones, deposit % outside 1–100, low stock outside 0–999, one-word synonym groups and unknown template variables.
+- **Performance (SC-006):** with 20,000 delivered orders over a year added to the dev database, the 90-day overview answered in ~0.3 s, the 90-day reports in 0.01–0.24 s, a full-year splits report in ~0.48 s, and the server-rendered `/admin` and `/admin/reports` pages in ~0.3 s (target: under 2 s). The test orders were deleted afterwards.
+- **Known follow-up:** the API throttles 120 requests/min per IP, and server-side renders reach it from the web server's address, so under real traffic all visitors would share one budget. `GET /api/settings/store` is exempt for now; forwarding the visitor IP on server-side calls is a separate task before launch.
+- Polish pass: English and 320 px check of the three pages (added to the admin overflow e2e), keyboard use of tabs, charts and forms, no hydration warnings.
+- Tests: API e2e 350, browser e2e 64 (isolated servers, one worker as in CI, incl. English and 320 px), unit 407 shared + 127 api + 402 web + 3 ui; production build clean.
+
 ## Quality gates (verified)
 
 | Gate | Result |
@@ -166,8 +177,7 @@
 
 ## Next steps
 
-1. Continue with **Slice 7 (Dashboard, reports & settings)**: dashboard counters and charts, reports with CSV export (revenue on delivered orders, deposits separate, repeat rate), and all settings pages (umbrella T080–T083).
-2. Then **launch readiness** (T090–T092): full regression at 1280/375/320 px, Lighthouse and security headers, real store data, VPS deploy and backups.
+1. **Launch readiness** (T090–T092): forward the visitor IP on server-side API calls (per-visitor throttling), full regression at 1280/375/320 px, Lighthouse and security headers, real store data (replace the store placeholders from «الإعدادات»), VPS deploy and backups.
 
 ## How to check it yourself
 

@@ -36,9 +36,9 @@ description: "Tasks for Slice 7 — Dashboard, reports & settings"
 
 ## Phase 5: Polish
 
-- [ ] T015 English + 375/320 px pass on the three pages, keyboard use of tabs/charts/forms, chart table alternatives, hydration check
-- [ ] T016 Docs: `docs/PHASE-1.md` Slice 7; README roadmap; tick umbrella T080–T083
-- [ ] T017 Review: permissions (counters, reports, exports, settings), CSRF/audit on settings, no PII in reports/CSV, CSV formula safety, settings validation edge cases, performance with a large seeded dataset (20k orders) against SC-006
+- [x] T015 English + 375/320 px pass on the three pages, keyboard use of tabs/charts/forms, chart table alternatives, hydration check
+- [x] T016 Docs: `docs/PHASE-1.md` Slice 7; README roadmap; tick umbrella T080–T083
+- [x] T017 Review: permissions (counters, reports, exports, settings), CSRF/audit on settings, no PII in reports/CSV, CSV formula safety, settings validation edge cases, performance with a large seeded dataset (20k orders) against SC-006
 
 ## Dependencies & Strategy
 

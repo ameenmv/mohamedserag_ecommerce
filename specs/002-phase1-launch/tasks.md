@@ -76,10 +76,10 @@
 - [x] T075 C Slice review
 
 ## Phase 7: Slice 7 — Dashboard, reports & settings
-- [ ] T080 A API dashboard counters, reports (revenue on delivered, deposits separate, repeat rate) + CSV
-- [ ] T081 A Admin dashboard (from prototype overview), reports pages, settings pages
-- [ ] T082 A E2E dashboard/reports/settings
-- [ ] T083 C Slice review
+- [x] T080 A API dashboard counters, reports (revenue on delivered, deposits separate, repeat rate) + CSV
+- [x] T081 A Admin dashboard (from prototype overview), reports pages, settings pages
+- [x] T082 A E2E dashboard/reports/settings
+- [x] T083 C Slice review
 
 ## Phase 8: Launch readiness
 - [ ] T090 C Full regression e2e at 1280, 375 and 320 px; `npx e2e explore` runs on the main journeys; KPI funnel events visible in analytics

@@ -265,7 +265,7 @@ Phase 1 ships in slices. Each slice is usable on its own and covered by e2e test
 - [x] **Slice 4 — Promotions & stock alerts:** flash sales with live countdowns, coupons with limits and scope, admin promotions, notify-me with WhatsApp
 - [x] **Slice 5 — Reviews:** review form, moderation with store replies, verified buyers, ratings on cards and product pages
 - [x] **Slice 6 — Content, CMS & SEO:** homepage CMS with versions, pages, traders page, guides, «ساعدني أختار» quiz, structured data, sitemap, robots, Merchant feed
-- [ ] **Slice 7 — Dashboard, reports & settings**
+- [x] **Slice 7 — Dashboard, reports & settings:** overview counters linking to filtered pages, revenue and deposit charts, reports with CSV export, settings for store info, payments, zones, deposit rule, low stock, synonyms and WhatsApp templates
 
 **Phase 2:** customer accounts, loyalty, an installable app (PWA), the WhatsApp Cloud API, e-receipts, and admin roles.
 
