@@ -27,7 +27,7 @@ No new tables or migrations. Optional indexes only if query plans need them: `or
 |---|---|
 | store | `{ name, phone, whatsapp, tradersWhatsapp, address, hours }` (phones: Egyptian mobile or `+` international; placeholders allowed but flagged) |
 | payments | existing `paymentsSettingSchema` (methods: enabled, name, hint, account) — ≥ 1 enabled |
-| zones | existing `zonesSchema` (name, governorates[], cities[], fee piastres ≥ 0, eta) — each governorate in at most one zone |
+| zones | existing `zonesSchema` (`{ id, name, fee, places: { governorate, city? }[] }`, fee piastres ≥ 0) — a governorate-wide place in at most one zone, a governorate+city pair at most once |
 | codDeposit | `{ threshold (piastres > 0), pct (1–100) }` |
 | lowStock | **new key** `{ defaultThreshold: int 0–999 }` (used when creating products) |
 | searchSynonyms | `string[][]` groups (each 2–10 words, ≤ 200 groups) |
