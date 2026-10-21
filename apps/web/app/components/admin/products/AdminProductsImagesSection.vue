@@ -215,7 +215,7 @@ function onRealToggle(img: AdminProductImage, newVal: boolean) {
             <!-- Alt text input -->
             <div class="mt-1">
               <Input
-                :value="img.alt"
+                :model-value="img.alt"
                 type="text"
                 :placeholder="t('admin.products.editor.images.altPlaceholder')"
                 :disabled="disabled"

@@ -80,6 +80,21 @@ export function useAdminProductsList() {
     void syncToUrlAndFetch()
   }
 
+  /**
+   * The query this list last wrote to the URL. The URL watcher below is for back/forward
+   * navigation; when it sees our own write it must not copy `q` back into the search box,
+   * because the admin may have typed more since the debounced sync (that dropped characters).
+   */
+  let lastPushedQuery: string | null = null
+  function queryKey(query: Record<string, unknown>): string {
+    return JSON.stringify(
+      Object.entries(query)
+        .filter(([, value]) => value !== undefined && value !== null && value !== '')
+        .map(([key, value]) => [key, String(value)])
+        .sort(([a], [b]) => String(a).localeCompare(String(b))),
+    )
+  }
+
   async function syncToUrlAndFetch() {
     const q: Record<string, string | number> = {}
     if (searchQuery.value.trim()) q.q = searchQuery.value.trim()
@@ -90,6 +105,7 @@ export function useAdminProductsList() {
     if (selectedSort.value && selectedSort.value !== 'updated') q.sort = selectedSort.value
     if (currentPage.value > 1) q.page = currentPage.value
 
+    lastPushedQuery = queryKey(q)
     await router.replace({ query: q })
     await fetchProducts()
   }
@@ -243,6 +259,7 @@ export function useAdminProductsList() {
   watch(
     () => route.query,
     () => {
+      if (queryKey(route.query) === lastPushedQuery) return
       searchQuery.value = String(route.query.q ?? '')
       selectedCategory.value = String(route.query.categoryId ?? '')
       selectedBrand.value = String(route.query.brandId ?? '')

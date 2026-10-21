@@ -2,6 +2,19 @@ import { afterEach, test } from '@e2e-dev/web';
 import { expect } from 'e2e';
 import { loginWithAdminSession, waitForHydration } from './support/auth.js';
 import { createSeed } from './support/seed.js';
+import type { Browser } from '@e2e-dev/web';
+
+/**
+ * Searches the products list and waits until the results for `code` are rendered.
+ * The list loads on the client after hydration and, when that first load lands, resets the
+ * search box from the URL — so typing before it (easy on a slow CI runner) is lost. Wait for
+ * the first load (a table row is rendered), type, then wait for the single result row.
+ */
+async function searchProducts(browser: Browser, screen: { getByPlaceholder: (text: string) => { fill: (value: string) => Promise<void> } }, code: string): Promise<void> {
+  await expect(browser.locator('tbody tr').first()).toBeVisible();
+  await screen.getByPlaceholder('اسم المنتج أو كود الموديل...').fill(code);
+  await expect(browser.locator('tbody tr')).toHaveCount(1);
+}
 
 let seed = createSeed();
 
@@ -48,7 +61,7 @@ test('create product through UI, verify preview, save, land on detail page, and 
   // Clean up: delete through the UI
   await app.open('/admin/products');
   await waitForHydration(browser);
-  await screen.getByPlaceholder('اسم المنتج أو كود الموديل...').fill(modelCode);
+  await searchProducts(browser, screen, modelCode);
 
   const rowActionBtn = screen.getByRole('button', {
     name: new RegExp(`إجراءات المنتج «${productName}»`),
@@ -83,7 +96,7 @@ test('delete protection: product in an order shows «لا يمكن حذف الم
   await app.open('/admin/products');
   await waitForHydration(browser);
 
-  await screen.getByPlaceholder('اسم المنتج أو كود الموديل...').fill(product.modelCode);
+  await searchProducts(browser, screen, product.modelCode);
 
   const rowActionBtn = screen.getByRole('button', {
     name: new RegExp(`إجراءات المنتج «${productName}»`),
@@ -118,7 +131,7 @@ test('archive with undo on a seeded product restores product from archive', asyn
   await app.open('/admin/products');
   await waitForHydration(browser);
 
-  await screen.getByPlaceholder('اسم المنتج أو كود الموديل...').fill(product.modelCode);
+  await searchProducts(browser, screen, product.modelCode);
 
   const rowActionBtn = screen.getByRole('button', {
     name: new RegExp(`إجراءات المنتج «${productName}»`),

@@ -36,13 +36,15 @@ const localePath = useLocalePath()
           class="pointer-events-none absolute inset-y-0 start-3 my-auto size-4 text-muted-foreground"
           aria-hidden="true"
         />
+        <!-- `model-value`, not `value` + `@input`: the shadcn Input keeps its own v-model, and a
+             plain `value` fought it, so each keystroke reset the field (only the last letters stuck). -->
         <Input
-          :value="searchQuery"
+          :model-value="searchQuery"
           type="search"
           :placeholder="t('admin.products.searchPlaceholder')"
           class="h-11 ps-9 pe-4 rounded-xl text-sm"
           :aria-label="t('admin.products.searchPlaceholder')"
-          @input="emit('update:searchQuery', ($event.target as HTMLInputElement).value)"
+          @update:model-value="emit('update:searchQuery', String($event))"
         />
       </div>
 
