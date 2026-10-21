@@ -146,7 +146,7 @@ export interface AdminReportApiQuery {
 }
 
 /** The API query always resolves presets to explicit dates and always includes `groupBy`. */
-export function toApiQuery(state: AdminReportQueryState, now: Date): AdminReportApiQuery {
+export function toAdminReportApiQuery(state: AdminReportQueryState, now: Date): AdminReportApiQuery {
   if (state.preset === 'custom') {
     return {
       from: state.from ?? '',
