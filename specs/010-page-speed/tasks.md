@@ -8,6 +8,8 @@
 
 - [ ] T001 Record the "before" measurements: median of the 3 CI Lighthouse runs per URL from PR #7 (the `lighthouse-report` artifact). Record score, LCP, LCP element, CLS and script transfer per page in a "Page speed: before / after" table in `docs/PHASE-1.md`, with the fields from data-model.md "Speed measurement" and the commit hash.
 
+> **Update after Phase 2 (2026-10-21):** the font-fallback fix (T002–T003) was implemented, then reverted. Its premise did not hold (research R1 retracted). The CI reference (research R0) shows home, category and product already within budget, and checkout missing LCP only because it is measured with an empty cart. **T020–T021 below replace Phases 2–5**; the per-story phases stay as a fallback if CI shows a page missing again.
+
 ## Phase 2: Foundational (blocks all stories)
 
 - [ ] T002 In `apps/web/nuxt.config.ts` → `fonts`, set the generated metric fallbacks to `['Arial', 'Helvetica Neue', 'Segoe UI', 'Roboto']` for `sans-serif` (via `fonts.defaults.fallbacks` or per family, whichever `@nuxt/fonts` 1.0.1 supports), so no `"… Fallback: Noto Sans"` face is generated (research R1). Keep the family names, weights, subsets and preloads as they are, and add a comment explaining the Noto Sans `local()` cost.
@@ -51,6 +53,11 @@
 
 - [ ] T015 [US4] In `lighthouserc.json`, change the `https://localhost:8443/(c|p|checkout).*` entry: `categories:performance` `["error", { "minScore": 0.9 }]` and `largest-contentful-paint` `["error", { "maxNumericValue": 2500 }]`, exactly as in contracts/lighthouse-budgets.md. Keep `numberOfRuns: 3`.
 - [ ] T016 [US4] Push and confirm the CI **Checks** job passes the Lighthouse step on all four URLs. If a page fails only in CI, go back to its story phase with the CI report.
+
+## Phase 6b: Measure checkout as shoppers reach it
+
+- [ ] T020 [US3] Add `lighthouse/add-to-cart.cjs` (repo root): a Lighthouse CI `puppeteerScript` that opens `https://localhost:8443/p/fresh-cooker-4b-s15`, waits for hydration, taps `#main-add-to-cart-button` and waits for the header cart link to show 1. In `lighthouserc.json` → `collect`, set `puppeteerScript` to it, `puppeteerLaunchOptions` with the same `--ignore-certificate-errors`, and `settings.disableStorageReset: true` so the cart survives into the checkout run. In `.github/workflows/ci.yml`, run lhci with puppeteer available (`pnpm dlx --package @lhci/cli@0.15.1 --package puppeteer@24 lhci autorun …`).
+- [ ] T021 [US3] Push and read the CI report: checkout's LCP element should now be the order form (not the empty-cart message) with LCP < 2.5 s, and the other three pages must stay within budget with the cart item present. Then do T015 (flip the gate to error).
 
 ## Phase 7: Polish & cross-cutting
 

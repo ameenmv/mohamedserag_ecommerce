@@ -2,7 +2,25 @@
 
 All measurements: Lighthouse 12.8.2, mobile, 375 × 812 @2x, simulated slow 4G, Chrome headless, through Caddy (HTTP/2, compression) unless noted. Local numbers are noisy (busy machine, benchmark index 1500–2200); CI is the reference.
 
-## R1 — Why does the first paint wait ~2 s on every page?
+## R0 — CI reference numbers (supersedes the local diagnosis below)
+
+First CI Lighthouse run on four URLs (PR #7, commit `e4f0122`, runner benchmark index ≈ 3,800–4,200, about twice this dev machine's), median of 3:
+
+| Page | Speed | LCP | TBT | LCP element |
+|---|---|---|---|---|
+| Home | 0.98 | 2.12 s | 81 ms | hero text |
+| Category | 0.95 | 2.27 s | 152 ms | category description |
+| Product | 0.97 | 1.82 s | 173 ms | product title |
+| Checkout | 0.93 | **2.94 s** | 114 ms | empty-cart message |
+
+Three of four pages already meet the budget. Checkout misses LCP because Lighthouse arrives with an **empty cart**: the cart lives in the browser, so the server renders the order form, and after hydration the empty-cart message replaces it and becomes the late LCP (render delay ~2.3 s after a 0.12 s first paint). A shopper reaching checkout normally has items, and then the server-rendered form is the main content. One home run out of three also showed the 1-second first-paint step described below (observed FCP 1.28 s), so that artifact exists on CI runners too but is rare there.
+
+**Decision**: measure checkout the way shoppers reach it, with an item in the cart (Lighthouse CI `puppeteerScript` adds a product before collection and storage is kept between URLs). Do not ship the font-fallback change from R1.
+
+## R1 — Why does the first paint wait ~2 s on every page? (retracted)
+
+> **Retracted after implementation:** with the Noto Sans, Roboto and IBM Plex fallback faces all removed, the same page still painted at 0.27 s, 1.28 s or 2.3 s on different runs. Identical HTML gave every one of those values, so the steps of about one second come from the environment (headless Chrome font setup on this machine), not from the CSS. The bisect below was misled by that noise. The change was reverted.
+
 
 **Decision**: Stop `@nuxt/fonts` from generating the `"<Family> Fallback: Noto Sans"` face. Configure the fallback list to `Arial`, `Helvetica Neue`, `Segoe UI` and `Roboto`.
 
