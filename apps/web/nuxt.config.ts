@@ -102,6 +102,13 @@ export default defineNuxtConfig({
               test: /[\\/]node_modules[\\/](?:@vue[\\/]|vue[\\/]|vue-router[\\/]|@unhead[\\/]|unhead[\\/]|@intlify[\\/]|vue-i18n[\\/])/,
               priority: 1,
             },
+            {
+              // Every Lucide icon was its own ~300-byte chunk (66 of them, 4.9 KB gzipped together):
+              // one request instead of dozens on listing and product pages.
+              name: 'icons',
+              test: /[\\/]node_modules[\\/]@lucide[\\/]/,
+              priority: 1,
+            },
           ],
         }
         if (Array.isArray(output)) {
