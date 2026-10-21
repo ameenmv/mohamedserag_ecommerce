@@ -187,7 +187,7 @@ function variableToken(variable: string): string {
             {{ t('admin.settings.templates.preview') }}
           </span>
           <p class="whitespace-pre-wrap text-xs text-foreground">{{ previewText(key) }}</p>
-          <p v-if="previewErrors[key]" class="text-[11px] font-semibold text-amber-600 dark:text-amber-400">
+          <p v-if="previewErrors[key]" class="text-[11px] font-semibold text-amber-800 dark:text-amber-400">
             {{ t('admin.settings.templates.previewError') }}
           </p>
           <p v-if="unknownVars(key).length > 0" class="text-[11px] font-semibold text-destructive">

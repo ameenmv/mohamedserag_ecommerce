@@ -65,7 +65,7 @@ async function handleSave() {
               />
               <span
                 v-if="isPlaceholder('name')"
-                class="flex items-center gap-1.5 text-[11px] font-semibold text-amber-600 dark:text-amber-400"
+                class="flex items-center gap-1.5 text-[11px] font-semibold text-amber-800 dark:text-amber-400"
               >
                 <AlertTriangle class="size-3.5" aria-hidden="true" />
                 <span>{{ t('admin.settings.store.placeholderWarning') }}</span>

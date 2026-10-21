@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
-import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core'
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core'
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
+import { ErrorLogFilter } from './common/error-log.filter.js'
 import { AuditInterceptor } from './audit/audit.interceptor.js'
 import { AdminCatalogModule } from './admin-catalog/admin-catalog.module.js'
 import { AdminContentModule } from './admin-content/admin-content.module.js'
@@ -58,6 +59,7 @@ import { TestSeedModule } from './test-seed/test-seed.module.js'
   ],
   controllers: [HealthController],
   providers: [
+    { provide: APP_FILTER, useClass: ErrorLogFilter },
     { provide: APP_GUARD, useClass: ThrottlerGuard },
     { provide: APP_GUARD, useClass: SessionGuard },
     { provide: APP_GUARD, useClass: PermissionGuard },

@@ -7,17 +7,19 @@ import type {
   HomeSectionId,
   ProductCard,
 } from '@serag/shared'
-import type { Component } from 'vue'
+import { type Component, defineAsyncComponent, hydrateOnVisible } from 'vue'
 import StoreHomeAnnounce from './StoreHomeAnnounce.vue'
 import StoreHomeHero from './StoreHomeHero.vue'
-import StoreHomeUspStrip from './StoreHomeUspStrip.vue'
-import StoreHomeFeaturedCategories from './StoreHomeFeaturedCategories.vue'
-import StoreHomeFlash from './StoreHomeFlash.vue'
-import StoreHomeBridalTeaser from './StoreHomeBridalTeaser.vue'
-import StoreHomeTradersTeaser from './StoreHomeTradersTeaser.vue'
-import StoreHomeAboutTeaser from './StoreHomeAboutTeaser.vue'
-import StoreHomePartners from './StoreHomePartners.vue'
-import StoreHomeGuides from './StoreHomeGuides.vue'
+
+/**
+ * Every section except the announcement bar and the hero is server-rendered as usual but only
+ * hydrated (and its code only downloaded) once it scrolls into view. That keeps the first-load
+ * JS and main-thread work small on phones; a section the owner moves to the top still hydrates
+ * right away because it is already visible.
+ */
+function onVisible(loader: () => Promise<Component>): Component {
+  return defineAsyncComponent({ loader, hydrate: hydrateOnVisible() })
+}
 
 const props = defineProps<{
   visibleSections: HomeSectionId[]
@@ -32,14 +34,14 @@ const props = defineProps<{
 const COMPONENT_BY_SECTION: Record<HomeSectionId, Component> = {
   announce: StoreHomeAnnounce,
   hero: StoreHomeHero,
-  uspStrip: StoreHomeUspStrip,
-  featuredCategories: StoreHomeFeaturedCategories,
-  flash: StoreHomeFlash,
-  bridalTeaser: StoreHomeBridalTeaser,
-  tradersTeaser: StoreHomeTradersTeaser,
-  aboutTeaser: StoreHomeAboutTeaser,
-  partners: StoreHomePartners,
-  guides: StoreHomeGuides,
+  uspStrip: onVisible(() => import('./StoreHomeUspStrip.vue')),
+  featuredCategories: onVisible(() => import('./StoreHomeFeaturedCategories.vue')),
+  flash: onVisible(() => import('./StoreHomeFlash.vue')),
+  bridalTeaser: onVisible(() => import('./StoreHomeBridalTeaser.vue')),
+  tradersTeaser: onVisible(() => import('./StoreHomeTradersTeaser.vue')),
+  aboutTeaser: onVisible(() => import('./StoreHomeAboutTeaser.vue')),
+  partners: onVisible(() => import('./StoreHomePartners.vue')),
+  guides: onVisible(() => import('./StoreHomeGuides.vue')),
 }
 
 function sectionProps(id: HomeSectionId) {

@@ -93,7 +93,7 @@ const hasDeposit = computed(() =>
             role="alert"
             class="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border border-amber-500/40 bg-amber-500/10 p-3 text-xs sm:text-sm font-bold text-amber-900 dark:text-amber-200"
           >
-            <AlertTriangle class="size-4 shrink-0 text-amber-600" aria-hidden="true" />
+            <AlertTriangle class="size-4 shrink-0 text-amber-800" aria-hidden="true" />
             <span>
               {{
                 t('admin.confirm.partialDepositRecorded', {
@@ -122,7 +122,7 @@ const hasDeposit = computed(() =>
         class="flex flex-col gap-2 rounded-2xl border border-amber-500/40 bg-amber-500/10 p-4 text-xs text-amber-900 dark:text-amber-200"
       >
         <div class="flex items-center gap-2 font-bold text-sm">
-          <AlertTriangle class="size-4 shrink-0 text-amber-600" aria-hidden="true" />
+          <AlertTriangle class="size-4 shrink-0 text-amber-800" aria-hidden="true" />
           <span>{{ t('admin.confirm.result.shortageWarning') }}</span>
         </div>
         <ul class="flex flex-col gap-1 list-disc ps-5">

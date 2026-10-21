@@ -28,7 +28,7 @@ const { t, locale } = useI18n()
           class="inline-flex items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/15 px-2.5 py-0.5 text-xs font-bold text-amber-900 dark:border-serag-gold/40 dark:bg-serag-gold/20 dark:text-serag-gold-hi"
         >
           <Zap
-            class="size-3.5 fill-amber-500 text-amber-600 dark:fill-serag-gold dark:text-serag-gold"
+            class="size-3.5 fill-amber-500 text-amber-800 dark:fill-serag-gold dark:text-serag-gold"
             aria-hidden="true"
           />
           <span>{{ t('store.flash.badge') }}</span>

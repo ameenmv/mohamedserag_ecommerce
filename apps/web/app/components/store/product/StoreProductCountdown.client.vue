@@ -96,7 +96,7 @@ onUnmounted(() => {
       aria-hidden="true"
       class="num inline-flex items-center gap-1 text-[11px] font-semibold text-amber-800 dark:text-amber-300 sm:text-xs whitespace-nowrap"
     >
-      <Clock class="size-3.5 shrink-0 text-amber-600 dark:text-amber-400" />
+      <Clock class="size-3.5 shrink-0 text-amber-800 dark:text-amber-400" />
       <span>{{ displayText }}</span>
     </span>
 

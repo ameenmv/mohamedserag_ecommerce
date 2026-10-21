@@ -43,6 +43,8 @@ const isCalm = computed(() => {
   <section class="flex flex-col gap-6 p-6">
     <AdminDashboardWelcomeHeader :name="user?.name" :new-orders="newOrders" :calm="isCalm" />
 
+    <AdminDashboardPlaceholderWarning />
+
     <!-- Error State -->
     <div
       v-if="error"

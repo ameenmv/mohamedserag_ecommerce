@@ -188,7 +188,7 @@ const {
     <Dialog :open="Boolean(inOrdersProduct)" @update:open="inOrdersProduct = null">
       <DialogContent class="sm:max-w-md">
         <DialogHeader class="text-start">
-          <DialogTitle class="font-display text-xl text-amber-600 dark:text-amber-400">
+          <DialogTitle class="font-display text-xl text-amber-800 dark:text-amber-400">
             {{ t('admin.products.inOrdersDialog.title') }}
           </DialogTitle>
           <DialogDescription class="pt-2 text-sm leading-relaxed text-foreground">

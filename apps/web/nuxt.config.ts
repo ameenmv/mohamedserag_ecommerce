@@ -50,6 +50,8 @@ export default defineNuxtConfig({
     },
   },
 
+  // Only the body text weight is preloaded: on a slow phone connection every preloaded font
+  // competes with the CSS and entry JS before first paint. The others swap in when they arrive.
   fonts: {
     families: [
       {
@@ -57,23 +59,32 @@ export default defineNuxtConfig({
         provider: 'google',
         weights: [400, 700],
         subsets: ['arabic'],
-        preload: { weights: [400, 700] },
+        preload: { weights: [400] },
       },
       {
         name: 'Lalezar',
         provider: 'google',
         weights: [400],
         subsets: ['arabic'],
-        preload: true,
+        preload: false,
       },
       {
         name: 'Outfit',
         provider: 'google',
         weights: [400, 500, 600, 700, 800],
         subsets: ['latin'],
-        preload: { weights: [800] },
+        preload: false,
       },
     ],
+  },
+
+  experimental: {
+    defaults: {
+      // Prefetch a page's code when its link is hovered or focused, not as soon as it scrolls into
+      // view: listings show dozens of links, and loading (and running) every target page's chunks
+      // at once cost ~0.5 s of main-thread time on mobile (Lighthouse TBT).
+      nuxtLink: { prefetchOn: { interaction: true, visibility: false } },
+    },
   },
 
   hooks: {
@@ -102,7 +113,7 @@ export default defineNuxtConfig({
         }
       }
     },
-    // Prefetch hints for lazy chunks compete with first paint; NuxtLink still prefetches visible links.
+    // Prefetch hints for lazy chunks compete with first paint; NuxtLink prefetches on interaction (see experimental).
     'build:manifest'(manifest) {
       for (const key in manifest) {
         const file = manifest[key]

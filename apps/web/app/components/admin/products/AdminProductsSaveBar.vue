@@ -28,7 +28,7 @@ const { t } = useI18n()
           <AlertCircle class="size-4 shrink-0" aria-hidden="true" />
           <span>{{ serverError }}</span>
         </div>
-        <div v-else-if="isDirty" class="flex items-center gap-1.5 text-amber-600 dark:text-amber-400 font-medium">
+        <div v-else-if="isDirty" class="flex items-center gap-1.5 text-amber-800 dark:text-amber-400 font-medium">
           <span class="size-2 rounded-full bg-amber-500 animate-pulse" aria-hidden="true" />
           <span>{{ t('admin.products.editor.unsavedBadge') }}</span>
         </div>

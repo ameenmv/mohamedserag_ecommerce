@@ -156,7 +156,7 @@ function handleRejectSubmit() {
       role="alert"
       class="flex items-center gap-2 rounded-xl border border-amber-500/40 bg-amber-500/10 p-3 text-xs font-bold text-amber-900 dark:text-amber-200"
     >
-      <AlertTriangle class="size-4 shrink-0 text-amber-600" aria-hidden="true" />
+      <AlertTriangle class="size-4 shrink-0 text-amber-800" aria-hidden="true" />
       <span>
         {{
           t('admin.confirm.partialDepositRecorded', {
@@ -193,7 +193,7 @@ function handleRejectSubmit() {
       role="alert"
     >
       <div class="flex items-center gap-2 font-bold mb-1">
-        <AlertTriangle class="size-4 text-amber-600 dark:text-amber-400" aria-hidden="true" />
+        <AlertTriangle class="size-4 text-amber-800 dark:text-amber-400" aria-hidden="true" />
         <span>{{ t('admin.orders.detail.shortagesWarning') }}</span>
       </div>
       <ul class="list-disc list-inside space-y-0.5">

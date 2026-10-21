@@ -2,11 +2,12 @@
   "private": true,
   "type": "module",
   "devDependencies": {
-    "e2e": "^0.21.2",
     "@e2e-dev/web": "^0.15.1",
-    "typescript": "catalog:",
+    "@serag/config": "workspace:*",
     "@types/node": "catalog:",
-    "@serag/config": "workspace:*"
+    "axe-core": "4.10.3",
+    "e2e": "^0.21.2",
+    "typescript": "catalog:"
   },
   "scripts": {
     "test:e2e": "e2e run",

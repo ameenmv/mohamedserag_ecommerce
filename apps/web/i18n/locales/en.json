@@ -846,6 +846,12 @@
         "empty": "No price locks expiring this week",
         "expired": "Expired",
         "daysLeft": "{n} days left"
+      },
+      "placeholderWarning": {
+        "title": "Store details are still placeholders",
+        "body": "These fields are empty or still hold placeholder values: {fields}. Phone and WhatsApp links stay hidden from customers until they are updated.",
+        "link": "Update them in Settings",
+        "separator": ", "
       }
     },
     "charts": {

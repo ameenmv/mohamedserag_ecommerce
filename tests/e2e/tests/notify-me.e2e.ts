@@ -84,6 +84,9 @@ test('admin views notify requests list, inspects detail with disabled whatsapp w
   screen,
   browser,
 }) => {
+  // Admin desktop table; admin phone layouts are covered by admin-mobile-overflow.e2e.ts
+  await browser.setViewport({ width: 1280, height: 720 })
+
   // 1. Seed two out-of-stock products A and B
   const prodAName = `غسالة اختبار أ ${seed.runId}`
   const prodA = await seed.product({

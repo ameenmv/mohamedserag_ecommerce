@@ -163,7 +163,7 @@ async function handleSave() {
           </Button>
         </div>
 
-        <p v-if="group.length === 1" class="text-[11px] font-semibold text-amber-600 dark:text-amber-400">
+        <p v-if="group.length === 1" class="text-[11px] font-semibold text-amber-800 dark:text-amber-400">
           {{ t('admin.settings.synonyms.minWords') }}
         </p>
         <p v-if="groupError(groupIndex)" class="text-[11px] font-semibold text-destructive">

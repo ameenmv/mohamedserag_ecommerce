@@ -7,6 +7,8 @@ test('category page displays heading, lists product cards, filters by brand, and
   screen,
   browser,
 }) => {
+  // Desktop sidebar filters; the phone filter sheet has its own test below (CI reruns journeys at 375/320 px)
+  await browser.setViewport({ width: 1280, height: 720 });
   await app.open('/c/refrigerators');
   await waitForHydration(browser);
 

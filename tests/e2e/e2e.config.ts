@@ -11,9 +11,16 @@ try {
 const testSeedSecret = process.env.TEST_SEED_SECRET || 'dev-test-seed-secret-32-chars-long!';
 process.env.TEST_SEED_SECRET ||= testSeedSecret;
 
+// `E2E_VIEWPORT=375x812` reruns the suite at a phone size (CI repeats the journeys at 375 and 320 px).
+function viewportFromEnv(): { width: number; height: number } | undefined {
+  const match = /^(\d+)x(\d+)$/.exec(process.env.E2E_VIEWPORT ?? '');
+  return match ? { width: Number(match[1]), height: Number(match[2]) } : undefined;
+}
+const viewport = viewportFromEnv();
+
 export default {
   targets: [{
-    engine: web(),
+    engine: web(viewport ? { viewport } : {}),
     app: {
       // Dev: web on :3000, API on :4000. Docker/prod: both behind Caddy on one origin (set APP_URL and API_URL to it).
       url: process.env.APP_URL ?? 'http://localhost:3000',

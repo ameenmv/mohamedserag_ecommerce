@@ -28,7 +28,7 @@ const mobileExpanded = ref(true)
           <Badge
             v-if="isDirty"
             variant="outline"
-            class="border-amber-500/50 bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[10px]"
+            class="border-amber-500/50 bg-amber-500/10 text-amber-800 dark:text-amber-400 text-[10px]"
           >
             {{ t('admin.products.editor.preview.unsavedBadge') }}
           </Badge>

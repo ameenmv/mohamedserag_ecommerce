@@ -253,7 +253,7 @@ function handleRemoveCoupon(): void {
       v-if="codDeposit?.required"
       class="flex items-start gap-2.5 rounded-2xl bg-amber-500/10 p-3.5 text-xs font-semibold text-amber-900 dark:text-amber-300"
     >
-      <AlertTriangle class="size-4.5 shrink-0 mt-0.5 text-amber-600 dark:text-amber-400" aria-hidden="true" />
+      <AlertTriangle class="size-4.5 shrink-0 mt-0.5 text-amber-800 dark:text-amber-400" aria-hidden="true" />
       <p class="leading-relaxed">
         {{
           t('store.checkout.depositNotice', {

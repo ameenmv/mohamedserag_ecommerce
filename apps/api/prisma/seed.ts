@@ -1663,7 +1663,9 @@ async function main() {
     },
   ]
 
-  for (const orderDef of demoOrderDefs) {
+  // Production first deploy: `SEED_DEMO_ORDERS=false` keeps the live order list empty.
+  const seedDemoOrders = process.env.SEED_DEMO_ORDERS !== 'false'
+  for (const orderDef of seedDemoOrders ? demoOrderDefs : []) {
     const existingOrder = await prisma.order.findUnique({
       where: { no: orderDef.no },
     })

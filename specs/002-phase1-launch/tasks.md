@@ -83,5 +83,8 @@
 
 ## Phase 8: Launch readiness
 - [ ] T090 C Full regression e2e at 1280, 375 and 320 px; `npx e2e explore` runs on the main journeys; KPI funnel events visible in analytics
+  - Note: see spec 009: viewport matrix in CI (T013) done; KPI events asserted via tracker stub, real Umami check at first deploy (T014); `e2e explore` not run.
 - [ ] T091 C Lighthouse budgets, accessibility pass, security headers check
+  - Note: see spec 009: security headers + CSP (T005–T006) and accessibility scan (T012) done; Lighthouse on four pages in CI, home gated, category/product/checkout perf still open (T010).
 - [ ] T092 C Replace placeholders with real store data (PRD §13), VPS deploy, backups verified
+  - Note: see spec 009: placeholder warning, deploy runbook and verified backups done; real store data and VPS deploy are owner steps (docs/LAUNCH-CHECKLIST.md).

@@ -75,7 +75,7 @@ const { t } = useI18n()
             />
             <div class="flex justify-between text-[11px] text-muted-foreground">
               <span>{{ t('admin.products.editor.seo.seoTitleHint') }}</span>
-              <span class="num font-semibold" :class="form.seoTitle.length > 60 ? 'text-amber-600 dark:text-amber-400' : ''">
+              <span class="num font-semibold" :class="form.seoTitle.length > 60 ? 'text-amber-800 dark:text-amber-400' : ''">
                 {{ t('admin.products.editor.seo.chars', { count: form.seoTitle.length }) }} / 60
               </span>
             </div>
@@ -102,7 +102,7 @@ const { t } = useI18n()
             />
             <div class="flex justify-between text-[11px] text-muted-foreground">
               <span>{{ t('admin.products.editor.seo.seoDescriptionHint') }}</span>
-              <span class="num font-semibold" :class="form.seoDescription.length > 160 ? 'text-amber-600 dark:text-amber-400' : ''">
+              <span class="num font-semibold" :class="form.seoDescription.length > 160 ? 'text-amber-800 dark:text-amber-400' : ''">
                 {{ t('admin.products.editor.seo.chars', { count: form.seoDescription.length }) }} / 160
               </span>
             </div>

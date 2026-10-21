@@ -193,6 +193,8 @@ pnpm dev                          # web → http://localhost:3000 · api → htt
 
 Full step-by-step guide with troubleshooting: **[docs/GETTING-STARTED.md](docs/GETTING-STARTED.md)**.
 
+Putting it on a server: **[docs/DEPLOY.md](docs/DEPLOY.md)** · backups, logs and health checks: **[docs/OPERATIONS.md](docs/OPERATIONS.md)** · what the owner still has to provide: **[docs/LAUNCH-CHECKLIST.md](docs/LAUNCH-CHECKLIST.md)**.
+
 Open `http://localhost:3000` for the store and `http://localhost:3000/admin` for the dashboard, then sign in with the admin from your `.env`.
 
 <details>

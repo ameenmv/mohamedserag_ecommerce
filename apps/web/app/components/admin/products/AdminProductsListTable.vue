@@ -127,7 +127,7 @@ const localePath = useLocalePath()
                 <Badge
                   v-else-if="p.stock <= p.lowStockThreshold"
                   variant="outline"
-                  class="border-amber-500/50 bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[10px] px-1.5 py-0"
+                  class="border-amber-500/50 bg-amber-500/10 text-amber-800 dark:text-amber-400 text-[10px] px-1.5 py-0"
                 >
                   {{ t('store.availability.low') }}
                 </Badge>
@@ -243,7 +243,7 @@ const localePath = useLocalePath()
             <Badge
               v-else-if="p.stock <= p.lowStockThreshold"
               variant="outline"
-              class="border-amber-500/50 bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[9px] px-1 py-0"
+              class="border-amber-500/50 bg-amber-500/10 text-amber-800 dark:text-amber-400 text-[9px] px-1 py-0"
             >
               {{ t('store.availability.low') }}
             </Badge>

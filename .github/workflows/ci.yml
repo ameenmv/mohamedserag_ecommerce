@@ -32,7 +32,7 @@ jobs:
   checks:
     name: Checks (Lint, Types, Tests, Build, E2E)
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     services:
       postgres:
         image: postgres:17
@@ -96,12 +96,70 @@ jobs:
       - name: Install chromium for e2e
         run: pnpm --filter @serag/e2e exec e2e-web install chromium --with-deps
 
-      - name: Browser e2e (runner starts web + API)
+      # The production build, not `pnpm dev`: the CSP, compression and lazy hydration only exist there.
+      - name: Start production API and web
+        env:
+          NUXT_API_INTERNAL_BASE: http://localhost:4000/api
+          NUXT_PUBLIC_API_BASE: http://localhost:4000/api
+          NUXT_PUBLIC_SITE_URL: http://localhost:3000
+        run: |
+          (cd apps/api && nohup node dist/main.js > /tmp/api.log 2>&1 &)
+          (cd apps/web && PORT=3000 nohup node .output/server/index.mjs > /tmp/web.log 2>&1 &)
+          for i in $(seq 1 60); do
+            curl -fsS http://localhost:4000/api/health > /dev/null && curl -fsS http://localhost:3000/healthz > /dev/null && exit 0
+            sleep 1
+          done
+          echo "servers did not start"; cat /tmp/api.log /tmp/web.log; exit 1
+
+      - name: Browser e2e (production build)
         env:
           CI: '1'
+          APP_URL: http://localhost:3000
+          API_URL: http://localhost:4000
           ALLOW_TEST_SEED: 'true'
           TEST_SEED_SECRET: ci-test-seed-secret-must-be-32-chars-long-min
         run: pnpm --filter @serag/e2e exec e2e run --reporter list,junit
+
+      # Viewport regression (spec 009, T013): the shopper journeys again at phone widths.
+      - name: Browser e2e journeys at 375 and 320 px
+        env:
+          CI: '1'
+          APP_URL: http://localhost:3000
+          API_URL: http://localhost:4000
+          ALLOW_TEST_SEED: 'true'
+          TEST_SEED_SECRET: ci-test-seed-secret-must-be-32-chars-long-min
+        run: |
+          JOURNEYS="tests/smoke.e2e.ts tests/catalog.e2e.ts tests/search.e2e.ts tests/product.e2e.ts tests/compare-wishlist.e2e.ts tests/checkout-cod.e2e.ts tests/checkout-transfer.e2e.ts tests/coupon.e2e.ts tests/bridal-builder.e2e.ts tests/bridal-reserve.e2e.ts tests/quiz.e2e.ts tests/reviews-submit.e2e.ts tests/notify-me.e2e.ts"
+          for vp in 375x812 320x640; do
+            echo "::group::viewport $vp"
+            # Rate limits are per minute per IP; give each pass a fresh window
+            sleep 60
+            E2E_VIEWPORT=$vp pnpm --filter @serag/e2e exec e2e run $JOURNEYS
+            echo "::endgroup::"
+          done
+
+      - name: Start Caddy for Lighthouse (HTTP/2 like production)
+        if: ${{ !cancelled() }}
+        run: docker run -d --name lh-caddy --network host -v "$PWD/docker/Caddyfile.lighthouse:/etc/caddy/Caddyfile:ro" caddy:2
+
+      # Home, a category, a product and checkout against the seeded catalogue (spec 009, T011).
+      - name: Lighthouse CI (mobile, four pages)
+        if: ${{ !cancelled() }}
+        run: pnpm dlx @lhci/cli@0.15.1 autorun --config=lighthouserc.json
+
+      - name: Upload Lighthouse artifacts
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: .lighthouseci/
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Server logs on failure
+        if: failure()
+        run: cat /tmp/api.log /tmp/web.log || true
 
       - name: Upload e2e artifacts
         if: ${{ !cancelled() }}
@@ -150,46 +208,3 @@ jobs:
       - name: Tear down Docker compose
         if: always()
         run: docker compose -f docker/compose.yml -f docker/compose.e2e.yml down -v
-
-  lighthouse:
-    name: Lighthouse CI
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build web application
-        run: pnpm --filter @serag/web... build
-
-      - name: Start Caddy (HTTP/2 like production)
-        run: docker run -d --name lh-caddy --network host -v "$PWD/docker/Caddyfile.lighthouse:/etc/caddy/Caddyfile:ro" caddy:2
-
-      - name: Run Lighthouse CI (mobile)
-        run: pnpm dlx @lhci/cli@0.15.1 autorun --config=lighthouserc.json
-
-      - name: Upload Lighthouse artifacts
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: lighthouse-report
-          path: .lighthouseci/
-          include-hidden-files: true
-          if-no-files-found: warn
-          retention-days: 7
-
-      - name: Stop Caddy
-        if: always()
-        run: docker rm -f lh-caddy
