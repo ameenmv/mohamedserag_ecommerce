@@ -18,14 +18,17 @@ import {
 } from '../src/generated/prisma/client.js'
 import {
   ALL_PERMISSIONS,
+  DEFAULT_HOME_CONTENT,
+  DEFAULT_HOME_LAYOUT,
   DEFAULT_TEMPLATES,
   DEFAULT_ZONES,
   OWNER_ROLE_KEY,
+  buildProductSearchText,
   egpToPiastres,
-  expandSynonyms,
   findZone,
   type Permission,
 } from '@serag/shared'
+import { seedQuizzes } from './seed-quizzes.js'
 import {
   buildModelCode,
   buildProductSlug,
@@ -117,7 +120,7 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
       {
         key: 'cooling',
         label: 'نظام التبريد',
-        type: 'select',
+        type: 'choice',
         options: ['نوفروست', 'ديفروست'],
         filterable: true,
         comparable: true,
@@ -127,7 +130,7 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
       {
         key: 'energy_class',
         label: 'كفاءة الطاقة',
-        type: 'select',
+        type: 'choice',
         options: ['A++', 'A+', 'A', 'B'],
         filterable: false,
         comparable: true,
@@ -148,7 +151,7 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
       {
         key: 'loading',
         label: 'نوع التحميل',
-        type: 'select',
+        type: 'choice',
         options: ['أمامي', 'علوي', 'حوضين'],
         filterable: true,
         comparable: true,
@@ -170,7 +173,7 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
       {
         key: 'resolution',
         label: 'الدقة',
-        type: 'select',
+        type: 'choice',
         options: ['HD', 'FHD', '4K', 'QLED'],
         filterable: true,
         comparable: true,
@@ -192,7 +195,7 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
       {
         key: 'mode',
         label: 'نظام التشغيل',
-        type: 'select',
+        type: 'choice',
         options: ['بارد', 'بارد ساخن'],
         filterable: true,
         comparable: true,
@@ -229,7 +232,7 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
       {
         key: 'material',
         label: 'الخامة',
-        type: 'select',
+        type: 'choice',
         options: ['جرانيت', 'ستانلس', 'سيراميك', 'تيفال'],
         filterable: true,
         comparable: true,
@@ -1019,8 +1022,14 @@ async function main() {
         ? 'الضمان ساري بالفاتورة المختومة من معرض محمد سراج'
         : 'فعّل الضمان بالاتصال بالخط الساخن للوكيل المعتمد عند التركيب'
 
-    const searchText = expandSynonyms(
-      [item.name, `${brand.enName} ${brand.name}`, category.name, item.cap, item.tech, modelCode].join(' '),
+    const searchText = buildProductSearchText(
+      {
+        name: item.name,
+        brandNames: [brand.enName, brand.name],
+        categoryName: category.name,
+        modelCode,
+        extra: [item.cap, item.tech],
+      },
       SEARCH_SYNONYMS,
     )
 
@@ -1171,26 +1180,34 @@ async function main() {
       slug: 'basic',
       name: 'أساسية',
       sort: 1,
+      highlights: [
+        'كل الأساسيات لبيت جديد بأفضل سعر',
+        'أجهزة مضمونة فرز أول بضمان الوكيل الرسمي',
+        'طقم حلل جرانيت تركي أصلي للمطبخ',
+      ],
       rooms: [
         {
           key: 'kitchen',
-          label: 'المطبخ',
           items: [
             { productId: requireProductId('SR-S4'), qty: 1 },
-            { productId: requireProductId('SR-S7'), qty: 1 },
             { productId: requireProductId('SR-S15'), qty: 1 },
-            { productId: requireProductId('SR-C4'), qty: 1 },
           ],
         },
         {
+          key: 'laundry',
+          items: [{ productId: requireProductId('SR-S7'), qty: 1 }],
+        },
+        {
           key: 'living',
-          label: 'الريسبشن',
           items: [{ productId: requireProductId('SR-S9'), qty: 1 }],
         },
         {
-          key: 'bedroom',
-          label: 'أوضة النوم',
+          key: 'bedrooms',
           items: [{ productId: requireProductId('SR-F4'), qty: 1 }],
+        },
+        {
+          key: 'kitchenware',
+          items: [{ productId: requireProductId('SR-C4'), qty: 1 }],
         },
       ],
     },
@@ -1198,29 +1215,38 @@ async function main() {
       slug: 'golden',
       name: 'ذهبية',
       sort: 2,
+      highlights: [
+        'المزيج المثالي بين المواصفات العالية والسعر المناسب',
+        'أجهزة أوتوماتيك وانفرتر موفرة للكهرباء',
+        'شاشة سمارت 4K وتكييف للريسبشن وغرفة النوم',
+        'طقم جرانيت تركي فاخر متكامل',
+      ],
       rooms: [
         {
           key: 'kitchen',
-          label: 'المطبخ',
           items: [
             { productId: requireProductId('SR-S1'), qty: 1 },
-            { productId: requireProductId('SR-S5'), qty: 1 },
             { productId: requireProductId('SR-S16'), qty: 1 },
-            { productId: requireProductId('SR-C1'), qty: 1 },
           ],
+        },
+        {
+          key: 'laundry',
+          items: [{ productId: requireProductId('SR-S5'), qty: 1 }],
         },
         {
           key: 'living',
-          label: 'الريسبشن',
+          items: [{ productId: requireProductId('SR-S8'), qty: 1 }],
+        },
+        {
+          key: 'bedrooms',
           items: [
-            { productId: requireProductId('SR-S8'), qty: 1 },
             { productId: requireProductId('SR-S11'), qty: 1 },
+            { productId: requireProductId('SR-F4'), qty: 1 },
           ],
         },
         {
-          key: 'bedroom',
-          label: 'أوضة النوم',
-          items: [{ productId: requireProductId('SR-F4'), qty: 1 }],
+          key: 'kitchenware',
+          items: [{ productId: requireProductId('SR-C1'), qty: 1 }],
         },
       ],
     },
@@ -1228,30 +1254,41 @@ async function main() {
       slug: 'palace',
       name: 'القصر',
       sort: 3,
+      highlights: [
+        'أعلى فئة لتجهيز متكامل بأرقى الماركات العالمية',
+        'شاشة QLED عملاقة مع تكييفات لجميع الغرف',
+        'ثلاجة وغسالة ذكية بأحدث تكنولوجيا',
+        'طقمين أواني طهي تركي جرانيت وستانلس أصلي',
+      ],
       rooms: [
         {
           key: 'kitchen',
-          label: 'المطبخ',
           items: [
             { productId: requireProductId('SR-S3'), qty: 1 },
-            { productId: requireProductId('SR-S6'), qty: 1 },
             { productId: requireProductId('SR-S14'), qty: 1 },
-            { productId: requireProductId('SR-C2'), qty: 1 },
-            { productId: requireProductId('SR-C3'), qty: 1 },
           ],
+        },
+        {
+          key: 'laundry',
+          items: [{ productId: requireProductId('SR-S6'), qty: 1 }],
         },
         {
           key: 'living',
-          label: 'الريسبشن',
+          items: [{ productId: requireProductId('SR-S10'), qty: 1 }],
+        },
+        {
+          key: 'bedrooms',
           items: [
-            { productId: requireProductId('SR-S10'), qty: 1 },
             { productId: requireProductId('SR-S13'), qty: 1 },
+            { productId: requireProductId('SR-S12'), qty: 2 },
           ],
         },
         {
-          key: 'bedroom',
-          label: 'أوضة النوم',
-          items: [{ productId: requireProductId('SR-S12'), qty: 2 }],
+          key: 'kitchenware',
+          items: [
+            { productId: requireProductId('SR-C2'), qty: 1 },
+            { productId: requireProductId('SR-C3'), qty: 1 },
+          ],
         },
       ],
     },
@@ -1259,17 +1296,20 @@ async function main() {
 
   for (const tier of bridalTierDefs) {
     const roomsJson = tier.rooms as unknown as Prisma.InputJsonValue
+    const highlightsJson = tier.highlights as unknown as Prisma.InputJsonValue
     await prisma.bridalTier.upsert({
       where: { slug: tier.slug },
       update: {
         name: tier.name,
         sort: tier.sort,
+        highlights: highlightsJson,
         rooms: roomsJson,
       },
       create: {
         slug: tier.slug,
         name: tier.name,
         sort: tier.sort,
+        highlights: highlightsJson,
         rooms: roomsJson,
       },
     })
@@ -1278,66 +1318,8 @@ async function main() {
   // --------------------------------------------------------------------------
   // 6.7 Content (Published Home ContentVersion + 6 Policy/Info Pages)
   // --------------------------------------------------------------------------
-  const homeData: Prisma.InputJsonValue = {
-    announce: {
-      text: 'أصلي 100% وبضمان حقيقي · استلام من المعرض أو توصيل لحد باب البيت',
-    },
-    hero: {
-      eyebrow: 'أجهزة كهربائية وأدوات منزلية · المنصورة · منذ 1972',
-      title: 'ثقة لها تاريخ',
-      subtitle:
-        'من 1972 بنجهّز بيوت مصر. أجهزة وأدوات أصلية بضمان حقيقي، بسعر قطاعي أو جملة، من أول جهاز لحد تجهيز بيت كامل.',
-      cta: { label: 'تسوّق دلوقتي', href: '/shop' },
-      secondaryCta: { label: 'جهّز بيتك (جهاز العروسة)', href: '/bridal' },
-      stats: [
-        { value: '1972', label: 'سنة التأسيس' },
-        { value: '+50', label: 'سنة خبرة' },
-        { value: '100%', label: 'منتجات أصلية' },
-      ],
-    },
-    uspStrip: [
-      { title: 'ضمان حقيقي', description: 'ضمان مباشر على الأجهزة من الوكيل الرسمي' },
-      { title: 'أصلي 100%', description: 'من مصادر موثوقة ومعتمدة بفرز أول مختوم' },
-      { title: 'استلام أو توصيل', description: 'من المعرض أو لحد باب بيتك بعربيات المعرض' },
-      { title: 'الدفع عند الاستلام', description: 'ادفع وانت مطمّن بعد معاينة جهازك' },
-    ],
-    featuredCategorySlugs: ['refrigerators', 'washers', 'tvs', 'acs', 'cookers', 'cookware'],
-    bridalTeaser: {
-      eyebrow: 'BRIDAL PACKAGES',
-      title: 'تجهيز العرايس — جهّز بيتك',
-      subtitle:
-        'بدل ما تلف على كل حاجة لوحدها، اختاري باقة جاهزة (أساسية / ذهبية / القصر)، عدّليها أوضة أوضة، شاركيها مع أهلك على واتساب، واحجزيها بعربون يثبّت الأسعار 30 يوم.',
-      cta: { label: 'ابدئي حاسبة التجهيز', href: '/bridal' },
-    },
-    tradersTeaser: {
-      badge: 'للتجار والمعارض',
-      title: 'أسعار الجملة بتوصلك من المصدر',
-      subtitle:
-        'تعامل مباشر مع كبرى مصانع الأجهزة وأواني الطهي التركية المستوردة حصرياً لمعارض وتجار الدلتا ومصر.',
-      cta: { label: 'كلّم قسم الجملة على واتساب', href: '/traders' },
-    },
-    aboutTeaser: {
-      eyebrow: 'OUR STORY · SINCE 1972',
-      title: 'من نحن — معرض محمد سراج الرئيسي',
-      subtitle:
-        'من سنة 1972 واسم محمد سراج معروف في المنصورة لأجهزة وأدوات البيت. منتج أصلي، سعر عادل، وخدمة بتفضل معاك بعد ما تمشي.',
-    },
-  }
-
-  const homeLayout: Prisma.InputJsonValue = {
-    sections: [
-      'announce',
-      'hero',
-      'uspStrip',
-      'featuredCategories',
-      'flash',
-      'bridalTeaser',
-      'tradersTeaser',
-      'aboutTeaser',
-      'partners',
-      'guides',
-    ],
-  }
+  const homeData = JSON.parse(JSON.stringify(DEFAULT_HOME_CONTENT)) as Prisma.InputJsonValue
+  const homeLayout = JSON.parse(JSON.stringify(DEFAULT_HOME_LAYOUT)) as Prisma.InputJsonValue
 
   const existingHomeVersion = await prisma.contentVersion.findFirst({
     where: { page: 'home', status: 'published' },
@@ -1444,6 +1426,116 @@ async function main() {
       },
     })
   }
+
+  // --------------------------------------------------------------------------
+  // 6.7b Buying Guides (3 published guides)
+  // --------------------------------------------------------------------------
+  interface GuideSeedDef {
+    slug: string
+    title: string
+    summary: string
+    body: string
+    categorySlug: string | null
+  }
+
+  const guideDefs: GuideSeedDef[] = [
+    {
+      slug: 'choose-refrigerator',
+      title: 'إزاي تختار الثلاجة المناسبة لبيتك؟',
+      summary:
+        'دليل سريع لاختيار الثلاجة: السعة المناسبة، الفرق بين النوفروست والانفرتر، استهلاك الكهرباء، والضمان — نصائح من خبراء معرض محمد سراج.',
+      body: `<h2>ابدأ بحجم البيت والاستخدام</h2>
+<p>ثلاجة 16 قدم مناسبة لبيت صغير، أما العائلات فالأفضل 20 قدم أو أكتر. اختار بين الباب العلوي والسفلي والـ Side by Side حسب المساحة المتاحة في مطبخك.</p>
+<h2>النوفروست والانفرتر بيفرقوا في إيه؟</h2>
+<ul>
+<li>النوفروست بيمنع تكوّن الثلج وبيقلل تنظيف الثلاجة.</li>
+<li>الانفرتر بيقلّل استهلاك الكهرباء وبيشتغل أهدأ.</li>
+<li>لو منطقتك فيها قطع كهرباء متكرر، اسأل عن حماية الفولت.</li>
+</ul>
+<h2>نصائح من معرض محمد سراج</h2>
+<p>اختار ماركة لها وكيل رسمي وضمان واضح في مصر، وقيس مساحة المطبخ قبل الشراء. في المعرض بنساعدك تقارن الموديلات والأسعار وتختار اللي يناسب بيتك.</p>`,
+      categorySlug: 'refrigerators',
+    },
+    {
+      slug: 'inverter-ac-guide',
+      title: 'دليل شراء التكييف الانفرتر',
+      summary:
+        'كل اللي محتاج تعرفه عن تكييف الانفرتر: قوة التبريد، استهلاك الكهرباء، سعة الـ BTU المناسبة للأوضة، ونصائح التركيب والصيانة.',
+      body: `<h2>ليه تختار الانفرتر؟</h2>
+<p>تكييف الانفرتر بيتحكم في سرعة الضاغط، فبيوصل للحرارة المطلوبة بسرعة وبعدين بيقلّل الاستهلاك، وده بيفرق في فاتورة الكهربا على المدى الطويل.</p>
+<h2>اختار سعة التبريد المناسبة</h2>
+<ul>
+<li>أوضة صغيرة لحد 14 متر مربع: 1.25 حصان كفاية.</li>
+<li>أوضة متوسطة من 14 لـ 18 متر مربع: 1.5 حصان.</li>
+<li>أوضة كبيرة أو فوق السطح: 2.25 حصان أو أكتر.</li>
+</ul>
+<h2>نصائح التركيب والصيانة</h2>
+<p>التركيب الصح بيفرق في عمر الجهاز واستهلاكه. متثبتش الوحدة قرب مصدر حرارة، ونظّف الفلاتر كل شهرين. في المعرض بنركّب ونخدم بخبرة من سنين.</p>`,
+      categorySlug: 'acs',
+    },
+    {
+      slug: 'bridal-checklist',
+      title: 'دليل تجهيز العروسة — قائمة كاملة',
+      summary:
+        'قائمة كاملة لتجهيز جهاز العروسة: من الأجهزة الكهربائية لأدوات المطبخ والحمام، مع نصائح ترتيب الأولويات والميزانية خطوة بخطوة.',
+      body: `<h2>ابدئي بالأساسيات</h2>
+<p>جهّزي الأول الأجهزة الكبيرة: ثلاجة، غسالة، تكييف، وبوتاجاز، لأنها بتاخد وقت في الاختيار والتوصيل.</p>
+<h2>القائمة على مراحل</h2>
+<ul>
+<li>المرحلة الأولى: الأجهزة الكهربائية الأساسية.</li>
+<li>المرحلة التانية: أدوات المطبخ والحلل والأجهزة الصغيرة.</li>
+<li>المرحلة التالتة: أجهزة الحمام والعناية الشخصية.</li>
+</ul>
+<h2>نصيحة مننا</h2>
+<p>متحاوليش تجهيزي كل حاجة مرة واحدة. رتّبي حسب الميزانية والأهم، وابدئي بباقة جاهزة لو حابة تمشي خطوة بخطوة.</p>`,
+      categorySlug: null,
+    },
+  ]
+
+  for (const guide of guideDefs) {
+    const category = guide.categorySlug
+      ? await prisma.category.findUnique({
+          where: { slug: guide.categorySlug },
+          select: { id: true },
+        })
+      : null
+
+    const guideProducts = category
+      ? await prisma.product.findMany({
+          where: { categoryId: category.id, visible: true, archivedAt: null },
+          take: 3,
+          orderBy: { createdAt: 'asc' },
+          select: { id: true },
+        })
+      : []
+
+    await prisma.guide.upsert({
+      where: { slug: guide.slug },
+      update: {
+        title: guide.title,
+        summary: guide.summary,
+        body: guide.body,
+        categoryIds: category ? [category.id] : [],
+        productIds: guideProducts.map((product) => product.id),
+        published: true,
+      },
+      create: {
+        slug: guide.slug,
+        title: guide.title,
+        summary: guide.summary,
+        body: guide.body,
+        categoryIds: category ? [category.id] : [],
+        productIds: guideProducts.map((product) => product.id),
+        published: true,
+        publishedAt: new Date(),
+      },
+    })
+  }
+
+  // --------------------------------------------------------------------------
+  // 6.7c «ساعدني أختار» quizzes (refrigerators, washers, tvs, acs)
+  // --------------------------------------------------------------------------
+  await seedQuizzes(prisma)
 
   // --------------------------------------------------------------------------
   // 6.8 Demo Orders (6 orders: SR-2026-000101..106)
@@ -1571,7 +1663,9 @@ async function main() {
     },
   ]
 
-  for (const orderDef of demoOrderDefs) {
+  // Production first deploy: `SEED_DEMO_ORDERS=false` keeps the live order list empty.
+  const seedDemoOrders = process.env.SEED_DEMO_ORDERS !== 'false'
+  for (const orderDef of seedDemoOrders ? demoOrderDefs : []) {
     const existingOrder = await prisma.order.findUnique({
       where: { no: orderDef.no },
     })

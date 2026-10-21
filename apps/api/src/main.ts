@@ -1,14 +1,25 @@
 import 'reflect-metadata'
+import { ConsoleLogger } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import type { NestExpressApplication } from '@nestjs/platform-express'
 import helmet from 'helmet'
 import cookieParser from 'cookie-parser'
 import { AppModule } from './app.module.js'
+import { requestId } from './common/request-id.middleware.js'
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule)
-  // Behind Caddy: use the real client IP for rate limits and logs.
+  const isProd = process.env.NODE_ENV === 'production'
+  const app = await NestFactory.create<NestExpressApplication>(
+    AppModule,
+    isProd ? { logger: new ConsoleLogger({ json: true }) } : {},
+  )
+  // Trust boundary: Caddy is the only trusted proxy in front of the API. It appends the
+  // real client address to `X-Forwarded-For`, so trusting exactly one hop makes `req.ip`
+  // the right-most XFF entry (any client-supplied entries stay to its left and are ignored).
+  // The throttler keys its budget on `req.ip`, which is what gives each visitor their own
+  // rate limit instead of one shared bucket for the web server's address.
   app.set('trust proxy', 1)
+  app.use(requestId)
   app.use(helmet())
   app.use(cookieParser())
   app.setGlobalPrefix('api')

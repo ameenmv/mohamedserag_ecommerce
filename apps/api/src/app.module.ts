@@ -1,9 +1,29 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
-import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core'
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core'
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
+import { ErrorLogFilter } from './common/error-log.filter.js'
 import { AuditInterceptor } from './audit/audit.interceptor.js'
+import { AdminCatalogModule } from './admin-catalog/admin-catalog.module.js'
+import { AdminContentModule } from './admin-content/admin-content.module.js'
+import { AdminDashboardModule } from './admin-dashboard/admin-dashboard.module.js'
+import { AdminReportsModule } from './admin-reports/admin-reports.module.js'
+import { AdminSettingsModule } from './admin-settings/admin-settings.module.js'
+import { AdminOrdersModule } from './admin-orders/admin-orders.module.js'
+import { AdminBridalModule } from './admin-bridal/admin-bridal.module.js'
+import { AdminPromotionsModule } from './admin-promotions/admin-promotions.module.js'
+import { AdminNotifyModule } from './admin-notify/admin-notify.module.js'
+import { AdminReviewsModule } from './admin-reviews/admin-reviews.module.js'
 import { AuthModule } from './auth/auth.module.js'
+import { CatalogModule } from './catalog/catalog.module.js'
+import { ContentModule } from './content/content.module.js'
+import { QuizModule } from './quiz/quiz.module.js'
+import { SeoModule } from './seo/seo.module.js'
+import { OrdersModule } from './orders/orders.module.js'
+import { BridalModule } from './bridal/bridal.module.js'
+import { SettingsModule } from './settings/settings.module.js'
+import { PromotionsModule } from './promotions/promotions.module.js'
+import { ReviewsModule } from './reviews/reviews.module.js'
 import { PermissionGuard } from './auth/permission.guard.js'
 import { SessionGuard } from './auth/session.guard.js'
 import { HealthController } from './health.controller.js'
@@ -16,10 +36,30 @@ import { TestSeedModule } from './test-seed/test-seed.module.js'
     TestSeedModule.forRoot(),
     ThrottlerModule.forRoot([{ ttl: 60_000, limit: 120 }]),
     PrismaModule,
+    SettingsModule,
+    PromotionsModule,
+    ReviewsModule,
     AuthModule,
+    CatalogModule,
+    ContentModule,
+    QuizModule,
+    SeoModule,
+    AdminCatalogModule,
+    AdminOrdersModule,
+    AdminBridalModule,
+    AdminPromotionsModule,
+    AdminNotifyModule,
+    AdminReviewsModule,
+    AdminContentModule,
+    AdminDashboardModule,
+    AdminReportsModule,
+    AdminSettingsModule,
+    OrdersModule,
+    BridalModule,
   ],
   controllers: [HealthController],
   providers: [
+    { provide: APP_FILTER, useClass: ErrorLogFilter },
     { provide: APP_GUARD, useClass: ThrottlerGuard },
     { provide: APP_GUARD, useClass: SessionGuard },
     { provide: APP_GUARD, useClass: PermissionGuard },

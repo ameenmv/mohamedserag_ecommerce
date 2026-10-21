@@ -12,7 +12,22 @@
     "logout": "تسجيل الخروج",
     "undo": "تراجع",
     "showPassword": "إظهار كلمة المرور",
-    "hidePassword": "إخفاء كلمة المرور"
+    "hidePassword": "إخفاء كلمة المرور",
+    "currency": "ج.م",
+    "confirm": "تأكيد",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "create": "إنشاء",
+    "delete": "حذف",
+    "error": "خطأ",
+    "close": "إغلاق",
+    "errors": {
+      "unexpected": "حدث خطأ غير متوقع",
+      "invalidValue": "قيمة غير صالحة"
+    },
+    "previous": "السابق",
+    "next": "التالي",
+    "retry": "إعادة المحاولة"
   },
   "locale": {
     "switch": "تغيير اللغة",
@@ -30,11 +45,11 @@
       "offers": "العروض",
       "guides": "دليل الشراء",
       "wishlist": "المفضلة",
-      "wishlistCount": "المفضلة، {count} منتجات",
+      "wishlistCount": "المفضلة: {count}",
       "compare": "المقارنة",
-      "compareCount": "المقارنة، {count} منتجات",
+      "compareCount": "المقارنة: {count}",
       "cart": "السلة",
-      "cartCount": "السلة، {count} منتجات",
+      "cartCount": "السلة: {count}",
       "whatsapp": "واتساب",
       "whatsappAria": "تواصل معنا عبر واتساب",
       "searchProduct": "ابحث عن منتج",
@@ -48,7 +63,11 @@
       "mobileMenuSubtitle": "SINCE 1972 · المنصورة",
       "browseSite": "تصفح الموقع",
       "directWhatsapp": "تواصل واتساب مباشر",
-      "callShowroom": "اتصل بالمعرض"
+      "callShowroom": "اتصل بالمعرض",
+      "suggestedCategories": "أقسام مقترحة",
+      "seeAllResults": "عرض كل نتائج البحث ({query})",
+      "resultsCount": "النتائج: {count}",
+      "askOnWhatsapp": "اسألنا على واتساب"
     },
     "footer": {
       "whatsappPrefill": "السلام عليكم، عندي استفسار من موقع معرض محمد سراج 👋",
@@ -82,10 +101,663 @@
       "account": "حسابي"
     },
     "home": {
-      "subtitle": "أجهزة منزلية وأدوات مطبخ — المنصورة",
-      "shopNow": "تسوّق الآن",
-      "bridalPackages": "جهاز العروسة",
-      "samplePrice": "28,900 ج.م"
+      "metaDescription": "معرض محمد سراج بالمنصورة من 1972: أجهزة كهربائية وجهاز العروسة بضمان معتمد وتوصيل لكل محافظات مصر.",
+      "uspHeading": "وعود معرض محمد سراج",
+      "categoriesEyebrow": "تسوّق حسب القسم",
+      "allCategories": "شوف كل الأقسام",
+      "allOffers": "شوف كل العروض",
+      "tradersTiers": "شرائح الأسعار",
+      "tradersAccount": "حساب تاجر",
+      "showroomName": "معرض محمد سراج الرئيسي",
+      "showroomLine": "المنصورة · صرح متكامل للأجهزة الكهربائية والأدوات المنزلية منذ 1972",
+      "partnersEyebrow": "وكلاء معتمدين",
+      "authorizedDealer": "وكيل معتمد",
+      "guidesEyebrow": "دليل الشراء",
+      "allGuides": "كل الأدلة"
+    },
+    "product": {
+      "addToCart": "أضف للسلة",
+      "outOfStock": "نفذ",
+      "discountBadge": "خصم {percent}%",
+      "realPhoto": "صورة حقيقية",
+      "oldPriceAria": "السعر الأصلي: {price}"
+    },
+    "pages": {
+      "updatedAt": "آخر تحديث: {date}"
+    },
+    "guides": {
+      "seoTitle": "دليل الشراء",
+      "heading": "دليل الشراء",
+      "subtitle": "أدلة ونصائح تساعدك تختار أحسن الأجهزة المنزلية وجهاز العروسة من معرض محمد سراج.",
+      "readGuide": "اقرأ الدليل",
+      "publishedAt": "نُشر: {date}",
+      "relatedProducts": "منتجات مرتبطة",
+      "emptyTitle": "لسه مفيش أدلة منشورة",
+      "emptyDescription": "تابعنا قريب، هننزّل أدلة شراء جديدة تساعدك تختار صح.",
+      "loadError": "تعذر تحميل الأدلة"
+    },
+    "quiz": {
+      "heading": "ساعدني أختار",
+      "entryCta": "ساعدني أختار",
+      "entryHint": "جاوب كام سؤال ونرشّحلك أحسن الأجهزة.",
+      "seoTitle": "ساعدني أختار: {category}",
+      "seoDescription": "جاوب كام سؤال بسيط ونرشّحلك أحسن منتجات {category} من معرض محمد سراج.",
+      "intro": "اختَر من الإجابات اللي تناسبك ونجهّزلك ترشيحات على مزاجك في {category}.",
+      "progress": "سؤال {current} من {total}",
+      "unsure": "مش متأكد",
+      "previous": "السابق",
+      "next": "التالي",
+      "showResults": "شوف الترشيحات",
+      "resultsHeading": "ترشيحاتنا ليك في {category}",
+      "reason": "ليه رشحناه: {reason}",
+      "popularReason": "من الأكثر طلباً في القسم",
+      "fallbackNotice": "مفيش نتيجة مطابقة تماماً، دي أشهر المنتجات في القسم.",
+      "emptyResults": "مفيش منتجات نرشّحها دلوقتي في القسم ده.",
+      "restart": "جاوب تاني",
+      "seeAll": "شوف كل النتايج",
+      "error": "تعذر جلب الترشيحات، جرّب تاني."
+    },
+    "traders": {
+      "seoTitle": "الجملة والتجار",
+      "seoDescription": "أسعار جملة من المصدر لمعارض وتجار الدلتا ومصر، بفواتير رسمية وضمان الوكيل من معرض محمد سراج.",
+      "whatsappCta": "كلّم قسم الجملة على واتساب",
+      "whatsappMessage": "أهلاً، أنا تاجر ومهتم بأسعار الجملة من معرض محمد سراج",
+      "whatsappUnavailable": "رقم قسم الجملة مش متاح دلوقتي. جرّب تتواصل معانا على الواتساب الرئيسي.",
+      "steps": {
+        "title": "إزاي تطلب بالجملة؟",
+        "step1Title": "كلّمنا على واتساب",
+        "step1Desc": "ابعتلنا اسم نشاطك والمحافظة اللي بتشتغل فيها، وفريق قسم الجملة هيرد عليك.",
+        "step2Title": "استلم قائمة الأسعار",
+        "step2Desc": "هنبعتلك قائمة أسعار مخصوصة للكميات اللي محتاجها، بأفضل سعر جملة من المصدر.",
+        "step3Title": "توصيل لمعرضك",
+        "step3Desc": "بنوصّل لمعرضك بعربيات المعرض مع فاتورة رسمية وضمان الوكيل."
+      },
+      "contact": {
+        "title": "تواصل مع قسم الجملة",
+        "phone": "تليفون",
+        "address": "العنوان",
+        "hours": "مواعيد العمل"
+      }
+    },
+    "flash": {
+      "badge": "عرض لفترة محدودة",
+      "remaining": "باقي {time}",
+      "endsIn": "العرض بيخلص خلال {time}",
+      "endsAtAria": "العرض بيخلص {datetime}",
+      "ended": "العرض خلص",
+      "daysAndClock": "{days} يوم و {clock}"
+    },
+    "offers": {
+      "title": "العروض",
+      "seoTitle": "العروض",
+      "heading": "العروض والتخفيضات",
+      "subtitle": "أقوى عروض وتخفيضات معرض محمد سراج على الأجهزة المنزلية وجهاز العروسة",
+      "flashSectionTitle": "عروض لفترة محدودة",
+      "discountedSectionTitle": "تخفيضات مميزة",
+      "emptyTitle": "مفيش عروض دلوقتي — تابعنا قريب",
+      "emptyDescription": "تابعنا على فيسبوك وتليجرام عشان تعرف أول بأول لما عروض جديدة تنزل",
+      "browseShop": "تصفح كل المنتجات"
+    },
+    "productPage": {
+      "modelCode": "الموديل: {code}",
+      "saving": "وفّر {amount}",
+      "vatIncluded": "الأسعار شاملة ضريبة القيمة المضافة",
+      "installmentAvailable": "التقسيط متاح في المعرض",
+      "askWhatsapp": "اسأل على واتساب",
+      "quantity": "الكمية",
+      "decreaseQty": "تقليل الكمية",
+      "increaseQty": "زيادة الكمية",
+      "qtyAria": "الكمية: {count}",
+      "brandLinkAria": "تصفح منتجات {brand}",
+      "gallery": {
+        "prev": "الصورة السابقة",
+        "next": "الصورة التالية",
+        "realPhoto": "صورة حقيقية من المعرض",
+        "thumbnailAria": "صورة {index} من {name}",
+        "placeholderAlt": "صورة غير متوفرة"
+      },
+      "delivery": {
+        "title": "التوصيل بعربيات المعرض",
+        "description": "شحن مباشر وسريع بأسطول عربيات معرض محمد سراج",
+        "zoneFee": "{zone}: {fee}"
+      },
+      "warranty": {
+        "title": "الضمان والمنشأ",
+        "warrantyTitle": "الضمان المعتمد",
+        "activationTitle": "طريقة تفعيل الضمان",
+        "originTitle": "بلد المنشأ"
+      },
+      "specs": {
+        "title": "المواصفات الفنية",
+        "caption": "جدول المواصفات الفنية للمنتج",
+        "property": "الخاصية",
+        "value": "القيمة",
+        "yes": "أيوه",
+        "no": "لأ"
+      },
+      "setContents": {
+        "title": "محتويات الطقم",
+        "caption": "قائمة القطع المشمولة في الطقم",
+        "piece": "القطعة",
+        "size": "المقاس",
+        "qty": "العدد"
+      },
+      "stickyBar": {
+        "addToCartAria": "أضف {name} للسلة"
+      },
+      "related": {
+        "title": "منتجات مشابهة"
+      },
+      "meta": {
+        "fallbackDescription": "اشترِ {name} من {brand} بضمان حقيقي وأفضل سعر من معرض محمد سراج بالمنصورة."
+      }
+    },
+    "cart": {
+      "addedToCart": "تمت الإضافة للسلة",
+      "pageTitle": "سلة التسوق",
+      "title": "سلة التسوق",
+      "drawerTitle": "سلة التسوق",
+      "drawerDescription": "مراجعة المنتجات في سلة التسوق الخاصة بك",
+      "itemCount": "{count} منتج",
+      "emptyTitle": "سلتك فاضية",
+      "emptyDescription": "لسه مفيش منتجات في السلة. تصفح عروضنا وأحدث الأجهزة المنزلية.",
+      "browseProducts": "تصفح المنتجات",
+      "viewCart": "عرض السلة",
+      "checkout": "كمّل الطلب",
+      "subtotal": "المجموع الفرعي",
+      "discount": "الخصم",
+      "deliveryFee": "مصاريف التوصيل",
+      "deliveryFeeNextStep": "بيتحسب في الخطوة الجاية",
+      "total": "الإجمالي",
+      "quantity": "الكمية",
+      "decreaseQty": "تقليل الكمية",
+      "increaseQty": "زيادة الكمية",
+      "removeLine": "إزالة المنتج من السلة",
+      "clearCart": "مسح السلة",
+      "unitPrice": "سعر القطعة",
+      "leadTime": "ميعاد التوصيل: {time}",
+      "onRequestNotice": "متاح بالطلب",
+      "issues": {
+        "outOfStock": "نفذ — شيله من السلة",
+        "qtyCapped": "المتاح {count} بس",
+        "priceChanged": "السعر اتغير من {from} لـ {to}",
+        "unavailable": "المنتج ده مبقاش متاح",
+        "blockingNotice": "في منتجات في السلة محتاجة مراجعة عشان تقدر تكمل الطلب"
+      },
+      "acknowledgePriceChange": "موافق على السعر الجديد"
+    },
+    "checkout": {
+      "pageTitle": "إتمام الطلب",
+      "title": "إتمام الطلب",
+      "subtitle": "خطوة واحدة لتأكيد طلبك وتوصيله لحد باب البيت",
+      "emptyCartTitle": "سلتك فاضية",
+      "emptyCartDescription": "لا يمكنك إتمام الطلب وسلة التسوق فارغة.",
+      "emptyCartError": "سلة التسوق فارغة",
+      "cartChangedError": "في تغييرات في السلة، راجعها قبل ما تأكد",
+      "customerSection": "بيانات التوصيل",
+      "fullName": "الاسم بالكامل",
+      "fullNamePlaceholder": "اكتب اسمك ثلاثي",
+      "phone": "رقم الموبايل",
+      "phonePlaceholder": "010xxxxxxxx",
+      "phoneHint": "رقم مصري متاح للاتصال لتأكيد ميعاد التوصيل",
+      "governorate": "المحافظة",
+      "governoratePlaceholder": "اختر المحافظة",
+      "city": "المدينة / المركز",
+      "cityPlaceholder": "اكتب اسم المدينة أو المركز (مثل: المنصورة، طلخا)",
+      "address": "العنوان بالتفصيل",
+      "addressPlaceholder": "اسم الشارع، رقم العمارة، رقم الشقة أو علامة مميزة",
+      "notes": "ملاحظات إضافية",
+      "notesPlaceholder": "أي تفاصيل تخص ميعاد التوصيل أو المكان (اختياري)",
+      "specialDateHelp": "لو محتاج يوم معيّن كلّمنا على واتساب",
+      "paymentSection": "طريقة الدفع",
+      "paymentMethod": "طريقة الدفع",
+      "orderSummary": "ملخص الطلب",
+      "depositNotice": "الطلب ده فوق {threshold}، محتاجين عربون {pct}% = {amount} تحويل قبل الشحن، والباقي عند الاستلام.",
+      "leadTimePrefix": "مدة التجهيز:",
+      "vatNotice": "الأسعار شاملة ضريبة القيمة المضافة",
+      "couponPrompt": "عندك كود خصم؟",
+      "couponCode": "كود الخصم",
+      "couponPlaceholder": "اكتب الكود هنا",
+      "applyCoupon": "تطبيق",
+      "coupon": {
+        "applied": "تم تطبيق الكود {code}",
+        "saving": "وفّرت {amount}",
+        "remove": "إزالة الكود",
+        "removeAria": "إزالة الكود {code}",
+        "reasons": {
+          "not_found": "الكود ده مش موجود",
+          "expired": "الكود انتهى",
+          "not_started": "الكود لسه مبدأش",
+          "min_order": "الحد الأدنى للطلب {amount}",
+          "limit": "الكود ده خلص",
+          "phone_limit": "استخدمت الكود ده قبل كده",
+          "no_eligible": "الكود ده مش على المنتجات اللي في السلة",
+          "too_many_attempts": "جربت أكواد كتير، استنى ربع ساعة وجرب تاني",
+          "generic": "الكود ده مش صالح"
+        }
+      },
+      "placeOrder": "تأكيد الطلب",
+      "placingOrder": "جاري تأكيد الطلب...",
+      "stickyTotal": "الإجمالي:",
+      "settingsError": "تعذر تحميل خيارات الدفع والشحن، يرجى المحاولة مرة أخرى",
+      "retrySettings": "إعادة المحاولة",
+      "hints": {
+        "selectGovernorateFirst": "اختار المحافظة عشان نحسب الشحن",
+        "reviewCartFirst": "راجع السلة الأول",
+        "updatingPrices": "بنحدّث الأسعار…"
+      }
+    },
+    "thanks": {
+      "pageTitle": "تم استلام طلبك",
+      "orderReceived": "شكراً يا {name}، طلبك وصل",
+      "orderNumber": "رقم الطلب:",
+      "copyOrderNo": "نسخ رقم الطلب",
+      "copied": "تم النسخ!",
+      "statusLabel": "حالة الطلب:",
+      "nextStepTitle": "الخطوة الجاية",
+      "codNextStep": "هنكلمك نأكد الطلب",
+      "transferNextStep": "تحويل المبلغ عبر {method}",
+      "depositNextStep": "تحويل العربون عبر {method}",
+      "transferInstruction": "يا ريت تحوّل مبلغ {amount} على الحساب التالي وتبعث صورة التحويل:",
+      "accountLabel": "رقم الحساب / المحفظة:",
+      "sendWhatsappProof": "ابعت إثبات التحويل على واتساب",
+      "summaryTitle": "تفاصيل الطلب",
+      "itemsTitle": "المنتجات المطلوبة",
+      "depositRequired": "عربون مطلوب ({pct}%):",
+      "remainingOnDelivery": "المتبقي عند الاستلام:",
+      "paymentMethodLabel": "طريقة الدفع المختارة:",
+      "backToHome": "الرجوع للرئيسية",
+      "browseShop": "متابعة التسوق",
+      "invalidLinkTitle": "الرابط ده مش صحيح أو انتهى",
+      "invalidLinkDescription": "تأكد من فتح الرابط الصحيح الذي وصلك بعد إتمام الطلب.",
+      "bridal": {
+        "title": "تم حجز جهازك",
+        "subtitle": "هنكلمك نتفق على ميعاد التوصيل والتركيب",
+        "reservationNumber": "رقم حجز الجهاز:",
+        "lockNotice": "الأسعار هتتثبت {lockDays} يوم من تأكيد العربون",
+        "installmentsTitle": "التقسيط متاح في المعرض",
+        "installmentsInquiry": "تقدري تقسطي باقي المبلغ في معرض محمد سراج بالمنصورة",
+        "installmentsButton": "استفسري عن التقسيط على واتساب",
+        "installmentsWhatsapp": "السلام عليكم، عندي استفسار عن تقسيط باقي مبلغ حجز الجهاز رقم {no}"
+      }
+    },
+    "wishlist": {
+      "add": "إضافة للمفضلة",
+      "remove": "شيل",
+      "addAria": "إضافة {name} للمفضلة",
+      "removeAria": "إزالة {name} من المفضلة",
+      "addedNotice": "تم الحفظ في المفضلة",
+      "removedNotice": "تم الحذف من المفضلة",
+      "priceDropped": "السعر نزل",
+      "pageTitle": "المفضلة",
+      "title": "المفضلة",
+      "subtitle": "منتجاتك المحفوظة للرجوع لها في أي وقت",
+      "emptyTitle": "قائمة المفضلة فاضية",
+      "emptyDescription": "احفظ المنتجات اللي بتفكر تشتريها وهنبلغك لو سعرها نزل.",
+      "browseProducts": "تصفح المنتجات",
+      "moveToCart": "انقل للسلة",
+      "moveToCartAria": "انقل {name} للسلة",
+      "unavailableProduct": "المنتج ده مبقاش متاح",
+      "removeUnavailable": "إزالة المنتج غير المتاح",
+      "movedToCartNotice": "تم نقل المنتج للسلة"
+    },
+    "compare": {
+      "add": "إضافة للمقارنة",
+      "remove": "إزالة من المقارنة",
+      "addAria": "إضافة {name} للمقارنة",
+      "removeAria": "إزالة {name} من المقارنة",
+      "addedNotice": "تمت الإضافة للمقارنة",
+      "removedNotice": "تم الحذف من المقارنة",
+      "maxReached": "الحد الأقصى للمقارنة 3 منتجات",
+      "fullNotice": "قائمة المقارنة ممتلئة (3 منتجات)",
+      "pageTitle": "مقارنة المنتجات",
+      "title": "مقارنة المنتجات",
+      "subtitle": "قارن بين حتى 3 منتجات واعرف الفروق والمواصفات بالتفصيل",
+      "barAria": "شريط مقارنة المنتجات",
+      "compareButton": "قارن ({count})",
+      "clear": "مسح",
+      "clearAria": "مسح كل المنتجات من المقارنة",
+      "emptyTitle": "مفيش منتجات في المقارنة",
+      "emptyDescription": "اختر منتجات من المتجر عشان تقارن مواصفاتها وأسعارها جنباً لجنب.",
+      "browseProducts": "تصفح المنتجات",
+      "singleItemHint": "أضف منتج تاني عشان تقدر تقارن بينهم.",
+      "mixedCategoriesNotice": "المنتجات من أقسام مختلفة، بنعرض المواصفات المشتركة بس",
+      "showDifferencesOnly": "اعرض الاختلافات بس",
+      "noDifferencesNotice": "مفيش اختلافات في المواصفات المعروضة.",
+      "differentValue": "قيم مختلفة",
+      "replacedNotice": "تم استبدال المنتج في المقارنة",
+      "price": "السعر",
+      "brand": "العلامة التجارية",
+      "warranty": "الضمان",
+      "origin": "بلد المنشأ",
+      "productColumn": "الخاصية",
+      "replaceDialog": {
+        "title": "تبدّل أنهي منتج؟",
+        "description": "قائمة المقارنة فيها 3 منتجات. اختر منتج عشان تستبدله بـ {name}",
+        "replaceButton": "استبدال",
+        "replaceButtonAria": "استبدال {name}",
+        "cancel": "إلغاء"
+      }
+    },
+    "availability": {
+      "inStock": "متوفر",
+      "low": "كمية محدودة",
+      "onRequest": "متاح بالطلب",
+      "outOfStock": "نفذ"
+    },
+    "listing": {
+      "title": "المتجر",
+      "resultsHeading": "المنتجات",
+      "metaDescription": "تصفح أحدث الأجهزة الكهربائية والأدوات المنزلية بضمان معتمد وأفضل الأسعار من معرض محمد سراج بالمنصورة.",
+      "searchResultsTitle": "نتائج البحث عن \"{query}\"",
+      "productCount": "{count} منتج",
+      "filters": "فلترة",
+      "filtersTitle": "فلترة النتائج",
+      "filterCountAria": "فلاتر مطبقة: {count}",
+      "clearAll": "مسح الكل",
+      "clearFilters": "مسح الفلاتر",
+      "applyFilters": "اعرض {count} منتج",
+      "sort": "الترتيب",
+      "sortBy": "ترتيب حسب",
+      "sortOptions": {
+        "popular": "الأكثر طلباً",
+        "price_asc": "السعر: من الأقل للأعلى",
+        "price_desc": "السعر: من الأعلى للأقل",
+        "discount": "أعلى خصم",
+        "newest": "وصل حديثاً",
+        "relevance": "الأكثر صلة"
+      },
+      "brands": "العلامة التجارية",
+      "price": "السعر",
+      "priceRange": "نطاق السعر",
+      "minPrice": "السعر الأدنى",
+      "maxPrice": "السعر الأقصى",
+      "fromPrice": "من",
+      "upToPrice": "حتى",
+      "egpUnit": "ج.م",
+      "availability": "حالة التوفر",
+      "offersAndSale": "العروض والتخفيضات",
+      "discountedOnly": "عليه خصم فقط",
+      "specs": "المواصفات",
+      "subcategories": "الأقسام الفرعية",
+      "empty": {
+        "noSearchResults": "مفيش نتايج لـ \"{query}\"",
+        "noFilteredProducts": "مفيش منتجات بالفلاتر دي",
+        "tryDifferentFilters": "جرّب تغيّر الفلاتر أو امسحها عشان تشوف كل المنتجات.",
+        "tryDifferentSearch": "تأكد من كتابة الكلمة صح أو تصفح أشهر الأقسام.",
+        "topCategories": "أشهر الأقسام",
+        "askOnWhatsapp": "اسألنا على واتساب",
+        "whatsappPrefill": "السلام عليكم، بدور على منتج ومش لاقيه على الموقع 👋"
+      },
+      "pagination": {
+        "label": "صفحات المنتجات",
+        "previous": "السابق",
+        "next": "التالي",
+        "page": "صفحة {page}"
+      },
+      "breadcrumb": {
+        "label": "مسار الصفحة",
+        "home": "الرئيسية",
+        "shop": "المتجر"
+      },
+      "activeFilters": "الفلاتر المطبقة",
+      "removeFilter": "إزالة فلتر {filter}",
+      "loading": "جاري تحميل المنتجات..."
+    },
+    "errorPage": {
+      "notFoundTitle": "الصفحة دي مش موجودة",
+      "notFoundDescription": "ممكن تكون اتنقلت أو الرابط فيه غلطة.",
+      "generalTitle": "حصلت مشكلة",
+      "generalDescription": "جرّب تاني بعد شوية.",
+      "home": "الرئيسية",
+      "shopAll": "تسوّق كل المنتجات"
+    },
+    "bridal": {
+      "pageTitle": "جهّز بيتك — جهاز العروسة",
+      "listPageTitle": "قائمة جهاز بيتك",
+      "metaDescription": "جهّزي بيتك مع معرض محمد سراج. اختاري باقة جهاز العروسة المناسبة، عدّلي فيها أوضة أوضة، شاركيها مع أهلك واحجزيها بعربون يثبّت الأسعار.",
+      "hero": {
+        "title": "جهّز بيتك",
+        "subtitle": "اختاري باقتك المناسبة لبيتك، عدّلي فيها على ذوقك وشوفي الفرق لحظة بلحظة، وشاركيها مع أهلك عشان تقرروا سوا."
+      },
+      "continueBanner": {
+        "title": "عندك قايمة محفوظة على الجهاز ده",
+        "hint": "اضغطي هنا للرجوع لآخر تعديل قمتِ بيه.",
+        "action": "كمّلي قايمتك"
+      },
+      "tiers": {
+        "title": "باقات جهاز العروسة الجاهزة",
+        "subtitle": "ابدئي بباقة متوازنة وعدّلي أجهزتها حسب احتياجك وميزانيتك",
+        "mostPopular": "الأكتر طلباً",
+        "roomsCount": "{count} غرف",
+        "itemsCount": "{count} أجهزة",
+        "startWithTier": "ابدئي بالباقة دي",
+        "starting": "جاري التجهيز...",
+        "errorLoading": "تعذر تحميل الباقات، يرجى المحاولة لاحقاً",
+        "retry": "إعادة المحاولة"
+      },
+      "scratch": {
+        "title": "ابدئي من الصفر",
+        "description": "عايزة تختاري أجهزتك بنفسك؟ ابدئي قايمتك من الصفر وأضيفي الأجهزة اللي محتاجاها لكل أوضة.",
+        "button": "ابدئي من الصفر",
+        "starting": "جاري الإنشاء..."
+      },
+      "rooms": {
+        "kitchen": "المطبخ",
+        "laundry": "الغسيل",
+        "living": "الصالة",
+        "bedrooms": "أوض النوم (تكييفات)",
+        "small_appliances": "أجهزة صغيرة",
+        "kitchenware": "أدوات المطبخ",
+        "subtotal": "المجموع:",
+        "addItemToRoom": "أضيفي جهاز للأوضة دي",
+        "addRoomItem": "أضيفي لأوضة"
+      },
+      "items": {
+        "unitPrice": "سعر القطعة:",
+        "lineTotal": "الإجمالي:",
+        "qty": "الكمية:",
+        "increaseQtyAria": "زيادة كمية {name}",
+        "decreaseQtyAria": "تقليل كمية {name}",
+        "removeAria": "إزالة {name} من القائمة",
+        "swapAria": "تبديل {name} ببديل آخر",
+        "swap": "بدّلي",
+        "remove": "إزالة",
+        "outOfStockBadge": "نفذ — اختاري بديل",
+        "onRequest": "متاح بالطلب",
+        "leadTimePrefix": "مدة التجهيز:"
+      },
+      "saveState": {
+        "saving": "بيتحفظ…",
+        "saved": "اتحفظ",
+        "error": "محصلش حفظ، هنحاول تاني"
+      },
+      "totals": {
+        "title": "ملخص القايمة",
+        "total": "الإجمالي:",
+        "itemCount": "عدد الأجهزة:",
+        "itemsFormat": "{count} أجهزة",
+        "tierDifference": "الفرق عن الباقة:",
+        "tierDiffMore": "أغلى من الباقة بـ {amount}",
+        "tierDiffLess": "أوفر من الباقة بـ {amount}",
+        "tierDiffSame": "نفس سعر الباقة",
+        "tierDiffIncrease": "+ {amount} زيادة",
+        "tierDiffDecrease": "- {amount} وفر",
+        "tierDiffMatch": "مطابق لسعر الباقة",
+        "reserveButton": "احجزي بعربون"
+      },
+      "reserve": {
+        "unavailableReason": "فيه منتجات نفذت، بدّليها أو شيليها",
+        "emptyReason": "القايمة فاضية",
+        "comingSoonReason": "الحجز بالعربون قريب",
+        "priceChangedNotice": "الأسعار اتغيرت، راجعي الإجمالي الجديد"
+      },
+      "reserveSheet": {
+        "title": "حجز جهاز العروسة",
+        "description": "احجزي جهازك بعربون وثبّتي الأسعار",
+        "preferredDate": "ميعاد التوصيل المفضّل (اختياري)",
+        "preferredDateHint": "هنكلمك نتفق على ميعاد التوصيل والتركيب",
+        "updatingQuote": "جاري تحديث الحسبة...",
+        "subtotal": "إجمالي الأجهزة",
+        "deliveryFee": "مصاريف التوصيل",
+        "lockedTotal": "الإجمالي المثبّت",
+        "depositAmount": "العربون المطلوب ({pct}%): {amount}",
+        "lockNotice": "الأسعار هتتثبت {lockDays} يوم من تأكيد العربون",
+        "noCouponsNotice": "الكوبونات مش بتتطبق على حجز الجهاز",
+        "installmentsNotice": "التقسيط متاح في المعرض",
+        "chooseLocationHint": "اكتبي المحافظة والمدينة لحساب مصاريف التوصيل وتأكيد العربون",
+        "submitting": "جاري تأكيد الحجز...",
+        "submitButton": "تأكيد الحجز",
+        "quoteRequiredHint": "اكتبي بيانات العنوان لمعرفة مصاريف التوصيل وحساب العربون"
+      },
+      "share": {
+        "title": "شاركي قايمتك",
+        "button": "شاركيها على واتساب",
+        "copyLink": "انسخي اللينك",
+        "copied": "تم نسخ الرابط بنجاح!",
+        "copyFailed": "تعذر نسخ الرابط",
+        "customList": "قايمة جهاز العروسة",
+        "message": "السلام عليكم، دي قايمة جهاز بيتي ({tierName}) من معرض محمد سراج. فيها {count} أجهزة بإجمالي {total}. تقدري تشوفي الأجهزة والأسعار من هنا:\n{url}"
+      },
+      "view": {
+        "badge": "معاينة فقط",
+        "contactShowroom": "كلّموا المعرض",
+        "contactMessage": "السلام عليكم، بتواصل معاكم بخصوص قايمة جهاز بيتي من على الموقع بإجمالي {total} وحابين نستفسر عن التفاصيل.",
+        "startOwn": "ابدئي قايمتك",
+        "readOnlyNotice": "أنتِ بتشوفي نسخة للعرض فقط. عشان تقدري تعدّلي وتختاري أجهزتك، ابدئي قايمتك الخاصة."
+      },
+      "status": {
+        "draft": "مسودة",
+        "awaitingDeposit": "بانتظار العربون",
+        "awaiting_deposit": "بانتظار العربون",
+        "reserved": "تم الحجز",
+        "locked": "محجوز (السعر مثبت)",
+        "deliveryAgreed": "اتفقنا على التوصيل",
+        "delivered": "تم التسليم",
+        "cancelled": "ملغي",
+        "reservationNo": "رقم الحجز: {no}",
+        "depositProgress": "العربون: تم سداد {paid} من {required}",
+        "lockedUntil": "الأسعار متثبتة لحد {date}",
+        "banner": "حالة الحجز: {status} — رقم الحجز: {no}"
+      },
+      "swapSheet": {
+        "title": "اختاري بديل لـ {name}",
+        "description": "بدائل متوفرة من نفس القسم مع توضيح فرق السعر",
+        "loading": "جاري تحميل البدائل...",
+        "empty": "مفيش بدائل متاحة لنفس القسم حالياً",
+        "priceDiffMore": "أغلى بـ {amount}",
+        "priceDiffLess": "أوفر بـ {amount}",
+        "priceDiffSame": "نفس السعر",
+        "priceDiffPlus": "+{amount} عن الحالي",
+        "priceDiffMinus": "-{amount} عن الحالي",
+        "choose": "اختيار البديل",
+        "outOfStock": "نفذ"
+      },
+      "addSheet": {
+        "title": "إضافة جهاز لقايمتك",
+        "description": "اختاري الأوضة وابحثي عن أي جهاز في الكتالوج لإضافته",
+        "chooseRoom": "الأوضة:",
+        "searchPlaceholder": "ابحثي عن ثلاجة، غسالة، شاشة، بوتاجاز...",
+        "searching": "جاري البحث...",
+        "noResults": "مفيش نتائج مطابقة للبحث",
+        "addButton": "أضيفي",
+        "addedSuccess": "تمت إضافة {name} إلى {room}",
+        "typeToSearch": "اكتبي حرفين على الأقل للبحث عن أجهزة"
+      },
+      "empty": {
+        "title": "قايمتك لسه فاضية",
+        "description": "أضيفي أجهزة لكل أوضة عشان تحسبي تكلفتها وتشاركيها مع أهلك.",
+        "addAppliance": "أضيفي أجهزة لقايمتك"
+      },
+      "notFound": {
+        "title": "القايمة دي مش موجودة",
+        "description": "الرابط ده مش مظبوط أو القايمة اتحذفت. تقدري تبدئي قايمة جديدة لجهاز بيتك في أي وقت.",
+        "backButton": "ابدئي قايمة جديدة"
+      },
+      "productButton": {
+        "label": "أضيفي لجهاز العروسة",
+        "adding": "جاري الإضافة...",
+        "ariaLabel": "أضيفي {name} لجهاز العروسة",
+        "addedToast": "اتضافت لجهاز العروسة",
+        "openList": "افتحي القايمة",
+        "errorToast": "محصلش، جربي تاني"
+      }
+    },
+    "notifyMe": {
+      "title": "بلّغني أول ما يوصل",
+      "subtitle": "سجّل بياناتك وهنبعتلك رسالة على واتساب أول ما المنتج يتوفر تاني.",
+      "nameLabel": "الاسم",
+      "namePlaceholder": "اكتب اسمك",
+      "phoneLabel": "رقم الموبايل (واتساب)",
+      "phonePlaceholder": "010xxxxxxxx",
+      "submit": "بلّغني أول ما يوصل",
+      "submitting": "جاري التسجيل...",
+      "successTitle": "تمام! هنبعتلك على واتساب أول ما يوصل",
+      "successDesc": "سجلنا طلبك وهنبعتلك رسالة على واتساب أول ما المنتج يتوفر تاني في المعرض.",
+      "inStockMessage": "المنتج بقى متوفر — حدّث الصفحة",
+      "throttledMessage": "جربت كتير، استنى دقيقة وجرب تاني",
+      "notFoundMessage": "المنتج مش موجود",
+      "genericError": "حصلت مشكلة، جرب تاني",
+      "stickyButton": "بلّغني",
+      "stickyButtonAria": "بلّغني عند توفر {name}",
+      "botFieldLabel": "اترك هذا الحقل فارغاً"
+    },
+    "reviews": {
+      "heading": "التقييمات",
+      "subheading": "قولّنا رأيك في المنتج — تقييمك بيساعد غيرك يختار",
+      "writeReview": "اكتب تقييمك",
+      "closeForm": "إغلاق النموذج",
+      "formTitle": "أضف تقييمك للمنتج",
+      "formDesc": "شاركنا تجربتك الحقيقية بكل صراحة لمساعدة عملاء المعرض.",
+      "ratingLabel": "تقييمك بالنجوم",
+      "starLabel": {
+        "1": "نجمة واحدة",
+        "2": "نجمتين",
+        "3": "3 نجوم",
+        "4": "4 نجوم",
+        "5": "5 نجوم"
+      },
+      "textLabel": "رأيك في المنتج",
+      "textPlaceholder": "اكتب تفاصيل تجربتك مع المنتج (20 حرف على الأقل)",
+      "nameLabel": "الاسم",
+      "namePlaceholder": "اكتب اسمك",
+      "phoneLabel": "رقم الموبايل",
+      "phonePlaceholder": "010xxxxxxxx",
+      "phoneHint": "رقم الموبايل خاص بالمعرض ومش هيظهر للجمهور",
+      "botFieldLabel": "اترك هذا الحقل فارغاً",
+      "submit": "إرسال التقييم",
+      "submitting": "جاري الإرسال...",
+      "successTitle": "شكراً! تقييمك هيظهر بعد المراجعة",
+      "successDesc": "فريق المعرض بيراجع التقييمات قبل نشرها للتأكد من جودة المحتوى.",
+      "duplicateError": "انت قيّمت المنتج ده قبل كده",
+      "throttledError": "جربت كتير، استنى دقيقة وجرب تاني",
+      "notFoundError": "المنتج مش موجود",
+      "genericError": "حصلت مشكلة، جرب تاني",
+      "validation": {
+        "stars": "اختار عدد النجوم",
+        "text": "التقييم لازم يكون 20 حرف على الأقل",
+        "name": "الاسم يجب أن يتكون من حرفين على الأقل",
+        "phone": "رقم الموبايل غير صحيح (010, 011, 012, 015)"
+      },
+      "count": {
+        "zero": "مفيش تقييمات",
+        "one": "تقييم واحد",
+        "two": "تقييمين",
+        "few": "{count} تقييمات",
+        "many": "{count} تقييم",
+        "other": "{count} تقييم"
+      },
+      "ratingSrText": "التقييم {average} من 5 — {count}",
+      "distributionLabel": "{stars}: {count}",
+      "starsOutOfFive": "{stars} من 5",
+      "verifiedBuyer": "اشترى من المعرض",
+      "storeReplyTitle": "رد المعرض",
+      "emptyState": "لسه مفيش تقييمات — كن أول واحد يقيّم",
+      "loadMore": "تحميل المزيد",
+      "loadingMore": "جاري التحميل...",
+      "showingCount": "ظهر {shown} من {total}",
+      "loadError": "تعذر تحميل التقييمات",
+      "retry": "إعادة المحاولة"
     }
   },
   "admin": {
@@ -105,8 +777,10 @@
       "overview": "نظرة عامة",
       "orders": "الطلبات",
       "products": "المنتجات",
+      "catalog": "الأقسام والماركات",
       "bridal": "جهاز العروسة",
       "promotions": "العروض والكوبونات",
+      "notify": "بلّغني",
       "reviews": "التقييمات",
       "content": "محرر الموقع",
       "reports": "التقارير",
@@ -134,7 +808,57 @@
     "dashboard": {
       "welcome": "أهلاً {name}",
       "subtitle": "نظرة عامة على أداء المعرض والطلبات اليومية",
-      "emptyState": "لوحة التحكم هتتملي لما الطلبات تبدأ توصل"
+      "emptyState": "لوحة التحكم هتتملي لما الطلبات تبدأ توصل",
+      "calm": "مفيش حاجة مستنياك",
+      "error": "تعذر تحميل النظرة العامة، يرجى المحاولة لاحقاً",
+      "counters": {
+        "aria": "ملخص الإجراءات المستنية",
+        "newOrders": "طلبات جديدة",
+        "awaitingPayment": "مدفوعات مستنية تأكيد",
+        "awaitingDeposit": "مستني العربون",
+        "locksExpiring": "تثبيت هيخلص خلال 7 أيام",
+        "pendingReviews": "تقييمات مستنية مراجعة",
+        "notifyReady": "طلبات «بلّغني» جاهزة للإرسال",
+        "lowStock": "منتجات قربت تخلص"
+      },
+      "hero": {
+        "newOrders": "النهارده عندك {count} طلب جديد",
+        "calm": "مفيش حاجة مستنياك"
+      },
+      "sales": {
+        "title": "المبيعات والطلبات",
+        "rangeLabel": "الفترة",
+        "range7": "7 أيام",
+        "range30": "30 يوم",
+        "range90": "90 يوم",
+        "revenue": "الإيراد",
+        "deliveredOrders": "طلبات تم التسليم",
+        "deposits": "العرابين المستلمة",
+        "vsPrevious": "{change}% عن الفترة اللي قبلها",
+        "noPrevious": "مفيش بيانات للفترة اللي قبلها",
+        "depositsNote": "العرابين فلوس مستلمة ومش محسوبة في الإيراد لحد التسليم",
+        "revenueChart": "الإيراد اليومي",
+        "ordersChart": "الطلبات المسلّمة يومياً",
+        "depositsChart": "العرابين المستلمة يومياً"
+      },
+      "expiringLocks": {
+        "title": "تثبيتات تنتهي قريباً",
+        "empty": "مفيش تثبيت هيخلص الأسبوع ده",
+        "expired": "انتهى",
+        "daysLeft": "باقي {n} يوم"
+      },
+      "placeholderWarning": {
+        "title": "بيانات المعرض لسه مؤقتة",
+        "body": "الحقول دي لسه فاضية أو فيها بيانات مؤقتة: {fields}. أرقام التليفون وواتساب مش بتظهر للعملاء لحد ما تتحدّث.",
+        "link": "حدّث البيانات من الإعدادات",
+        "separator": "، "
+      }
+    },
+    "charts": {
+      "showTable": "عرض الجدول",
+      "hideTable": "إخفاء الجدول",
+      "tableDate": "التاريخ",
+      "tableValue": "القيمة"
     },
     "topbar": {
       "portalSubtitle": "لوحة التحكم · معرض محمد سراج",
@@ -168,12 +892,1506 @@
       "openStore": "افتح الموقع",
       "openStoreSearch": "افتح الموقع المتجر الرئيسي تاب جديد",
       "inNewTab": "في تاب جديد"
+    },
+    "products": {
+      "title": "المنتجات",
+      "import": {
+        "title": "استيراد الأسعار والمخزون بملف CSV",
+        "subtitle": "تحديث أسعار البيع والكميات دفعة واحدة بمطابقة كود الموديل مع معاينة التغييرات قبل التطبيق",
+        "button": "استيراد CSV",
+        "backToProducts": "العودة لقائمة المنتجات",
+        "downloadCurrentCatalog": "تحميل ملف المنتجات الحالي",
+        "instructions": {
+          "title": "تعليمات الاستيراد وقواعد البيانات",
+          "columns": "الأعمدة المدعومة: كود الموديل (إلزامي)، سعر البيع، السعر القديم، المخزون، اسم المنتج (اختياري).",
+          "pricing": "الأسعار بالجنيه المصري (EGP) ويمكن كتابة الأرقام بالعربية أو الإنجليزية مع الفواصل.",
+          "emptyMeansNoChange": "الخلية الفارغة تعني الإبقاء على القيمة الحالية دون تعديل.",
+          "clearOldPrice": "لكتابة خصم أو مسحه: القيمة 0 أو - في خانة السعر القديم تؤدي لمسح الخصم."
+        },
+        "dropzone": {
+          "ariaLabel": "منطقة رفع ملف CSV للاستيراد",
+          "prompt": "اضغط لاختيار ملف CSV أو اسحبه هنا",
+          "reading": "جاري قراءة الملف وتجهيز المعاينة...",
+          "hint": "يقبل ملفات CSV بحجم أقصى 2 ميجابايت وحتى 2000 منتج",
+          "invalidType": "يرجى اختيار ملف بصيغة CSV صالحة",
+          "fileTooLarge": "حجم الملف يتجاوز الحد الأقصى المسموح به (2 ميجابايت)"
+        },
+        "summary": {
+          "title": "ملخص المعاينة وفلاتر الحالات",
+          "filterLabel": "تصفية نتائج المعاينة حسب الحالة",
+          "changesOnly": "التعديلات فقط",
+          "allRows": "كل السطور",
+          "updates": "تعديلات جاهزة",
+          "unchanged": "بدون تغيير",
+          "notFound": "غير موجود",
+          "duplicate": "مكرر في الملف",
+          "errors": "أخطاء بيانات"
+        },
+        "preview": {
+          "applyBarTitle": "جاهز لتطبيق التعديلات",
+          "applyBarHint": "سيتم تحديث {count} منتج في قاعدة البيانات وتسجيل حركة المخزون آلياً.",
+          "applyButton": "طبّق {count} تعديل"
+        },
+        "table": {
+          "product": "المنتج",
+          "price": "سعر البيع",
+          "oldPrice": "السعر القديم",
+          "stock": "المخزون",
+          "status": "الحالة والملاحظات",
+          "archived": "مؤرشف",
+          "noMatchingRows": "لا توجد سطور مطابقة للفلتر المختار."
+        },
+        "status": {
+          "update": "تعديل",
+          "unchanged": "مطابق",
+          "notFound": "غير موجود",
+          "duplicate": "مكرر",
+          "error": "خطأ"
+        },
+        "confirmDialog": {
+          "title": "تأكيد تطبيق التعديلات",
+          "description": "أنت على وشك تطبيق {count} تعديل على أسعار ومخزون المنتجات في قاعدة البيانات. سيتم تسجيل حركات المخزون تلقائياً في سجل الكتالوج.",
+          "confirmAction": "نعم، طبّق {count} تعديل"
+        },
+        "result": {
+          "title": "تم تطبيق التعديلات بنجاح",
+          "description": "تم تحديث أسعار وكميات المنتجات في قاعدة البيانات وتسجيل حركات المخزون المرتبطة.",
+          "skipped": "تم تخطيه",
+          "importAnother": "استيراد ملف آخر",
+          "backToProducts": "العودة للمنتجات",
+          "updated": "تم تحديثه"
+        },
+        "toasts": {
+          "appliedTitle": "اكتمل الاستيراد",
+          "appliedDescription": "تم تحديث {count} منتج بنجاح."
+        },
+        "errors": {
+          "headerErrorTitle": "تعذر معالجة الملف لوجود خطأ في الترويسة",
+          "headerMissing": "ترويسة الملف مفقودة أو فارغة.",
+          "missingModelCodeHeader": "عمود كود الموديل مفقود. يجب أن يحتوي الملف على عمود (model_code أو كود الموديل).",
+          "noUpdatableColumns": "الملف لا يحتوي على أي عمود للتحديث (يجب وجود سعر البيع، السعر القديم، أو المخزون).",
+          "maxRowsExceeded": "تجاوز الملف الحد الأقصى المسموح به (2000 سطر بيانات).",
+          "emptyFile": "الملف فارغ، يرجى اختيار ملف يحتوي على بيانات.",
+          "noDataRows": "الملف يحتوي على ترويسة فقط دون سطور بيانات.",
+          "missingModelCode": "كود الموديل فارغ في هذا السطر.",
+          "modelNotFound": "كود الموديل غير مسجل في قاعدة البيانات.",
+          "duplicateModelCode": "كود الموديل مكرر داخل نفس الملف (تم تطبيق أول ظهور وتجاهل السطور المكررة).",
+          "invalidPrice": "سعر البيع غير صالح (يجب أن يكون رقماً موجباً أكبر من الصفر حتى خانتين عشريتين).",
+          "invalidOldPrice": "السعر القديم غير صالح (يجب أن يكون رقماً موجباً، أو 0 / - لإلغائه).",
+          "invalidStock": "المخزون غير صالح (يجب أن يكون رقماً صحيحاً 0 أو أكبر).",
+          "oldPriceNotGreaterThanPrice": "السعر القديم يجب أن يكون أكبر من سعر البيع الناتج.",
+          "exportFailed": "فشل تحميل ملف المنتجات الحالي.",
+          "previewFailed": "فشل تجهيز معاينة الاستيراد.",
+          "applyFailed": "فشل تطبيق تعديلات الاستيراد."
+        }
+      },
+      "newProduct": "منتج جديد",
+      "newTitle": "إضافة منتج جديد",
+      "editTitle": "تعديل المنتج",
+      "backToList": "العودة لقائمة المنتجات",
+      "searchPlaceholder": "اسم المنتج أو كود الموديل...",
+      "allCategories": "كل الأقسام",
+      "allBrands": "كل الماركات",
+      "status": {
+        "all": "كل الحالات",
+        "active": "ظاهر في المتجر",
+        "hidden": "مخفي",
+        "archived": "مؤرشف"
+      },
+      "stockFilter": {
+        "all": "كل مستويات المخزون",
+        "low": "مخزون منخفض",
+        "out": "نفد المخزون"
+      },
+      "sort": {
+        "label": "ترتيب حسب",
+        "updated": "آخر تحديث",
+        "name": "الاسم",
+        "price": "السعر",
+        "stock": "المخزون"
+      },
+      "list": {
+        "actionsFor": "إجراءات المنتج «{name}»"
+      },
+      "preview": {
+        "defaultName": "اسم المنتج الجديد",
+        "defaultBrand": "العلامة التجارية",
+        "defaultCategory": "القسم",
+        "defaultImageAlt": "صورة المنتج"
+      },
+      "validation": {
+        "nameRequired": "اسم المنتج مطلوب",
+        "modelCodeRequired": "كود الموديل مطلوب",
+        "brandRequired": "الماركة مطلوبة",
+        "categoryRequired": "القسم مطلوب"
+      },
+      "table": {
+        "product": "المنتج",
+        "category": "القسم",
+        "brand": "الماركة",
+        "price": "السعر",
+        "stock": "المخزون",
+        "status": "الحالة",
+        "actions": "إجراءات"
+      },
+      "actions": {
+        "edit": "تعديل",
+        "show": "إظهار في المتجر",
+        "hide": "إخفاء عن المتجر",
+        "archive": "أرشفة",
+        "unarchive": "إلغاء الأرشفة",
+        "delete": "حذف",
+        "confirmDeleteTitle": "حذف المنتج نهائياً",
+        "confirmDeleteDescription": "هل أنت متأكد من حذف «{name}»؟ لا يمكن التراجع عن هذا الإجراء إلا إذا لم يكن مرتبطاً بطلبات.",
+        "cancel": "إلغاء",
+        "confirmDelete": "نعم، احذف"
+      },
+      "inOrdersDialog": {
+        "title": "لا يمكن حذف المنتج",
+        "description": "هذا المنتج مسجل في طلبات سابقة للعملاء، لذا لا يمكن حذفه للحفاظ على سجل الحسابات والطلبات. يمكنك أرشفته لإخفائه تماماً عن المتجر.",
+        "archiveAction": "أرشفة بدلاً من الحذف",
+        "close": "إغلاق"
+      },
+      "toasts": {
+        "hidden": "تم إخفاء «{name}» من المتجر",
+        "shown": "تم إظهار «{name}» في المتجر",
+        "archived": "تم أرشفة «{name}»",
+        "unarchived": "تم إلغاء أرشفة «{name}»",
+        "deleted": "تم حذف «{name}» بنجاح",
+        "created": "تم إضافة المنتج بنجاح",
+        "saved": "تم حفظ التعديلات بنجاح",
+        "imageUploaded": "تم رفع الصورة بنجاح",
+        "imageDeleted": "تم حذف الصورة",
+        "imagesReordered": "تم تحديث ترتيب الصور",
+        "imagePatched": "تم تحديث بيانات الصورة"
+      },
+      "empty": {
+        "title": "مفيش منتجات بالشكل ده",
+        "description": "جرّب تغيّر كلمات البحث أو الفلاتر المطبقة.",
+        "clearFilters": "مسح الفلاتر"
+      },
+      "loading": "جاري تحميل المنتجات...",
+      "pagination": {
+        "previous": "السابق",
+        "next": "التالي",
+        "page": "صفحة {page} من {totalPages}",
+        "total": "إجمالي {total} منتج"
+      },
+      "editor": {
+        "save": "حفظ التعديلات",
+        "saving": "جاري الحفظ...",
+        "create": "إضافة المنتج",
+        "cancel": "إلغاء",
+        "unsavedChanges": "توجد تعديلات غير محفوظة. هل تريد المغادرة وتجاهلها؟",
+        "unsavedBadge": "تعديلات غير محفوظة",
+        "allSaved": "كل التعديلات محفوظة",
+        "preview": {
+          "title": "معاينة كارت المنتج",
+          "subtitle": "شكل المنتج كما يظهر للعميل في المتجر مباشرة",
+          "mobileToggle": "معاينة شكل الكارت",
+          "unsavedBadge": "تعديلات مش محفوظة"
+        },
+        "basics": {
+          "title": "البيانات الأساسية",
+          "name": "اسم المنتج",
+          "namePlaceholder": "مثال: غسالة إل جي 9 كيلو بالمجفف",
+          "modelCode": "كود الموديل",
+          "modelCodePlaceholder": "مثال: F4R5VGG2E",
+          "slug": "الرابط التعريفي (Slug)",
+          "slugPlaceholder": "هيتعمل تلقائي لو سبته فاضي",
+          "brand": "الماركة",
+          "selectBrand": "اختر الماركة",
+          "category": "القسم",
+          "selectCategory": "اختر القسم",
+          "categoryChangeWarnTitle": "تغيير القسم سيحذف المواصفات",
+          "categoryChangeWarnDescription": "تغيير القسم يؤدي إلى إعادة تحميل حقول المواصفات وحذف القيم غير الموجودة في قالب القسم الجديد. هل تريد المتابعة؟"
+        },
+        "pricing": {
+          "title": "الأسعار والمخزون",
+          "price": "سعر البيع (ج.م)",
+          "oldPrice": "السعر قبل الخصم (ج.م)",
+          "oldPriceGreater": "السعر قبل الخصم يجب أن يكون أكبر من سعر البيع",
+          "discountPercent": "نسبة الخصم المحسوبة",
+          "noDiscount": "بدون خصم",
+          "stock": "الكمية المتاحة في المخزن",
+          "lowStockThreshold": "حد التنبيه بانخفاض المخزون",
+          "availabilityMode": "نظام التوفر",
+          "modes": {
+            "auto": "تلقائي بحسب المخزون",
+            "on_request": "متاح بالطلب (حجز)",
+            "out": "نفد المخزون (غير متاح)"
+          },
+          "leadTimeText": "مدة التوريد المتوقعة للطلب",
+          "leadTimePlaceholder": "مثال: التوريد خلال 3 إلى 5 أيام عمل",
+          "taxRate": "نسبة ضريبة القيمة المضافة (%)"
+        },
+        "specs": {
+          "title": "المواصفات الفنية",
+          "noTemplate": "القسم المختار ليس له قالب مواصفات فنية مرتبط.",
+          "assignTemplateHint": "يمكنك ربط قالب مواصفات بالقسم من صفحة الأقسام والماركات.",
+          "true": "نعم / متاح",
+          "false": "لا / غير متاح",
+          "selectOption": "اختر من القائمة"
+        },
+        "setContents": {
+          "title": "محتويات الطقم",
+          "description": "سجل القطع المشمولة في الطقم وأحجامها وكمياتها لضمان وضوحها للعميل",
+          "emptyHint": "لا توجد قطع مضافة بعد. اضغط «إضافة قطعة» للبدء.",
+          "item": "اسم القطعة",
+          "itemPlaceholder": "مثال: حلة طهي بغطاء",
+          "size": "المقاس / السعة",
+          "sizePlaceholder": "مثال: 24 سم",
+          "qty": "العدد",
+          "addRow": "إضافة قطعة أخرى",
+          "removeRow": "حذف القطعة"
+        },
+        "warranty": {
+          "title": "الضمان والمنشأ",
+          "warranty": "مدة وتفاصيل الضمان",
+          "warrantyPlaceholder": "مثال: ضمان 10 سنوات شامل من الوكيل المعتمد",
+          "warrantyActivation": "طريقة تفعيل الضمان",
+          "warrantyActivationPlaceholder": "مثال: الاتصال بالخط الساخن للشركة وتثبيت الختم",
+          "origin": "بلد المنشأ والتصنيع",
+          "originPlaceholder": "مثال: مصر / تركيا / كوريا الجنوبية"
+        },
+        "images": {
+          "title": "صور المنتج",
+          "saveFirst": "احفظ المنتج الأول عشان ترفع صور",
+          "dragDrop": "اسحب الصور هنا أو اضغط للاختيار من جهازك",
+          "allowedTypes": "الصيغ المدعومة: JPEG, PNG, WebP, AVIF — الحد الأقصى 5 ميجابايت للصورة",
+          "uploading": "جاري رفع الصور...",
+          "realPhoto": "صورة حقيقية من المعرض",
+          "alt": "النص البديل (SEO)",
+          "altPlaceholder": "وصف دقيق للصورة لمحركات البحث",
+          "moveStart": "تحريك للبداية",
+          "moveEnd": "تحريك للنهاية",
+          "delete": "حذف الصورة",
+          "primary": "الصورة الرئيسية",
+          "maxSizeError": "حجم الصورة يجب ألا يتجاوز 5 ميجابايت",
+          "typeError": "صيغة الصورة غير مدعومة. الصيغ المقبولة: JPEG, PNG, WebP, AVIF",
+          "moveStartN": "تحريك الصورة {n} للبداية",
+          "moveEndN": "تحريك الصورة {n} للنهاية",
+          "realPhotoN": "صورة حقيقية من المعرض للصورة {n}",
+          "deleteN": "حذف الصورة {n}",
+          "altN": "النص البديل للصورة {n}"
+        },
+        "seo": {
+          "title": "الظهور ومحركات البحث (SEO)",
+          "visible": "المنتج ظاهر في الموقع",
+          "visibleHint": "إذا كان معطلاً لن يظهر المنتج لزوار المتجر ولن يظهر في نتائج البحث",
+          "featured": "منتج مميز (يظهر في الواجهة)",
+          "featuredHint": "يتم إبراز المنتج في الأقسام المميزة بالصفحة الرئيسية",
+          "seoTitle": "عنوان الصفحة في جوجل (SEO Title)",
+          "seoTitleHint": "موصى به ~60 حرف",
+          "seoDescription": "وصف المنتج لمحركات البحث (SEO Description)",
+          "seoDescriptionHint": "موصى به ~160 حرف",
+          "chars": "{count} حرف"
+        }
+      }
+    },
+    "catalog": {
+      "title": "الأقسام والماركات",
+      "tabs": {
+        "categories": "الأقسام",
+        "brands": "العلامات التجارية",
+        "specTemplates": "قوالب المواصفات"
+      },
+      "categories": {
+        "new": "قسم جديد",
+        "edit": "تعديل القسم",
+        "name": "اسم القسم",
+        "slug": "الرابط التعريفي",
+        "parent": "القسم الأب (الرئيسي)",
+        "noParent": "قسم رئيسي (بدون أب)",
+        "specTemplate": "قالب المواصفات المرتبط",
+        "noSpecTemplate": "بدون قالب مواصفات",
+        "intro": "نبذة عن القسم",
+        "seoTitle": "عنوان SEO",
+        "seoDescription": "وصف SEO",
+        "visible": "ظاهر في المتجر",
+        "productsCount": "{count} منتج",
+        "reorderSuccess": "تم تحديث ترتيب الأقسام",
+        "created": "تم إنشاء القسم بنجاح",
+        "updated": "تم تحديث القسم بنجاح",
+        "deleted": "تم حذف القسم بنجاح",
+        "confirmDelete": "هل أنت متأكد من حذف قسم «{name}»؟",
+        "empty": "لا توجد أقسام مسجلة حتى الآن.",
+        "moveUpN": "تحريك قسم «{name}» لأعلى (الترتيب {n})",
+        "moveDownN": "تحريك قسم «{name}» لأسفل (الترتيب {n})",
+        "editNamed": "تعديل قسم «{name}»",
+        "deleteNamed": "حذف قسم «{name}»"
+      },
+      "brands": {
+        "new": "ماركة جديدة",
+        "edit": "تعديل الماركة",
+        "name": "اسم الماركة",
+        "slug": "الرابط التعريفي",
+        "logo": "شعار الماركة",
+        "uploadLogo": "رفع الشعار",
+        "logoHint": "صورة الشعار بصيغة PNG أو WebP أو SVG بحد أقصى 5 ميجابايت",
+        "intro": "نبذة عن الماركة",
+        "seoTitle": "عنوان SEO",
+        "seoDescription": "وصف SEO",
+        "visible": "ظاهرة في المتجر",
+        "productsCount": "{count} منتج",
+        "created": "تم إضافة الماركة بنجاح",
+        "updated": "تم تحديث الماركة بنجاح",
+        "deleted": "تم حذف الماركة بنجاح",
+        "confirmDelete": "هل أنت متأكد من حذف ماركة «{name}»؟",
+        "empty": "لا توجد ماركات مسجلة حتى الآن.",
+        "logoSizeError": "حجم الشعار يجب ألا يتجاوز 5 ميجابايت",
+        "logoUploaded": "تم رفع الشعار بنجاح",
+        "editNamed": "تعديل ماركة «{name}»",
+        "deleteNamed": "حذف ماركة «{name}»"
+      },
+      "specTemplates": {
+        "new": "قالب مواصفات جديد",
+        "edit": "تعديل قالب المواصفات",
+        "name": "اسم القالب",
+        "fieldsCount": "{count} خاصية",
+        "usedIn": "مستخدم في {count} قسم",
+        "fields": "حقول وخصائص القالب",
+        "addField": "إضافة خاصية",
+        "removeField": "حذف",
+        "key": "المفتاح البرمجي (key)",
+        "keyPlaceholder": "e.g. capacity",
+        "label": "الاسم بالعربي",
+        "labelPlaceholder": "مثال: السعة باللتر",
+        "type": "النوع",
+        "unit": "الوحدة",
+        "unitPlaceholder": "مثال: لتر، وات",
+        "options": "الخيارات (مفصولة بفاصلة)",
+        "optionsPlaceholder": "مثال: أبيض, فضي, أسود",
+        "filterable": "فلترة بالمتجر",
+        "comparable": "مقارنة",
+        "emptyHint": "اضغط «إضافة خاصية» لإضافة أول مواصفة فنية للقالب.",
+        "types": {
+          "text": "نص",
+          "number": "رقم",
+          "boolean": "نعم/لا (منطقي)",
+          "choice": "اختيار من متعدد"
+        },
+        "created": "تم إنشاء القالب بنجاح",
+        "updated": "تم تحديث القالب بنجاح",
+        "deleted": "تم حذف القالب بنجاح",
+        "confirmDelete": "هل أنت متأكد من حذف قالب «{name}»؟",
+        "empty": "لا توجد قوالب مواصفات حتى الآن.",
+        "editNamed": "تعديل قالب «{name}»",
+        "deleteNamed": "حذف قالب «{name}»",
+        "moveUpN": "تحريك الخاصية {n} لأعلى",
+        "moveDownN": "تحريك الخاصية {n} لأسفل",
+        "removeFieldN": "حذف الخاصية {n}"
+      },
+      "errors": {
+        "hasRelations": "لا يمكن حذف القسم لأنه يحتوي على منتجات أو أقسام فرعية",
+        "hasProducts": "لا يمكن حذف الماركة لأنها مرتبطة بمنتجات",
+        "inUse": "لا يمكن حذف قالب المواصفات لأنه مستخدم في أقسام"
+      }
+    },
+    "orders": {
+      "title": "الطلبات",
+      "searchPlaceholder": "ابحث برقم الطلب، اسم العميل، أو الموبايل…",
+      "exportCsv": "تصدير CSV",
+      "tabs": {
+        "all": "الكل",
+        "new": "جديد",
+        "awaiting_payment": "بانتظار الدفع",
+        "awaiting_deposit": "بانتظار العربون",
+        "payment_rejected": "الدفع مرفوض",
+        "confirmed": "مؤكد",
+        "out_for_delivery": "خرج للتوصيل",
+        "delivered": "تم التسليم",
+        "cancelled": "ملغي"
+      },
+      "status": {
+        "new": "جديد",
+        "awaiting_payment": "بانتظار الدفع",
+        "awaiting_deposit": "بانتظار العربون",
+        "payment_rejected": "الدفع مرفوض",
+        "confirmed": "مؤكد",
+        "out_for_delivery": "خرج للتوصيل",
+        "delivered": "تم التسليم",
+        "cancelled": "ملغي"
+      },
+      "types": {
+        "order": "طلبات",
+        "bridal": "جهاز عروسة"
+      },
+      "filters": {
+        "allTypes": "كل الأنواع",
+        "allMethods": "كل طرق الدفع",
+        "from": "من تاريخ",
+        "to": "إلى تاريخ",
+        "clear": "مسح الفلاتر",
+        "lockExpiring": "التثبيت هيخلص خلال {days} أيام",
+        "removeLockExpiring": "إزالة فلتر انتهاء التثبيت"
+      },
+      "bridal": {
+        "lockExpired": "انتهى تثبيت السعر",
+        "daysLeft": "باقي {n} يوم",
+        "outForDeliveryBlockedReason": "«خرج للتوصيل» بيتفعل بعد ما نتفق على ميعاد التوصيل"
+      },
+      "table": {
+        "orderNo": "رقم الطلب",
+        "date": "التاريخ",
+        "customer": "العميل",
+        "phone": "الموبايل",
+        "items": "عدد القطع",
+        "total": "الإجمالي",
+        "paid": "المدفوع",
+        "method": "طريقة الدفع",
+        "status": "الحالة",
+        "actions": "إجراءات",
+        "view": "عرض التفاصيل"
+      },
+      "empty": {
+        "title": "لا توجد طلبات مطابقة",
+        "description": "لم يتم العثور على أي طلبات بالفلاتر المحددة."
+      },
+      "pagination": {
+        "showing": "عرض {from} إلى {to} من إجمالي {total} طلب",
+        "prev": "السابق",
+        "next": "التالي"
+      },
+      "detail": {
+        "backToList": "العودة للطلبات",
+        "printInvoice": "طباعة الفاتورة",
+        "customerTitle": "بيانات العميل",
+        "customerName": "اسم العميل",
+        "customerPhone": "رقم الموبايل",
+        "chatWhatsapp": "محادثة واتساب",
+        "address": "العنوان",
+        "customerNotes": "ملاحظات العميل",
+        "noNotes": "لا توجد ملاحظات من العميل",
+        "itemsTitle": "المنتجات المطلوبة",
+        "item": "المنتج",
+        "modelCode": "كود الموديل",
+        "qty": "الكمية",
+        "unitPrice": "سعر الوحدة",
+        "lineTotal": "المجموع",
+        "totalsTitle": "تفاصيل الحساب",
+        "subtotal": "مجموع المنتجات",
+        "discount": "الخصم",
+        "deliveryFee": "مصاريف التوصيل",
+        "total": "الإجمالي",
+        "deposit": "العربون المطلوب",
+        "paid": "المدفوع",
+        "remaining": "المتبقي",
+        "paymentsTitle": "سجل المدفوعات",
+        "noPayments": "لا توجد مدفوعات مسجلة حتى الآن",
+        "confirmPayment": "تأكيد دفعة جديدة",
+        "rejectPayment": "رفض الدفع",
+        "paymentConfirmed": "تم تأكيد الدفعة بنجاح",
+        "paymentRejected": "تم رفض الدفع بنجاح",
+        "statusActionsTitle": "إجراءات الحالة",
+        "transition": {
+          "confirmed": "تأكيد الطلب",
+          "out_for_delivery": "خرج للتوصيل",
+          "delivered": "تم التسليم",
+          "cancelled": "إلغاء الطلب"
+        },
+        "statusChanged": "تم تغيير حالة الطلب إلى {status}",
+        "sendWhatsapp": "ابعت للعميل على واتساب",
+        "historyTitle": "سجل الأحداث والتغييرات",
+        "noHistory": "لا توجد أحداث مسجلة",
+        "events": {
+          "payment_confirmed": "تأكيد دفع",
+          "payment_rejected": "رفض دفع"
+        },
+        "internalNotesTitle": "ملاحظات الإدارة الداخلية",
+        "internalNotesPlaceholder": "اكتب ملاحظات داخلية سرية لا تظهر للعميل (حد أقصى 2000 حرف)…",
+        "saveNotes": "حفظ الملاحظات",
+        "notesSaved": "اتحفظت الملاحظات",
+        "whatsappMessagesTitle": "رسائل واتساب المسجلة",
+        "noWhatsappMessages": "لم يتم تسجيل رسائل واتساب لهذا الطلب حتى الآن",
+        "shortagesWarning": "تنبيه نقص في المخزون:",
+        "shortageItem": "{name}: المطلوب {requested}، المتاح كان {taken}",
+        "noStatusActions": "مفيش إجراءات متاحة للحالة دي"
+      },
+      "dialogs": {
+        "cancelTitle": "إلغاء الطلب",
+        "cancelDescription": "اكتب سبب إلغاء الطلب لتسجيله في سجل الأحداث:",
+        "cancelReasonLabel": "سبب الإلغاء",
+        "cancelReasonPlaceholder": "سبب الإلغاء (3 أحرف على الأقل)…",
+        "confirmCancel": "تأكيد الإلغاء",
+        "confirmPaymentTitle": "تأكيد الدفع",
+        "confirmPaymentDescription": "أدخل المبلغ المدفوع وملاحظات المعاملة:",
+        "amountLabel": "المبلغ المدفوع (ج.م)",
+        "noteLabel": "ملاحظة (اختياري)",
+        "rejectTitle": "رفض الدفع",
+        "rejectDescription": "اكتب سبب رفض الدفع لإرساله للعميل:",
+        "reasonLabel": "سبب الرفض"
+      },
+      "invoice": {
+        "title": "فاتورة داخلية — ليست إيصال ضريبي",
+        "print": "طباعة",
+        "back": "رجوع للطلب",
+        "showroomAddressPlaceholder": "[عنوان المعرض]",
+        "whatsappLabel": "واتساب",
+        "whatsappPlaceholder": "[رقم الواتساب]",
+        "customerInfo": "بيانات العميل",
+        "vatNotice": "شامل ضريبة القيمة المضافة 14%"
+      },
+      "paymentMethods": {
+        "cod": "الدفع عند الاستلام",
+        "instapay": "إنستا باي",
+        "vodafone_cash": "فودافون كاش",
+        "fawry": "فوري"
+      }
+    },
+    "confirm": {
+      "pageTitle": "تأكيد دفع الطلب",
+      "header": "تأكيد دفع الطلب {no}",
+      "notFound": "الرابط ده مش صحيح أو انتهى",
+      "backToDashboard": "رجوع للوحة التحكم",
+      "notActionable": "الطلب ده {status}، مفيش حاجة محتاجة تأكيد",
+      "partialDepositRecorded": "اتسجل {amount} — فاضل {remaining} من العربون",
+      "summary": {
+        "title": "تفاصيل الدفع",
+        "customer": "العميل",
+        "method": "طريقة الدفع",
+        "total": "إجمالي الطلب",
+        "paid": "المدفوع حالياً",
+        "expected": "المبلغ المطلوب",
+        "depositExpected": "العربون المطلوب ({pct}%)",
+        "depositRequired": "العربون المطلوب",
+        "depositPaid": "المدفوع من العربون",
+        "depositRemaining": "المتبقي من العربون",
+        "remaining": "المتبقي"
+      },
+      "actions": {
+        "amountLabel": "المبلغ المدفوع (ج.م)",
+        "amountPlaceholder": "مثال: 500",
+        "noteLabel": "ملاحظة (اختياري)",
+        "notePlaceholder": "أي ملاحظة تخص التحويل أو المعاملة",
+        "confirmButton": "تأكيد الدفع",
+        "confirming": "جاري التأكيد...",
+        "rejectButton": "رفض"
+      },
+      "dialog": {
+        "title": "رفض الدفع",
+        "description": "اكتب سبب رفض التحويل، وهيتم إرساله للعميل للتوضيح",
+        "reasonLabel": "سبب الرفض",
+        "reasonPlaceholder": "مثال: الصورة مش واضحة، المبلغ غير مطابق",
+        "confirmReject": "تأكيد الرفض",
+        "rejecting": "جاري الرفض...",
+        "cancel": "إلغاء"
+      },
+      "result": {
+        "confirmedTitle": "اتأكد الدفع",
+        "rejectedTitle": "اترفض الدفع",
+        "statusLabel": "حالة الطلب الآن:",
+        "paidAmount": "تم دفع:",
+        "remainingAmount": "المتبقي:",
+        "bridalLockedNotice": "الأسعار اتثبتت لحد {date}",
+        "sendBridalLockedWhatsapp": "ابعت رسالة تثبيت الأسعار على واتساب",
+        "openOrder": "افتح الطلب",
+        "sendWhatsapp": "ابعت للعميل على واتساب",
+        "shortageWarning": "تنبيه نقص في المخزون:",
+        "shortageItem": "{name}: المطلوب {requested}، المتاح كان {taken}"
+      },
+      "errors": {
+        "generic": "حدث خطأ غير متوقع، يرجى المحاولة مرة أخرى",
+        "notFound": "الرابط ده مش صحيح أو انتهى",
+        "conflict": "الطلب اتحدث، حدّث الصفحة",
+        "badRequest": "المبلغ غير صحيح أو أكبر من الباقي",
+        "forbidden": "ليس لديك صلاحية لتأكيد الدفع",
+        "unauthorized": "يرجى تسجيل الدخول أولاً",
+        "amountRequired": "يرجى إدخال المبلغ",
+        "invalidAmount": "يرجى إدخال رقم صحيح",
+        "amountPositive": "المبلغ يجب أن يكون أكبر من صفر",
+        "amountExceedsRemaining": "المبلغ أكبر من المتبقي",
+        "reasonRequired": "سبب الرفض يجب أن يكون 3 أحرف على الأقل",
+        "reasonTooLong": "سبب الرفض لا يزيد عن 300 حرف"
+      }
+    },
+    "bridal": {
+      "pageTitle": "إدارة باقات وإعدادات العروسة",
+      "panelTitle": "بيانات حجز العروسة",
+      "tiersTabsAria": "باقات جهاز العروسة",
+      "daysCount": "{days} يوم",
+      "viewListLink": "عرض قائمة العروسة",
+      "status": {
+        "draft": "مسودة",
+        "awaiting_deposit": "بانتظار العربون",
+        "locked": "محجوز (السعر مثبت)",
+        "delivery_agreed": "اتفقنا على التوصيل",
+        "delivered": "تم التسليم",
+        "cancelled": "ملغي",
+        "lock_expired": "انتهى التثبيت"
+      },
+      "detail": {
+        "lockEndDate": "تاريخ انتهاء التثبيت",
+        "lockDays": "مدة التثبيت",
+        "preferredDate": "ميعاد التوصيل المفضل",
+        "agreedDeliveryDate": "ميعاد التوصيل المتفق عليه",
+        "listLink": "رابط قائمة العروسة",
+        "openBrideList": "افتح قائمة العروسة (للقراءة)"
+      },
+      "actions": {
+        "setDeliveryDate": "تحديد ميعاد التوصيل",
+        "setDeliveryDateNotice": "تحديد ميعاد التوصيل يخصم المنتجات من المخزون ويحول حالة الحجز إلى اتفقنا على التوصيل.",
+        "deliveryDateLabel": "تاريخ التوصيل",
+        "deliveryDateSuccess": "تم تحديد ميعاد التوصيل بنجاح",
+        "extendLock": "مدّ التثبيت",
+        "extendLockNotice": "اختر تاريخاً جديداً لانتهاء فترة تثبيت السعر.",
+        "extendLockUntilLabel": "تاريخ التثبيت الجديد",
+        "extendLockSuccess": "تم تمديد فترة التثبيت بنجاح",
+        "reprice": "حدّث الأسعار",
+        "repriceConfirmNotice": "سيتم تحديث أسعار الأجهزة بالأسعار الحالية في الكتالوج وبدء فترة تثبيت جديدة من اليوم لحساب العروسة.",
+        "confirmReprice": "تأكيد تحديث الأسعار",
+        "repriceSuccess": "تم تحديث الأسعار بنجاح"
+      },
+      "reprice": {
+        "resultTitle": "نتيجة تحديث الأسعار",
+        "resultDescription": "تم تحديث أسعار القائمة وبدء فترة تثبيت جديدة.",
+        "oldTotal": "الإجمالي القديم",
+        "newTotal": "الإجمالي الجديد",
+        "difference": "فرق السعر",
+        "increased": "زاد {amount}",
+        "decreased": "قل {amount}",
+        "noDifference": "مفيش فرق",
+        "sendWhatsapp": "ابعت للعروسة على واتساب"
+      },
+      "editor": {
+        "totalLabel": "إجمالي الباقة (بالأسعار الحالية)",
+        "dirtyBadge": "تعديلات غير محفوظة",
+        "cleanBadge": "كل التعديلات محفوظة",
+        "saveTier": "حفظ الباقة",
+        "tierSavedSuccess": "تم حفظ تعديلات الباقة بنجاح",
+        "basicsTitle": "بيانات الباقة الأساسية",
+        "nameLabel": "اسم الباقة",
+        "highlightsLabel": "الميزات والضمانات",
+        "addHighlight": "أضف ميزة",
+        "highlightPlaceholder": "ميزة {n} (مثال: أجهزة أساسية بضمان معتمد)",
+        "roomsTitle": "منتجات الغرف",
+        "addProduct": "أضف منتج",
+        "roomEmpty": "لا توجد منتجات مضافة لهذه الغرفة بعد",
+        "flaggedBadge": "نفذ/مخفي",
+        "addProductTitle": "إضافة منتج إلى {room}"
+      },
+      "settings": {
+        "title": "إعدادات حجز العروسة",
+        "depositPctLabel": "نسبة العربون المطلوب",
+        "depositPctHint": "النسبة المئوية من إجمالي الحجز (بين 1% و50%)",
+        "lockDaysLabel": "مدة تثبيت الأسعار (أيام)",
+        "lockDaysHint": "عدد أيام تثبيت السعر بعد دفع العربون (بين 7 و180 يوماً)",
+        "notice": "الحجوزات الحالية مش هتتأثر",
+        "saveButton": "حفظ الإعدادات",
+        "savedSuccess": "تم حفظ إعدادات العروسة بنجاح",
+        "depositPctError": "نسبة العربون يجب أن تكون بين 1 و50",
+        "lockDaysError": "مدة التثبيت يجب أن تكون بين 7 و180 يوماً"
+      },
+      "errors": {
+        "deliveryDateInvalid": "يرجى اختيار تاريخ توصيل صحيح لا يسبق اليوم",
+        "extendDateInvalid": "تاريخ التمديد يجب أن يكون بعد تاريخ اليوم"
+      }
+    },
+    "promotions": {
+      "pageTitle": "العروض والكوبونات",
+      "tabs": {
+        "flash": "عروض الفلاش",
+        "coupons": "كوبونات الخصم"
+      },
+      "flash": {
+        "title": "عروض الفلاش",
+        "new": "عرض جديد",
+        "edit": "تعديل العرض",
+        "empty": "لا توجد عروض فلاش حتى الآن.",
+        "searchPlaceholder": "ابحث باسم العرض…",
+        "table": {
+          "name": "اسم العرض",
+          "status": "الحالة",
+          "startsAt": "يبدأ في",
+          "endsAt": "ينتهي في",
+          "itemCount": "المنتجات",
+          "actions": "إجراءات"
+        },
+        "status": {
+          "running": "شغال",
+          "scheduled": "مجدول",
+          "ended": "منتهي"
+        },
+        "itemsCount": "{count} منتج",
+        "endNow": "إنهاء العرض دلوقتي",
+        "confirmEndTitle": "إنهاء العرض دلوقتي",
+        "confirmEnd": "هل أنت متأكد من إنهاء هذا العرض فوراً؟",
+        "confirmEndDesc": "المنتجات هترجع لسعرها الأصلي فوراً في المتجر.",
+        "ending": "جاري الإنهاء...",
+        "confirmDeleteTitle": "حذف عرض الفلاش",
+        "confirmDelete": "هل أنت متأكد من حذف عرض «{name}»؟",
+        "confirmDeleteDesc": "سيتم حذف العرض ولن يظهر في المتجر.",
+        "deleting": "جاري الحذف...",
+        "name": "اسم العرض",
+        "namePlaceholder": "مثال: عروض الصيف 2026",
+        "startsAt": "تاريخ ووقت البداية",
+        "endsAt": "تاريخ ووقت النهاية",
+        "productsTitle": "منتجات العرض",
+        "addProduct": "إضافة منتج",
+        "addProductTitle": "إضافة منتج لعرض الفلاش",
+        "addProductDescription": "ابحث عن المنتج من الكتالوج لإضافته للعرض.",
+        "noProducts": "لم يتم إضافة منتجات للعرض بعد.",
+        "colProduct": "المنتج",
+        "colRegularPrice": "السعر الأصلي",
+        "colSalePrice": "سعر العرض (ج.م)",
+        "colDiscount": "الخصم",
+        "percentOff": "{percent}%",
+        "removeProduct": "إزالة المنتج",
+        "created": "تم إنشاء العرض بنجاح",
+        "updated": "تم تحديث العرض بنجاح",
+        "endedSuccess": "تم إنهاء العرض بنجاح",
+        "deleted": "تم حذف العرض بنجاح",
+        "errors": {
+          "minItems": "يجب إضافة منتج واحد على الأقل",
+          "salePriceRequired": "سعر العرض مطلوب",
+          "salePriceGteRegular": "سعر العرض لازم يكون أقل من السعر الأصلي",
+          "salePricePositive": "سعر العرض يجب أن يكون أكبر من صفر",
+          "overlap": "المنتجات دي في عرض تاني في نفس الوقت"
+        }
+      },
+      "coupons": {
+        "title": "كوبونات الخصم",
+        "new": "كوبون جديد",
+        "edit": "تعديل الكوبون",
+        "empty": "لا توجد كوبونات مسجلة حتى الآن.",
+        "searchPlaceholder": "ابحث بكود الكوبون…",
+        "table": {
+          "code": "الكود",
+          "value": "قيمة الخصم",
+          "minOrder": "الحد الأدنى للطلب",
+          "status": "الحالة",
+          "usage": "الاستخدام",
+          "totalDiscount": "إجمالي الخصم",
+          "actions": "إجراءات"
+        },
+        "status": {
+          "running": "شغال",
+          "scheduled": "مجدول",
+          "expired": "منتهي",
+          "inactive": "معطل"
+        },
+        "types": {
+          "percent": "نسبة مئوية (%)",
+          "fixed": "مبلغ ثابت (ج.م)"
+        },
+        "percentValue": "{value}%",
+        "fixedValue": "{value} ج.م",
+        "unlimited": "∞",
+        "usageDisplay": "{active} / {max}",
+        "noMinOrder": "بدون حد أدنى",
+        "confirmDeleteTitle": "حذف الكوبون",
+        "confirmDelete": "هل أنت متأكد من حذف كود «{code}»؟",
+        "confirmDeleteDesc": "إذا كان الكود قد استُخدم سابقاً سيتم إيقافه فقط بدلاً من حذفه نهائياً.",
+        "deleting": "جاري الحذف...",
+        "code": "كود الخصم",
+        "codePlaceholder": "مثال: SUMMER20",
+        "codeHint": "حروف وأرقام إنجليزية وشرطات فقط",
+        "type": "نوع الخصم",
+        "valuePercent": "نسبة الخصم (1 - 90%)",
+        "valueFixed": "قيمة الخصم (ج.م)",
+        "minOrder": "الحد الأدنى للطلب (ج.م)",
+        "minOrderPlaceholder": "0 إذا مفيش حد أدنى",
+        "startsAt": "تاريخ البداية (اختياري)",
+        "endsAt": "تاريخ النهاية (اختياري)",
+        "maxUses": "الحد الأقصى لمرات الاستخدام (اختياري)",
+        "maxUsesPlaceholder": "اتركه فارغاً لاستخدام غير محدود",
+        "maxUsesPerPhone": "الحد الأقصى لكل رقم موبايل (اختياري)",
+        "maxUsesPerPhonePlaceholder": "اتركه فارغاً لاستخدام غير محدود",
+        "scopesTitle": "نطاق التطبيق (اختياري)",
+        "allCategories": "جميع الأقسام",
+        "categories": "الأقسام المشمولة",
+        "allBrands": "جميع الماركات",
+        "brands": "الماركات المشمولة",
+        "active": "الكوبون مفعل",
+        "created": "تم إنشاء الكوبون بنجاح",
+        "updated": "تم تحديث الكوبون بنجاح",
+        "deleted": "تم حذف الكوبون بنجاح",
+        "deactivated": "تم إيقاف الكوبون لأنه استُخدم في طلبات سابقة",
+        "errors": {
+          "duplicateCode": "الكود ده موجود بالفعل",
+          "invalidPercent": "نسبة الخصم يجب أن تكون بين 1 و 90%",
+          "invalidFixed": "قيمة الخصم يجب أن تكون أكبر من صفر"
+        }
+      }
+    },
+    "reports": {
+      "pageTitle": "التقارير",
+      "tabsLabel": "أنواع التقارير",
+      "empty": "مفيش بيانات في الفترة دي",
+      "percent": "{value}%",
+      "tabs": {
+        "revenue": "الإيرادات",
+        "splits": "التقسيمات",
+        "bestSellers": "الأكثر مبيعاً",
+        "coupons": "الكوبونات",
+        "flashSales": "عروض البرق",
+        "bridalFunnel": "مسار العروسة",
+        "repeatCustomers": "العملاء المتكررون"
+      },
+      "period": {
+        "label": "الفترة",
+        "presets": {
+          "today": "اليوم",
+          "d7": "7 أيام",
+          "d30": "30 يوم",
+          "d90": "90 يوم",
+          "thisMonth": "الشهر ده",
+          "lastMonth": "الشهر اللي فات",
+          "custom": "مخصص"
+        },
+        "from": "من",
+        "to": "إلى",
+        "apply": "تطبيق",
+        "groupBy": "تجميع حسب",
+        "groupings": {
+          "day": "يوم",
+          "week": "أسبوع",
+          "month": "شهر"
+        },
+        "exportCsv": "تصدير CSV"
+      },
+      "totals": {
+        "revenue": "إجمالي الإيراد",
+        "orders": "عدد الطلبات",
+        "aov": "متوسط قيمة الطلب"
+      },
+      "revenue": {
+        "revenueChart": "الإيراد بمرور الوقت",
+        "ordersChart": "الطلبات بمرور الوقت",
+        "table": {
+          "caption": "الإيراد حسب الفترة",
+          "period": "الفترة",
+          "revenue": "الإيراد",
+          "orders": "عدد الطلبات",
+          "aov": "متوسط الطلب"
+        },
+        "total": "الإجمالي"
+      },
+      "splits": {
+        "sections": {
+          "category": "حسب القسم",
+          "brand": "حسب الماركة",
+          "paymentMethod": "حسب طريقة الدفع",
+          "zone": "حسب المنطقة",
+          "type": "حسب النوع"
+        },
+        "table": {
+          "name": "البند",
+          "revenue": "الإيراد",
+          "orders": "عدد الطلبات"
+        },
+        "total": "الإجمالي",
+        "undefinedLabel": "غير محدد"
+      },
+      "bestSellers": {
+        "table": {
+          "name": "المنتج",
+          "modelCode": "كود الموديل",
+          "units": "الكمية",
+          "revenue": "الإيراد",
+          "stock": "المخزون"
+        }
+      },
+      "coupons": {
+        "table": {
+          "code": "الكوبون",
+          "uses": "الاستخدامات",
+          "discount": "الخصم",
+          "revenue": "الإيراد"
+        }
+      },
+      "flash": {
+        "table": {
+          "name": "العرض",
+          "period": "الفترة",
+          "units": "الكمية",
+          "revenue": "الإيراد",
+          "discount": "خصم تقريبي"
+        },
+        "discountNote": "الخصم تقريبي ويُحسب من فرق سعر البيع وقت العرض عن السعر العادي."
+      },
+      "funnel": {
+        "table": {
+          "stage": "المرحلة",
+          "count": "العدد",
+          "conversion": "نسبة التحويل"
+        },
+        "steps": {
+          "lists": "قوائم اتعملت",
+          "reservations": "حجوزات بعربون",
+          "delivered": "اتسلّمت"
+        }
+      },
+      "repeat": {
+        "allTime": "كل الفترات",
+        "period": "الفترة المختارة",
+        "customers": "عدد العملاء",
+        "repeatCustomers": "العملاء المتكررون",
+        "share": "النسبة"
+      }
+    },
+    "productPicker": {
+      "description": "ابحث في الكتالوج بالاسم أو كود الموديل واختار المنتج.",
+      "searchPlaceholder": "ابحث بالاسم أو كود الموديل…",
+      "noResults": "لا توجد منتجات مطابقة للبحث",
+      "loading": "جاري البحث…"
+    },
+    "notify": {
+      "pageTitle": "بلّغني",
+      "subtitle": "متابعة طلبات العملاء لإشعارهم بالمنتجات الناقصة فور توفرها ومراسلتهم على واتساب",
+      "searchPlaceholder": "ابحث باسم المنتج أو كود الموديل…",
+      "empty": "مفيش طلبات بلّغني لسه",
+      "errorLoading": "تعذر تحميل طلبات بلّغني، يرجى المحاولة لاحقاً",
+      "retry": "إعادة المحاولة",
+      "refresh": "تحديث",
+      "readyFilter": "جاهزة للإرسال",
+      "removeReadyFilter": "إزالة فلتر الجاهزية للإرسال",
+      "table": {
+        "product": "المنتج",
+        "modelCode": "كود الموديل",
+        "stock": "المخزون",
+        "availability": "حالة التوفر",
+        "waiting": "في الانتظار",
+        "sent": "تم الإرسال",
+        "lastRequest": "آخر طلب",
+        "actions": "إجراءات"
+      },
+      "badge": {
+        "available": "متوفر",
+        "outOfStock": "لسه ناقص",
+        "waiting": "في الانتظار",
+        "sent": "تم الإرسال",
+        "ready": "متوفر الآن"
+      },
+      "detail": {
+        "title": "طلبات إشعار المنتج",
+        "productInfo": "بيانات المنتج",
+        "customerName": "اسم العميل",
+        "phone": "رقم الموبايل",
+        "status": "الحالة",
+        "requestDate": "تاريخ الطلب",
+        "sentDate": "تاريخ الإرسال",
+        "sendWhatsapp": "ابعت على واتساب",
+        "resendWhatsapp": "ابعت تاني",
+        "notAvailableHelper": "المنتج لسه مش متوفر",
+        "notAvailableNotice": "المنتج لسه مش متوفر في المعرض، لا يمكن الإرسال حتى يتوفر المخزون.",
+        "sentSuccess": "تم تسجيل الإرسال وفتح محادثة واتساب بنجاح",
+        "empty": "لا توجد طلبات مسجلة لهذا المنتج",
+        "openRequests": "عرض الطلبات ({count})"
+      }
+    },
+    "reviews": {
+      "pageTitle": "التقييمات",
+      "subtitle": "مراجعة تقييمات العملاء واعتمادها أو إخفاؤها والرد عليها",
+      "pendingBadgeSr": "{count} تقييم مستني المراجعة",
+      "searchPlaceholder": "ابحث باسم المنتج…",
+      "starsSelectLabel": "تصفية حسب عدد النجوم",
+      "starsAll": "كل التقييمات",
+      "starsFilter": "{stars} نجوم",
+      "starsSr": "{stars} من {total} نجوم",
+      "verifiedBuyer": "اشترى من المعرض",
+      "replyTitle": "رد المعرض",
+      "replyAction": "رد المعرض",
+      "editReply": "تعديل الرد",
+      "approve": "اعتماد",
+      "reject": "رفض",
+      "hide": "إخفاء",
+      "delete": "حذف",
+      "refresh": "تحديث",
+      "tabs": {
+        "ariaLabel": "تبويبات حالة التقييمات",
+        "pending": "بانتظار المراجعة",
+        "approved": "معتمدة",
+        "rejected": "مرفوضة ومخفية"
+      },
+      "empty": {
+        "pending": "مفيش تقييمات جديدة بانتظار المراجعة",
+        "approved": "مفيش تقييمات معتمدة حتى الآن",
+        "rejected": "مفيش تقييمات مرفوضة أو مخفية"
+      },
+      "table": {
+        "product": "المنتج",
+        "reviewer": "العميل",
+        "rating": "التقييم",
+        "text": "نص التقييم",
+        "date": "التاريخ",
+        "actions": "إجراءات"
+      },
+      "replyDialog": {
+        "title": "الرد على تقييم {name}",
+        "description": "الرد هيظهر تحت التقييم في صفحة المنتج لكل الزوار باسم المعرض.",
+        "label": "نص الرد",
+        "placeholder": "اكتب رد المعرض على التقييم…",
+        "charCount": "{current} / {max} حرف",
+        "save": "حفظ الرد",
+        "clearReply": "مسح الرد",
+        "tooLong": "الرد لازم يكون {max} حرف أو أقل"
+      },
+      "confirmDeleteTitle": "حذف التقييم",
+      "confirmDeleteDesc": "هل أنت متأكد من حذف تقييم العميل «{name}» لمنتج «{product}»؟ لا يمكن التراجع عن هذا الإجراء.",
+      "notifications": {
+        "approved": "تم اعتماد التقييم بنجاح",
+        "rejected": "تم رفض التقييم وإخفاؤه",
+        "replySaved": "تم حفظ رد المعرض بنجاح",
+        "replyCleared": "تم مسح رد المعرض",
+        "deleted": "تم حذف التقييم بنجاح"
+      }
+    },
+    "content": {
+      "loading": "جاري تحميل المحرر…",
+      "tabs": {
+        "home": "الصفحة الرئيسية",
+        "pages": "الصفحات",
+        "guides": "دليل الشراء",
+        "quiz": "ساعدني أختار"
+      },
+      "pages": {
+        "listTitle": "صفحات الموقع",
+        "listSubtitle": "عدّل نصوص الصفحات وسيو كل صفحة، وحدد إذا كانت ظاهرة للزوار.",
+        "loading": "جاري تحميل الصفحات…",
+        "empty": "مفيش صفحات متاحة.",
+        "loadError": "تعذر تحميل الصفحات",
+        "published": "منشورة",
+        "draft": "مسودة",
+        "edit": "تعديل",
+        "editNamed": "تعديل صفحة «{title}»",
+        "updatedAt": "آخر تحديث: {date}",
+        "back": "رجوع للصفحات",
+        "editorHeading": "تعديل الصفحة",
+        "editorLoadError": "تعذر تحميل الصفحة",
+        "fieldTitle": "عنوان الصفحة",
+        "fieldBody": "محتوى الصفحة",
+        "fieldSeoTitle": "عنوان SEO",
+        "fieldSeoDescription": "وصف SEO",
+        "fieldPublished": "الصفحة منشورة للزوار",
+        "counter": "{count}/{max}",
+        "snippetLabel": "معاينة نتيجة البحث",
+        "snippetUrl": "/pages/{slug}",
+        "previewTitleFallback": "عنوان الصفحة",
+        "previewDescriptionFallback": "وصف مختصر للصفحة يظهر في نتيجة البحث.",
+        "save": "احفظ",
+        "saving": "جاري الحفظ…",
+        "savedToast": "اتحفظت الصفحة",
+        "saveError": "تعذر حفظ الصفحة",
+        "viewPage": "شوف الصفحة"
+      },
+      "guides": {
+        "listTitle": "أدلة الشراء",
+        "listSubtitle": "أنشئ وعدّل أدلة الشراء، وأضف الأقسام والمنتجات المرتبطة، وحدد حالة النشر.",
+        "loading": "جاري تحميل الأدلة…",
+        "empty": "لسه مفيش أدلة. ابدأ بإنشاء أول دليل.",
+        "loadError": "تعذر تحميل الأدلة",
+        "searchPlaceholder": "ابحث بالعنوان…",
+        "statusFilter": "فلترة حسب الحالة",
+        "status": {
+          "all": "الكل",
+          "published": "منشور",
+          "draft": "مسودة"
+        },
+        "new": "دليل جديد",
+        "published": "منشور",
+        "draft": "مسودة",
+        "edit": "تعديل",
+        "editNamed": "تعديل دليل «{title}»",
+        "updatedAt": "آخر تحديث: {date}",
+        "back": "رجوع للأدلة",
+        "editorHeading": "تعديل الدليل",
+        "editorCreateHeading": "دليل جديد",
+        "editorLoadError": "تعذر تحميل الدليل",
+        "fieldTitle": "عنوان الدليل",
+        "fieldSlug": "الرابط (slug)",
+        "fieldSummary": "ملخص الدليل",
+        "fieldCover": "صورة الغلاف",
+        "fieldBody": "محتوى الدليل",
+        "fieldCategories": "الأقسام المرتبطة",
+        "fieldProducts": "المنتجات المرتبطة",
+        "fieldSeoTitle": "عنوان SEO",
+        "fieldSeoDescription": "وصف SEO",
+        "fieldPublished": "الدليل منشور للزوار",
+        "pickCategory": "اختر قسم",
+        "addCategory": "أضف قسم",
+        "addProduct": "أضف منتج",
+        "productPickerTitle": "اختر منتج",
+        "removeTerm": "امسح «{name}»",
+        "maxTerms": "أقصى عدد أقسام أو منتجات 4",
+        "duplicateProduct": "المنتج مضاف بالفعل",
+        "titleRequired": "عنوان الدليل مطلوب",
+        "slugInvalid": "الرابط حروف إنجليزي صغيرة وأرقام وشرطة بس",
+        "counter": "{count}/{max}",
+        "snippetLabel": "معاينة نتيجة البحث",
+        "snippetUrl": "/guides/{slug}",
+        "previewTitleFallback": "عنوان الدليل",
+        "previewDescriptionFallback": "وصف مختصر للدليل يظهر في نتيجة البحث.",
+        "save": "احفظ",
+        "saving": "جاري الحفظ…",
+        "savedToast": "اتحفظ الدليل",
+        "saveError": "تعذر حفظ الدليل",
+        "deletedToast": "اتحذف الدليل",
+        "viewGuide": "شوف الدليل",
+        "delete": "احذف",
+        "confirmDeleteTitle": "حذف الدليل",
+        "confirmDelete": "هيتم حذف الدليل نهائياً ومش هيظهر للزوار. متأكد؟"
+      },
+      "quiz": {
+        "listTitle": "اختبار «ساعدني أختار»",
+        "listSubtitle": "أنشئ وعدّل أسئلة الاختبار وقواعد الترشيح لكل قسم.",
+        "loading": "جاري تحميل الاختبار…",
+        "empty": "مفيش أقسام متاحة للاختبار.",
+        "hasQuiz": "فيه اختبار ({count} أسئلة)",
+        "noQuiz": "مفيش اختبار",
+        "create": "إنشاء اختبار",
+        "edit": "تعديل",
+        "createNamed": "إنشاء اختبار لقسم «{name}»",
+        "editNamed": "تعديل اختبار قسم «{name}»",
+        "back": "رجوع للاختبارات",
+        "editorHeading": "اختبار قسم «{name}»",
+        "editorLoadError": "تعذر تحميل الاختبار",
+        "warningsTitle": "تنبيهات",
+        "questionsTitle": "الأسئلة",
+        "addQuestion": "أضف سؤال",
+        "removeQuestion": "امسح السؤال {number}",
+        "questionLabel": "سؤال {number}",
+        "questionText": "نص السؤال",
+        "questionId": "معرّف السؤال",
+        "answersTitle": "الإجابات",
+        "addAnswer": "أضف إجابة",
+        "removeAnswer": "امسح الإجابة {number}",
+        "answerText": "نص الإجابة",
+        "answerId": "معرّف الإجابة",
+        "moveUp": "طلّع «{name}» لفوق",
+        "moveDown": "نزّل «{name}» لتحت",
+        "idInvalid": "المعرّف حروف إنجليزي صغيرة وأرقام وشرطة بس (حتى 40 حرف)",
+        "rulesTitle": "قواعد الترشيح",
+        "addRule": "أضف قاعدة",
+        "noRules": "لسه مفيش قواعد. أضف قاعدة لربط الإجابات بمواصفات المنتجات.",
+        "ruleAnswer": "الإجابة",
+        "ruleField": "المواصفة",
+        "ruleOperator": "الشرط",
+        "ruleValue": "القيمة",
+        "rulePoints": "النقاط (-5 لـ 5)",
+        "ruleReason": "سبب الترشيح",
+        "removeRule": "امسح القاعدة {number}",
+        "removeRuleShort": "امسح القاعدة",
+        "counter": "{count}/{max}",
+        "operators": {
+          "eq": "يساوي",
+          "neq": "لا يساوي",
+          "gte": "أكبر من أو يساوي",
+          "lte": "أصغر من أو يساوي",
+          "contains": "يحتوي على",
+          "isTrue": "متاح"
+        },
+        "save": "احفظ",
+        "saving": "جاري الحفظ…",
+        "savedToast": "اتحفظ الاختبار",
+        "saveError": "تعذر حفظ الاختبار",
+        "deletedToast": "اتحذف الاختبار",
+        "delete": "امسح الاختبار",
+        "confirmDeleteTitle": "حذف الاختبار",
+        "confirmDelete": "هيتم حذف الاختبار نهائياً ومش هيظهر للزوار. متأكد؟"
+      },
+      "sections": {
+        "title": "أقسام الصفحة",
+        "subtitle": "رتّب، أخفي، أو افتح للتعديل",
+        "announce": "شريط الإعلان",
+        "hero": "الهيرو الرئيسي",
+        "uspStrip": "شريط المميزات",
+        "featuredCategories": "الأقسام المميزة",
+        "flash": "عروض الفلاش",
+        "bridalTeaser": "تجهيز العرايس",
+        "tradersTeaser": "قسم التجار",
+        "aboutTeaser": "من نحن",
+        "partners": "الماركات الشريكة",
+        "guides": "دليل الشراء",
+        "moveUp": "طلّع «{section}» لفوق",
+        "moveDown": "نزّل «{section}» لتحت",
+        "open": "افتح «{section}» للتعديل",
+        "toggleVisibility": "إظهار «{section}»",
+        "hiddenBadge": "مخفي عن الزوار",
+        "fieldCount": "{count} حقول",
+        "changedCount": "{count} تعديل"
+      },
+      "fields": {
+        "reset": "رجّع",
+        "linkLabel": "نص الرابط",
+        "linkHref": "الرابط (يبدأ بـ / أو https://)",
+        "linkInvalid": "الرابط لازم يبدأ بـ / أو https://",
+        "addLink": "أضف رابط",
+        "removeLink": "امسح الرابط",
+        "upload": "ارفع صورة",
+        "uploading": "جاري الرفع…",
+        "removeImage": "امسح الصورة",
+        "addItem": "أضف عنصر",
+        "removeItem": "امسح العنصر",
+        "statValue": "القيمة",
+        "statLabel": "الوصف",
+        "uspTitle": "العنوان",
+        "uspDescription": "الوصف",
+        "noCategories": "مفيش أقسام متاحة دلوقتي",
+        "announce": {
+          "text": "نص الإعلان",
+          "href": "رابط الإعلان"
+        },
+        "hero": {
+          "eyebrow": "السطر العلوي",
+          "title": "العنوان",
+          "subtitle": "الوصف",
+          "cta": "الزر الأساسي",
+          "secondaryCta": "الزر الثانوي",
+          "image": "صورة الهيرو",
+          "stats": "الإحصائيات"
+        },
+        "uspStrip": {
+          "items": "المميزات (4)"
+        },
+        "featuredCategories": {
+          "title": "عنوان القسم",
+          "categorySlugs": "الأقسام المعروضة"
+        },
+        "flash": {
+          "title": "عنوان القسم",
+          "subtitle": "الوصف"
+        },
+        "bridalTeaser": {
+          "eyebrow": "السطر العلوي",
+          "title": "العنوان",
+          "subtitle": "الوصف",
+          "cta": "الزر"
+        },
+        "tradersTeaser": {
+          "badge": "نص الشارة",
+          "title": "العنوان",
+          "subtitle": "الوصف",
+          "cta": "الزر",
+          "points": "النقاط"
+        },
+        "aboutTeaser": {
+          "eyebrow": "السطر العلوي",
+          "title": "العنوان",
+          "subtitle": "الوصف",
+          "cta": "الزر"
+        },
+        "partners": {
+          "title": "عنوان القسم"
+        },
+        "guides": {
+          "title": "عنوان القسم"
+        }
+      },
+      "preview": {
+        "label": "معاينة حيّة للمسودة",
+        "toggle": "معاينة",
+        "deviceGroup": "مقاس المعاينة",
+        "desktop": "كمبيوتر",
+        "mobile": "موبايل",
+        "frameTitle": "معاينة الصفحة الرئيسية"
+      },
+      "publishBar": {
+        "label": "حالة النشر",
+        "pageName": "الصفحة الرئيسية",
+        "pending": "{count} تعديل مش منشور",
+        "allPublished": "كل حاجة منشورة",
+        "idle": "في انتظار التعديلات",
+        "saving": "جاري الحفظ…",
+        "saved": "اتحفظت المسودة",
+        "error": "تعذر الحفظ",
+        "discard": "تجاهل التعديلات",
+        "publish": "انشر"
+      },
+      "publishDialog": {
+        "title": "نشر التعديلات",
+        "description": "هيتم إنشاء إصدار جديد ونشره على الموقع فوراً.",
+        "labelLabel": "تسمية الإصدار (اختياري)",
+        "labelPlaceholder": "مثال: تحديث عروض الصيف",
+        "confirm": "انشر دلوقتي",
+        "publishing": "جاري النشر…"
+      },
+      "versions": {
+        "title": "سجل النسخ",
+        "description": "استرجع أي نسخة قديمة كمسودة، وانشرها بعدين.",
+        "button": "سجل النسخ",
+        "empty": "لسه مفيش نسخ منشورة",
+        "untitled": "نسخة بدون تسمية",
+        "current": "الحالية",
+        "unknownAuthor": "غير معروف",
+        "restore": "استرجع",
+        "confirmTitle": "استرجاع النسخة",
+        "confirmDescription": "هيتم استرجاع «{label}» كمسودة. انشرها بعد كده عشان تظهر للزوار.",
+        "confirmAction": "استرجع كمسودة"
+      },
+      "errors": {
+        "loadFailed": "تعذر تحميل محرر الموقع",
+        "publishFailed": "تعذر نشر التعديلات",
+        "discardFailed": "تعذر تجاهل التعديلات",
+        "restoreFailed": "تعذر استرجاع النسخة",
+        "uploadFailed": "تعذر رفع الصورة"
+      },
+      "toasts": {
+        "published": "اتنشرت التعديلات",
+        "discarded": "اتلغت التعديلات",
+        "restored": "اترجعت النسخة كمسودة، انشرها عشان تتأكد"
+      }
+    },
+    "richText": {
+      "toolbar": "أدوات تنسيق النص",
+      "heading2": "عنوان رئيسي 2",
+      "heading3": "عنوان فرعي 3",
+      "heading4": "عنوان فرعي 4",
+      "paragraph": "فقرة عادية",
+      "bold": "نص عريض",
+      "italic": "نص مائل",
+      "bulletList": "قائمة نقط",
+      "orderedList": "قائمة أرقام",
+      "blockquote": "اقتباس",
+      "link": "إضافة رابط",
+      "linkTitle": "إضافة أو تعديل رابط",
+      "linkDescription": "اكتب رابط داخلي يبدأ بـ /، أو رابط خارجي يبدأ بـ https://، أو mailto: أو tel:.",
+      "linkUrl": "الرابط",
+      "linkPlaceholder": "/pages/about أو https://example.com",
+      "linkApply": "تطبيق الرابط",
+      "linkRemove": "امسح الرابط",
+      "linkInvalid": "الرابط لازم يبدأ بـ / أو https:// أو mailto: أو tel:",
+      "image": "إضافة صورة",
+      "imageError": "تعذر رفع الصورة",
+      "loading": "جاري تحميل المحرر…",
+      "undo": "تراجع",
+      "redo": "إعادة"
+    },
+    "settings": {
+      "pageTitle": "الإعدادات",
+      "intro": "عدّل بيانات المعرض وطرق الدفع ومناطق التوصيل والرسائل من مكان واحد، واحفظ كل قسم لوحده.",
+      "sectionNavLabel": "أقسام الإعدادات",
+      "dirty": "مسودة غير محفوظة",
+      "loading": "جاري تحميل الإعدادات…",
+      "loadError": "تعذر تحميل الإعدادات، حاول تحدّث الصفحة",
+      "sectionLoadError": "في بيانات القسم ده مش سليمة، مش هينفع تعدّلها دلوقتي",
+      "saved": "اتحفظت",
+      "saveFailed": "تعذر الحفظ، اتأكد من البيانات وحاول تاني",
+      "discarded": "اتلغت التعديلات",
+      "saveBar": {
+        "unsaved": "عندك تعديلات مش محفوظة",
+        "save": "احفظ",
+        "saving": "جاري الحفظ…",
+        "discard": "تجاهل"
+      },
+      "conflict": {
+        "title": "الإعدادات دي اتغيرت من مكان تاني",
+        "description": "فيه تعديلات أحدث على القسم ده. حمّل آخر نسخة قبل ما تحفظ تاني.",
+        "loadLatest": "حمّل آخر نسخة",
+        "cancel": "سيب نسختي"
+      },
+      "leave": {
+        "title": "تعديلات مش محفوظة",
+        "description": "لو خرجت من الصفحة، التعديلات اللي عملتها مش هتتحفظ.",
+        "stay": "افضل هنا",
+        "leave": "اخرج واتجاهل"
+      },
+      "sections": {
+        "store": "بيانات المعرض",
+        "payments": "طرق الدفع",
+        "zones": "مناطق التوصيل",
+        "codDeposit": "عربون الدفع عند الاستلام",
+        "lowStock": "تنبيه المخزون",
+        "searchSynonyms": "كلمات البحث",
+        "templates": "قوالب الرسائل"
+      },
+      "store": {
+        "hint": "البيانات دي بتظهر في الفوتر وصفحة التواصل ورسائل واتساب.",
+        "name": "اسم المعرض",
+        "namePlaceholder": "معرض محمد سراج",
+        "phone": "رقم التليفون",
+        "phoneHint": "رقم مصري محلي (01…) أو رقم دولي يبدأ بـ +",
+        "whatsapp": "رقم واتساب",
+        "tradersWhatsapp": "واتساب قسم التجار",
+        "tradersWhatsappHint": "سيبه فاضي لو نفس رقم واتساب الأساسي",
+        "address": "العنوان",
+        "hours": "مواعيد العمل",
+        "placeholderWarning": "القيمة دي لسه فيها بيانات مؤقتة، حدّثها قبل النشر"
+      },
+      "payments": {
+        "hint": "لازم طريقة دفع واحدة على الأقل تكون مفعّلة عشان العملاء يقدروا يكملوا الطلب.",
+        "methodsError": "لازم طريقة دفع واحدة على الأقل تكون مفعّلة",
+        "enabled": "مفعّلة",
+        "enableAria": "تفعيل طريقة الدفع",
+        "name": "الاسم الظاهر للعميل",
+        "account": "بيانات الحساب",
+        "accountPlaceholder": "رقم المحفظة أو رقم الحساب للتحويل",
+        "hintLabel": "ملاحظة للعميل",
+        "hintPlaceholder": "مثال: حوّل ثم ابعت صورة الإيصال"
+      },
+      "zones": {
+        "hint": "كل منطقة ليها مصاريف توصيل وليها محافظات (ومدن اختيارية) بتتبعها.",
+        "add": "أضف منطقة",
+        "remove": "احذف المنطقة",
+        "removeAria": "حذف منطقة التوصيل",
+        "name": "اسم المنطقة",
+        "namePlaceholder": "مثال: الدقهلية ودمياط",
+        "fee": "مصاريف التوصيل (ج.م)",
+        "places": "المحافظات",
+        "addPlace": "أضف محافظة",
+        "removePlace": "احذف المحافظة",
+        "removePlaceAria": "حذف المحافظة",
+        "governorate": "المحافظة",
+        "city": "المدينة (اختياري)",
+        "cityPlaceholder": "سيبه فاضي لو المحافظة كلها",
+        "selectGovernorate": "اختار محافظة",
+        "feeInvalid": "اكتب مصاريف توصيل صحيحة",
+        "zonesError": "في مشكلة في مناطق التوصيل",
+        "placesError": "في مشكلة في محافظات المنطقة دي",
+        "catchAll": "المنطقة دي من غير محافظات، فبتغطي كل الأماكن اللي مش موجودة في منطقة تانية."
+      },
+      "codDeposit": {
+        "hint": "لو إجمالي الطلب أكبر من الحد ده، بنطلب عربون من العميل.",
+        "threshold": "الحد الأدنى للطلب (ج.م)",
+        "pct": "نسبة العربون (%)",
+        "thresholdHint": "الطلبات اللي فوق المبلغ ده محتاجة عربون",
+        "thresholdInvalid": "اكتب مبلغ صحيح أكبر من صفر"
+      },
+      "lowStock": {
+        "hint": "الحد الافتراضي لتنبيه المخزون.",
+        "threshold": "الحد الافتراضي",
+        "appliesToHint": "بيتطبق على المنتجات الجديدة، وتقدر تعدّل الحد لكل منتج لوحده"
+      },
+      "synonyms": {
+        "hint": "كل مجموعة كلمات بتعتبر متكافئة في البحث، فمثلاً «تلاجة، ثلاجة» هيرجعوا نفس النتائج.",
+        "addGroup": "أضف مجموعة",
+        "removeGroup": "احذف المجموعة",
+        "removeGroupAria": "حذف مجموعة الكلمات",
+        "removeWord": "احذف الكلمة",
+        "removeWordAria": "حذف الكلمة",
+        "wordPlaceholder": "أضف كلمة واضغط Enter",
+        "addWord": "أضف",
+        "empty": "مفيش كلمات لسه، أضف كلمة عشان تبدأ",
+        "minWords": "كل مجموعة لازم يكون فيها كلمتين على الأقل"
+      },
+      "templates": {
+        "hint": "القوالب دي بتستخدم في رسايل واتساب للعملاء. اضغط على أي متغير عشان تضيفه في الرسالة.",
+        "variablesLabel": "المتغيرات المسموح بها",
+        "insertVariableAria": "إضافة المتغير",
+        "preview": "المعاينة",
+        "previewError": "تعذر تحديث المعاينة، بتشوف النص بالمتغيرات",
+        "unknown": "متغيرات غير مسموح بها",
+        "name": {
+          "order_confirmed": "تأكيد الطلب",
+          "order_out_for_delivery": "الطلب خرج للتوصيل",
+          "order_delivered": "تم التسليم",
+          "order_cancelled": "إلغاء الطلب",
+          "payment_rejected": "رفض إثبات الدفع",
+          "payment_proof": "إثبات التحويل",
+          "bridal_locked": "تثبيت قائمة العروسة",
+          "bridal_repriced": "تحديث أسعار القائمة",
+          "notify_back_in_stock": "إشعار توفر المنتج",
+          "product_question": "استفسار عن منتج",
+          "traders_contact": "تواصل التجار"
+        }
+      }
     }
   },
   "validation": {
     "emailRequired": "يرجى إدخال البريد الإلكتروني",
     "emailInvalid": "البريد الإلكتروني غير صحيح",
-    "passwordRequired": "يرجى إدخال كلمة المرور"
+    "passwordRequired": "يرجى إدخال كلمة المرور",
+    "priceRequired": "يرجى إدخال سعر صحيح"
   },
   "errors": {
     "generic": "حدث خطأ غير متوقع، يرجى المحاولة مرة أخرى"

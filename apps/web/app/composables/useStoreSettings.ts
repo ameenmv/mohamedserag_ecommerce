@@ -1,35 +1,48 @@
+import { storePhoneDisplay, storeWhatsappDigits } from '~/utils/store-settings'
+
 export interface StoreSettings {
-  whatsapp: string
-  phone: string
-  name: string
+  readonly whatsapp: string
+  readonly phone: string
+  readonly name: string
+  readonly installmentMinPrice: number
 }
 
+/** Minimum installment price: 10,000 EGP in integer piastres. */
+const INSTALLMENT_MIN_PRICE_PIASTRES = 1_000_000
+
 /**
- * Storefront public settings.
- * TODO(Slice 6): Load public store settings from GET /api/settings/public instead of placeholder values.
+ * Storefront public settings loaded from `GET /settings/store`.
+ * Shares the `'store:info'` fetch with the site-wide JSON-LD so it is
+ * requested only once per navigation.
+ *
+ * `whatsapp` and `phone` are empty strings when the value is missing or
+ * still a `[placeholder]`; callers must hide the corresponding links.
  */
 export function useStoreSettings(): StoreSettings {
   const { t } = useI18n()
-  const base = useState('store-settings-raw', () => ({
-    whatsapp: '201000000000',
-    phone: '01000000000',
-  }))
+  const storeApi = useStoreApi()
+  const { data } = useAsyncData('store:info', () => storeApi.storeInfo())
+
+  const whatsapp = computed(() => storeWhatsappDigits(data.value?.whatsapp))
+  const phone = computed(() => storePhoneDisplay(data.value?.phone))
+  const name = computed(() => {
+    const value = data.value?.name?.trim() ?? ''
+    if (value === '' || value.includes('[')) {
+      return t('brand.storeName')
+    }
+    return value
+  })
 
   return {
     get whatsapp() {
-      return base.value.whatsapp
-    },
-    set whatsapp(val: string) {
-      base.value.whatsapp = val
+      return whatsapp.value
     },
     get phone() {
-      return base.value.phone
-    },
-    set phone(val: string) {
-      base.value.phone = val
+      return phone.value
     },
     get name() {
-      return t('brand.storeName')
+      return name.value
     },
+    installmentMinPrice: INSTALLMENT_MIN_PRICE_PIASTRES,
   }
 }

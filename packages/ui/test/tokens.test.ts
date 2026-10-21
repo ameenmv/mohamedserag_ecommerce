@@ -104,6 +104,9 @@ describe('packages/ui tokens', () => {
     const primaryBg = rootVars['--primary'] ?? '#000000'
 
     expect(wcagContrastRatio(mutedFg, cardBg)).toBeGreaterThanOrEqual(4.5)
+    // Muted text also sits directly on the page background and on muted panels
+    expect(wcagContrastRatio(mutedFg, rootVars['--background'] ?? '#000000')).toBeGreaterThanOrEqual(4.5)
+    expect(wcagContrastRatio(mutedFg, rootVars['--muted'] ?? '#000000')).toBeGreaterThanOrEqual(4.5)
     expect(wcagContrastRatio(primaryFg, primaryBg)).toBeGreaterThanOrEqual(4.5)
   })
 })

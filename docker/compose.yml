@@ -50,6 +50,8 @@ services:
       UPLOADS_DIR: /uploads
       ADMIN_EMAIL: ${ADMIN_EMAIL:-}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      # No demo orders on a real server (the catalogue, settings and content are still seeded)
+      SEED_DEMO_ORDERS: ${SEED_DEMO_ORDERS:-false}
     volumes:
       - uploads:/uploads
 
@@ -94,15 +96,42 @@ services:
       NUXT_PUBLIC_API_BASE: /api
       NUXT_PUBLIC_UMAMI_HOST: /stats
       NUXT_PUBLIC_UMAMI_WEBSITE_ID: ${UMAMI_WEBSITE_ID:-}
+      # Public origin for canonical URLs, hreflang, sitemap, JSON-LD and the CSP https upgrade
+      NUXT_PUBLIC_SITE_URL: ${PUBLIC_URL:-https://localhost}
+      NUXT_PUBLIC_I18N_BASE_URL: ${PUBLIC_URL:-https://localhost}
+      # 'true' only on the real domain; otherwise robots.txt disallows everything
+      NUXT_PUBLIC_SITE_INDEXABLE: ${SITE_INDEXABLE:-false}
       UPLOADS_DIR: /uploads
     volumes:
       - uploads:/uploads:ro
     healthcheck:
-      test: ["CMD-SHELL", "node -e \"fetch('http://localhost:3000/').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))\""]
+      test: ["CMD-SHELL", "node -e \"fetch('http://localhost:3000/healthz').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))\""]
       interval: 10s
       timeout: 3s
       retries: 3
       start_period: 10s
+
+  # Automated daily database and uploads backup.
+  # Note: Backups stored on the same disk protect against accidental deletes, bugs,
+  # and bad migrations, not host or disk loss. Copying backups off the server
+  # to remote storage is documented in docs/OPERATIONS.md.
+  backup:
+    image: postgres:17
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    entrypoint: ["sh", "/backup/backup.sh"]
+    environment:
+      PGHOST: db
+      PGUSER: ${POSTGRES_USER:-serag}
+      PGPASSWORD: ${POSTGRES_PASSWORD:-serag}
+      PGDATABASE: serag
+      BACKUP_RETENTION_DAYS: ${BACKUP_RETENTION_DAYS:-30}
+    volumes:
+      - ./backup:/backup:ro
+      - uploads:/uploads:ro
+      - backups:/backups
 
   # Note: The Umami dashboard UI does not work under /stats (only the tracker and /api/send do).
   # Dashboard access for now via `docker compose port umami 3000` / SSH tunnel; a subdomain later.
@@ -141,3 +170,4 @@ volumes:
   db-data:
   uploads:
   caddy-data:
+  backups:

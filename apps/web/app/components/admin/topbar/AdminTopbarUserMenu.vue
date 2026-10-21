@@ -34,7 +34,7 @@ const userInitial = computed(() => {
         <span class="hidden text-sm font-bold text-foreground sm:inline">
           {{ name }}
         </span>
-        <ChevronDown class="size-4 text-muted-foreground" aria-hidden="true" />
+        <ChevronDown class="hidden size-4 text-muted-foreground sm:block" aria-hidden="true" />
       </button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end" class="w-48">

@@ -1,10 +1,15 @@
 {$SITE_ADDRESS:localhost} {
 	encode zstd gzip
 
+	# The web Content-Security-Policy is sent by the app (apps/web/server/plugins/csp.ts)
+	# because it hashes inline scripts per response; the API keeps helmet's own headers.
 	header {
 		Strict-Transport-Security "max-age=31536000"
 		X-Content-Type-Options nosniff
 		Referrer-Policy strict-origin-when-cross-origin
+		X-Frame-Options SAMEORIGIN
+		Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()"
+		-Server
 	}
 
 	handle /api/* {

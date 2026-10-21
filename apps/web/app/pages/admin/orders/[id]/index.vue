@@ -1,0 +1,194 @@
+<script setup lang="ts">
+import {
+  DEFAULT_TEMPLATES,
+  renderTemplate,
+  waLink,
+  type OrderStatus,
+} from '@serag/shared'
+import { useAdminOrder } from '~/composables/useAdminOrder'
+
+definePageMeta({ layout: 'admin', middleware: 'admin-auth' })
+
+const route = useRoute()
+const orderId = String(route.params.id)
+
+const { t } = useI18n()
+const { money } = usePrice()
+const notify = useNotify()
+
+const {
+  detail,
+  loading,
+  actionPending,
+  load,
+  changeStatus,
+  confirmPayment,
+  rejectPayment,
+  saveNotes,
+  logWhatsapp,
+  sendWhatsapp,
+  agreeDeliveryDate,
+  extendLock,
+  reprice,
+} = useAdminOrder(orderId)
+
+await load()
+
+useSeoMeta({
+  title: () => (detail.value ? `${detail.value.no} — ${t('admin.orders.title')}` : t('admin.orders.title')),
+})
+useAdminPageTitle('admin.nav.orders')
+
+async function handleStatusChange(to: OrderStatus, reason?: string) {
+  const ok = await changeStatus(to, reason)
+  if (ok && detail.value) {
+    notify.success(t('admin.orders.detail.statusChanged', { status: t(`admin.orders.status.${detail.value.status}`) }))
+  }
+}
+
+async function handlePaymentConfirm(amount: number, note?: string) {
+  const ok = await confirmPayment(amount, note)
+  if (ok && detail.value) {
+    if (detail.value.deposit && detail.value.depositRemaining > 0) {
+      notify.success(
+        t('admin.confirm.partialDepositRecorded', {
+          amount: money(amount),
+          remaining: money(detail.value.depositRemaining),
+        }),
+      )
+    } else {
+      notify.success(t('admin.orders.detail.paymentConfirmed'))
+    }
+  }
+}
+
+async function handlePaymentReject(reason: string) {
+  const ok = await rejectPayment(reason)
+  if (ok) {
+    notify.success(t('admin.orders.detail.paymentRejected'))
+  }
+}
+
+async function handleNotesSave(notes: string) {
+  const ok = await saveNotes(notes)
+  if (ok) {
+    notify.success(t('admin.orders.detail.notesSaved'))
+  }
+}
+
+async function handleSendBridalLockedWhatsapp() {
+  if (!detail.value) return
+  const bridalLockedEvent = detail.value.events.find((e) => e.status === 'bridal_locked')
+  if (!bridalLockedEvent) return
+  const firstName = detail.value.customer.name.trim().split(/\s+/)[0] || detail.value.customer.name
+  const lockedDate = bridalLockedEvent.note ?? ''
+  const variables = {
+    customerName: firstName,
+    orderNo: detail.value.no,
+    date: lockedDate,
+    lockedUntil: lockedDate,
+  }
+  const text = renderTemplate(DEFAULT_TEMPLATES.bridal_locked, variables)
+  const url = waLink(detail.value.customer.phone, text)
+  await logWhatsapp('bridal_locked', variables)
+  if (typeof window !== 'undefined') {
+    window.open(url, '_blank', 'noopener')
+  }
+}
+</script>
+
+<template>
+  <div v-if="loading && !detail" class="flex flex-col gap-4">
+    <div class="h-12 w-full rounded-2xl bg-muted/50 animate-pulse" />
+    <div class="h-64 w-full rounded-2xl bg-muted/50 animate-pulse" />
+  </div>
+
+  <div v-else-if="detail" class="flex flex-col gap-6 min-w-0">
+    <!-- Header -->
+    <AdminOrdersDetailHeader
+      :detail="detail"
+      :action-pending="actionPending"
+      @send-whatsapp="sendWhatsapp"
+    />
+
+    <!-- Main Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 min-w-0">
+      <!-- Left/Main Column: Customer, Items, Payments, Status Actions -->
+      <div class="lg:col-span-2 flex flex-col gap-6 min-w-0">
+        <!-- Customer Details -->
+        <AdminOrdersDetailCustomer :customer="detail.customer" />
+
+        <!-- Line Items & Financials -->
+        <AdminOrdersDetailItems
+          :items="detail.items"
+          :subtotal="detail.subtotal"
+          :discount="detail.discount"
+          :delivery-fee="detail.deliveryFee"
+          :total="detail.total"
+          :deposit="detail.deposit"
+          :paid-amount="detail.paidAmount"
+          :remaining="detail.remaining"
+        />
+
+        <!-- Bridal Reservation Panel (if detail.bridal is present) -->
+        <AdminOrdersDetailBridal
+          v-if="detail.bridal"
+          :bridal="detail.bridal"
+          :order-id="detail.id"
+          :order-no="detail.no"
+          :customer="detail.customer"
+          :action-pending="actionPending"
+          :agree-delivery-date="agreeDeliveryDate"
+          :extend-lock="extendLock"
+          :reprice="reprice"
+          :log-whatsapp="logWhatsapp"
+        />
+
+        <!-- Status Transitions Actions -->
+        <AdminOrdersDetailStatusActions
+          :allowed-transitions="detail.allowedTransitions"
+          :action-pending="actionPending"
+          :is-bridal="detail.type === 'bridal'"
+          :bridal-status="detail.bridal?.status"
+          @change-status="handleStatusChange"
+        />
+
+        <!-- Payments Management -->
+        <AdminOrdersDetailPayments
+          :payments="detail.payments"
+          :can-confirm-payment="detail.canConfirmPayment"
+          :can-reject-payment="detail.canRejectPayment"
+          :default-confirm-amount="detail.defaultConfirmAmount"
+          :shortages="detail.shortages"
+          :action-pending="actionPending"
+          :deposit="detail.deposit"
+          :paid-amount="detail.paidAmount"
+          :deposit-remaining="detail.depositRemaining"
+          :events="detail.events"
+          :customer-phone="detail.customer.phone"
+          :customer-name="detail.customer.name"
+          :order-no="detail.no"
+          @confirm="handlePaymentConfirm"
+          @reject="handlePaymentReject"
+          @send-bridal-locked-whatsapp="handleSendBridalLockedWhatsapp"
+        />
+      </div>
+
+      <!-- Right Column: Notes, History, WhatsApp Log -->
+      <div class="flex flex-col gap-6 min-w-0">
+        <!-- Internal Admin Notes -->
+        <AdminOrdersDetailNotes
+          :initial-notes="detail.internalNotes"
+          :action-pending="actionPending"
+          @save="handleNotesSave"
+        />
+
+        <!-- Status & Decision History Timeline -->
+        <AdminOrdersDetailHistory :events="detail.events" />
+
+        <!-- WhatsApp Messages Log -->
+        <AdminOrdersDetailWhatsApp :messages="detail.whatsappMessages" />
+      </div>
+    </div>
+  </div>
+</template>

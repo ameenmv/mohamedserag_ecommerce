@@ -5,6 +5,9 @@ import { getRequestHeader, getResponseHeader, removeResponseHeader, setResponseH
 // Nuxt 4.6 hands the rendered page over as a stream with its content-type set on the event.
 export default defineNitroPlugin((nitroApp) => {
   nitroApp.hooks.hook('render:response', (response, { event }) => {
+    // Error pages are rendered through an internal /__nuxt_error sub-request whose body the error
+    // handler re-sends as plain text; compressing it there yields ERR_CONTENT_DECODING_FAILED.
+    if (event.path.startsWith('/__nuxt_error') || (response.statusCode ?? 200) >= 400) return
     const contentType = String(getResponseHeader(event, 'content-type') ?? response.headers?.['content-type'] ?? '')
     if (!contentType.includes('text/html')) return
     if (!(getRequestHeader(event, 'accept-encoding') ?? '').includes('gzip')) return
