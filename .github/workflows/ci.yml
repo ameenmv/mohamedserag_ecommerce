@@ -145,7 +145,8 @@ jobs:
       # Home, a category, a product and checkout against the seeded catalogue (spec 009, T011).
       - name: Lighthouse CI (mobile, four pages)
         if: ${{ !cancelled() }}
-        run: pnpm dlx @lhci/cli@0.15.1 autorun --config=lighthouserc.json
+        # puppeteer runs lighthouse/add-to-cart.cjs first, so checkout is measured with an item in the cart
+        run: pnpm dlx --package @lhci/cli@0.15.1 --package puppeteer@24.10.2 lhci autorun --config=lighthouserc.json
 
       - name: Upload Lighthouse artifacts
         if: ${{ !cancelled() }}
