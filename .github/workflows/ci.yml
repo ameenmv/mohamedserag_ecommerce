@@ -138,9 +138,22 @@ jobs:
             echo "::endgroup::"
           done
 
-      - name: Start Caddy for Lighthouse (HTTP/2 like production)
+      # A second web server whose browser API base is the Caddy origin, like production: with an item in
+      # the cart every page asks /api/cart/quote, which would be a blocked cross-origin call to :4000.
+      - name: Start web and Caddy for Lighthouse (HTTP/2 like production)
         if: ${{ !cancelled() }}
-        run: docker run -d --name lh-caddy --network host -v "$PWD/docker/Caddyfile.lighthouse:/etc/caddy/Caddyfile:ro" caddy:2
+        env:
+          NUXT_API_INTERNAL_BASE: http://localhost:4000/api
+          NUXT_PUBLIC_API_BASE: https://localhost:8443/api
+          NUXT_PUBLIC_SITE_URL: https://localhost:8443
+        run: |
+          (cd apps/web && PORT=3001 nohup node .output/server/index.mjs > /tmp/web-lh.log 2>&1 &)
+          docker run -d --name lh-caddy --network host -v "$PWD/docker/Caddyfile.lighthouse:/etc/caddy/Caddyfile:ro" caddy:2
+          for i in $(seq 1 60); do
+            curl -fsSk https://localhost:8443/healthz > /dev/null && curl -fsSk https://localhost:8443/api/health > /dev/null && exit 0
+            sleep 1
+          done
+          echo "lighthouse servers did not start"; cat /tmp/web-lh.log; docker logs lh-caddy; exit 1
 
       # Home, a category, a product and checkout against the seeded catalogue (spec 009, T011).
       - name: Lighthouse CI (mobile, four pages)
@@ -160,7 +173,7 @@ jobs:
 
       - name: Server logs on failure
         if: failure()
-        run: cat /tmp/api.log /tmp/web.log || true
+        run: cat /tmp/api.log /tmp/web.log /tmp/web-lh.log || true
 
       - name: Upload e2e artifacts
         if: ${{ !cancelled() }}

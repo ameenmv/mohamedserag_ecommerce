@@ -3,7 +3,7 @@ import { ShieldCheck, RefreshCw, AlertCircle } from '@lucide/vue'
 
 const { t } = useI18n()
 const { money } = usePrice()
-const { lines, subtotal } = useCart()
+const { lines: cartLines, subtotal: cartSubtotal } = useCart()
 const {
   form,
   errors,
@@ -25,6 +25,11 @@ const {
   placeOrder,
   trackCheckoutStart,
 } = useCheckout()
+
+// The cart lives in browser storage and is loaded before hydration, so render it only after mount:
+// the server HTML has no cart and the first client render must match it.
+const lines = computed(() => (hydrated.value ? cartLines.value : []))
+const subtotal = computed(() => (hydrated.value ? cartSubtotal.value : 0))
 
 useSeoMeta({
   title: () => t('store.checkout.pageTitle'),
