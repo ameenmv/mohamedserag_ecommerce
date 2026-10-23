@@ -301,7 +301,11 @@
       "discountBadge": "{percent}% off",
       "realPhoto": "Real photo",
       "oldPriceAria": "Original price: {price}",
-      "askWhatsappAria": "Ask about {name} on WhatsApp"
+      "askWhatsappAria": "Ask about {name} on WhatsApp",
+      "save": "Save {amount}",
+      "inCart": "In cart",
+      "notifyMe": "Notify me",
+      "discountShort": "-{percent}%"
     },
     "pages": {
       "updatedAt": "Last updated: {date}"

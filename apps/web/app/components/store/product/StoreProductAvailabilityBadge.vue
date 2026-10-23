@@ -3,13 +3,15 @@ import type { ProductCardAvailability } from '@serag/shared'
 
 const props = defineProps<{
   availability: ProductCardAvailability
+  // Cards show the lead time on its own line, so the badge keeps the short label
+  compact?: boolean
 }>()
 
 const { t } = useI18n()
 
 const label = computed(() => {
   if (props.availability.state === 'on_request') {
-    return props.availability.leadTimeText || t('store.availability.onRequest')
+    return (!props.compact && props.availability.leadTimeText) || t('store.availability.onRequest')
   }
   if (props.availability.state === 'in_stock') {
     return t('store.availability.inStock')

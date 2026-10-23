@@ -33,11 +33,11 @@ const showSkeletons = computed(() => isMounted.value && props.pending)
     <!-- Client pending skeleton grid -->
     <div
       v-if="showSkeletons"
-      class="grid grid-cols-2 gap-2.5 sm:gap-4 md:grid-cols-3 xl:grid-cols-4"
+      class="grid grid-cols-2 gap-2.5 sm:gap-5 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3"
       aria-busy="true"
     >
       <div
-        v-for="i in 8"
+        v-for="i in 6"
         :key="i"
         class="flex flex-col justify-between rounded-2xl border border-border bg-card p-2.5 sm:p-4"
       >
@@ -61,13 +61,13 @@ const showSkeletons = computed(() => isMounted.value && props.pending)
     <!-- Real product card grid -->
     <div
       v-else
-      class="grid grid-cols-2 gap-2.5 sm:gap-4 md:grid-cols-3 xl:grid-cols-4"
+      class="grid grid-cols-2 gap-2.5 sm:gap-5 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3"
     >
       <StoreProductCard
         v-for="(product, idx) in products"
         :key="product.id"
         :product="product"
-        :priority="idx < 4"
+        :priority="idx < 3"
       />
     </div>
   </div>

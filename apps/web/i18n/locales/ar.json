@@ -301,7 +301,11 @@
       "discountBadge": "خصم {percent}%",
       "realPhoto": "صورة حقيقية",
       "oldPriceAria": "السعر الأصلي: {price}",
-      "askWhatsappAria": "اسأل على واتساب عن {name}"
+      "askWhatsappAria": "اسأل على واتساب عن {name}",
+      "save": "وفّر {amount}",
+      "inCart": "في السلة",
+      "notifyMe": "بلّغني لما يتوفر",
+      "discountShort": "-{percent}%"
     },
     "pages": {
       "updatedAt": "آخر تحديث: {date}"
