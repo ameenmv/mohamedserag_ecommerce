@@ -65,7 +65,8 @@ export default defineNuxtConfig({
         name: 'Lalezar',
         provider: 'google',
         weights: [400],
-        subsets: ['arabic'],
+        // Latin too: the Arabic subset has no digits («4 خطوات بس», headline numbers)
+        subsets: ['arabic', 'latin'],
         preload: false,
       },
       {

@@ -13,3 +13,46 @@
   body { @apply bg-background text-foreground font-sans antialiased; }
   .num { font-family: var(--font-num); direction: ltr; unicode-bidi: isolate; }
 }
+
+/* Storefront motion from the prototype: floating hero cards, rotating seal, marquee strips. */
+@theme {
+  --animate-floaty: floaty 6s ease-in-out infinite;
+  --animate-spin-slow: spin 22s linear infinite;
+  --animate-marquee: marquee 48s linear infinite;
+  --animate-marquee-fast: marquee 38s linear infinite;
+  --animate-pulse-soft: pulse-soft 1.4s ease-in-out infinite;
+  --animate-ping-soft: ping-soft 2.2s ease-out infinite;
+
+  @keyframes floaty {
+    0%, 100% { transform: translateY(0) rotate(var(--tilt, 0deg)); }
+    50% { transform: translateY(-14px) rotate(var(--tilt, 0deg)); }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes pulse-soft {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+  @keyframes ping-soft {
+    0% { transform: scale(0.9); opacity: 1; }
+    100% { transform: scale(1.5); opacity: 0; }
+  }
+}
+
+/* Big outlined background numerals/words ("1972", "MS", "ثقة"). */
+@utility text-outline {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--outline-color, currentColor);
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-floaty, .animate-spin-slow, .animate-marquee, .animate-marquee-fast,
+  .animate-pulse-soft, .animate-ping-soft { animation: none !important; }
+}

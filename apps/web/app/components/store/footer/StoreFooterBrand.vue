@@ -5,7 +5,7 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <div class="flex flex-col gap-4 lg:col-span-4">
+  <div class="flex flex-col gap-4">
     <div class="flex items-center gap-3.5">
       <div
         class="num flex size-14 shrink-0 items-center justify-center rounded-2xl bg-serag-green text-2xl font-extrabold text-serag-gold-hi ring-2 ring-serag-gold/45 ring-inset"
@@ -22,7 +22,7 @@ const { t } = useI18n()
         </div>
       </div>
     </div>
-    <p class="max-w-sm text-base leading-relaxed text-sidebar-foreground">
+    <p class="max-w-sm text-base leading-[1.8]">
       {{ t('store.footer.brandDescription') }}
     </p>
     <div class="inline-flex items-center gap-2 text-xs text-serag-gold-hi">

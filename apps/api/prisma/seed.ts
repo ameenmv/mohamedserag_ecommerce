@@ -1156,10 +1156,12 @@ async function main() {
     },
   ]
 
+  // Create-only: settings are the owner's data (store numbers, payment accounts, zones,
+  // templates). Re-running the seed must never put the placeholders back.
   for (const entry of settingsEntries) {
     await prisma.setting.upsert({
       where: { key: entry.key },
-      update: { value: entry.value },
+      update: {},
       create: { key: entry.key, value: entry.value },
     })
   }
@@ -1316,25 +1318,49 @@ async function main() {
   }
 
   // --------------------------------------------------------------------------
+  // 6.6b Demo flash sale (dev only): one in-stock product from four departments, 12% off, ending
+  // in three days, so the home flash section and its countdown show. CI and production seeds set
+  // `SEED_DEMO_FLASH=false`: a running sale would change the prices the browser suite expects.
+  // --------------------------------------------------------------------------
+  if (process.env.SEED_DEMO_FLASH !== 'false') {
+    const demoFlashName = 'عروض الفلاش (تجريبي)'
+    const flashProducts = []
+    for (const slug of ['refrigerators', 'washers', 'acs', 'tvs']) {
+      const product = await prisma.product.findFirst({
+        where: { category: { slug }, stock: { gt: 0 }, visible: true, archivedAt: null },
+        orderBy: { price: 'desc' },
+      })
+      if (product) flashProducts.push(product)
+    }
+    const startsAt = new Date(Date.now() - 60 * 60 * 1000)
+    const endsAt = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
+    const existingFlash = await prisma.flashSale.findFirst({ where: { name: demoFlashName } })
+    const flash = existingFlash
+      ? await prisma.flashSale.update({ where: { id: existingFlash.id }, data: { startsAt, endsAt } })
+      : await prisma.flashSale.create({ data: { name: demoFlashName, startsAt, endsAt } })
+    for (const product of flashProducts) {
+      // 12% off, rounded down to a whole 10 EGP (1,000 piastres)
+      const salePrice = Math.floor((product.price * 0.88) / 1000) * 1000
+      await prisma.flashSaleItem.upsert({
+        where: { flashSaleId_productId: { flashSaleId: flash.id, productId: product.id } },
+        create: { flashSaleId: flash.id, productId: product.id, salePrice },
+        update: { salePrice },
+      })
+    }
+  }
+
+  // --------------------------------------------------------------------------
   // 6.7 Content (Published Home ContentVersion + 6 Policy/Info Pages)
   // --------------------------------------------------------------------------
   const homeData = JSON.parse(JSON.stringify(DEFAULT_HOME_CONTENT)) as Prisma.InputJsonValue
   const homeLayout = JSON.parse(JSON.stringify(DEFAULT_HOME_LAYOUT)) as Prisma.InputJsonValue
 
+  // Create-only: once a home version is published it belongs to the owner (the editor);
+  // re-running the seed must not replace it.
   const existingHomeVersion = await prisma.contentVersion.findFirst({
     where: { page: 'home', status: 'published' },
   })
-  if (existingHomeVersion) {
-    await prisma.contentVersion.update({
-      where: { id: existingHomeVersion.id },
-      data: {
-        data: homeData,
-        layout: homeLayout,
-        label: 'النسخة الافتتاحية',
-        userId: seededAdminId,
-      },
-    })
-  } else {
+  if (!existingHomeVersion) {
     await prisma.contentVersion.create({
       data: {
         page: 'home',

@@ -48,7 +48,7 @@ docker compose -f docker/compose.yml --profile tools run --rm seed   # first tim
 ```
 
 - `migrate` applies the database migrations on every start and then exits.
-- `seed` creates the permissions, the admin user, categories, brands, the starter catalogue, settings, bridal tiers, content, guides and quizzes. On the server it does **not** create demo orders (`SEED_DEMO_ORDERS=false`). Running it again is safe: it updates rather than duplicates.
+- `seed` creates the permissions, the admin user, categories, brands, the starter catalogue, settings, bridal tiers, content, guides and quizzes. On the server it does **not** create demo orders or the demo flash sale (`SEED_DEMO_ORDERS=false`, `SEED_DEMO_FLASH=false`). Running it again is safe: it updates rather than duplicates.
 - Caddy requests the HTTPS certificate on first start; it needs ports 80/443 reachable and the DNS record already pointing at the server. Check with `docker compose -f docker/compose.yml logs caddy`.
 
 Then open `https://<domain>/admin`, sign in, change the password and work through «الإعدادات» (store numbers, payment accounts, zones) — see the launch checklist.

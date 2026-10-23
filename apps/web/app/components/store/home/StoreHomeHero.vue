@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import { ArrowRight } from '@lucide/vue'
 import type { HomeContent } from '@serag/shared'
+import { FEATURES } from '~/constants/features'
 
 const props = defineProps<{
   content: HomeContent['hero']
 }>()
 
+const { t } = useI18n()
 const localePath = useLocalePath()
+
+const marqueeWords = computed(() => t('store.home.marquee').split('|'))
 
 function resolveLink(href: string): string {
   return isInternalHref(href) ? localePath(href) : href
@@ -22,8 +26,12 @@ const primary = computed(() => {
 })
 
 const secondary = computed(() => {
-  const cta = props.content.secondaryCta
+  let cta = props.content.secondaryCta
   if (!cta) return null
+  // Older published content still points at the switched-off bridal builder
+  if (!FEATURES.bridal && cta.href.startsWith('/bridal')) {
+    cta = { label: t('store.home.heroTradersCta'), href: '/traders' }
+  }
   return {
     to: resolveLink(cta.href),
     external: isExternalHref(cta.href),
@@ -32,6 +40,9 @@ const secondary = computed(() => {
 })
 
 const headingId = useId()
+
+// «ثقة لها» / «تاريخ»: the last word goes on its own line in gold, as in the prototype
+const title = computed(() => splitHighlight(props.content.title))
 </script>
 
 <template>
@@ -39,33 +50,39 @@ const headingId = useId()
     class="relative overflow-hidden bg-serag-deep text-serag-ivory"
     :aria-labelledby="headingId"
   >
-    <!-- Decorative brand glows -->
+    <!-- Decorative brand glows and the outlined «1972» -->
     <div
-      class="pointer-events-none absolute -top-40 -start-40 size-[36rem] rounded-full bg-serag-gold/20 blur-3xl"
+      class="pointer-events-none absolute -top-44 -end-40 size-[45rem] rounded-full bg-[radial-gradient(circle,rgba(181,164,92,.28)_0%,rgba(181,164,92,0)_65%)]"
       aria-hidden="true"
     />
     <div
-      class="pointer-events-none absolute -bottom-52 -end-32 size-[32rem] rounded-full bg-serag-green/40 blur-3xl"
+      class="pointer-events-none absolute -bottom-64 -start-32 size-[40rem] rounded-full bg-[radial-gradient(circle,rgba(90,143,107,.35)_0%,rgba(90,143,107,0)_65%)]"
       aria-hidden="true"
     />
+    <div
+      class="num text-outline pointer-events-none absolute -bottom-16 left-1/2 -translate-x-1/2 text-[clamp(200px,34vw,520px)] leading-[0.8] font-extrabold tracking-[-8px] whitespace-nowrap [--outline-color:rgba(181,164,92,.16)]"
+      aria-hidden="true"
+    >
+      1972
+    </div>
 
-    <div class="relative mx-auto flex max-w-7xl flex-col items-center gap-12 px-4 py-16 sm:px-6 lg:flex-row lg:gap-14 lg:px-8 lg:py-24">
-      <div class="flex w-full min-w-0 flex-col gap-7 lg:flex-1">
+    <div class="relative mx-auto flex max-w-7xl flex-wrap items-center gap-14 px-4 pt-10 pb-14 sm:px-6 lg:px-10 lg:pt-[72px] lg:pb-24">
+      <div class="flex min-w-0 flex-[1_1_520px] flex-col gap-7">
         <span
-          class="inline-flex items-center gap-2.5 self-start rounded-full border border-serag-gold/50 bg-serag-gold/10 px-4 py-2 text-sm font-medium text-serag-gold-hi"
+          class="inline-flex items-center gap-2.5 self-start rounded-full border border-serag-gold/50 bg-serag-gold/10 px-[18px] py-2 text-[15px] font-medium text-[#E8DFB0]"
         >
-          <span class="size-2 rounded-full bg-serag-gold-hi" aria-hidden="true" />
+          <span class="animate-pulse-soft size-2 rounded-full bg-serag-gold-hi" aria-hidden="true" />
           {{ content.eyebrow }}
         </span>
 
         <h1
           :id="headingId"
-          class="font-display text-5xl leading-[0.95] text-serag-ivory sm:text-6xl lg:text-7xl"
+          class="font-display text-[clamp(56px,9vw,132px)] leading-[0.95] tracking-[-1px] text-serag-ivory"
         >
-          {{ content.title }}
+          {{ title.lead }}<template v-if="title.highlight"><br><span class="text-serag-gold-hi">{{ title.highlight }}</span></template>
         </h1>
 
-        <p class="max-w-xl text-lg leading-relaxed text-serag-ivory/80">
+        <p class="max-w-[560px] text-lg leading-[1.8] text-[#D9E2D6] sm:text-[clamp(18px,2vw,22px)]">
           {{ content.subtitle }}
         </p>
 
@@ -74,7 +91,7 @@ const headingId = useId()
             :to="primary.to"
             :target="primary.external ? '_blank' : undefined"
             :rel="primary.external ? 'noopener noreferrer' : undefined"
-            class="inline-flex min-h-11 items-center gap-3 rounded-full bg-serag-gold px-7 py-3 text-base font-bold text-serag-ink transition-colors hover:bg-serag-gold-hi focus-visible:ring-2 focus-visible:ring-serag-gold focus-visible:outline-none"
+            class="inline-flex min-h-11 w-full items-center justify-center gap-3 rounded-full bg-serag-gold px-8 py-4 text-base font-bold text-serag-ink transition hover:-translate-y-0.5 hover:bg-serag-gold-hi focus-visible:ring-2 focus-visible:ring-serag-gold focus-visible:outline-none sm:w-auto sm:text-lg motion-reduce:transition-none"
           >
             {{ primary.label }}
             <ArrowRight class="size-5 rtl:-scale-x-100" aria-hidden="true" />
@@ -84,30 +101,25 @@ const headingId = useId()
             :to="secondary.to"
             :target="secondary.external ? '_blank' : undefined"
             :rel="secondary.external ? 'noopener noreferrer' : undefined"
-            class="inline-flex min-h-11 items-center gap-3 rounded-full border border-serag-ivory/55 px-7 py-3 text-base font-bold text-serag-ivory transition-colors hover:bg-serag-ivory/10 focus-visible:ring-2 focus-visible:ring-serag-gold focus-visible:outline-none"
+            class="inline-flex min-h-11 w-full items-center justify-center gap-3 rounded-full border-[1.5px] border-serag-ivory/55 px-8 py-4 text-base font-bold text-serag-ivory transition-colors hover:bg-serag-ivory hover:text-serag-deep focus-visible:ring-2 focus-visible:ring-serag-gold focus-visible:outline-none sm:w-auto sm:text-lg"
           >
             {{ secondary.label }}
           </NuxtLink>
         </div>
 
-        <dl
-          class="mt-2 flex flex-wrap gap-9 border-t border-serag-ivory/15 pt-7"
-        >
+        <dl class="mt-3 flex flex-wrap gap-5 border-t border-serag-ivory/15 pt-7 sm:gap-9">
           <div v-for="stat in content.stats" :key="stat.label" class="flex flex-col-reverse gap-1.5">
-            <dt class="text-sm text-serag-ivory/70">{{ stat.label }}</dt>
-            <dd class="num text-4xl font-extrabold leading-none text-serag-gold-hi">
+            <dt class="text-sm text-[#B9C7B6]">{{ stat.label }}</dt>
+            <dd class="num text-[28px] leading-none font-extrabold text-serag-gold-hi sm:text-[40px]">
               {{ stat.value }}
             </dd>
           </div>
         </dl>
       </div>
 
-      <div class="relative w-full max-w-lg lg:flex-1">
-        <div
-          class="relative aspect-[4/5] overflow-hidden rounded-[var(--radius-card)] border border-serag-gold/40"
-        >
+      <div v-if="content.image" class="relative w-full max-w-lg flex-[1_1_440px]">
+        <div class="relative aspect-[4/5] overflow-hidden rounded-[var(--radius-card)] border border-serag-gold/40">
           <NuxtImg
-            v-if="content.image"
             :src="content.image"
             :alt="content.title"
             width="640"
@@ -116,18 +128,22 @@ const headingId = useId()
             loading="eager"
             class="size-full object-cover"
           />
-          <div
-            v-else
-            class="flex size-full flex-col items-center justify-center gap-4 bg-gradient-to-br from-serag-green to-serag-deep text-serag-gold-hi"
-            aria-hidden="true"
-          >
-            <span class="font-display text-7xl">1972</span>
-            <span class="text-sm font-medium text-serag-ivory/70">
-              {{ content.title }}
-            </span>
-          </div>
         </div>
       </div>
+      <StoreHomeHeroArt v-else class="flex-[1_1_440px]" />
     </div>
   </section>
+
+  <!-- Gold marquee strip under the hero -->
+  <div class="overflow-hidden border-y border-[#8B7D3C] bg-serag-gold text-serag-ink" dir="ltr" aria-hidden="true">
+    <div class="animate-marquee flex w-max py-3.5 font-display text-[22px] sm:text-[26px]">
+      <div v-for="copy in 2" :key="copy" class="flex shrink-0 gap-11 px-[22px] whitespace-nowrap">
+        <template v-for="n in 2" :key="n">
+          <template v-for="word in marqueeWords" :key="`${n}-${word}`">
+            <span>{{ word }}</span><span>✦</span>
+          </template>
+        </template>
+      </div>
+    </div>
+  </div>
 </template>

@@ -15,15 +15,15 @@ const headingId = useId()
 
 <template>
   <section class="bg-serag-ivory" :aria-labelledby="headingId">
-    <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-      <div class="mb-10 flex flex-wrap items-end justify-between gap-4">
+    <div class="mx-auto max-w-7xl px-4 pt-16 pb-14 sm:px-6 lg:px-10 lg:pt-24 lg:pb-[88px]">
+      <div class="mb-11 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p class="text-xs font-bold tracking-[0.25em] text-serag-gold-ink uppercase">
+          <p class="num text-[13px] font-bold tracking-[4px] text-serag-gold-ink uppercase">
             {{ t('store.home.guidesEyebrow') }}
           </p>
           <h2
             :id="headingId"
-            class="mt-2 font-display text-4xl leading-none text-serag-green sm:text-5xl"
+            class="mt-2 font-display text-[clamp(40px,5vw,64px)] leading-none text-serag-green"
           >
             {{ content.title }}
           </h2>
@@ -39,9 +39,11 @@ const headingId = useId()
 
       <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <StoreGuidesCard
-          v-for="guide in guides"
+          v-for="(guide, index) in guides"
           :key="guide.slug"
           :guide="guide"
+          :tone="index"
+          compact
         />
       </div>
     </div>

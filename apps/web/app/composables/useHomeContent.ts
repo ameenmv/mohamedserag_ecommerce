@@ -11,6 +11,8 @@ import { DEFAULT_HOME_CONTENT, DEFAULT_HOME_LAYOUT } from '@serag/shared'
 interface HomeBundle {
   home: PublicHome
   flashProducts: ProductCard[]
+  /** When the soonest-ending running flash sale ends (ISO), or null without one. */
+  flashEndsAt: string | null
   categories: CategoryTreeNode[]
   brands: BrandSummary[]
   guides: GuideCard[]
@@ -53,13 +55,16 @@ export async function useHomeContent() {
     ])
 
     const flashProducts = offers.flash.flatMap((group) => group.products)
+    const flashEndsAt =
+      offers.flash.map((group) => group.endsAt).sort((a, b) => Date.parse(a) - Date.parse(b))[0] ?? null
 
-    return { home, flashProducts, categories, brands, guides }
+    return { home, flashProducts, flashEndsAt, categories, brands, guides }
   })
 
   const home = computed(() => asyncData.data.value?.home ?? EMPTY_HOME)
   const sections = computed(() => home.value.sections)
   const flashProducts = computed(() => asyncData.data.value?.flashProducts ?? [])
+  const flashEndsAt = computed(() => asyncData.data.value?.flashEndsAt ?? null)
   const brands = computed(() => asyncData.data.value?.brands ?? [])
   const guides = computed(() => asyncData.data.value?.guides ?? [])
 
@@ -92,6 +97,7 @@ export async function useHomeContent() {
     sections,
     visibleSections,
     flashProducts,
+    flashEndsAt,
     featuredCategories,
     partners,
     guides,

@@ -39,10 +39,10 @@ const previousPrice = computed(() =>
     </div>
 
     <div class="flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5">
-      <span data-price class="num text-base font-extrabold tracking-tight text-serag-night sm:text-xl dark:text-serag-ivory whitespace-nowrap">
+      <span data-price class="num text-lg font-extrabold tracking-tight text-serag-green sm:text-2xl dark:text-serag-ivory whitespace-nowrap">
         {{ currentPrice.digits }}
       </span>
-      <span class="text-xs font-semibold text-muted-foreground whitespace-nowrap">
+      <span class="text-xs font-semibold text-foreground whitespace-nowrap sm:text-sm">
         {{ currentPrice.unit }}
       </span>
 

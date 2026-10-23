@@ -23,11 +23,11 @@ const label = computed(() => {
 const badgeClasses = computed(() => {
   switch (props.availability.state) {
     case 'in_stock':
-      return 'bg-emerald-500/10 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 border-emerald-500/20'
+      return 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400 border-emerald-500/20'
     case 'low':
-      return 'bg-amber-500/10 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400 border-amber-500/20'
+      return 'bg-amber-50 text-amber-800 dark:bg-amber-950/40 dark:text-amber-400 border-amber-500/20'
     case 'on_request':
-      return 'bg-blue-500/10 text-blue-700 dark:bg-blue-950/40 dark:text-blue-400 border-blue-500/20'
+      return 'bg-blue-50 text-blue-800 dark:bg-blue-950/40 dark:text-blue-400 border-blue-500/20'
     case 'out':
     default:
       return 'bg-muted text-muted-foreground border-border'

@@ -79,12 +79,12 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
     href: null,
   },
   hero: {
-    eyebrow: 'أجهزة كهربائية وأدوات منزلية · المنصورة · منذ 1972',
+    eyebrow: 'أجهزة كهربائية وأدوات منزلية · المنصورة',
     title: 'ثقة لها تاريخ',
     subtitle:
       'من 1972 بنجهّز بيوت مصر. أجهزة وأدوات أصلية بضمان حقيقي، بسعر قطاعي أو جملة، من أول جهاز لحد تجهيز بيت كامل.',
     cta: { label: 'تسوّق دلوقتي', href: '/shop' },
-    secondaryCta: { label: 'جهّز بيتك (جهاز العروسة)', href: '/bridal' },
+    secondaryCta: { label: 'أسعار الجملة للتجار', href: '/traders' },
     image: null,
     stats: [
       { value: '1972', label: 'سنة التأسيس' },
@@ -94,10 +94,10 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
   },
   uspStrip: {
     items: [
-      { title: 'ضمان حقيقي', description: 'ضمان مباشر على الأجهزة من الوكيل الرسمي' },
-      { title: 'أصلي 100%', description: 'من مصادر موثوقة ومعتمدة بفرز أول مختوم' },
-      { title: 'استلام أو توصيل', description: 'من المعرض أو لحد باب بيتك بعربيات المعرض' },
-      { title: 'الدفع عند الاستلام', description: 'ادفع وانت مطمّن بعد معاينة جهازك' },
+      { title: 'ضمان حقيقي', description: 'ضمان مباشر على الأجهزة' },
+      { title: 'أصلي 100%', description: 'من مصادر موثوقة ومعتمدة' },
+      { title: 'استلام أو توصيل', description: 'من المعرض أو لحد باب بيتك' },
+      { title: 'الدفع عند الاستلام', description: 'ادفع وانت مطمّن' },
     ],
   },
   featuredCategories: {
@@ -105,8 +105,8 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
     categorySlugs: ['refrigerators', 'washers', 'tvs', 'acs', 'cookers', 'cookware'],
   },
   flash: {
-    title: 'عروض لفترة محدودة',
-    subtitle: 'الأسعار دي لحد ما العداد يخلص',
+    title: 'عروض الفلاش',
+    subtitle: 'عروض لفترة محدودة، تخلص قبل ما تلحق',
   },
   bridalTeaser: {
     eyebrow: 'BRIDAL PACKAGES',
@@ -120,28 +120,36 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
     title: 'أسعار الجملة بتوصلك من المصدر',
     subtitle:
       'تعامل مباشر مع كبرى مصانع الأجهزة وأواني الطهي التركية المستوردة حصرياً لمعارض وتجار الدلتا ومصر.',
-    cta: { label: 'كلّم قسم الجملة على واتساب', href: '/traders' },
-    points: ['أسعار جملة من المصدر', 'توريد لمعارض الدلتا', 'فواتير رسمية وضمان الوكيل'],
+    cta: { label: 'اعرف أكتر عن الجملة', href: '/traders' },
+    points: [
+      'أسعار جملة من المصدر',
+      'توريد لمعارض الدلتا ومصر',
+      'خصومات حسب الكمية',
+      'فواتير رسمية وضمان الوكيل',
+    ],
   },
   aboutTeaser: {
-    eyebrow: 'OUR STORY · SINCE 1972',
-    title: 'من نحن — معرض محمد سراج الرئيسي',
+    eyebrow: 'OUR STORY',
+    title: 'من نحن',
     subtitle:
-      'من سنة 1972 واسم محمد سراج معروف في المنصورة لأجهزة وأدوات البيت. منتج أصلي، سعر عادل، وخدمة بتفضل معاك بعد ما تمشي.',
+      'من سنة 1972 واسم محمد سراج معروف في المنصورة لأجهزة وأدوات البيت. السوق اتغيّر كتير في +50 سنة، واللي ما اتغيّرش هو وعدنا: منتج أصلي، سعر عادل، وخدمة بتفضل معاك بعد ما تمشي.',
     cta: { label: 'اعرف حكايتنا', href: '/pages/about' },
   },
   partners: {
-    title: 'وكلاء معتمدين لأكبر الماركات',
+    title: 'أكبر المصانع بتثق فينا',
   },
   guides: {
-    title: 'دليل الشراء',
+    title: 'اشترِ صح',
   },
 }
 
-/** The announce bar starts hidden: the store header already carries the same promise strip. */
+/**
+ * The announce bar starts hidden: the store header already carries the same promise strip.
+ * The bridal teaser is hidden while the bridal builder is switched off.
+ */
 export const DEFAULT_HOME_LAYOUT: HomeLayout = {
   order: [...HOME_SECTION_IDS],
-  hidden: ['announce'],
+  hidden: ['announce', 'bridalTeaser'],
 }
 
 export function countHomeChanges(

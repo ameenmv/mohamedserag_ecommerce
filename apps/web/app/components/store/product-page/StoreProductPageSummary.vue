@@ -8,6 +8,7 @@ import {
 } from '@serag/shared'
 import { toProductCard } from '~/utils/product-card-mapper'
 import StoreProductPageBridalButton from './StoreProductPageBridalButton.vue'
+import { FEATURES } from '~/constants/features'
 
 const props = defineProps<{
   product: ProductDetail
@@ -251,7 +252,7 @@ function scrollToReviews(): void {
       </div>
 
       <!-- Add to Bridal List Button -->
-      <StoreProductPageBridalButton :product="product" />
+      <StoreProductPageBridalButton v-if="FEATURES.bridal" :product="product" />
 
       <!-- WhatsApp Ask Button -->
       <a

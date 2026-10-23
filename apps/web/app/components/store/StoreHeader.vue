@@ -9,9 +9,9 @@ const settings = useStoreSettings()
 const { wishlist, compare, cart } = useHeaderBadges()
 const { y } = useWindowScroll()
 const { isActive: isNavActive } = useNavActive('/')
+const categories = await useNavCategories()
 
 const isScrolled = computed(() => y.value > 10)
-const searchSheetOpen = ref(false)
 const mobileMenuOpen = ref(false)
 
 const whatsappUrl = computed(() =>
@@ -20,20 +20,17 @@ const whatsappUrl = computed(() =>
 </script>
 
 <template>
-  <!-- Top announcement bar -->
+  <!-- Top promise bar: authentic + delivery, phone, language -->
   <LazyStoreHeaderAnnouncement hydrate-never :phone="settings.phone" />
 
-  <!-- Sticky Header (frosted on scroll) -->
+  <!-- Logo, search and actions stay pinned; the category bar below scrolls away -->
   <header
     :class="[
-      'sticky top-0 z-40 border-b transition-all duration-200 motion-reduce:transition-none',
-      isScrolled
-        ? 'border-border/80 bg-card/90 shadow-sm backdrop-blur-md'
-        : 'border-border bg-card',
+      'sticky top-0 z-40 border-b border-[#ECE6D3] bg-card transition-shadow duration-200 motion-reduce:transition-none',
+      isScrolled ? 'shadow-sm' : '',
     ]"
   >
-    <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-2 px-3 py-3 sm:gap-4 sm:px-6 lg:px-8">
-      <!-- Mobile menu drawer trigger + Brand logo -->
+    <div class="mx-auto flex max-w-7xl flex-wrap items-center gap-x-3 gap-y-3 px-4 py-3 sm:gap-x-8 sm:px-6 lg:px-10 lg:py-[18px]">
       <div class="flex items-center gap-2 sm:gap-3">
         <StoreHeaderMobileMenu
           v-model:open="mobileMenuOpen"
@@ -42,34 +39,12 @@ const whatsappUrl = computed(() =>
           :phone="settings.phone"
           :is-active="isNavActive"
         />
-
         <StoreHeaderBrand />
       </div>
 
-      <!-- Desktop main navigation -->
-      <nav :aria-label="t('common.mainNav')" class="hidden items-center gap-1 lg:flex">
-        <StoreHeaderNavLink
-          v-for="item in STORE_NAV_ITEMS"
-          :key="item.to"
-          :to="item.to"
-          :label="t(item.labelKey)"
-          :is-active="isNavActive(item.to)"
-          :highlight="item.highlight"
-        />
-      </nav>
+      <StoreHeaderSearchBar class="order-last basis-full md:order-none md:flex-1 md:basis-80" />
 
-      <!-- Actions: Search (Sheet), Wishlist, Compare, Cart, WhatsApp, LocaleSwitcher -->
-      <div class="flex items-center gap-1.5 sm:gap-2">
-        <StoreHeaderSearch v-model:open="searchSheetOpen" />
-
-        <StoreHeaderBadgeButton
-          to="/wishlist"
-          :label="t('store.header.wishlist')"
-          :sr-text="t('store.header.wishlistCount', { count: wishlist })"
-          :count="wishlist"
-          :icon="Heart"
-        />
-
+      <div class="ms-auto flex items-center gap-1.5 sm:gap-2.5 md:ms-0">
         <StoreHeaderBadgeButton
           to="/compare"
           :label="t('store.header.compare')"
@@ -77,23 +52,17 @@ const whatsappUrl = computed(() =>
           :count="compare"
           :icon="ArrowLeftRight"
         />
-
-        <!-- Cart button with badge -->
+        <StoreHeaderBadgeButton
+          to="/wishlist"
+          :label="t('store.header.wishlist')"
+          :sr-text="t('store.header.wishlistCount', { count: wishlist })"
+          :count="wishlist"
+          :icon="Heart"
+        />
         <StoreHeaderCartButton :count="cart" />
-
-        <!-- WhatsApp button -->
-        <StoreHeaderWhatsAppButton :href="whatsappUrl" />
-
-        <!-- Language switcher (phones get it in the ☰ menu, so the action row fits at 320 px) -->
-        <CommonLocaleSwitcher class="hidden sm:inline-flex" />
       </div>
     </div>
-
-    <!-- Secondary horizontal navigation strip for tablet/mobile below lg -->
-    <LazyStoreHeaderQuickNav
-      hydrate-on-idle
-      :items="STORE_NAV_ITEMS"
-      :is-active="isNavActive"
-    />
   </header>
+
+  <StoreHeaderCategoryNav :categories="categories" />
 </template>

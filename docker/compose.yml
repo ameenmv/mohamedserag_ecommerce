@@ -52,6 +52,7 @@ services:
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
       # No demo orders on a real server (the catalogue, settings and content are still seeded)
       SEED_DEMO_ORDERS: ${SEED_DEMO_ORDERS:-false}
+      SEED_DEMO_FLASH: ${SEED_DEMO_FLASH:-false}
     volumes:
       - uploads:/uploads
 

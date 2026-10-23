@@ -11,8 +11,10 @@ export function useFooterPages() {
   const storeApi = useStoreApi()
   const { t } = useI18n()
 
-  const asyncData = useAsyncData('store:footer-pages', () =>
-    storeApi.pages().then((response) => response.items),
+  const asyncData = useAsyncData(
+    'store:footer-pages',
+    () => storeApi.pages().then((response) => response.items),
+    { getCachedData: payloadCache },
   )
 
   const links = computed<FooterResolvedLink[]>(() => {

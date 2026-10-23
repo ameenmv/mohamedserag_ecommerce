@@ -23,7 +23,7 @@ const side = computed<'right' | 'left'>(() => (localeProperties.value.dir === 'l
       <button
         type="button"
         :aria-label="t('common.mainNav')"
-        class="inline-flex size-11 items-center justify-center rounded-xl border border-border bg-background text-primary transition-colors hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none lg:hidden motion-reduce:transition-none"
+        class="inline-flex size-10 items-center justify-center rounded-xl border border-border bg-background text-primary transition-colors hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none md:hidden motion-reduce:transition-none"
       >
         <Menu class="size-5" aria-hidden="true" />
       </button>
