@@ -42,8 +42,8 @@ const whatsappUrl = computed(() =>
         <StoreHeaderBrand />
       </div>
 
-      <!-- A plain GET form until touched; the live-results code hydrates on first interaction -->
-      <LazyStoreHeaderSearchBar :hydrate-on-interaction="['focusin', 'pointerdown', 'keydown']" class="order-last basis-full md:order-none md:flex-1 md:basis-80" />
+      <!-- Hydrated eagerly: deferring it lost what was typed before it loaded -->
+      <StoreHeaderSearchBar class="order-last basis-full md:order-none md:flex-1 md:basis-80" />
 
       <div class="ms-auto flex items-center gap-1.5 sm:gap-2.5 md:ms-0">
         <StoreHeaderBadgeButton
