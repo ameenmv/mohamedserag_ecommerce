@@ -101,6 +101,9 @@ jobs:
       # The production build, not `pnpm dev`: the CSP, compression and lazy hydration only exist there.
       - name: Start production API and web
         env:
+          # Every browser test (and the SSR calls it causes) comes from this runner's one IP; the
+          # per-visitor limit (120/min) made the full suite fail at random with 429s.
+          THROTTLE_LIMIT: '2000'
           NUXT_API_INTERNAL_BASE: http://localhost:4000/api
           NUXT_PUBLIC_API_BASE: http://localhost:4000/api
           NUXT_PUBLIC_SITE_URL: http://localhost:3000
