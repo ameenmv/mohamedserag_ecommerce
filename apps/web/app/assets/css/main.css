@@ -80,23 +80,20 @@
   animation: splash-glow 1.4s ease-out both;
 }
 .splash-mark {
-  background-image: url('/brand/mark.webp');
   animation: splash-pop 0.6s cubic-bezier(.2, .9, .3, 1.25) both;
 }
 /* Arabic reads right to left, so the name is revealed from the right */
 .splash-wordmark {
-  background-image: url('/brand/wordmark.webp');
   animation: splash-wipe 0.65s cubic-bezier(.6, 0, .2, 1) 0.3s both;
 }
 .splash-since {
-  background-image: url('/brand/since.webp');
   animation: splash-open 0.55s ease-out 0.75s both;
 }
 @keyframes splash-out { to { opacity: 0; transform: scale(1.04); visibility: hidden; } }
 @keyframes splash-glow { from { opacity: 0; transform: scale(.6); } }
 @keyframes splash-pop { from { opacity: 0; transform: scale(.4) rotate(-12deg); } }
-@keyframes splash-wipe { from { clip-path: inset(0 0 0 100%); opacity: .4; } }
-@keyframes splash-open { from { clip-path: inset(0 50% 0 50%); } }
+@keyframes splash-wipe { from { clip-path: inset(0 0 0 100%); opacity: 0; } }
+@keyframes splash-open { from { clip-path: inset(0 50% 0 50%); opacity: 0; } }
 
 @media (prefers-reduced-motion: reduce) {
   .animate-floaty, .animate-spin-slow, .animate-marquee, .animate-marquee-fast,
@@ -167,3 +164,7 @@
   color: var(--color-serag-ivory);
   border-color: rgb(210 194 122 / 0.35);
 }
+/* A toast never blocks the page under it (e.g. checkout's submit right after adding to cart):
+   taps on its body pass through; its own buttons stay clickable. */
+[data-sonner-toaster][dir] [data-sonner-toast] { pointer-events: none; }
+[data-sonner-toaster][dir] [data-sonner-toast] :is(button, a) { pointer-events: auto; }
