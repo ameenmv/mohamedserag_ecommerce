@@ -308,7 +308,8 @@
       "discountShort": "-{percent}%"
     },
     "pages": {
-      "updatedAt": "Last updated: {date}"
+      "updatedAt": "Last updated: {date}",
+      "moreTitle": "More help"
     },
     "guides": {
       "seoTitle": "Buying guides",

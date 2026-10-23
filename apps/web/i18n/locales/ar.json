@@ -308,7 +308,8 @@
       "discountShort": "-{percent}%"
     },
     "pages": {
-      "updatedAt": "آخر تحديث: {date}"
+      "updatedAt": "آخر تحديث: {date}",
+      "moreTitle": "صفحات تهمّك"
     },
     "guides": {
       "seoTitle": "دليل الشراء",
