@@ -3,14 +3,13 @@ import { waLink } from '@serag/shared'
 
 const { t } = useI18n()
 const settings = useStoreSettings()
-const { track } = useAnalytics()
 
 const href = computed(() =>
   settings.whatsapp ? waLink(settings.whatsapp, t('store.footer.whatsappPrefill')) : '',
 )
 </script>
 
-<!-- Floating WhatsApp button (tablet/desktop; phones have it in the bottom bar's reach) -->
+<!-- Floating WhatsApp button (tablet/desktop). Rendered without hydration: a plain link. -->
 <template>
   <a
     v-if="href"
@@ -19,7 +18,6 @@ const href = computed(() =>
     rel="noopener noreferrer"
     :aria-label="t('store.header.whatsappAria')"
     class="group fixed end-[26px] bottom-[26px] z-40 hidden size-[62px] items-center justify-center rounded-full bg-[#16A34A] text-white shadow-[0_18px_36px_-12px_rgba(22,163,74,.7)] transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:ring-[#16A34A] focus-visible:ring-offset-2 focus-visible:outline-none md:flex motion-reduce:transition-none"
-    @click="track('whatsapp_click', { source: 'float' })"
   >
     <span class="animate-ping-soft absolute inset-0 rounded-full border-2 border-[#16A34A]" aria-hidden="true" />
     <svg viewBox="0 0 24 24" class="size-7 fill-current" aria-hidden="true">

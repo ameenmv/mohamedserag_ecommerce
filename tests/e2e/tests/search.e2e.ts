@@ -10,16 +10,13 @@ test('header search live results handles spelling variant and typo, showing Sams
   await app.open('/');
   await waitForHydration(browser);
 
-  // Open search sheet
-  const searchTrigger = screen.getByRole('button', 'ابحث عن منتج');
-  await searchTrigger.tap();
-
+  // The search box sits in the header (no sheet to open)
   // Type spelling variant plus typo «تلاجه سامسنج»
   const searchInput = screen.getByRole('searchbox', 'ابحث عن منتج');
   await searchInput.fill('تلاجه سامسنج');
 
   // Live results show Samsung fridge
-  const results = screen.getByRole('dialog');
+  const results = screen.getByRole('region', 'ابحث في معرض محمد سراج');
   await expect(results.getByText(/ثلاجة نوفروست/).first()).toBeVisible();
   await expect(results.getByText('سامسونج').first()).toBeVisible();
 
@@ -37,10 +34,7 @@ test('search with no results shows «مفيش نتايج» and top-category link
   await app.open('/');
   await waitForHydration(browser);
 
-  // Open search sheet
-  const searchTrigger = screen.getByRole('button', 'ابحث عن منتج');
-  await searchTrigger.tap();
-
+  // The search box sits in the header (no sheet to open)
   // Fill nonsense query
   const searchInput = screen.getByRole('searchbox', 'ابحث عن منتج');
   await searchInput.fill('xyzxyz');
@@ -51,7 +45,7 @@ test('search with no results shows «مفيش نتايج» and top-category link
 
   // Top category links appear as recommendations
   await expect(screen.getByText('أشهر الأقسام')).toBeVisible();
-  await expect(screen.getByRole('dialog').getByRole('link', /ثلاجات/)).toBeVisible();
+  await expect(screen.getByRole('region', 'ابحث في معرض محمد سراج').getByRole('link', /ثلاجات/)).toBeVisible();
 });
 
 test('submitting search form navigates to /shop?q=… with query in page heading', async ({
@@ -62,10 +56,7 @@ test('submitting search form navigates to /shop?q=… with query in page heading
   await app.open('/');
   await waitForHydration(browser);
 
-  // Open search sheet
-  const searchTrigger = screen.getByRole('button', 'ابحث عن منتج');
-  await searchTrigger.tap();
-
+  // The search box sits in the header (no sheet to open)
   // Type query and submit
   const searchInput = screen.getByRole('searchbox', 'ابحث عن منتج');
   await searchInput.fill('سامسونج');

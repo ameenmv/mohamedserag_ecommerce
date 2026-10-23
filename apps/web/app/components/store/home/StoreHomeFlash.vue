@@ -52,7 +52,7 @@ const headingId = useId()
 
       <!-- Horizontal scroll row on mobile, grid on desktop -->
       <div
-        class="-mx-4 flex snap-x snap-mandatory gap-[22px] overflow-x-auto px-4 pb-2 sm:-mx-0 sm:px-0 lg:grid lg:grid-cols-4 lg:overflow-visible lg:pb-0"
+        class="-mx-4 flex snap-x snap-mandatory scroll-px-4 gap-[22px] overflow-x-auto px-4 pb-2 sm:-mx-0 sm:px-0 lg:grid lg:grid-cols-4 lg:overflow-visible lg:pb-0"
       >
         <div
           v-for="product in products"

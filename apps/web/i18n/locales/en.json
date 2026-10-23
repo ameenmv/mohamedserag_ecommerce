@@ -300,7 +300,8 @@
       "outOfStock": "Out of stock",
       "discountBadge": "{percent}% off",
       "realPhoto": "Real photo",
-      "oldPriceAria": "Original price: {price}"
+      "oldPriceAria": "Original price: {price}",
+      "askWhatsappAria": "Ask about {name} on WhatsApp"
     },
     "pages": {
       "updatedAt": "Last updated: {date}"

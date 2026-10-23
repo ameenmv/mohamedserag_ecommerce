@@ -44,6 +44,7 @@ function submit(): void {
       :placeholder="t('store.header.searchPlaceholder')"
       class="min-w-0 flex-1 bg-transparent px-4 py-2 text-base text-foreground outline-none placeholder:text-muted-foreground"
       @focus="focused = true"
+      @input="focused = true"
     >
     <button
       type="submit"
@@ -55,9 +56,12 @@ function submit(): void {
 
     <div
       v-if="showResults"
+      id="store-header-search-results"
+      role="region"
+      :aria-label="t('store.header.searchTitle')"
       class="absolute inset-x-0 top-full z-50 mt-2 max-h-[70vh] overflow-y-auto rounded-3xl border border-border bg-card p-4 shadow-xl"
     >
-      <StoreHeaderSearchResults
+      <LazyStoreHeaderSearchResults
         :query="query.trim()"
         :results="results"
         :pending="pending"

@@ -300,7 +300,8 @@
       "outOfStock": "نفذ",
       "discountBadge": "خصم {percent}%",
       "realPhoto": "صورة حقيقية",
-      "oldPriceAria": "السعر الأصلي: {price}"
+      "oldPriceAria": "السعر الأصلي: {price}",
+      "askWhatsappAria": "اسأل على واتساب عن {name}"
     },
     "pages": {
       "updatedAt": "آخر تحديث: {date}"

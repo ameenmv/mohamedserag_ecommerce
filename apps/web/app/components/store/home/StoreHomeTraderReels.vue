@@ -68,7 +68,7 @@ const avatars = ['س', 'م', 'ك', 'ع']
         </div>
       </div>
 
-      <ul ref="track" tabindex="0" :aria-label="t('store.home.reels.title') + ' ' + t('store.home.reels.titleHighlight')" class="flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth px-1 pt-2.5 pb-7 scrollbar-none focus-visible:ring-2 focus-visible:ring-serag-gold focus-visible:outline-none">
+      <ul ref="track" tabindex="0" :aria-label="t('store.home.reels.title') + ' ' + t('store.home.reels.titleHighlight')" class="flex snap-x snap-mandatory scroll-px-1 gap-5 overflow-x-auto scroll-smooth px-1 pt-2.5 pb-7 scrollbar-none focus-visible:ring-2 focus-visible:ring-serag-gold focus-visible:outline-none">
         <li v-for="reel in TRADER_REELS" :key="reel.name" class="flex-none snap-start">
           <component
             :is="reel.url ? 'a' : 'div'"

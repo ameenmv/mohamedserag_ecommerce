@@ -101,7 +101,7 @@ const whatsappUrl = computed(() => {
 
       <!-- Brand name -->
       <div class="mb-1">
-        <span class="text-[11px] font-semibold text-serag-gold-ink sm:text-[13px]">
+        <span data-brand class="text-[11px] font-semibold text-serag-gold-ink sm:text-[13px]">
           {{ product.brand.name }}
         </span>
       </div>
@@ -138,6 +138,7 @@ const whatsappUrl = computed(() => {
         :href="whatsappUrl"
         target="_blank"
         rel="noopener noreferrer"
+        :aria-label="t('store.product.askWhatsappAria', { name: product.name })"
         class="relative z-10 inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border-[1.5px] border-[#CFE7D6] bg-[#F1FAF3] px-3 text-xs font-bold text-[#15803D] transition-colors hover:border-[#16A34A] hover:bg-[#16A34A] hover:text-white focus-visible:ring-2 focus-visible:ring-[#16A34A] focus-visible:outline-none sm:min-h-11 sm:rounded-2xl sm:text-[15px]"
       >
         <MessageCircle class="size-4 shrink-0 sm:size-[18px]" aria-hidden="true" />

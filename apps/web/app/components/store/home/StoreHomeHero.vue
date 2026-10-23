@@ -39,7 +39,8 @@ const secondary = computed(() => {
   }
 })
 
-const headingId = useId()
+// Fixed id: one hero per page, and useId() came out different on server and client here
+const headingId = 'home-hero-title'
 
 // «ثقة لها» / «تاريخ»: the last word goes on its own line in gold, as in the prototype
 const title = computed(() => splitHighlight(props.content.title))
@@ -130,7 +131,7 @@ const title = computed(() => splitHighlight(props.content.title))
           />
         </div>
       </div>
-      <StoreHomeHeroArt v-else class="flex-[1_1_440px]" />
+      <LazyStoreHomeHeroArt v-else hydrate-never class="flex-[1_1_440px]" />
     </div>
   </section>
 

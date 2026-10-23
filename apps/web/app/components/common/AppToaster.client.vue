@@ -3,6 +3,10 @@ import 'vue-sonner/style.css'
 import { Toaster } from '@/components/ui/sonner'
 
 const { localeProperties } = useI18n()
+
+onMounted(() => {
+  void nextTick(markToasterReady)
+})
 </script>
 
 <template>

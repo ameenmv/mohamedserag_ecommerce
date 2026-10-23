@@ -58,7 +58,7 @@ const isProductRoute = computed(() => {
     </ClientOnly>
 
     <LazyStoreFooter hydrate-on-visible />
-    <LazyStoreWhatsAppFloat hydrate-on-idle />
+    <LazyStoreWhatsAppFloat hydrate-never />
     <LazyStoreBottomNav hydrate-on-idle />
   </div>
 </template>
