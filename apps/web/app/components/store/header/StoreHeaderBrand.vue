@@ -14,7 +14,16 @@ const localePath = useLocalePath()
       :alt="t('brand.storeName')"
       width="480"
       height="172"
-      class="h-11 w-auto sm:h-[60px]"
+      class="h-11 w-auto sm:h-[60px] dark:hidden"
+    >
+    <!-- Lazy while hidden, so the light-text logo only downloads in dark mode -->
+    <img
+      src="/brand/logo-light.webp"
+      :alt="t('brand.storeName')"
+      width="480"
+      height="172"
+      loading="lazy"
+      class="hidden h-11 w-auto sm:h-[60px] dark:block"
     >
   </NuxtLink>
 </template>

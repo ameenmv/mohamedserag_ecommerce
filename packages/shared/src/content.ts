@@ -53,12 +53,18 @@ export interface PublicHome {
 }
 
 export interface AdminHomeState {
-  draft: { sections: HomeContent; layout: HomeLayout; updatedAt: string | null }
+  draft: {
+    sections: HomeContent
+    layout: HomeLayout
+    updatedAt: string | null
+    english: HomeContent | null
+  }
   published: {
     sections: HomeContent
     layout: HomeLayout
     publishedAt: string | null
     label: string | null
+    english: HomeContent | null
   }
   changes: number
 }
@@ -144,6 +150,89 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
 }
 
 /**
+ * English home content for /en until the owner writes their own English version in the admin.
+ * Links and category choices match the Arabic defaults.
+ */
+export const DEFAULT_HOME_CONTENT_EN: HomeContent = {
+  announce: {
+    text: '100% authentic with a real warranty · Showroom pickup or delivery to your door',
+    href: null,
+  },
+  hero: {
+    eyebrow: 'Home appliances & housewares · Mansoura',
+    title: 'Trusted since 1972',
+    subtitle:
+      'Since 1972 we have been furnishing Egyptian homes. Authentic appliances and housewares with a real warranty, at retail or wholesale prices, from a single appliance to a fully equipped home.',
+    cta: { label: 'Shop now', href: '/shop' },
+    secondaryCta: { label: 'Wholesale prices for traders', href: '/traders' },
+    image: null,
+    stats: [
+      { value: '1972', label: 'Founded' },
+      { value: '+50', label: 'Years of experience' },
+      { value: '100%', label: 'Authentic products' },
+    ],
+  },
+  uspStrip: {
+    items: [
+      { title: 'Real warranty', description: 'Direct warranty on every appliance' },
+      { title: '100% authentic', description: 'From trusted, authorised sources' },
+      { title: 'Pickup or delivery', description: 'From the showroom or to your door' },
+      { title: 'Cash on delivery', description: 'Pay with peace of mind' },
+    ],
+  },
+  featuredCategories: {
+    title: 'Shop by category',
+    categorySlugs: DEFAULT_HOME_CONTENT.featuredCategories.categorySlugs,
+  },
+  flash: {
+    title: 'Flash deals',
+    subtitle: 'Limited-time offers that end before you know it',
+  },
+  bridalTeaser: {
+    eyebrow: 'BRIDAL PACKAGES',
+    title: 'Bridal packages — set up your home',
+    subtitle:
+      'Pick a ready package (Basic / Golden / Palace), adjust it room by room, share it with your family on WhatsApp, and reserve it with a deposit that locks prices for 30 days.',
+    cta: { label: 'Start the planner', href: '/bridal' },
+  },
+  tradersTeaser: {
+    badge: 'For traders & showrooms',
+    title: 'Wholesale prices straight from the source',
+    subtitle:
+      'Direct dealings with leading appliance factories and imported Turkish cookware, supplied to showrooms and traders across the Delta and Egypt.',
+    cta: { label: 'Learn about wholesale', href: '/traders' },
+    points: [
+      'Wholesale prices from the source',
+      'Supply for showrooms across Egypt',
+      'Quantity discounts',
+      'Official invoices and agent warranty',
+    ],
+  },
+  aboutTeaser: {
+    eyebrow: 'OUR STORY',
+    title: 'About us',
+    subtitle:
+      'Since 1972 the name Mohamed Serag has stood for home appliances and housewares in Mansoura. The market has changed a lot in 50+ years; our promise has not: authentic products, fair prices, and service that stays with you after you leave.',
+    cta: { label: 'Read our story', href: '/pages/about' },
+  },
+  partners: {
+    title: 'Leading factories trust us',
+  },
+  guides: {
+    title: 'Buy smart',
+  },
+}
+
+/**
+ * The home content shown for `locale`: the stored English version (`data.en`) on /en when it is
+ * valid, otherwise the English defaults; Arabic always uses the main content.
+ */
+export function homeContentForLocale(arabic: HomeContent, english: HomeContent | null, locale: 'ar' | 'en'): HomeContent {
+  if (locale !== 'en') return arabic
+  return english ?? DEFAULT_HOME_CONTENT_EN
+}
+
+/**
  * The announce bar starts hidden: the store header already carries the same promise strip.
  * The bridal teaser is hidden while the bridal builder is switched off.
  */
@@ -153,8 +242,8 @@ export const DEFAULT_HOME_LAYOUT: HomeLayout = {
 }
 
 export function countHomeChanges(
-  draft: { sections: HomeContent; layout: HomeLayout },
-  published: { sections: HomeContent; layout: HomeLayout },
+  draft: { sections: HomeContent; layout: HomeLayout; english?: HomeContent | null },
+  published: { sections: HomeContent; layout: HomeLayout; english?: HomeContent | null },
 ): number {
   let changes = 0
 
@@ -166,6 +255,20 @@ export function countHomeChanges(
     for (const key of keys) {
       if (JSON.stringify(draftSection[key]) !== JSON.stringify(publishedSection[key])) changes += 1
     }
+  }
+
+  // Count differences in English content
+  if (draft.english && published.english) {
+    for (const sectionId of HOME_SECTION_IDS) {
+      const draftSection: Record<string, unknown> = { ...draft.english[sectionId] }
+      const publishedSection: Record<string, unknown> = { ...published.english[sectionId] }
+      const keys = new Set([...Object.keys(draftSection), ...Object.keys(publishedSection)])
+      for (const key of keys) {
+        if (JSON.stringify(draftSection[key]) !== JSON.stringify(publishedSection[key])) changes += 1
+      }
+    }
+  } else if ((draft.english ?? null) !== (published.english ?? null)) {
+    changes += 1
   }
 
   // Check order
@@ -243,10 +346,22 @@ export interface AdminPageRow {
   updatedAt: string
 }
 
+export interface AdminPageTranslationsEn {
+  title?: string
+  body?: string
+  seoTitle?: string
+  seoDescription?: string
+}
+
+export interface AdminPageTranslations {
+  en?: AdminPageTranslationsEn
+}
+
 export interface AdminPage extends AdminPageRow {
   body: string
   seoTitle: string | null
   seoDescription: string | null
+  translations?: AdminPageTranslations | null
 }
 
 export interface GuideCard {
@@ -267,6 +382,18 @@ export interface AdminGuideRow {
   updatedAt: string
 }
 
+export interface AdminGuideTranslationsEn {
+  title?: string
+  summary?: string
+  body?: string
+  seoTitle?: string
+  seoDescription?: string
+}
+
+export interface AdminGuideTranslations {
+  en?: AdminGuideTranslationsEn
+}
+
 export interface AdminGuide extends AdminGuideRow {
   summary: string | null
   cover: string | null
@@ -275,6 +402,7 @@ export interface AdminGuide extends AdminGuideRow {
   productIds: string[]
   seoTitle: string | null
   seoDescription: string | null
+  translations?: AdminGuideTranslations | null
   categories: { id: string; slug: string; name: string }[]
   products: { id: string; slug: string; name: string }[]
 }

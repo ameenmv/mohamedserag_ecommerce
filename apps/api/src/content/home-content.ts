@@ -57,6 +57,8 @@ function parseLayout(value: unknown): HomeLayout {
 export interface StoredHome {
   sections: HomeContent
   layout: HomeLayout
+  /** The owner's English version (stored as `data.en`), or null when there is none */
+  english: HomeContent | null
 }
 
 /**
@@ -65,8 +67,11 @@ export interface StoredHome {
  */
 export function parseStoredHome(data: unknown, layout: unknown): StoredHome {
   const parsedContent = homeContentSchema.safeParse(data)
+  const rawEnglish = typeof data === 'object' && data !== null ? (data as Record<string, unknown>).en : undefined
+  const parsedEnglish = rawEnglish === undefined ? null : homeContentSchema.safeParse(rawEnglish)
   return {
     sections: parsedContent.success ? parsedContent.data : DEFAULT_HOME_CONTENT,
     layout: parseLayout(layout),
+    english: parsedEnglish?.success ? parsedEnglish.data : null,
   }
 }

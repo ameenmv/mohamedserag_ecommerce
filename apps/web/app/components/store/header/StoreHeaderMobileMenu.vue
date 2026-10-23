@@ -56,6 +56,7 @@ const side = computed<'right' | 'left'>(() => (localeProperties.value.dir === 'l
       </nav>
       <div class="mt-auto flex flex-col gap-2 border-t border-border bg-secondary/50 p-4">
         <CommonLocaleSwitcher class="w-full justify-center" />
+        <StoreHeaderThemeToggle block />
         <a
           v-if="whatsappUrl"
           :href="whatsappUrl"

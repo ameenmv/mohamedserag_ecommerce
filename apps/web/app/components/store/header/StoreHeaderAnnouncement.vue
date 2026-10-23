@@ -35,6 +35,7 @@ const otherLocale = computed(() => locales.value.find((l) => l.code !== locale.v
         </a>
         <NuxtLink
           :to="switchLocalePath(otherLocale.code)"
+          external
           :lang="otherLocale.code"
           :hreflang="otherLocale.language"
           :aria-label="otherLocale.name"

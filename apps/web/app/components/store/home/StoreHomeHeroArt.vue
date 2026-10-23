@@ -1,4 +1,11 @@
 <script setup lang="ts">
+// With a photo uploaded in the admin (Content → Home → hero image) it fills the tall middle card;
+// without one the card keeps its fridge illustration.
+// The whole composition is decorative (aria-hidden), so the photo has an empty alt.
+defineProps<{
+  image?: string | null
+}>()
+
 const { t } = useI18n()
 </script>
 
@@ -8,8 +15,26 @@ const { t } = useI18n()
     <div class="absolute inset-[6%] rounded-full border border-dashed border-serag-gold/40" />
     <div class="absolute inset-[18%] rounded-full border border-serag-gold/20" />
 
+    <!-- Store photo (when uploaded) -->
+    <div
+      v-if="image"
+      class="animate-floaty absolute top-[8%] end-[31%] h-[76%] w-[36%] overflow-hidden rounded-[34px] border border-serag-gold-hi/55 bg-[#1B3526] shadow-[0_40px_70px_-24px_rgba(0,0,0,0.65)] [animation-delay:-1s]"
+    >
+      <NuxtImg
+        :src="image"
+        alt=""
+        width="440"
+        height="640"
+        fetchpriority="high"
+        loading="eager"
+        class="size-full object-cover"
+      />
+      <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/45 to-transparent" />
+    </div>
+
     <!-- Fridge -->
     <div
+      v-else
       class="animate-floaty absolute top-[8%] end-[31%] flex h-[76%] w-[36%] flex-col items-center justify-center gap-4 rounded-[34px] border border-serag-gold-hi/55 bg-gradient-to-b from-[#3D6B4F] to-[#1B3526] text-serag-gold-hi shadow-[0_40px_70px_-24px_rgba(0,0,0,0.65)] [animation-delay:-1s]"
     >
       <svg viewBox="0 0 48 48" class="w-[64%]" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">

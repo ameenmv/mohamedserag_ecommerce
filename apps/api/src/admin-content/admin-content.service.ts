@@ -65,6 +65,14 @@ function toInputJson(value: unknown): Prisma.InputJsonValue {
   return JSON.parse(JSON.stringify(value)) as Prisma.InputJsonValue
 }
 
+function encodeStoredData(sections: HomeContent, english: HomeContent | null): Prisma.InputJsonValue {
+  const payload: Record<string, unknown> = { ...sections }
+  if (english) {
+    payload.en = english
+  }
+  return toInputJson(payload)
+}
+
 @Injectable()
 export class AdminContentService {
   constructor(private readonly prisma: PrismaService) {}
@@ -75,7 +83,7 @@ export class AdminContentService {
   }
 
   async saveDraft(input: HomeDraftOutput, userId: string | null): Promise<AdminHomeState> {
-    await this.upsertDraft(input.sections, input.layout, userId)
+    await this.upsertDraft(input.sections, input.layout, userId, input.english)
     return this.getHomeState()
   }
 
@@ -100,7 +108,7 @@ export class AdminContentService {
       const draftState = parseStoredHome(draft.data, draft.layout)
       const publishedState = currentPublished
         ? parseStoredHome(currentPublished.data, currentPublished.layout)
-        : { sections: DEFAULT_HOME_CONTENT, layout: DEFAULT_HOME_LAYOUT }
+        : { sections: DEFAULT_HOME_CONTENT, layout: DEFAULT_HOME_LAYOUT, english: null }
 
       const changes = countHomeChanges(draftState, publishedState)
       if (changes === 0) {
@@ -111,7 +119,7 @@ export class AdminContentService {
         data: {
           page: 'home',
           status: 'published',
-          data: toInputJson(draftState.sections),
+          data: encodeStoredData(draftState.sections, draftState.english),
           layout: toInputJson(draftState.layout),
           label: input.label && input.label.length > 0 ? input.label : `${changes} تعديل منشور`,
           publishedAt: new Date(),
@@ -170,7 +178,7 @@ export class AdminContentService {
     }
 
     const parsed = parseStoredHome(version.data, version.layout)
-    await this.upsertDraft(parsed.sections, parsed.layout, userId)
+    await this.upsertDraft(parsed.sections, parsed.layout, userId, parsed.english)
     return this.getHomeState()
   }
 
@@ -223,13 +231,14 @@ export class AdminContentService {
   ): AdminHomeState {
     const publishedState = publishedRow
       ? parseStoredHome(publishedRow.data, publishedRow.layout)
-      : { sections: DEFAULT_HOME_CONTENT, layout: DEFAULT_HOME_LAYOUT }
+      : { sections: DEFAULT_HOME_CONTENT, layout: DEFAULT_HOME_LAYOUT, english: null }
 
     const published: AdminHomeState['published'] = {
       sections: publishedState.sections,
       layout: publishedState.layout,
       publishedAt: publishedRow?.publishedAt?.toISOString() ?? null,
       label: publishedRow?.label ?? null,
+      english: publishedState.english,
     }
 
     const draftSource = draftRow ? parseStoredHome(draftRow.data, draftRow.layout) : publishedState
@@ -237,6 +246,7 @@ export class AdminContentService {
       sections: draftSource.sections,
       layout: draftSource.layout,
       updatedAt: draftRow?.updatedAt.toISOString() ?? null,
+      english: draftSource.english,
     }
 
     return { draft, published, changes: countHomeChanges(draft, published) }
@@ -246,13 +256,26 @@ export class AdminContentService {
     sections: HomeContent,
     layout: HomeLayout,
     userId: string | null,
+    english?: HomeContent | null,
   ): Promise<void> {
     const draft = await this.findDraft()
+    let targetEnglish: HomeContent | null
+    if (english !== undefined) {
+      targetEnglish = english
+    } else {
+      const existingDraft = draft ? parseStoredHome(draft.data, draft.layout) : null
+      const existingPublished = existingDraft ? null : await this.findPublished()
+      const fallbackTarget =
+        existingDraft ??
+        (existingPublished ? parseStoredHome(existingPublished.data, existingPublished.layout) : null)
+      targetEnglish = fallbackTarget?.english ?? null
+    }
+
     if (draft) {
       await this.prisma.contentVersion.update({
         where: { id: draft.id },
         data: {
-          data: toInputJson(sections),
+          data: encodeStoredData(sections, targetEnglish),
           layout: toInputJson(layout),
         },
       })
@@ -263,7 +286,7 @@ export class AdminContentService {
       data: {
         page: 'home',
         status: 'draft',
-        data: toInputJson(sections),
+        data: encodeStoredData(sections, targetEnglish),
         layout: toInputJson(layout),
         userId,
       },

@@ -7,10 +7,11 @@ const props = defineProps<{
   content: HomeContent['hero']
 }>()
 
-const { t } = useI18n()
+const { t, tm, rt } = useI18n()
 const localePath = useLocalePath()
 
-const marqueeWords = computed(() => t('store.home.marquee').split('|'))
+// A list in the locale files: a «|» in a message is vue-i18n's plural separator, so t() returned one word
+const marqueeWords = computed(() => (tm('store.home.marquee') as unknown[]).map((word) => rt(word as Parameters<typeof rt>[0])))
 
 function resolveLink(href: string): string {
   return isInternalHref(href) ? localePath(href) : href
@@ -118,20 +119,7 @@ const title = computed(() => splitHighlight(props.content.title))
         </dl>
       </div>
 
-      <div v-if="content.image" class="relative w-full max-w-lg flex-[1_1_440px]">
-        <div class="relative aspect-[4/5] overflow-hidden rounded-[var(--radius-card)] border border-serag-gold/40">
-          <NuxtImg
-            :src="content.image"
-            :alt="content.title"
-            width="640"
-            height="800"
-            fetchpriority="high"
-            loading="eager"
-            class="size-full object-cover"
-          />
-        </div>
-      </div>
-      <LazyStoreHomeHeroArt v-else hydrate-never class="flex-[1_1_440px]" />
+      <LazyStoreHomeHeroArt hydrate-never :image="content.image" class="flex-[1_1_440px]" />
     </div>
   </section>
 

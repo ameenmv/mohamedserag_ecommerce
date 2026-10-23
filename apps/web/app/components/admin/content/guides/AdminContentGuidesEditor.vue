@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { AdminCategory, AdminGuide, GuidePatch } from '@serag/shared'
+import type { AdminCategory, AdminGuide, GuidePatch, GuideTranslationsInput } from '@serag/shared'
 import {
   ArrowLeft,
   ExternalLink,
@@ -63,6 +63,7 @@ const uploading = ref(false)
 const fieldErrors = ref<Record<string, string>>({})
 
 const guide = ref<AdminGuide | null>(null)
+const currentTab = ref<'ar' | 'en'>('ar')
 
 const slug = ref('')
 const title = ref('')
@@ -74,6 +75,12 @@ const products = ref<SelectedTerm[]>([])
 const seoTitle = ref('')
 const seoDescription = ref('')
 const published = ref(false)
+
+const titleEn = ref('')
+const summaryEn = ref('')
+const bodyEn = ref('')
+const seoTitleEn = ref('')
+const seoDescriptionEn = ref('')
 
 const slugTouched = ref(false)
 const initial = ref<string | null>(null)
@@ -87,6 +94,16 @@ const deleting = ref(false)
 const slugInvalid = computed(() => slug.value.trim().length > 0 && !isValidGuideSlug(slug.value.trim()))
 const titleRequired = computed(() => title.value.trim().length === 0)
 
+function buildTranslations(): GuideTranslationsInput | null {
+  const en: Record<string, string> = {}
+  if (titleEn.value.trim().length > 0) en.title = titleEn.value.trim()
+  if (summaryEn.value.trim().length > 0) en.summary = summaryEn.value.trim()
+  if (bodyEn.value.trim().length > 0) en.body = bodyEn.value.trim()
+  if (seoTitleEn.value.trim().length > 0) en.seoTitle = seoTitleEn.value.trim()
+  if (seoDescriptionEn.value.trim().length > 0) en.seoDescription = seoDescriptionEn.value.trim()
+  return Object.keys(en).length > 0 ? { en } : null
+}
+
 function buildInput(): GuidePatch {
   return {
     slug: slug.value.trim(),
@@ -99,6 +116,7 @@ function buildInput(): GuidePatch {
     seoTitle: seoTitle.value.trim(),
     seoDescription: seoDescription.value.trim(),
     published: published.value,
+    translations: buildTranslations(),
   }
 }
 
@@ -113,20 +131,42 @@ const canSave = computed(
     (creating.value || changed.value),
 )
 
-const snippetTitle = computed(
-  () =>
+const snippetTitle = computed(() => {
+  if (currentTab.value === 'en') {
+    return (
+      seoTitleEn.value.trim() ||
+      titleEn.value.trim() ||
+      seoTitle.value.trim() ||
+      title.value.trim() ||
+      t('admin.content.guides.previewTitleFallback')
+    )
+  }
+  return (
     seoTitle.value.trim() ||
     title.value.trim() ||
-    t('admin.content.guides.previewTitleFallback'),
-)
+    t('admin.content.guides.previewTitleFallback')
+  )
+})
 
-const snippetDescription = computed(
-  () =>
+const snippetDescription = computed(() => {
+  if (currentTab.value === 'en') {
+    return (
+      seoDescriptionEn.value.trim() ||
+      summaryEn.value.trim() ||
+      plainTextExcerpt(bodyEn.value, 160) ||
+      seoDescription.value.trim() ||
+      summary.value.trim() ||
+      plainTextExcerpt(body.value, 160) ||
+      t('admin.content.guides.previewDescriptionFallback')
+    )
+  }
+  return (
     seoDescription.value.trim() ||
     summary.value.trim() ||
     plainTextExcerpt(body.value, 160) ||
-    t('admin.content.guides.previewDescriptionFallback'),
-)
+    t('admin.content.guides.previewDescriptionFallback')
+  )
+})
 
 const viewHref = computed(() =>
   guide.value ? localePath(`/guides/${guide.value.slug}`) : '#',
@@ -139,6 +179,7 @@ const availableCategoryOptions = computed(() =>
 )
 
 function applyGuide(data: AdminGuide): void {
+  const en = data.translations?.en
   guide.value = data
   slug.value = data.slug
   title.value = data.title
@@ -149,6 +190,11 @@ function applyGuide(data: AdminGuide): void {
   products.value = data.products.map((p) => ({ id: p.id, name: p.name }))
   seoTitle.value = data.seoTitle ?? ''
   seoDescription.value = data.seoDescription ?? ''
+  titleEn.value = en?.title ?? ''
+  summaryEn.value = en?.summary ?? ''
+  bodyEn.value = en?.body ?? ''
+  seoTitleEn.value = en?.seoTitle ?? ''
+  seoDescriptionEn.value = en?.seoDescription ?? ''
   published.value = data.published
   slugTouched.value = true
   initial.value = JSON.stringify(buildInput())
@@ -377,265 +423,432 @@ onBeforeUnmount(() => {
         </p>
       </div>
 
-      <FormField
-        id="guide-title"
-        :label="t('admin.content.guides.fieldTitle')"
-        :error="fieldErrors.title || (titleRequired ? t('admin.content.guides.titleRequired') : undefined)"
-      >
-        <template #default="{ id, invalid, describedBy }">
-          <Input
-            :id="id"
-            v-model="title"
-            type="text"
-            maxlength="120"
-            :disabled="!hydrated || saving"
-            :aria-invalid="invalid"
-            :aria-describedby="describedBy"
-            class="h-11 rounded-lg"
-          />
-        </template>
-      </FormField>
-
-      <FormField
-        id="guide-slug"
-        :label="t('admin.content.guides.fieldSlug')"
-        :error="fieldErrors.slug || (slugInvalid ? t('admin.content.guides.slugInvalid') : undefined)"
-      >
-        <template #default="{ id, invalid, describedBy }">
-          <Input
-            :id="id"
-            v-model="slug"
-            type="text"
-            maxlength="80"
-            dir="ltr"
-            :disabled="!hydrated || saving"
-            :aria-invalid="invalid"
-            :aria-describedby="describedBy"
-            class="h-11 rounded-lg font-mono"
-            @input="onSlugInput"
-          />
-        </template>
-      </FormField>
-
-      <FormField
-        id="guide-summary"
-        :label="t('admin.content.guides.fieldSummary')"
-        :error="fieldErrors.summary"
-      >
-        <template #default="{ id, invalid, describedBy }">
-          <div class="flex flex-col gap-1">
-            <AdminFormTextarea
-              :id="id"
-              v-model="summary"
-              :rows="2"
-              maxlength="280"
-              :disabled="!hydrated || saving"
-              :aria-invalid="invalid"
-              :aria-describedby="describedBy"
-            />
-            <span class="num self-end text-[11px] text-muted-foreground">
-              {{ t('admin.content.guides.counter', { count: summary.length, max: 280 }) }}
-            </span>
-          </div>
-        </template>
-      </FormField>
-
-      <!-- Cover -->
-      <div class="flex flex-col gap-2">
-        <Label class="text-sm font-semibold">{{ t('admin.content.guides.fieldCover') }}</Label>
-        <div class="flex flex-wrap items-center gap-3">
-          <img
-            v-if="cover"
-            :src="cover"
-            :alt="t('admin.content.guides.fieldCover')"
-            class="h-20 w-32 rounded-xl border border-border object-cover"
-          >
-          <label
-            class="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-xl border border-input px-4 text-sm font-bold text-foreground hover:bg-accent focus-within:ring-2 focus-within:ring-ring"
-          >
-            <Upload class="size-4" aria-hidden="true" />
-            <span>
-              {{
-                uploading
-                  ? t('admin.content.fields.uploading')
-                  : t('admin.content.fields.upload')
-              }}
-            </span>
-            <input
-              type="file"
-              accept="image/jpeg,image/png,image/webp"
-              class="sr-only"
-              :disabled="!hydrated || uploading"
-              @change="onFileChange"
-            >
-          </label>
+      <!-- Language tabs -->
+      <div class="border-b border-border">
+        <div
+          role="tablist"
+          :aria-label="t('admin.content.langTabs.ariaLabel')"
+          class="-mb-px flex items-center gap-2"
+        >
           <button
-            v-if="cover"
             type="button"
-            class="inline-flex min-h-11 items-center gap-1 text-xs font-bold text-destructive hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-            @click="cover = null"
+            role="tab"
+            :aria-selected="currentTab === 'ar'"
+            class="flex shrink-0 cursor-pointer items-center gap-2 whitespace-nowrap border-b-2 px-4 py-2.5 text-sm font-bold transition-colors"
+            :class="
+              currentTab === 'ar'
+                ? 'border-serag-green text-serag-green dark:border-serag-gold dark:text-serag-gold'
+                : 'border-transparent text-muted-foreground hover:border-border hover:text-foreground'
+            "
+            @click="currentTab = 'ar'"
           >
-            <Trash2 class="size-3.5" aria-hidden="true" />
-            <span>{{ t('admin.content.fields.removeImage') }}</span>
+            <span>{{ t('admin.content.langTabs.ar') }}</span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            :aria-selected="currentTab === 'en'"
+            class="flex shrink-0 cursor-pointer items-center gap-2 whitespace-nowrap border-b-2 px-4 py-2.5 text-sm font-bold transition-colors"
+            :class="
+              currentTab === 'en'
+                ? 'border-serag-green text-serag-green dark:border-serag-gold dark:text-serag-gold'
+                : 'border-transparent text-muted-foreground hover:border-border hover:text-foreground'
+            "
+            @click="currentTab = 'en'"
+          >
+            <span>{{ t('admin.content.langTabs.en') }}</span>
           </button>
         </div>
-        <p v-if="fieldErrors.cover" class="text-xs font-medium text-destructive">
-          {{ fieldErrors.cover }}
-        </p>
       </div>
 
-      <!-- Body -->
-      <div class="flex flex-col gap-2">
-        <Label class="text-sm font-semibold">{{ t('admin.content.guides.fieldBody') }}</Label>
-        <AdminRichTextEditor
-          v-model="body"
-          allow-images
-          :label="t('admin.content.guides.fieldBody')"
-          :on-upload-image="uploadBodyImage"
-        />
-        <p v-if="fieldErrors.body" class="text-xs font-medium text-destructive">
-          {{ fieldErrors.body }}
-        </p>
-      </div>
-
-      <!-- Categories -->
-      <div class="flex flex-col gap-2">
-        <Label for="guide-category" class="text-sm font-semibold">
-          {{ t('admin.content.guides.fieldCategories') }}
-        </Label>
-        <div class="flex items-end gap-2">
-          <div class="flex-1">
-            <AdminFormSelect
-              id="guide-category"
-              :model-value="selectedCategoryId"
-              :disabled="!hydrated || saving || availableCategoryOptions.length === 0"
-              @update:model-value="selectedCategoryId = String($event)"
-            >
-              <option value="">{{ t('admin.content.guides.pickCategory') }}</option>
-              <option v-for="option in availableCategoryOptions" :key="option.id" :value="option.id">
-                {{ option.name }}
-              </option>
-            </AdminFormSelect>
-          </div>
-          <Button
-            type="button"
-            variant="outline"
-            class="min-h-10 shrink-0 gap-1"
-            :disabled="!hydrated || saving || !selectedCategoryId"
-            @click="addCategory"
-          >
-            <Plus class="size-4" aria-hidden="true" />
-            <span>{{ t('admin.content.guides.addCategory') }}</span>
-          </Button>
-        </div>
-        <ul v-if="categories.length" class="flex flex-wrap gap-2">
-          <li
-            v-for="term in categories"
-            :key="term.id"
-            class="inline-flex items-center gap-2 rounded-full bg-serag-green/10 px-3 py-1 text-xs font-bold text-serag-green"
-          >
-            <span>{{ term.name }}</span>
-            <button
-              type="button"
-              :disabled="!hydrated || saving"
-              :aria-label="t('admin.content.guides.removeTerm', { name: term.name })"
-              class="inline-flex size-5 items-center justify-center rounded-full hover:bg-serag-green/20 disabled:opacity-50"
-              @click="removeCategory(term.id)"
-            >
-              <X class="size-3.5" aria-hidden="true" />
-            </button>
-          </li>
-        </ul>
-        <p v-if="fieldErrors.categoryIds" class="text-xs font-medium text-destructive">
-          {{ fieldErrors.categoryIds }}
-        </p>
-      </div>
-
-      <!-- Products -->
-      <div class="flex flex-col gap-2">
-        <Label class="text-sm font-semibold">{{ t('admin.content.guides.fieldProducts') }}</Label>
-        <div class="flex flex-wrap items-center gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            class="min-h-10 gap-1"
-            :disabled="!hydrated || saving || products.length >= MAX_TERMS"
-            @click="pickerOpen = true"
-          >
-            <Plus class="size-4" aria-hidden="true" />
-            <span>{{ t('admin.content.guides.addProduct') }}</span>
-          </Button>
-        </div>
-        <ul v-if="products.length" class="flex flex-wrap gap-2">
-          <li
-            v-for="term in products"
-            :key="term.id"
-            class="inline-flex items-center gap-2 rounded-full bg-serag-night/10 px-3 py-1 text-xs font-bold text-serag-night dark:bg-serag-gold/15 dark:text-serag-gold"
-          >
-            <span class="max-w-[14rem] truncate">{{ term.name }}</span>
-            <button
-              type="button"
-              :disabled="!hydrated || saving"
-              :aria-label="t('admin.content.guides.removeTerm', { name: term.name })"
-              class="inline-flex size-5 items-center justify-center rounded-full hover:bg-serag-night/15 disabled:opacity-50"
-              @click="removeProduct(term.id)"
-            >
-              <X class="size-3.5" aria-hidden="true" />
-            </button>
-          </li>
-        </ul>
-        <p v-if="fieldErrors.productIds" class="text-xs font-medium text-destructive">
-          {{ fieldErrors.productIds }}
-        </p>
-      </div>
-
-      <!-- SEO -->
-      <FormField
-        id="guide-seo-title"
-        :label="t('admin.content.guides.fieldSeoTitle')"
-        :error="fieldErrors.seoTitle"
-      >
-        <template #default="{ id, invalid, describedBy }">
-          <div class="flex flex-col gap-1">
+      <!-- Arabic tab -->
+      <div v-if="currentTab === 'ar'" class="flex flex-col gap-5">
+        <FormField
+          id="guide-title"
+          :label="t('admin.content.guides.fieldTitle')"
+          :error="fieldErrors.title || (titleRequired ? t('admin.content.guides.titleRequired') : undefined)"
+        >
+          <template #default="{ id, invalid, describedBy }">
             <Input
               :id="id"
-              v-model="seoTitle"
+              v-model="title"
               type="text"
-              maxlength="70"
+              maxlength="120"
               :disabled="!hydrated || saving"
               :aria-invalid="invalid"
               :aria-describedby="describedBy"
               class="h-11 rounded-lg"
             />
-            <span class="num self-end text-[11px] text-muted-foreground">
-              {{ t('admin.content.guides.counter', { count: seoTitle.length, max: 70 }) }}
-            </span>
-          </div>
-        </template>
-      </FormField>
+          </template>
+        </FormField>
 
-      <FormField
-        id="guide-seo-description"
-        :label="t('admin.content.guides.fieldSeoDescription')"
-        :error="fieldErrors.seoDescription"
-      >
-        <template #default="{ id, invalid, describedBy }">
-          <div class="flex flex-col gap-1">
-            <AdminFormTextarea
+        <FormField
+          id="guide-slug"
+          :label="t('admin.content.guides.fieldSlug')"
+          :error="fieldErrors.slug || (slugInvalid ? t('admin.content.guides.slugInvalid') : undefined)"
+        >
+          <template #default="{ id, invalid, describedBy }">
+            <Input
               :id="id"
-              v-model="seoDescription"
-              :rows="3"
-              maxlength="160"
+              v-model="slug"
+              type="text"
+              maxlength="80"
+              dir="ltr"
               :disabled="!hydrated || saving"
               :aria-invalid="invalid"
               :aria-describedby="describedBy"
+              class="h-11 rounded-lg font-mono"
+              @input="onSlugInput"
             />
-            <span class="num self-end text-[11px] text-muted-foreground">
-              {{ t('admin.content.guides.counter', { count: seoDescription.length, max: 160 }) }}
-            </span>
+          </template>
+        </FormField>
+
+        <FormField
+          id="guide-summary"
+          :label="t('admin.content.guides.fieldSummary')"
+          :error="fieldErrors.summary"
+        >
+          <template #default="{ id, invalid, describedBy }">
+            <div class="flex flex-col gap-1">
+              <AdminFormTextarea
+                :id="id"
+                v-model="summary"
+                :rows="2"
+                maxlength="280"
+                :disabled="!hydrated || saving"
+                :aria-invalid="invalid"
+                :aria-describedby="describedBy"
+              />
+              <span class="num self-end text-[11px] text-muted-foreground">
+                {{ t('admin.content.guides.counter', { count: summary.length, max: 280 }) }}
+              </span>
+            </div>
+          </template>
+        </FormField>
+
+        <!-- Cover -->
+        <div class="flex flex-col gap-2">
+          <Label class="text-sm font-semibold">{{ t('admin.content.guides.fieldCover') }}</Label>
+          <div class="flex flex-wrap items-center gap-3">
+            <img
+              v-if="cover"
+              :src="cover"
+              :alt="t('admin.content.guides.fieldCover')"
+              class="h-20 w-32 rounded-xl border border-border object-cover"
+            >
+            <label
+              class="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-xl border border-input px-4 text-sm font-bold text-foreground hover:bg-accent focus-within:ring-2 focus-within:ring-ring"
+            >
+              <Upload class="size-4" aria-hidden="true" />
+              <span>
+                {{
+                  uploading
+                    ? t('admin.content.fields.uploading')
+                    : t('admin.content.fields.upload')
+                }}
+              </span>
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                class="sr-only"
+                :disabled="!hydrated || uploading"
+                @change="onFileChange"
+              >
+            </label>
+            <button
+              v-if="cover"
+              type="button"
+              class="inline-flex min-h-11 items-center gap-1 text-xs font-bold text-destructive hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+              @click="cover = null"
+            >
+              <Trash2 class="size-3.5" aria-hidden="true" />
+              <span>{{ t('admin.content.fields.removeImage') }}</span>
+            </button>
           </div>
-        </template>
-      </FormField>
+          <p v-if="fieldErrors.cover" class="text-xs font-medium text-destructive">
+            {{ fieldErrors.cover }}
+          </p>
+        </div>
+
+        <!-- Body -->
+        <div class="flex flex-col gap-2">
+          <Label class="text-sm font-semibold">{{ t('admin.content.guides.fieldBody') }}</Label>
+          <AdminRichTextEditor
+            v-model="body"
+            allow-images
+            :label="t('admin.content.guides.fieldBody')"
+            :on-upload-image="uploadBodyImage"
+          />
+          <p v-if="fieldErrors.body" class="text-xs font-medium text-destructive">
+            {{ fieldErrors.body }}
+          </p>
+        </div>
+
+        <!-- Categories -->
+        <div class="flex flex-col gap-2">
+          <Label for="guide-category" class="text-sm font-semibold">
+            {{ t('admin.content.guides.fieldCategories') }}
+          </Label>
+          <div class="flex items-end gap-2">
+            <div class="flex-1">
+              <AdminFormSelect
+                id="guide-category"
+                :model-value="selectedCategoryId"
+                :disabled="!hydrated || saving || availableCategoryOptions.length === 0"
+                @update:model-value="selectedCategoryId = String($event)"
+              >
+                <option value="">{{ t('admin.content.guides.pickCategory') }}</option>
+                <option v-for="option in availableCategoryOptions" :key="option.id" :value="option.id">
+                  {{ option.name }}
+                </option>
+              </AdminFormSelect>
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              class="min-h-10 shrink-0 gap-1"
+              :disabled="!hydrated || saving || !selectedCategoryId"
+              @click="addCategory"
+            >
+              <Plus class="size-4" aria-hidden="true" />
+              <span>{{ t('admin.content.guides.addCategory') }}</span>
+            </Button>
+          </div>
+          <ul v-if="categories.length" class="flex flex-wrap gap-2">
+            <li
+              v-for="term in categories"
+              :key="term.id"
+              class="inline-flex items-center gap-2 rounded-full bg-serag-green/10 px-3 py-1 text-xs font-bold text-serag-green"
+            >
+              <span>{{ term.name }}</span>
+              <button
+                type="button"
+                :disabled="!hydrated || saving"
+                :aria-label="t('admin.content.guides.removeTerm', { name: term.name })"
+                class="inline-flex size-5 items-center justify-center rounded-full hover:bg-serag-green/20 disabled:opacity-50"
+                @click="removeCategory(term.id)"
+              >
+                <X class="size-3.5" aria-hidden="true" />
+              </button>
+            </li>
+          </ul>
+          <p v-if="fieldErrors.categoryIds" class="text-xs font-medium text-destructive">
+            {{ fieldErrors.categoryIds }}
+          </p>
+        </div>
+
+        <!-- Products -->
+        <div class="flex flex-col gap-2">
+          <Label class="text-sm font-semibold">{{ t('admin.content.guides.fieldProducts') }}</Label>
+          <div class="flex flex-wrap items-center gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              class="min-h-10 gap-1"
+              :disabled="!hydrated || saving || products.length >= MAX_TERMS"
+              @click="pickerOpen = true"
+            >
+              <Plus class="size-4" aria-hidden="true" />
+              <span>{{ t('admin.content.guides.addProduct') }}</span>
+            </Button>
+          </div>
+          <ul v-if="products.length" class="flex flex-wrap gap-2">
+            <li
+              v-for="term in products"
+              :key="term.id"
+              class="inline-flex items-center gap-2 rounded-full bg-serag-night/10 px-3 py-1 text-xs font-bold text-serag-night dark:bg-serag-gold/15 dark:text-serag-gold"
+            >
+              <span class="max-w-[14rem] truncate">{{ term.name }}</span>
+              <button
+                type="button"
+                :disabled="!hydrated || saving"
+                :aria-label="t('admin.content.guides.removeTerm', { name: term.name })"
+                class="inline-flex size-5 items-center justify-center rounded-full hover:bg-serag-night/15 disabled:opacity-50"
+                @click="removeProduct(term.id)"
+              >
+                <X class="size-3.5" aria-hidden="true" />
+              </button>
+            </li>
+          </ul>
+          <p v-if="fieldErrors.productIds" class="text-xs font-medium text-destructive">
+            {{ fieldErrors.productIds }}
+          </p>
+        </div>
+
+        <!-- SEO -->
+        <FormField
+          id="guide-seo-title"
+          :label="t('admin.content.guides.fieldSeoTitle')"
+          :error="fieldErrors.seoTitle"
+        >
+          <template #default="{ id, invalid, describedBy }">
+            <div class="flex flex-col gap-1">
+              <Input
+                :id="id"
+                v-model="seoTitle"
+                type="text"
+                maxlength="70"
+                :disabled="!hydrated || saving"
+                :aria-invalid="invalid"
+                :aria-describedby="describedBy"
+                class="h-11 rounded-lg"
+              />
+              <span class="num self-end text-[11px] text-muted-foreground">
+                {{ t('admin.content.guides.counter', { count: seoTitle.length, max: 70 }) }}
+              </span>
+            </div>
+          </template>
+        </FormField>
+
+        <FormField
+          id="guide-seo-description"
+          :label="t('admin.content.guides.fieldSeoDescription')"
+          :error="fieldErrors.seoDescription"
+        >
+          <template #default="{ id, invalid, describedBy }">
+            <div class="flex flex-col gap-1">
+              <AdminFormTextarea
+                :id="id"
+                v-model="seoDescription"
+                :rows="3"
+                maxlength="160"
+                :disabled="!hydrated || saving"
+                :aria-invalid="invalid"
+                :aria-describedby="describedBy"
+              />
+              <span class="num self-end text-[11px] text-muted-foreground">
+                {{ t('admin.content.guides.counter', { count: seoDescription.length, max: 160 }) }}
+              </span>
+            </div>
+          </template>
+        </FormField>
+      </div>
+
+      <!-- English tab -->
+      <div v-else-if="currentTab === 'en'" class="flex flex-col gap-5">
+        <p class="text-xs text-muted-foreground">
+          {{ t('admin.content.guides.englishTabHint') }}
+        </p>
+
+        <FormField
+          id="guide-title-en"
+          :label="t('admin.content.guides.fieldTitleEn')"
+          :error="fieldErrors['translations.en.title']"
+        >
+          <template #default="{ id, invalid, describedBy }">
+            <div class="flex flex-col gap-1">
+              <Input
+                :id="id"
+                v-model="titleEn"
+                type="text"
+                dir="ltr"
+                lang="en"
+                maxlength="120"
+                :disabled="!hydrated || saving"
+                :aria-invalid="invalid"
+                :aria-describedby="describedBy"
+                class="h-11 rounded-lg"
+              />
+              <span class="num self-end text-[11px] text-muted-foreground">
+                {{ t('admin.content.guides.counter', { count: titleEn.length, max: 120 }) }}
+              </span>
+            </div>
+          </template>
+        </FormField>
+
+        <FormField
+          id="guide-summary-en"
+          :label="t('admin.content.guides.fieldSummaryEn')"
+          :error="fieldErrors['translations.en.summary']"
+        >
+          <template #default="{ id, invalid, describedBy }">
+            <div class="flex flex-col gap-1">
+              <AdminFormTextarea
+                :id="id"
+                v-model="summaryEn"
+                :rows="2"
+                dir="ltr"
+                lang="en"
+                maxlength="280"
+                :disabled="!hydrated || saving"
+                :aria-invalid="invalid"
+                :aria-describedby="describedBy"
+              />
+              <span class="num self-end text-[11px] text-muted-foreground">
+                {{ t('admin.content.guides.counter', { count: summaryEn.length, max: 280 }) }}
+              </span>
+            </div>
+          </template>
+        </FormField>
+
+        <!-- Body En -->
+        <div class="flex flex-col gap-2">
+          <Label class="text-sm font-semibold">{{ t('admin.content.guides.fieldBodyEn') }}</Label>
+          <div dir="ltr" lang="en">
+            <AdminRichTextEditor
+              v-model="bodyEn"
+              allow-images
+              :label="t('admin.content.guides.fieldBodyEn')"
+              :on-upload-image="uploadBodyImage"
+            />
+          </div>
+          <p v-if="fieldErrors['translations.en.body']" class="text-xs font-medium text-destructive">
+            {{ fieldErrors['translations.en.body'] }}
+          </p>
+        </div>
+
+        <!-- SEO En -->
+        <FormField
+          id="guide-seo-title-en"
+          :label="t('admin.content.guides.fieldSeoTitleEn')"
+          :error="fieldErrors['translations.en.seoTitle']"
+        >
+          <template #default="{ id, invalid, describedBy }">
+            <div class="flex flex-col gap-1">
+              <Input
+                :id="id"
+                v-model="seoTitleEn"
+                type="text"
+                dir="ltr"
+                lang="en"
+                maxlength="70"
+                :disabled="!hydrated || saving"
+                :aria-invalid="invalid"
+                :aria-describedby="describedBy"
+                class="h-11 rounded-lg"
+              />
+              <span class="num self-end text-[11px] text-muted-foreground">
+                {{ t('admin.content.guides.counter', { count: seoTitleEn.length, max: 70 }) }}
+              </span>
+            </div>
+          </template>
+        </FormField>
+
+        <FormField
+          id="guide-seo-description-en"
+          :label="t('admin.content.guides.fieldSeoDescriptionEn')"
+          :error="fieldErrors['translations.en.seoDescription']"
+        >
+          <template #default="{ id, invalid, describedBy }">
+            <div class="flex flex-col gap-1">
+              <AdminFormTextarea
+                :id="id"
+                v-model="seoDescriptionEn"
+                :rows="3"
+                dir="ltr"
+                lang="en"
+                maxlength="160"
+                :disabled="!hydrated || saving"
+                :aria-invalid="invalid"
+                :aria-describedby="describedBy"
+              />
+              <span class="num self-end text-[11px] text-muted-foreground">
+                {{ t('admin.content.guides.counter', { count: seoDescriptionEn.length, max: 160 }) }}
+              </span>
+            </div>
+          </template>
+        </FormField>
+      </div>
 
       <!-- Snippet preview -->
       <div class="rounded-2xl border border-border bg-muted/30 p-4">

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   DEFAULT_HOME_CONTENT,
+  DEFAULT_HOME_CONTENT_EN,
   DEFAULT_HOME_LAYOUT,
   comparePageOrder,
   countHomeChanges,
@@ -10,9 +11,12 @@ import {
 } from './content.js'
 import {
   homeContentSchema,
+  homeDraftInputSchema,
   homeLayoutSchema,
   pageInputSchema,
+  pageTranslationsSchema,
   guideInputSchema,
+  guideTranslationsSchema,
 } from './content-schema.js'
 
 describe('content', () => {
@@ -129,5 +133,129 @@ describe('content', () => {
       { slug: 'returns', title: 'الاسترجاع' },
     ]
     expect([...pages].sort(comparePageOrder).map((p) => p.slug)).toEqual(['about', 'returns', 'faq', 'alpha', 'zeta'])
+  })
+
+  it('pageTranslationsSchema drops empty strings so Arabic fallback applies', () => {
+    const parsed = pageTranslationsSchema.safeParse({
+      en: {
+        title: '  About Mohamed Serag  ',
+        body: '  <p>English content</p>  ',
+        seoTitle: '   ',
+        seoDescription: null,
+      },
+    })
+    expect(parsed.success).toBe(true)
+    if (parsed.success) {
+      expect(parsed.data.en).toEqual({
+        title: 'About Mohamed Serag',
+        body: '<p>English content</p>',
+      })
+      expect('seoTitle' in (parsed.data.en ?? {})).toBe(false)
+      expect('seoDescription' in (parsed.data.en ?? {})).toBe(false)
+    }
+  })
+
+  it('guideTranslationsSchema drops empty strings and trims values', () => {
+    const parsed = guideTranslationsSchema.safeParse({
+      en: {
+        title: '  Refrigerator Buying Guide  ',
+        summary: '  Quick summary  ',
+        body: '   ',
+        seoTitle: 'Guide SEO',
+        seoDescription: '',
+      },
+    })
+    expect(parsed.success).toBe(true)
+    if (parsed.success) {
+      expect(parsed.data.en).toEqual({
+        title: 'Refrigerator Buying Guide',
+        summary: 'Quick summary',
+        seoTitle: 'Guide SEO',
+      })
+    }
+  })
+
+  it('pageInputSchema and guideInputSchema accept optional translations', () => {
+    const pageRes = pageInputSchema.safeParse({
+      title: 'عن المعرض',
+      body: '<p>محتوى عربي</p>',
+      seoTitle: null,
+      seoDescription: null,
+      published: true,
+      translations: {
+        en: {
+          title: 'About Us',
+          body: '<p>English body</p>',
+          seoTitle: '',
+          seoDescription: 'English SEO description',
+        },
+      },
+    })
+    expect(pageRes.success).toBe(true)
+    if (pageRes.success) {
+      expect(pageRes.data.translations?.en).toEqual({
+        title: 'About Us',
+        body: '<p>English body</p>',
+        seoDescription: 'English SEO description',
+      })
+    }
+
+    const guideRes = guideInputSchema.safeParse({
+      slug: 'washers-guide',
+      title: 'دليل الغسالات',
+      summary: 'ملخص عربي',
+      cover: null,
+      body: '<p>محتوى</p>',
+      categoryIds: [],
+      productIds: [],
+      seoTitle: null,
+      seoDescription: null,
+      published: false,
+      translations: {
+        en: {
+          title: 'Washers Guide',
+          summary: 'English summary',
+        },
+      },
+    })
+    expect(guideRes.success).toBe(true)
+    if (guideRes.success) {
+      expect(guideRes.data.translations?.en).toEqual({
+        title: 'Washers Guide',
+        summary: 'English summary',
+      })
+    }
+  })
+
+  it('homeDraftInputSchema accepts optional english HomeContent', () => {
+    const res = homeDraftInputSchema.safeParse({
+      sections: DEFAULT_HOME_CONTENT,
+      layout: DEFAULT_HOME_LAYOUT,
+      english: DEFAULT_HOME_CONTENT_EN,
+    })
+    expect(res.success).toBe(true)
+
+    const resWithoutEn = homeDraftInputSchema.safeParse({
+      sections: DEFAULT_HOME_CONTENT,
+      layout: DEFAULT_HOME_LAYOUT,
+    })
+    expect(resWithoutEn.success).toBe(true)
+  })
+
+  it('countHomeChanges accounts for english differences', () => {
+    const base = {
+      sections: DEFAULT_HOME_CONTENT,
+      layout: DEFAULT_HOME_LAYOUT,
+      english: DEFAULT_HOME_CONTENT_EN,
+    }
+    const modifiedEn = {
+      sections: DEFAULT_HOME_CONTENT,
+      layout: DEFAULT_HOME_LAYOUT,
+      english: {
+        ...DEFAULT_HOME_CONTENT_EN,
+        hero: { ...DEFAULT_HOME_CONTENT_EN.hero, title: 'Brand New English Title' },
+      },
+    }
+    expect(countHomeChanges(modifiedEn, base)).toBe(1)
   })
 })

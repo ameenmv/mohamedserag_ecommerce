@@ -46,6 +46,10 @@ const whatsappUrl = computed(() =>
       <StoreHeaderSearchBar class="order-last basis-full md:order-none md:flex-1 md:basis-80" />
 
       <div class="ms-auto flex items-center gap-1.5 sm:gap-2.5 md:ms-0">
+        <!-- Phones get it in the side menu: the row has no room for a fourth button -->
+        <div class="hidden sm:flex">
+          <StoreHeaderThemeToggle />
+        </div>
         <StoreHeaderBadgeButton
           to="/compare"
           :label="t('store.header.compare')"

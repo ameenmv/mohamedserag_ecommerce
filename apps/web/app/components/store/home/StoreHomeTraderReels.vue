@@ -2,7 +2,7 @@
 import { ArrowLeft, ArrowRight, Play } from '@lucide/vue'
 import { TRADER_REELS } from '~/constants/trader-reels'
 
-const { t, localeProperties } = useI18n()
+const { t, locale, localeProperties } = useI18n()
 const localePath = useLocalePath()
 const headingId = useId()
 const track = ref<HTMLElement | null>(null)
@@ -15,7 +15,14 @@ function scrollCards(direction: 1 | -1): void {
   el.scrollBy({ left: direction * (rtl ? -280 : 280), behavior: 'smooth' })
 }
 
-const avatars = ['س', 'م', 'ك', 'ع']
+const lang = computed(() => (locale.value === 'en' ? 'en' : 'ar'))
+const reels = computed(() =>
+  TRADER_REELS.map((reel) => ({ ...reel, label: reel.name[lang.value], place: reel.shop[lang.value] })),
+)
+// First letters of the first four traders' names (skipping the «أ.» / «الحاج» title in Arabic)
+const avatars = computed(() =>
+  reels.value.slice(0, 4).map((reel) => (reel.label.split(' ').at(-1) ?? reel.label).charAt(0)),
+)
 </script>
 
 <template>
@@ -69,13 +76,13 @@ const avatars = ['س', 'م', 'ك', 'ع']
       </div>
 
       <ul ref="track" tabindex="0" :aria-label="t('store.home.reels.title') + ' ' + t('store.home.reels.titleHighlight')" class="flex snap-x snap-mandatory scroll-px-1 gap-5 overflow-x-auto scroll-smooth px-1 pt-2.5 pb-7 scrollbar-none focus-visible:ring-2 focus-visible:ring-serag-gold focus-visible:outline-none">
-        <li v-for="reel in TRADER_REELS" :key="reel.name" class="flex-none snap-start">
+        <li v-for="reel in reels" :key="reel.name.en" class="flex-none snap-start">
           <component
             :is="reel.url ? 'a' : 'div'"
             :href="reel.url ?? undefined"
             :target="reel.url ? '_blank' : undefined"
             :rel="reel.url ? 'noopener noreferrer' : undefined"
-            :aria-label="reel.url ? t('store.home.reels.play', { name: reel.name }) : undefined"
+            :aria-label="reel.url ? t('store.home.reels.play', { name: reel.label }) : undefined"
             class="group relative block aspect-[9/16] w-[200px] overflow-hidden rounded-[var(--radius-card)] border border-serag-gold-hi/25 bg-[#1B3526] text-start transition duration-300 hover:-translate-y-2.5 hover:scale-[1.02] hover:border-serag-gold-hi hover:shadow-[0_40px_60px_-28px_rgba(0,0,0,.8)] focus-visible:ring-2 focus-visible:ring-serag-gold focus-visible:outline-none sm:w-[260px] motion-reduce:transition-none motion-reduce:hover:transform-none"
           >
             <div
@@ -98,8 +105,8 @@ const avatars = ['س', 'م', 'ك', 'ع']
             </span>
             <div class="absolute inset-x-0 bottom-0 p-5">
               <div class="text-sm tracking-[2px] text-serag-gold-hi" aria-hidden="true">★★★★★</div>
-              <div class="mt-1.5 text-lg font-bold">{{ reel.name }}</div>
-              <div class="mt-0.5 text-[13px] text-[#B9C7B6]">{{ reel.shop }}</div>
+              <div class="mt-1.5 text-lg font-bold">{{ reel.label }}</div>
+              <div class="mt-0.5 text-[13px] text-[#B9C7B6]">{{ reel.place }}</div>
             </div>
           </component>
         </li>
@@ -110,7 +117,7 @@ const avatars = ['س', 'م', 'ك', 'ع']
           <div class="flex ps-3" dir="ltr" aria-hidden="true">
             <span
               v-for="(letter, i) in avatars"
-              :key="letter"
+              :key="i"
               :class="[
                 '-ms-3 flex size-[46px] items-center justify-center rounded-full border-[3px] border-serag-deep font-bold text-serag-ink',
                 ['bg-serag-gold-hi', 'bg-serag-gold', 'bg-[#E8DFB0]', 'bg-[#8B7D3C]'][i],

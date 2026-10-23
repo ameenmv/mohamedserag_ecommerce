@@ -73,7 +73,10 @@
       "flashDeals": "عروض الفلاش",
       "tradersWholesale": "للتجار والجملة",
       "tradersReviews": "آراء التجار",
-      "aboutUs": "من نحن"
+      "aboutUs": "من نحن",
+      "toggleTheme": "بدّل بين الوضع الفاتح والغامق",
+      "darkMode": "الوضع الغامق",
+      "lightMode": "الوضع الفاتح"
     },
     "footer": {
       "whatsappPrefill": "السلام عليكم، عندي استفسار من موقع معرض محمد سراج 👋",
@@ -129,7 +132,16 @@
         "screens": "شاشات",
         "acs": "تكييفات"
       },
-      "marquee": "أجهزة كهربائية|أدوات منزلية|جملة وقطاعي|منذ 1972|المنصورة|ضمان حقيقي|أصلي 100%|توصيل لحد البيت",
+      "marquee": [
+        "أجهزة كهربائية",
+        "أدوات منزلية",
+        "جملة وقطاعي",
+        "منذ 1972",
+        "المنصورة",
+        "ضمان حقيقي",
+        "أصلي 100%",
+        "توصيل لحد البيت"
+      ],
       "flashEndsIn": "بتخلص بعد",
       "how": {
         "title": "إزاي تطلب؟",
@@ -1380,11 +1392,46 @@
           "seoDescription": "وصف المنتج لمحركات البحث (SEO Description)",
           "seoDescriptionHint": "موصى به ~160 حرف",
           "chars": "{count} حرف"
+        },
+        "english": {
+          "title": "البيانات بالإنجليزي (لموقع /en)",
+          "description": "نصوص بديلة تظهر في النسخة الإنجليزية /en للمتجر. لو سبتها فاضية، هيظهر النص العربي تلقائياً.",
+          "name": "اسم المنتج بالإنجليزي",
+          "namePlaceholder": "e.g. LG Front Load Washer 9kg",
+          "leadTimeText": "مدة التوريد بالإنجليزي",
+          "leadTimePlaceholder": "e.g. Delivery within 3 to 5 business days",
+          "warranty": "الضمان بالإنجليزي",
+          "warrantyPlaceholder": "e.g. 10 Years Comprehensive Warranty",
+          "warrantyActivation": "تفعيل الضمان بالإنجليزي",
+          "warrantyActivationPlaceholder": "e.g. Call customer service hotline",
+          "origin": "بلد المنشأ بالإنجليزي",
+          "originPlaceholder": "e.g. Egypt / Turkey / South Korea",
+          "seoTitle": "عنوان SEO بالإنجليزي",
+          "seoTitleHint": "موصى به ~60 حرف",
+          "seoDescription": "وصف SEO بالإنجليزي",
+          "seoDescriptionHint": "موصى به ~160 حرف",
+          "setContentsTitle": "محتويات الطقم بالإنجليزي",
+          "setContentsDescription": "صفوف مطابقة لمحتويات الطقم بالعربي بنفس الترتيب والعدد",
+          "item": "اسم القطعة بالإنجليزي",
+          "itemPlaceholder": "e.g. Cooking pot with lid",
+          "size": "المقاس بالإنجليزي",
+          "sizePlaceholder": "e.g. 24 cm",
+          "qty": "العدد"
         }
       }
     },
     "catalog": {
       "title": "الأقسام والماركات",
+      "english": {
+        "sectionTitle": "البيانات بالإنجليزي (لموقع /en)",
+        "sectionHint": "تظهر في النسخة الإنجليزية /en، وإذا تُركت فارغة سيتم استخدام النص العربي.",
+        "name": "الاسم بالإنجليزي",
+        "namePlaceholder": "e.g. Refrigerators",
+        "intro": "نبذة بالإنجليزي",
+        "introPlaceholder": "e.g. High quality cooling appliances",
+        "seoTitle": "عنوان SEO بالإنجليزي",
+        "seoDescription": "وصف SEO بالإنجليزي"
+      },
       "tabs": {
         "categories": "الأقسام",
         "brands": "العلامات التجارية",
@@ -1451,11 +1498,21 @@
         "keyPlaceholder": "e.g. capacity",
         "label": "الاسم بالعربي",
         "labelPlaceholder": "مثال: السعة باللتر",
+        "labelEn": "الاسم بالإنجليزي",
+        "labelEnPlaceholder": "e.g. Capacity (Liters)",
         "type": "النوع",
-        "unit": "الوحدة",
+        "unit": "الوحدة بالعربي",
         "unitPlaceholder": "مثال: لتر، وات",
-        "options": "الخيارات (مفصولة بفاصلة)",
+        "unitEn": "الوحدة بالإنجليزي",
+        "unitEnPlaceholder": "e.g. Liters, Watts",
+        "options": "خيارات القائمة",
         "optionsPlaceholder": "مثال: أبيض, فضي, أسود",
+        "optionAr": "الخيار بالعربي",
+        "optionArPlaceholder": "مثال: نوفروست",
+        "optionEn": "الخيار بالإنجليزي",
+        "optionEnPlaceholder": "e.g. No Frost",
+        "addOption": "إضافة خيار",
+        "removeOption": "حذف الخيار",
         "filterable": "فلترة بالمتجر",
         "comparable": "مقارنة",
         "emptyHint": "اضغط «إضافة خاصية» لإضافة أول مواصفة فنية للقالب.",
@@ -2133,6 +2190,14 @@
     },
     "content": {
       "loading": "جاري تحميل المحرر…",
+      "langTabs": {
+        "ariaLabel": "تبديل لغة المحتوى",
+        "ar": "العربية",
+        "en": "English"
+      },
+      "home": {
+        "sharedWithArabic": "الحقل ده مشترك مع النسخة العربي ومش محتاج ترجمة."
+      },
       "tabs": {
         "home": "الصفحة الرئيسية",
         "pages": "الصفحات",
@@ -2153,10 +2218,15 @@
         "back": "رجوع للصفحات",
         "editorHeading": "تعديل الصفحة",
         "editorLoadError": "تعذر تحميل الصفحة",
+        "englishTabHint": "جميع الحقول اختيارية. اترك أي حقل فارغاً لاستخدام النسخة العربية بدلاً منه.",
         "fieldTitle": "عنوان الصفحة",
+        "fieldTitleEn": "عنوان الصفحة بالإنجليزي",
         "fieldBody": "محتوى الصفحة",
+        "fieldBodyEn": "محتوى الصفحة بالإنجليزي",
         "fieldSeoTitle": "عنوان SEO",
+        "fieldSeoTitleEn": "عنوان SEO بالإنجليزي",
         "fieldSeoDescription": "وصف SEO",
+        "fieldSeoDescriptionEn": "وصف SEO بالإنجليزي",
         "fieldPublished": "الصفحة منشورة للزوار",
         "counter": "{count}/{max}",
         "snippetLabel": "معاينة نتيجة البحث",
@@ -2192,15 +2262,21 @@
         "editorHeading": "تعديل الدليل",
         "editorCreateHeading": "دليل جديد",
         "editorLoadError": "تعذر تحميل الدليل",
+        "englishTabHint": "جميع الحقول اختيارية. اترك أي حقل فارغاً لاستخدام النسخة العربية. الرابط وصورة الغلاف والأقسام والمنتجات مشتركة مع النسخة العربية.",
         "fieldTitle": "عنوان الدليل",
+        "fieldTitleEn": "عنوان الدليل بالإنجليزي",
         "fieldSlug": "الرابط (slug)",
         "fieldSummary": "ملخص الدليل",
+        "fieldSummaryEn": "ملخص الدليل بالإنجليزي",
         "fieldCover": "صورة الغلاف",
         "fieldBody": "محتوى الدليل",
+        "fieldBodyEn": "محتوى الدليل بالإنجليزي",
         "fieldCategories": "الأقسام المرتبطة",
         "fieldProducts": "المنتجات المرتبطة",
         "fieldSeoTitle": "عنوان SEO",
+        "fieldSeoTitleEn": "عنوان SEO بالإنجليزي",
         "fieldSeoDescription": "وصف SEO",
+        "fieldSeoDescriptionEn": "وصف SEO بالإنجليزي",
         "fieldPublished": "الدليل منشور للزوار",
         "pickCategory": "اختر قسم",
         "addCategory": "أضف قسم",
@@ -2332,7 +2408,7 @@
           "subtitle": "الوصف",
           "cta": "الزر الأساسي",
           "secondaryCta": "الزر الثانوي",
-          "image": "صورة الهيرو",
+          "image": "صورة الهيرو (بتظهر في الكارت الكبير اللي في النص، والأحسن تكون طولية)",
           "stats": "الإحصائيات"
         },
         "uspStrip": {

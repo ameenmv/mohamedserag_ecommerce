@@ -10,5 +10,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <Toaster :dir="localeProperties.dir" rich-colors position="bottom-center" />
+  <!-- Styled in main.css; on phones it sits above the bottom navigation -->
+  <Toaster
+    :dir="localeProperties.dir"
+    position="bottom-center"
+    close-button
+    :mobile-offset="{ bottom: '84px' }"
+  />
 </template>

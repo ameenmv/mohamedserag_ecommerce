@@ -50,6 +50,12 @@ export interface SpecTemplateField {
   type: SpecFieldType
   unit?: string | null
   options?: string[] | null
+  /** English label, unit and options (same order as `options`) for the /en storefront */
+  labelEn?: string | null
+  unitEn?: string | null
+  optionsEn?: string[] | null
+  /** Display names for `options` in the requested language (the values stay Arabic for filters) */
+  optionLabels?: string[] | null
   filterable: boolean
   comparable: boolean
 }

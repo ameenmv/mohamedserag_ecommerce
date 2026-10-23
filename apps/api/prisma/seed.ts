@@ -94,6 +94,19 @@ const SEARCH_SYNONYMS: string[][] = [
 // 3. SPEC TEMPLATES & CATEGORIES
 // ============================================================================
 
+type SpecFieldDefWithEn = SpecFieldDef & {
+  labelEn?: string
+  unitEn?: string
+  optionsEn?: string[]
+}
+
+interface CategoryTranslationsEn {
+  name: string
+  intro?: string
+  seoTitle?: string
+  seoDescription?: string
+}
+
 interface CategorySeedDef {
   slug: string
   name: string
@@ -102,7 +115,8 @@ interface CategorySeedDef {
   intro: string
   seoTitle: string
   seoDescription: string
-  fields: SpecFieldDef[]
+  translations: { en: CategoryTranslationsEn }
+  fields: SpecFieldDefWithEn[]
 }
 
 const CATEGORY_DEFS: CategorySeedDef[] = [
@@ -114,24 +128,69 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
     intro: 'تشكيلة ثلاجات نوفروست وديفروست أصلية بضمان الوكيل الرسمي وتوصيل لحد باب البيت.',
     seoTitle: 'ثلاجات وفريزر بأفضل سعر في مصر | معرض محمد سراج',
     seoDescription: 'اشترِ ثلاجات سامسونج وإل جي وتوشيبا وفريش بضمان الوكيل الرسمي من معرض محمد سراج بالمنصورة.',
+    translations: {
+      en: {
+        name: 'Refrigerators',
+        intro: 'Genuine No Frost and Defrost refrigerators with official agent warranty and doorstep delivery.',
+        seoTitle: 'Refrigerators & Freezers in Egypt | Mohamed Serag',
+        seoDescription:
+          'Shop Samsung, LG, Toshiba, and Fresh refrigerators with official agent warranty from Mohamed Serag showroom in Mansoura.',
+      },
+    },
     fields: [
-      { key: 'capacity_l', label: 'السعة باللتر', type: 'number', unit: 'لتر', filterable: true, comparable: true },
-      { key: 'capacity_ft', label: 'السعة بالقدم', type: 'number', unit: 'قدم', filterable: true, comparable: true },
       {
-        key: 'cooling',
-        label: 'نظام التبريد',
-        type: 'choice',
-        options: ['نوفروست', 'ديفروست'],
+        key: 'capacity_l',
+        label: 'السعة باللتر',
+        labelEn: 'Capacity (Liters)',
+        type: 'number',
+        unit: 'لتر',
+        unitEn: 'L',
         filterable: true,
         comparable: true,
       },
-      { key: 'inverter', label: 'موتور انفرتر', type: 'boolean', filterable: true, comparable: true },
-      { key: 'doors', label: 'عدد الأبواب', type: 'number', filterable: true, comparable: true },
+      {
+        key: 'capacity_ft',
+        label: 'السعة بالقدم',
+        labelEn: 'Capacity (Cu Ft)',
+        type: 'number',
+        unit: 'قدم',
+        unitEn: 'ft',
+        filterable: true,
+        comparable: true,
+      },
+      {
+        key: 'cooling',
+        label: 'نظام التبريد',
+        labelEn: 'Cooling System',
+        type: 'choice',
+        options: ['نوفروست', 'ديفروست'],
+        optionsEn: ['No Frost', 'Defrost'],
+        filterable: true,
+        comparable: true,
+      },
+      {
+        key: 'inverter',
+        label: 'موتور انفرتر',
+        labelEn: 'Inverter Motor',
+        type: 'boolean',
+        filterable: true,
+        comparable: true,
+      },
+      {
+        key: 'doors',
+        label: 'عدد الأبواب',
+        labelEn: 'Number of Doors',
+        type: 'number',
+        filterable: true,
+        comparable: true,
+      },
       {
         key: 'energy_class',
         label: 'كفاءة الطاقة',
+        labelEn: 'Energy Efficiency Class',
         type: 'choice',
         options: ['A++', 'A+', 'A', 'B'],
+        optionsEn: ['A++', 'A+', 'A', 'B'],
         filterable: false,
         comparable: true,
       },
@@ -145,19 +204,62 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
     intro: 'غسالات أوتوماتيك تحميل أمامي وفوق أوتوماتيك ونصف أوتوماتيك من أكبر الماركات المعتمدة.',
     seoTitle: 'غسالات ملابس أوتوماتيك وفوق أوتوماتيك | معرض محمد سراج',
     seoDescription: 'قارن أسعار ومواصفات غسالات إل جي وسامسونج وتوشيبا وتورنيدو بضمان الوكيل الرسمي.',
+    translations: {
+      en: {
+        name: 'Washers',
+        intro: 'Front load automatic, top load, and semi-automatic washing machines from leading certified brands.',
+        seoTitle: 'Automatic & Top Load Washing Machines | Mohamed Serag',
+        seoDescription:
+          'Compare prices and specs for LG, Samsung, Toshiba, and Tornado washing machines with official agent warranty from Mohamed Serag.',
+      },
+    },
     fields: [
-      { key: 'capacity_kg', label: 'سعة الغسيل', type: 'number', unit: 'كجم', filterable: true, comparable: true },
-      { key: 'rpm', label: 'سرعة الدوران', type: 'number', unit: 'لفة/دقيقة', filterable: true, comparable: true },
       {
-        key: 'loading',
-        label: 'نوع التحميل',
-        type: 'choice',
-        options: ['أمامي', 'علوي', 'حوضين'],
+        key: 'capacity_kg',
+        label: 'سعة الغسيل',
+        labelEn: 'Washing Capacity',
+        type: 'number',
+        unit: 'كجم',
+        unitEn: 'kg',
         filterable: true,
         comparable: true,
       },
-      { key: 'inverter', label: 'موتور انفرتر', type: 'boolean', filterable: true, comparable: true },
-      { key: 'steam', label: 'غسيل بالبخار', type: 'boolean', filterable: true, comparable: true },
+      {
+        key: 'rpm',
+        label: 'سرعة الدوران',
+        labelEn: 'Spin Speed',
+        type: 'number',
+        unit: 'لفة/دقيقة',
+        unitEn: 'RPM',
+        filterable: true,
+        comparable: true,
+      },
+      {
+        key: 'loading',
+        label: 'نوع التحميل',
+        labelEn: 'Loading Type',
+        type: 'choice',
+        options: ['أمامي', 'علوي', 'حوضين'],
+        optionsEn: ['Front Load', 'Top Load', 'Twin Tub'],
+        filterable: true,
+        comparable: true,
+      },
+      {
+        key: 'inverter',
+        label: 'موتور انفرتر',
+        labelEn: 'Inverter Motor',
+        type: 'boolean',
+        filterable: true,
+        comparable: true,
+      },
+      {
+        key: 'steam',
+        label: 'غسيل بالبخار',
+        labelEn: 'Steam Wash',
+        type: 'boolean',
+        filterable: true,
+        comparable: true,
+      },
     ],
   },
   {
@@ -168,18 +270,52 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
     intro: 'شاشات سمارت 4K وQLED وFull HD بريسيفر داخلي وضمان رسمي.',
     seoTitle: 'شاشات وتلفزيونات سمارت 4K وQLED | معرض محمد سراج',
     seoDescription: 'تسوق أحدث شاشات سامسونج وإل جي وشارب بمقاسات متنوعة وضمان الوكيل المعتمد.',
+    translations: {
+      en: {
+        name: 'TVs',
+        intro: 'Smart 4K, QLED, and Full HD TVs with built-in receiver and official warranty.',
+        seoTitle: 'Smart 4K & QLED TVs and Screens | Mohamed Serag',
+        seoDescription:
+          'Shop the latest Samsung, LG, and Sharp screens in diverse sizes with certified agent warranty from Mohamed Serag showroom.',
+      },
+    },
     fields: [
-      { key: 'size_in', label: 'المقاس', type: 'number', unit: 'بوصة', filterable: true, comparable: true },
       {
-        key: 'resolution',
-        label: 'الدقة',
-        type: 'choice',
-        options: ['HD', 'FHD', '4K', 'QLED'],
+        key: 'size_in',
+        label: 'المقاس',
+        labelEn: 'Screen Size',
+        type: 'number',
+        unit: 'بوصة',
+        unitEn: 'in',
         filterable: true,
         comparable: true,
       },
-      { key: 'smart', label: 'شاشة سمارت', type: 'boolean', filterable: true, comparable: true },
-      { key: 'receiver', label: 'ريسيفر داخلي', type: 'boolean', filterable: true, comparable: true },
+      {
+        key: 'resolution',
+        label: 'الدقة',
+        labelEn: 'Resolution',
+        type: 'choice',
+        options: ['HD', 'FHD', '4K', 'QLED'],
+        optionsEn: ['HD', 'FHD', '4K', 'QLED'],
+        filterable: true,
+        comparable: true,
+      },
+      {
+        key: 'smart',
+        label: 'شاشة سمارت',
+        labelEn: 'Smart TV',
+        type: 'boolean',
+        filterable: true,
+        comparable: true,
+      },
+      {
+        key: 'receiver',
+        label: 'ريسيفر داخلي',
+        labelEn: 'Built-in Receiver',
+        type: 'boolean',
+        filterable: true,
+        comparable: true,
+      },
     ],
   },
   {
@@ -190,18 +326,54 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
     intro: 'تكييفات سبليت بارد وبارد ساخن وتكنولوجيا انفرتر موفرة للكهرباء.',
     seoTitle: 'تكييفات شارب وتوشيبا وفريش إنفرتر | معرض محمد سراج',
     seoDescription: 'أفضل أسعار التكييفات السبليت 1.5 و2.25 و3 حصان بضمان العربي جروب ومصانع فريش.',
+    translations: {
+      en: {
+        name: 'Air Conditioners',
+        intro: 'Split air conditioners, cooling and heating, with energy-saving inverter technology.',
+        seoTitle: 'Sharp, Toshiba & Fresh Inverter ACs | Mohamed Serag',
+        seoDescription:
+          'Best prices on 1.5, 2.25, and 3 HP split air conditioners with El Araby Group and Fresh factories warranty at Mohamed Serag.',
+      },
+    },
     fields: [
-      { key: 'hp', label: 'القدرة', type: 'number', unit: 'حصان', filterable: true, comparable: true },
       {
-        key: 'mode',
-        label: 'نظام التشغيل',
-        type: 'choice',
-        options: ['بارد', 'بارد ساخن'],
+        key: 'hp',
+        label: 'القدرة',
+        labelEn: 'Horsepower',
+        type: 'number',
+        unit: 'حصان',
+        unitEn: 'HP',
         filterable: true,
         comparable: true,
       },
-      { key: 'inverter', label: 'تكنولوجيا انفرتر', type: 'boolean', filterable: true, comparable: true },
-      { key: 'coverage_m2', label: 'مساحة التغطية', type: 'number', unit: 'م²', filterable: false, comparable: true },
+      {
+        key: 'mode',
+        label: 'نظام التشغيل',
+        labelEn: 'Operating Mode',
+        type: 'choice',
+        options: ['بارد', 'بارد ساخن'],
+        optionsEn: ['Cooling Only', 'Cool & Heat'],
+        filterable: true,
+        comparable: true,
+      },
+      {
+        key: 'inverter',
+        label: 'تكنولوجيا انفرتر',
+        labelEn: 'Inverter Technology',
+        type: 'boolean',
+        filterable: true,
+        comparable: true,
+      },
+      {
+        key: 'coverage_m2',
+        label: 'مساحة التغطية',
+        labelEn: 'Coverage Area',
+        type: 'number',
+        unit: 'م²',
+        unitEn: 'm²',
+        filterable: false,
+        comparable: true,
+      },
     ],
   },
   {
@@ -212,11 +384,52 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
     intro: 'بوتاجازات غاز 4 و5 شعلة استانلس كامل وأمان كامل من أشهر المصانع المصرية.',
     seoTitle: 'بوتاجازات 4 و5 شعلة استانلس وأمان كامل | معرض محمد سراج',
     seoDescription: 'بوتاجازات يونيون إير وفريش وتورنيدو العربي بمروحة فرن وإشعال ذاتي بضمان المصنع.',
+    translations: {
+      en: {
+        name: 'Cookers',
+        intro: 'Full stainless steel 4- and 5-burner gas cookers with full safety from top Egyptian manufacturers.',
+        seoTitle: '4 & 5 Burner Gas Cookers Full Stainless | Mohamed Serag',
+        seoDescription:
+          'Unionaire, Fresh, and Tornado cookers featuring oven fan and auto ignition with factory warranty at Mohamed Serag showroom.',
+      },
+    },
     fields: [
-      { key: 'burners', label: 'عدد الشعلات', type: 'number', unit: 'شعلة', filterable: true, comparable: true },
-      { key: 'width_cm', label: 'العرض', type: 'number', unit: 'سم', filterable: true, comparable: true },
-      { key: 'fan', label: 'مروحة فرن', type: 'boolean', filterable: true, comparable: true },
-      { key: 'auto_ignition', label: 'إشعال ذاتي', type: 'boolean', filterable: true, comparable: true },
+      {
+        key: 'burners',
+        label: 'عدد الشعلات',
+        labelEn: 'Number of Burners',
+        type: 'number',
+        unit: 'شعلة',
+        unitEn: 'burners',
+        filterable: true,
+        comparable: true,
+      },
+      {
+        key: 'width_cm',
+        label: 'العرض',
+        labelEn: 'Width',
+        type: 'number',
+        unit: 'سم',
+        unitEn: 'cm',
+        filterable: true,
+        comparable: true,
+      },
+      {
+        key: 'fan',
+        label: 'مروحة فرن',
+        labelEn: 'Oven Fan',
+        type: 'boolean',
+        filterable: true,
+        comparable: true,
+      },
+      {
+        key: 'auto_ignition',
+        label: 'إشعال ذاتي',
+        labelEn: 'Auto Ignition',
+        type: 'boolean',
+        filterable: true,
+        comparable: true,
+      },
     ],
   },
   {
@@ -227,18 +440,52 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
     intro: 'أطقم حلل وأواني طهي تركية أصلية مستوردة مباشرة (جرانيت، ستانلس 18/10، سيراميك، تيفال).',
     seoTitle: 'أدوات مطبخ وأطقم حلل تركي أصلية | معرض محمد سراج',
     seoDescription: 'أطقم حلل تركي مستوردة حصرياً من مصانع TAÇ وGlore وÖztef وYonca وMarti وEdessa.',
+    translations: {
+      en: {
+        name: 'Cookware',
+        intro: 'Authentic imported Turkish cookware and pot sets (granite, 18/10 stainless steel, ceramic, Tefal non-stick).',
+        seoTitle: 'Authentic Turkish Cookware & Pot Sets | Mohamed Serag',
+        seoDescription:
+          'Exclusive Turkish cookware sets directly imported from TAÇ, Glore, Öztef, Yonca, Marti, and Edessa factories at Mohamed Serag.',
+      },
+    },
     fields: [
-      { key: 'pieces', label: 'عدد القطع', type: 'number', unit: 'قطعة', filterable: true, comparable: true },
       {
-        key: 'material',
-        label: 'الخامة',
-        type: 'choice',
-        options: ['جرانيت', 'ستانلس', 'سيراميك', 'تيفال'],
+        key: 'pieces',
+        label: 'عدد القطع',
+        labelEn: 'Number of Pieces',
+        type: 'number',
+        unit: 'قطعة',
+        unitEn: 'pcs',
         filterable: true,
         comparable: true,
       },
-      { key: 'induction', label: 'يدعم الحث الحراري', type: 'boolean', filterable: false, comparable: true },
-      { key: 'dishwasher_safe', label: 'آمن لغسالة الأطباق', type: 'boolean', filterable: false, comparable: true },
+      {
+        key: 'material',
+        label: 'الخامة',
+        labelEn: 'Material',
+        type: 'choice',
+        options: ['جرانيت', 'ستانلس', 'سيراميك', 'تيفال'],
+        optionsEn: ['Granite', 'Stainless Steel', 'Ceramic', 'Tefal'],
+        filterable: true,
+        comparable: true,
+      },
+      {
+        key: 'induction',
+        label: 'يدعم الحث الحراري',
+        labelEn: 'Induction Compatible',
+        type: 'boolean',
+        filterable: false,
+        comparable: true,
+      },
+      {
+        key: 'dishwasher_safe',
+        label: 'آمن لغسالة الأطباق',
+        labelEn: 'Dishwasher Safe',
+        type: 'boolean',
+        filterable: false,
+        comparable: true,
+      },
     ],
   },
 ]
@@ -669,44 +916,434 @@ const COOKWARE_CATALOG: CatalogSeedItem[] = [
   },
 ]
 
-const TURKISH_BRAND_DEFS: Array<{ slug: string; name: string; enName: string; intro: string }> = [
+const CATALOG_BRAND_EN: Record<
+  string,
+  { name: string; intro: string; seoTitle: string; seoDescription: string }
+> = {
+  samsung: {
+    name: 'Samsung',
+    intro: 'Original Samsung appliances with certified agent warranty at Mohamed Serag showroom.',
+    seoTitle: 'Genuine Samsung Products & Prices | Mohamed Serag',
+    seoDescription:
+      'Shop the latest Samsung home appliances with official agent warranty and doorstep delivery from Mohamed Serag in Mansoura.',
+  },
+  toshiba: {
+    name: 'Toshiba',
+    intro: 'Original Toshiba appliances with certified El Araby warranty at Mohamed Serag showroom.',
+    seoTitle: 'Genuine Toshiba Products & Prices | Mohamed Serag',
+    seoDescription:
+      'Shop the latest Toshiba home appliances with official El Araby warranty and doorstep delivery from Mohamed Serag in Mansoura.',
+  },
+  lg: {
+    name: 'LG',
+    intro: 'Original LG appliances with certified agent warranty at Mohamed Serag showroom.',
+    seoTitle: 'Genuine LG Products & Prices | Mohamed Serag',
+    seoDescription:
+      'Shop the latest LG home appliances with official certified agent warranty and doorstep delivery from Mohamed Serag in Mansoura.',
+  },
+  fresh: {
+    name: 'Fresh',
+    intro: 'Original Fresh appliances with certified factory warranty at Mohamed Serag showroom.',
+    seoTitle: 'Genuine Fresh Products & Prices | Mohamed Serag',
+    seoDescription:
+      'Shop the latest Fresh home appliances with official factory warranty and doorstep delivery from Mohamed Serag in Mansoura.',
+  },
+  tornado: {
+    name: 'Tornado',
+    intro: 'Original Tornado appliances with certified El Araby warranty at Mohamed Serag showroom.',
+    seoTitle: 'Genuine Tornado Products & Prices | Mohamed Serag',
+    seoDescription:
+      'Shop the latest Tornado home appliances with official El Araby warranty and doorstep delivery from Mohamed Serag in Mansoura.',
+  },
+  sharp: {
+    name: 'Sharp',
+    intro: 'Original Sharp appliances with certified El Araby warranty at Mohamed Serag showroom.',
+    seoTitle: 'Genuine Sharp Products & Prices | Mohamed Serag',
+    seoDescription:
+      'Shop the latest Sharp home appliances with official El Araby warranty and doorstep delivery from Mohamed Serag in Mansoura.',
+  },
+  unionaire: {
+    name: 'Unionaire',
+    intro: 'Original Unionaire appliances with certified warranty at Mohamed Serag showroom.',
+    seoTitle: 'Genuine Unionaire Products & Prices | Mohamed Serag',
+    seoDescription:
+      'Shop the latest Unionaire home appliances with official factory warranty and doorstep delivery from Mohamed Serag in Mansoura.',
+  },
+}
+
+interface TurkishBrandSeedDef {
+  slug: string
+  name: string
+  enName: string
+  intro: string
+  translations: {
+    en: {
+      name: string
+      intro: string
+      seoTitle: string
+      seoDescription: string
+    }
+  }
+}
+
+const TURKISH_BRAND_DEFS: TurkishBrandSeedDef[] = [
   {
     slug: 'tac',
     name: 'تاك',
     enName: 'TAÇ',
     intro: 'تاك (TAÇ) التركية — أطقم حلل جرانيت وأدوات مائدة فاخرة باستيراد مباشر.',
+    translations: {
+      en: {
+        name: 'TAÇ',
+        intro: 'Turkish TAÇ — luxury granite cookware sets and tableware directly imported.',
+        seoTitle: 'Turkish TAÇ Cookware Sets & Kitchen Tools | Mohamed Serag',
+        seoDescription:
+          'Turkish TAÇ premium granite cookware sets and luxury tableware imported directly to Mohamed Serag showroom in Mansoura.',
+      },
+    },
   },
   {
     slug: 'glore',
     name: 'جلور',
     enName: 'Glore',
     intro: 'جلور (Glore) التركية — أطقم ستانلس ستيل وزجاج وبورسلين تركي أصلي.',
+    translations: {
+      en: {
+        name: 'Glore',
+        intro: 'Turkish Glore — authentic Turkish stainless steel sets, glassware, and porcelain.',
+        seoTitle: 'Turkish Glore Cookware & Kitchen Tools | Mohamed Serag',
+        seoDescription:
+          'Turkish Glore authentic stainless steel sets, premium glassware, and porcelain directly imported to Mohamed Serag showroom.',
+      },
+    },
   },
   {
     slug: 'yonca',
     name: 'يونجا',
     enName: 'Yonca',
     intro: 'يونجا (Yonca) التركية — أواني طهي عملية وعصرية بجودة تركية معتمدة.',
+    translations: {
+      en: {
+        name: 'Yonca',
+        intro: 'Turkish Yonca — practical, modern cookware with certified Turkish quality.',
+        seoTitle: 'Turkish Yonca Cookware & Kitchen Tools | Mohamed Serag',
+        seoDescription:
+          'Turkish Yonca practical, modern cookware and non-stick pot sets with certified Turkish quality at Mohamed Serag showroom.',
+      },
+    },
   },
   {
     slug: 'oztef',
     name: 'أوزتيف دوكوم',
     enName: 'Öztef Döküm',
     intro: 'أوزتيف دوكوم (Öztef Döküm) — حلل جرانيت وزهر تركي صب ثقيل لتوزيع مثالي للحرارة.',
+    translations: {
+      en: {
+        name: 'Öztef Döküm',
+        intro: 'Öztef Döküm — heavy cast granite and iron cookware from Turkey for optimal heat distribution.',
+        seoTitle: 'Turkish Öztef Döküm Cookware Sets | Mohamed Serag',
+        seoDescription:
+          'Turkish Öztef Döküm heavy cast granite and iron cookware for ideal heat distribution, directly imported to Mohamed Serag.',
+      },
+    },
   },
   {
     slug: 'marti',
     name: 'مارتي',
     enName: 'Marti',
     intro: 'مارتي (Marti) التركية — أطقم طهي سيراميك وأدوات مائدة ومنزل.',
+    translations: {
+      en: {
+        name: 'Marti',
+        intro: 'Turkish Marti — ceramic cookware sets, tableware, and household essentials.',
+        seoTitle: 'Turkish Marti Cookware & Tableware | Mohamed Serag',
+        seoDescription:
+          'Turkish Marti ceramic cookware sets, fine tableware, and household goods directly imported to Mohamed Serag in Mansoura.',
+      },
+    },
   },
   {
     slug: 'edessa',
     name: 'إيديسا',
     enName: 'Edessa',
     intro: 'إيديسا (Edessa) التركية — أطقم سيراميك وبورسلين حراري تركي.',
+    translations: {
+      en: {
+        name: 'Edessa',
+        intro: 'Turkish Edessa — thermal ceramic sets and Turkish oven porcelain.',
+        seoTitle: 'Turkish Edessa Ceramic Cookware Sets | Mohamed Serag',
+        seoDescription:
+          'Turkish Edessa thermal ceramic cookware sets and heat-resistant oven porcelain directly imported to Mohamed Serag showroom.',
+      },
+    },
   },
 ]
+
+interface ProductTranslationSeedDef {
+  name: string
+  leadTimeText?: string
+  warranty: string
+  origin: string
+  seoTitle: string
+  seoDescription: string
+  setContents?: SetContentPiece[]
+}
+
+const PRODUCT_TRANSLATIONS_EN: Record<string, ProductTranslationSeedDef> = {
+  s1: {
+    name: 'Samsung 450L 2-Door No Frost Refrigerator',
+    warranty: '10 Years Samsung Warranty',
+    origin: 'Egypt — Official Agent Warranty',
+    seoTitle: 'Samsung 450L 2-Door No Frost Fridge | Mohamed Serag',
+    seoDescription:
+      'Samsung 450L (16 ft) 2-door No Frost refrigerator featuring Digital Inverter and Twin Cooling with 10 years Samsung warranty.',
+  },
+  s2: {
+    name: 'Toshiba 350L Defrost Refrigerator',
+    warranty: '10 Years El Araby Group Warranty',
+    origin: 'Egypt — El Araby Warranty',
+    seoTitle: 'Toshiba 350L Defrost Refrigerator | Mohamed Serag',
+    seoDescription:
+      'Toshiba 350L (14 ft) Defrost refrigerator featuring hybrid cooling and energy-saving design with 10 years El Araby warranty.',
+  },
+  s3: {
+    name: 'LG 400L Digital No Frost Refrigerator',
+    warranty: '10 Years LG Warranty',
+    origin: 'Egypt / Korea',
+    seoTitle: 'LG 400L Digital No Frost Refrigerator | Mohamed Serag',
+    seoDescription:
+      'LG 400L digital No Frost refrigerator featuring Smart Inverter and Linear Cooling technology with 10 years official LG warranty.',
+  },
+  s4: {
+    name: 'Fresh 14 ft Defrost Refrigerator',
+    warranty: '10 Years Fresh Warranty',
+    origin: 'Egypt — Fresh Factories',
+    seoTitle: 'Fresh 14 ft Defrost Refrigerator | Mohamed Serag',
+    seoDescription:
+      'Fresh 14 ft (330L) Defrost refrigerator with thick thermal insulation and Pyrex glass shelves, backed by 10 years Fresh warranty.',
+  },
+  s5: {
+    name: 'LG 8kg Front Load Automatic Washing Machine',
+    warranty: '10 Years Motor Warranty',
+    origin: 'Egypt — LG Warranty',
+    seoTitle: 'LG 8kg Front Load Washing Machine | Mohamed Serag',
+    seoDescription:
+      'LG 8kg 1200 RPM front load automatic washing machine with Direct Drive motor and steam wash, featuring 10 years motor warranty.',
+  },
+  s6: {
+    name: 'Samsung 10kg Inverter Automatic Washing Machine',
+    warranty: '10 Years Samsung Warranty',
+    origin: 'Egypt — Official Agent Warranty',
+    seoTitle: 'Samsung 10kg Inverter Washer | Mohamed Serag',
+    seoDescription:
+      'Samsung 10kg 1400 RPM automatic washing machine with Digital Inverter and EcoBubble technology, backed by 10 years warranty.',
+  },
+  s7: {
+    name: 'Tornado 7kg Semi-Automatic Washing Machine',
+    warranty: '5 Years El Araby Group Warranty',
+    origin: 'Egypt — El Araby Warranty',
+    seoTitle: 'Tornado 7kg Semi-Automatic Washer | Mohamed Serag',
+    seoDescription:
+      'Tornado 7kg twin tub semi-automatic washing machine with powerful motor and dual lint filter, with 5 years El Araby warranty.',
+  },
+  s8: {
+    name: 'Samsung 55-Inch 4K Smart TV',
+    warranty: '2 Years Samsung Warranty',
+    origin: 'Egypt — Samsung Warranty',
+    seoTitle: 'Samsung 55-Inch 4K Smart TV | Mohamed Serag',
+    seoDescription:
+      'Samsung 55-Inch 4K UHD smart TV with Crystal 4K processor, built-in receiver, and HDR10+ backed by 2 years Samsung warranty.',
+  },
+  s9: {
+    name: 'Sharp 43-Inch Full HD TV',
+    warranty: '3 Years El Araby Group Warranty',
+    origin: 'Egypt — El Araby Warranty',
+    seoTitle: 'Sharp 43-Inch Full HD TV | Mohamed Serag',
+    seoDescription:
+      'Sharp 43-inch Full HD LED TV with direct LED backlighting, 2 HDMI ports, and USB input, backed by 3 years El Araby warranty.',
+  },
+  s10: {
+    name: 'LG 65-Inch Smart QLED 4K TV',
+    warranty: '2 Years LG Warranty',
+    origin: 'Egypt — LG Warranty',
+    seoTitle: 'LG 65-Inch Smart QLED 4K TV | Mohamed Serag',
+    seoDescription:
+      'LG 65-inch Smart QLED 4K TV featuring Quantum Color technology and ThinQ AI smart platform with 2 years official LG warranty.',
+  },
+  s11: {
+    name: 'Sharp 1.5 HP Inverter Split Air Conditioner',
+    warranty: '5 Years El Araby Group Warranty',
+    origin: 'Egypt — El Araby Warranty',
+    seoTitle: 'Sharp 1.5 HP Inverter Split AC | Mohamed Serag',
+    seoDescription:
+      'Sharp 1.5 HP inverter split air conditioner covering up to 14 m² with Plasmacluster and 40% energy saving, 5 years warranty.',
+  },
+  s12: {
+    name: 'Toshiba 2.25 HP Cool & Heat Split Air Conditioner',
+    warranty: '5 Years El Araby Group Warranty',
+    origin: 'Egypt — El Araby Warranty',
+    seoTitle: 'Toshiba 2.25 HP Cool & Heat Split AC | Mohamed Serag',
+    seoDescription:
+      'Toshiba 2.25 HP cool & heat split air conditioner covering up to 20 m² with Turbo Cool and antibacterial filters, 5y warranty.',
+  },
+  s13: {
+    name: 'Fresh 3 HP Cooling Split Air Conditioner',
+    warranty: '5 Years Fresh Warranty',
+    origin: 'Egypt — Fresh Factories',
+    seoTitle: 'Fresh 3 HP Cooling Split AC | Mohamed Serag',
+    seoDescription:
+      'Fresh 3 HP cooling split air conditioner covering up to 26 m² with tropical compressor for extreme climates, 5 years warranty.',
+  },
+  s14: {
+    name: 'Unionaire 5-Burner Stainless Steel Gas Cooker',
+    warranty: '5 Years Unionaire Warranty',
+    origin: 'Egypt',
+    seoTitle: 'Unionaire 5-Burner Gas Cooker | Mohamed Serag',
+    seoDescription:
+      'Unionaire 90x60 cm 5-burner gas cooker with full stainless steel build, auto ignition, and oven fan, backed by 5 years warranty.',
+  },
+  s15: {
+    name: 'Fresh 4-Burner Gas Cooker',
+    warranty: '5 Years Fresh Warranty',
+    origin: 'Egypt — Fresh Factories',
+    seoTitle: 'Fresh 4-Burner Gas Cooker | Mohamed Serag',
+    seoDescription:
+      'Fresh 60x60 cm 4-burner gas cooker with motorized rotisserie grill and automatic ignition, backed by 5 years Fresh warranty.',
+  },
+  s16: {
+    name: 'Tornado 5-Burner Digital Gas Cooker',
+    warranty: '5 Years El Araby Group Warranty',
+    origin: 'Egypt — El Araby Warranty',
+    seoTitle: 'Tornado 5-Burner Digital Cooker | Mohamed Serag',
+    seoDescription:
+      'Tornado 90x60 cm 5-burner gas cooker with digital timer screen, cast iron pan supports, and full safety, 5 years warranty.',
+  },
+  f1: {
+    name: 'Samsung 18 ft Inverter No Frost Refrigerator',
+    warranty: '10 Years Samsung Warranty',
+    origin: 'Egypt — Official Agent Warranty',
+    seoTitle: 'Samsung 18 ft Inverter Fridge | Mohamed Serag',
+    seoDescription:
+      'Samsung 18 ft (500L) full No Frost refrigerator with Digital Inverter compressor and 10 years official Samsung warranty.',
+  },
+  f2: {
+    name: 'Toshiba 13kg Top Load Automatic Washing Machine',
+    warranty: '5 Years El Araby Group Warranty',
+    origin: 'Egypt — El Araby Warranty',
+    seoTitle: 'Toshiba 13kg Top Load Washer | Mohamed Serag',
+    seoDescription:
+      'Toshiba 13kg top load automatic washing machine with Direct Drive motor and 8 wash programs, backed by 5 years El Araby warranty.',
+  },
+  f3: {
+    name: 'LG 55-Inch 4K Smart TV',
+    warranty: '2 Years LG Warranty',
+    origin: 'Egypt — LG Warranty',
+    seoTitle: 'LG 55-Inch 4K Smart TV | Mohamed Serag',
+    seoDescription:
+      'LG 55-inch 4K UHD smart TV powered by webOS, Magic Remote control, and HDR10 support, backed by 2 years official LG warranty.',
+  },
+  f4: {
+    name: 'Sharp 1.5 HP Inverter Cool & Heat Split Air Conditioner',
+    warranty: '5 Years El Araby Group Warranty',
+    origin: 'Egypt — El Araby Warranty',
+    seoTitle: 'Sharp 1.5 HP Inverter AC | Mohamed Serag',
+    seoDescription:
+      'Sharp 1.5 HP cool & heat inverter split air conditioner with Plasmacluster technology and digital display, 5 years warranty.',
+  },
+  c1: {
+    name: 'TAÇ 10-Piece Turkish Granite Cookware Set',
+    warranty: '3 Years Warranty Against Peeling & Defects',
+    origin: 'Turkey — Mohamed Serag Direct Import',
+    seoTitle: 'TAÇ 10-Piece Turkish Granite Set | Mohamed Serag',
+    seoDescription:
+      'TAÇ 10-piece Turkish granite cookware set with 5-layer non-stick coating, induction ready and dishwasher safe, 3-year warranty.',
+    setContents: [
+      { item: 'Granite Casserole with Lid', size: '18 cm', qty: 1 },
+      { item: 'Granite Casserole with Lid', size: '20 cm', qty: 1 },
+      { item: 'Granite Casserole with Lid', size: '24 cm', qty: 1 },
+      { item: 'Granite Casserole with Lid', size: '28 cm', qty: 1 },
+      { item: 'Deep Granite Frying Pan', size: '26 cm', qty: 1 },
+      { item: 'Granite Milk Pot', size: '16 cm', qty: 1 },
+    ],
+  },
+  c2: {
+    name: 'Glore 12-Piece Turkish Stainless Steel Cookware Set',
+    warranty: '5 Years Warranty Against Rust',
+    origin: 'Turkey — Mohamed Serag Direct Import',
+    seoTitle: 'Glore 12-Piece Turkish Steel Set | Mohamed Serag',
+    seoDescription:
+      'Glore 12-piece 18/10 Cr-Ni Turkish stainless steel cookware set with double teapot, induction ready with 5 years rust warranty.',
+    setContents: [
+      { item: 'Stainless Steel Pot with Lid', size: '16 cm', qty: 1 },
+      { item: 'Stainless Steel Pot with Lid', size: '20 cm', qty: 1 },
+      { item: 'Stainless Steel Pot with Lid', size: '24 cm', qty: 1 },
+      { item: 'Large Stainless Steel Pot with Lid', size: '28 cm', qty: 1 },
+      { item: 'Stainless Steel Saucepan with Lid', size: '16 cm', qty: 1 },
+      { item: 'Double Turkish Teapot', size: '2 L', qty: 1 },
+    ],
+  },
+  c3: {
+    name: 'Öztef Döküm 9-Piece Cast Granite Cookware Set',
+    warranty: '3 Years Warranty Against Manufacturing Defects',
+    origin: 'Turkey — Mohamed Serag Direct Import',
+    seoTitle: 'Öztef Döküm 9-Pc Granite Cookware | Mohamed Serag',
+    seoDescription:
+      'Öztef Döküm 9-piece heavy die-cast granite cookware set from Turkey including ribbed grill pan, backed by 3-year warranty.',
+    setContents: [
+      { item: 'Cast Granite Pot with Lid', size: '20 cm', qty: 1 },
+      { item: 'Cast Granite Pot with Lid', size: '24 cm', qty: 1 },
+      { item: 'Cast Granite Pot with Lid', size: '28 cm', qty: 1 },
+      { item: 'Shallow Casserole with Lid', size: '26 cm', qty: 1 },
+      { item: 'Ribbed Grill Pan', size: '28 cm', qty: 1 },
+    ],
+  },
+  c4: {
+    name: 'Yonca 14-Piece Turkish Non-Stick Cookware Set',
+    warranty: '2 Years Replacement Warranty',
+    origin: 'Turkey — Mohamed Serag Direct Import',
+    seoTitle: 'Yonca 14-Piece Non-Stick Set | Mohamed Serag',
+    seoDescription:
+      'Yonca 14-piece healthy PFOA-free non-stick cookware set from Turkey with cooking utensils and 2 years replacement warranty.',
+    setContents: [
+      { item: 'Non-Stick Pot with Lid', size: '18 cm', qty: 1 },
+      { item: 'Non-Stick Pot with Lid', size: '22 cm', qty: 1 },
+      { item: 'Non-Stick Pot with Lid', size: '26 cm', qty: 1 },
+      { item: 'Non-Stick Frying Pan', size: '22 cm', qty: 1 },
+      { item: 'Non-Stick Frying Pan', size: '26 cm', qty: 1 },
+      { item: 'Heat-Resistant Utensil Set', qty: 4 },
+    ],
+  },
+  c5: {
+    name: 'Marti 8-Piece Turkish Ceramic Cookware Set',
+    leadTimeText: 'Delivery within 7–10 days',
+    warranty: '2 Years Warranty Against Manufacturing Defects',
+    origin: 'Turkey — Mohamed Serag Direct Import',
+    seoTitle: 'Marti 8-Piece Turkish Ceramic Set | Mohamed Serag',
+    seoDescription:
+      'Marti 8-piece scratch-resistant natural ceramic cookware set from Turkey, induction compatible with 2-year factory warranty.',
+    setContents: [
+      { item: 'Ceramic Pot with Lid', size: '20 cm', qty: 1 },
+      { item: 'Ceramic Pot with Lid', size: '24 cm', qty: 1 },
+      { item: 'Ceramic Pot with Lid', size: '28 cm', qty: 1 },
+      { item: 'Ceramic Frying Pan', size: '24 cm', qty: 2 },
+    ],
+  },
+  c6: {
+    name: 'Edessa 7-Piece Ceramic Cookware & Baking Set',
+    warranty: '2 Years Warranty Against Manufacturing Defects',
+    origin: 'Turkey — Mohamed Serag Direct Import',
+    seoTitle: 'Edessa 7-Piece Ceramic Set | Mohamed Serag',
+    seoDescription:
+      'Edessa 7-piece thermal ceramic stovetop and oven bakeware set from Turkey, dishwasher safe with 2-year warranty at Mohamed Serag.',
+    setContents: [
+      { item: 'Ceramic Pot with Lid', size: '20 cm', qty: 1 },
+      { item: 'Ceramic Pot with Lid', size: '24 cm', qty: 1 },
+      { item: 'Rectangular Ceramic Oven Tray', size: '30 cm', qty: 1 },
+      { item: 'Oval Ceramic Oven Tray', size: '26 cm', qty: 1 },
+      { item: 'Ceramic Frying Pan', size: '24 cm', qty: 1 },
+    ],
+  },
+}
 
 // ============================================================================
 // 5. BRAND LOGO FILE COPY HELPER
@@ -876,6 +1513,7 @@ async function main() {
           },
         })
 
+    const categoryTranslations = catDef.translations as unknown as Prisma.InputJsonValue
     const category = await prisma.category.upsert({
       where: { slug: catDef.slug },
       update: {
@@ -884,6 +1522,7 @@ async function main() {
         intro: catDef.intro,
         seoTitle: catDef.seoTitle,
         seoDescription: catDef.seoDescription,
+        translations: categoryTranslations,
         sort: catDef.sort,
         visible: true,
       },
@@ -894,6 +1533,7 @@ async function main() {
         intro: catDef.intro,
         seoTitle: catDef.seoTitle,
         seoDescription: catDef.seoDescription,
+        translations: categoryTranslations,
         sort: catDef.sort,
         visible: true,
       },
@@ -922,6 +1562,11 @@ async function main() {
     const intro = `أجهزة ${b.name} (${b.enName}) الأصلية بضمان الوكيل المعتمد في معرض محمد سراج.`
     const seoTitle = `منتجات وأسعار ${b.name} الأصلية | معرض محمد سراج`
     const seoDescription = `تسوق أحدث أجهزة ${b.name} بضمان الوكيل الرسمي وتوصيل لباب البيت من معرض محمد سراج.`
+    const brandEn = CATALOG_BRAND_EN[b.slug]
+    if (!brandEn) {
+      throw new Error(`English translations missing for brand "${b.slug}"`)
+    }
+    const brandTranslations = { en: brandEn } as unknown as Prisma.InputJsonValue
 
     const saved = await prisma.brand.upsert({
       where: { slug: b.slug },
@@ -931,6 +1576,7 @@ async function main() {
         intro,
         seoTitle,
         seoDescription,
+        translations: brandTranslations,
         sort: brandSort,
         visible: true,
       },
@@ -941,6 +1587,7 @@ async function main() {
         intro,
         seoTitle,
         seoDescription,
+        translations: brandTranslations,
         sort: brandSort,
         visible: true,
       },
@@ -953,6 +1600,7 @@ async function main() {
     const logoUrl = logoMap.get(tb.slug) ?? null
     const seoTitle = `أطقم حلل وأدوات مطبخ ${tb.name} التركي | معرض محمد سراج`
     const seoDescription = tb.intro
+    const brandTranslations = tb.translations as unknown as Prisma.InputJsonValue
 
     const saved = await prisma.brand.upsert({
       where: { slug: tb.slug },
@@ -962,6 +1610,7 @@ async function main() {
         intro: tb.intro,
         seoTitle,
         seoDescription,
+        translations: brandTranslations,
         sort: brandSort,
         visible: true,
       },
@@ -972,6 +1621,7 @@ async function main() {
         intro: tb.intro,
         seoTitle,
         seoDescription,
+        translations: brandTranslations,
         sort: brandSort,
         visible: true,
       },
@@ -1033,6 +1683,31 @@ async function main() {
       SEARCH_SYNONYMS,
     )
 
+    const itemEn = PRODUCT_TRANSLATIONS_EN[item.id]
+    if (!itemEn) {
+      throw new Error(`English translations missing for product "${item.id}"`)
+    }
+    const warrantyActivationEn =
+      categorySlug === 'cookware'
+        ? 'Warranty valid with stamped invoice from Mohamed Serag showroom'
+        : 'Activate warranty by calling the certified agent hotline upon installation'
+
+    const productTranslationsEn: Record<string, unknown> = {
+      name: itemEn.name,
+      warranty: itemEn.warranty,
+      warrantyActivation: warrantyActivationEn,
+      origin: itemEn.origin,
+      seoTitle: itemEn.seoTitle,
+      seoDescription: itemEn.seoDescription,
+    }
+    if (itemEn.leadTimeText) {
+      productTranslationsEn.leadTimeText = itemEn.leadTimeText
+    }
+    if (itemEn.setContents) {
+      productTranslationsEn.setContents = itemEn.setContents
+    }
+    const translations = { en: productTranslationsEn } as unknown as Prisma.InputJsonValue
+
     const productData = {
       slug,
       name: item.name,
@@ -1055,6 +1730,7 @@ async function main() {
       seoTitle: `${item.name} - ${brand.name} | معرض محمد سراج`,
       seoDescription: `${item.name} (${item.cap}) — ${item.tech} — ${item.warranty}.`,
       searchText,
+      translations,
     }
 
     const savedProduct = await prisma.product.upsert({
@@ -1379,7 +2055,32 @@ async function main() {
       slug: 'about',
       title: 'من نحن — معرض محمد سراج',
       seoTitle: 'من نحن | معرض محمد سراج',
-      seoDescription: 'تعرف على قصة معرض محمد سراج بالمنصورة منذ عام 1972، وتشكيلتنا من الأجهزة المنزلية الأصلية وأدوات المطبخ التركية بضمان الوكيل الرسمي.',
+      seoDescription:
+        'تعرف على قصة معرض محمد سراج بالمنصورة منذ عام 1972، وتشكيلتنا من الأجهزة المنزلية الأصلية وأدوات المطبخ التركية بضمان الوكيل الرسمي.',
+      translations: {
+        en: {
+          title: 'About Us — Mohamed Serag Showroom',
+          seoTitle: 'About Us | Mohamed Serag',
+          seoDescription:
+            'Discover the story of Mohamed Serag showroom in Mansoura since 1972, offering genuine home appliances and Turkish cookware with official warranty.',
+          body: `<p>Welcome to Mohamed Serag Showroom, your trusted destination for home appliances and kitchenware in Mansoura and the Delta for over fifty years.</p>
+<h2>Our Story Since 1972</h2>
+<p>Our journey began in the heart of Mansoura in 1972 on a simple, enduring principle: providing genuine, guaranteed electrical appliances paired with honest service and dependable advice for every home. Over decades, we grew alongside the Egyptian market, serving generations of families, shop owners, and traders, building a name synonymous with honesty, reliability, and after-sales support.</p>
+<h2>What We Offer at the Showroom</h2>
+<p>We provide our customers with a comprehensive selection of essential home appliances from leading certified brands, including refrigerators and deep freezers, automatic and top-load washing machines, smart TVs, energy-efficient air conditioners, and modern cookers. We also feature a carefully curated collection of authentic imported Turkish cookware and pot sets, crafted from healthy granite and stainless steel built to last and satisfy all daily cooking needs.</p>
+<h2>Why Choose to Buy from Us?</h2>
+<ul>
+<li><strong>100% Genuine Appliances:</strong> All appliances are certified grade-A with an official agent warranty card and an official purchase invoice.</li>
+<li><strong>Official Certified Warranty:</strong> We deal directly with authorized distributors to safeguard our customers' rights to certified maintenance and technical support.</li>
+<li><strong>Dedicated Showroom Delivery Fleet:</strong> We transport and ship appliances using our own specialized vehicles to ensure large and delicate items reach your doorstep safely.</li>
+<li><strong>Honest Technical Advice:</strong> We help you choose the ideal model and capacity suited to your household needs and budget without exaggeration.</li>
+</ul>
+<h2>Wholesale &amp; Trader Services</h2>
+<p>Alongside serving households and retail shoppers, we take pride in fulfilling bulk orders for merchants and commercial distributors. You can review trading terms and details on the <a href="/traders">Wholesale &amp; Traders</a> page.</p>
+<h2>Visit Us or Get in Touch</h2>
+<p>You can browse and purchase all available models directly through the <a href="/shop">online product catalog</a>, or visit our showroom in Mansoura to inspect the appliances in person. You can also chat with us directly via the WhatsApp button on the site for any inquiry, and we will be delighted to assist you.</p>`,
+        },
+      },
       body: `<p>أهلاً بكم في معرض محمد سراج، وجهتكم الموثوقة للأجهزة المنزلية ومستلزمات المطبخ في المنصورة والدلتا منذ أكثر من خمسين عاماً.</p>
 <h2>قصتنا منذ عام 1972</h2>
 <p>بدأت رحلتنا في قلب مدينة المنصورة عام 1972 على مبدأ بسيط وراسخ: تقديم أجهزة كهربائية أصلية ومضمونة مع المعاملة الصادقة والنصيحة الأمينة لكل بيت. على مدار عقود، واكبنا تطور السوق المصري وخدمنا أجيالاً متتالية من العائلات الكريمة وأصحاب المحلات والتجار، ونجحنا في بناء اسم يرتبط دائماً بالأمانة والاعتمادية وجودة ما بعد البيع.</p>
@@ -1401,7 +2102,27 @@ async function main() {
       slug: 'delivery',
       title: 'سياسة الشحن والتوصيل',
       seoTitle: 'الشحن والتوصيل | معرض محمد سراج',
-      seoDescription: 'تعرف على خدمة الشحن بسيارات معرض محمد سراج للمنصورة والدقهلية والدلتا وكافة محافظات مصر وطرق تحديد وتنسيق موعد الاستلام.',
+      seoDescription:
+        'تعرف على خدمة الشحن بسيارات معرض محمد سراج للمنصورة والدقهلية والدلتا وكافة محافظات مصر وطرق تحديد وتنسيق موعد الاستلام.',
+      translations: {
+        en: {
+          title: 'Shipping & Delivery Policy',
+          seoTitle: 'Shipping & Delivery | Mohamed Serag',
+          seoDescription:
+            'Learn about Mohamed Serag showroom delivery fleet serving Mansoura, Dakahlia, the Delta, and all governorates of Egypt with scheduling options.',
+          body: `<p>At Mohamed Serag Showroom, we ensure that your home appliances arrive safely and reliably at your doorstep across all governorates of Egypt.</p>
+<h2>Safe Delivery with Equipped Showroom Fleet</h2>
+<p>We rely on Mohamed Serag Showroom's dedicated fleet of transport vehicles, specially equipped for loading and carrying large, sensitive home appliances like refrigerators, washing machines, and screens, handled by trained personnel who protect goods from shocks or transit damage.</p>
+<h2>Geographic Coverage Areas</h2>
+<p>Our delivery services cover Mansoura city and all districts of Dakahlia governorate, as well as Delta governorates and the rest of Egypt from Lower to Upper Egypt. The showroom also offers direct pickup and personal inspection at our Mansoura showroom for customers who prefer it.</p>
+<h2>Shipping Rates &amp; Cost Calculation</h2>
+<p>Delivery fees vary depending on the governorate and city specified in the delivery address. The fee is calculated accurately and displayed clearly on the <a href="/checkout">checkout page</a> before final order confirmation, giving you complete visibility of the total cost with no hidden charges.</p>
+<h2>Delivery Scheduling &amp; Timing</h2>
+<p>If you wish to set a specific delivery window matching your free time at home, you can easily arrange this: message us on WhatsApp via the button on the site after placing your order, and our tracking team will coordinate the most suitable delivery day.</p>
+<h2>Inspecting &amp; Receiving Appliances</h2>
+<p>Please inspect the outer packaging, verify the model number, and check the seal integrity before accepting appliances and signing for the delivery agent. To understand the terms should you wish to return or exchange an item, please review our <a href="/pages/returns">Return &amp; Exchange Policy</a>, and feel free to reach out to us for any assistance.</p>`,
+        },
+      },
       body: `<p>نحرص في معرض محمد سراج على وصول أجهزتك المنزلية بسلامة تامة وسرعة موثوقة حتى باب بيتك في مختلف محافظات جمهورية مصر العربية.</p>
 <h2>توصيل آمن بسيارات المعرض المجهزة</h2>
 <p>نعتمد على أسطول سيارات النقل الخاص بمعرض محمد سراج، والمجهز خصيصاً لتحميل ونقل الأجهزة الكهربائية الكبيرة والحساسة، مثل الثلاجات والغسالات والشاشات، مع فريق مدرب يتعامل مع البضائع بحرص شديد لتفادي أي صدمات أو تلفيات أثناء النقل.</p>
@@ -1418,7 +2139,39 @@ async function main() {
       slug: 'returns',
       title: 'سياسة الاستبدال والاسترجاع',
       seoTitle: 'الاستبدال والاسترجاع | معرض محمد سراج',
-      seoDescription: 'سياسة استبدال واسترجاع الأجهزة في معرض محمد سراج وفق قانون حماية المستهلك المصري رقم 181 لسنة 2018 وخطوات التعامل مع الأعطال.',
+      seoDescription:
+        'سياسة استبدال واسترجاع الأجهزة في معرض محمد سراج وفق قانون حماية المستهلك المصري رقم 181 لسنة 2018 وخطوات التعامل مع الأعطال.',
+      translations: {
+        en: {
+          title: 'Return & Exchange Policy',
+          seoTitle: 'Return & Exchange Policy | Mohamed Serag',
+          seoDescription:
+            'Appliance return and exchange policy at Mohamed Serag under Egyptian Consumer Protection Law No. 181 of 2018 and defect handling steps.',
+          body: `<p>At Mohamed Serag Showroom, we are committed to safeguarding our customers' rights in full and providing a safe, comfortable shopping experience in accordance with Egyptian Consumer Protection Law No. 181 of 2018 and its executive regulations.</p>
+<h2>14-Day Returns &amp; Exchanges (Unused Products)</h2>
+<p>Customers are entitled to exchange or return an unused product within 14 days of delivery, subject to the following conditions:</p>
+<ul>
+<li>The appliance must be in its original condition, inside its factory-sealed original carton without broken tape, opening, or operation.</li>
+<li>All included accessories, user manuals, warranty certificates, and attachments must be present and intact.</li>
+<li>Retaining the original purchase invoice issued by Mohamed Serag Showroom is recommended to expedite the procedure.</li>
+</ul>
+<h2>Handling Manufacturing Defects within 30 Days</h2>
+<p>If any manufacturing defect or technical malfunction appears within 30 days of delivery, it is handled according to the following guidelines:</p>
+<ul>
+<li>Contact the brand authorized service center directly (via the hotline printed on the warranty certificate) to schedule an in-home inspection.</li>
+<li>An authorized technician inspects the appliance and issues an official technical report verifying the manufacturing defect.</li>
+<li>Based on the approved technical report, the agent and the showroom take the legally mandated replacement or refund actions. For further maintenance details, please review the <a href="/pages/warranty">Warranty &amp; Authorized Service</a> page.</li>
+</ul>
+<h2>Non-Returnable Cases</h2>
+<ul>
+<li>Products whose sealed cartons were opened, or that were operated and used, without a manufacturing defect confirmed by an official technical report.</li>
+<li>Damage or breakage resulting from misuse, improper electrical connections, mishandling during personal transport after receipt, or non-compliance with official operating instructions.</li>
+</ul>
+<h2>How to Submit a Return or Exchange Request</h2>
+<p>To submit a request or inquire about a specific case, please prepare your order number and invoice details, then message us on WhatsApp via the button on the site. Our customer support team will guide you through the process step by step.</p>
+<blockquote>This policy is under final legal review.</blockquote>`,
+        },
+      },
       body: `<p>نلتزم في معرض محمد سراج بضمان حقوق عملائنا كاملة وتقديم تجربة تسوق آمنة ومريحة وفقاً لأحكام قانون حماية المستهلك المصري رقم 181 لسنة 2018 ولائحته التنفيذية.</p>
 <h2>الاسترجاع والاستبدال خلال 14 يوماً (المنتج غير المستخدم)</h2>
 <p>يحق للعميل استبدال أو استرجاع المنتج غير المستخدم خلال 14 يوماً من تاريخ استلامه، وذلك وفق الشروط الآتية:</p>
@@ -1447,7 +2200,30 @@ async function main() {
       slug: 'warranty',
       title: 'الضمان والصيانة المعتمدة',
       seoTitle: 'الضمان والصيانة المعتمدة | معرض محمد سراج',
-      seoDescription: 'تعرف على تفاصيل ضمان الوكيل الرسمي للأجهزة الأصلية في معرض محمد سراج وطريقة تفعيل الضمان وتركيب الأجهزة عبر الخط الساخن.',
+      seoDescription:
+        'تعرف على تفاصيل ضمان الوكيل الرسمي للأجهزة الأصلية في معرض محمد سراج وطريقة تفعيل الضمان وتركيب الأجهزة عبر الخط الساخن.',
+      translations: {
+        en: {
+          title: 'Warranty & Authorized Service',
+          seoTitle: 'Warranty & Service | Mohamed Serag',
+          seoDescription:
+            'Details on official agent warranties for genuine appliances at Mohamed Serag showroom, hotline activation, and certified installation.',
+          body: `<p>At Mohamed Serag Showroom, we believe peace of mind begins with dependable warranty coverage. That is why all home appliances in our showroom are covered by full official protection from certified agents in Egypt.</p>
+<h2>100% Genuine Products with Official Agent Warranty</h2>
+<p>Every electrical appliance we supply is brand-new, certified grade-A, accompanied by the original warranty certificate from the authorized distributor in Egypt, alongside an official showroom purchase invoice guaranteeing your right to warranty service and genuine spare parts throughout the coverage period.</p>
+<h2>Warranty Period &amp; Duration</h2>
+<p>Warranty durations vary by appliance type, manufacturer, and distributor policy; major appliances such as refrigerators, washing machines, and air conditioners carry multi-year warranties differing by brand and model. You will find the exact warranty duration stated clearly on each product page on our site before purchasing.</p>
+<h2>Steps to Activate Warranty &amp; Install Major Appliances</h2>
+<p>To safeguard your full warranty coverage upon receiving major home appliances (such as washing machines, air conditioners, large televisions, and cookers):</p>
+<ol>
+<li>Keep the carton sealed after delivery and do not open it yourself if the manufacturer manual requires certified technician installation.</li>
+<li>Call the official agent hotline printed on the product carton or warranty papers to schedule an installation visit.</li>
+<li>The certified technician unboxes, installs, tests the appliance, and stamps the warranty certificate to activate coverage.</li>
+</ol>
+<h2>Support &amp; Assistance from Mohamed Serag Showroom</h2>
+<p>If you encounter any difficulty reaching an authorized service center or have technical questions regarding warranty activation, never hesitate to contact us: message us on WhatsApp via the button on the site, and our team will gladly assist and coordinate with you. We also invite you to review our <a href="/pages/returns">Return &amp; Exchange Policy</a> for details on defect coverage.</p>`,
+        },
+      },
       body: `<p>نؤمن في معرض محمد سراج بأن الثقة وراحة البال تبدأ من الضمان الموثوق، ولذلك نحرص على أن تكون كافة الأجهزة الكهربائية المعروضة لدينا مشمولة بالحماية الرسمية الكاملة من الوكلاء المعتمدين في مصر.</p>
 <h2>منتجات أصلية 100% بضمان الوكيل الرسمي</h2>
 <p>جميع الأجهزة الكهربائية التي نوفرها في المعرض أصلية وجديدة كلياً فرز أول، ومرفقة بشهادة الضمان الأصلية المعتمدة من شركة الوكيل الرسمي في جمهورية مصر العربية، مع فاتورة شراء معتمدة من المعرض تثبت حقك في التمتع بخدمات الضمان وقطع الغيار الأصلية طوال فترة السريان.</p>
@@ -1467,7 +2243,30 @@ async function main() {
       slug: 'privacy',
       title: 'سياسة الخصوصية',
       seoTitle: 'سياسة الخصوصية وحماية البيانات | معرض محمد سراج',
-      seoDescription: 'نلتزم في معرض محمد سراج بحماية خصوصيتك وسرية بياناتك الشخصية وعدم مشاركتها مع أي جهة إعلانية أو إظهارها علناً.',
+      seoDescription:
+        'نلتزم في معرض محمد سراج بحماية خصوصيتك وسرية بياناتك الشخصية وعدم مشاركتها مع أي جهة إعلانية أو إظهارها علناً.',
+      translations: {
+        en: {
+          title: 'Privacy Policy',
+          seoTitle: 'Privacy Policy | Mohamed Serag',
+          seoDescription:
+            'At Mohamed Serag showroom, we are committed to protecting your privacy, keeping personal data confidential, and never sharing it with advertisers.',
+          body: `<p>At Mohamed Serag Showroom, we place the highest priority on the privacy of our customers and website visitors, remaining fully committed to protecting your personal data and maintaining its confidentiality and security with transparency and respect.</p>
+<h2>What Data Do We Collect and Why?</h2>
+<p>When you use the site or place an order, we collect only essential required information: your full name, mobile phone number, and detailed delivery address (governorate, city, and street address). We use this data exclusively for the following purposes:</p>
+<ul>
+<li>Confirming order details and communicating with you while preparing and shipping your items.</li>
+<li>Safely delivering purchased appliances directly to your address using the showroom delivery fleet.</li>
+<li>Providing order follow-up, issuing purchase invoices, and facilitating appliance warranty registration and service when needed.</li>
+</ul>
+<h2>Protection &amp; Confidentiality of Phone Numbers and Personal Data</h2>
+<p>We reassure our valued customers that phone numbers and personal information are treated with strict confidentiality. We never publish your phone number or sensitive data publicly on the site (such as on customer review forms), nor do we ever sell, rent, or share your data with third-party marketing or advertising entities under any circumstances.</p>
+<h2>Site Analytics &amp; Privacy-Friendly Browsing</h2>
+<p>Mohamed Serag Showroom website uses lightweight, privacy-friendly analytics tools designed solely to enhance site performance, improve user experience, and understand the most visited sections. These tools function independently without advertising cookies or tracking your activity across other websites.</p>
+<h2>Your Rights to Edit or Delete Your Data</h2>
+<p>You have the right at any time to review your registered information or request an update. You may also request the complete deletion of your personal records from our databases: simply reach out to us via the WhatsApp button on the site, and we will follow up on your request. For questions regarding our delivery policies and services, please visit our <a href="/pages/delivery">Shipping Policy</a> or <a href="/pages/faq">FAQ</a> pages.</p>`,
+        },
+      },
       body: `<p>نولي في معرض محمد سراج أهمية قصوى لخصوصية عملائنا وزوار موقعنا الإلكتروني، ونلتزم التزاماً كاملاً بحماية بياناتكم الشخصية والحفاظ على سريتها وأمانها وفق أعلى معايير الشفافية والاحترام.</p>
 <h2>ما هي البيانات التي نجمعها ولماذا؟</h2>
 <p>عند استخدامكم للموقع أو تقديم طلب شراء، نطلب بعض البيانات الأساسية اللازمة فقط، وتقتصر على: الاسم الشخصي، رقم الهاتف المحمول، وعنوان التوصيل التفصيلي (المحافظة والمدينة والعنوان). نستخدم هذه البيانات في الأغراض الآتية حصراً:</p>
@@ -1487,7 +2286,45 @@ async function main() {
       slug: 'faq',
       title: 'الأسئلة الشائعة',
       seoTitle: 'الأسئلة الشائعة | معرض محمد سراج',
-      seoDescription: 'إجابات على الأسئلة الأكثر شيوعاً حول الطلب والدفع، التوصيل بالمحافظات، الضمان المعتمد، وسياسات معرض محمد سراج للأجهزة المنزلية.',
+      seoDescription:
+        'إجابات على الأسئلة الأكثر شيوعاً حول الطلب والدفع، التوصيل بالمحافظات، الضمان المعتمد، وسياسات معرض محمد سراج للأجهزة المنزلية.',
+      translations: {
+        en: {
+          title: 'Frequently Asked Questions',
+          seoTitle: 'FAQ | Mohamed Serag',
+          seoDescription:
+            'Answers to frequently asked questions about ordering, payments, governorate shipping, official warranty, and policies at Mohamed Serag.',
+          body: `<p>On this page, we have gathered clear answers to the most common questions our customers ask about ordering, shipping, payment, and warranty, ensuring a smooth shopping experience at Mohamed Serag Showroom.</p>
+<h2>Ordering &amp; Payment</h2>
+<h3>How can I place an order with the showroom?</h3>
+<p>You can browse our selection on the <a href="/shop">products page</a>, select your appliance, add it to your shopping cart, and complete your details on the checkout page. Alternatively, you can contact us directly: message us on WhatsApp via the button on the site and we will assist you in completing your order.</p>
+<h3>What payment methods do you accept?</h3>
+<p>We provide convenient and secure payment options including: cash on delivery (COD), transfers via the InstaPay app, and Vodafone Cash mobile wallet transfers. For electronic wallet or InstaPay transfers, please share the transaction screenshot on WhatsApp to confirm the operation and prepare your order for dispatch.</p>
+<h3>Is a deposit required before shipping cash-on-delivery orders?</h3>
+<p>For certain large cash orders (cash on delivery), a modest advance deposit may be requested to confirm booking before the shipment leaves with showroom vehicles. If this applies to your order, the required deposit amount and transfer instructions will be clearly shown on the <a href="/checkout">checkout page</a> before your final confirmation.</p>
+<h3>Are installment plans available for electrical appliances?</h3>
+<p>Yes, installment programs and facilities are available when purchasing directly from our showroom in Mansoura. You can inquire about the current systems and conditions when visiting us at the showroom.</p>
+<h2>Shipping &amp; Delivery</h2>
+<h3>Which areas and governorates are covered by delivery?</h3>
+<p>We deliver appliances using our own dedicated vehicles to Mansoura city, all towns and villages of Dakahlia governorate, the Delta governorates, and all governorates across Egypt. Direct pickup from our Mansoura showroom is also available.</p>
+<h3>How much does shipping and delivery cost?</h3>
+<p>Delivery fees depend on the governorate and city specified in your address. You can see the exact shipping charge by entering your location on the <a href="/checkout">checkout page</a> before completing your purchase. For further details, please visit our <a href="/pages/delivery">Shipping &amp; Delivery Policy</a> page.</p>
+<h3>Can I schedule a specific delivery day?</h3>
+<p>Yes, certainly. After submitting your order, message us on WhatsApp via the button on the site to coordinate the most convenient delivery day and time window with our showroom delivery team.</p>
+<h2>Warranty &amp; Returns</h2>
+<h3>Are all appliances brand-new and covered by official warranty?</h3>
+<p>Yes, all appliances sold at Mohamed Serag Showroom are 100% genuine, brand-new grade-A units, accompanied by the official distributor warranty card and a certified showroom invoice. The warranty duration varies by brand and is listed on each product page.</p>
+<h3>How do I activate the warranty and install appliances after delivery?</h3>
+<p>For major appliances such as washing machines, air conditioners, and large screens, we recommend keeping the box sealed and calling the customer service hotline printed on the carton so an authorized technician can perform installation and stamp the warranty certificate. Full details are available on the <a href="/pages/warranty">Warranty &amp; Authorized Service</a> page.</p>
+<h3>What are the terms for returning or exchanging an appliance?</h3>
+<p>Under Egyptian Consumer Protection Law, you may return or exchange an unused product in its original unopened carton within 14 days of delivery. If a manufacturing defect occurs within 30 days, it is addressed through a certified technical report from the official agent service center. Please visit our <a href="/pages/returns">Return &amp; Exchange Policy</a> page for the full procedure.</p>
+<h2>About the Showroom &amp; Wholesale</h2>
+<h3>Where is the showroom located?</h3>
+<p>Mohamed Serag Showroom is located in Mansoura, Dakahlia governorate, serving customers since 1972. You can learn more about our history on our <a href="/pages/about">About Us</a> page. To inquire about opening hours or any questions, message us on WhatsApp via the button on the site.</p>
+<h3>Do you offer special pricing for merchants and wholesale orders?</h3>
+<p>Yes, we provide specialized pricing and services for merchants and retail shop owners dealing in housewares and electrical appliances. Traders can explore terms and submit inquiries via the <a href="/traders">Wholesale &amp; Traders</a> page.</p>`,
+        },
+      },
       body: `<p>جمعنا لكم في هذه الصفحة إجابات واضحة ومباشرة عن أكثر الأسئلة المتكررة التي تصلنا من عملائنا حول الطلب، الشحن، الدفع، والضمان، لتسهيل تجربتكم في معرض محمد سراج.</p>
 <h2>الطلب والدفع</h2>
 <h3>كيف يمكنني إتمام الطلب من المعرض؟</h3>
@@ -1521,6 +2358,7 @@ async function main() {
   ]
 
   for (const p of pageDefs) {
+    const pageTranslations = p.translations as unknown as Prisma.InputJsonValue
     await prisma.page.upsert({
       where: { slug: p.slug },
       update: {
@@ -1528,6 +2366,7 @@ async function main() {
         body: p.body,
         seoTitle: p.seoTitle,
         seoDescription: p.seoDescription,
+        translations: pageTranslations,
         published: true,
       },
       create: {
@@ -1536,6 +2375,7 @@ async function main() {
         body: p.body,
         seoTitle: p.seoTitle,
         seoDescription: p.seoDescription,
+        translations: pageTranslations,
         published: true,
       },
     })
@@ -1550,6 +2390,15 @@ async function main() {
     summary: string
     body: string
     categorySlug: string | null
+    translations: {
+      en: {
+        title: string
+        summary: string
+        body: string
+        seoTitle: string
+        seoDescription: string
+      }
+    }
   }
 
   const guideDefs: GuideSeedDef[] = [
@@ -1558,6 +2407,26 @@ async function main() {
       title: 'إزاي تختار الثلاجة المناسبة لبيتك؟',
       summary:
         'دليل سريع لاختيار الثلاجة: السعة المناسبة، الفرق بين النوفروست والانفرتر، استهلاك الكهرباء، والضمان — نصائح من خبراء معرض محمد سراج.',
+      translations: {
+        en: {
+          title: 'How to Choose the Right Refrigerator for Your Home',
+          summary:
+            'A quick guide to choosing a refrigerator: ideal capacity, No Frost vs Inverter, power consumption, and warranty — expert tips from Mohamed Serag.',
+          seoTitle: 'How to Choose the Right Refrigerator | Mohamed Serag',
+          seoDescription:
+            'Quick refrigerator buying guide: choosing capacity, No Frost vs Defrost, Inverter energy savings, and warranty advice from Mohamed Serag.',
+          body: `<h2>Start with Household Size and Usage</h2>
+<p>A 16-cubic-foot refrigerator fits a small household, while larger families usually need 20 cubic feet or more. Choose between top-freezer, bottom-freezer, and side-by-side configurations based on your kitchen layout.</p>
+<h2>What Difference Do No Frost and Inverter Make?</h2>
+<ul>
+<li>No Frost prevents ice buildup and cuts down on manual cleaning.</li>
+<li>Inverter compressors lower electricity consumption and run more quietly.</li>
+<li>If your area experiences frequent power cuts, ask about built-in voltage protection.</li>
+</ul>
+<h2>Tips from Mohamed Serag Showroom</h2>
+<p>Choose a brand with an authorized agent and clear warranty in Egypt, and measure your kitchen space carefully before buying. At our showroom, we help you compare models and prices to find the perfect fit for your home.</p>`,
+        },
+      },
       body: `<h2>ابدأ بحجم البيت والاستخدام</h2>
 <p>ثلاجة 16 قدم مناسبة لبيت صغير، أما العائلات فالأفضل 20 قدم أو أكتر. اختار بين الباب العلوي والسفلي والـ Side by Side حسب المساحة المتاحة في مطبخك.</p>
 <h2>النوفروست والانفرتر بيفرقوا في إيه؟</h2>
@@ -1575,6 +2444,26 @@ async function main() {
       title: 'دليل شراء التكييف الانفرتر',
       summary:
         'كل اللي محتاج تعرفه عن تكييف الانفرتر: قوة التبريد، استهلاك الكهرباء، سعة الـ BTU المناسبة للأوضة، ونصائح التركيب والصيانة.',
+      translations: {
+        en: {
+          title: 'Inverter Air Conditioner Buying Guide',
+          summary:
+            'Everything you need to know about inverter air conditioners: cooling power, electricity consumption, matching room capacity, and care tips.',
+          seoTitle: 'Inverter Air Conditioner Buying Guide | Mohamed Serag',
+          seoDescription:
+            'Everything you need to know about inverter air conditioners: cooling power, power consumption, room capacity, and installation tips from Serag.',
+          body: `<h2>Why Choose an Inverter AC?</h2>
+<p>An inverter air conditioner modulates its compressor speed, reaching your desired temperature quickly and then throttling down, making a noticeable difference to your electricity bills over time.</p>
+<h2>Select the Right Cooling Capacity</h2>
+<ul>
+<li>Small room up to 14 m²: 1.25 HP is sufficient.</li>
+<li>Medium room from 14 to 18 m²: 1.5 HP.</li>
+<li>Large room or top-floor space: 2.25 HP or higher.</li>
+</ul>
+<h2>Installation &amp; Maintenance Tips</h2>
+<p>Proper installation preserves the lifespan and efficiency of the unit. Avoid mounting the indoor unit near heat sources, and clean filters every two months. At the showroom, we install and service with decades of trusted experience.</p>`,
+        },
+      },
       body: `<h2>ليه تختار الانفرتر؟</h2>
 <p>تكييف الانفرتر بيتحكم في سرعة الضاغط، فبيوصل للحرارة المطلوبة بسرعة وبعدين بيقلّل الاستهلاك، وده بيفرق في فاتورة الكهربا على المدى الطويل.</p>
 <h2>اختار سعة التبريد المناسبة</h2>
@@ -1592,6 +2481,26 @@ async function main() {
       title: 'دليل تجهيز العروسة — قائمة كاملة',
       summary:
         'قائمة كاملة لتجهيز جهاز العروسة: من الأجهزة الكهربائية لأدوات المطبخ والحمام، مع نصائح ترتيب الأولويات والميزانية خطوة بخطوة.',
+      translations: {
+        en: {
+          title: 'Bridal Preparation Checklist — Complete Guide',
+          summary:
+            'Complete checklist for bride home setup: from major electrical appliances to kitchen cookware and bathroom essentials, with budgeting advice.',
+          seoTitle: 'Bridal Preparation Checklist & Guide | Mohamed Serag',
+          seoDescription:
+            'Complete bridal preparation checklist: essential home appliances, Turkish cookware, bathroom gear, budgeting tips, and step-by-step guidance.',
+          body: `<h2>Start with the Essentials</h2>
+<p>First, prepare major home appliances: refrigerator, washing machine, air conditioner, and cooker, as they take time to select, coordinate, and deliver.</p>
+<h2>Phased Checklist</h2>
+<ul>
+<li>Phase 1: Essential large electrical appliances.</li>
+<li>Phase 2: Kitchen cookware, pot sets, and small domestic appliances.</li>
+<li>Phase 3: Bathroom appliances and personal care devices.</li>
+</ul>
+<h2>Our Advice</h2>
+<p>Do not try to buy everything all at once. Prioritize by budget and essential needs, or start with a ready bridal package if you prefer a step-by-step approach.</p>`,
+        },
+      },
       body: `<h2>ابدئي بالأساسيات</h2>
 <p>جهّزي الأول الأجهزة الكبيرة: ثلاجة، غسالة، تكييف، وبوتاجاز، لأنها بتاخد وقت في الاختيار والتوصيل.</p>
 <h2>القائمة على مراحل</h2>
@@ -1623,12 +2532,14 @@ async function main() {
         })
       : []
 
+    const guideTranslations = guide.translations as unknown as Prisma.InputJsonValue
     await prisma.guide.upsert({
       where: { slug: guide.slug },
       update: {
         title: guide.title,
         summary: guide.summary,
         body: guide.body,
+        translations: guideTranslations,
         categoryIds: category ? [category.id] : [],
         productIds: guideProducts.map((product) => product.id),
         published: true,
@@ -1638,6 +2549,7 @@ async function main() {
         title: guide.title,
         summary: guide.summary,
         body: guide.body,
+        translations: guideTranslations,
         categoryIds: category ? [category.id] : [],
         productIds: guideProducts.map((product) => product.id),
         published: true,
