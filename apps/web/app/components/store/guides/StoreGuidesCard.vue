@@ -29,7 +29,7 @@ const headingTag = computed(() => `h${props.headingLevel ?? 3}`)
 <template>
   <NuxtLink
     :to="guideUrl"
-    class="group flex min-w-0 flex-col overflow-hidden rounded-[var(--radius-card)] border border-[#E7E0C8] bg-card transition duration-200 hover:-translate-y-1.5 hover:shadow-[0_28px_48px_-22px_rgba(20,32,26,.4)] focus-visible:ring-2 focus-visible:ring-serag-gold focus-visible:outline-none motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+    class="group flex min-w-0 flex-col overflow-hidden rounded-[var(--radius-card)] border border-border bg-card transition duration-200 hover:-translate-y-1.5 hover:shadow-[0_28px_48px_-22px_rgba(20,32,26,.4)] focus-visible:ring-2 focus-visible:ring-serag-gold focus-visible:outline-none motion-reduce:transition-none motion-reduce:hover:translate-y-0"
   >
     <div :class="['flex h-[190px] items-center justify-center overflow-hidden', tone.cover]">
       <NuxtImg

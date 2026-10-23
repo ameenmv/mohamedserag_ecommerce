@@ -943,6 +943,14 @@
       "showingCount": "ظهر {shown} من {total}",
       "loadError": "تعذر تحميل التقييمات",
       "retry": "إعادة المحاولة"
+    },
+    "trust": {
+      "warranty": "ضمان الوكيل المعتمد",
+      "delivery": "توصيل لحد باب البيت",
+      "cod": "الدفع عند الاستلام"
+    },
+    "empty": {
+      "browseCategories": "أو ابدأ من قسم"
     }
   },
   "admin": {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { CartLine } from '~/utils/cart'
 import type { CartQuoteLine } from '@serag/shared'
-import { Minus, Plus, Trash2 } from '@lucide/vue'
+import { Minus, Package, Plus, Trash2 } from '@lucide/vue'
 import type { PriceChange } from '~/utils/cart-quote'
 
 const props = defineProps<{
@@ -67,7 +67,8 @@ function increase(): void {
       <!-- Product Image -->
       <NuxtLink
         :to="localePath(`/p/${line.slug}`)"
-        class="relative size-18 shrink-0 overflow-hidden rounded-xl bg-muted/40 border border-border/40 sm:size-20"
+        :aria-label="line.name"
+        class="relative size-18 shrink-0 overflow-hidden rounded-xl bg-serag-cream border border-border sm:size-20"
       >
         <img
           v-if="line.image"
@@ -76,8 +77,8 @@ function increase(): void {
           class="size-full object-contain p-1"
           loading="lazy"
         >
-        <div v-else class="flex size-full items-center justify-center text-muted-foreground text-xs">
-          Serag
+        <div v-else class="flex size-full items-center justify-center bg-serag-cream text-serag-green" aria-hidden="true">
+          <Package class="size-8" stroke-width="1.4" />
         </div>
       </NuxtLink>
 

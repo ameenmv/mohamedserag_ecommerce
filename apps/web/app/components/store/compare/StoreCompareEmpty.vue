@@ -18,31 +18,14 @@ const localePath = useLocalePath()
 <template>
   <div>
     <!-- 0-item Empty State -->
-    <div
+    <StoreEmptyState
       v-if="products.length === 0"
-      class="flex flex-col items-center justify-center rounded-3xl border border-dashed border-border/80 bg-card/60 px-6 py-16 text-center"
-    >
-      <div
-        class="mb-4 flex size-16 items-center justify-center rounded-2xl bg-secondary text-muted-foreground"
-        aria-hidden="true"
-      >
-        <ArrowLeftRight class="size-8" />
-      </div>
-      <h1 class="font-display text-2xl sm:text-3xl text-foreground">
-        {{ t('store.compare.emptyTitle') }}
-      </h1>
-      <p class="mt-2 max-w-md text-sm text-muted-foreground sm:text-base">
-        {{ t('store.compare.emptyDescription') }}
-      </p>
-      <div class="mt-6">
-        <NuxtLink
-          :to="localePath('/shop')"
-          class="inline-flex min-h-12 items-center justify-center rounded-full bg-primary px-6 text-sm font-bold text-primary-foreground shadow-xs transition-colors hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-        >
-          {{ t('store.compare.browseProducts') }}
-        </NuxtLink>
-      </div>
-    </div>
+      :icon="ArrowLeftRight"
+      heading-tag="h1"
+      :title="t('store.compare.emptyTitle')"
+      :description="t('store.compare.emptyDescription')"
+      :cta-label="t('store.compare.browseProducts')"
+    />
 
     <!-- 1-item State: hint to add one more product + product card -->
     <div v-else-if="products.length === 1" class="space-y-6">

@@ -88,8 +88,8 @@ function onRestart(): void {
       @restart="onRestart"
     />
 
-    <template v-else-if="current">
-      <StoreQuizProgress class="mt-6" :current="step + 1" :total="total" />
+    <div v-else-if="current" class="mt-6 rounded-[28px] border border-border bg-card p-5 shadow-[0_24px_48px_-32px_rgba(20,32,26,.3)] sm:p-8">
+      <StoreQuizProgress :current="step + 1" :total="total" />
 
       <div class="mt-6">
         <StoreQuizQuestion
@@ -134,6 +134,6 @@ function onRestart(): void {
           <span>{{ t('store.quiz.showResults') }}</span>
         </button>
       </div>
-    </template>
+    </div>
   </main>
 </template>

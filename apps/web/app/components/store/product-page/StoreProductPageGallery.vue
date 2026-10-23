@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ChevronLeft, ChevronRight, Package } from '@lucide/vue'
+import { ChevronLeft, ChevronRight } from '@lucide/vue'
 import type { ProductDetailImage } from '@serag/shared'
 
 const props = defineProps<{
   images: ProductDetailImage[]
   productName: string
+  categorySlug?: string
 }>()
 
 const { t } = useI18n()
@@ -40,7 +41,7 @@ function next(): void {
   <div class="flex flex-col">
     <!-- Main image viewport -->
     <div
-      class="relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-3xl border border-border bg-serag-ivory/60 p-4 sm:p-8 dark:bg-muted/30"
+      class="relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-[28px] border border-border bg-serag-cream p-4 sm:p-8 dark:bg-muted/30"
     >
       <!-- NuxtImg with explicit width/height and LCP prioritization on first image -->
       <NuxtImg
@@ -57,10 +58,10 @@ function next(): void {
       <!-- Neutral placeholder when images are missing -->
       <div
         v-else
-        class="flex size-full items-center justify-center text-muted-foreground/35"
+        class="flex size-full items-center justify-center text-serag-green"
         aria-hidden="true"
       >
-        <Package class="size-20 stroke-[1.2]" />
+        <StoreCategoryIcon :slug="categorySlug ?? ''" class="size-40 sm:size-56" stroke-width="1.1" />
       </div>
 
       <!-- Real showroom photo chip -->

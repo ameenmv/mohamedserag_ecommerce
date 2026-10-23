@@ -14,7 +14,6 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
-const localePath = useLocalePath()
 
 const availableItems = computed(() =>
   props.items.filter((i) => i.card !== null),
@@ -57,31 +56,14 @@ const unavailableItems = computed(() =>
     </div>
 
     <!-- Empty State -->
-    <div
+    <StoreEmptyState
       v-else-if="items.length === 0"
-      class="flex flex-col items-center justify-center rounded-3xl border border-dashed border-border/80 bg-card/60 px-6 py-16 text-center"
-    >
-      <div
-        class="mb-4 flex size-16 items-center justify-center rounded-2xl bg-secondary text-muted-foreground"
-        aria-hidden="true"
-      >
-        <Heart class="size-8" />
-      </div>
-      <h1 class="font-display text-2xl sm:text-3xl text-foreground">
-        {{ t('store.wishlist.emptyTitle') }}
-      </h1>
-      <p class="mt-2 max-w-md text-sm text-muted-foreground sm:text-base">
-        {{ t('store.wishlist.emptyDescription') }}
-      </p>
-      <div class="mt-6">
-        <NuxtLink
-          :to="localePath('/shop')"
-          class="inline-flex min-h-12 items-center justify-center rounded-full bg-primary px-6 text-sm font-bold text-primary-foreground shadow-xs transition-colors hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-        >
-          {{ t('store.wishlist.browseProducts') }}
-        </NuxtLink>
-      </div>
-    </div>
+      :icon="Heart"
+      heading-tag="h1"
+      :title="t('store.wishlist.emptyTitle')"
+      :description="t('store.wishlist.emptyDescription')"
+      :cta-label="t('store.wishlist.browseProducts')"
+    />
 
     <!-- Loaded Content: Grid + Unavailable List -->
     <div v-else class="space-y-6">

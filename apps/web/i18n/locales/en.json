@@ -943,6 +943,14 @@
       "showingCount": "Showing {shown} of {total}",
       "loadError": "Failed to load reviews",
       "retry": "Retry"
+    },
+    "trust": {
+      "warranty": "Official warranty",
+      "delivery": "Delivered to your door",
+      "cod": "Cash on delivery"
+    },
+    "empty": {
+      "browseCategories": "Or start from a category"
     }
   },
   "admin": {

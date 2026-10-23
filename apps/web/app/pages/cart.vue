@@ -59,7 +59,7 @@ function handleCheckout(): void {
         </div>
 
         <!-- Totals & Summary (Desktop 5 cols, Mobile full) -->
-        <div class="lg:col-span-5 xl:col-span-4">
+        <div class="flex flex-col gap-4 lg:sticky lg:top-28 lg:col-span-5 xl:col-span-4">
           <StoreCartTotals
             :quote="quote"
             :subtotal="subtotal"
@@ -67,6 +67,7 @@ function handleCheckout(): void {
             :disabled="lines.length === 0"
             @checkout="handleCheckout"
           />
+          <StoreTrustRow class="rounded-[28px] border border-border bg-card p-4" />
         </div>
       </div>
     </div>

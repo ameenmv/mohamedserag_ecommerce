@@ -53,7 +53,7 @@ const whatsappUrl = computed(() => {
 
 <template>
   <article
-    class="group relative flex flex-col rounded-[20px] border border-[#E7E0C8] bg-card p-2.5 transition duration-200 hover:-translate-y-1 hover:border-serag-gold/60 hover:shadow-[0_28px_48px_-24px_rgba(20,32,26,.38)] sm:rounded-[26px] sm:p-4 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+    class="group relative flex flex-col rounded-[20px] border border-border bg-card p-2.5 transition duration-200 hover:-translate-y-1 hover:border-serag-gold/60 hover:shadow-[0_28px_48px_-24px_rgba(20,32,26,.38)] sm:rounded-[26px] sm:p-4 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
   >
     <!-- Background overlay link for full-card navigation -->
     <NuxtLink
