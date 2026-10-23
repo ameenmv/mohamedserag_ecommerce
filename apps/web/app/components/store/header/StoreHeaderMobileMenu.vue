@@ -31,7 +31,7 @@ const side = computed<'right' | 'left'>(() => (localeProperties.value.dir === 'l
     <LazySheetContent :side="side" class="w-80 bg-background p-0">
       <SheetHeader class="border-b border-sidebar-border bg-serag-deep px-5 py-5 text-start text-serag-ivory">
         <SheetTitle>
-          <img src="/brand/logo-light.webp" :alt="t('brand.storeName')" width="480" height="172" class="h-14 w-auto">
+          <CommonBrandLogo class="h-14 text-serag-ivory" />
         </SheetTitle>
         <SheetDescription class="num text-xs font-semibold tracking-widest text-serag-gold-hi">
           {{ t('store.header.mobileMenuSubtitle') }}

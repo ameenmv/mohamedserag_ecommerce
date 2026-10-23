@@ -6,14 +6,7 @@ const { t } = useI18n()
 
 <template>
   <div class="flex flex-col gap-4">
-    <img
-      src="/brand/logo-light.webp"
-      :alt="t('brand.storeName')"
-      width="480"
-      height="172"
-      loading="lazy"
-      class="h-20 w-auto self-start"
-    >
+    <CommonBrandLogo class="h-20 self-start text-serag-ivory" />
     <p class="max-w-sm text-base leading-[1.8]">
       {{ t('store.footer.brandDescription') }}
     </p>

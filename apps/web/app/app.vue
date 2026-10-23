@@ -27,7 +27,9 @@ useHead({
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
-    <CommonSplash v-if="showSplash" />
+    <!-- Server-rendered only (no client JS): the logo symbols and the splash that uses them -->
+    <LazyCommonBrandSymbols hydrate-never />
+    <LazyCommonSplash v-if="showSplash" hydrate-never />
     <!-- Mounted on the first notification (see utils/toaster.ts) -->
     <LazyCommonAppToaster v-if="toasterWanted" />
   </div>
