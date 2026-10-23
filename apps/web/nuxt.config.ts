@@ -16,6 +16,12 @@ export default defineNuxtConfig({
   app: {
     head: {
       meta: [{ name: 'theme-color', content: '#16291E' }],
+      // Icons from the store's logo square (public/, generated from public/logo.jpg)
+      link: [
+        { rel: 'icon', href: '/favicon.ico', sizes: '48x48' },
+        { rel: 'icon', type: 'image/png', href: '/icon-192.png', sizes: '192x192' },
+        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+      ],
     },
   },
 

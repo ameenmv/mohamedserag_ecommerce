@@ -6,22 +6,15 @@ const localePath = useLocalePath()
 <template>
   <NuxtLink
     :to="localePath('/')"
-    class="flex items-center gap-2.5 rounded-xl focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:gap-3"
+    class="flex shrink-0 items-center rounded-xl focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
   >
-    <div
-      class="num flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary text-lg font-extrabold tracking-tight text-serag-gold-hi ring-2 ring-serag-gold-hi/45 ring-inset sm:size-14 sm:rounded-2xl sm:text-2xl"
-      aria-hidden="true"
+    <!-- The store's own logo (public/brand, built from public/logo.jpg) -->
+    <img
+      src="/brand/logo.webp"
+      :alt="t('brand.storeName')"
+      width="480"
+      height="172"
+      class="h-11 w-auto sm:h-[60px]"
     >
-      MS
-    </div>
-    <div class="flex flex-col leading-none">
-      <span class="font-display text-xl text-primary sm:text-[30px]">{{ t('brand.name') }}</span>
-      <span
-        aria-hidden="true"
-        class="num mt-0.5 text-[10px] font-bold tracking-[3px] text-serag-gold-ink sm:text-[11px] dark:text-serag-gold-hi"
-      >
-        SINCE 1972
-      </span>
-    </div>
   </NuxtLink>
 </template>

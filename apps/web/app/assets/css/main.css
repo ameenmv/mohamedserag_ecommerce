@@ -52,7 +52,55 @@
   &::-webkit-scrollbar { display: none; }
 }
 
+/* Skeletons: a soft light sweep across a cream block (direction follows the page). */
+@utility skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.65), transparent);
+    animation: shimmer 1.6s ease-in-out infinite;
+  }
+  &:where([dir='rtl'], [dir='rtl'] *)::after { animation-name: shimmer-rtl; }
+}
+@keyframes shimmer { to { transform: translateX(100%); } }
+@keyframes shimmer-rtl { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
+
+/* Splash on every full page load (components/common/CommonSplash.vue): the real logo assembles
+   itself, then fades away. Pure CSS, so it also clears without JavaScript; never takes taps. */
+.splash {
+  display: flex;
+  animation: splash-out 0.45s ease 1.45s forwards;
+}
+.splash-glow {
+  background: radial-gradient(circle, rgb(111 168 39 / 0.16) 0%, rgb(111 168 39 / 0) 65%);
+  animation: splash-glow 1.4s ease-out both;
+}
+.splash-mark {
+  background-image: url('/brand/mark.webp');
+  animation: splash-pop 0.6s cubic-bezier(.2, .9, .3, 1.25) both;
+}
+/* Arabic reads right to left, so the name is revealed from the right */
+.splash-wordmark {
+  background-image: url('/brand/wordmark.webp');
+  animation: splash-wipe 0.65s cubic-bezier(.6, 0, .2, 1) 0.3s both;
+}
+.splash-since {
+  background-image: url('/brand/since.webp');
+  animation: splash-open 0.55s ease-out 0.75s both;
+}
+@keyframes splash-out { to { opacity: 0; transform: scale(1.04); visibility: hidden; } }
+@keyframes splash-glow { from { opacity: 0; transform: scale(.6); } }
+@keyframes splash-pop { from { opacity: 0; transform: scale(.4) rotate(-12deg); } }
+@keyframes splash-wipe { from { clip-path: inset(0 0 0 100%); opacity: .4; } }
+@keyframes splash-open { from { clip-path: inset(0 50% 0 50%); } }
+
 @media (prefers-reduced-motion: reduce) {
   .animate-floaty, .animate-spin-slow, .animate-marquee, .animate-marquee-fast,
   .animate-pulse-soft, .animate-ping-soft { animation: none !important; }
+  .skeleton-shimmer::after { animation: none; }
+  .splash { display: none; }
 }

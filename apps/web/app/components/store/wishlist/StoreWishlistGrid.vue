@@ -37,21 +37,7 @@ const unavailableItems = computed(() =>
         <Skeleton class="h-4 w-72 rounded-md" />
       </div>
       <div class="grid grid-cols-2 gap-2.5 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
-        <div
-          v-for="i in 4"
-          :key="i"
-          class="flex flex-col justify-between rounded-2xl border border-border bg-card p-3 sm:p-4"
-        >
-          <div>
-            <Skeleton class="mb-3 aspect-square w-full rounded-xl" />
-            <Skeleton class="mb-2 h-3 w-16 rounded-md" />
-            <Skeleton class="mb-3 h-4 w-full rounded-md" />
-          </div>
-          <div class="space-y-2">
-            <Skeleton class="h-6 w-24 rounded-md" />
-            <Skeleton class="h-11 w-full rounded-xl" />
-          </div>
-        </div>
+        <StoreProductCardSkeleton v-for="i in 4" :key="i" />
       </div>
     </div>
 
