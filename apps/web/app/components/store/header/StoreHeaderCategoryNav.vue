@@ -9,8 +9,9 @@ defineProps<{
 const { t } = useI18n()
 const localePath = useLocalePath()
 
+// Tight enough that every link fits on one row at 1440 px in both languages.
 const linkClass =
-  'flex min-h-12 items-center whitespace-nowrap px-4 transition-colors hover:text-serag-gold focus-visible:ring-2 focus-visible:ring-serag-gold focus-visible:outline-none focus-visible:ring-inset xl:px-4 lg:px-3'
+  'flex min-h-12 items-center whitespace-nowrap px-2.5 text-[15px] transition-colors hover:text-serag-gold focus-visible:ring-2 focus-visible:ring-serag-gold focus-visible:outline-none focus-visible:ring-inset xl:px-3'
 </script>
 
 <template>

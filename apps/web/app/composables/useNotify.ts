@@ -122,7 +122,15 @@ export function useNotify() {
     })
   }
 
+  /** Clears open toasts, without loading vue-sonner if nothing has been shown yet. */
+  function dismissAll(): void {
+    void sonnerModulePromise?.then(({ toast }) => {
+      toast.dismiss()
+    })
+  }
+
   return {
+    dismissAll,
     success,
     info,
     warning,

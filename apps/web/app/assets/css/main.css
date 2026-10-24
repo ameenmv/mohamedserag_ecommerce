@@ -4,8 +4,9 @@
 @custom-variant dark (&:is(.dark *));
 
 :root:lang(en) {
-  --font-display: 'Outfit', sans-serif;
-  --font-sans: 'Outfit', system-ui, sans-serif;
+  --font-display: 'Bricolage Grotesque', 'Plus Jakarta Sans', sans-serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-num: 'Plus Jakarta Sans', system-ui, sans-serif;
 }
 
 @layer base {
@@ -168,3 +169,35 @@
    taps on its body pass through; its own buttons stay clickable. */
 [data-sonner-toaster][dir] [data-sonner-toast] { pointer-events: none; }
 [data-sonner-toaster][dir] [data-sonner-toast] :is(button, a) { pointer-events: auto; }
+
+/* Sheets (cart drawer, mobile menu, filters): the panel glides in from its side and the backdrop
+   fades. Reka keeps a closing sheet mounted until its animation ends, so the exit plays too. */
+.sheet-overlay[data-state='open'] { animation: sheet-fade-in .3s ease both; }
+.sheet-overlay[data-state='closed'] { animation: sheet-fade-out .22s ease both; }
+.sheet-panel { --sheet-from: translate3d(100%, 0, 0); }
+.sheet-panel[data-side='left'] { --sheet-from: translate3d(-100%, 0, 0); }
+.sheet-panel[data-side='top'] { --sheet-from: translate3d(0, -100%, 0); }
+.sheet-panel[data-side='bottom'] { --sheet-from: translate3d(0, 100%, 0); }
+.sheet-panel[data-state='open'] { animation: sheet-in .48s cubic-bezier(.32, .72, 0, 1) both; }
+.sheet-panel[data-state='closed'] { animation: sheet-out .26s cubic-bezier(.4, 0, 1, 1) both; }
+/* Content rises in just behind the panel. */
+.sheet-panel[data-state='open'] > :not(button) { animation: sheet-rise .5s cubic-bezier(.32, .72, 0, 1) .08s both; }
+@keyframes sheet-in { from { transform: var(--sheet-from); } }
+@keyframes sheet-out { to { transform: var(--sheet-from); } }
+@keyframes sheet-rise { from { opacity: 0; transform: translateY(10px); } }
+@keyframes sheet-fade-in { from { opacity: 0; } }
+@keyframes sheet-fade-out { to { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .sheet-panel[data-state], .sheet-panel[data-state='open'] > :not(button) { animation-name: sheet-fade-in; animation-duration: .15s; }
+  .sheet-panel[data-state='closed'] { animation-name: sheet-fade-out; }
+}
+
+/* Cart drawer lines: stagger in when the drawer opens, slide away when removed. */
+.sheet-panel[data-state='open'] .cart-line-enter { animation: sheet-rise .45s cubic-bezier(.32, .72, 0, 1) both; }
+.cart-line-move, .cart-line-leave-active { transition: transform .3s ease, opacity .25s ease; }
+.cart-line-leave-active { position: absolute; inset-inline: 0; }
+.cart-line-leave-to { opacity: 0; transform: translateX(24px); }
+[dir='rtl'] .cart-line-leave-to { transform: translateX(-24px); }
+@media (prefers-reduced-motion: reduce) {
+  .sheet-panel[data-state='open'] .cart-line-enter { animation: none; }
+}
