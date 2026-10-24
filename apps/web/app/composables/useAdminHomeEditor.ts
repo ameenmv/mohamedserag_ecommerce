@@ -1,5 +1,10 @@
 import type { AdminHomeState, HomeContent, HomeSectionId, HomeVersionRow } from '@serag/shared'
-import { DEFAULT_HOME_CONTENT, DEFAULT_HOME_LAYOUT, countHomeChanges } from '@serag/shared'
+import {
+  DEFAULT_HOME_CONTENT,
+  DEFAULT_HOME_CONTENT_EN,
+  DEFAULT_HOME_LAYOUT,
+  countHomeChanges,
+} from '@serag/shared'
 import {
   cloneHomeDraft,
   isHomeFieldChanged,
@@ -15,23 +20,30 @@ export type HomeSaveStatus = 'idle' | 'saving' | 'saved' | 'error'
 interface DraftShape {
   sections: HomeContent
   layout: AdminHomeState['draft']['layout']
+  english: HomeContent
 }
 
 function emptyState(): AdminHomeState {
   return {
-    draft: { sections: cloneHomeDraft(DEFAULT_HOME_CONTENT), layout: cloneHomeDraft(DEFAULT_HOME_LAYOUT), updatedAt: null },
+    draft: {
+      sections: cloneHomeDraft(DEFAULT_HOME_CONTENT),
+      layout: cloneHomeDraft(DEFAULT_HOME_LAYOUT),
+      updatedAt: null,
+      english: cloneHomeDraft(DEFAULT_HOME_CONTENT_EN),
+    },
     published: {
       sections: cloneHomeDraft(DEFAULT_HOME_CONTENT),
       layout: cloneHomeDraft(DEFAULT_HOME_LAYOUT),
       publishedAt: null,
       label: null,
+      english: null,
     },
     changes: 0,
   }
 }
 
 /**
- * Editor state for the admin home CMS. Owns a deep-cloned `draft` (sections + layout),
+ * Editor state for the admin home CMS. Owns a deep-cloned `draft` (sections + layout + english),
  * debounced autosave against the API, per-field change tracking and validation errors.
  * All network calls funnel through `useAdminCms`.
  */
@@ -44,6 +56,7 @@ export function useAdminHomeEditor() {
   const draft = ref<DraftShape>({
     sections: cloneHomeDraft(DEFAULT_HOME_CONTENT),
     layout: cloneHomeDraft(DEFAULT_HOME_LAYOUT),
+    english: cloneHomeDraft(DEFAULT_HOME_CONTENT_EN),
   })
   const status = ref<HomeSaveStatus>('idle')
   const loading = ref(false)
@@ -54,8 +67,8 @@ export function useAdminHomeEditor() {
 
   const changes = computed(() =>
     countHomeChanges(
-      { sections: draft.value.sections, layout: draft.value.layout },
-      { sections: state.value.published.sections, layout: state.value.published.layout },
+      { sections: draft.value.sections, layout: draft.value.layout, english: draft.value.english },
+      { sections: state.value.published.sections, layout: state.value.published.layout, english: state.value.published.english },
     ),
   )
 
@@ -64,6 +77,7 @@ export function useAdminHomeEditor() {
     draft.value = {
       sections: cloneHomeDraft(next.draft.sections),
       layout: cloneHomeDraft(next.draft.layout),
+      english: cloneHomeDraft(next.draft.english ?? DEFAULT_HOME_CONTENT_EN),
     }
     fieldErrors.value = {}
   }
@@ -92,6 +106,7 @@ export function useAdminHomeEditor() {
       const payload = {
         sections: cloneHomeDraft(draft.value.sections),
         layout: cloneHomeDraft(draft.value.layout),
+        english: cloneHomeDraft(draft.value.english),
       }
       const next = await cms.saveDraft(payload)
       // Keep the user's local edits if they typed while the request was in flight.
@@ -101,6 +116,7 @@ export function useAdminHomeEditor() {
           ...next.draft,
           sections: cloneHomeDraft(draft.value.sections),
           layout: cloneHomeDraft(draft.value.layout),
+          english: cloneHomeDraft(draft.value.english),
         },
       }
       status.value = 'saved'
@@ -153,7 +169,16 @@ export function useAdminHomeEditor() {
     scheduleSave()
   }
 
-  function isFieldChanged(sectionId: HomeSectionId, key: string): boolean {
+  function isFieldChanged(sectionId: HomeSectionId, key: string, locale: 'ar' | 'en' = 'ar'): boolean {
+    if (locale === 'en') {
+      const publishedEnglish = state.value.published.english ?? DEFAULT_HOME_CONTENT_EN
+      return isHomeFieldChanged(
+        draft.value.english,
+        publishedEnglish,
+        sectionId,
+        key,
+      )
+    }
     return isHomeFieldChanged(
       draft.value.sections,
       state.value.published.sections,
@@ -162,15 +187,63 @@ export function useAdminHomeEditor() {
     )
   }
 
-  function resetField(sectionId: HomeSectionId, key: string): void {
-    resetHomeField(draft.value, state.value.published.sections, sectionId, key)
+  function resetField(sectionId: HomeSectionId, key: string, locale: 'ar' | 'en' = 'ar'): void {
+    if (locale === 'en') {
+      const publishedEnglish = state.value.published.english ?? DEFAULT_HOME_CONTENT_EN
+      resetHomeField(
+        { sections: draft.value.english, layout: draft.value.layout },
+        publishedEnglish,
+        sectionId,
+        key,
+      )
+      if (key === 'image' && sectionId === 'hero') {
+        draft.value.sections.hero.image = draft.value.english.hero.image
+      } else if (key === 'categorySlugs' && sectionId === 'featuredCategories') {
+        draft.value.sections.featuredCategories.categorySlugs = [
+          ...draft.value.english.featuredCategories.categorySlugs,
+        ]
+      }
+    } else {
+      resetHomeField(draft.value, state.value.published.sections, sectionId, key)
+      if (key === 'image' && sectionId === 'hero') {
+        draft.value.english.hero.image = draft.value.sections.hero.image
+      } else if (key === 'categorySlugs' && sectionId === 'featuredCategories') {
+        draft.value.english.featuredCategories.categorySlugs = [
+          ...draft.value.sections.featuredCategories.categorySlugs,
+        ]
+      }
+    }
     fieldErrors.value = {}
     touch()
   }
 
   /** Applies a single field edit from the fields editor and schedules the autosave. */
-  function setField(sectionId: HomeSectionId, key: string, value: unknown): void {
-    setHomeField(draft.value, sectionId, key, value)
+  function setField(
+    sectionId: HomeSectionId,
+    key: string,
+    value: unknown,
+    locale: 'ar' | 'en' = 'ar',
+  ): void {
+    if (locale === 'en') {
+      setHomeField(
+        { sections: draft.value.english, layout: draft.value.layout },
+        sectionId,
+        key,
+        value,
+      )
+      if (key === 'image' && sectionId === 'hero') {
+        draft.value.sections.hero.image = value as string | null
+      } else if (key === 'categorySlugs' && sectionId === 'featuredCategories') {
+        draft.value.sections.featuredCategories.categorySlugs = value as string[]
+      }
+    } else {
+      setHomeField(draft.value, sectionId, key, value)
+      if (key === 'image' && sectionId === 'hero') {
+        draft.value.english.hero.image = value as string | null
+      } else if (key === 'categorySlugs' && sectionId === 'featuredCategories') {
+        draft.value.english.featuredCategories.categorySlugs = value as string[]
+      }
+    }
     touch()
   }
 
@@ -232,13 +305,18 @@ export function useAdminHomeEditor() {
     await settleSaves()
     const beforeSections = cloneHomeDraft(draft.value.sections)
     const beforeLayout = cloneHomeDraft(draft.value.layout)
+    const beforeEnglish = cloneHomeDraft(draft.value.english)
     try {
       const next = await cms.discard()
       applyState(next)
       status.value = 'saved'
       undoToast(t('admin.content.toasts.discarded'), {
         onUndo: async () => {
-          draft.value = { sections: beforeSections, layout: beforeLayout }
+          draft.value = {
+            sections: beforeSections,
+            layout: beforeLayout,
+            english: beforeEnglish,
+          }
           await flushSave()
         },
       })

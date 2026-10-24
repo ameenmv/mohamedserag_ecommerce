@@ -67,7 +67,16 @@
       "suggestedCategories": "أقسام مقترحة",
       "seeAllResults": "عرض كل نتائج البحث ({query})",
       "resultsCount": "النتائج: {count}",
-      "askOnWhatsapp": "اسألنا على واتساب"
+      "askOnWhatsapp": "اسألنا على واتساب",
+      "categoriesNav": "أقسام المتجر",
+      "allCategories": "كل الأقسام",
+      "flashDeals": "عروض الفلاش",
+      "tradersWholesale": "للتجار والجملة",
+      "tradersReviews": "آراء التجار",
+      "aboutUs": "من نحن",
+      "toggleTheme": "بدّل بين الوضع الفاتح والغامق",
+      "darkMode": "الوضع الغامق",
+      "lightMode": "الوضع الفاتح"
     },
     "footer": {
       "whatsappPrefill": "السلام عليكم، عندي استفسار من موقع معرض محمد سراج 👋",
@@ -85,7 +94,7 @@
       "mansouraEgypt": "المنصورة، مصر",
       "showroomAddress": "[عنوان المعرض]",
       "chatOnWhatsapp": "كلّمنا على واتساب",
-      "brandDescription": "أجهزة كهربائية وأدوات منزلية بضمان حقيقي، من المنصورة لكل بيت مصري. خبرة وثقة من سنة 1972 في تجهيز البيوت والعرايس بأفضل الأسعار.",
+      "brandDescription": "أجهزة كهربائية وأدوات منزلية بضمان حقيقي، من المنصورة لكل بيت مصري.",
       "vatNotice": "الأسعار شاملة ضريبة القيمة المضافة",
       "availablePaymentMethods": "طرق الدفع المتاحة:",
       "cashOnDelivery": "كاش عند الاستلام",
@@ -93,7 +102,9 @@
       "vodafoneCash": "فودافون كاش",
       "legacyTagline": "ثقة لها تاريخ",
       "allRightsReserved": "كل الحقوق محفوظة.",
-      "deliveryNotice": "توصيل بعربيات المعرض لكل محافظات مصر"
+      "deliveryNotice": "توصيل بعربيات المعرض لكل محافظات مصر",
+      "categoriesTitle": "الأقسام",
+      "serviceTitle": "خدمة العملاء"
     },
     "bottomNav": {
       "ariaLabel": "تنقل سريع للموبايل",
@@ -101,9 +112,9 @@
       "account": "حسابي"
     },
     "home": {
-      "metaDescription": "معرض محمد سراج بالمنصورة من 1972: أجهزة كهربائية وجهاز العروسة بضمان معتمد وتوصيل لكل محافظات مصر.",
+      "metaDescription": "معرض محمد سراج بالمنصورة من 1972: أجهزة كهربائية وأدوات منزلية أصلية بضمان معتمد وتوصيل لكل محافظات مصر.",
       "uspHeading": "وعود معرض محمد سراج",
-      "categoriesEyebrow": "تسوّق حسب القسم",
+      "categoriesEyebrow": "SHOP BY CATEGORY",
       "allCategories": "شوف كل الأقسام",
       "allOffers": "شوف كل العروض",
       "tradersTiers": "شرائح الأسعار",
@@ -112,18 +123,205 @@
       "showroomLine": "المنصورة · صرح متكامل للأجهزة الكهربائية والأدوات المنزلية منذ 1972",
       "partnersEyebrow": "وكلاء معتمدين",
       "authorizedDealer": "وكيل معتمد",
-      "guidesEyebrow": "دليل الشراء",
-      "allGuides": "كل الأدلة"
+      "guidesEyebrow": "GUIDES",
+      "allGuides": "اقرأ دليل الشراء",
+      "heroTradersCta": "أسعار الجملة للتجار",
+      "heroArt": {
+        "fridges": "ثلاجات",
+        "washers": "غسالات",
+        "screens": "شاشات",
+        "acs": "تكييفات"
+      },
+      "marquee": [
+        "أجهزة كهربائية",
+        "أدوات منزلية",
+        "جملة وقطاعي",
+        "منذ 1972",
+        "المنصورة",
+        "ضمان حقيقي",
+        "أصلي 100%",
+        "توصيل لحد البيت"
+      ],
+      "flashEndsIn": "بتخلص بعد",
+      "how": {
+        "title": "إزاي تطلب؟",
+        "titleHighlight": "4 خطوات بس",
+        "subtitle": "مش هتدفع تمن الجهاز غير لما تشوفه بعينك. كل اللي بتحوّله مقدّماً هو مصاريف الشحن.",
+        "onlyUpfront": "المبلغ الوحيد المقدّم",
+        "startShopping": "ابدأ تسوّق",
+        "askWhatsapp": "عندك سؤال؟ كلمنا واتساب",
+        "steps": {
+          "choose": {
+            "title": "اختار منتجك",
+            "body": "تصفّح وقارن، ولو محتار اسألنا على واتساب ونرشحلك الأنسب."
+          },
+          "confirm": {
+            "title": "أكّد الطلب",
+            "body": "سيب اسمك ورقمك وعنوانك، واختار منطقتك فتعرف سعر الشحن فوراً."
+          },
+          "transfer": {
+            "title": "حوّل الشحن بس",
+            "body": "بإنستا باي أو فودافون كاش، وابعت الإثبات على واتساب بضغطة."
+          },
+          "receive": {
+            "title": "استلم وادفع",
+            "body": "المندوب يوصلّك، تعاين الجهاز قدامك وتدفع تمنه كاش."
+          }
+        }
+      },
+      "traders": {
+        "talkToTeam": "كلّم فريق الجملة",
+        "whatsappPrefill": "السلام عليكم، أنا تاجر وعايز أعرف أسعار الجملة 👋",
+        "tiersTitle": "شرائح الأسعار",
+        "tradersAccount": "حساب تاجر",
+        "invoiceNote": "فاتورة رسمية باسم معرضك مع كل طلب جملة",
+        "tiers": {
+          "small": {
+            "label": "كمية صغيرة",
+            "price": "سعر القطاعي"
+          },
+          "medium": {
+            "label": "كمية متوسطة",
+            "price": "خصم كمية"
+          },
+          "large": {
+            "label": "كمية كبيرة",
+            "price": "سعر الجملة"
+          }
+        }
+      },
+      "about": {
+        "showroom": "معرض محمد سراج الرئيسي",
+        "showroomNote": "المنصورة · صرح متكامل للأجهزة الكهربائية والأدوات المنزلية منذ 1972",
+        "yearsBadge": "سنة من ثقة أهل المنصورة",
+        "today": "النهارده بنجمع خبرة المعرض اللي اتبنت على سنين، مع متجر أونلاين سريع وحديث، عشان تختار وتطلب من بيتك وانت واثق في اللي بتشتريه.",
+        "values": {
+          "trust": {
+            "title": "ثقة",
+            "body": "تاريخ طويل واسم اتبنى بالسنين."
+          },
+          "specialty": {
+            "title": "تخصص",
+            "body": "متخصصين في الأجهزة المنزلية بس."
+          },
+          "local": {
+            "title": "خدمة محلية",
+            "body": "فريق بيعرفك ويرد عليك بنفسه."
+          }
+        },
+        "milestones": {
+          "start": {
+            "title": "البداية في المنصورة",
+            "body": "تأسيس معرض محمد سراج لتجارة الأجهزة والأدوات المنزلية في قلب المنصورة."
+          },
+          "wholesale": {
+            "title": "توسّع التوزيع والجملة",
+            "body": "اعتمادنا كموزع رئيسي لكبرى المصانع وتوريد الأجهزة لمعارض الدلتا."
+          },
+          "agents": {
+            "title": "شراكات الوكلاء الكبار",
+            "body": "توسيع المخازن المركزية وتكوين شبكة تضم أكثر من 500 تاجر ومعرض."
+          },
+          "online": {
+            "title": "المتجر الأونلاين",
+            "body": "نفس الثقة، بتجربة شراء حديثة من بيتك."
+          }
+        }
+      },
+      "partners": {
+        "subtitle": "أكتر من 50 سنة شغل مباشر مع أكبر المصانع والوكلاء في مصر والعالم. يعني بضاعة أصلية من المصدر، بضمان المصنع، وبأحسن سعر.",
+        "stats": {
+          "brands": {
+            "value": "+25",
+            "label": "مصنع وعلامة تجارية"
+          },
+          "years": {
+            "value": "+50",
+            "label": "سنة شراكة وثقة"
+          },
+          "warranty": {
+            "value": "100%",
+            "label": "ضمان المصنع الأصلي"
+          },
+          "models": {
+            "value": "+1000",
+            "label": "موديل متاح"
+          }
+        }
+      },
+      "reels": {
+        "badge": "فيديوهات حقيقية من فيسبوك",
+        "title": "التجار",
+        "titleHighlight": "بيتكلموا عننا",
+        "subtitle": "مش إحنا اللي بنقول.. تجار من كل محافظات الدلتا بيشتغلوا معانا من سنين، وبيعرضوا بضاعتنا في محلاتهم بكل فخر.",
+        "watermark": "ثقة",
+        "previous": "الفيديو السابق",
+        "next": "الفيديو التالي",
+        "play": "شغّل فيديو {name}",
+        "tradersCount": "+500 تاجر",
+        "tradersNote": "بيشتغلوا معانا في الدلتا",
+        "join": "انضم لشبكة تجارنا"
+      },
+      "sourcing": {
+        "title": "من المصنع",
+        "titleHighlight": "لحد بيتك",
+        "subtitle": "بنختار موردينا بعناية، ونفحص البضاعة قبل ما توصلك، عشان اللي يدخل بيتك يكون أصلي وبضمان حقيقي.",
+        "pillars": {
+          "factories": {
+            "title": "مصانع ومنتجين محلياً ودولياً",
+            "body": "تعامل مباشر مع كبرى مصانع الأجهزة ومصانع الأدوات المنزلية وأواني الطهي التركية المستوردة حصرياً."
+          },
+          "agents": {
+            "title": "وكلاء وموزعين معتمدين",
+            "body": "شراكات مع وكلاء رسميين لكبرى العلامات، وده اللي بيضمن الأصالة وضمان الوكيل."
+          },
+          "inspection": {
+            "title": "توريد وفحص مباشر",
+            "body": "فرز أول مختوم من خطوط الإنتاج، مع متابعة دقيقة للجودة والمواصفات قبل ما توصل مخازننا."
+          }
+        },
+        "steps": {
+          "supplier": {
+            "title": "اختيار المورد",
+            "body": "نتعامل مع مصادر موثوقة بس."
+          },
+          "quality": {
+            "title": "فحص الأصالة والجودة",
+            "body": "مراجعة قبل التخزين."
+          },
+          "storage": {
+            "title": "تخزين وتجهيز",
+            "body": "مخزون منظم وطلبك بيتجهز بعناية."
+          },
+          "delivery": {
+            "title": "ضمان وتسليم",
+            "body": "توصيل أو استلام، وضمان معاك."
+          }
+        },
+        "warrantyTitle": "ضمان الوكيل الرسمي لكبرى العلامات"
+      },
+      "contact": {
+        "title": "محتار تختار؟ كلّمنا",
+        "subtitle": "فريق محمد سراج جاهز يساعدك تختار الجهاز المناسب لبيتك وميزانيتك، من غير أي التزام.",
+        "whatsapp": "واتساب مباشر",
+        "call": "اتصل:"
+      }
     },
     "product": {
       "addToCart": "أضف للسلة",
       "outOfStock": "نفذ",
       "discountBadge": "خصم {percent}%",
       "realPhoto": "صورة حقيقية",
-      "oldPriceAria": "السعر الأصلي: {price}"
+      "oldPriceAria": "السعر الأصلي: {price}",
+      "askWhatsappAria": "اسأل على واتساب عن {name}",
+      "save": "وفّر {amount}",
+      "inCart": "في السلة",
+      "notifyMe": "بلّغني لما يتوفر",
+      "discountShort": "-{percent}%"
     },
     "pages": {
-      "updatedAt": "آخر تحديث: {date}"
+      "updatedAt": "آخر تحديث: {date}",
+      "moreTitle": "صفحات تهمّك"
     },
     "guides": {
       "seoTitle": "دليل الشراء",
@@ -758,6 +956,14 @@
       "showingCount": "ظهر {shown} من {total}",
       "loadError": "تعذر تحميل التقييمات",
       "retry": "إعادة المحاولة"
+    },
+    "trust": {
+      "warranty": "ضمان الوكيل المعتمد",
+      "delivery": "توصيل لحد باب البيت",
+      "cod": "الدفع عند الاستلام"
+    },
+    "empty": {
+      "browseCategories": "أو ابدأ من قسم"
     }
   },
   "admin": {
@@ -1186,11 +1392,46 @@
           "seoDescription": "وصف المنتج لمحركات البحث (SEO Description)",
           "seoDescriptionHint": "موصى به ~160 حرف",
           "chars": "{count} حرف"
+        },
+        "english": {
+          "title": "البيانات بالإنجليزي (لموقع /en)",
+          "description": "نصوص بديلة تظهر في النسخة الإنجليزية /en للمتجر. لو سبتها فاضية، هيظهر النص العربي تلقائياً.",
+          "name": "اسم المنتج بالإنجليزي",
+          "namePlaceholder": "e.g. LG Front Load Washer 9kg",
+          "leadTimeText": "مدة التوريد بالإنجليزي",
+          "leadTimePlaceholder": "e.g. Delivery within 3 to 5 business days",
+          "warranty": "الضمان بالإنجليزي",
+          "warrantyPlaceholder": "e.g. 10 Years Comprehensive Warranty",
+          "warrantyActivation": "تفعيل الضمان بالإنجليزي",
+          "warrantyActivationPlaceholder": "e.g. Call customer service hotline",
+          "origin": "بلد المنشأ بالإنجليزي",
+          "originPlaceholder": "e.g. Egypt / Turkey / South Korea",
+          "seoTitle": "عنوان SEO بالإنجليزي",
+          "seoTitleHint": "موصى به ~60 حرف",
+          "seoDescription": "وصف SEO بالإنجليزي",
+          "seoDescriptionHint": "موصى به ~160 حرف",
+          "setContentsTitle": "محتويات الطقم بالإنجليزي",
+          "setContentsDescription": "صفوف مطابقة لمحتويات الطقم بالعربي بنفس الترتيب والعدد",
+          "item": "اسم القطعة بالإنجليزي",
+          "itemPlaceholder": "e.g. Cooking pot with lid",
+          "size": "المقاس بالإنجليزي",
+          "sizePlaceholder": "e.g. 24 cm",
+          "qty": "العدد"
         }
       }
     },
     "catalog": {
       "title": "الأقسام والماركات",
+      "english": {
+        "sectionTitle": "البيانات بالإنجليزي (لموقع /en)",
+        "sectionHint": "تظهر في النسخة الإنجليزية /en، وإذا تُركت فارغة سيتم استخدام النص العربي.",
+        "name": "الاسم بالإنجليزي",
+        "namePlaceholder": "e.g. Refrigerators",
+        "intro": "نبذة بالإنجليزي",
+        "introPlaceholder": "e.g. High quality cooling appliances",
+        "seoTitle": "عنوان SEO بالإنجليزي",
+        "seoDescription": "وصف SEO بالإنجليزي"
+      },
       "tabs": {
         "categories": "الأقسام",
         "brands": "العلامات التجارية",
@@ -1257,11 +1498,21 @@
         "keyPlaceholder": "e.g. capacity",
         "label": "الاسم بالعربي",
         "labelPlaceholder": "مثال: السعة باللتر",
+        "labelEn": "الاسم بالإنجليزي",
+        "labelEnPlaceholder": "e.g. Capacity (Liters)",
         "type": "النوع",
-        "unit": "الوحدة",
+        "unit": "الوحدة بالعربي",
         "unitPlaceholder": "مثال: لتر، وات",
-        "options": "الخيارات (مفصولة بفاصلة)",
+        "unitEn": "الوحدة بالإنجليزي",
+        "unitEnPlaceholder": "e.g. Liters, Watts",
+        "options": "خيارات القائمة",
         "optionsPlaceholder": "مثال: أبيض, فضي, أسود",
+        "optionAr": "الخيار بالعربي",
+        "optionArPlaceholder": "مثال: نوفروست",
+        "optionEn": "الخيار بالإنجليزي",
+        "optionEnPlaceholder": "e.g. No Frost",
+        "addOption": "إضافة خيار",
+        "removeOption": "حذف الخيار",
         "filterable": "فلترة بالمتجر",
         "comparable": "مقارنة",
         "emptyHint": "اضغط «إضافة خاصية» لإضافة أول مواصفة فنية للقالب.",
@@ -1939,6 +2190,14 @@
     },
     "content": {
       "loading": "جاري تحميل المحرر…",
+      "langTabs": {
+        "ariaLabel": "تبديل لغة المحتوى",
+        "ar": "العربية",
+        "en": "English"
+      },
+      "home": {
+        "sharedWithArabic": "الحقل ده مشترك مع النسخة العربي ومش محتاج ترجمة."
+      },
       "tabs": {
         "home": "الصفحة الرئيسية",
         "pages": "الصفحات",
@@ -1959,10 +2218,15 @@
         "back": "رجوع للصفحات",
         "editorHeading": "تعديل الصفحة",
         "editorLoadError": "تعذر تحميل الصفحة",
+        "englishTabHint": "جميع الحقول اختيارية. اترك أي حقل فارغاً لاستخدام النسخة العربية بدلاً منه.",
         "fieldTitle": "عنوان الصفحة",
+        "fieldTitleEn": "عنوان الصفحة بالإنجليزي",
         "fieldBody": "محتوى الصفحة",
+        "fieldBodyEn": "محتوى الصفحة بالإنجليزي",
         "fieldSeoTitle": "عنوان SEO",
+        "fieldSeoTitleEn": "عنوان SEO بالإنجليزي",
         "fieldSeoDescription": "وصف SEO",
+        "fieldSeoDescriptionEn": "وصف SEO بالإنجليزي",
         "fieldPublished": "الصفحة منشورة للزوار",
         "counter": "{count}/{max}",
         "snippetLabel": "معاينة نتيجة البحث",
@@ -1998,15 +2262,21 @@
         "editorHeading": "تعديل الدليل",
         "editorCreateHeading": "دليل جديد",
         "editorLoadError": "تعذر تحميل الدليل",
+        "englishTabHint": "جميع الحقول اختيارية. اترك أي حقل فارغاً لاستخدام النسخة العربية. الرابط وصورة الغلاف والأقسام والمنتجات مشتركة مع النسخة العربية.",
         "fieldTitle": "عنوان الدليل",
+        "fieldTitleEn": "عنوان الدليل بالإنجليزي",
         "fieldSlug": "الرابط (slug)",
         "fieldSummary": "ملخص الدليل",
+        "fieldSummaryEn": "ملخص الدليل بالإنجليزي",
         "fieldCover": "صورة الغلاف",
         "fieldBody": "محتوى الدليل",
+        "fieldBodyEn": "محتوى الدليل بالإنجليزي",
         "fieldCategories": "الأقسام المرتبطة",
         "fieldProducts": "المنتجات المرتبطة",
         "fieldSeoTitle": "عنوان SEO",
+        "fieldSeoTitleEn": "عنوان SEO بالإنجليزي",
         "fieldSeoDescription": "وصف SEO",
+        "fieldSeoDescriptionEn": "وصف SEO بالإنجليزي",
         "fieldPublished": "الدليل منشور للزوار",
         "pickCategory": "اختر قسم",
         "addCategory": "أضف قسم",
@@ -2138,7 +2408,7 @@
           "subtitle": "الوصف",
           "cta": "الزر الأساسي",
           "secondaryCta": "الزر الثانوي",
-          "image": "صورة الهيرو",
+          "image": "صورة الهيرو (بتظهر في الكارت الكبير اللي في النص، والأحسن تكون طولية)",
           "stats": "الإحصائيات"
         },
         "uspStrip": {

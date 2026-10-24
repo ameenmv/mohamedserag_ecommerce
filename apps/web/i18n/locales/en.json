@@ -40,7 +40,7 @@
       "announcementDelivery": "Showroom Pickup or Doorstep Delivery",
       "brandAria": "Mohamed Serag - Home",
       "home": "Home",
-      "shop": "Departments",
+      "shop": "Shop",
       "bridal": "Bridal Packages",
       "offers": "Offers",
       "guides": "Buying Guide",
@@ -67,7 +67,16 @@
       "suggestedCategories": "Suggested categories",
       "seeAllResults": "See all search results ({query})",
       "resultsCount": "Results: {count}",
-      "askOnWhatsapp": "Ask us on WhatsApp"
+      "askOnWhatsapp": "Ask us on WhatsApp",
+      "categoriesNav": "Store departments",
+      "allCategories": "Shop all",
+      "flashDeals": "Flash deals",
+      "tradersWholesale": "Wholesale",
+      "tradersReviews": "Reviews",
+      "aboutUs": "About us",
+      "toggleTheme": "Switch light or dark theme",
+      "darkMode": "Dark mode",
+      "lightMode": "Light mode"
     },
     "footer": {
       "whatsappPrefill": "Hello, I have an inquiry from Mohamed Serag Showroom website 👋",
@@ -85,7 +94,7 @@
       "mansouraEgypt": "Mansoura, Egypt",
       "showroomAddress": "[Showroom Address]",
       "chatOnWhatsapp": "Chat on WhatsApp",
-      "brandDescription": "Home appliances and kitchenware with genuine warranty, from Mansoura to every Egyptian home. Trust and experience since 1972 in outfitting homes and bridal setups at the best prices.",
+      "brandDescription": "Genuine home appliances and houseware with a real warranty, from Mansoura to every Egyptian home.",
       "vatNotice": "Prices include Value Added Tax (VAT)",
       "availablePaymentMethods": "Accepted Payment Methods:",
       "cashOnDelivery": "Cash on Delivery",
@@ -93,7 +102,9 @@
       "vodafoneCash": "Vodafone Cash",
       "legacyTagline": "A Legacy of Trust",
       "allRightsReserved": "All rights reserved.",
-      "deliveryNotice": "Delivery to all Egyptian governorates via showroom fleet"
+      "deliveryNotice": "Delivery to all Egyptian governorates via showroom fleet",
+      "categoriesTitle": "Categories",
+      "serviceTitle": "Customer service"
     },
     "bottomNav": {
       "ariaLabel": "Mobile quick navigation",
@@ -101,9 +112,9 @@
       "account": "My Account"
     },
     "home": {
-      "metaDescription": "Mohamed Serag Showroom, Mansoura, since 1972: home appliances and bridal packages with genuine warranty and delivery across Egypt.",
+      "metaDescription": "Mohamed Serag Showroom, Mansoura, since 1972: genuine home appliances and houseware with an authorized warranty and delivery across Egypt.",
       "uspHeading": "Mohamed Serag promises",
-      "categoriesEyebrow": "Shop by category",
+      "categoriesEyebrow": "SHOP BY CATEGORY",
       "allCategories": "See all categories",
       "allOffers": "See all offers",
       "tradersTiers": "Price tiers",
@@ -112,18 +123,205 @@
       "showroomLine": "Mansoura · A complete home appliances and houseware destination since 1972",
       "partnersEyebrow": "Authorized dealers",
       "authorizedDealer": "Authorized dealer",
-      "guidesEyebrow": "Buying guides",
-      "allGuides": "All guides"
+      "guidesEyebrow": "GUIDES",
+      "allGuides": "Read the buying guides",
+      "heroTradersCta": "Wholesale prices for traders",
+      "heroArt": {
+        "fridges": "Fridges",
+        "washers": "Washers",
+        "screens": "Screens",
+        "acs": "ACs"
+      },
+      "marquee": [
+        "Home appliances",
+        "Houseware",
+        "Wholesale & retail",
+        "Since 1972",
+        "Mansoura",
+        "Real warranty",
+        "100% genuine",
+        "Delivered to your door"
+      ],
+      "flashEndsIn": "Ends in",
+      "how": {
+        "title": "How to order?",
+        "titleHighlight": "Just 4 steps",
+        "subtitle": "You only pay for the appliance once you see it. The only thing you transfer upfront is the delivery fee.",
+        "onlyUpfront": "The only upfront payment",
+        "startShopping": "Start shopping",
+        "askWhatsapp": "Questions? Chat on WhatsApp",
+        "steps": {
+          "choose": {
+            "title": "Pick your product",
+            "body": "Browse and compare. Not sure? Ask us on WhatsApp and we'll recommend the right one."
+          },
+          "confirm": {
+            "title": "Confirm the order",
+            "body": "Leave your name, number and address, pick your area and see the delivery fee right away."
+          },
+          "transfer": {
+            "title": "Transfer the delivery fee",
+            "body": "Via InstaPay or Vodafone Cash, then send the receipt on WhatsApp in one tap."
+          },
+          "receive": {
+            "title": "Receive and pay",
+            "body": "Our driver delivers, you inspect the appliance and pay for it in cash."
+          }
+        }
+      },
+      "traders": {
+        "talkToTeam": "Talk to the wholesale team",
+        "whatsappPrefill": "Hello, I'm a trader and would like to know your wholesale prices 👋",
+        "tiersTitle": "Price tiers",
+        "tradersAccount": "Trader account",
+        "invoiceNote": "An official invoice in your shop's name with every wholesale order",
+        "tiers": {
+          "small": {
+            "label": "Small quantity",
+            "price": "Retail price"
+          },
+          "medium": {
+            "label": "Medium quantity",
+            "price": "Volume discount"
+          },
+          "large": {
+            "label": "Large quantity",
+            "price": "Wholesale price"
+          }
+        }
+      },
+      "about": {
+        "showroom": "Mohamed Serag Main Showroom",
+        "showroomNote": "Mansoura · A complete home appliances and houseware destination since 1972",
+        "yearsBadge": "years of Mansoura's trust",
+        "today": "Today we bring the showroom's decades of experience to a fast, modern online store, so you can choose and order from home with confidence.",
+        "values": {
+          "trust": {
+            "title": "Trust",
+            "body": "A long history and a name built over the years."
+          },
+          "specialty": {
+            "title": "Specialists",
+            "body": "We only do home appliances."
+          },
+          "local": {
+            "title": "Local service",
+            "body": "A team that knows you and answers you in person."
+          }
+        },
+        "milestones": {
+          "start": {
+            "title": "The start in Mansoura",
+            "body": "Mohamed Serag Showroom opens for home appliances and houseware in the heart of Mansoura."
+          },
+          "wholesale": {
+            "title": "Distribution and wholesale",
+            "body": "Became a main distributor for major factories, supplying showrooms across the Delta."
+          },
+          "agents": {
+            "title": "Major agent partnerships",
+            "body": "Central warehouses expanded and a network of more than 500 traders and showrooms."
+          },
+          "online": {
+            "title": "The online store",
+            "body": "The same trust, with a modern way to shop from home."
+          }
+        }
+      },
+      "partners": {
+        "subtitle": "More than 50 years working directly with the biggest factories and agents in Egypt and abroad: genuine goods from the source, with the factory warranty, at the best price.",
+        "stats": {
+          "brands": {
+            "value": "+25",
+            "label": "Factories and brands"
+          },
+          "years": {
+            "value": "+50",
+            "label": "Years of partnership"
+          },
+          "warranty": {
+            "value": "100%",
+            "label": "Original factory warranty"
+          },
+          "models": {
+            "value": "+1000",
+            "label": "Models available"
+          }
+        }
+      },
+      "reels": {
+        "badge": "Real videos from Facebook",
+        "title": "Traders",
+        "titleHighlight": "talk about us",
+        "subtitle": "Don't take our word for it: traders from every Delta governorate have worked with us for years and proudly sell our goods in their shops.",
+        "watermark": "Trust",
+        "previous": "Previous video",
+        "next": "Next video",
+        "play": "Play {name}'s video",
+        "tradersCount": "+500 traders",
+        "tradersNote": "work with us across the Delta",
+        "join": "Join our traders network"
+      },
+      "sourcing": {
+        "title": "From the factory",
+        "titleHighlight": "to your home",
+        "subtitle": "We choose our suppliers carefully and inspect the goods before they reach you, so what enters your home is genuine and properly warranted.",
+        "pillars": {
+          "factories": {
+            "title": "Local and international factories",
+            "body": "Direct dealings with major appliance factories and with exclusive imported Turkish houseware and cookware makers."
+          },
+          "agents": {
+            "title": "Authorized agents and distributors",
+            "body": "Partnerships with official agents of the major brands, which guarantees authenticity and the agent's warranty."
+          },
+          "inspection": {
+            "title": "Direct supply and inspection",
+            "body": "First-grade sealed goods from the production line, with close quality and specification checks before they reach our warehouses."
+          }
+        },
+        "steps": {
+          "supplier": {
+            "title": "Choosing the supplier",
+            "body": "We only deal with trusted sources."
+          },
+          "quality": {
+            "title": "Authenticity and quality check",
+            "body": "Reviewed before storage."
+          },
+          "storage": {
+            "title": "Storage and preparation",
+            "body": "Organized stock, and your order is prepared with care."
+          },
+          "delivery": {
+            "title": "Warranty and delivery",
+            "body": "Delivery or pickup, with your warranty."
+          }
+        },
+        "warrantyTitle": "Official agent warranty for the major brands"
+      },
+      "contact": {
+        "title": "Not sure what to pick? Talk to us",
+        "subtitle": "The Mohamed Serag team is ready to help you choose the right appliance for your home and budget, with no obligation.",
+        "whatsapp": "WhatsApp us",
+        "call": "Call:"
+      }
     },
     "product": {
       "addToCart": "Add to cart",
       "outOfStock": "Out of stock",
       "discountBadge": "{percent}% off",
       "realPhoto": "Real photo",
-      "oldPriceAria": "Original price: {price}"
+      "oldPriceAria": "Original price: {price}",
+      "askWhatsappAria": "Ask about {name} on WhatsApp",
+      "save": "Save {amount}",
+      "inCart": "In cart",
+      "notifyMe": "Notify me",
+      "discountShort": "-{percent}%"
     },
     "pages": {
-      "updatedAt": "Last updated: {date}"
+      "updatedAt": "Last updated: {date}",
+      "moreTitle": "More help"
     },
     "guides": {
       "seoTitle": "Buying guides",
@@ -758,6 +956,14 @@
       "showingCount": "Showing {shown} of {total}",
       "loadError": "Failed to load reviews",
       "retry": "Retry"
+    },
+    "trust": {
+      "warranty": "Official warranty",
+      "delivery": "Delivered to your door",
+      "cod": "Cash on delivery"
+    },
+    "empty": {
+      "browseCategories": "Or start from a category"
     }
   },
   "admin": {
@@ -1186,11 +1392,46 @@
           "seoDescription": "Search Description (SEO Description)",
           "seoDescriptionHint": "Recommended ~160 characters",
           "chars": "{count} chars"
+        },
+        "english": {
+          "title": "English (for the /en site)",
+          "description": "Alternate text shown on the /en version of the store. If left empty, Arabic text is used as fallback.",
+          "name": "English Name",
+          "namePlaceholder": "e.g. LG Front Load Washer 9kg",
+          "leadTimeText": "English Lead Time Text",
+          "leadTimePlaceholder": "e.g. Delivery within 3 to 5 business days",
+          "warranty": "English Warranty",
+          "warrantyPlaceholder": "e.g. 10 Years Comprehensive Warranty",
+          "warrantyActivation": "English Warranty Activation",
+          "warrantyActivationPlaceholder": "e.g. Call customer service hotline",
+          "origin": "English Origin",
+          "originPlaceholder": "e.g. Egypt / Turkey / South Korea",
+          "seoTitle": "English SEO Title",
+          "seoTitleHint": "Recommended ~60 chars",
+          "seoDescription": "English SEO Description",
+          "seoDescriptionHint": "Recommended ~160 chars",
+          "setContentsTitle": "Cookware Set Contents in English",
+          "setContentsDescription": "Rows matching the Arabic cookware set contents in the same order and count",
+          "item": "English Item Name",
+          "itemPlaceholder": "e.g. Cooking pot with lid",
+          "size": "English Size",
+          "sizePlaceholder": "e.g. 24 cm",
+          "qty": "Qty"
         }
       }
     },
     "catalog": {
       "title": "Categories & Brands",
+      "english": {
+        "sectionTitle": "English (for the /en site)",
+        "sectionHint": "Shown on the /en site; if left empty, Arabic text is used as fallback.",
+        "name": "English Name",
+        "namePlaceholder": "e.g. Refrigerators",
+        "intro": "English Intro",
+        "introPlaceholder": "e.g. High quality cooling appliances",
+        "seoTitle": "English SEO Title",
+        "seoDescription": "English SEO Description"
+      },
       "tabs": {
         "categories": "Categories",
         "brands": "Brands",
@@ -1255,13 +1496,23 @@
         "removeField": "Remove",
         "key": "Field Key",
         "keyPlaceholder": "e.g. capacity",
-        "label": "Display Label",
+        "label": "Display Label (Arabic)",
         "labelPlaceholder": "e.g. Capacity (Liters)",
+        "labelEn": "Display Label (English)",
+        "labelEnPlaceholder": "e.g. Capacity (Liters)",
         "type": "Type",
-        "unit": "Unit",
+        "unit": "Unit (Arabic)",
         "unitPlaceholder": "e.g. Liters, Watts",
-        "options": "Options (comma-separated)",
+        "unitEn": "Unit (English)",
+        "unitEnPlaceholder": "e.g. Liters, Watts",
+        "options": "Choice Options",
         "optionsPlaceholder": "e.g. White, Silver, Black",
+        "optionAr": "Arabic Option",
+        "optionArPlaceholder": "e.g. No Frost",
+        "optionEn": "English Option",
+        "optionEnPlaceholder": "e.g. No Frost",
+        "addOption": "Add Option",
+        "removeOption": "Remove Option",
         "filterable": "Store Filter",
         "comparable": "Compare",
         "emptyHint": "Click \"Add Field\" to add the first spec definition to this template.",
@@ -1939,6 +2190,14 @@
     },
     "content": {
       "loading": "Loading the editor…",
+      "langTabs": {
+        "ariaLabel": "Switch content language",
+        "ar": "العربية",
+        "en": "English"
+      },
+      "home": {
+        "sharedWithArabic": "This field is shared with the Arabic version and does not need translation."
+      },
       "tabs": {
         "home": "Home page",
         "pages": "Pages",
@@ -1959,10 +2218,15 @@
         "back": "Back to pages",
         "editorHeading": "Edit page",
         "editorLoadError": "Could not load the page",
+        "englishTabHint": "All fields are optional. Leave empty to fall back to the Arabic version.",
         "fieldTitle": "Page title",
+        "fieldTitleEn": "Page title in English",
         "fieldBody": "Page content",
+        "fieldBodyEn": "Page content in English",
         "fieldSeoTitle": "SEO title",
+        "fieldSeoTitleEn": "SEO title in English",
         "fieldSeoDescription": "SEO description",
+        "fieldSeoDescriptionEn": "SEO description in English",
         "fieldPublished": "Page is published to shoppers",
         "counter": "{count}/{max}",
         "snippetLabel": "Search result preview",
@@ -1998,15 +2262,21 @@
         "editorHeading": "Edit guide",
         "editorCreateHeading": "New guide",
         "editorLoadError": "Could not load the guide",
+        "englishTabHint": "All fields are optional. Leave empty to fall back to the Arabic version. Slug, cover, categories, and products are shared with the Arabic version.",
         "fieldTitle": "Guide title",
+        "fieldTitleEn": "Guide title in English",
         "fieldSlug": "URL (slug)",
         "fieldSummary": "Guide summary",
+        "fieldSummaryEn": "Guide summary in English",
         "fieldCover": "Cover image",
         "fieldBody": "Guide content",
+        "fieldBodyEn": "Guide content in English",
         "fieldCategories": "Linked categories",
         "fieldProducts": "Linked products",
         "fieldSeoTitle": "SEO title",
+        "fieldSeoTitleEn": "SEO title in English",
         "fieldSeoDescription": "SEO description",
+        "fieldSeoDescriptionEn": "SEO description in English",
         "fieldPublished": "Guide is published to shoppers",
         "pickCategory": "Choose a category",
         "addCategory": "Add category",
@@ -2138,7 +2408,7 @@
           "subtitle": "Description",
           "cta": "Primary button",
           "secondaryCta": "Secondary button",
-          "image": "Hero image",
+          "image": "Hero photo (fills the tall middle card; portrait works best)",
           "stats": "Stats"
         },
         "uspStrip": {

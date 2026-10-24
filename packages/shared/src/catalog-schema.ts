@@ -20,6 +20,10 @@ export const specTemplateFieldSchema = z.object({
   type: z.preprocess((val) => (val === 'select' ? 'choice' : val), specFieldTypeSchema),
   unit: z.string().nullable().optional(),
   options: z.array(z.string()).nullable().optional(),
+  labelEn: z.string().nullable().optional(),
+  unitEn: z.string().nullable().optional(),
+  optionsEn: z.array(z.string()).nullable().optional(),
+  optionLabels: z.array(z.string()).nullable().optional(),
   filterable: z.boolean().default(false),
   comparable: z.boolean().default(false),
 })

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import {
   buildSearchTerms,
   egpToPiastres,
+  localizedText,
   normalizeArabic,
   piastresToEgp,
   resolveCatalogSort,
@@ -14,6 +15,7 @@ import {
 import { z } from 'zod'
 import { Prisma } from '../generated/prisma/client.js'
 import { PrismaService } from '../prisma/prisma.service.js'
+import { currentLocale } from '../common/content-locale.middleware.js'
 import { FlashPricingService } from '../promotions/flash-pricing.service.js'
 import { ReviewRatingsService } from '../reviews/review-ratings.service.js'
 import {
@@ -36,6 +38,7 @@ interface IdTotalRow {
 interface BrandFacetRow {
   slug: string
   name: string
+  translations: unknown
   count: number
 }
 
@@ -88,8 +91,8 @@ export class ProductListService {
           category: { visible: true },
         },
         include: {
-          brand: { select: { slug: true, name: true } },
-          category: { select: { slug: true, name: true } },
+          brand: { select: { slug: true, name: true, translations: true } },
+          category: { select: { slug: true, name: true, translations: true } },
           images: { orderBy: [{ sort: 'asc' }, { createdAt: 'asc' }], take: 1 },
         },
       })
@@ -304,8 +307,8 @@ export class ProductListService {
       const productRecords = await this.prisma.product.findMany({
         where: { id: { in: ids } },
         include: {
-          brand: { select: { slug: true, name: true } },
-          category: { select: { slug: true, name: true } },
+          brand: { select: { slug: true, name: true, translations: true } },
+          category: { select: { slug: true, name: true, translations: true } },
           images: { orderBy: [{ sort: 'asc' }, { createdAt: 'asc' }], take: 1 },
         },
       })
@@ -324,12 +327,12 @@ export class ProductListService {
 
     // Compute live facets (also when total is 0, so the shopper can widen the filters) for the filtered set
     const brandFacetSql = Prisma.sql`
-      SELECT b.slug, b.name, COUNT(*)::int AS count
+      SELECT b.slug, b.name, b.translations, COUNT(*)::int AS count
       FROM products p
       JOIN brands b ON p.brand_id = b.id
       JOIN categories c ON p.category_id = c.id
       ${toWhere([...whereConditions, ...priceConditions])}
-      GROUP BY b.slug, b.name
+      GROUP BY b.id
       ORDER BY count DESC, b.name ASC
     `
 
@@ -364,7 +367,11 @@ export class ProductListService {
       page: query.page,
       pageSize: query.pageSize,
       facets: {
-        brands: brandFacetRows.map((b) => ({ slug: b.slug, name: b.name, count: b.count })),
+        brands: brandFacetRows.map((b) => ({
+          slug: b.slug,
+          name: localizedText(b.name, b.translations, 'name', currentLocale()),
+          count: b.count,
+        })),
         price: { min: minPriceEgp, max: maxPriceEgp },
       },
     }

@@ -35,6 +35,9 @@ While any store number is still a placeholder, the admin overview shows a warnin
 | About, FAQ, delivery and warranty pages | Admin «محرر الموقع» → الصفحات | ⬜ |
 | Large-COD deposit threshold and % (default 30,000 ج.م / 10%) | «الإعدادات» → عربون الدفع عند الاستلام | ✅ default set, owner may change |
 | WhatsApp message templates | «الإعدادات» → قوالب الرسائل | ✅ defaults set, owner may edit |
+| Trader videos on the home page («التجار بيتكلموا عننا»): the names and shops are placeholders from the prototype; replace them with real traders and their Facebook reel links | `apps/web/app/constants/trader-reels.ts` (tell the developer) | ⬜ |
+| Home sections not yet editable in «محرر الموقع» («إزاي تطلب؟», «من المصنع لحد بيتك», «محتار تختار؟») and the about timeline/values: wording to review | `apps/web/i18n/locales/ar.json` → `store.home` (tell the developer) | ⬜ |
+| Bridal builder «جهّز بيتك»: switched off for launch (pages, links, admin screen hidden) | `FEATURES.bridal` in `apps/web/app/constants/features.ts` | ✅ decided: off for now |
 
 ## Server and go-live
 

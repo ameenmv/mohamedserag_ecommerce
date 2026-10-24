@@ -18,12 +18,19 @@ import {
 } from '@/components/ui/sheet'
 import { parseAdminApiError } from '~/utils/admin-api-errors'
 
+interface ChoiceOptionRow {
+  ar: string
+  en: string
+}
+
 interface EditableFieldRow {
   key: string
   label: string
+  labelEn: string
   type: AdminSpecFieldType
   unit: string
-  optionsRaw: string
+  unitEn: string
+  choiceOptions: ChoiceOptionRow[]
   filterable: boolean
   comparable: boolean
 }
@@ -59,15 +66,25 @@ watch(
       serverError.value = ''
       if (props.template) {
         formName.value = props.template.name
-        formFields.value = props.template.fields.map((f) => ({
-          key: f.key,
-          label: f.label,
-          type: f.type,
-          unit: f.unit ?? '',
-          optionsRaw: f.options ? f.options.join(', ') : '',
-          filterable: f.filterable,
-          comparable: f.comparable,
-        }))
+        formFields.value = props.template.fields.map((f) => {
+          const opts = f.options ?? []
+          const optsEn = f.optionsEn ?? []
+          const choiceOptions: ChoiceOptionRow[] = opts.map((opt, i) => ({
+            ar: opt,
+            en: optsEn[i] ?? '',
+          }))
+          return {
+            key: f.key,
+            label: f.label,
+            labelEn: f.labelEn ?? '',
+            type: f.type,
+            unit: f.unit ?? '',
+            unitEn: f.unitEn ?? '',
+            choiceOptions,
+            filterable: f.filterable,
+            comparable: f.comparable,
+          }
+        })
       } else {
         formName.value = ''
         formFields.value = []
@@ -81,9 +98,11 @@ function addFieldRow() {
   formFields.value.push({
     key: '',
     label: '',
+    labelEn: '',
     type: 'text',
     unit: '',
-    optionsRaw: '',
+    unitEn: '',
+    choiceOptions: [],
     filterable: false,
     comparable: false,
   })
@@ -91,6 +110,20 @@ function addFieldRow() {
 
 function removeFieldRow(index: number) {
   formFields.value.splice(index, 1)
+}
+
+function addChoiceOption(fieldIndex: number) {
+  formFields.value[fieldIndex]?.choiceOptions.push({ ar: '', en: '' })
+}
+
+function removeChoiceOption(fieldIndex: number, optionIndex: number) {
+  formFields.value[fieldIndex]?.choiceOptions.splice(optionIndex, 1)
+}
+
+function handleTypeChange(row: EditableFieldRow) {
+  if (row.type === 'choice' && row.choiceOptions.length === 0) {
+    row.choiceOptions.push({ ar: '', en: '' })
+  }
 }
 
 function moveFieldRow(index: number, direction: 'up' | 'down') {
@@ -106,20 +139,33 @@ async function handleSubmit() {
   serverError.value = ''
 
   const mappedFields = formFields.value.map((f) => {
-    const options =
-      f.type === 'choice'
-        ? f.optionsRaw
-            .split(',')
-            .map((s) => s.trim())
-            .filter(Boolean)
-        : null
+    let options: string[] | null = null
+    let optionsEn: string[] | null = null
+
+    if (f.type === 'choice') {
+      const arList: string[] = []
+      const enList: string[] = []
+      for (const opt of f.choiceOptions) {
+        const ar = opt.ar.trim()
+        if (ar.length > 0) {
+          arList.push(ar)
+          enList.push(opt.en.trim())
+        }
+      }
+      options = arList.length > 0 ? arList : null
+      const hasAnyEn = enList.some((s) => s.length > 0)
+      optionsEn = hasAnyEn && options ? enList : null
+    }
 
     return {
       key: f.key.trim().toLowerCase(),
       label: f.label.trim(),
+      labelEn: f.labelEn.trim() || null,
       type: f.type,
       unit: f.unit.trim() || null,
+      unitEn: f.unitEn.trim() || null,
       options,
+      optionsEn,
       filterable: f.filterable,
       comparable: f.comparable,
     }
@@ -230,8 +276,8 @@ async function handleSubmit() {
               :key="idx"
               class="flex flex-col gap-3 rounded-xl border border-border bg-muted/20 p-3.5 shadow-2xs"
             >
-              <!-- Row header: Key & Label & Type -->
-              <div class="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
+              <!-- Row header: Key & Label & LabelEn & Type -->
+              <div class="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
                 <div class="flex flex-col gap-1">
                   <label class="text-[11px] font-semibold text-muted-foreground">
                     {{ t('admin.catalog.specTemplates.key') }}
@@ -267,12 +313,31 @@ async function handleSubmit() {
 
                 <div class="flex flex-col gap-1">
                   <label class="text-[11px] font-semibold text-muted-foreground">
+                    {{ t('admin.catalog.specTemplates.labelEn') }}
+                  </label>
+                  <Input
+                    v-model="row.labelEn"
+                    type="text"
+                    dir="ltr"
+                    lang="en"
+                    :placeholder="t('admin.catalog.specTemplates.labelEnPlaceholder')"
+                    :disabled="saving"
+                    class="h-9 text-xs text-start"
+                  />
+                  <span v-if="errors[`fields.${idx}.labelEn`]" class="text-[11px] text-destructive">
+                    {{ errors[`fields.${idx}.labelEn`] }}
+                  </span>
+                </div>
+
+                <div class="flex flex-col gap-1">
+                  <label class="text-[11px] font-semibold text-muted-foreground">
                     {{ t('admin.catalog.specTemplates.type') }}
                   </label>
                   <AdminFormSelect
                     v-model="row.type"
                     :disabled="saving"
                     class="h-9 text-xs"
+                    @change="handleTypeChange(row)"
                   >
                     <option value="text">{{ t('admin.catalog.specTemplates.types.text') }}</option>
                     <option value="number">{{ t('admin.catalog.specTemplates.types.number') }}</option>
@@ -282,34 +347,102 @@ async function handleSubmit() {
                 </div>
               </div>
 
-              <!-- Row secondary: Unit (if number) or Options (if choice) -->
-              <div v-if="row.type === 'number'" class="flex flex-col gap-1">
-                <label class="text-[11px] font-semibold text-muted-foreground">
-                  {{ t('admin.catalog.specTemplates.unit') }}
-                </label>
-                <Input
-                  v-model="row.unit"
-                  type="text"
-                  :placeholder="t('admin.catalog.specTemplates.unitPlaceholder')"
-                  :disabled="saving"
-                  class="h-9 text-xs max-w-xs"
-                />
+              <!-- Row secondary: Unit & UnitEn (if number) or Options (if choice) -->
+              <div v-if="row.type === 'number'" class="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+                <div class="flex flex-col gap-1">
+                  <label class="text-[11px] font-semibold text-muted-foreground">
+                    {{ t('admin.catalog.specTemplates.unit') }}
+                  </label>
+                  <Input
+                    v-model="row.unit"
+                    type="text"
+                    :placeholder="t('admin.catalog.specTemplates.unitPlaceholder')"
+                    :disabled="saving"
+                    class="h-9 text-xs"
+                  />
+                </div>
+                <div class="flex flex-col gap-1">
+                  <label class="text-[11px] font-semibold text-muted-foreground">
+                    {{ t('admin.catalog.specTemplates.unitEn') }}
+                  </label>
+                  <Input
+                    v-model="row.unitEn"
+                    type="text"
+                    dir="ltr"
+                    lang="en"
+                    :placeholder="t('admin.catalog.specTemplates.unitEnPlaceholder')"
+                    :disabled="saving"
+                    class="h-9 text-xs text-start"
+                  />
+                </div>
               </div>
 
-              <div v-else-if="row.type === 'choice'" class="flex flex-col gap-1">
-                <label class="text-[11px] font-semibold text-muted-foreground">
-                  {{ t('admin.catalog.specTemplates.options') }}
-                </label>
-                <Input
-                  v-model="row.optionsRaw"
-                  type="text"
-                  :placeholder="t('admin.catalog.specTemplates.optionsPlaceholder')"
-                  :disabled="saving"
-                  class="h-9 text-xs"
-                />
+              <div v-else-if="row.type === 'choice'" class="flex flex-col gap-2">
+                <div class="flex items-center justify-between">
+                  <label class="text-[11px] font-semibold text-muted-foreground">
+                    {{ t('admin.catalog.specTemplates.options') }}
+                  </label>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    :disabled="saving"
+                    class="h-7 gap-1 px-2 text-[11px]"
+                    @click="addChoiceOption(idx)"
+                  >
+                    <Plus class="size-3" aria-hidden="true" />
+                    <span>{{ t('admin.catalog.specTemplates.addOption') }}</span>
+                  </Button>
+                </div>
+
                 <span v-if="errors[`fields.${idx}.options`]" class="text-[11px] text-destructive">
                   {{ errors[`fields.${idx}.options`] }}
                 </span>
+                <span v-if="errors[`fields.${idx}.optionsEn`]" class="text-[11px] text-destructive">
+                  {{ errors[`fields.${idx}.optionsEn`] }}
+                </span>
+
+                <div class="flex flex-col gap-2">
+                  <div
+                    v-for="(opt, optIdx) in row.choiceOptions"
+                    :key="optIdx"
+                    class="flex items-center gap-2"
+                  >
+                    <div class="flex-1">
+                      <Input
+                        v-model="opt.ar"
+                        type="text"
+                        :placeholder="t('admin.catalog.specTemplates.optionArPlaceholder')"
+                        :disabled="saving"
+                        class="h-8 text-xs"
+                        :aria-label="t('admin.catalog.specTemplates.optionAr')"
+                      />
+                    </div>
+                    <div class="flex-1">
+                      <Input
+                        v-model="opt.en"
+                        type="text"
+                        dir="ltr"
+                        lang="en"
+                        :placeholder="t('admin.catalog.specTemplates.optionEnPlaceholder')"
+                        :disabled="saving"
+                        class="h-8 text-xs text-start"
+                        :aria-label="t('admin.catalog.specTemplates.optionEn')"
+                      />
+                    </div>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      :disabled="saving"
+                      class="size-8 shrink-0 text-destructive hover:bg-destructive/10"
+                      :aria-label="t('admin.catalog.specTemplates.removeOption')"
+                      @click="removeChoiceOption(idx, optIdx)"
+                    >
+                      <Trash2 class="size-3.5" aria-hidden="true" />
+                    </Button>
+                  </div>
+                </div>
               </div>
 
               <!-- Row footer: filterable, comparable, move, remove -->

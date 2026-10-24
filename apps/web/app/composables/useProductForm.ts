@@ -37,6 +37,18 @@ export interface ProductFormState {
   seoTitle: string
   seoDescription: string
   images: AdminProductImage[]
+  translations: {
+    en: {
+      name: string
+      leadTimeText: string
+      warranty: string
+      warrantyActivation: string
+      origin: string
+      seoTitle: string
+      seoDescription: string
+      setContents: AdminProductSetContent[]
+    }
+  }
 }
 
 export function useProductForm(initialDetail?: AdminProductDetail | null) {
@@ -50,6 +62,27 @@ export function useProductForm(initialDetail?: AdminProductDetail | null) {
   const notify = useNotify()
 
   const isEditMode = computed(() => Boolean(initialDetail?.id))
+
+  const initialEn = initialDetail?.translations?.en
+  const initialSetContents: AdminProductSetContent[] = initialDetail?.setContents
+    ? JSON.parse(JSON.stringify(initialDetail.setContents))
+    : []
+  const initialEnSetContents: AdminProductSetContent[] = Array.isArray(initialEn?.setContents)
+    ? JSON.parse(JSON.stringify(initialEn.setContents))
+    : []
+
+  // Ensure English setContents aligns with Arabic setContents row count
+  while (initialEnSetContents.length < initialSetContents.length) {
+    const idx = initialEnSetContents.length
+    initialEnSetContents.push({
+      item: '',
+      size: initialSetContents[idx]?.size ?? '',
+      qty: initialSetContents[idx]?.qty ?? 1,
+    })
+  }
+  if (initialEnSetContents.length > initialSetContents.length) {
+    initialEnSetContents.splice(initialSetContents.length)
+  }
 
   const form = reactive<ProductFormState>({
     id: initialDetail?.id ?? '',
@@ -66,7 +99,7 @@ export function useProductForm(initialDetail?: AdminProductDetail | null) {
     leadTimeText: initialDetail?.leadTimeText ?? '',
     taxRate: initialDetail?.taxRate ?? 14,
     specs: initialDetail?.specs ? JSON.parse(JSON.stringify(initialDetail.specs)) : {},
-    setContents: initialDetail?.setContents ? JSON.parse(JSON.stringify(initialDetail.setContents)) : [],
+    setContents: initialSetContents,
     warranty: initialDetail?.warranty ?? '',
     warrantyActivation: initialDetail?.warrantyActivation ?? '',
     origin: initialDetail?.origin ?? '',
@@ -75,7 +108,37 @@ export function useProductForm(initialDetail?: AdminProductDetail | null) {
     seoTitle: initialDetail?.seoTitle ?? '',
     seoDescription: initialDetail?.seoDescription ?? '',
     images: initialDetail?.images ? [...initialDetail.images] : [],
+    translations: {
+      en: {
+        name: initialEn?.name ?? '',
+        leadTimeText: initialEn?.leadTimeText ?? '',
+        warranty: initialEn?.warranty ?? '',
+        warrantyActivation: initialEn?.warrantyActivation ?? '',
+        origin: initialEn?.origin ?? '',
+        seoTitle: initialEn?.seoTitle ?? '',
+        seoDescription: initialEn?.seoDescription ?? '',
+        setContents: initialEnSetContents,
+      },
+    },
   })
+
+  // Keep English setContents rows in sync with Arabic setContents count
+  watch(
+    () => form.setContents.length,
+    (len) => {
+      while (form.translations.en.setContents.length < len) {
+        const idx = form.translations.en.setContents.length
+        form.translations.en.setContents.push({
+          item: '',
+          size: form.setContents[idx]?.size ?? '',
+          qty: form.setContents[idx]?.qty ?? 1,
+        })
+      }
+      if (form.translations.en.setContents.length > len) {
+        form.translations.en.setContents.splice(len)
+      }
+    },
+  )
 
   // Snapshot for dirty checking
   const initialSnapshot = ref(JSON.stringify(form))
@@ -274,6 +337,18 @@ export function useProductForm(initialDetail?: AdminProductDetail | null) {
     const price = egpInputToPiastres(form.priceEgp) ?? 0
     const oldPrice = egpInputToPiastres(form.oldPriceEgp)
 
+    const enSetContents =
+      form.setContents.length > 0
+        ? form.translations.en.setContents.map((r) => ({
+            item: r.item.trim(),
+            size: r.size ? r.size.trim() : null,
+            qty: r.qty ?? null,
+          }))
+        : null
+
+    const hasAnyEnSetContents =
+      enSetContents && enSetContents.some((r) => r.item.length > 0)
+
     const payload: CreateProductInput = {
       name: form.name.trim(),
       modelCode: form.modelCode.trim(),
@@ -296,6 +371,18 @@ export function useProductForm(initialDetail?: AdminProductDetail | null) {
       featured: form.featured,
       seoTitle: form.seoTitle.trim() || null,
       seoDescription: form.seoDescription.trim() || null,
+      translations: {
+        en: {
+          name: form.translations.en.name.trim() || undefined,
+          leadTimeText: form.translations.en.leadTimeText.trim() || undefined,
+          warranty: form.translations.en.warranty.trim() || undefined,
+          warrantyActivation: form.translations.en.warrantyActivation.trim() || undefined,
+          origin: form.translations.en.origin.trim() || undefined,
+          seoTitle: form.translations.en.seoTitle.trim() || undefined,
+          seoDescription: form.translations.en.seoDescription.trim() || undefined,
+          setContents: hasAnyEnSetContents ? enSetContents : undefined,
+        },
+      },
     }
 
     try {
@@ -407,10 +494,12 @@ export function useProductForm(initialDetail?: AdminProductDetail | null) {
   // Set contents row actions
   function addSetContentRow() {
     form.setContents.push({ item: '', size: '', qty: 1 })
+    form.translations.en.setContents.push({ item: '', size: '', qty: 1 })
   }
 
   function removeSetContentRow(index: number) {
     form.setContents.splice(index, 1)
+    form.translations.en.setContents.splice(index, 1)
   }
 
   // Keyboard shortcut Ctrl/Cmd+S

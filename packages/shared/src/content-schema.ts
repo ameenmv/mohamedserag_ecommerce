@@ -223,6 +223,7 @@ export const homeLayoutSchema = z.object({
 export const homeDraftInputSchema = z.object({
   sections: homeContentSchema,
   layout: homeLayoutSchema,
+  english: homeContentSchema.nullable().optional(),
 })
 
 export const homePublishInputSchema = z.object({
@@ -232,6 +233,36 @@ export const homePublishInputSchema = z.object({
     .max(80, 'تسمية الإصدار بيزيد عن 80 حرف')
     .optional(),
 })
+
+export const pageTranslationsEnSchema = z
+  .object({
+    title: z.string().trim().max(120, 'عنوان الصفحة بيزيد عن 120 حرف').nullable().optional(),
+    body: z.string().trim().max(50000, 'محتوى الصفحة بيزيد عن 50000 حرف').nullable().optional(),
+    seoTitle: z.string().trim().max(70, 'عنوان SEO بيزيد عن 70 حرف').nullable().optional(),
+    seoDescription: z.string().trim().max(160, 'وصف SEO بيزيد عن 160 حرف').nullable().optional(),
+  })
+  .transform((data) => {
+    const res: {
+      title?: string
+      body?: string
+      seoTitle?: string
+      seoDescription?: string
+    } = {}
+    if (data.title && data.title.length > 0) res.title = data.title
+    if (data.body && data.body.length > 0) res.body = data.body
+    if (data.seoTitle && data.seoTitle.length > 0) res.seoTitle = data.seoTitle
+    if (data.seoDescription && data.seoDescription.length > 0) res.seoDescription = data.seoDescription
+    return res
+  })
+
+export const pageTranslationsSchema = z.object({
+  en: pageTranslationsEnSchema.optional(),
+})
+
+export type PageTranslationsEnInput = z.input<typeof pageTranslationsEnSchema>
+export type PageTranslationsEn = z.output<typeof pageTranslationsEnSchema>
+export type PageTranslationsInput = z.input<typeof pageTranslationsSchema>
+export type PageTranslations = z.output<typeof pageTranslationsSchema>
 
 export const pageInputSchema = z.object({
   title: z
@@ -256,7 +287,41 @@ export const pageInputSchema = z.object({
     .nullable()
     .transform((val) => (val === '' ? null : val)),
   published: z.boolean({ message: 'حالة النشر غير صالحة' }),
+  translations: pageTranslationsSchema.nullable().optional(),
 })
+
+export const guideTranslationsEnSchema = z
+  .object({
+    title: z.string().trim().max(120, 'عنوان الدليل بيزيد عن 120 حرف').nullable().optional(),
+    summary: z.string().trim().max(280, 'ملخص الدليل بيزيد عن 280 حرف').nullable().optional(),
+    body: z.string().trim().max(100000, 'محتوى الدليل بيزيد عن 100000 حرف').nullable().optional(),
+    seoTitle: z.string().trim().max(70, 'عنوان SEO بيزيد عن 70 حرف').nullable().optional(),
+    seoDescription: z.string().trim().max(160, 'وصف SEO بيزيد عن 160 حرف').nullable().optional(),
+  })
+  .transform((data) => {
+    const res: {
+      title?: string
+      summary?: string
+      body?: string
+      seoTitle?: string
+      seoDescription?: string
+    } = {}
+    if (data.title && data.title.length > 0) res.title = data.title
+    if (data.summary && data.summary.length > 0) res.summary = data.summary
+    if (data.body && data.body.length > 0) res.body = data.body
+    if (data.seoTitle && data.seoTitle.length > 0) res.seoTitle = data.seoTitle
+    if (data.seoDescription && data.seoDescription.length > 0) res.seoDescription = data.seoDescription
+    return res
+  })
+
+export const guideTranslationsSchema = z.object({
+  en: guideTranslationsEnSchema.optional(),
+})
+
+export type GuideTranslationsEnInput = z.input<typeof guideTranslationsEnSchema>
+export type GuideTranslationsEn = z.output<typeof guideTranslationsEnSchema>
+export type GuideTranslationsInput = z.input<typeof guideTranslationsSchema>
+export type GuideTranslations = z.output<typeof guideTranslationsSchema>
 
 export const guideInputSchema = z.object({
   slug: z
@@ -309,6 +374,7 @@ export const guideInputSchema = z.object({
     .nullable()
     .transform((val) => (val === '' ? null : val)),
   published: z.boolean({ message: 'حالة النشر غير صالحة' }),
+  translations: guideTranslationsSchema.nullable().optional(),
 })
 
 export const guidePatchSchema = guideInputSchema.partial()

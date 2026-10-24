@@ -7,5 +7,14 @@
 https://localhost:8443 {
 	tls internal
 	encode zstd gzip
-	reverse_proxy localhost:3000
+
+	# Same origin for the API, as in docker/Caddyfile: the browser's cart quote is not cross-origin.
+	handle /api/* {
+		reverse_proxy localhost:4000
+	}
+
+	# A web server started for Lighthouse whose public API base is this origin (see ci.yml).
+	handle {
+		reverse_proxy localhost:3001
+	}
 }

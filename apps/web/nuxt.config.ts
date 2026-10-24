@@ -1,8 +1,13 @@
+import { existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
 
 // Absolute, because IPX resolves a relative dir from its own build output, not from this app.
 const uploadsDir = process.env.UPLOADS_DIR || fileURLToPath(new URL('../../uploads', import.meta.url))
+
+// Thmanyah's files stay out of git (see assets/css/thmanyah.css). Without them, e.g. in CI, the
+// storefront keeps IBM Plex Sans Arabic and Lalezar, with no requests for missing files.
+const hasThmanyah = existsSync(fileURLToPath(new URL('./public/fonts/thmanyah/thmanyahsans-Regular.woff2', import.meta.url)))
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -10,12 +15,21 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@nuxt/eslint', '@nuxt/fonts', '@nuxt/image', '@nuxtjs/i18n', 'shadcn-nuxt'],
 
-  css: ['~/assets/css/main.css'],
+  css: ['~/assets/css/main.css', ...(hasThmanyah ? ['~/assets/css/thmanyah.css'] : [])],
   vite: { plugins: [tailwindcss()] },
 
   app: {
     head: {
       meta: [{ name: 'theme-color', content: '#16291E' }],
+      // Icons from the store's logo square (public/, generated from public/logo.jpg)
+      link: [
+        { rel: 'icon', href: '/favicon.ico', sizes: '48x48' },
+        { rel: 'icon', type: 'image/png', href: '/icon-192.png', sizes: '192x192' },
+        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+        ...(hasThmanyah
+          ? [{ rel: 'preload' as const, as: 'font' as const, type: 'font/woff2', href: '/fonts/thmanyah/thmanyahsans-Regular.woff2', crossorigin: '' as const }]
+          : []),
+      ],
     },
   },
 
@@ -59,19 +73,37 @@ export default defineNuxtConfig({
         provider: 'google',
         weights: [400, 700],
         subsets: ['arabic'],
-        preload: { weights: [400] },
+        preload: hasThmanyah ? false : { weights: [400] },
       },
       {
         name: 'Lalezar',
         provider: 'google',
         weights: [400],
-        subsets: ['arabic'],
+        // Latin too: the Arabic subset has no digits («4 خطوات بس», headline numbers)
+        subsets: ['arabic', 'latin'],
         preload: false,
       },
       {
+        // Arabic pages only use it for digits (--font-num).
         name: 'Outfit',
         provider: 'google',
         weights: [400, 500, 600, 700, 800],
+        subsets: ['latin'],
+        preload: false,
+      },
+      {
+        // English body text: a warm, rounded geometric sans that sits well next to Plex Arabic.
+        name: 'Plus Jakarta Sans',
+        provider: 'google',
+        weights: [400, 500, 600, 700, 800],
+        subsets: ['latin'],
+        preload: false,
+      },
+      {
+        // English headlines: a characterful grotesque, the Latin counterpart of Lalezar.
+        name: 'Bricolage Grotesque',
+        provider: 'google',
+        weights: [600, 700, 800],
         subsets: ['latin'],
         preload: false,
       },
@@ -79,6 +111,10 @@ export default defineNuxtConfig({
   },
 
   experimental: {
+    // Cached (swr) pages would otherwise load their data from a separate, uncached _payload.json:
+    // after a home edit or an API blip the cached HTML and the fresh data disagree and hydration
+    // breaks the page. Inline, the data is cached in the same response as the HTML it renders.
+    payloadExtraction: false,
     defaults: {
       // Prefetch a page's code when its link is hovered or focused, not as soon as it scrolls into
       // view: listings show dozens of links, and loading (and running) every target page's chunks
@@ -100,6 +136,13 @@ export default defineNuxtConfig({
             {
               name: 'framework',
               test: /[\\/]node_modules[\\/](?:@vue[\\/]|vue[\\/]|vue-router[\\/]|@unhead[\\/]|unhead[\\/]|@intlify[\\/]|vue-i18n[\\/])/,
+              priority: 1,
+            },
+            {
+              // Every Lucide icon was its own ~300-byte chunk (66 of them, 4.9 KB gzipped together):
+              // one request instead of dozens on listing and product pages.
+              name: 'icons',
+              test: /[\\/]node_modules[\\/]@lucide[\\/]/,
               priority: 1,
             },
           ],

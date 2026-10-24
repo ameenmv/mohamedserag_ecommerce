@@ -8,6 +8,7 @@ import {
 } from '@serag/shared'
 import { toProductCard } from '~/utils/product-card-mapper'
 import StoreProductPageBridalButton from './StoreProductPageBridalButton.vue'
+import { FEATURES } from '~/constants/features'
 
 const props = defineProps<{
   product: ProductDetail
@@ -104,13 +105,13 @@ function scrollToReviews(): void {
 
 <template>
   <div
-    class="flex flex-col gap-5 rounded-3xl border border-border bg-card p-5 sm:p-7 shadow-xs"
+    class="flex flex-col gap-5 rounded-[28px] border border-border bg-card p-5 shadow-[0_24px_48px_-32px_rgba(20,32,26,.35)] sm:p-7"
   >
     <!-- Brand link and model code -->
     <div class="flex flex-wrap items-center justify-between gap-2">
       <NuxtLink
         :to="localePath(`/b/${product.brand.slug}`)"
-        class="inline-flex items-center rounded-full bg-serag-gold/15 px-3 py-1 text-xs font-bold uppercase tracking-wider text-serag-gold hover:text-serag-gold-hi transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+        class="inline-flex items-center rounded-full bg-serag-gold/15 px-3 py-1 text-xs font-bold uppercase tracking-wider text-serag-gold-ink hover:text-serag-night transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
         :aria-label="t('store.productPage.brandLinkAria', { brand: product.brand.name })"
       >
         {{ product.brand.name }}
@@ -122,7 +123,7 @@ function scrollToReviews(): void {
     </div>
 
     <!-- Product Title (h1) -->
-    <h1 class="text-xl font-bold leading-snug text-foreground sm:text-2xl lg:text-3xl">
+    <h1 class="text-2xl font-bold leading-snug text-foreground sm:text-3xl lg:text-[34px] lg:leading-[1.3]">
       {{ product.name }}
     </h1>
 
@@ -143,13 +144,13 @@ function scrollToReviews(): void {
     </div>
 
     <!-- Price Box & Savings -->
-    <div class="rounded-2xl border border-border/80 bg-serag-ivory/40 p-4 dark:bg-muted/20">
+    <div class="rounded-2xl bg-serag-cream p-4 sm:p-5 dark:bg-muted/20">
       <div class="flex flex-col gap-1.5">
         <StoreProductPrice
           :price="product.price"
           :old-price="product.oldPrice"
-          :discount-percent="product.discountPercent"
           :flash="product.flash"
+          size="lg"
           countdown-variant="detail"
           @flash-ended="emit('flashEnded')"
         />
@@ -158,7 +159,7 @@ function scrollToReviews(): void {
           <!-- Saving line «وفّر {amount}» -->
           <span
             v-if="savingText"
-            class="num inline-flex items-center rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-bold text-emerald-700 border border-emerald-500/20 dark:bg-emerald-950/40 dark:text-emerald-400"
+            class="num inline-flex items-center rounded-full bg-white px-2.5 py-0.5 text-xs font-bold text-emerald-800 border border-emerald-600/25 dark:bg-emerald-950/40 dark:text-emerald-400"
           >
             {{ t('store.productPage.saving', { amount: savingText }) }}
           </span>
@@ -194,7 +195,7 @@ function scrollToReviews(): void {
             type="button"
             :disabled="!isOrderable || qty <= 1"
             :aria-label="t('store.productPage.decreaseQty')"
-            class="inline-flex size-11 items-center justify-center rounded-lg text-foreground transition-colors hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-40 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+            class="inline-flex size-11 items-center justify-center rounded-lg text-foreground transition-colors hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-40 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:h-12"
             @click="decreaseQty"
           >
             <Minus class="size-4" aria-hidden="true" />
@@ -212,7 +213,7 @@ function scrollToReviews(): void {
             type="button"
             :disabled="!isOrderable || qty >= maxQty"
             :aria-label="t('store.productPage.increaseQty')"
-            class="inline-flex size-11 items-center justify-center rounded-lg text-foreground transition-colors hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-40 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+            class="inline-flex size-11 items-center justify-center rounded-lg text-foreground transition-colors hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-40 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:h-12"
             @click="increaseQty"
           >
             <Plus class="size-4" aria-hidden="true" />
@@ -224,7 +225,7 @@ function scrollToReviews(): void {
           id="main-add-to-cart-button"
           ref="addToCartButton"
           type="button"
-          class="flex-1 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-serag-night px-5 text-sm font-bold text-serag-ivory shadow-xs transition-colors hover:bg-serag-green focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none dark:bg-serag-green dark:hover:bg-serag-night motion-reduce:transition-none"
+          class="flex-1 inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-serag-green px-5 text-base font-bold text-serag-ivory shadow-xs transition-colors hover:bg-serag-night sm:min-h-14 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none dark:bg-serag-green dark:hover:bg-serag-night motion-reduce:transition-none"
           @click="handleAddToCart"
         >
           <ShoppingCart class="size-4.5 shrink-0 text-serag-gold-hi" aria-hidden="true" />
@@ -251,7 +252,7 @@ function scrollToReviews(): void {
       </div>
 
       <!-- Add to Bridal List Button -->
-      <StoreProductPageBridalButton :product="product" />
+      <StoreProductPageBridalButton v-if="FEATURES.bridal" :product="product" />
 
       <!-- WhatsApp Ask Button -->
       <a
@@ -259,12 +260,14 @@ function scrollToReviews(): void {
         :href="whatsappUrl"
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-emerald-600/30 bg-emerald-500/10 px-4 text-xs sm:text-sm font-bold text-emerald-800 transition-colors hover:bg-emerald-500/20 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none dark:border-emerald-500/30 dark:bg-emerald-950/40 dark:text-emerald-300"
+        class="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl border border-emerald-600/30 bg-emerald-500/10 px-4 text-xs sm:text-sm font-bold text-emerald-800 transition-colors hover:bg-emerald-500/20 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none dark:border-emerald-500/30 dark:bg-emerald-950/40 dark:text-emerald-300"
         @click="track('whatsapp_click', { source: 'product', slug: product.slug })"
       >
         <MessageCircle class="size-4.5 shrink-0 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
         <span>{{ t('store.productPage.askWhatsapp') }}</span>
       </a>
     </div>
+
+    <StoreTrustRow class="border-t border-border/70 pt-4" />
   </div>
 </template>

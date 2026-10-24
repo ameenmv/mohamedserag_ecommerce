@@ -12,6 +12,7 @@ export function useAdminCms() {
   async function saveDraft(input: {
     sections: HomeContent
     layout: HomeLayout
+    english?: HomeContent | null
   }): Promise<AdminHomeState> {
     return adminFetch<AdminHomeState>('/admin/content/home/draft', {
       method: 'PUT',

@@ -1,4 +1,4 @@
-import type { AdminPage, AdminPageRow } from '@serag/shared'
+import type { AdminPage, AdminPageRow, PageTranslationsInput } from '@serag/shared'
 
 export interface AdminPageUpdateInput {
   title: string
@@ -6,6 +6,7 @@ export interface AdminPageUpdateInput {
   seoTitle: string
   seoDescription: string
   published: boolean
+  translations?: PageTranslationsInput | null
 }
 
 /**

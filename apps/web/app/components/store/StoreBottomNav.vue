@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { Home, LayoutGrid, ShoppingCart, Sparkles, User } from '@lucide/vue'
+import { Home, LayoutGrid, ShoppingCart, Sparkles, User, Zap } from '@lucide/vue'
 import type { Component } from 'vue'
+import { FEATURES } from '~/constants/features'
 
 const { t } = useI18n()
 const localePath = useLocalePath()
@@ -11,7 +12,9 @@ const hydrated = useHydrated()
 const items: { labelKey: string; to: string; icon: Component; showCartBadge?: boolean }[] = [
   { labelKey: 'store.header.home', to: '/', icon: Home },
   { labelKey: 'store.header.shop', to: '/shop', icon: LayoutGrid },
-  { labelKey: 'store.bottomNav.bridal', to: '/bridal', icon: Sparkles },
+  FEATURES.bridal
+    ? { labelKey: 'store.bottomNav.bridal', to: '/bridal', icon: Sparkles }
+    : { labelKey: 'store.header.offers', to: '/offers', icon: Zap },
   { labelKey: 'store.header.cart', to: '/cart', icon: ShoppingCart, showCartBadge: true },
   { labelKey: 'store.bottomNav.account', to: '/wishlist', icon: User },
 ]

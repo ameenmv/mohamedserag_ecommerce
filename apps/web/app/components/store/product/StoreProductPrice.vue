@@ -9,12 +9,14 @@ const props = withDefaults(
     discountPercent?: number | null
     flash?: ProductFlash | null
     countdownVariant?: 'compact' | 'detail' | 'none'
+    size?: 'md' | 'lg'
   }>(),
   {
     oldPrice: null,
     discountPercent: null,
     flash: null,
     countdownVariant: 'none',
+    size: 'md',
   },
 )
 
@@ -39,16 +41,22 @@ const previousPrice = computed(() =>
     </div>
 
     <div class="flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5">
-      <span data-price class="num text-base font-extrabold tracking-tight text-serag-night sm:text-xl dark:text-serag-ivory whitespace-nowrap">
+      <span
+        data-price
+        :class="[
+          'num font-extrabold tracking-tight text-serag-green dark:text-serag-ivory whitespace-nowrap',
+          size === 'lg' ? 'text-3xl sm:text-[40px] sm:leading-none' : 'text-lg sm:text-2xl',
+        ]"
+      >
         {{ currentPrice.digits }}
       </span>
-      <span class="text-xs font-semibold text-muted-foreground whitespace-nowrap">
+      <span :class="['font-semibold text-foreground whitespace-nowrap', size === 'lg' ? 'text-sm sm:text-base' : 'text-xs sm:text-sm']">
         {{ currentPrice.unit }}
       </span>
 
       <span
         v-if="previousPrice"
-        class="num text-[11px] font-medium text-muted-foreground line-through decoration-muted-foreground/60 ms-1 sm:text-xs whitespace-nowrap"
+        :class="['num font-medium text-muted-foreground line-through decoration-muted-foreground/60 ms-1 whitespace-nowrap', size === 'lg' ? 'text-sm sm:text-base' : 'text-[11px] sm:text-xs']"
         :aria-label="t('store.product.oldPriceAria', { price: previousPrice.formatted })"
       >
         {{ previousPrice.digits }}

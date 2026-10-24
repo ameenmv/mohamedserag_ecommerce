@@ -18,3 +18,7 @@ uploads/
 uploads/
 .lighthouseci/
 *.tsbuildinfo
+
+# Thmanyah font: its license forbids redistributing the files (see apps/web/app/assets/css/thmanyah.css)
+apps/web/public/fonts/thmanyah/
+Thmanyah-Font-Family.zip

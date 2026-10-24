@@ -1,3 +1,5 @@
+import { whenToasterReady } from '../utils/toaster'
+
 export interface UndoToastOptions {
   onUndo: () => void | Promise<void>
   durationMs?: number
@@ -30,7 +32,8 @@ function getSonnerModule(): Promise<typeof import('vue-sonner')> | null {
     return null
   }
   if (!sonnerModulePromise) {
-    sonnerModulePromise = import('vue-sonner')
+    // Toasts published before the toaster subscribes would be lost: wait for it to mount
+    sonnerModulePromise = Promise.all([import('vue-sonner'), whenToasterReady()]).then(([mod]) => mod)
   }
   return sonnerModulePromise
 }
@@ -119,7 +122,15 @@ export function useNotify() {
     })
   }
 
+  /** Clears open toasts, without loading vue-sonner if nothing has been shown yet. */
+  function dismissAll(): void {
+    void sonnerModulePromise?.then(({ toast }) => {
+      toast.dismiss()
+    })
+  }
+
   return {
+    dismissAll,
     success,
     info,
     warning,

@@ -11,6 +11,7 @@ export function useCart() {
   const notify = useNotify()
   const analytics = useAnalytics()
   const lines = useCartLines()
+  const localePath = useLocalePath()
 
   const count = computed(() => cartCount(lines.value))
   const subtotal = computed(() => cartSubtotal(lines.value))
@@ -23,7 +24,10 @@ export function useCart() {
 
     lines.value = addLine(lines.value, card, qty)
     const t = useNuxtApp().$i18n.t
-    notify.success(t('store.cart.addedToCart'))
+    notify.success(t('store.cart.addedToCart'), {
+      description: card.name,
+      action: { label: t('store.cart.viewCart'), onClick: () => { void navigateTo(localePath('/cart')) } },
+    })
 
     analytics.track('add_to_cart', {
       productId: card.id,

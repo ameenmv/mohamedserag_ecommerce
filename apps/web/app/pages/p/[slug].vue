@@ -111,26 +111,26 @@ const summaryRef = ref<{ addToCartButton: HTMLElement | null } | null>(null)
     <!-- Breadcrumb -->
     <StoreListingBreadcrumb :items="breadcrumbItems" />
 
-    <!-- Top section: Gallery (start side) + Buy box (end side, sticky top on lg) -->
-    <div class="mt-4 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-10 items-start">
-      <div class="lg:col-span-7">
+    <!-- Gallery and details on the start side; the buy box stays in view beside both on lg -->
+    <div class="mt-4 grid grid-cols-1 items-start gap-6 lg:grid-cols-12 lg:gap-x-10 lg:gap-y-8">
+      <div class="lg:col-span-7 lg:row-start-1">
         <StoreProductPageGallery
           :images="product.images"
           :product-name="product.name"
+          :category-slug="product.category.slug"
         />
       </div>
 
-      <div class="lg:col-span-5 lg:sticky lg:top-24">
+      <div class="lg:col-span-5 lg:col-start-8 lg:row-span-2 lg:row-start-1 lg:sticky lg:top-28 lg:self-start">
         <StoreProductPageSummary
           ref="summaryRef"
           :product="product"
           @flash-ended="refreshNuxtData(`product:${slug}`)"
         />
       </div>
-    </div>
 
-    <!-- Product Details: Specs, Set Contents, Warranty, Delivery -->
-    <div class="mt-10 flex max-w-4xl flex-col gap-6 lg:mt-12">
+      <!-- Product Details: Specs, Set Contents, Warranty, Delivery -->
+      <div class="flex flex-col gap-6 lg:col-span-7 lg:row-start-2">
       <LazyStoreProductPageSpecs hydrate-never :specs="product.specs" />
       <LazyStoreProductPageSetContents hydrate-never :set-contents="product.setContents" />
       <LazyStoreProductPageWarranty
@@ -140,6 +140,7 @@ const summaryRef = ref<{ addToCartButton: HTMLElement | null } | null>(null)
         :origin="product.origin"
       />
       <LazyStoreProductPageDelivery hydrate-never />
+      </div>
     </div>
 
     <!-- Product Reviews -->

@@ -1,4 +1,5 @@
 import { type Permission, PERMISSIONS } from '@serag/shared'
+import { FEATURES } from '../constants/features'
 
 export const ADMIN_SHORTCUT_WINDOW_MS = 1500
 
@@ -14,7 +15,7 @@ export interface AdminNavShortcut {
   permission?: Permission
 }
 
-export const ADMIN_NAV_SHORTCUTS: readonly AdminNavShortcut[] = [
+const ALL_ADMIN_NAV_SHORTCUTS: readonly AdminNavShortcut[] = [
   { key: 'h', hint: 'G H', paletteHint: 'G H', labelKey: 'admin.nav.overview', to: '/admin', group: 'main' },
   { key: 'o', hint: 'G O', paletteHint: 'G O', labelKey: 'admin.nav.orders', to: '/admin/orders', group: 'store', permission: PERMISSIONS.orders.read },
   { key: 'p', hint: 'G P', paletteHint: 'G P', labelKey: 'admin.nav.products', to: '/admin/products', group: 'store', permission: PERMISSIONS.products.read },
@@ -27,6 +28,11 @@ export const ADMIN_NAV_SHORTCUTS: readonly AdminNavShortcut[] = [
   { key: 't', hint: 'G T', paletteHint: 'G T', labelKey: 'admin.nav.reports', to: '/admin/reports', group: 'system', permission: PERMISSIONS.reports.read },
   { key: 's', hint: 'G S', paletteHint: 'G S', labelKey: 'admin.nav.settings', to: '/admin/settings', group: 'system', permission: PERMISSIONS.settings.manage },
 ] as const
+
+/** The admin pages shown in the sidebar, palette and `G` shortcuts (switched-off features left out). */
+export const ADMIN_NAV_SHORTCUTS: readonly AdminNavShortcut[] = ALL_ADMIN_NAV_SHORTCUTS.filter(
+  (item) => FEATURES.bridal || item.to !== '/admin/bridal',
+)
 
 export const ADMIN_SHORTCUT_ROUTES: Readonly<Record<string, string>> = Object.freeze(
   Object.fromEntries(ADMIN_NAV_SHORTCUTS.map((item) => [item.key, item.to])),

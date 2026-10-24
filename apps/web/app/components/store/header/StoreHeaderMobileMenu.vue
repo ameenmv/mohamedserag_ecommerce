@@ -23,15 +23,15 @@ const side = computed<'right' | 'left'>(() => (localeProperties.value.dir === 'l
       <button
         type="button"
         :aria-label="t('common.mainNav')"
-        class="inline-flex size-11 items-center justify-center rounded-xl border border-border bg-background text-primary transition-colors hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none lg:hidden motion-reduce:transition-none"
+        class="inline-flex size-10 items-center justify-center rounded-xl border border-border bg-background text-primary transition-colors hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none md:hidden motion-reduce:transition-none"
       >
         <Menu class="size-5" aria-hidden="true" />
       </button>
     </SheetTrigger>
     <LazySheetContent :side="side" class="w-80 bg-background p-0">
       <SheetHeader class="border-b border-sidebar-border bg-serag-deep px-5 py-5 text-start text-serag-ivory">
-        <SheetTitle class="font-display text-2xl text-serag-ivory">
-          {{ t('brand.name') }}
+        <SheetTitle>
+          <CommonBrandLogo class="h-14 text-serag-ivory" />
         </SheetTitle>
         <SheetDescription class="num text-xs font-semibold tracking-widest text-serag-gold-hi">
           {{ t('store.header.mobileMenuSubtitle') }}
@@ -56,6 +56,7 @@ const side = computed<'right' | 'left'>(() => (localeProperties.value.dir === 'l
       </nav>
       <div class="mt-auto flex flex-col gap-2 border-t border-border bg-secondary/50 p-4">
         <CommonLocaleSwitcher class="w-full justify-center" />
+        <StoreHeaderThemeToggle block />
         <a
           v-if="whatsappUrl"
           :href="whatsappUrl"

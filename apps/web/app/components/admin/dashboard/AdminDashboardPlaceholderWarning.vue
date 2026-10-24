@@ -8,7 +8,7 @@ const { can } = useAdminAuth()
 const storeApi = useStoreApi()
 
 // Same key as the storefront's store info, so the request is shared when both are on the page
-const { data } = await useAsyncData('store:info', () => storeApi.storeInfo())
+const { data } = await useAsyncData('store:info', () => storeApi.storeInfo(), { getCachedData: payloadCache })
 
 /** Store fields that are empty or still hold a `[placeholder]` (shown until real data is saved). */
 const missing = computed(() => (data.value ? settingsPlaceholderWarnings(data.value) : []))
