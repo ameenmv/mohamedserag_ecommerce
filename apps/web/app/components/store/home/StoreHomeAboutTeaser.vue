@@ -59,7 +59,7 @@ const headingId = useId()
         </div>
 
         <div class="flex min-w-0 flex-[1_1_520px] flex-col gap-6">
-          <p class="num text-[13px] font-bold tracking-[4px] text-serag-gold-ink">{{ content.eyebrow }}</p>
+          <p class="eyebrow text-serag-gold-ink">{{ content.eyebrow }}</p>
           <h2 :id="headingId" class="font-display text-[clamp(42px,5.5vw,76px)] leading-none text-serag-green">
             {{ content.title }}
           </h2>

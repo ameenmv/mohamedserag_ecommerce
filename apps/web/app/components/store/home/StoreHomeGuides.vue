@@ -18,7 +18,7 @@ const headingId = useId()
     <div class="mx-auto max-w-7xl px-4 pt-16 pb-14 sm:px-6 lg:px-10 lg:pt-24 lg:pb-[88px]">
       <div class="mb-11 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p class="num text-[13px] font-bold tracking-[4px] text-serag-gold-ink uppercase">
+          <p class="eyebrow text-serag-gold-ink">
             {{ t('store.home.guidesEyebrow') }}
           </p>
           <h2

@@ -10,6 +10,7 @@ export const HOME_SECTION_IDS = [
   'tradersTeaser',
   'aboutTeaser',
   'partners',
+  'traderReels',
   'guides',
 ] as const
 
@@ -19,6 +20,20 @@ export interface HomeLink {
   label: string
   href: string
 }
+
+/** One video card in the «التجار بيتكلموا عننا» strip. The card opens `url` (a reel) in a new tab. */
+export interface TraderReelItem {
+  name: string
+  place: string
+  /** The reel's own address (not a short /share/ link, which Facebook will not embed). */
+  url: string | null
+  /** Plays inside the site (a popup) instead of opening Facebook; needs an embeddable `url`. */
+  embed: boolean
+  /** A saved thumbnail (`/uploads/…`); the card shows a gradient without one. */
+  image: string | null
+}
+
+export const TRADER_REELS_MAX = 12
 
 export interface HomeContent {
   announce: { text: string; href: string | null }
@@ -38,6 +53,7 @@ export interface HomeContent {
   tradersTeaser: { badge: string; title: string; subtitle: string; cta: HomeLink; points: string[] }
   aboutTeaser: { eyebrow: string; title: string; subtitle: string; cta: HomeLink | null }
   partners: { title: string }
+  traderReels: { items: TraderReelItem[] }
   guides: { title: string }
 }
 
@@ -115,7 +131,7 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
     subtitle: 'عروض لفترة محدودة، تخلص قبل ما تلحق',
   },
   bridalTeaser: {
-    eyebrow: 'BRIDAL PACKAGES',
+    eyebrow: 'باقات العرايس',
     title: 'تجهيز العرايس — جهّز بيتك',
     subtitle:
       'بدل ما تلف على كل حاجة لوحدها، اختاري باقة جاهزة (أساسية / ذهبية / القصر)، عدّليها أوضة أوضة، شاركيها مع أهلك على واتساب، واحجزيها بعربون يثبّت الأسعار 30 يوم.',
@@ -135,7 +151,7 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
     ],
   },
   aboutTeaser: {
-    eyebrow: 'OUR STORY',
+    eyebrow: 'حكايتنا',
     title: 'من نحن',
     subtitle:
       'من سنة 1972 واسم محمد سراج معروف في المنصورة لأجهزة وأدوات البيت. السوق اتغيّر كتير في +50 سنة، واللي ما اتغيّرش هو وعدنا: منتج أصلي، سعر عادل، وخدمة بتفضل معاك بعد ما تمشي.',
@@ -143,6 +159,16 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
   },
   partners: {
     title: 'أكبر المصانع بتثق فينا',
+  },
+  traderReels: {
+    items: [
+      { name: 'رؤوف يوسف', place: 'طقم تيتانيوم سراج تركي أصلي', url: 'https://www.facebook.com/reel/1444506754485675/', embed: true, image: null },
+      { name: 'رؤوف يوسف', place: 'وصل تاني بكميات · تيتانيوم سراج', url: 'https://www.facebook.com/reel/947308004664183/', embed: true, image: null },
+      { name: 'النجا للأدوات المنزلية', place: 'معرض طنطا · شارع البحر', url: 'https://www.facebook.com/61552593096705/videos/1646363123819379/', embed: true, image: null },
+      { name: 'النجا للأدوات المنزلية', place: 'جولة في معرض طنطا', url: 'https://www.facebook.com/61552593096705/videos/2893970727632819/', embed: false, image: null },
+      { name: 'الخواجة للأدوات المنزلية', place: 'أحدث أطقم العشاء التركي', url: 'https://www.facebook.com/Elkawagastore/videos/1725780245171281/', embed: true, image: null },
+      { name: 'الشرقاوي للأدوات المنزلية', place: 'تيتانيوم تركي · ضمان سنتين', url: 'https://www.facebook.com/reel/1059485930202915/', embed: true, image: null },
+    ],
   },
   guides: {
     title: 'اشترِ صح',
@@ -217,6 +243,16 @@ export const DEFAULT_HOME_CONTENT_EN: HomeContent = {
   },
   partners: {
     title: 'Leading factories trust us',
+  },
+  traderReels: {
+    items: [
+      { name: 'Raouf Yousef', place: 'Genuine Turkish Serag titanium set', url: 'https://www.facebook.com/reel/1444506754485675/', embed: true, image: null },
+      { name: 'Raouf Yousef', place: 'Back in stock · Serag titanium', url: 'https://www.facebook.com/reel/947308004664183/', embed: true, image: null },
+      { name: 'El Naga Housewares', place: 'Tanta showroom · El Bahr St.', url: 'https://www.facebook.com/61552593096705/videos/1646363123819379/', embed: true, image: null },
+      { name: 'El Naga Housewares', place: 'A tour of the Tanta showroom', url: 'https://www.facebook.com/61552593096705/videos/2893970727632819/', embed: false, image: null },
+      { name: 'El Khawaga Housewares', place: 'Latest Turkish dinner sets', url: 'https://www.facebook.com/Elkawagastore/videos/1725780245171281/', embed: true, image: null },
+      { name: 'El Sharkawy Housewares', place: 'Turkish titanium · 2-year warranty', url: 'https://www.facebook.com/reel/1059485930202915/', embed: true, image: null },
+    ],
   },
   guides: {
     title: 'Buy smart',
@@ -302,6 +338,32 @@ export function isSafeContentLink(href: string): boolean {
   if (href.startsWith('/')) return true
   if (href.startsWith('https://')) return true
   return false
+}
+
+// shared/ has no DOM or Node typings (no `URL`), so the address is matched, not parsed. Nothing may
+// follow the host but `/`, `?`, `#` or the end, so facebook.com.evil.test and user@ tricks fail.
+const FACEBOOK_URL = /^https:\/\/(?:www\.|m\.|web\.)?facebook\.com(\/[^?#]*)?(?:[?#].*)?$/i
+
+/** The path of a https Facebook address, or null for any other address. */
+function facebookPath(raw: string): string | null {
+  const match = FACEBOOK_URL.exec(raw.trim())
+  return match ? (match[1] ?? '/') : null
+}
+
+/** True for the address of a Facebook video or reel page (any of its hosts, https only). */
+export function isFacebookVideoUrl(raw: string): boolean {
+  const path = facebookPath(raw)
+  return path !== null && /^\/(reel\/\d+|[^/]+\/videos\/(?:[^/]+\/)?\d+)/.test(path)
+}
+
+/**
+ * The address of Facebook's video player for a reel, or null when it cannot be embedded
+ * (not a Facebook video page, or a short /share/ link that has not been resolved yet).
+ */
+export function facebookEmbedSrc(raw: string | null): string | null {
+  if (!raw || !isFacebookVideoUrl(raw)) return null
+  const href = encodeURIComponent(`https://www.facebook.com${facebookPath(raw)}`)
+  return `https://www.facebook.com/plugins/video.php?href=${href}&show_text=false&autoplay=1`
 }
 
 export function isUploadedImage(src: string): boolean {

@@ -24,7 +24,7 @@ const whatsappUrl = computed(() =>
   <section class="bg-serag-ivory" :aria-labelledby="headingId">
     <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-10 lg:py-24">
       <div class="mx-auto mb-[52px] max-w-[720px] text-center">
-        <p class="num text-[13px] font-bold tracking-[4px] text-serag-gold-ink">HOW IT WORKS</p>
+        <p class="eyebrow text-serag-gold-ink">{{ t('store.home.howItWorksEyebrow') }}</p>
         <h2 :id="headingId" class="mt-2.5 mb-3.5 font-display text-[clamp(40px,5.5vw,72px)] leading-none text-serag-green">
           {{ t('store.home.how.title') }}
           <span class="text-[#8B7D3C]">{{ t('store.home.how.titleHighlight') }}</span>

@@ -104,7 +104,8 @@
       "allRightsReserved": "كل الحقوق محفوظة.",
       "deliveryNotice": "توصيل بعربيات المعرض لكل محافظات مصر",
       "categoriesTitle": "الأقسام",
-      "serviceTitle": "خدمة العملاء"
+      "serviceTitle": "خدمة العملاء",
+      "since": "منذ 1972"
     },
     "bottomNav": {
       "ariaLabel": "تنقل سريع للموبايل",
@@ -114,7 +115,7 @@
     "home": {
       "metaDescription": "معرض محمد سراج بالمنصورة من 1972: أجهزة كهربائية وأدوات منزلية أصلية بضمان معتمد وتوصيل لكل محافظات مصر.",
       "uspHeading": "وعود معرض محمد سراج",
-      "categoriesEyebrow": "SHOP BY CATEGORY",
+      "categoriesEyebrow": "الأقسام",
       "allCategories": "شوف كل الأقسام",
       "allOffers": "شوف كل العروض",
       "tradersTiers": "شرائح الأسعار",
@@ -123,7 +124,7 @@
       "showroomLine": "المنصورة · صرح متكامل للأجهزة الكهربائية والأدوات المنزلية منذ 1972",
       "partnersEyebrow": "وكلاء معتمدين",
       "authorizedDealer": "وكيل معتمد",
-      "guidesEyebrow": "GUIDES",
+      "guidesEyebrow": "دليل الشراء",
       "allGuides": "اقرأ دليل الشراء",
       "heroTradersCta": "أسعار الجملة للتجار",
       "heroArt": {
@@ -260,7 +261,11 @@
         "play": "شغّل فيديو {name}",
         "tradersCount": "+500 تاجر",
         "tradersNote": "بيشتغلوا معانا في الدلتا",
-        "join": "انضم لشبكة تجارنا"
+        "join": "انضم لشبكة تجارنا",
+        "viewerLabel": "فيديو {name}",
+        "close": "اقفل الفيديو",
+        "loading": "جاري تحميل الفيديو",
+        "openOnFacebook": "افتح على فيسبوك"
       },
       "sourcing": {
         "title": "من المصنع",
@@ -305,7 +310,13 @@
         "subtitle": "فريق محمد سراج جاهز يساعدك تختار الجهاز المناسب لبيتك وميزانيتك، من غير أي التزام.",
         "whatsapp": "واتساب مباشر",
         "call": "اتصل:"
-      }
+      },
+      "howItWorksEyebrow": "خطوات الطلب",
+      "trustedPartnersEyebrow": "شركاء النجاح",
+      "sourcingEyebrow": "المصدر والجودة",
+      "countdownHours": "ساعة",
+      "countdownMinutes": "دقيقة",
+      "countdownSeconds": "ثانية"
     },
     "product": {
       "addToCart": "أضف للسلة",
@@ -2379,7 +2390,8 @@
         "toggleVisibility": "إظهار «{section}»",
         "hiddenBadge": "مخفي عن الزوار",
         "fieldCount": "{count} حقول",
-        "changedCount": "{count} تعديل"
+        "changedCount": "{count} تعديل",
+        "traderReels": "فيديوهات التجار"
       },
       "fields": {
         "reset": "رجّع",
@@ -2446,7 +2458,27 @@
         },
         "guides": {
           "title": "عنوان القسم"
-        }
+        },
+        "reelsHint": "فيديوهات الريلز اللي بتظهر في قسم «التجار بيتكلموا عننا». الكارت بيفتح الفيديو في بوب أب جوه الموقع، أو على فيسبوك لو التضمين مقفول. الرابط لازم يكون آمن (https).",
+        "reelName": "اسم التاجر أو المعرض",
+        "reelPlace": "السطر التحتاني (مثلاً: طقم تيتانيوم، أو اسم المنطقة)",
+        "reelUrl": "رابط الفيديو (https://…)",
+        "reelUrlInvalid": "الرابط لازم يكون آمن ويبدأ بـ https",
+        "addReel": "أضف فيديو",
+        "moveItemUp": "طلّع العنصر لفوق",
+        "moveItemDown": "نزّل العنصر لتحت",
+        "traderReels": {
+          "items": "الفيديوهات"
+        },
+        "reelThumbnail": "صورة الفيديو",
+        "reelNoThumbnail": "من غير صورة",
+        "reelFetch": "هات الصورة والرابط من فيسبوك",
+        "reelFetching": "جاري الجلب…",
+        "reelFetched": "اتجابت الصورة وحُدّث الرابط",
+        "reelFetchedNoImage": "الرابط اتحدّث بس فيسبوك ما رضيش يدّينا الصورة. ارفعها بإيدك",
+        "reelFetchFailed": "مقدرناش نجيب من فيسبوك. اتأكد إن الفيديو عام وجرّب تاني، أو ارفع الصورة بإيدك",
+        "reelEmbed": "يتفتح جوه الموقع (بوب أب)، ولو مقفولة بيفتح على فيسبوك",
+        "reelNeedsResolve": "الرابط ده مش قابل للتشغيل جوه الموقع (غالباً رابط مختصر). اضغط «هات الصورة والرابط من فيسبوك» عشان يتحوّل للرابط الكامل."
       },
       "preview": {
         "label": "معاينة حيّة للمسودة",

@@ -22,14 +22,14 @@ onBeforeUnmount(() => {
 const split = computed(() => getCountdownSplit(props.endsAt, now.value))
 const pad = (n: number): string => String(n).padStart(2, '0')
 
-// Days fold into the hours box, as in the prototype (HRS / MIN / SEC)
+// Days fold into the hours box, as in the prototype (hours / minutes / seconds)
 const boxes = computed(() => {
   const s = split.value
   const ready = hydrated.value
   return [
-    { label: 'HRS', value: ready ? pad(s.days * 24 + s.hours) : '--', hot: false },
-    { label: 'MIN', value: ready ? pad(s.minutes) : '--', hot: false },
-    { label: 'SEC', value: ready ? pad(s.seconds) : '--', hot: true },
+    { label: t('store.home.countdownHours'), value: ready ? pad(s.days * 24 + s.hours) : '--', hot: false },
+    { label: t('store.home.countdownMinutes'), value: ready ? pad(s.minutes) : '--', hot: false },
+    { label: t('store.home.countdownSeconds'), value: ready ? pad(s.seconds) : '--', hot: true },
   ]
 })
 </script>
@@ -47,7 +47,7 @@ const boxes = computed(() => {
         ]"
       >
         <div class="text-[28px] leading-none font-extrabold sm:text-[34px]">{{ box.value }}</div>
-        <div :class="['mt-1 text-[11px] tracking-[2px]', box.hot ? 'text-white' : 'text-[#B9C7B6]']">
+        <div :class="['mt-1 text-[11px] tracking-[2px] rtl:text-xs rtl:tracking-normal', box.hot ? 'text-white' : 'text-[#B9C7B6]']">
           {{ box.label }}
         </div>
       </div>

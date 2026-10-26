@@ -42,6 +42,7 @@ const COMPONENT_BY_SECTION: Record<HomeSectionId, Component> = {
   tradersTeaser: onVisible(() => import('./StoreHomeTradersTeaser.vue')),
   aboutTeaser: onVisible(() => import('./StoreHomeAboutTeaser.vue')),
   partners: onVisible(() => import('./StoreHomePartners.vue')),
+  traderReels: onVisible(() => import('./StoreHomeTraderReels.vue')),
   guides: onVisible(() => import('./StoreHomeGuides.vue')),
 }
 
@@ -75,6 +76,8 @@ function sectionProps(id: HomeSectionId) {
         content: props.sections.partners,
         brands: props.partners,
       }
+    case 'traderReels':
+      return { content: props.sections.traderReels }
     case 'guides':
       return {
         content: props.sections.guides,
@@ -88,7 +91,7 @@ function sectionProps(id: HomeSectionId) {
  * that is on the page (so hiding or reordering a CMS section never drops it); without any,
  * it goes last.
  */
-type ExtraSectionId = 'howItWorks' | 'traderReels' | 'sourcing' | 'contactCta'
+type ExtraSectionId = 'howItWorks' | 'sourcing' | 'contactCta'
 
 const EXTRA_SECTIONS: { id: ExtraSectionId; anchors: string[]; component: Component }[] = [
   {
@@ -97,13 +100,8 @@ const EXTRA_SECTIONS: { id: ExtraSectionId; anchors: string[]; component: Compon
     component: onVisible(() => import('./StoreHomeHowItWorks.vue')),
   },
   {
-    id: 'traderReels',
-    anchors: ['partners', 'aboutTeaser', 'tradersTeaser'],
-    component: onVisible(() => import('./StoreHomeTraderReels.vue')),
-  },
-  {
     id: 'sourcing',
-    anchors: ['traderReels'],
+    anchors: ['traderReels', 'partners', 'aboutTeaser', 'tradersTeaser'],
     component: onVisible(() => import('./StoreHomeSourcing.vue')),
   },
   {

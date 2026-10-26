@@ -68,8 +68,8 @@ const title = computed(() => splitHighlight(props.content.title))
       1972
     </div>
 
-    <div class="relative mx-auto flex max-w-7xl flex-wrap items-center gap-14 px-4 pt-10 pb-14 sm:px-6 lg:px-10 lg:pt-[72px] lg:pb-24">
-      <div class="flex min-w-0 flex-[1_1_520px] flex-col gap-7">
+    <div class="relative mx-auto flex max-w-7xl flex-wrap items-center gap-14 px-4 pt-10 pb-14 sm:px-6 lg:px-10 lg:pt-10 lg:pb-20">
+      <div class="flex min-w-0 flex-[1_1_600px] flex-col gap-7 lg:gap-5">
         <span
           class="inline-flex items-center gap-2.5 self-start rounded-full border border-serag-gold/50 bg-serag-gold/10 px-[18px] py-2 text-[15px] font-medium text-[#E8DFB0]"
         >
@@ -79,7 +79,7 @@ const title = computed(() => splitHighlight(props.content.title))
 
         <h1
           :id="headingId"
-          class="font-display text-[clamp(56px,9vw,132px)] leading-[0.95] tracking-[-1px] text-serag-ivory"
+          class="font-display text-[clamp(52px,min(7vw,11.5svh),112px)] leading-[0.95] [&:lang(en)]:text-[clamp(48px,min(6vw,9.5svh),92px)] tracking-[-1px] text-serag-ivory"
         >
           {{ title.lead }}<template v-if="title.highlight"><br><span class="text-serag-gold-hi">{{ title.highlight }}</span></template>
         </h1>
@@ -109,7 +109,7 @@ const title = computed(() => splitHighlight(props.content.title))
           </NuxtLink>
         </div>
 
-        <dl class="mt-3 flex flex-wrap gap-5 border-t border-serag-ivory/15 pt-7 sm:gap-9">
+        <dl class="mt-3 flex flex-wrap gap-5 border-t border-serag-ivory/15 pt-7 sm:gap-9 lg:mt-1 lg:pt-5">
           <div v-for="stat in content.stats" :key="stat.label" class="flex flex-col-reverse gap-1.5">
             <dt class="text-sm text-[#B9C7B6]">{{ stat.label }}</dt>
             <dd class="num text-[28px] leading-none font-extrabold text-serag-gold-hi sm:text-[40px]">

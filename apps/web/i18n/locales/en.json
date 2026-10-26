@@ -104,7 +104,8 @@
       "allRightsReserved": "All rights reserved.",
       "deliveryNotice": "Delivery to all Egyptian governorates via showroom fleet",
       "categoriesTitle": "Categories",
-      "serviceTitle": "Customer service"
+      "serviceTitle": "Customer service",
+      "since": "SINCE 1972"
     },
     "bottomNav": {
       "ariaLabel": "Mobile quick navigation",
@@ -260,7 +261,11 @@
         "play": "Play {name}'s video",
         "tradersCount": "+500 traders",
         "tradersNote": "work with us across the Delta",
-        "join": "Join our traders network"
+        "join": "Join our traders network",
+        "viewerLabel": "{name}'s video",
+        "close": "Close the video",
+        "loading": "Loading the video",
+        "openOnFacebook": "Open on Facebook"
       },
       "sourcing": {
         "title": "From the factory",
@@ -305,7 +310,13 @@
         "subtitle": "The Mohamed Serag team is ready to help you choose the right appliance for your home and budget, with no obligation.",
         "whatsapp": "WhatsApp us",
         "call": "Call:"
-      }
+      },
+      "howItWorksEyebrow": "HOW IT WORKS",
+      "trustedPartnersEyebrow": "TRUSTED PARTNERS",
+      "sourcingEyebrow": "SOURCING & QUALITY",
+      "countdownHours": "HRS",
+      "countdownMinutes": "MIN",
+      "countdownSeconds": "SEC"
     },
     "product": {
       "addToCart": "Add to cart",
@@ -2379,7 +2390,8 @@
         "toggleVisibility": "Show \"{section}\"",
         "hiddenBadge": "Hidden from shoppers",
         "fieldCount": "{count} fields",
-        "changedCount": "{count} changes"
+        "changedCount": "{count} changes",
+        "traderReels": "Trader videos"
       },
       "fields": {
         "reset": "Reset",
@@ -2446,7 +2458,27 @@
         },
         "guides": {
           "title": "Section title"
-        }
+        },
+        "reelsHint": "The reels shown in the «Traders talk about us» section. A card plays the video in a popup on the site, or opens Facebook when embedding is off. The link must be secure (https).",
+        "reelName": "Trader or showroom name",
+        "reelPlace": "Second line (e.g. product, or the area)",
+        "reelUrl": "Video link (https://…)",
+        "reelUrlInvalid": "The link must start with https://",
+        "addReel": "Add a video",
+        "moveItemUp": "Move item up",
+        "moveItemDown": "Move item down",
+        "traderReels": {
+          "items": "Videos"
+        },
+        "reelThumbnail": "Video picture",
+        "reelNoThumbnail": "No picture",
+        "reelFetch": "Get the picture and link from Facebook",
+        "reelFetching": "Fetching…",
+        "reelFetched": "Picture saved and link updated",
+        "reelFetchedNoImage": "The link was updated but Facebook did not give us the picture. Upload it yourself",
+        "reelFetchFailed": "Could not fetch from Facebook. Make sure the video is public and try again, or upload the picture yourself",
+        "reelEmbed": "Play inside the site (popup); when off, it opens on Facebook",
+        "reelNeedsResolve": "This link cannot play inside the site (probably a short link). Press «Get the picture and link from Facebook» to turn it into the full link."
       },
       "preview": {
         "label": "Live draft preview",

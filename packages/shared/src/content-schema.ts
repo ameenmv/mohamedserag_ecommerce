@@ -1,5 +1,11 @@
 import { z } from 'zod'
-import { HOME_SECTION_IDS, isSafeContentLink, isUploadedImage } from './content.js'
+import {
+  DEFAULT_HOME_CONTENT,
+  HOME_SECTION_IDS,
+  TRADER_REELS_MAX,
+  isSafeContentLink,
+  isUploadedImage,
+} from './content.js'
 
 export const homeLinkSchema = z.object({
   label: z
@@ -185,6 +191,52 @@ const partnersSchema = z.object({
     .max(60, 'عنوان الوكلاء بيزيد عن 60 حرف'),
 })
 
+const traderReelItemSchema = z.object({
+  name: z
+    .string({ message: 'اسم التاجر مطلوب' })
+    .trim()
+    .min(1, 'اسم التاجر مطلوب')
+    .max(60, 'اسم التاجر بيزيد عن 60 حرف'),
+  place: z
+    .string({ message: 'السطر التحتاني غير صالح' })
+    .trim()
+    .max(80, 'السطر التحتاني بيزيد عن 80 حرف'),
+  url: z
+    .string({ message: 'رابط الفيديو غير صالح' })
+    .trim()
+    .nullable()
+    .transform((val) => (val === '' ? null : val))
+    .refine((val) => val === null || (val.startsWith('https://') && val.length <= 300), {
+      message: 'رابط الفيديو لازم يبدأ بـ https://',
+    }),
+  // Items saved before the popup existed play on Facebook, as before
+  embed: z.boolean({ message: 'خيار التشغيل جوه الموقع غير صالح' }).default(false),
+  image: z
+    .string({ message: 'صورة الفيديو غير صالحة' })
+    .trim()
+    .nullable()
+    .default(null)
+    .transform((val) => (val === '' ? null : val))
+    .refine((val) => val === null || isUploadedImage(val), {
+      message: 'الصورة لازم تبدأ بـ /uploads/',
+    }),
+})
+
+export const reelPreviewInputSchema = z.object({
+  url: z
+    .string({ message: 'رابط الفيديو مطلوب' })
+    .trim()
+    .min(1, 'رابط الفيديو مطلوب')
+    .max(300, 'رابط الفيديو طويل'),
+})
+
+// Content saved before this section existed has no `traderReels`: it reads as the defaults
+const traderReelsSchema = z
+  .object({
+    items: z.array(traderReelItemSchema).max(TRADER_REELS_MAX, `أقصى عدد فيديوهات ${TRADER_REELS_MAX}`),
+  })
+  .default(() => DEFAULT_HOME_CONTENT.traderReels)
+
 const guidesSchema = z.object({
   title: z
     .string({ message: 'عنوان الدليل مطلوب' })
@@ -203,6 +255,7 @@ export const homeContentSchema = z.object({
   tradersTeaser: tradersTeaserSchema,
   aboutTeaser: aboutTeaserSchema,
   partners: partnersSchema,
+  traderReels: traderReelsSchema,
   guides: guidesSchema,
 })
 

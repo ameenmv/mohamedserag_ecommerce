@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { isSafeContentLink, isUploadedImage } from '@serag/shared'
+import { facebookEmbedSrc, isSafeContentLink, isUploadedImage } from '@serag/shared'
 import type { HomeContent, HomeSectionId } from '@serag/shared'
-import { Plus, RotateCcw, Trash2, Upload, X } from '@lucide/vue'
+import { ArrowDown, ArrowUp, Plus, RotateCcw, Trash2, Upload, X } from '@lucide/vue'
 import { HOME_SECTION_META, homeFieldErrorKey } from '~/utils/admin-home-fields'
 
 type HomeSectionContent = HomeContent[HomeSectionId]
@@ -176,6 +176,124 @@ function updateUsp(key: string, index: number, field: 'title' | 'description', v
   if (!row) return
   row[field] = value
   emit('set', key, rows, props.locale)
+}
+
+// --- trader videos ----------------------------------------------------------
+
+interface ReelRow {
+  name: string
+  place: string
+  url: string
+  embed: boolean
+  image: string
+}
+
+function reelsValue(key: string): ReelRow[] {
+  const value = read(activeSection.value, key)
+  if (!Array.isArray(value)) return []
+  return value.flatMap((row): ReelRow[] =>
+    typeof row === 'object' && row !== null && 'name' in row
+      ? [
+          {
+            name: String(row.name),
+            place: 'place' in row ? String(row.place) : '',
+            url: 'url' in row && row.url ? String(row.url) : '',
+            embed: 'embed' in row ? row.embed === true : false,
+            image: 'image' in row && row.image ? String(row.image) : '',
+          },
+        ]
+      : [],
+  )
+}
+
+function emitReels(key: string, rows: ReelRow[]): void {
+  emit(
+    'set',
+    key,
+    rows.map((row) => ({
+      ...row,
+      url: row.url.trim() === '' ? null : row.url.trim(),
+      image: row.image === '' ? null : row.image,
+    })),
+    props.locale,
+  )
+}
+
+function patchReel(key: string, index: number, patch: Partial<ReelRow>): void {
+  emitReels(key, reelsValue(key).map((row, i) => (i === index ? { ...row, ...patch } : row)))
+}
+
+function updateReel(key: string, index: number, field: 'name' | 'place' | 'url', value: string): void {
+  patchReel(key, index, { [field]: value })
+}
+
+function addReel(key: string): void {
+  emitReels(key, [...reelsValue(key), { name: '', place: '', url: '', embed: true, image: '' }])
+}
+
+function removeReel(key: string, index: number): void {
+  emitReels(key, reelsValue(key).filter((_, i) => i !== index))
+}
+
+function moveReel(key: string, index: number, step: -1 | 1): void {
+  const rows = reelsValue(key)
+  const target = index + step
+  if (target < 0 || target >= rows.length) return
+  const moved = rows[index]
+  const other = rows[target]
+  if (!moved || !other) return
+  rows[index] = other
+  rows[target] = moved
+  emitReels(key, rows)
+}
+
+function reelUrlHint(url: string): string | null {
+  if (!url) return null
+  if (!url.startsWith('https://')) return t('admin.content.fields.reelUrlInvalid')
+  return null
+}
+
+/** True when the link is a Facebook address the popup cannot play (e.g. a short /share/ link). */
+function reelNeedsResolve(row: ReelRow): boolean {
+  return row.embed && row.url !== '' && !facebookEmbedSrc(row.url)
+}
+
+const reelBusy = ref<string | null>(null)
+
+/** Fetches the plain link and the picture from Facebook, then saves both into the row. */
+async function fetchReelFromFacebook(key: string, index: number): Promise<void> {
+  const row = reelsValue(key)[index]
+  if (!row || !row.url) return
+  reelBusy.value = `${key}-${index}`
+  try {
+    const res = await cms.previewReel(row.url)
+    patchReel(key, index, { url: res.url, image: res.image ?? row.image })
+    if (res.image) useNotify().success(t('admin.content.fields.reelFetched'))
+    else useNotify().warning(t('admin.content.fields.reelFetchedNoImage'))
+  } catch {
+    useNotify().error(t('admin.content.fields.reelFetchFailed'))
+  } finally {
+    reelBusy.value = null
+  }
+}
+
+async function uploadReelImage(file: File, key: string, index: number): Promise<void> {
+  reelBusy.value = `${key}-${index}`
+  try {
+    const res = await cms.uploadImage(file)
+    patchReel(key, index, { image: res.url })
+  } catch {
+    useNotify().error(t('admin.content.errors.uploadFailed'))
+  } finally {
+    reelBusy.value = null
+  }
+}
+
+function onReelFileChange(event: Event, key: string, index: number): void {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  if (file) void uploadReelImage(file, key, index)
+  input.value = ''
 }
 
 // --- generic string list ----------------------------------------------------
@@ -593,6 +711,161 @@ onMounted(() => {
               @update:model-value="updateUsp(field.key, index, 'description', String($event))"
             />
           </div>
+        </div>
+      </template>
+
+      <!-- trader videos -->
+      <template v-else-if="field.kind === 'reels'">
+        <p class="text-xs text-muted-foreground">{{ t('admin.content.fields.reelsHint') }}</p>
+        <div class="flex flex-col gap-3">
+          <div
+            v-for="(row, index) in reelsValue(field.key)"
+            :key="index"
+            class="flex flex-col gap-2 rounded-xl border border-border p-3"
+          >
+            <div class="flex items-center justify-between gap-2">
+              <span class="num text-xs font-bold text-muted-foreground">{{ index + 1 }}</span>
+              <div class="flex items-center gap-1">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  class="min-h-11 min-w-11"
+                  :disabled="!hydrated || index === 0"
+                  :aria-label="t('admin.content.fields.moveItemUp')"
+                  @click="moveReel(field.key, index, -1)"
+                >
+                  <ArrowUp class="size-4" aria-hidden="true" />
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  class="min-h-11 min-w-11"
+                  :disabled="!hydrated || index === reelsValue(field.key).length - 1"
+                  :aria-label="t('admin.content.fields.moveItemDown')"
+                  @click="moveReel(field.key, index, 1)"
+                >
+                  <ArrowDown class="size-4" aria-hidden="true" />
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  class="min-h-11 min-w-11"
+                  :disabled="!hydrated"
+                  :aria-label="t('admin.content.fields.removeItem')"
+                  @click="removeReel(field.key, index)"
+                >
+                  <Trash2 class="size-4" aria-hidden="true" />
+                </Button>
+              </div>
+            </div>
+            <Input
+              :model-value="row.name"
+              :disabled="!hydrated"
+              :dir="locale === 'en' ? 'ltr' : undefined"
+              :lang="locale === 'en' ? 'en' : undefined"
+              maxlength="60"
+              :aria-label="t('admin.content.fields.reelName')"
+              :placeholder="t('admin.content.fields.reelName')"
+              @update:model-value="updateReel(field.key, index, 'name', String($event))"
+            />
+            <Input
+              :model-value="row.place"
+              :disabled="!hydrated"
+              :dir="locale === 'en' ? 'ltr' : undefined"
+              :lang="locale === 'en' ? 'en' : undefined"
+              :maxlength="field.max"
+              :aria-label="t('admin.content.fields.reelPlace')"
+              :placeholder="t('admin.content.fields.reelPlace')"
+              @update:model-value="updateReel(field.key, index, 'place', String($event))"
+            />
+            <Input
+              :model-value="row.url"
+              :disabled="!hydrated"
+              dir="ltr"
+              maxlength="300"
+              inputmode="url"
+              :aria-label="t('admin.content.fields.reelUrl')"
+              :placeholder="t('admin.content.fields.reelUrl')"
+              @update:model-value="updateReel(field.key, index, 'url', String($event))"
+            />
+            <p v-if="reelUrlHint(row.url)" class="text-xs text-destructive">{{ reelUrlHint(row.url) }}</p>
+
+            <div class="flex flex-wrap items-center gap-3">
+              <div
+                class="flex h-24 w-[54px] shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border bg-muted"
+                :aria-label="t('admin.content.fields.reelThumbnail')"
+              >
+                <img v-if="row.image" :src="row.image" alt="" class="size-full object-cover">
+                <span v-else class="px-1 text-center text-[10px] leading-tight text-muted-foreground">
+                  {{ t('admin.content.fields.reelNoThumbnail') }}
+                </span>
+              </div>
+              <div class="flex flex-wrap items-center gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  :disabled="!hydrated || !row.url || reelBusy !== null"
+                  class="min-h-11"
+                  @click="fetchReelFromFacebook(field.key, index)"
+                >
+                  <span>{{ reelBusy === `${field.key}-${index}` ? t('admin.content.fields.reelFetching') : t('admin.content.fields.reelFetch') }}</span>
+                </Button>
+                <label
+                  class="inline-flex min-h-11 items-center gap-2 rounded-md border border-input px-3 text-sm font-medium transition-colors hover:bg-muted has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50"
+                  :class="hydrated && reelBusy === null ? 'cursor-pointer' : ''"
+                >
+                  <Upload class="size-4" aria-hidden="true" />
+                  <span>{{ t('admin.content.fields.upload') }}</span>
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp,image/avif"
+                    class="sr-only"
+                    :disabled="!hydrated || reelBusy !== null"
+                    @change="onReelFileChange($event, field.key, index)"
+                  >
+                </label>
+                <Button
+                  v-if="row.image"
+                  type="button"
+                  variant="ghost"
+                  :disabled="!hydrated"
+                  class="min-h-11"
+                  @click="patchReel(field.key, index, { image: '' })"
+                >
+                  <X class="size-4" aria-hidden="true" />
+                  <span>{{ t('admin.content.fields.removeImage') }}</span>
+                </Button>
+              </div>
+            </div>
+
+            <label class="flex min-h-11 items-center gap-3 text-sm font-medium" :class="hydrated ? 'cursor-pointer' : ''">
+              <input
+                type="checkbox"
+                class="size-5 shrink-0 accent-serag-green"
+                :checked="row.embed"
+                :disabled="!hydrated"
+                @change="patchReel(field.key, index, { embed: ($event.target as HTMLInputElement).checked })"
+              >
+              <span>{{ t('admin.content.fields.reelEmbed') }}</span>
+            </label>
+            <p v-if="reelNeedsResolve(row)" class="text-xs text-amber-700 dark:text-amber-400">
+              {{ t('admin.content.fields.reelNeedsResolve') }}
+            </p>
+          </div>
+          <Button
+            v-if="reelsValue(field.key).length < (field.maxItems ?? 12)"
+            type="button"
+            variant="outline"
+            :disabled="!hydrated"
+            class="min-h-11 w-fit"
+            @click="addReel(field.key)"
+          >
+            <Plus class="size-4" aria-hidden="true" />
+            <span>{{ t('admin.content.fields.addReel') }}</span>
+          </Button>
         </div>
       </template>
 

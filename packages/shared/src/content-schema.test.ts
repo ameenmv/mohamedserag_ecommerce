@@ -1,8 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import {
+  TRADER_REELS_MAX,
   DEFAULT_HOME_CONTENT,
   DEFAULT_HOME_CONTENT_EN,
   DEFAULT_HOME_LAYOUT,
+  facebookEmbedSrc,
+  isFacebookVideoUrl,
   comparePageOrder,
   countHomeChanges,
   isSafeContentLink,
@@ -257,5 +260,69 @@ describe('content', () => {
       },
     }
     expect(countHomeChanges(modifiedEn, base)).toBe(1)
+  })
+
+  describe('trader videos', () => {
+    const reel = { name: 'تاجر', place: 'معرض', url: 'https://www.facebook.com/share/r/abc/' }
+    const parse = (items: unknown) =>
+      homeContentSchema.safeParse({ ...DEFAULT_HOME_CONTENT, traderReels: { items } })
+
+    it('content without the section reads as the default videos', () => {
+      const { traderReels: _omitted, ...old } = DEFAULT_HOME_CONTENT
+      const result = homeContentSchema.safeParse(old)
+      expect(result.success && result.data.traderReels).toEqual(DEFAULT_HOME_CONTENT.traderReels)
+    })
+
+    it('accepts a video, no videos, and a card without a link', () => {
+      expect(parse([reel]).success).toBe(true)
+      expect(parse([]).success).toBe(true)
+      expect(parse([{ ...reel, url: null }]).success).toBe(true)
+      expect(parse([{ ...reel, url: '  ' }]).success).toBe(true)
+    })
+
+    it('turns a blank link into null', () => {
+      const result = parse([{ ...reel, url: '  ' }])
+      expect(result.success && result.data.traderReels.items[0]?.url).toBeNull()
+    })
+
+    it('rejects a missing name, an insecure or script link, and too many videos', () => {
+      expect(parse([{ ...reel, name: ' ' }]).success).toBe(false)
+      expect(parse([{ ...reel, url: 'http://facebook.com/x' }]).success).toBe(false)
+      expect(parse([{ ...reel, url: 'javascript:alert(1)' }]).success).toBe(false)
+      expect(parse(Array.from({ length: TRADER_REELS_MAX + 1 }, () => reel)).success).toBe(false)
+    })
+
+    it('the default videos are six real links in both languages', () => {
+      for (const content of [DEFAULT_HOME_CONTENT, DEFAULT_HOME_CONTENT_EN]) {
+        expect(content.traderReels.items).toHaveLength(6)
+        expect(content.traderReels.items.every((item) => item.url?.startsWith('https://'))).toBe(true)
+      }
+    })
+  })
+
+  describe('Facebook video addresses', () => {
+    it('recognises reels and page videos on Facebook hosts', () => {
+      expect(isFacebookVideoUrl('https://www.facebook.com/reel/1444506754485675/')).toBe(true)
+      expect(isFacebookVideoUrl('https://facebook.com/Elkawagastore/videos/1725780245171281/')).toBe(true)
+      expect(isFacebookVideoUrl('https://m.facebook.com/page/videos/slug/123/?x=1')).toBe(true)
+    })
+
+    it('rejects short share links, other pages, other hosts and look-alike hosts', () => {
+      expect(isFacebookVideoUrl('https://www.facebook.com/share/r/19rBsq1tFH/')).toBe(false)
+      expect(isFacebookVideoUrl('https://www.facebook.com/MohamedSeragCo/')).toBe(false)
+      expect(isFacebookVideoUrl('http://www.facebook.com/reel/1/')).toBe(false)
+      expect(isFacebookVideoUrl('https://facebook.com.evil.test/reel/1/')).toBe(false)
+      expect(isFacebookVideoUrl('https://facebook.com@evil.test/reel/1/')).toBe(false)
+      expect(isFacebookVideoUrl('https://evil.test/reel/1/')).toBe(false)
+    })
+
+    it('builds the player address only on facebook.com, with the reel in the href', () => {
+      const src = facebookEmbedSrc('https://m.facebook.com/reel/123/?rdid=x')
+      expect(src).toBe(
+        'https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F123%2F&show_text=false&autoplay=1',
+      )
+      expect(facebookEmbedSrc('https://www.facebook.com/share/r/abc/')).toBeNull()
+      expect(facebookEmbedSrc(null)).toBeNull()
+    })
   })
 })

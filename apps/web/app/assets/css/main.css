@@ -13,6 +13,21 @@
   * { @apply border-border outline-ring/50; }
   body { @apply bg-background text-foreground font-sans antialiased; }
   .num { font-family: var(--font-num); direction: ltr; unicode-bidi: isolate; }
+  /* Tailwind v4 dropped the pointer cursor on buttons; every clickable control gets it back. */
+  :is(button, [role='button'], [role='tab'], [role='menuitem'], [role='option'], [role='checkbox'], [role='radio'], [role='switch'], summary, select, label[for], input:is([type='checkbox'], [type='radio'], [type='submit'], [type='button'], [type='file'], [type='range'])):not(:disabled, [aria-disabled='true']) {
+    cursor: pointer;
+  }
+  :is(button, [role='button'], select, input):is(:disabled, [aria-disabled='true']) { cursor: not-allowed; }
+}
+
+/* Small label above a section title. Wide-tracked capitals in English; Arabic letters must stay
+   joined, so Arabic gets normal tracking and a size that matches the script's x-height. */
+@utility eyebrow {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  &:lang(ar) { font-size: 15px; letter-spacing: 0; }
 }
 
 /* Storefront motion from the prototype: floating hero cards, rotating seal, marquee strips. */
@@ -200,4 +215,15 @@
 [dir='rtl'] .cart-line-leave-to { transform: translateX(-24px); }
 @media (prefers-reduced-motion: reduce) {
   .sheet-panel[data-state='open'] .cart-line-enter { animation: none; }
+}
+
+/* Trader reels popup: backdrop fades, the player rises in; both reduced when motion is. */
+.reel-overlay[data-state='open'] { animation: sheet-fade-in .25s ease both; }
+.reel-overlay[data-state='closed'] { animation: sheet-fade-out .18s ease both; }
+.reel-viewer[data-state='open'] .reel-stage { animation: reel-pop .38s cubic-bezier(.32, .72, 0, 1) both; }
+.reel-viewer[data-state='closed'] { animation: sheet-fade-out .18s ease both; }
+.reel-frame { animation: sheet-fade-in .3s ease both; }
+@keyframes reel-pop { from { opacity: 0; transform: translateY(18px) scale(.96); } }
+@media (prefers-reduced-motion: reduce) {
+  .reel-viewer[data-state='open'] .reel-stage { animation: sheet-fade-in .15s ease both; }
 }

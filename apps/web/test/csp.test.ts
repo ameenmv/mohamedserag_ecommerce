@@ -72,7 +72,7 @@ describe('buildCsp', () => {
     expect(csp).toContain("img-src 'self' data: blob:")
     expect(csp).toContain("font-src 'self' data:")
     expect(csp).toContain("connect-src 'self'")
-    expect(csp).toContain("frame-src 'self'")
+    expect(csp).toContain("frame-src 'self' https://www.facebook.com")
     expect(csp).toContain("frame-ancestors 'self'")
     expect(csp).toContain("object-src 'none'")
     expect(csp).toContain("base-uri 'self'")

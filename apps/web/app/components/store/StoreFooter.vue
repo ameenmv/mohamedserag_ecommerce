@@ -61,7 +61,7 @@ const contactLinkClass =
           :to="localePath('/')"
           class="font-display text-lg text-serag-gold-hi focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:outline-none"
         >
-          {{ t('store.footer.legacyTagline') }} · <span class="num font-extrabold">SINCE 1972</span>
+          {{ t('store.footer.legacyTagline') }} · <span class="font-extrabold">{{ t('store.footer.since') }}</span>
         </NuxtLink>
       </div>
     </div>

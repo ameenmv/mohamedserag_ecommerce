@@ -36,6 +36,8 @@ function isHomeSectionEmpty(
       return live.flashCount === 0
     case 'partners':
       return live.partnerCount === 0
+    case 'traderReels':
+      return sections.traderReels.items.length === 0
     case 'guides':
       return live.guideCount === 0
     default:

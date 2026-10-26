@@ -1,11 +1,19 @@
 <script setup lang="ts">
 import { ArrowLeft, ArrowRight, Play } from '@lucide/vue'
-import { TRADER_REELS } from '~/constants/trader-reels'
+import { facebookEmbedSrc, type HomeContent } from '@serag/shared'
+import { defineAsyncComponent } from 'vue'
 
-const { t, locale, localeProperties } = useI18n()
+const props = defineProps<{ content: HomeContent['traderReels'] }>()
+
+const { t, localeProperties } = useI18n()
 const localePath = useLocalePath()
 const headingId = useId()
 const track = ref<HTMLElement | null>(null)
+
+// The popup player (and with it Facebook's player) is only fetched after the first tap
+const ReelViewer = defineAsyncComponent(() => import('./StoreHomeReelViewer.vue'))
+const viewerShown = ref(false)
+const active = ref<number | null>(null)
 
 /** Scrolls one card (260px + 20px gap) towards the reading direction's next/previous card. */
 function scrollCards(direction: 1 | -1): void {
@@ -15,14 +23,38 @@ function scrollCards(direction: 1 | -1): void {
   el.scrollBy({ left: direction * (rtl ? -280 : 280), behavior: 'smooth' })
 }
 
-const lang = computed(() => (locale.value === 'en' ? 'en' : 'ar'))
+/** Card backgrounds cycle through the brand greens and golds. */
+const TINTS = ['#3D6B4F', '#6F6329', '#2A4D38', '#8B7D3C'] as const
 const reels = computed(() =>
-  TRADER_REELS.map((reel) => ({ ...reel, label: reel.name[lang.value], place: reel.shop[lang.value] })),
+  props.content.items.map((item, index) => ({
+    ...item,
+    tint: TINTS[index % TINTS.length],
+    // A card plays in the popup only when the owner allows it and Facebook can embed the link
+    src: item.embed ? facebookEmbedSrc(item.url) : null,
+  })),
 )
-// First letters of the first four traders' names (skipping the «أ.» / «الحاج» title in Arabic)
-const avatars = computed(() =>
-  reels.value.slice(0, 4).map((reel) => (reel.label.split(' ').at(-1) ?? reel.label).charAt(0)),
+const playable = computed(() =>
+  reels.value.flatMap((reel) =>
+    reel.src && reel.url ? [{ name: reel.name, place: reel.place, url: reel.url, src: reel.src }] : [],
+  ),
 )
+
+/** Before this section hydrates the card is a plain link to Facebook; afterwards a tap opens the popup. */
+function openViewer(event: MouseEvent, src: string | null): void {
+  if (!src || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+  event.preventDefault()
+  viewerShown.value = true
+  active.value = playable.value.findIndex((reel) => reel.src === src)
+}
+
+const TITLES = new Set(['أ.', 'أ', 'الحاج', 'م.', 'Hajj', 'Mr.', 'Eng.'])
+/** The first letter of the name (skipping a title and the Arabic «ال»), for the little avatars. */
+function initial(name: string): string {
+  const word = name.split(/\s+/).find((part) => part && !TITLES.has(part)) ?? name
+  const bare = word.length > 3 && word.startsWith('ال') ? word.slice(2) : word
+  return bare.charAt(0).toUpperCase()
+}
+const avatars = computed(() => reels.value.slice(0, 4).map((reel) => initial(reel.name)))
 </script>
 
 <template>
@@ -76,21 +108,33 @@ const avatars = computed(() =>
       </div>
 
       <ul ref="track" tabindex="0" :aria-label="t('store.home.reels.title') + ' ' + t('store.home.reels.titleHighlight')" class="flex snap-x snap-mandatory scroll-px-1 gap-5 overflow-x-auto scroll-smooth px-1 pt-2.5 pb-7 scrollbar-none focus-visible:ring-2 focus-visible:ring-serag-gold focus-visible:outline-none">
-        <li v-for="reel in reels" :key="reel.name.en" class="flex-none snap-start">
+        <li v-for="(reel, index) in reels" :key="`${index}-${reel.url ?? reel.name}`" class="flex-none snap-start">
           <component
             :is="reel.url ? 'a' : 'div'"
             :href="reel.url ?? undefined"
             :target="reel.url ? '_blank' : undefined"
             :rel="reel.url ? 'noopener noreferrer' : undefined"
-            :aria-label="reel.url ? t('store.home.reels.play', { name: reel.label }) : undefined"
+            :aria-label="reel.url ? t('store.home.reels.play', { name: reel.name }) : undefined"
+            :aria-haspopup="reel.src ? 'dialog' : undefined"
             class="group relative block aspect-[9/16] w-[200px] overflow-hidden rounded-[var(--radius-card)] border border-serag-gold-hi/25 bg-[#1B3526] text-start transition duration-300 hover:-translate-y-2.5 hover:scale-[1.02] hover:border-serag-gold-hi hover:shadow-[0_40px_60px_-28px_rgba(0,0,0,.8)] focus-visible:ring-2 focus-visible:ring-serag-gold focus-visible:outline-none sm:w-[260px] motion-reduce:transition-none motion-reduce:hover:transform-none"
+            @click="openViewer($event, reel.src)"
           >
+            <NuxtImg
+              v-if="reel.image"
+              :src="reel.image"
+              alt=""
+              width="260"
+              height="462"
+              loading="lazy"
+              class="absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-110"
+            />
             <div
+              v-else
               class="absolute inset-0 transition-transform duration-500 group-hover:scale-110"
               :style="{ background: `radial-gradient(circle at 30% 20%, rgba(210,194,122,.35), transparent 55%), linear-gradient(160deg, ${reel.tint}, #14201A)` }"
               aria-hidden="true"
             />
-            <div class="absolute inset-x-0 top-[18%] text-center font-display text-[120px] leading-none text-serag-gold-hi/12" aria-hidden="true">”</div>
+            <div v-if="!reel.image" class="absolute inset-x-0 top-[18%] text-center font-display text-[120px] leading-none text-serag-gold-hi/12" aria-hidden="true">”</div>
             <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.25)_0%,rgba(0,0,0,0)_30%,rgba(8,16,11,.92)_100%)]" aria-hidden="true" />
             <span class="absolute end-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-black/40 px-3 py-1 text-xs font-bold backdrop-blur-sm" aria-hidden="true">
               <svg viewBox="0 0 24 24" class="size-3 fill-serag-gold-hi"><path d="M14 9V7c0-1 .5-1.5 1.5-1.5H17V2h-3c-3 0-4 2-4 4.5V9H7.5v3.5H10V22h4v-9.5h2.6L17 9z" /></svg>
@@ -105,12 +149,14 @@ const avatars = computed(() =>
             </span>
             <div class="absolute inset-x-0 bottom-0 p-5">
               <div class="text-sm tracking-[2px] text-serag-gold-hi" aria-hidden="true">★★★★★</div>
-              <div class="mt-1.5 text-lg font-bold">{{ reel.label }}</div>
+              <div class="mt-1.5 text-lg font-bold">{{ reel.name }}</div>
               <div class="mt-0.5 text-[13px] text-[#B9C7B6]">{{ reel.place }}</div>
             </div>
           </component>
         </li>
       </ul>
+
+      <ReelViewer v-if="viewerShown" v-model:index="active" :reels="playable" />
 
       <div class="mt-7 flex flex-wrap items-center justify-between gap-6 border-t border-serag-ivory/15 pt-8">
         <div class="flex items-center gap-[18px]">
