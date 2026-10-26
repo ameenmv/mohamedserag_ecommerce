@@ -36,6 +36,7 @@ While any store number is still a placeholder, the admin overview shows a warnin
 | Large-COD deposit threshold and % (default 30,000 ج.م / 10%) | «الإعدادات» → عربون الدفع عند الاستلام | ✅ default set, owner may change |
 | WhatsApp message templates | «الإعدادات» → قوالب الرسائل | ✅ defaults set, owner may edit |
 | Trader videos on the home page («التجار بيتكلموا عننا»): six real Facebook reels are in; the owner can add, edit, reorder or remove them in the admin | Admin → Content → Home → Trader videos | ✅ |
+| Thmanyah font (Arabic text and headlines): Thmanyah support allowed website use (ticket 359363) on condition the files cannot be downloaded or hotlinked. The files are not in git: before building, copy `thmanyahsans-Regular.woff2`, `thmanyahsans-Bold.woff2` and `thmanyahserifdisplay-Black.woff2` into `apps/web/server/assets/fonts/thmanyah/` on the build machine (without them the site falls back to IBM Plex Sans Arabic and Lalezar). The app serves them only to its own pages | `apps/web/server/routes/fonts/thmanyah/[file].get.ts` | ⬜ copy to the build machine |
 | Home sections not yet editable in «محرر الموقع» («إزاي تطلب؟», «من المصنع لحد بيتك», «محتار تختار؟») and the about timeline/values: wording to review | `apps/web/i18n/locales/ar.json` → `store.home` (tell the developer) | ⬜ |
 | Bridal builder «جهّز بيتك»: switched off for launch (pages, links, admin screen hidden) | `FEATURES.bridal` in `apps/web/app/constants/features.ts` | ✅ decided: off for now |
 

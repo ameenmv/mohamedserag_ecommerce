@@ -7,7 +7,7 @@ const uploadsDir = process.env.UPLOADS_DIR || fileURLToPath(new URL('../../uploa
 
 // Thmanyah's files stay out of git (see assets/css/thmanyah.css). Without them, e.g. in CI, the
 // storefront keeps IBM Plex Sans Arabic and Lalezar, with no requests for missing files.
-const hasThmanyah = existsSync(fileURLToPath(new URL('./public/fonts/thmanyah/thmanyahsans-Regular.woff2', import.meta.url)))
+const hasThmanyah = existsSync(fileURLToPath(new URL('./server/assets/fonts/thmanyah/thmanyahsans-Regular.woff2', import.meta.url)))
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({

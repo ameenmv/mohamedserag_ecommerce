@@ -1,7 +1,10 @@
 /* Thmanyah (https://thmanyah.com) for the Arabic storefront. The font files are not in git (the
-   license forbids redistributing them): put the woff2 files in public/fonts/thmanyah/ on the
+   license forbids redistributing them): put the woff2 files in server/assets/fonts/thmanyah/ on the
    build machine. nuxt.config.ts only loads this file when they are there:
-   thmanyahsans-Regular, thmanyahsans-Bold and thmanyahserifdisplay-Black. */
+   thmanyahsans-Regular, thmanyahsans-Bold and thmanyahserifdisplay-Black.
+   Thmanyah support allowed website use (ticket 359363, 2026-10-26) on condition that the files
+   cannot be downloaded directly or hotlinked: server/routes/fonts/thmanyah/[file].get.ts serves
+   them only to this site's own pages (see server/utils/font-guard.ts). */
 /* Three files (~80 KB each) cover every weight the storefront uses: medium reads as regular,
    semibold up to black as bold. Headlines use the display Black, as on thmanyah.com. */
 @font-face {
