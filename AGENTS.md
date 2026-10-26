@@ -8,7 +8,7 @@ The Serag store (`mohamedserag_ecommerce`) is a modern e-commerce platform for h
 
 1. **Thin Pages**: Route pages under `apps/web/app/pages/` only declare routes, layouts, SEO/meta, and high-level component composition. Business logic lives in composables.
 2. **Single Responsibility**: One clear purpose per component, composable, or utility function. Avoid multi-purpose god files.
-3. **No Hardcoded UI Strings**: Every user-facing string must use i18n keys present in **both** `apps/web/i18n/locales/ar.json` and `en.json`.
+3. **No Hardcoded UI Strings**: Every user-facing string must use i18n keys present in **both** `apps/web/i18n/locales/ar.json` and `en.json`. Admin-panel strings (the `admin.*` keys) live in `apps/web/i18n/admin/ar.json` and `en.json` instead: they are loaded only on `/admin` routes (plugin `admin-i18n`) so the storefront's first load stays light. Never add `admin` keys to the `locales/` files.
 4. **Logical CSS for RTL**: Use logical spacing and borders (`ms-`, `pe-`, `start-`, `end-`, `border-s-`). Directional icons must use `rtl:` variants (e.g. `rtl:-scale-x-100`).
 5. **Shared Logic in `packages/shared`**: Schemas, enums, money math, normalizers, and domain rules live in `@serag/shared` with zero framework dependencies.
 6. **Zod at Every Boundary**: Validate API inputs (body, query, params), JSON columns, and client forms through Zod schemas.
