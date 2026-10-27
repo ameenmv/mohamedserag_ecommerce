@@ -6,6 +6,7 @@ import type {
 import {
   CATALOG_AVAILABILITY_FILTERS,
   CATALOG_SORTS,
+  PRICE_FILTER_MAX_EGP,
 } from '@serag/shared'
 
 export interface NumberRangeSpec {
@@ -100,11 +101,11 @@ export function parseListingQuery(
   // Prices in EGP (non-negative integers)
   const minPriceStr = getQueryString(routeQuery.minPrice)
   const minPrice =
-    minPriceStr && /^\d+$/.test(minPriceStr) ? parseInt(minPriceStr, 10) : undefined
+    minPriceStr && /^\d+$/.test(minPriceStr) ? Math.min(parseInt(minPriceStr, 10), PRICE_FILTER_MAX_EGP) : undefined
 
   const maxPriceStr = getQueryString(routeQuery.maxPrice)
   const maxPrice =
-    maxPriceStr && /^\d+$/.test(maxPriceStr) ? parseInt(maxPriceStr, 10) : undefined
+    maxPriceStr && /^\d+$/.test(maxPriceStr) ? Math.min(parseInt(maxPriceStr, 10), PRICE_FILTER_MAX_EGP) : undefined
 
   // Availability
   const rawAvailability = getQueryStringList(routeQuery.availability)

@@ -621,7 +621,7 @@
       "fullNotice": "قائمة المقارنة ممتلئة (3 منتجات)",
       "pageTitle": "مقارنة المنتجات",
       "title": "مقارنة المنتجات",
-      "subtitle": "قارن بين حتى 3 منتجات واعرف الفروق والمواصفات بالتفصيل",
+      "subtitle": "قارن بين حتى {max} منتجات واعرف الفروق والمواصفات بالتفصيل",
       "barAria": "شريط مقارنة المنتجات",
       "compareButton": "قارن ({count})",
       "clear": "مسح",
@@ -646,7 +646,16 @@
         "replaceButton": "استبدال",
         "replaceButtonAria": "استبدال {name}",
         "cancel": "إلغاء"
-      }
+      },
+      "barHint": "أضف منتج كمان عشان تقارن",
+      "barReady": "جاهز تقارن {count} منتجات",
+      "eyebrow": "{count} منتجات جنب بعض",
+      "allSpecs": "كل المواصفات",
+      "differencesOnly": "الاختلافات بس",
+      "viewAria": "طريقة عرض المواصفات",
+      "cheapest": "الأرخص",
+      "addAnother": "أضف منتج للمقارنة",
+      "viewProduct": "عرض {name}"
     },
     "availability": {
       "inStock": "متوفر",
@@ -696,7 +705,14 @@
         "tryDifferentSearch": "تأكد من كتابة الكلمة صح أو تصفح أشهر الأقسام.",
         "topCategories": "أشهر الأقسام",
         "askOnWhatsapp": "اسألنا على واتساب",
-        "whatsappPrefill": "السلام عليكم، بدور على منتج ومش لاقيه على الموقع 👋"
+        "whatsappPrefill": "السلام عليكم، بدور على منتج ومش لاقيه على الموقع 👋",
+        "failedTitle": "مش قادرين نحمّل المنتجات دلوقتي",
+        "failedDescription": "حصلت مشكلة مؤقتة. جرّب تاني بعد لحظات أو امسح الفلاتر.",
+        "retry": "جرّب تاني",
+        "tipsTitle": "جرّب كده",
+        "tipWiden": "وسّع نطاق السعر",
+        "tipRemove": "شيل فلتر أو اتنين",
+        "browseAll": "تصفح كل المنتجات"
       },
       "pagination": {
         "label": "صفحات المنتجات",
@@ -975,6 +991,10 @@
     },
     "empty": {
       "browseCategories": "أو ابدأ من قسم"
+    },
+    "paletteLab": {
+      "title": "جرّب ألوان الموقع",
+      "button": "الألوان"
     }
   },
   "validation": {

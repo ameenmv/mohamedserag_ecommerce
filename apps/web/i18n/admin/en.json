@@ -1709,6 +1709,10 @@
           "traders_contact": "Traders contact"
         }
       }
+    },
+    "form": {
+      "pickDate": "Pick a date",
+      "clearDate": "Clear date"
     }
   }
 }

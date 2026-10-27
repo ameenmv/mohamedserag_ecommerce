@@ -34,7 +34,7 @@ const localePath = useLocalePath()
           {{ t('store.compare.title') }}
         </h1>
         <p class="mt-1 text-xs sm:text-sm text-muted-foreground">
-          {{ t('store.compare.subtitle') }}
+          {{ t('store.compare.subtitle', { max: 3 }) }}
         </p>
       </div>
 

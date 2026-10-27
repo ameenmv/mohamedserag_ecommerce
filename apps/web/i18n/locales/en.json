@@ -621,7 +621,7 @@
       "fullNotice": "Compare list is full (3 products)",
       "pageTitle": "Compare Products",
       "title": "Compare Products",
-      "subtitle": "Compare up to 3 products side by side to see differences and details",
+      "subtitle": "Compare up to {max} products side by side to see differences and details",
       "barAria": "Product comparison bar",
       "compareButton": "Compare ({count})",
       "clear": "Clear",
@@ -646,7 +646,16 @@
         "replaceButton": "Replace",
         "replaceButtonAria": "Replace {name}",
         "cancel": "Cancel"
-      }
+      },
+      "barHint": "Add one more to compare",
+      "barReady": "Ready to compare {count} products",
+      "eyebrow": "{count} products side by side",
+      "allSpecs": "All specs",
+      "differencesOnly": "Differences only",
+      "viewAria": "How to show the specs",
+      "cheapest": "Lowest price",
+      "addAnother": "Add a product",
+      "viewProduct": "View {name}"
     },
     "availability": {
       "inStock": "In stock",
@@ -696,7 +705,14 @@
         "tryDifferentSearch": "Check your spelling or browse our popular categories.",
         "topCategories": "Popular categories",
         "askOnWhatsapp": "Ask us on WhatsApp",
-        "whatsappPrefill": "Hello, I am looking for a product on your store 👋"
+        "whatsappPrefill": "Hello, I am looking for a product on your store 👋",
+        "failedTitle": "We can't load the products right now",
+        "failedDescription": "A temporary problem. Try again in a moment or clear the filters.",
+        "retry": "Try again",
+        "tipsTitle": "Try this",
+        "tipWiden": "Widen the price range",
+        "tipRemove": "Remove a filter or two",
+        "browseAll": "Browse all products"
       },
       "pagination": {
         "label": "Product pages",
@@ -975,6 +991,10 @@
     },
     "empty": {
       "browseCategories": "Or start from a category"
+    },
+    "paletteLab": {
+      "title": "Try the site colours",
+      "button": "Colours"
     }
   },
   "validation": {

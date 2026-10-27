@@ -46,8 +46,9 @@ const emitDebounced = useDebounceFn(() => {
 }, 500)
 
 function applyChange() {
-  const minTrimmed = localMin.value.trim()
-  const maxTrimmed = localMax.value.trim()
+  // v-model on a number input hands back a number once the visitor types, not a string
+  const minTrimmed = String(localMin.value ?? '').trim()
+  const maxTrimmed = String(localMax.value ?? '').trim()
 
   const minParsed =
     minTrimmed !== '' && !Number.isNaN(Number(minTrimmed))
@@ -71,7 +72,7 @@ function applyChange() {
       <label :for="minId" class="mb-1 block text-xs font-semibold text-muted-foreground">
         {{ minLabel ?? t('store.listing.fromPrice') }}
       </label>
-      <div class="relative flex items-center">
+      <div class="relative flex items-center" dir="ltr">
         <input
           :id="minId"
           v-model="localMin"
@@ -79,7 +80,7 @@ function applyChange() {
           min="0"
           step="50"
           :placeholder="minPlaceholder"
-          class="num min-h-11 w-full rounded-xl border border-input bg-background ps-3 pe-8 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          class="num min-h-11 w-full rounded-xl border border-input bg-background ps-3 pe-10 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           @input="emitDebounced"
           @change="applyChange"
         >
@@ -99,7 +100,7 @@ function applyChange() {
       <label :for="maxId" class="mb-1 block text-xs font-semibold text-muted-foreground">
         {{ maxLabel ?? t('store.listing.upToPrice') }}
       </label>
-      <div class="relative flex items-center">
+      <div class="relative flex items-center" dir="ltr">
         <input
           :id="maxId"
           v-model="localMax"
@@ -107,7 +108,7 @@ function applyChange() {
           min="0"
           step="50"
           :placeholder="maxPlaceholder"
-          class="num min-h-11 w-full rounded-xl border border-input bg-background ps-3 pe-8 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          class="num min-h-11 w-full rounded-xl border border-input bg-background ps-3 pe-10 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           @input="emitDebounced"
           @change="applyChange"
         >

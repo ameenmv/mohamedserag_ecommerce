@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { MessageCircle, PackageSearch, RotateCcw } from '@lucide/vue'
-import { waLink } from '@serag/shared'
+import { ArrowUpRight, RotateCcw } from '@lucide/vue'
 
-const props = defineProps<{
+defineProps<{
   q?: string
+  /** The products could not be loaded at all (not "no match") */
+  failed?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -12,102 +13,98 @@ const emit = defineEmits<{
 
 const { t } = useI18n()
 const localePath = useLocalePath()
-const storeApi = useStoreApi()
-const settings = useStoreSettings()
 
-// Fetch top categories for discovery when no results match
-const { data: categoryTree } = await useAsyncData('listing:empty:categories', () =>
-  storeApi.categories(),
-)
+const tips = computed(() => [
+  t('store.listing.empty.tipWiden'),
+  t('store.listing.empty.tipRemove'),
+])
 
-const topCategories = computed(() => {
-  return (categoryTree.value ?? [])
-    .filter((c) => c.productCount > 0)
-    .slice(0, 6)
-})
-
-const whatsappPrefill = computed(() => {
-  return props.q
-    ? `${t('store.listing.empty.whatsappPrefill')} ("${props.q}")`
-    : t('store.listing.empty.whatsappPrefill')
-})
-
-const whatsappUrl = computed(() =>
-  settings.whatsapp ? waLink(settings.whatsapp, whatsappPrefill.value) : '',
-)
+function retry(): void {
+  reloadNuxtApp({ persistState: false })
+}
 </script>
 
 <template>
-  <div
-    class="flex flex-col items-center justify-center rounded-3xl border border-dashed border-border/80 bg-card/60 px-6 py-12 text-center backdrop-blur-xs sm:py-16"
+  <section
+    class="relative overflow-hidden rounded-[28px] border border-border bg-card px-5 py-12 text-center sm:px-10 sm:py-16"
+    role="status"
   >
+    <!-- Soft brand glow behind the illustration -->
     <div
-      class="mb-4 flex size-16 items-center justify-center rounded-2xl bg-secondary text-muted-foreground"
+      class="pointer-events-none absolute -top-24 start-1/2 size-72 -translate-x-1/2 rounded-full bg-serag-gold/15 blur-3xl rtl:translate-x-1/2"
       aria-hidden="true"
-    >
-      <PackageSearch class="size-8 stroke-[1.5]" />
+    />
+
+    <div class="relative mx-auto mb-6 size-36 sm:size-40" aria-hidden="true">
+      <svg viewBox="0 0 160 160" fill="none" class="size-full text-primary">
+        <circle cx="80" cy="80" r="74" class="stroke-border" stroke-width="1.5" stroke-dasharray="3 7" stroke-linecap="round" />
+        <circle cx="80" cy="80" r="54" class="fill-secondary" />
+        <!-- open box -->
+        <g class="animate-floaty">
+          <path d="M44 74 80 58l36 16v38L80 128l-36-16V74Z" class="fill-card stroke-current" stroke-width="3" stroke-linejoin="round" />
+          <path d="M44 74 80 90l36-16M80 90v38" class="stroke-current" stroke-width="3" stroke-linejoin="round" />
+          <path d="m62 66 36 16" class="stroke-serag-gold" stroke-width="3" stroke-linecap="round" />
+        </g>
+        <!-- magnifier -->
+        <g class="stroke-serag-gold" stroke-width="5" stroke-linecap="round">
+          <circle cx="112" cy="48" r="16" class="fill-card" />
+          <path d="m124 60 12 12" />
+          <path d="M106 48h12" stroke-width="3.5" />
+        </g>
+      </svg>
     </div>
 
-    <!-- Empty state heading -->
-    <h3 class="font-display text-2xl text-foreground sm:text-3xl">
-      <span v-if="q">
-        {{ t('store.listing.empty.noSearchResults', { query: q }) }}
-      </span>
-      <span v-else>
-        {{ t('store.listing.empty.noFilteredProducts') }}
-      </span>
+    <h3 class="font-display relative text-2xl text-foreground sm:text-3xl">
+      <template v-if="failed">{{ t('store.listing.empty.failedTitle') }}</template>
+      <template v-else-if="q">{{ t('store.listing.empty.noSearchResults', { query: q }) }}</template>
+      <template v-else>{{ t('store.listing.empty.noFilteredProducts') }}</template>
     </h3>
 
-    <!-- Helper explanation -->
-    <p class="mt-2 max-w-md text-sm text-muted-foreground sm:text-base">
-      <span v-if="q">
-        {{ t('store.listing.empty.tryDifferentSearch') }}
-      </span>
-      <span v-else>
-        {{ t('store.listing.empty.tryDifferentFilters') }}
-      </span>
+    <p class="relative mx-auto mt-2 max-w-md text-sm text-muted-foreground sm:text-base">
+      <template v-if="failed">{{ t('store.listing.empty.failedDescription') }}</template>
+      <template v-else-if="q">{{ t('store.listing.empty.tryDifferentSearch') }}</template>
+      <template v-else>{{ t('store.listing.empty.tryDifferentFilters') }}</template>
     </p>
 
-    <!-- Clear filters CTA (shown when no q or filtered) -->
-    <div v-if="!q" class="mt-5">
+    <!-- Tips -->
+    <ul v-if="!failed" class="relative mt-5 flex flex-wrap justify-center gap-2" :aria-label="t('store.listing.empty.tipsTitle')">
+      <li
+        v-for="tip in tips"
+        :key="tip"
+        class="rounded-full bg-secondary px-3.5 py-1.5 text-xs font-semibold text-muted-foreground"
+      >
+        {{ tip }}
+      </li>
+    </ul>
+
+    <!-- Actions -->
+    <div class="relative mt-7 flex flex-wrap items-center justify-center gap-3">
       <button
+        v-if="failed"
         type="button"
-        class="inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-5 text-sm font-bold text-primary-foreground shadow-xs transition-colors hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-reduce:transition-none"
-        @click="emit('clearFilters')"
+        class="inline-flex min-h-12 items-center gap-2 rounded-full bg-primary px-6 text-sm font-bold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-reduce:transition-none"
+        @click="retry"
       >
         <RotateCcw class="size-4" aria-hidden="true" />
-        <span>{{ t('store.listing.clearFilters') }}</span>
+        {{ t('store.listing.empty.retry') }}
       </button>
-    </div>
-
-    <!-- Popular top category pills -->
-    <div v-if="topCategories.length > 0" class="mt-8 flex flex-col items-center gap-3">
-      <span class="text-xs font-bold text-muted-foreground">
-        {{ t('store.listing.empty.topCategories') }}
-      </span>
-      <div class="flex flex-wrap justify-center gap-2">
-        <NuxtLink
-          v-for="cat in topCategories"
-          :key="cat.id"
-          :to="localePath(`/c/${cat.slug}`)"
-          class="inline-flex min-h-9 items-center rounded-full border border-border bg-card px-4 text-xs font-semibold text-foreground transition-colors hover:border-serag-gold hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-reduce:transition-none"
-        >
-          {{ cat.name }}
-        </NuxtLink>
-      </div>
-    </div>
-
-    <!-- Ask us on WhatsApp button -->
-    <div v-if="whatsappUrl" class="mt-6">
-      <a
-        :href="whatsappUrl"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="inline-flex min-h-11 items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-5 text-xs font-bold text-emerald-700 transition-colors hover:bg-emerald-500/20 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:text-sm dark:text-emerald-400 motion-reduce:transition-none"
+      <button
+        v-if="!q"
+        type="button"
+        class="inline-flex min-h-12 items-center gap-2 rounded-full px-6 text-sm font-bold shadow-sm transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-reduce:transition-none"
+        :class="failed ? 'border border-border bg-card text-foreground hover:bg-secondary' : 'bg-primary text-primary-foreground hover:bg-primary/90'"
+        @click="emit('clearFilters')"
       >
-        <MessageCircle class="size-4 shrink-0" aria-hidden="true" />
-        <span>{{ t('store.listing.empty.askOnWhatsapp') }}</span>
-      </a>
+        <RotateCcw v-if="!failed" class="size-4" aria-hidden="true" />
+        {{ t('store.listing.clearFilters') }}
+      </button>
+      <NuxtLink
+        :to="localePath('/shop')"
+        class="inline-flex min-h-12 items-center gap-1.5 rounded-full border border-border bg-card px-6 text-sm font-bold text-foreground transition-colors hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-reduce:transition-none"
+      >
+        {{ t('store.listing.empty.browseAll') }}
+        <ArrowUpRight class="size-4 rtl:-scale-x-100" aria-hidden="true" />
+      </NuxtLink>
     </div>
-  </div>
+  </section>
 </template>

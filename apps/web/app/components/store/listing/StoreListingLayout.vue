@@ -87,9 +87,10 @@ function handleSortChange(sort: CatalogSort) {
         />
 
         <!-- Empty state when no products match -->
-        <div v-if="data && data.items.length === 0 && !pending">
+        <div v-if="!pending && (!data || data.items.length === 0)">
           <StoreListingEmpty
             :q="filters.q"
+            :failed="!data"
             @clear-filters="emit('clearFilters', false)"
           />
         </div>
