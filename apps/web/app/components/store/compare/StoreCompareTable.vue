@@ -236,8 +236,7 @@ function getRowLabel(row: { key: string; label: string; type: string }): string 
                   row.different ? 'border-s-4 border-s-serag-gold' : '',
                 ]"
               >
-                <span>{{ getRowLabel(row) }}</span>
-                <span v-if="row.different" class="sr-only">{{ t('store.compare.differentValue') }}</span>
+                {{ getRowLabel(row) }}
               </th>
 
               <td
@@ -245,6 +244,8 @@ function getRowLabel(row: { key: string; label: string; type: string }): string 
                 :key="idx"
                 class="border-b border-e border-border p-3.5 text-foreground sm:p-4"
               >
+                <!-- Kept out of the row header so its accessible name stays the row label -->
+                <span v-if="row.different && idx === 0" class="sr-only">{{ t('store.compare.differentValue') }}: </span>
                 <span
                   v-if="row.type === 'price'"
                   :class="[
