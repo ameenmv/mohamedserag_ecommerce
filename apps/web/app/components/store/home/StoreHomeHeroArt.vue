@@ -86,7 +86,7 @@ const { t } = useI18n()
         <defs>
           <path id="hero-seal-ring" d="M75 75 m-54 0 a54 54 0 1 1 108 0 a54 54 0 1 1 -108 0" />
         </defs>
-        <text font-family="Outfit, sans-serif" font-weight="700" font-size="13" letter-spacing="4.2" fill="#D2C27A">
+        <text style="font-family: var(--font-num)" font-weight="700" font-size="13" letter-spacing="4.2" fill="#D2C27A">
           <textPath href="#hero-seal-ring">MOHAMED SERAG • SINCE 1972 • TRUSTED •</textPath>
         </text>
       </svg>

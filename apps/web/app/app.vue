@@ -15,7 +15,17 @@ useHead({
       tagPosition: 'head',
       innerHTML: "try{if(localStorage.getItem('serag-theme')==='dark')document.documentElement.classList.add('dark')}catch(e){}",
     },
+    {
+      // Web fonts start loading only after the first paint (the splash covers the swap). Until
+      // then text uses system fonts: see `:root:not(.fonts-ready)` in main.css.
+      key: 'fonts-ready',
+      tagPosition: 'head',
+      innerHTML:
+        "requestAnimationFrame(function(){requestAnimationFrame(function(){setTimeout(function(){document.documentElement.classList.add('fonts-ready')},100)})})",
+    },
   ],
+  // Without JavaScript the class is never added: use the web fonts straight away
+  noscript: [{ innerHTML: '<style>:root:not(.fonts-ready){--font-display:initial;--font-sans:initial;--font-num:initial}</style>' }],
 })
 </script>
 

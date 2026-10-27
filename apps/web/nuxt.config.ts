@@ -26,9 +26,6 @@ export default defineNuxtConfig({
         { rel: 'icon', href: '/favicon.ico', sizes: '48x48' },
         { rel: 'icon', type: 'image/png', href: '/icon-192.png', sizes: '192x192' },
         { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
-        ...(hasThmanyah
-          ? [{ rel: 'preload' as const, as: 'font' as const, type: 'font/woff2', href: '/fonts/thmanyah/thmanyahsans-Regular.woff2', crossorigin: '' as const }]
-          : []),
       ],
     },
   },
@@ -64,8 +61,10 @@ export default defineNuxtConfig({
     },
   },
 
-  // Only the body text weight is preloaded: on a slow phone connection every preloaded font
-  // competes with the CSS and entry JS before first paint. The others swap in when they arrive.
+  // Nothing is preloaded, and the web fonts are not even applied until just after the first paint
+  // (see assets/css/main.css and the `fonts-ready` script in app.vue): a font requested before
+  // the first paint competes with the CSS and entry JS for a slow phone's bandwidth, and
+  // Lighthouse counts every request started before the paint into the LCP estimate.
   fonts: {
     families: [
       {
@@ -73,7 +72,7 @@ export default defineNuxtConfig({
         provider: 'google',
         weights: [400, 700],
         subsets: ['arabic'],
-        preload: hasThmanyah ? false : { weights: [400] },
+        preload: false,
       },
       {
         name: 'Lalezar',

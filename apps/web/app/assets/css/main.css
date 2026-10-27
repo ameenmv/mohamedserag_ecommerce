@@ -9,6 +9,17 @@
   --font-num: 'Plus Jakarta Sans', system-ui, sans-serif;
 }
 
+/* The web fonts are applied only once `fonts-ready` is on <html> (an inline head script adds it
+   right after the first paint). Before it the stacks are the system fonts, so no font is requested
+   ahead of the first paint; the splash screen covers the swap. Specificity beats the token and
+   per-language stacks, whichever file defines them. */
+:root:not(.fonts-ready):lang(ar),
+:root:not(.fonts-ready):lang(en) {
+  --font-display: system-ui, sans-serif;
+  --font-sans: system-ui, sans-serif;
+  --font-num: system-ui, sans-serif;
+}
+
 @layer base {
   * { @apply border-border outline-ring/50; }
   body { @apply bg-background text-foreground font-sans antialiased; }
