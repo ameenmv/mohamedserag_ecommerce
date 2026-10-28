@@ -49,7 +49,7 @@ function submit(): void {
     <button
       type="submit"
       :aria-label="t('common.search')"
-      class="flex size-11 flex-none items-center justify-center rounded-full bg-serag-green text-[#E8DFB0] transition-colors hover:bg-serag-deep focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+      class="flex size-11 flex-none items-center justify-center rounded-full bg-serag-green text-serag-ivory transition-colors hover:bg-serag-deep focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
     >
       <Search class="size-5" aria-hidden="true" />
     </button>

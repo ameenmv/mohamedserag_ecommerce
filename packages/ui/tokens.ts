@@ -4,8 +4,7 @@
 export const brand = {
   night: '#141412',
   deep: '#22211F',
-  green: '#5E8A38',
-  'green-ink': '#4B7B16',
+  green: '#557840',
   gold: '#A68A64',
   'gold-hi': '#C9B189',
   'gold-ink': '#66522F',

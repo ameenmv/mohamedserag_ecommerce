@@ -44,7 +44,7 @@ const headingId = useId()
         <!-- Showroom arch -->
         <div class="relative min-h-[400px] w-full flex-[1_1_440px] sm:min-h-[460px]" aria-hidden="true">
           <div
-            class="absolute inset-y-0 start-0 end-[12%] flex flex-col items-center justify-center gap-3.5 rounded-[200px_200px_40px_40px] border-2 border-serag-gold bg-[radial-gradient(circle_at_50%_25%,rgba(210,194,122,.28),transparent_60%),linear-gradient(160deg,#22211F_0%,#5E8A38_100%)] p-8 text-center text-serag-ivory shadow-[0_36px_64px_-28px_rgba(20,32,26,.55)]"
+            class="absolute inset-y-0 start-0 end-[12%] flex flex-col items-center justify-center gap-3.5 rounded-[200px_200px_40px_40px] border-2 border-serag-gold bg-[radial-gradient(circle_at_50%_25%,rgba(210,194,122,.28),transparent_60%),linear-gradient(160deg,#22211F_0%,#557840_100%)] p-8 text-center text-serag-ivory shadow-[0_36px_64px_-28px_rgba(20,32,26,.55)]"
           >
             <svg viewBox="0 0 64 64" class="size-[76px] text-serag-gold-hi" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
               <path d="M8 26L32 10l24 16v28H8z M4 26h56M24 54V36h16v18M16 34h4M44 34h4" />
@@ -53,7 +53,7 @@ const headingId = useId()
             <div class="max-w-[260px] text-[15px] leading-[1.7] text-[#D8D3C7]">{{ t('store.home.about.showroomNote') }}</div>
           </div>
           <div class="absolute start-0 -bottom-5 rounded-[var(--radius-card)] border-[1.5px] border-serag-gold-hi/40 bg-serag-green px-7 py-[22px] text-serag-ivory shadow-[0_30px_50px_-22px_rgba(20,32,26,.55)]">
-            <div class="num text-[54px] leading-none font-extrabold text-serag-gold-hi">+50</div>
+            <div class="num text-[54px] leading-none font-extrabold text-serag-ivory">+50</div>
             <div class="mt-1.5 text-[15px]">{{ t('store.home.about.yearsBadge') }}</div>
           </div>
         </div>
@@ -103,7 +103,7 @@ const headingId = useId()
           <div
             :class="[
               'num text-[44px] leading-none font-extrabold',
-              m.accent === 'dark' ? 'text-serag-gold-hi' : m.accent === 'green' ? 'text-serag-green' : 'text-serag-gold-ink',
+              m.accent === 'dark' ? 'text-serag-ivory' : m.accent === 'green' ? 'text-serag-green' : 'text-serag-gold-ink',
             ]"
           >
             {{ m.year }}

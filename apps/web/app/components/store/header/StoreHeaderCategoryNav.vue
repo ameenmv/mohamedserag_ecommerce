@@ -15,13 +15,13 @@ const linkClass =
 </script>
 
 <template>
-  <nav :aria-label="t('store.header.categoriesNav')" class="hidden bg-serag-green text-[#F1EBD0] md:block">
+  <nav :aria-label="t('store.header.categoriesNav')" class="hidden bg-serag-green text-serag-ivory md:block">
     <div class="mx-auto flex max-w-7xl items-center gap-1.5 overflow-x-auto px-4 scrollbar-none sm:px-6 lg:px-10">
       <NuxtLink
         :to="localePath('/shop')"
         class="flex min-h-12 items-center gap-2.5 bg-serag-deep px-5 font-bold whitespace-nowrap focus-visible:ring-2 focus-visible:ring-serag-gold focus-visible:outline-none focus-visible:ring-inset"
       >
-        <Menu class="size-[18px] text-serag-gold-hi" aria-hidden="true" />
+        <Menu class="size-[18px] text-serag-ivory" aria-hidden="true" />
         {{ t('store.header.allCategories') }}
       </NuxtLink>
       <NuxtLink
@@ -32,10 +32,10 @@ const linkClass =
       >
         {{ category.name }}
       </NuxtLink>
-      <NuxtLink :to="localePath('/offers')" :class="[linkClass, 'font-bold text-[#FFB59C]']">
+      <NuxtLink :to="localePath('/offers')" :class="[linkClass, 'font-bold text-serag-ivory']">
         {{ t('store.header.flashDeals') }}
       </NuxtLink>
-      <NuxtLink :to="localePath('/traders')" :class="[linkClass, 'font-bold text-serag-gold-hi']">
+      <NuxtLink :to="localePath('/traders')" :class="[linkClass, 'font-bold text-serag-ivory']">
         {{ t('store.header.tradersWholesale') }}
       </NuxtLink>
       <NuxtLink :to="localePath({ path: '/', hash: '#traders-reviews' })" :class="[linkClass, 'font-medium']">

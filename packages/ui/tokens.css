@@ -5,8 +5,7 @@
 @theme {
   --color-serag-night: #141412;
   --color-serag-deep: #22211F;
-  --color-serag-green: #5E8A38; /* the logo's green, softened */
-  --color-serag-green-ink: #4B7B16; /* the same green deep enough for text on beige (4.5:1) */
+  --color-serag-green: #557840; /* the logo's green, muted; ivory text on it is 4.8:1 */
   --color-serag-gold: #A68A64;
   --color-serag-gold-hi: #C9B189;
   --color-serag-gold-ink: #66522F;
@@ -43,7 +42,7 @@
   --input: #DAD3C2;
   --ring: #A68A64;
   --radius: 14px;
-  --chart-1: #5E8A38;
+  --chart-1: #557840;
   --chart-2: #A68A64;
   --chart-3: #E4572E;
   --chart-4: #22211F;

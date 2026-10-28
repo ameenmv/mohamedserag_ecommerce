@@ -40,7 +40,7 @@ const headingId = useId()
   <section class="bg-serag-ivory" :aria-labelledby="headingId">
     <div class="mx-auto flex max-w-7xl flex-wrap items-center gap-16 px-4 py-16 sm:px-6 lg:px-10 lg:py-[104px]">
       <div class="flex min-w-0 flex-[1_1_480px] flex-col gap-[26px]">
-        <span class="self-start rounded-full bg-serag-green px-[18px] py-[7px] text-sm font-bold text-[#E8DFB0]">
+        <span class="self-start rounded-full bg-serag-green px-[18px] py-[7px] text-sm font-bold text-serag-ivory">
           {{ content.badge }}
         </span>
         <h2 :id="headingId" class="font-display text-[clamp(42px,5.5vw,76px)] leading-none text-serag-green">
@@ -51,7 +51,7 @@ const headingId = useId()
         </p>
         <ul class="flex flex-col gap-4 text-lg">
           <li v-for="point in content.points" :key="point" class="flex items-center gap-3.5">
-            <span class="flex size-[34px] flex-none items-center justify-center rounded-full bg-serag-green text-serag-gold-hi" aria-hidden="true">
+            <span class="flex size-[34px] flex-none items-center justify-center rounded-full bg-serag-green text-serag-ivory" aria-hidden="true">
               <Check class="size-[18px]" :stroke-width="2.4" />
             </span>
             {{ point }}
@@ -62,7 +62,7 @@ const headingId = useId()
             :to="cta.to"
             :target="cta.external ? '_blank' : undefined"
             :rel="cta.external ? 'noopener noreferrer' : undefined"
-            class="inline-flex min-h-11 items-center gap-3 rounded-full bg-serag-green px-[34px] py-4 text-lg font-bold text-[#F1EBD0] transition hover:-translate-y-0.5 hover:bg-serag-deep focus-visible:ring-2 focus-visible:ring-serag-gold focus-visible:outline-none motion-reduce:transition-none"
+            class="inline-flex min-h-11 items-center gap-3 rounded-full bg-serag-green px-[34px] py-4 text-lg font-bold text-serag-ivory transition hover:-translate-y-0.5 hover:bg-serag-deep focus-visible:ring-2 focus-visible:ring-serag-gold focus-visible:outline-none motion-reduce:transition-none"
           >
             {{ cta.label }}
           </NuxtLink>

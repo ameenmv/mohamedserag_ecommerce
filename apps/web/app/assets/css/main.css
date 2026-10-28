@@ -244,8 +244,9 @@
 @keyframes compare-pill-in { from { opacity: 0; transform: translateY(14px) scale(.96); } }
 @media (prefers-reduced-motion: reduce) { .compare-pill { animation: none; } }
 
-/* Green text takes the deeper shade so small text stays readable on the beige surfaces. */
-.text-serag-green { color: var(--color-serag-green-ink); }
-
 /* Whites lean beige: text-white is the ivory. */
 .text-white { color: var(--color-serag-ivory); }
+
+/* Green text on a pale green tint (badges, chips) needs a deeper green than on plain surfaces to
+   keep 4.5:1; the dark theme has its own colours for these. */
+:root:not(.dark) .text-serag-green[class*='bg-serag-green/'] { color: #3F5B2D; }

@@ -12,7 +12,7 @@ const props = defineProps<{
 }>()
 
 const TONES = [
-  { cover: 'bg-serag-green text-serag-gold-hi', tag: 'bg-[#EAF2DC] text-serag-green' },
+  { cover: 'bg-serag-green text-serag-ivory', tag: 'bg-[#EAF2DC] text-serag-green' },
   { cover: 'bg-serag-gold text-serag-ink', tag: 'bg-[#F4EFD6] text-serag-gold-ink' },
   { cover: 'bg-serag-deep text-serag-gold-hi', tag: 'bg-[#EAF2DC] text-serag-green' },
 ] as const

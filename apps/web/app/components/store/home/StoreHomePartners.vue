@@ -39,7 +39,7 @@ const headingId = useId()
         </div>
         <div class="relative mx-auto size-[180px] flex-none" aria-hidden="true">
           <svg viewBox="0 0 180 180" class="size-full">
-            <circle cx="90" cy="90" r="86" fill="#5E8A38" stroke="#A68A64" stroke-width="2" />
+            <circle cx="90" cy="90" r="86" fill="#557840" stroke="#A68A64" stroke-width="2" />
             <circle cx="90" cy="90" r="70" fill="none" stroke="rgba(210,194,122,.5)" stroke-width="1.5" stroke-dasharray="4 6" class="animate-spin-slow origin-center" />
           </svg>
           <div class="absolute inset-0 flex flex-col items-center justify-center text-serag-gold-hi">

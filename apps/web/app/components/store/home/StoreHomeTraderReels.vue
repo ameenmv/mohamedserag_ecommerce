@@ -24,7 +24,7 @@ function scrollCards(direction: 1 | -1): void {
 }
 
 /** Card backgrounds cycle through the brand greens and golds. */
-const TINTS = ['#5E8A38', '#66522F', '#4B7B16', '#7C6A4B'] as const
+const TINTS = ['#557840', '#66522F', '#4B7B16', '#7C6A4B'] as const
 const reels = computed(() =>
   props.content.items.map((item, index) => ({
     ...item,
