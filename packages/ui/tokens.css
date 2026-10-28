@@ -3,15 +3,16 @@
    ========================================================= */
 
 @theme {
-  --color-serag-night: #0E1A13;
-  --color-serag-deep: #16291E;
-  --color-serag-green: #2A4D38;
-  --color-serag-gold: #B5A45C;
-  --color-serag-gold-hi: #D2C27A;
-  --color-serag-gold-ink: #6F6329;
-  --color-serag-cream: #F4F1E6;
-  --color-serag-ivory: #FAF7EE;
-  --color-serag-ink: #14201A;
+  --color-serag-night: #141412;
+  --color-serag-deep: #22211F;
+  --color-serag-green: #5E8A38; /* the logo's green, softened */
+  --color-serag-green-ink: #4B7B16; /* the same green deep enough for text on beige (4.5:1) */
+  --color-serag-gold: #A68A64;
+  --color-serag-gold-hi: #C9B189;
+  --color-serag-gold-ink: #66522F;
+  --color-serag-cream: #F6F2EA;
+  --color-serag-ivory: #FBF8F1;
+  --color-serag-ink: #1B1A18;
   --color-serag-hot: #E4572E;
 
   --font-display: 'Lalezar', 'IBM Plex Sans Arabic', sans-serif;
@@ -23,73 +24,73 @@
 }
 
 :root {
-  --background: #F4F1E6;
-  --foreground: #14201A;
-  --card: #FFFFFF;
-  --card-foreground: #14201A;
-  --popover: #FFFFFF;
-  --popover-foreground: #14201A;
-  --primary: #2A4D38;
-  --primary-foreground: #FAF7EE;
-  --secondary: #F1ECDD;
-  --secondary-foreground: #14201A;
-  --muted: #F1ECDD;
-  --muted-foreground: #5C6660;
-  --accent: #B5A45C;
-  --accent-foreground: #14201A;
+  --background: #F6F2EA;
+  --foreground: #1B1A18;
+  --card: #FDFBF6;
+  --card-foreground: #1B1A18;
+  --popover: #FDFBF6;
+  --popover-foreground: #1B1A18;
+  --primary: #2E2D2B;
+  --primary-foreground: #FBF8F1;
+  --secondary: #ECE7DC;
+  --secondary-foreground: #1B1A18;
+  --muted: #ECE7DC;
+  --muted-foreground: #66625B;
+  --accent: #A68A64;
+  --accent-foreground: #1B1A18;
   --destructive: #A2381A;
-  --border: #E7E0C8;
-  --input: #E1DAC0;
-  --ring: #B5A45C;
+  --border: #E2DCCE;
+  --input: #DAD3C2;
+  --ring: #A68A64;
   --radius: 14px;
-  --chart-1: #2A4D38;
-  --chart-2: #B5A45C;
+  --chart-1: #5E8A38;
+  --chart-2: #A68A64;
   --chart-3: #E4572E;
-  --chart-4: #16291E;
-  --chart-5: #D2C27A;
-  --sidebar: #0E1A13;
-  --sidebar-foreground: #C9D5C6;
-  --sidebar-primary: #B5A45C;
-  --sidebar-primary-foreground: #0E1A13;
-  --sidebar-accent: #16291E;
-  --sidebar-accent-foreground: #FAF7EE;
-  --sidebar-border: #16291E;
-  --sidebar-ring: #B5A45C;
+  --chart-4: #22211F;
+  --chart-5: #C9B189;
+  --sidebar: #141412;
+  --sidebar-foreground: #D8D3C7;
+  --sidebar-primary: #A68A64;
+  --sidebar-primary-foreground: #141412;
+  --sidebar-accent: #22211F;
+  --sidebar-accent-foreground: #FBF8F1;
+  --sidebar-border: #22211F;
+  --sidebar-ring: #A68A64;
 }
 
 .dark {
-  --background: #0D1510;
+  --background: #121211;
   --foreground: #EEEBE1;
-  --card: #141F18;
+  --card: #1A1917;
   --card-foreground: #EEEBE1;
-  --popover: #141F18;
+  --popover: #1A1917;
   --popover-foreground: #EEEBE1;
-  --primary: #3D6A50;
-  --primary-foreground: #FAF7EE;
-  --secondary: #213026;
+  --primary: #7A766C;
+  --primary-foreground: #FBF8F1;
+  --secondary: #262522;
   --secondary-foreground: #EEEBE1;
-  --muted: #1A271E;
-  --muted-foreground: #97A39A;
-  --accent: #B5A45C;
-  --accent-foreground: #14201A;
+  --muted: #1F1E1C;
+  --muted-foreground: #A29D92;
+  --accent: #A68A64;
+  --accent-foreground: #1B1A18;
   --destructive: #F08A6A;
-  --border: #26362B;
-  --input: #2F4235;
-  --ring: #D2C27A;
+  --border: #2D2B27;
+  --input: #36332E;
+  --ring: #C9B189;
   --radius: 14px;
-  --chart-1: #3D6A50;
-  --chart-2: #D2C27A;
+  --chart-1: #8CC63F;
+  --chart-2: #C9B189;
   --chart-3: #E4572E;
-  --chart-4: #B5A45C;
-  --chart-5: #8FD6A8;
-  --sidebar: #0E1A13;
-  --sidebar-foreground: #C9D5C6;
-  --sidebar-primary: #B5A45C;
-  --sidebar-primary-foreground: #0E1A13;
-  --sidebar-accent: #16291E;
-  --sidebar-accent-foreground: #FAF7EE;
-  --sidebar-border: #1F2D24;
-  --sidebar-ring: #D2C27A;
+  --chart-4: #A68A64;
+  --chart-5: #B9D98B;
+  --sidebar: #141412;
+  --sidebar-foreground: #D8D3C7;
+  --sidebar-primary: #A68A64;
+  --sidebar-primary-foreground: #141412;
+  --sidebar-accent: #22211F;
+  --sidebar-accent-foreground: #FBF8F1;
+  --sidebar-border: #26241F;
+  --sidebar-ring: #C9B189;
 }
 
 @theme inline {

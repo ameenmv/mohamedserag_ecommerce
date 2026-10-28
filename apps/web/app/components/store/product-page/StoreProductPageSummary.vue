@@ -159,7 +159,7 @@ function scrollToReviews(): void {
           <!-- Saving line «وفّر {amount}» -->
           <span
             v-if="savingText"
-            class="num inline-flex items-center rounded-full bg-white px-2.5 py-0.5 text-xs font-bold text-emerald-800 border border-emerald-600/25 dark:bg-emerald-950/40 dark:text-emerald-400"
+            class="num inline-flex items-center rounded-full bg-card px-2.5 py-0.5 text-xs font-bold text-emerald-800 border border-emerald-600/25 dark:bg-emerald-950/40 dark:text-emerald-400"
           >
             {{ t('store.productPage.saving', { amount: savingText }) }}
           </span>

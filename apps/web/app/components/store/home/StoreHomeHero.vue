@@ -84,7 +84,7 @@ const title = computed(() => splitHighlight(props.content.title))
           {{ title.lead }}<template v-if="title.highlight"><br><span class="text-serag-gold-hi">{{ title.highlight }}</span></template>
         </h1>
 
-        <p class="max-w-[560px] text-lg leading-[1.8] text-[#D9E2D6] sm:text-[clamp(18px,2vw,22px)]">
+        <p class="max-w-[560px] text-lg leading-[1.8] text-[#D8D3C7] sm:text-[clamp(18px,2vw,22px)]">
           {{ content.subtitle }}
         </p>
 
@@ -111,7 +111,7 @@ const title = computed(() => splitHighlight(props.content.title))
 
         <dl class="mt-3 flex flex-wrap gap-5 border-t border-serag-ivory/15 pt-7 sm:gap-9 lg:mt-1 lg:pt-5">
           <div v-for="stat in content.stats" :key="stat.label" class="flex flex-col-reverse gap-1.5">
-            <dt class="text-sm text-[#B9C7B6]">{{ stat.label }}</dt>
+            <dt class="text-sm text-[#C4BEB0]">{{ stat.label }}</dt>
             <dd class="num text-[28px] leading-none font-extrabold text-serag-gold-hi sm:text-[40px]">
               {{ stat.value }}
             </dd>
@@ -124,7 +124,7 @@ const title = computed(() => splitHighlight(props.content.title))
   </section>
 
   <!-- Gold marquee strip under the hero -->
-  <div class="overflow-hidden border-y border-[#8B7D3C] bg-serag-gold text-serag-ink" dir="ltr" aria-hidden="true">
+  <div class="overflow-hidden border-y border-[#7C6A4B] bg-serag-gold text-serag-ink" dir="ltr" aria-hidden="true">
     <div class="animate-marquee flex w-max py-3.5 font-display text-[22px] sm:text-[26px]">
       <div v-for="copy in 2" :key="copy" class="flex shrink-0 gap-11 px-[22px] whitespace-nowrap">
         <template v-for="n in 2" :key="n">

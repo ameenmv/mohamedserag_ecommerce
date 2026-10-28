@@ -35,7 +35,7 @@ const { t } = useI18n()
     <!-- Fridge -->
     <div
       v-else
-      class="animate-floaty absolute top-[8%] end-[31%] flex h-[76%] w-[36%] flex-col items-center justify-center gap-4 rounded-[34px] border border-serag-gold-hi/55 bg-gradient-to-b from-[#3D6B4F] to-[#1B3526] text-serag-gold-hi shadow-[0_40px_70px_-24px_rgba(0,0,0,0.65)] [animation-delay:-1s]"
+      class="animate-floaty absolute top-[8%] end-[31%] flex h-[76%] w-[36%] flex-col items-center justify-center gap-4 rounded-[34px] border border-serag-gold-hi/55 bg-gradient-to-b from-[#4F7F1B] to-[#1B3526] text-serag-gold-hi shadow-[0_40px_70px_-24px_rgba(0,0,0,0.65)] [animation-delay:-1s]"
     >
       <svg viewBox="0 0 48 48" class="w-[64%]" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <rect x="13" y="4" width="22" height="40" rx="3" />
@@ -82,11 +82,11 @@ const { t } = useI18n()
     <!-- Rotating «since 1972» seal -->
     <div class="absolute start-[2%] bottom-0 size-28 sm:size-[150px]" dir="ltr">
       <svg class="animate-spin-slow size-full" viewBox="0 0 150 150">
-        <circle cx="75" cy="75" r="72" fill="#16291E" stroke="rgba(210,194,122,.6)" stroke-width="1.5" />
+        <circle cx="75" cy="75" r="72" fill="#22211F" stroke="rgba(210,194,122,.6)" stroke-width="1.5" />
         <defs>
           <path id="hero-seal-ring" d="M75 75 m-54 0 a54 54 0 1 1 108 0 a54 54 0 1 1 -108 0" />
         </defs>
-        <text style="font-family: var(--font-num)" font-weight="700" font-size="13" letter-spacing="4.2" fill="#D2C27A">
+        <text style="font-family: var(--font-num)" font-weight="700" font-size="13" letter-spacing="4.2" fill="#C9B189">
           <textPath href="#hero-seal-ring">MOHAMED SERAG • SINCE 1972 • TRUSTED •</textPath>
         </text>
       </svg>

@@ -33,13 +33,13 @@ const headingId = useId()
         <div class="max-w-[720px] flex-[1_1_520px]">
           <p class="eyebrow text-serag-gold-ink">{{ t('store.home.trustedPartnersEyebrow') }}</p>
           <h2 :id="headingId" class="mt-2.5 mb-[18px] font-display text-[clamp(42px,5.5vw,76px)] leading-none text-serag-green">
-            {{ title.lead }}{{ title.highlight ? ' ' : '' }}<span v-if="title.highlight" class="text-[#8B7D3C]">{{ title.highlight }}</span>
+            {{ title.lead }}{{ title.highlight ? ' ' : '' }}<span v-if="title.highlight" class="text-[#7C6A4B]">{{ title.highlight }}</span>
           </h2>
-          <p class="text-lg leading-[1.9] text-[#4B574F] sm:text-[19px]">{{ t('store.home.partners.subtitle') }}</p>
+          <p class="text-lg leading-[1.9] text-[#66625B] sm:text-[19px]">{{ t('store.home.partners.subtitle') }}</p>
         </div>
         <div class="relative mx-auto size-[180px] flex-none" aria-hidden="true">
           <svg viewBox="0 0 180 180" class="size-full">
-            <circle cx="90" cy="90" r="86" fill="#2A4D38" stroke="#B5A45C" stroke-width="2" />
+            <circle cx="90" cy="90" r="86" fill="#5E8A38" stroke="#A68A64" stroke-width="2" />
             <circle cx="90" cy="90" r="70" fill="none" stroke="rgba(210,194,122,.5)" stroke-width="1.5" stroke-dasharray="4 6" class="animate-spin-slow origin-center" />
           </svg>
           <div class="absolute inset-0 flex flex-col items-center justify-center text-serag-gold-hi">

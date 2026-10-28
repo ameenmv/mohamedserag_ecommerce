@@ -44,13 +44,13 @@ const headingId = useId()
         <!-- Showroom arch -->
         <div class="relative min-h-[400px] w-full flex-[1_1_440px] sm:min-h-[460px]" aria-hidden="true">
           <div
-            class="absolute inset-y-0 start-0 end-[12%] flex flex-col items-center justify-center gap-3.5 rounded-[200px_200px_40px_40px] border-2 border-serag-gold bg-[radial-gradient(circle_at_50%_25%,rgba(210,194,122,.28),transparent_60%),linear-gradient(160deg,#16291E_0%,#2A4D38_100%)] p-8 text-center text-serag-ivory shadow-[0_36px_64px_-28px_rgba(20,32,26,.55)]"
+            class="absolute inset-y-0 start-0 end-[12%] flex flex-col items-center justify-center gap-3.5 rounded-[200px_200px_40px_40px] border-2 border-serag-gold bg-[radial-gradient(circle_at_50%_25%,rgba(210,194,122,.28),transparent_60%),linear-gradient(160deg,#22211F_0%,#5E8A38_100%)] p-8 text-center text-serag-ivory shadow-[0_36px_64px_-28px_rgba(20,32,26,.55)]"
           >
             <svg viewBox="0 0 64 64" class="size-[76px] text-serag-gold-hi" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
               <path d="M8 26L32 10l24 16v28H8z M4 26h56M24 54V36h16v18M16 34h4M44 34h4" />
             </svg>
             <div class="font-display text-[34px] leading-none text-serag-gold-hi">{{ t('store.home.about.showroom') }}</div>
-            <div class="max-w-[260px] text-[15px] leading-[1.7] text-[#C9D5C6]">{{ t('store.home.about.showroomNote') }}</div>
+            <div class="max-w-[260px] text-[15px] leading-[1.7] text-[#D8D3C7]">{{ t('store.home.about.showroomNote') }}</div>
           </div>
           <div class="absolute start-0 -bottom-5 rounded-[var(--radius-card)] border-[1.5px] border-serag-gold-hi/40 bg-serag-green px-7 py-[22px] text-serag-ivory shadow-[0_30px_50px_-22px_rgba(20,32,26,.55)]">
             <div class="num text-[54px] leading-none font-extrabold text-serag-gold-hi">+50</div>
@@ -63,8 +63,8 @@ const headingId = useId()
           <h2 :id="headingId" class="font-display text-[clamp(42px,5.5vw,76px)] leading-none text-serag-green">
             {{ content.title }}
           </h2>
-          <p class="text-lg leading-[1.9] text-[#2F3B34] sm:text-xl">{{ content.subtitle }}</p>
-          <p class="text-lg leading-[1.9] text-[#4B574F]">{{ t('store.home.about.today') }}</p>
+          <p class="text-lg leading-[1.9] text-[#2B2925] sm:text-xl">{{ content.subtitle }}</p>
+          <p class="text-lg leading-[1.9] text-[#66625B]">{{ t('store.home.about.today') }}</p>
           <ul class="mt-1.5 grid gap-3.5 sm:grid-cols-2">
             <li
               v-for="(value, index) in values"
@@ -72,7 +72,7 @@ const headingId = useId()
               :class="['rounded-[22px] border border-[#E4DDC6] bg-card p-5', index === values.length - 1 ? 'sm:col-span-2' : '']"
             >
               <div class="text-lg font-bold text-serag-green">{{ t(`store.home.about.values.${value}.title`) }}</div>
-              <div class="mt-1.5 text-[15px] leading-[1.7] text-[#4B574F]">{{ t(`store.home.about.values.${value}.body`) }}</div>
+              <div class="mt-1.5 text-[15px] leading-[1.7] text-[#66625B]">{{ t(`store.home.about.values.${value}.body`) }}</div>
             </li>
           </ul>
           <NuxtLink
@@ -109,7 +109,7 @@ const headingId = useId()
             {{ m.year }}
           </div>
           <div class="mt-3 text-lg font-bold">{{ t(`store.home.about.milestones.${m.key}.title`) }}</div>
-          <div :class="['mt-1.5 text-[15px] leading-[1.7]', m.accent === 'dark' ? 'text-[#D9E2D6]' : 'text-[#4B574F]']">
+          <div :class="['mt-1.5 text-[15px] leading-[1.7]', m.accent === 'dark' ? 'text-[#D8D3C7]' : 'text-[#66625B]']">
             {{ t(`store.home.about.milestones.${m.key}.body`) }}
           </div>
         </li>

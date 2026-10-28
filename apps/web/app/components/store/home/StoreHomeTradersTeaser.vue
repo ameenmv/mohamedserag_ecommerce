@@ -28,8 +28,8 @@ const whatsappUrl = computed(() =>
 )
 
 const tiers = [
-  { key: 'small', width: 'w-[34%]', bar: 'bg-[#8AA78F]', strong: false },
-  { key: 'medium', width: 'w-[66%]', bar: 'bg-[#5A8F6B]', strong: false },
+  { key: 'small', width: 'w-[34%]', bar: 'bg-[#A9CE75]', strong: false },
+  { key: 'medium', width: 'w-[66%]', bar: 'bg-[#6BA324]', strong: false },
   { key: 'large', width: 'w-full', bar: 'bg-serag-gold', strong: true },
 ] as const
 
@@ -46,7 +46,7 @@ const headingId = useId()
         <h2 :id="headingId" class="font-display text-[clamp(42px,5.5vw,76px)] leading-none text-serag-green">
           {{ title.lead }}{{ title.highlight ? ' ' : '' }}<span v-if="title.highlight" class="text-serag-gold-ink">{{ title.highlight }}</span>
         </h2>
-        <p class="max-w-[540px] text-lg leading-[1.9] text-[#3C4840] sm:text-[19px]">
+        <p class="max-w-[540px] text-lg leading-[1.9] text-[#4A4640] sm:text-[19px]">
           {{ content.subtitle }}
         </p>
         <ul class="flex flex-col gap-4 text-lg">
@@ -96,10 +96,10 @@ const headingId = useId()
             </div>
           </div>
           <div class="flex items-center gap-3.5 border-t border-dashed border-[#D8D0B4] pt-[18px]">
-            <span class="flex size-[46px] flex-none items-center justify-center rounded-[14px] bg-[#E9F0E8] text-serag-green">
+            <span class="flex size-[46px] flex-none items-center justify-center rounded-[14px] bg-[#EAF2DC] text-serag-green">
               <FileText class="size-[22px]" :stroke-width="1.8" />
             </span>
-            <span class="text-[15px] leading-[1.6] text-[#3C4840]">{{ t('store.home.traders.invoiceNote') }}</span>
+            <span class="text-[15px] leading-[1.6] text-[#4A4640]">{{ t('store.home.traders.invoiceNote') }}</span>
           </div>
         </div>
       </div>

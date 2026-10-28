@@ -27,9 +27,9 @@ const whatsappUrl = computed(() =>
         <p class="eyebrow text-serag-gold-ink">{{ t('store.home.howItWorksEyebrow') }}</p>
         <h2 :id="headingId" class="mt-2.5 mb-3.5 font-display text-[clamp(40px,5.5vw,72px)] leading-none text-serag-green">
           {{ t('store.home.how.title') }}
-          <span class="text-[#8B7D3C]">{{ t('store.home.how.titleHighlight') }}</span>
+          <span class="text-[#7C6A4B]">{{ t('store.home.how.titleHighlight') }}</span>
         </h2>
-        <p class="text-lg leading-[1.9] text-[#4B574F] sm:text-[19px]">{{ t('store.home.how.subtitle') }}</p>
+        <p class="text-lg leading-[1.9] text-[#66625B] sm:text-[19px]">{{ t('store.home.how.subtitle') }}</p>
       </div>
 
       <ol class="grid gap-[22px] sm:grid-cols-2 lg:grid-cols-4">
@@ -64,7 +64,7 @@ const whatsappUrl = computed(() =>
             />
           </div>
           <h3 class="text-[21px] font-bold">{{ t(`store.home.how.steps.${step.key}.title`) }}</h3>
-          <p :class="['text-[15px] leading-[1.8]', step.featured ? 'text-[#C9D5C6]' : 'text-[#4B574F]']">
+          <p :class="['text-[15px] leading-[1.8]', step.featured ? 'text-[#D8D3C7]' : 'text-[#66625B]']">
             {{ t(`store.home.how.steps.${step.key}.body`) }}
           </p>
           <span

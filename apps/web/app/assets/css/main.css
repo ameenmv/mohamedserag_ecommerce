@@ -135,17 +135,17 @@
    their dark ink. */
 .dark .bg-serag-ivory, .dark .bg-serag-cream, .dark .bg-white,
 .dark .bg-\[\#FBF8EF\], .dark .bg-\[\#F6F2E4\] { background-color: var(--card); }
-.dark .bg-\[\#F4EFD6\], .dark .bg-\[\#E9F0E8\], .dark .bg-\[\#EDE8D5\], .dark .bg-\[\#E8DFB0\] { background-color: var(--secondary); }
+.dark .bg-\[\#F4EFD6\], .dark .bg-\[\#EAF2DC\], .dark .bg-\[\#EDE8D5\], .dark .bg-\[\#E8DFB0\] { background-color: var(--secondary); }
 .dark .bg-\[\#F1FAF3\] { background-color: rgb(22 163 74 / 0.12); }
 .dark .border-\[\#E4DDC6\], .dark .border-\[\#ECE6D3\], .dark .border-\[\#D8D0B4\], .dark .border-\[\#E7E0C8\] { border-color: var(--border); }
 .dark .border-\[\#CFE7D6\] { border-color: rgb(22 163 74 / 0.35); }
 .dark .text-serag-ink:not([class~='bg-serag-gold']):not([class~='bg-serag-gold-hi']), .dark .text-serag-night:not([class~='bg-serag-gold']):not([class~='bg-serag-gold-hi']),
-.dark .text-\[\#2F3B34\], .dark .text-\[\#3C4840\] { color: var(--foreground); }
-.dark .text-\[\#4B574F\] { color: var(--muted-foreground); }
-.dark .text-serag-green:not([class~='bg-serag-gold']):not([class~='bg-serag-gold-hi']) { color: #8FC9A0; }
-.dark .text-serag-gold-ink, .dark .text-\[\#8B7D3C\] { color: var(--color-serag-gold-hi); }
+.dark .text-\[\#2B2925\], .dark .text-\[\#4A4640\] { color: var(--foreground); }
+.dark .text-\[\#66625B\] { color: var(--muted-foreground); }
+.dark .text-serag-green:not([class~='bg-serag-gold']):not([class~='bg-serag-gold-hi']) { color: #8DBB4F; }
+.dark .text-serag-gold-ink, .dark .text-\[\#7C6A4B\] { color: var(--color-serag-gold-hi); }
 .dark .text-\[\#15803D\] { color: #4ADE80; }
-.dark .text-primary:not([class~='bg-serag-gold']):not([class~='bg-serag-gold-hi']) { color: #8FC9A0; }
+.dark .text-primary:not([class~='bg-serag-gold']):not([class~='bg-serag-gold-hi']) { color: #C9B189; }
 
 /* Toasts (vue-sonner): the store's night green with a gold edge, icon in a tinted circle,
    gold pill for the action. Same look in light and dark. */
@@ -175,7 +175,7 @@
 [data-sonner-toaster][dir] [data-sonner-toast][data-type='error'] [data-icon] { background: rgb(240 138 106 / 0.18); color: #f08a6a; }
 [data-sonner-toaster][dir] [data-sonner-toast][data-type='warning'] [data-icon] { background: rgb(251 191 36 / 0.16); color: #fbbf24; }
 [data-sonner-toaster][dir] [data-sonner-toast][data-styled='true'] [data-title] { font-size: 14px; font-weight: 700; line-height: 1.4; }
-[data-sonner-toaster][dir] [data-sonner-toast][data-styled='true'] [data-description] { color: #c9d5c6; font-size: 12.5px; line-height: 1.5; }
+[data-sonner-toaster][dir] [data-sonner-toast][data-styled='true'] [data-description] { color: #D8D3C7; font-size: 12.5px; line-height: 1.5; }
 [data-sonner-toaster][dir] [data-sonner-toast][data-styled='true'] [data-button] {
   height: 32px;
   padding: 0 14px;
@@ -243,3 +243,9 @@
 .compare-pill { animation: compare-pill-in 0.35s cubic-bezier(.2, .9, .3, 1.2) both; }
 @keyframes compare-pill-in { from { opacity: 0; transform: translateY(14px) scale(.96); } }
 @media (prefers-reduced-motion: reduce) { .compare-pill { animation: none; } }
+
+/* Green text takes the deeper shade so small text stays readable on the beige surfaces. */
+.text-serag-green { color: var(--color-serag-green-ink); }
+
+/* Whites lean beige: text-white is the ivory. */
+.text-white { color: var(--color-serag-ivory); }

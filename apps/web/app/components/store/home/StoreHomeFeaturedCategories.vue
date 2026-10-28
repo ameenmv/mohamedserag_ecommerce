@@ -50,7 +50,7 @@ const headingId = useId()
           <span
             :class="[
               'flex size-16 items-center justify-center rounded-full sm:size-24',
-              index % 2 === 0 ? 'bg-[#E9F0E8] text-serag-green' : 'bg-[#F4EFD6] text-serag-gold-ink',
+              index % 2 === 0 ? 'bg-[#EAF2DC] text-serag-green' : 'bg-[#F4EFD6] text-serag-gold-ink',
             ]"
             aria-hidden="true"
           >

@@ -56,7 +56,7 @@ watch(
       <!-- Chosen products + the free slots -->
       <ul class="flex items-center gap-1.5">
         <li v-for="card in currentCards" :key="card.id" class="group relative">
-          <div class="flex size-10 items-center justify-center overflow-hidden rounded-full bg-white p-1 ring-2 ring-serag-gold/70">
+          <div class="flex size-10 items-center justify-center overflow-hidden rounded-full bg-card p-1 ring-2 ring-serag-gold/70">
             <NuxtImg
               v-if="card.image?.url"
               :src="card.image.url"

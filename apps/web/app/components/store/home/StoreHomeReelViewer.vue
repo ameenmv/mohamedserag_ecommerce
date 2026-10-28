@@ -75,7 +75,7 @@ const navButton =
 <template>
   <DialogRoot v-model:open="open">
     <DialogPortal>
-      <DialogOverlay class="reel-overlay fixed inset-0 z-[60] bg-[#07110b]/90 backdrop-blur-sm" />
+      <DialogOverlay class="reel-overlay fixed inset-0 z-[60] bg-[#0c0c0b]/90 backdrop-blur-sm" />
       <DialogContent
         class="reel-viewer fixed inset-0 z-[60] flex items-center justify-center gap-3 p-3 outline-none sm:gap-6 sm:p-6"
         @keydown="onKeydown"
@@ -119,7 +119,7 @@ const navButton =
 
           <div class="text-center text-serag-ivory">
             <p class="text-base font-bold">{{ current.name }}</p>
-            <p v-if="current.place" class="mt-0.5 text-[13px] text-[#B9C7B6]">{{ current.place }}</p>
+            <p v-if="current.place" class="mt-0.5 text-[13px] text-[#C4BEB0]">{{ current.place }}</p>
           </div>
 
           <div class="flex items-center gap-3">

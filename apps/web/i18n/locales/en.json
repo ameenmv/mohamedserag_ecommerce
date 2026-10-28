@@ -991,10 +991,6 @@
     },
     "empty": {
       "browseCategories": "Or start from a category"
-    },
-    "paletteLab": {
-      "title": "Try the site colours",
-      "button": "Colours"
     }
   },
   "validation": {

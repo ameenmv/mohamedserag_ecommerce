@@ -35,7 +35,7 @@ const warrantyBrands = computed(() => props.brands.slice(0, 6))
           {{ t('store.home.sourcing.title') }}
           <span class="text-serag-gold-hi">{{ t('store.home.sourcing.titleHighlight') }}</span>
         </h2>
-        <p class="text-lg leading-[1.9] text-[#C9D5C6] sm:text-[19px]">{{ t('store.home.sourcing.subtitle') }}</p>
+        <p class="text-lg leading-[1.9] text-[#D8D3C7] sm:text-[19px]">{{ t('store.home.sourcing.subtitle') }}</p>
       </div>
 
       <div class="grid gap-[22px] md:grid-cols-3">
@@ -48,7 +48,7 @@ const warrantyBrands = computed(() => props.brands.slice(0, 6))
             <component :is="pillar.icon" class="size-[30px]" :stroke-width="1.6" />
           </span>
           <h3 class="text-[22px] font-bold">{{ t(`store.home.sourcing.pillars.${pillar.key}.title`) }}</h3>
-          <p class="text-base leading-[1.8] text-[#C9D5C6]">{{ t(`store.home.sourcing.pillars.${pillar.key}.body`) }}</p>
+          <p class="text-base leading-[1.8] text-[#D8D3C7]">{{ t(`store.home.sourcing.pillars.${pillar.key}.body`) }}</p>
         </article>
       </div>
 
@@ -71,7 +71,7 @@ const warrantyBrands = computed(() => props.brands.slice(0, 6))
             />
           </div>
           <h3 class="mt-4 text-[19px] font-bold">{{ t(`store.home.sourcing.steps.${step}.title`) }}</h3>
-          <p class="mt-1.5 text-[15px] leading-[1.7] text-[#C9D5C6]">{{ t(`store.home.sourcing.steps.${step}.body`) }}</p>
+          <p class="mt-1.5 text-[15px] leading-[1.7] text-[#D8D3C7]">{{ t(`store.home.sourcing.steps.${step}.body`) }}</p>
         </li>
       </ol>
 

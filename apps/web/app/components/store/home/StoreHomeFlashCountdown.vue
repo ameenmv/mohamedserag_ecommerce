@@ -47,7 +47,7 @@ const boxes = computed(() => {
         ]"
       >
         <div class="text-[28px] leading-none font-extrabold sm:text-[34px]">{{ box.value }}</div>
-        <div :class="['mt-1 text-[11px] tracking-[2px] rtl:text-xs rtl:tracking-normal', box.hot ? 'text-white' : 'text-[#B9C7B6]']">
+        <div :class="['mt-1 text-[11px] tracking-[2px] rtl:text-xs rtl:tracking-normal', box.hot ? 'text-white' : 'text-[#C4BEB0]']">
           {{ box.label }}
         </div>
       </div>

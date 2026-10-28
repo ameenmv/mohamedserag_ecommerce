@@ -24,7 +24,7 @@ function scrollCards(direction: 1 | -1): void {
 }
 
 /** Card backgrounds cycle through the brand greens and golds. */
-const TINTS = ['#3D6B4F', '#6F6329', '#2A4D38', '#8B7D3C'] as const
+const TINTS = ['#5E8A38', '#66522F', '#4B7B16', '#7C6A4B'] as const
 const reels = computed(() =>
   props.content.items.map((item, index) => ({
     ...item,
@@ -85,7 +85,7 @@ const avatars = computed(() => reels.value.slice(0, 4).map((reel) => initial(ree
             {{ t('store.home.reels.title') }}
             <span class="text-serag-gold-hi">{{ t('store.home.reels.titleHighlight') }}</span>
           </h2>
-          <p class="text-lg leading-[1.9] text-[#C9D5C6] sm:text-[19px]">{{ t('store.home.reels.subtitle') }}</p>
+          <p class="text-lg leading-[1.9] text-[#D8D3C7] sm:text-[19px]">{{ t('store.home.reels.subtitle') }}</p>
         </div>
         <div class="flex gap-3">
           <button
@@ -150,7 +150,7 @@ const avatars = computed(() => reels.value.slice(0, 4).map((reel) => initial(ree
             <div class="absolute inset-x-0 bottom-0 p-5">
               <div class="text-sm tracking-[2px] text-serag-gold-hi" aria-hidden="true">★★★★★</div>
               <div class="mt-1.5 text-lg font-bold">{{ reel.name }}</div>
-              <div class="mt-0.5 text-[13px] text-[#B9C7B6]">{{ reel.place }}</div>
+              <div class="mt-0.5 text-[13px] text-[#C4BEB0]">{{ reel.place }}</div>
             </div>
           </component>
         </li>
@@ -166,13 +166,13 @@ const avatars = computed(() => reels.value.slice(0, 4).map((reel) => initial(ree
               :key="i"
               :class="[
                 '-ms-3 flex size-[46px] items-center justify-center rounded-full border-[3px] border-serag-deep font-bold text-serag-ink',
-                ['bg-serag-gold-hi', 'bg-serag-gold', 'bg-[#E8DFB0]', 'bg-[#8B7D3C]'][i],
+                ['bg-serag-gold-hi', 'bg-serag-gold', 'bg-[#E8DFB0]', 'bg-[#7C6A4B]'][i],
               ]"
             >{{ letter }}</span>
           </div>
           <div>
             <div class="num text-[28px] leading-none font-extrabold text-serag-gold-hi">{{ t('store.home.reels.tradersCount') }}</div>
-            <div class="mt-1 text-sm text-[#B9C7B6]">{{ t('store.home.reels.tradersNote') }}</div>
+            <div class="mt-1 text-sm text-[#C4BEB0]">{{ t('store.home.reels.tradersNote') }}</div>
           </div>
         </div>
         <NuxtLink

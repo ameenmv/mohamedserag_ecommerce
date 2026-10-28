@@ -3,8 +3,6 @@ import { toasterWanted } from '~/utils/toaster'
 
 useAppHead()
 
-const paletteLab = useRuntimeConfig().public.paletteLab === 'true'
-
 // The splash plays on every full page load of the storefront (not the admin); CSS only.
 const showSplash = !/^\/(?:en\/)?admin(?:\/|$)/.test(useRoute().path)
 
@@ -12,14 +10,6 @@ const showSplash = !/^\/(?:en\/)?admin(?:\/|$)/.test(useRoute().path)
 // page never flashes light. The store stays light unless the visitor picked dark.
 useHead({
   script: [
-    ...(paletteLab
-      ? [{
-          // Re-applies the palette picked with the floating picker before the first paint
-          key: 'palette-lab',
-          tagPosition: 'head' as const,
-          innerHTML: "try{var c=localStorage.getItem('serag-palette-css');if(c){var s=document.createElement('style');s.id='palette-lab';s.textContent=c;document.head.appendChild(s)}}catch(e){}",
-        }]
-      : []),
     {
       key: 'theme',
       tagPosition: 'head',
@@ -43,14 +33,13 @@ useHead({
   <div>
     <NuxtRouteAnnouncer />
     <!-- Gold progress bar while the next page loads -->
-    <NuxtLoadingIndicator color="linear-gradient(90deg, #B5A45C, #D2C27A, #B5A45C)" :height="3" :throttle="150" />
+    <NuxtLoadingIndicator color="linear-gradient(90deg, #A68A64, #C9B189, #A68A64)" :height="3" :throttle="150" />
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
     <!-- Server-rendered only (no client JS): the logo symbols and the splash that uses them -->
     <LazyCommonBrandSymbols hydrate-never />
     <LazyCommonSplash v-if="showSplash" hydrate-never />
-    <LazyCommonPaletteLab v-if="paletteLab" />
     <!-- Mounted on the first notification (see utils/toaster.ts) -->
     <LazyCommonAppToaster v-if="toasterWanted" />
   </div>

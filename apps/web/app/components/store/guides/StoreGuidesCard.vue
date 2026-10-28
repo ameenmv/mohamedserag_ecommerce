@@ -12,9 +12,9 @@ const props = defineProps<{
 }>()
 
 const TONES = [
-  { cover: 'bg-serag-green text-serag-gold-hi', tag: 'bg-[#E9F0E8] text-serag-green' },
+  { cover: 'bg-serag-green text-serag-gold-hi', tag: 'bg-[#EAF2DC] text-serag-green' },
   { cover: 'bg-serag-gold text-serag-ink', tag: 'bg-[#F4EFD6] text-serag-gold-ink' },
-  { cover: 'bg-serag-deep text-serag-gold-hi', tag: 'bg-[#E9F0E8] text-serag-green' },
+  { cover: 'bg-serag-deep text-serag-gold-hi', tag: 'bg-[#EAF2DC] text-serag-green' },
 ] as const
 const tone = computed(() => TONES[(props.tone ?? 0) % TONES.length] ?? TONES[0])
 const categorySlug = computed(() => props.guide.categories[0]?.slug ?? null)

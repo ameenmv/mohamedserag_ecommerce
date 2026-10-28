@@ -22,7 +22,7 @@ const contactLinkClass =
 </script>
 
 <template>
-  <footer class="bg-serag-night text-[#C9D5C6]">
+  <footer class="bg-serag-night text-[#D8D3C7]">
     <div class="mx-auto max-w-7xl px-4 pt-14 pb-6 sm:px-6 lg:px-10">
       <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1.2fr]">
         <StoreFooterBrand />

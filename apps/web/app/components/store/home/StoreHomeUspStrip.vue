@@ -33,7 +33,7 @@ const headingId = useId()
         <div
           :class="[
             'flex size-[60px] flex-none items-center justify-center rounded-[18px]',
-            index % 2 === 0 ? 'bg-[#E9F0E8] text-serag-green' : 'bg-[#F4EFD6] text-serag-gold-ink',
+            index % 2 === 0 ? 'bg-[#EAF2DC] text-serag-green' : 'bg-[#F4EFD6] text-serag-gold-ink',
           ]"
           aria-hidden="true"
         >
