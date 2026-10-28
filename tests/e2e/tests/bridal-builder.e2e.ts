@@ -3,6 +3,7 @@ import { expect } from 'e2e'
 import { createSeed } from './support/seed.js'
 import { waitForHydration } from './support/hydration.js'
 import { apiUrl } from './api-url.js'
+import { BRIDAL_SKIP } from './support/features.js'
 
 let seed = createSeed()
 
@@ -11,7 +12,7 @@ afterEach(async () => {
   seed = createSeed()
 })
 
-test('bridal builder: start golden tier, modify list, reload persists, swap alternative, search add, and verify 320/375px responsiveness', async ({
+test('bridal builder: start golden tier, modify list, reload persists, swap alternative, search add, and verify 320/375px responsiveness', { skip: BRIDAL_SKIP }, async ({
   app,
   screen,
   browser,

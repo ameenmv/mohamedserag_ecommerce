@@ -4,6 +4,7 @@ import { ensureStoreContact } from './support/store-contact.js'
 import { createSeed } from './support/seed.js'
 import { waitForHydration } from './support/hydration.js'
 import { apiUrl } from './api-url.js'
+import { BRIDAL_SKIP } from './support/features.js'
 
 let seed = createSeed()
 
@@ -12,7 +13,7 @@ afterEach(async () => {
   seed = createSeed()
 })
 
-test('bridal reserve flow: create list, fill reserve form, thanks page, read-only list with awaiting deposit, partial confirm, and full confirm price lock', async ({
+test('bridal reserve flow: create list, fill reserve form, thanks page, read-only list with awaiting deposit, partial confirm, and full confirm price lock', { skip: BRIDAL_SKIP }, async ({
   app,
   screen,
   browser,

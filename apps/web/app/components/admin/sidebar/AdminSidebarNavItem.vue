@@ -46,7 +46,7 @@ const localePath = useLocalePath()
       :class="[
         'num rounded px-1.5 py-0.5 text-[11px] font-semibold',
         isActive
-          ? 'bg-sidebar-primary-foreground/15 text-sidebar-primary-foreground'
+          ? 'bg-sidebar-primary-foreground/8 text-sidebar-primary-foreground'
           : 'text-sidebar-foreground/60',
       ]"
     >

@@ -1,3 +1,5 @@
+import { FEATURES } from './features'
+
 export interface StoreNavItem {
   labelKey: string
   to: string
@@ -21,7 +23,7 @@ export interface FooterResolvedLink {
 export const STORE_NAV_ITEMS: readonly StoreNavItem[] = [
   { labelKey: 'store.header.home', to: '/' },
   { labelKey: 'store.header.shop', to: '/shop' },
-  { labelKey: 'store.header.bridal', to: '/bridal', highlight: true },
+  ...(FEATURES.bridal ? [{ labelKey: 'store.header.bridal', to: '/bridal', highlight: true }] : []),
   { labelKey: 'store.header.offers', to: '/offers' },
   { labelKey: 'store.header.guides', to: '/guides' },
 ] as const
@@ -44,14 +46,3 @@ export const FOOTER_TRADERS_LINK: FooterLinkItem = {
   labelKey: 'store.footer.traders',
   to: '/traders',
 }
-
-/**
- * Quick department links rendered under the "تسوّق" footer column.
- */
-export const FOOTER_STORE_SECTIONS: readonly FooterLinkItem[] = [
-  { labelKey: 'store.header.home', to: '/' },
-  { labelKey: 'store.footer.allSections', to: '/shop' },
-  { labelKey: 'store.header.bridal', to: '/bridal' },
-  { labelKey: 'store.header.offers', to: '/offers' },
-  { labelKey: 'store.header.guides', to: '/guides' },
-] as const

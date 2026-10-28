@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import ar from '../i18n/locales/ar.json'
 import en from '../i18n/locales/en.json'
+import adminAr from '../i18n/admin/ar.json'
+import adminEn from '../i18n/admin/en.json'
 
 function flattenKeys(obj: Record<string, unknown>, prefix = ''): Record<string, string> {
   const result: Record<string, string> = {}
@@ -16,8 +18,17 @@ function flattenKeys(obj: Record<string, unknown>, prefix = ''): Record<string, 
 }
 
 describe('i18n messages test', () => {
-  const arFlat = flattenKeys(ar)
-  const enFlat = flattenKeys(en)
+  // The admin panel's messages live in their own files (loaded only on /admin routes) but are
+  // merged into the same locale at runtime, so they are checked together with the storefront's
+  const arFlat = flattenKeys({ ...ar, ...adminAr })
+  const enFlat = flattenKeys({ ...en, ...adminEn })
+
+  it('keeps admin messages out of the storefront locale files (they would ship on every page)', () => {
+    expect(Object.keys(ar)).not.toContain('admin')
+    expect(Object.keys(en)).not.toContain('admin')
+    expect(Object.keys(adminAr)).toEqual(['admin'])
+    expect(Object.keys(adminEn)).toEqual(['admin'])
+  })
 
   it('asserts ar.json and en.json have identical flattened key sets', () => {
     const arKeys = Object.keys(arFlat).sort()

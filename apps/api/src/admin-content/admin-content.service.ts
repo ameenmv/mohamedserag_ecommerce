@@ -28,6 +28,20 @@ import {
   type UploadedFile,
 } from '../admin-catalog/admin-catalog.util.js'
 import { parseStoredHome } from '../content/home-content.js'
+import {
+  isAllowedFacebookImage,
+  isAllowedFacebookPage,
+  normalizeFacebookVideoUrl,
+  readOpenGraph,
+} from './facebook-reel.js'
+
+const FETCH_TIMEOUT_MS = 8000
+const MAX_PAGE_BYTES = 3 * 1024 * 1024
+// Facebook serves its preview markup (the og: tags) to its own link-preview crawler
+const FACEBOOK_FETCH_HEADERS = {
+  'user-agent': 'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)',
+  'accept-language': 'ar,en;q=0.8',
+}
 
 const stateSelect = {
   id: true,
@@ -65,6 +79,14 @@ function toInputJson(value: unknown): Prisma.InputJsonValue {
   return JSON.parse(JSON.stringify(value)) as Prisma.InputJsonValue
 }
 
+function encodeStoredData(sections: HomeContent, english: HomeContent | null): Prisma.InputJsonValue {
+  const payload: Record<string, unknown> = { ...sections }
+  if (english) {
+    payload.en = english
+  }
+  return toInputJson(payload)
+}
+
 @Injectable()
 export class AdminContentService {
   constructor(private readonly prisma: PrismaService) {}
@@ -75,7 +97,7 @@ export class AdminContentService {
   }
 
   async saveDraft(input: HomeDraftOutput, userId: string | null): Promise<AdminHomeState> {
-    await this.upsertDraft(input.sections, input.layout, userId)
+    await this.upsertDraft(input.sections, input.layout, userId, input.english)
     return this.getHomeState()
   }
 
@@ -100,7 +122,7 @@ export class AdminContentService {
       const draftState = parseStoredHome(draft.data, draft.layout)
       const publishedState = currentPublished
         ? parseStoredHome(currentPublished.data, currentPublished.layout)
-        : { sections: DEFAULT_HOME_CONTENT, layout: DEFAULT_HOME_LAYOUT }
+        : { sections: DEFAULT_HOME_CONTENT, layout: DEFAULT_HOME_LAYOUT, english: null }
 
       const changes = countHomeChanges(draftState, publishedState)
       if (changes === 0) {
@@ -111,7 +133,7 @@ export class AdminContentService {
         data: {
           page: 'home',
           status: 'published',
-          data: toInputJson(draftState.sections),
+          data: encodeStoredData(draftState.sections, draftState.english),
           layout: toInputJson(draftState.layout),
           label: input.label && input.label.length > 0 ? input.label : `${changes} تعديل منشور`,
           publishedAt: new Date(),
@@ -170,7 +192,7 @@ export class AdminContentService {
     }
 
     const parsed = parseStoredHome(version.data, version.layout)
-    await this.upsertDraft(parsed.sections, parsed.layout, userId)
+    await this.upsertDraft(parsed.sections, parsed.layout, userId, parsed.english)
     return this.getHomeState()
   }
 
@@ -178,12 +200,15 @@ export class AdminContentService {
     if (!file || !file.buffer) {
       throw new BadRequestException('ملف الصورة مطلوب')
     }
+    return this.saveImage(file.buffer)
+  }
 
-    if (file.buffer.length > MAX_IMAGE_SIZE_BYTES) {
+  private async saveImage(buffer: Buffer): Promise<{ url: string }> {
+    if (buffer.length > MAX_IMAGE_SIZE_BYTES) {
       throw new BadRequestException('حجم الصورة يجب ألا يتجاوز 5 ميجابايت')
     }
 
-    const detected = detectImageMime(file.buffer)
+    const detected = detectImageMime(buffer)
     if (!detected) {
       throw new BadRequestException(
         'نوع الملف غير مدعوم، يرجى رفع صورة بصيغة JPEG أو PNG أو WebP أو AVIF',
@@ -196,9 +221,53 @@ export class AdminContentService {
     await fs.promises.mkdir(contentDir, { recursive: true })
 
     const fileName = `${nanoid()}.${detected.ext}`
-    await fs.promises.writeFile(path.join(contentDir, fileName), file.buffer)
+    await fs.promises.writeFile(path.join(contentDir, fileName), buffer)
 
     return { url: `/uploads/content/${month}/${fileName}` }
+  }
+
+  /**
+   * From a Facebook reel/video link (including a short /share/ link): the plain embeddable address
+   * and a saved copy of its preview picture. Facebook's own picture links expire within weeks, so
+   * the picture is downloaded into our uploads. Only Facebook hosts are ever contacted.
+   */
+  async previewReel(rawUrl: string): Promise<{ url: string; image: string | null; title: string | null }> {
+    if (!isAllowedFacebookPage(rawUrl)) {
+      throw new BadRequestException('الرابط لازم يكون رابط فيديو من فيسبوك (https://www.facebook.com/…)')
+    }
+
+    const unreachable = new BadRequestException('مقدرناش نوصل لفيسبوك. جرّب تاني أو ارفع الصورة بنفسك')
+    let page: Response
+    try {
+      page = await fetch(rawUrl, { headers: FACEBOOK_FETCH_HEADERS, signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) })
+    } catch {
+      throw unreachable
+    }
+    if (!page.ok || !isAllowedFacebookPage(page.url)) throw unreachable
+    if (Number(page.headers.get('content-length') ?? 0) > MAX_PAGE_BYTES) throw unreachable
+    const html = (await page.text().catch(() => '')).slice(0, MAX_PAGE_BYTES)
+
+    const canonical =
+      normalizeFacebookVideoUrl(page.url) ?? normalizeFacebookVideoUrl(readOpenGraph(html, 'url') ?? '')
+    if (!canonical) {
+      throw new BadRequestException('الرابط ده مش فيديو أو ريل على فيسبوك، أو الفيديو مش عام')
+    }
+
+    const title = readOpenGraph(html, 'description')?.trim().slice(0, 120) || null
+    const imageUrl = readOpenGraph(html, 'image')
+    if (!imageUrl || !isAllowedFacebookImage(imageUrl)) return { url: canonical, image: null, title }
+
+    try {
+      const res = await fetch(imageUrl, { headers: FACEBOOK_FETCH_HEADERS, signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) })
+      if (!res.ok || !isAllowedFacebookImage(res.url)) return { url: canonical, image: null, title }
+      if (Number(res.headers.get('content-length') ?? 0) > MAX_IMAGE_SIZE_BYTES) {
+        return { url: canonical, image: null, title }
+      }
+      const saved = await this.saveImage(Buffer.from(await res.arrayBuffer()))
+      return { url: canonical, image: saved.url, title }
+    } catch {
+      return { url: canonical, image: null, title }
+    }
   }
 
   private findPublished(): Promise<HomeVersionRecord | null> {
@@ -223,13 +292,14 @@ export class AdminContentService {
   ): AdminHomeState {
     const publishedState = publishedRow
       ? parseStoredHome(publishedRow.data, publishedRow.layout)
-      : { sections: DEFAULT_HOME_CONTENT, layout: DEFAULT_HOME_LAYOUT }
+      : { sections: DEFAULT_HOME_CONTENT, layout: DEFAULT_HOME_LAYOUT, english: null }
 
     const published: AdminHomeState['published'] = {
       sections: publishedState.sections,
       layout: publishedState.layout,
       publishedAt: publishedRow?.publishedAt?.toISOString() ?? null,
       label: publishedRow?.label ?? null,
+      english: publishedState.english,
     }
 
     const draftSource = draftRow ? parseStoredHome(draftRow.data, draftRow.layout) : publishedState
@@ -237,6 +307,7 @@ export class AdminContentService {
       sections: draftSource.sections,
       layout: draftSource.layout,
       updatedAt: draftRow?.updatedAt.toISOString() ?? null,
+      english: draftSource.english,
     }
 
     return { draft, published, changes: countHomeChanges(draft, published) }
@@ -246,13 +317,26 @@ export class AdminContentService {
     sections: HomeContent,
     layout: HomeLayout,
     userId: string | null,
+    english?: HomeContent | null,
   ): Promise<void> {
     const draft = await this.findDraft()
+    let targetEnglish: HomeContent | null
+    if (english !== undefined) {
+      targetEnglish = english
+    } else {
+      const existingDraft = draft ? parseStoredHome(draft.data, draft.layout) : null
+      const existingPublished = existingDraft ? null : await this.findPublished()
+      const fallbackTarget =
+        existingDraft ??
+        (existingPublished ? parseStoredHome(existingPublished.data, existingPublished.layout) : null)
+      targetEnglish = fallbackTarget?.english ?? null
+    }
+
     if (draft) {
       await this.prisma.contentVersion.update({
         where: { id: draft.id },
         data: {
-          data: toInputJson(sections),
+          data: encodeStoredData(sections, targetEnglish),
           layout: toInputJson(layout),
         },
       })
@@ -263,7 +347,7 @@ export class AdminContentService {
       data: {
         page: 'home',
         status: 'draft',
-        data: toInputJson(sections),
+        data: encodeStoredData(sections, targetEnglish),
         layout: toInputJson(layout),
         userId,
       },

@@ -4,12 +4,249 @@
 @custom-variant dark (&:is(.dark *));
 
 :root:lang(en) {
-  --font-display: 'Outfit', sans-serif;
-  --font-sans: 'Outfit', system-ui, sans-serif;
+  --font-display: 'Bricolage Grotesque', 'Plus Jakarta Sans', sans-serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-num: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+/* The web fonts are applied only once `fonts-ready` is on <html> (an inline head script adds it
+   right after the first paint). Before it the stacks are the system fonts, so no font is requested
+   ahead of the first paint; the splash screen covers the swap. Specificity beats the token and
+   per-language stacks, whichever file defines them. */
+:root:not(.fonts-ready):lang(ar),
+:root:not(.fonts-ready):lang(en) {
+  --font-display: system-ui, sans-serif;
+  --font-sans: system-ui, sans-serif;
+  --font-num: system-ui, sans-serif;
 }
 
 @layer base {
   * { @apply border-border outline-ring/50; }
   body { @apply bg-background text-foreground font-sans antialiased; }
   .num { font-family: var(--font-num); direction: ltr; unicode-bidi: isolate; }
+  /* Tailwind v4 dropped the pointer cursor on buttons; every clickable control gets it back. */
+  :is(button, [role='button'], [role='tab'], [role='menuitem'], [role='option'], [role='checkbox'], [role='radio'], [role='switch'], summary, select, label[for], input:is([type='checkbox'], [type='radio'], [type='submit'], [type='button'], [type='file'], [type='range'])):not(:disabled, [aria-disabled='true']) {
+    cursor: pointer;
+  }
+  :is(button, [role='button'], select, input):is(:disabled, [aria-disabled='true']) { cursor: not-allowed; }
 }
+
+/* Small label above a section title. Wide-tracked capitals in English; Arabic letters must stay
+   joined, so Arabic gets normal tracking and a size that matches the script's x-height. */
+@utility eyebrow {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  &:lang(ar) { font-size: 15px; letter-spacing: 0; }
+}
+
+/* Storefront motion from the prototype: floating hero cards, rotating seal, marquee strips. */
+@theme {
+  --animate-floaty: floaty 6s ease-in-out infinite;
+  --animate-spin-slow: spin 22s linear infinite;
+  --animate-marquee: marquee 48s linear infinite;
+  --animate-marquee-fast: marquee 38s linear infinite;
+  --animate-pulse-soft: pulse-soft 1.4s ease-in-out infinite;
+  --animate-ping-soft: ping-soft 2.2s ease-out infinite;
+
+  @keyframes floaty {
+    0%, 100% { transform: translateY(0) rotate(var(--tilt, 0deg)); }
+    50% { transform: translateY(-14px) rotate(var(--tilt, 0deg)); }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes pulse-soft {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+  @keyframes ping-soft {
+    0% { transform: scale(0.9); opacity: 1; }
+    100% { transform: scale(1.5); opacity: 0; }
+  }
+}
+
+/* Big outlined background numerals/words ("1972", "MS", "ثقة"). */
+@utility text-outline {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--outline-color, currentColor);
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+/* Skeletons: a soft light sweep across a cream block (direction follows the page). */
+@utility skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.65), transparent);
+    animation: shimmer 1.6s ease-in-out infinite;
+  }
+  &:where([dir='rtl'], [dir='rtl'] *)::after { animation-name: shimmer-rtl; }
+}
+@keyframes shimmer { to { transform: translateX(100%); } }
+@keyframes shimmer-rtl { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
+
+/* Splash on every full page load (components/common/CommonSplash.vue): the real logo assembles
+   itself, then fades away. Pure CSS, so it also clears without JavaScript; never takes taps. */
+.splash {
+  display: flex;
+  animation: splash-out 0.45s ease 1.45s forwards;
+}
+.splash-glow {
+  background: radial-gradient(circle, rgb(111 168 39 / 0.16) 0%, rgb(111 168 39 / 0) 65%);
+  animation: splash-glow 1.4s ease-out both;
+}
+.splash-mark {
+  animation: splash-pop 0.6s cubic-bezier(.2, .9, .3, 1.25) both;
+}
+/* Arabic reads right to left, so the name is revealed from the right */
+.splash-wordmark {
+  animation: splash-wipe 0.65s cubic-bezier(.6, 0, .2, 1) 0.3s both;
+}
+.splash-since {
+  animation: splash-open 0.55s ease-out 0.75s both;
+}
+@keyframes splash-out { to { opacity: 0; transform: scale(1.04); visibility: hidden; } }
+@keyframes splash-glow { from { opacity: 0; transform: scale(.6); } }
+@keyframes splash-pop { from { opacity: 0; transform: scale(.4) rotate(-12deg); } }
+@keyframes splash-wipe { from { clip-path: inset(0 0 0 100%); opacity: 0; } }
+@keyframes splash-open { from { clip-path: inset(0 50% 0 50%); opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-floaty, .animate-spin-slow, .animate-marquee, .animate-marquee-fast,
+  .animate-pulse-soft, .animate-ping-soft { animation: none !important; }
+  .skeleton-shimmer::after { animation: none; }
+  .splash { display: none; }
+}
+
+/* Storefront dark theme (header switch). The storefront was designed light, with brand colours
+   written into components; this maps those light surfaces and dark inks onto the dark tokens in
+   one place. Unlayered on purpose so it wins over the light utilities. Elements on gold keep
+   their dark ink. */
+.dark .bg-serag-ivory, .dark .bg-serag-cream, .dark .bg-white,
+.dark .bg-\[\#FBF8EF\], .dark .bg-\[\#F6F2E4\] { background-color: var(--card); }
+.dark .bg-\[\#F4EFD6\], .dark .bg-\[\#EAF2DC\], .dark .bg-\[\#EDE8D5\], .dark .bg-\[\#E8DFB0\] { background-color: var(--secondary); }
+.dark .bg-\[\#F1FAF3\] { background-color: rgb(22 163 74 / 0.12); }
+.dark .border-\[\#E4DDC6\], .dark .border-\[\#ECE6D3\], .dark .border-\[\#D8D0B4\], .dark .border-\[\#E7E0C8\] { border-color: var(--border); }
+.dark .border-\[\#CFE7D6\] { border-color: rgb(22 163 74 / 0.35); }
+.dark .text-serag-ink:not([class~='bg-serag-gold']):not([class~='bg-serag-gold-hi']), .dark .text-serag-night:not([class~='bg-serag-gold']):not([class~='bg-serag-gold-hi']),
+.dark .text-\[\#2B2925\], .dark .text-\[\#4A4640\] { color: var(--foreground); }
+.dark .text-\[\#66625B\] { color: var(--muted-foreground); }
+.dark .text-serag-green:not([class~='bg-serag-gold']):not([class~='bg-serag-gold-hi']) { color: #8DBB4F; }
+.dark .text-serag-gold-ink, .dark .text-\[\#7C6A4B\] { color: var(--color-serag-gold-hi); }
+.dark .text-\[\#15803D\] { color: #4ADE80; }
+.dark .text-primary:not([class~='bg-serag-gold']):not([class~='bg-serag-gold-hi']) { color: #C9B189; }
+
+/* Toasts (vue-sonner): the store's night green with a gold edge, icon in a tinted circle,
+   gold pill for the action. Same look in light and dark. */
+[data-sonner-toaster][dir] [data-sonner-toast][data-styled='true'] {
+  background: var(--color-serag-night);
+  color: var(--color-serag-ivory);
+  border: 1px solid rgb(210 194 122 / 0.35);
+  border-radius: 18px;
+  padding: 14px 16px;
+  gap: 12px;
+  box-shadow: 0 24px 48px -20px rgb(0 0 0 / 0.55);
+  font-family: var(--font-sans);
+}
+[data-sonner-toaster][dir] [data-sonner-toast][data-styled='true'] [data-icon] {
+  width: 34px;
+  height: 34px;
+  margin: 0;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgb(210 194 122 / 0.16);
+  color: var(--color-serag-gold-hi);
+}
+[data-sonner-toaster][dir] [data-sonner-toast][data-type='success'] [data-icon] { background: rgb(74 222 128 / 0.16); color: #4ade80; }
+[data-sonner-toaster][dir] [data-sonner-toast][data-type='error'] [data-icon] { background: rgb(240 138 106 / 0.18); color: #f08a6a; }
+[data-sonner-toaster][dir] [data-sonner-toast][data-type='warning'] [data-icon] { background: rgb(251 191 36 / 0.16); color: #fbbf24; }
+[data-sonner-toaster][dir] [data-sonner-toast][data-styled='true'] [data-title] { font-size: 14px; font-weight: 700; line-height: 1.4; }
+[data-sonner-toaster][dir] [data-sonner-toast][data-styled='true'] [data-description] { color: #D8D3C7; font-size: 12.5px; line-height: 1.5; }
+[data-sonner-toaster][dir] [data-sonner-toast][data-styled='true'] [data-button] {
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--color-serag-gold);
+  color: var(--color-serag-ink);
+  font-weight: 700;
+  font-size: 12.5px;
+}
+[data-sonner-toaster][dir] [data-sonner-toast][data-styled='true'] [data-button]:hover { background: var(--color-serag-gold-hi); }
+[data-sonner-toaster][dir] [data-sonner-toast][data-styled='true'] [data-close-button] {
+  background: var(--color-serag-deep);
+  color: var(--color-serag-ivory);
+  border-color: rgb(210 194 122 / 0.35);
+}
+/* A toast never blocks the page under it (e.g. checkout's submit right after adding to cart):
+   taps on its body pass through; its own buttons stay clickable. */
+[data-sonner-toaster][dir] [data-sonner-toast] { pointer-events: none; }
+[data-sonner-toaster][dir] [data-sonner-toast] :is(button, a) { pointer-events: auto; }
+
+/* Sheets (cart drawer, mobile menu, filters): the panel glides in from its side and the backdrop
+   fades. Reka keeps a closing sheet mounted until its animation ends, so the exit plays too. */
+.sheet-overlay[data-state='open'] { animation: sheet-fade-in .3s ease both; }
+.sheet-overlay[data-state='closed'] { animation: sheet-fade-out .22s ease both; }
+.sheet-panel { --sheet-from: translate3d(100%, 0, 0); }
+.sheet-panel[data-side='left'] { --sheet-from: translate3d(-100%, 0, 0); }
+.sheet-panel[data-side='top'] { --sheet-from: translate3d(0, -100%, 0); }
+.sheet-panel[data-side='bottom'] { --sheet-from: translate3d(0, 100%, 0); }
+.sheet-panel[data-state='open'] { animation: sheet-in .48s cubic-bezier(.32, .72, 0, 1) both; }
+.sheet-panel[data-state='closed'] { animation: sheet-out .26s cubic-bezier(.4, 0, 1, 1) both; }
+/* Content rises in just behind the panel. */
+.sheet-panel[data-state='open'] > :not(button) { animation: sheet-rise .5s cubic-bezier(.32, .72, 0, 1) .08s both; }
+@keyframes sheet-in { from { transform: var(--sheet-from); } }
+@keyframes sheet-out { to { transform: var(--sheet-from); } }
+@keyframes sheet-rise { from { opacity: 0; transform: translateY(10px); } }
+@keyframes sheet-fade-in { from { opacity: 0; } }
+@keyframes sheet-fade-out { to { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .sheet-panel[data-state], .sheet-panel[data-state='open'] > :not(button) { animation-name: sheet-fade-in; animation-duration: .15s; }
+  .sheet-panel[data-state='closed'] { animation-name: sheet-fade-out; }
+}
+
+/* Cart drawer lines: stagger in when the drawer opens, slide away when removed. */
+.sheet-panel[data-state='open'] .cart-line-enter { animation: sheet-rise .45s cubic-bezier(.32, .72, 0, 1) both; }
+.cart-line-move, .cart-line-leave-active { transition: transform .3s ease, opacity .25s ease; }
+.cart-line-leave-active { position: absolute; inset-inline: 0; }
+.cart-line-leave-to { opacity: 0; transform: translateX(24px); }
+[dir='rtl'] .cart-line-leave-to { transform: translateX(-24px); }
+@media (prefers-reduced-motion: reduce) {
+  .sheet-panel[data-state='open'] .cart-line-enter { animation: none; }
+}
+
+/* Trader reels popup: backdrop fades, the player rises in; both reduced when motion is. */
+.reel-overlay[data-state='open'] { animation: sheet-fade-in .25s ease both; }
+.reel-overlay[data-state='closed'] { animation: sheet-fade-out .18s ease both; }
+.reel-viewer[data-state='open'] .reel-stage { animation: reel-pop .38s cubic-bezier(.32, .72, 0, 1) both; }
+.reel-viewer[data-state='closed'] { animation: sheet-fade-out .18s ease both; }
+.reel-frame { animation: sheet-fade-in .3s ease both; }
+@keyframes reel-pop { from { opacity: 0; transform: translateY(18px) scale(.96); } }
+@media (prefers-reduced-motion: reduce) {
+  .reel-viewer[data-state='open'] .reel-stage { animation: sheet-fade-in .15s ease both; }
+}
+
+/* Compare pill: rises into place once the first product is added */
+.compare-pill { animation: compare-pill-in 0.35s cubic-bezier(.2, .9, .3, 1.2) both; }
+@keyframes compare-pill-in { from { opacity: 0; transform: translateY(14px) scale(.96); } }
+@media (prefers-reduced-motion: reduce) { .compare-pill { animation: none; } }
+
+/* Whites lean beige: text-white is the ivory. */
+.text-white { color: var(--color-serag-ivory); }
+
+/* Green text on a pale green tint (badges, chips) needs a deeper green than on plain surfaces to
+   keep 4.5:1; the dark theme has its own colours for these. */
+:root:not(.dark) .text-serag-green[class*='bg-serag-green/'] { color: #3F5B2D; }

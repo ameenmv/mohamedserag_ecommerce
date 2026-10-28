@@ -4,12 +4,7 @@ const { t } = useI18n()
 
 <template>
   <div class="flex items-center gap-3 px-2">
-    <div
-      class="font-display flex size-12 shrink-0 items-center justify-center rounded-2xl bg-sidebar-primary pb-1 text-3xl leading-none text-sidebar-primary-foreground"
-      aria-hidden="true"
-    >
-      س
-    </div>
+    <img src="/brand/mark.webp" alt="" width="240" height="233" class="size-12 shrink-0 rounded-xl">
     <div class="leading-none">
       <div class="font-display text-2xl text-sidebar-accent-foreground">
         {{ t('brand.name') }}

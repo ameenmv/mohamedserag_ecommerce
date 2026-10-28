@@ -21,8 +21,11 @@ const other = computed(() => locales.value.find((l) => l.code !== locale.value)!
 </script>
 
 <template>
+  <!-- A full page load: catalog data comes back in the other language, and nothing cached from
+       this one is reused -->
   <NuxtLink
     :to="switchLocalePath(other.code)"
+    external
     :lang="other.code"
     :hreflang="other.language"
     :class="

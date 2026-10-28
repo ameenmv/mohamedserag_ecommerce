@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { FEATURES } from '~/constants/features'
 import type { Component } from 'vue'
 import AdminSettingsCodDepositSection from '~/components/admin/settings/AdminSettingsCodDepositSection.vue'
 import AdminSettingsLowStockSection from '~/components/admin/settings/AdminSettingsLowStockSection.vue'
@@ -226,6 +227,7 @@ useEventListener('beforeunload', (event: BeforeUnloadEvent) => {
         {{ t('admin.content.tabs.quiz') }}
       </NuxtLink>
       <NuxtLink
+        v-if="FEATURES.bridal"
         :to="localePath('/admin/bridal')"
         class="font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >

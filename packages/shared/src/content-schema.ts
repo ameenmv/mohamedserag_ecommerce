@@ -1,5 +1,11 @@
 import { z } from 'zod'
-import { HOME_SECTION_IDS, isSafeContentLink, isUploadedImage } from './content.js'
+import {
+  DEFAULT_HOME_CONTENT,
+  HOME_SECTION_IDS,
+  TRADER_REELS_MAX,
+  isSafeContentLink,
+  isUploadedImage,
+} from './content.js'
 
 export const homeLinkSchema = z.object({
   label: z
@@ -185,6 +191,52 @@ const partnersSchema = z.object({
     .max(60, 'عنوان الوكلاء بيزيد عن 60 حرف'),
 })
 
+const traderReelItemSchema = z.object({
+  name: z
+    .string({ message: 'اسم التاجر مطلوب' })
+    .trim()
+    .min(1, 'اسم التاجر مطلوب')
+    .max(60, 'اسم التاجر بيزيد عن 60 حرف'),
+  place: z
+    .string({ message: 'السطر التحتاني غير صالح' })
+    .trim()
+    .max(80, 'السطر التحتاني بيزيد عن 80 حرف'),
+  url: z
+    .string({ message: 'رابط الفيديو غير صالح' })
+    .trim()
+    .nullable()
+    .transform((val) => (val === '' ? null : val))
+    .refine((val) => val === null || (val.startsWith('https://') && val.length <= 300), {
+      message: 'رابط الفيديو لازم يبدأ بـ https://',
+    }),
+  // Items saved before the popup existed play on Facebook, as before
+  embed: z.boolean({ message: 'خيار التشغيل جوه الموقع غير صالح' }).default(false),
+  image: z
+    .string({ message: 'صورة الفيديو غير صالحة' })
+    .trim()
+    .nullable()
+    .default(null)
+    .transform((val) => (val === '' ? null : val))
+    .refine((val) => val === null || isUploadedImage(val), {
+      message: 'الصورة لازم تبدأ بـ /uploads/',
+    }),
+})
+
+export const reelPreviewInputSchema = z.object({
+  url: z
+    .string({ message: 'رابط الفيديو مطلوب' })
+    .trim()
+    .min(1, 'رابط الفيديو مطلوب')
+    .max(300, 'رابط الفيديو طويل'),
+})
+
+// Content saved before this section existed has no `traderReels`: it reads as the defaults
+const traderReelsSchema = z
+  .object({
+    items: z.array(traderReelItemSchema).max(TRADER_REELS_MAX, `أقصى عدد فيديوهات ${TRADER_REELS_MAX}`),
+  })
+  .default(() => DEFAULT_HOME_CONTENT.traderReels)
+
 const guidesSchema = z.object({
   title: z
     .string({ message: 'عنوان الدليل مطلوب' })
@@ -203,6 +255,7 @@ export const homeContentSchema = z.object({
   tradersTeaser: tradersTeaserSchema,
   aboutTeaser: aboutTeaserSchema,
   partners: partnersSchema,
+  traderReels: traderReelsSchema,
   guides: guidesSchema,
 })
 
@@ -223,6 +276,7 @@ export const homeLayoutSchema = z.object({
 export const homeDraftInputSchema = z.object({
   sections: homeContentSchema,
   layout: homeLayoutSchema,
+  english: homeContentSchema.nullable().optional(),
 })
 
 export const homePublishInputSchema = z.object({
@@ -232,6 +286,36 @@ export const homePublishInputSchema = z.object({
     .max(80, 'تسمية الإصدار بيزيد عن 80 حرف')
     .optional(),
 })
+
+export const pageTranslationsEnSchema = z
+  .object({
+    title: z.string().trim().max(120, 'عنوان الصفحة بيزيد عن 120 حرف').nullable().optional(),
+    body: z.string().trim().max(50000, 'محتوى الصفحة بيزيد عن 50000 حرف').nullable().optional(),
+    seoTitle: z.string().trim().max(70, 'عنوان SEO بيزيد عن 70 حرف').nullable().optional(),
+    seoDescription: z.string().trim().max(160, 'وصف SEO بيزيد عن 160 حرف').nullable().optional(),
+  })
+  .transform((data) => {
+    const res: {
+      title?: string
+      body?: string
+      seoTitle?: string
+      seoDescription?: string
+    } = {}
+    if (data.title && data.title.length > 0) res.title = data.title
+    if (data.body && data.body.length > 0) res.body = data.body
+    if (data.seoTitle && data.seoTitle.length > 0) res.seoTitle = data.seoTitle
+    if (data.seoDescription && data.seoDescription.length > 0) res.seoDescription = data.seoDescription
+    return res
+  })
+
+export const pageTranslationsSchema = z.object({
+  en: pageTranslationsEnSchema.optional(),
+})
+
+export type PageTranslationsEnInput = z.input<typeof pageTranslationsEnSchema>
+export type PageTranslationsEn = z.output<typeof pageTranslationsEnSchema>
+export type PageTranslationsInput = z.input<typeof pageTranslationsSchema>
+export type PageTranslations = z.output<typeof pageTranslationsSchema>
 
 export const pageInputSchema = z.object({
   title: z
@@ -256,7 +340,41 @@ export const pageInputSchema = z.object({
     .nullable()
     .transform((val) => (val === '' ? null : val)),
   published: z.boolean({ message: 'حالة النشر غير صالحة' }),
+  translations: pageTranslationsSchema.nullable().optional(),
 })
+
+export const guideTranslationsEnSchema = z
+  .object({
+    title: z.string().trim().max(120, 'عنوان الدليل بيزيد عن 120 حرف').nullable().optional(),
+    summary: z.string().trim().max(280, 'ملخص الدليل بيزيد عن 280 حرف').nullable().optional(),
+    body: z.string().trim().max(100000, 'محتوى الدليل بيزيد عن 100000 حرف').nullable().optional(),
+    seoTitle: z.string().trim().max(70, 'عنوان SEO بيزيد عن 70 حرف').nullable().optional(),
+    seoDescription: z.string().trim().max(160, 'وصف SEO بيزيد عن 160 حرف').nullable().optional(),
+  })
+  .transform((data) => {
+    const res: {
+      title?: string
+      summary?: string
+      body?: string
+      seoTitle?: string
+      seoDescription?: string
+    } = {}
+    if (data.title && data.title.length > 0) res.title = data.title
+    if (data.summary && data.summary.length > 0) res.summary = data.summary
+    if (data.body && data.body.length > 0) res.body = data.body
+    if (data.seoTitle && data.seoTitle.length > 0) res.seoTitle = data.seoTitle
+    if (data.seoDescription && data.seoDescription.length > 0) res.seoDescription = data.seoDescription
+    return res
+  })
+
+export const guideTranslationsSchema = z.object({
+  en: guideTranslationsEnSchema.optional(),
+})
+
+export type GuideTranslationsEnInput = z.input<typeof guideTranslationsEnSchema>
+export type GuideTranslationsEn = z.output<typeof guideTranslationsEnSchema>
+export type GuideTranslationsInput = z.input<typeof guideTranslationsSchema>
+export type GuideTranslations = z.output<typeof guideTranslationsSchema>
 
 export const guideInputSchema = z.object({
   slug: z
@@ -309,6 +427,7 @@ export const guideInputSchema = z.object({
     .nullable()
     .transform((val) => (val === '' ? null : val)),
   published: z.boolean({ message: 'حالة النشر غير صالحة' }),
+  translations: guideTranslationsSchema.nullable().optional(),
 })
 
 export const guidePatchSchema = guideInputSchema.partial()

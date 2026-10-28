@@ -24,6 +24,8 @@ env:
   ADMIN_PASSWORD: ci-admin-password
   ADMIN_NAME: CI Admin
   ALLOW_TEST_SEED: 'true'
+  # The dev seed's demo flash sale would change the prices the browser suite expects
+  SEED_DEMO_FLASH: 'false'
   # 32+ characters throwaway secret for the test seed endpoint in CI
   TEST_SEED_SECRET: ci-test-seed-secret-must-be-32-chars-long-min
   E2E_TELEMETRY_DISABLED: '1'
@@ -99,6 +101,9 @@ jobs:
       # The production build, not `pnpm dev`: the CSP, compression and lazy hydration only exist there.
       - name: Start production API and web
         env:
+          # Every browser test (and the SSR calls it causes) comes from this runner's one IP; the
+          # per-visitor limit (120/min) made the full suite fail at random with 429s.
+          THROTTLE_LIMIT: '2000'
           NUXT_API_INTERNAL_BASE: http://localhost:4000/api
           NUXT_PUBLIC_API_BASE: http://localhost:4000/api
           NUXT_PUBLIC_SITE_URL: http://localhost:3000
@@ -138,14 +143,28 @@ jobs:
             echo "::endgroup::"
           done
 
-      - name: Start Caddy for Lighthouse (HTTP/2 like production)
+      # A second web server whose browser API base is the Caddy origin, like production: with an item in
+      # the cart every page asks /api/cart/quote, which would be a blocked cross-origin call to :4000.
+      - name: Start web and Caddy for Lighthouse (HTTP/2 like production)
         if: ${{ !cancelled() }}
-        run: docker run -d --name lh-caddy --network host -v "$PWD/docker/Caddyfile.lighthouse:/etc/caddy/Caddyfile:ro" caddy:2
+        env:
+          NUXT_API_INTERNAL_BASE: http://localhost:4000/api
+          NUXT_PUBLIC_API_BASE: https://localhost:8443/api
+          NUXT_PUBLIC_SITE_URL: https://localhost:8443
+        run: |
+          (cd apps/web && PORT=3001 nohup node .output/server/index.mjs > /tmp/web-lh.log 2>&1 &)
+          docker run -d --name lh-caddy --network host -v "$PWD/docker/Caddyfile.lighthouse:/etc/caddy/Caddyfile:ro" caddy:2
+          for i in $(seq 1 60); do
+            curl -fsSk https://localhost:8443/healthz > /dev/null && curl -fsSk https://localhost:8443/api/health > /dev/null && exit 0
+            sleep 1
+          done
+          echo "lighthouse servers did not start"; cat /tmp/web-lh.log; docker logs lh-caddy; exit 1
 
       # Home, a category, a product and checkout against the seeded catalogue (spec 009, T011).
       - name: Lighthouse CI (mobile, four pages)
         if: ${{ !cancelled() }}
-        run: pnpm dlx @lhci/cli@0.15.1 autorun --config=lighthouserc.json
+        # puppeteer runs lighthouse/add-to-cart.cjs first, so checkout is measured with an item in the cart
+        run: pnpm dlx --package @lhci/cli@0.15.1 --package puppeteer@24.10.2 lhci autorun --config=lighthouserc.json
 
       - name: Upload Lighthouse artifacts
         if: ${{ !cancelled() }}
@@ -159,7 +178,7 @@ jobs:
 
       - name: Server logs on failure
         if: failure()
-        run: cat /tmp/api.log /tmp/web.log || true
+        run: cat /tmp/api.log /tmp/web.log /tmp/web-lh.log || true
 
       - name: Upload e2e artifacts
         if: ${{ !cancelled() }}

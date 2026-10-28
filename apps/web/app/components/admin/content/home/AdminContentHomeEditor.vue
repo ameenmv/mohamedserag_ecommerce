@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { DEFAULT_HOME_CONTENT_EN } from '@serag/shared'
 import type { HomeSectionId } from '@serag/shared'
 import { Eye, History } from '@lucide/vue'
 import { Button } from '@/components/ui/button'
@@ -8,6 +9,7 @@ const { t } = useI18n()
 const editor = useAdminHomeEditor()
 
 const selected = ref<HomeSectionId>('hero')
+const currentLocale = ref<'ar' | 'en'>('ar')
 const versionsOpen = ref(false)
 const publishing = ref(false)
 const restoringId = ref<string | null>(null)
@@ -36,7 +38,12 @@ const changedCounts = computed<Record<HomeSectionId, number>>(() => {
   for (const id of editor.draft.value.layout.order) {
     let count = 0
     for (const field of HOME_SECTION_META[id].fields) {
-      if (editor.isFieldChanged(id, field.key)) count += 1
+      if (
+        editor.isFieldChanged(id, field.key, 'ar') ||
+        editor.isFieldChanged(id, field.key, 'en')
+      ) {
+        count += 1
+      }
     }
     counts[id] = count
   }
@@ -136,14 +143,25 @@ function onSelect(id: HomeSectionId): void {
         />
 
         <AdminContentHomeFields
-          :key="selected"
+          :key="`${selected}-${currentLocale}`"
+          :locale="currentLocale"
           :section-id="selected"
           :section="editor.draft.value.sections[selected]"
+          :english-section="editor.draft.value.english[selected]"
           :published-section="editor.state.value.published.sections[selected]"
+          :published-english-section="
+            editor.state.value.published.english
+              ? editor.state.value.published.english[selected]
+              : DEFAULT_HOME_CONTENT_EN[selected]
+          "
           :hydrated="editor.hydrated.value"
           :errors="editor.fieldErrors.value"
-          @set="(key: string, value: unknown) => editor.setField(selected, key, value)"
-          @reset="(key: string) => editor.resetField(selected, key)"
+          @update:locale="currentLocale = $event"
+          @set="
+            (key: string, value: unknown, loc: 'ar' | 'en') =>
+              editor.setField(selected, key, value, loc)
+          "
+          @reset="(key: string, loc: 'ar' | 'en') => editor.resetField(selected, key, loc)"
         />
 
         <div :class="showPreview ? 'block' : 'hidden lg:block'">

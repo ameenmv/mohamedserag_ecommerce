@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowRight, LayoutGrid } from '@lucide/vue'
+import { ArrowRight } from '@lucide/vue'
 import type { CategoryTreeNode, HomeContent } from '@serag/shared'
 
 defineProps<{
@@ -18,15 +18,15 @@ const headingId = useId()
     class="bg-serag-ivory"
     :aria-labelledby="headingId"
   >
-    <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-      <div class="mb-10 flex flex-wrap items-end justify-between gap-4">
+    <div class="mx-auto max-w-7xl px-4 pt-16 pb-14 sm:px-6 lg:px-10 lg:pt-[88px] lg:pb-[72px]">
+      <div class="mb-11 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p class="text-xs font-bold tracking-[0.25em] text-serag-gold-ink uppercase">
+          <p class="eyebrow text-serag-gold-ink">
             {{ t('store.home.categoriesEyebrow') }}
           </p>
           <h2
             :id="headingId"
-            class="mt-2 font-display text-4xl leading-none text-serag-green sm:text-5xl"
+            class="mt-2 font-display text-[clamp(36px,5vw,64px)] leading-none text-serag-green"
           >
             {{ content.title }}
           </h2>
@@ -40,20 +40,23 @@ const headingId = useId()
         </NuxtLink>
       </div>
 
-      <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+      <div class="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
         <NuxtLink
-          v-for="category in categories"
+          v-for="(category, index) in categories"
           :key="category.slug"
           :to="localePath(`/c/${category.slug}`)"
-          class="flex min-w-0 flex-col items-center gap-4 rounded-[var(--radius-card)] border border-border bg-card px-5 py-8 text-center transition-colors hover:border-serag-gold/60 focus-visible:ring-2 focus-visible:ring-serag-gold focus-visible:outline-none"
+          class="flex min-w-0 flex-col items-center gap-[18px] rounded-[var(--radius-card)] border-[1.5px] border-[#ECE6D3] bg-card px-3.5 py-5 text-center transition duration-200 hover:-translate-y-2 hover:border-serag-gold hover:shadow-[0_24px_40px_-18px_rgba(20,32,26,.35)] focus-visible:ring-2 focus-visible:ring-serag-gold focus-visible:outline-none sm:px-6 sm:py-[30px] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
         >
           <span
-            class="flex size-20 items-center justify-center rounded-full bg-serag-green/10 text-serag-green"
+            :class="[
+              'flex size-16 items-center justify-center rounded-full sm:size-24',
+              index % 2 === 0 ? 'bg-[#EAF2DC] text-serag-green' : 'bg-[#F4EFD6] text-serag-gold-ink',
+            ]"
             aria-hidden="true"
           >
-            <LayoutGrid class="size-9" />
+            <StoreCategoryIcon :slug="category.slug" class="size-9 sm:size-[52px]" stroke-width="1.8" />
           </span>
-          <span class="font-bold text-foreground">{{ category.name }}</span>
+          <span class="text-[15px] font-bold text-foreground sm:text-xl">{{ category.name }}</span>
         </NuxtLink>
       </div>
     </div>

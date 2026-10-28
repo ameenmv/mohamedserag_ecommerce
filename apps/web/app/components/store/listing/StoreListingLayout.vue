@@ -54,9 +54,9 @@ function handleSortChange(sort: CatalogSort) {
 
     <!-- Main Layout: Sidebar on lg start side, Results on end side -->
     <div class="flex flex-col items-start gap-6 lg:flex-row lg:gap-8">
-      <!-- Desktop Filters Sidebar (Hidden below lg) -->
+      <!-- Desktop Filters Sidebar (Hidden below lg); stays in view and scrolls on its own -->
       <aside
-        class="hidden w-72 shrink-0 rounded-3xl border border-border/80 bg-card p-5 shadow-xs lg:block"
+        class="scrollbar-none hidden w-72 shrink-0 rounded-[28px] border border-border bg-card p-5 shadow-xs lg:sticky lg:top-28 lg:block lg:max-h-[calc(100dvh-8rem)] lg:overflow-y-auto"
       >
         <StoreListingFilters
           :filters="filters"
@@ -87,9 +87,10 @@ function handleSortChange(sort: CatalogSort) {
         />
 
         <!-- Empty state when no products match -->
-        <div v-if="data && data.items.length === 0 && !pending">
+        <div v-if="!pending && (!data || data.items.length === 0)">
           <StoreListingEmpty
             :q="filters.q"
+            :failed="!data"
             @clear-filters="emit('clearFilters', false)"
           />
         </div>

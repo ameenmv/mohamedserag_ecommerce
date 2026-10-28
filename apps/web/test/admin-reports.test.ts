@@ -4,7 +4,7 @@ import {
   formatBucketLabel,
   serializeReportQuery,
   sharePercent,
-  toApiQuery,
+  toAdminReportApiQuery,
   validateReportQuery,
   type AdminReportQueryState,
 } from '../app/utils/admin-reports'
@@ -100,7 +100,7 @@ describe('admin-reports query', () => {
   it('always resolves presets to explicit dates for the API', () => {
     const now = new Date('2026-10-20T12:00:00Z')
     const state: AdminReportQueryState = { tab: 'revenue', preset: '7d', groupBy: 'day' }
-    expect(toApiQuery(state, now)).toEqual({
+    expect(toAdminReportApiQuery(state, now)).toEqual({
       from: '2026-10-14',
       to: '2026-10-20',
       groupBy: 'day',
@@ -116,7 +116,7 @@ describe('admin-reports query', () => {
       to: '2026-01-31',
       groupBy: 'week',
     }
-    expect(toApiQuery(state, now)).toEqual({
+    expect(toAdminReportApiQuery(state, now)).toEqual({
       from: '2026-01-01',
       to: '2026-01-31',
       groupBy: 'week',

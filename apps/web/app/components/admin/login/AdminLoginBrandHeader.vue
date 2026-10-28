@@ -5,7 +5,7 @@ const { t } = useI18n()
 <template>
   <div class="flex items-center gap-3 mb-2">
     <div
-      class="size-12 rounded-2xl bg-serag-green flex items-center justify-center font-num font-extrabold text-xl text-serag-gold-hi shadow-[inset_0_0_0_2px_rgba(210,194,122,0.45)]"
+      class="size-12 rounded-2xl bg-serag-green flex items-center justify-center font-num font-extrabold text-xl text-serag-ivory shadow-[inset_0_0_0_2px_rgba(210,194,122,0.45)]"
     >
       MS
     </div>

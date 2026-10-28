@@ -1,4 +1,4 @@
-import type { HomeSectionId } from '@serag/shared'
+import { TRADER_REELS_MAX, type HomeSectionId } from '@serag/shared'
 
 /**
  * Editable field kinds for the home CMS editor. Each kind maps to a control
@@ -14,6 +14,7 @@ export type HomeFieldKind =
   | 'uspItems'
   | 'stringList'
   | 'categorySlugs'
+  | 'reels'
 
 export interface HomeFieldMeta {
   /** Top-level key on the section content object. */
@@ -166,6 +167,18 @@ export const HOME_SECTION_META: Record<HomeSectionId, HomeSectionMeta> = {
     nameKey: 'admin.content.sections.partners',
     fields: [
       { key: 'title', kind: 'text', labelKey: 'admin.content.fields.partners.title', max: 60 },
+    ],
+  },
+  traderReels: {
+    nameKey: 'admin.content.sections.traderReels',
+    fields: [
+      {
+        key: 'items',
+        kind: 'reels',
+        labelKey: 'admin.content.fields.traderReels.items',
+        max: 80,
+        maxItems: TRADER_REELS_MAX,
+      },
     ],
   },
   guides: {

@@ -31,6 +31,7 @@ const cms = useAdminCms()
 const draftSections = ref<HomeContent>(DEFAULT_HOME_CONTENT)
 const draftLayout = ref<HomeLayout>(DEFAULT_HOME_LAYOUT)
 const flashProducts = ref<ProductCard[]>([])
+const flashEndsAt = ref<string | null>(null)
 const categories = ref<CategoryTreeNode[]>([])
 const brands = ref<BrandSummary[]>([])
 const guides = ref<GuideCard[]>([])
@@ -81,6 +82,8 @@ async function loadPreview(): Promise<void> {
     draftSections.value = home.draft.sections
     draftLayout.value = home.draft.layout
     flashProducts.value = offers.flash.flatMap((group) => group.products)
+    flashEndsAt.value =
+      offers.flash.map((group) => group.endsAt).sort((a, b) => Date.parse(a) - Date.parse(b))[0] ?? null
     categories.value = cats
     brands.value = brandList
     guides.value = guideList
@@ -103,6 +106,7 @@ onMounted(async () => {
       :visible-sections="visibleSections"
       :sections="draftSections"
       :flash-products="flashProducts"
+      :flash-ends-at="flashEndsAt"
       :featured-categories="featuredCategories"
       :partners="partners"
       :guides="guides"

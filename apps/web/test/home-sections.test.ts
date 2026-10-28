@@ -78,4 +78,13 @@ describe('visibleHomeSections', () => {
     )
     expect(result).toEqual(['flash', 'partners', 'guides', 'featuredCategories'])
   })
+
+  it('drops the trader videos section when there are no videos', () => {
+    const empty: HomeContent = { ...DEFAULT_HOME_CONTENT, traderReels: { items: [] } }
+    expect(visibleHomeSections(layout(['hero', 'traderReels']), empty, ALL_VISIBLE)).toEqual(['hero'])
+    expect(visibleHomeSections(layout(['hero', 'traderReels']), DEFAULT_HOME_CONTENT, ALL_VISIBLE)).toEqual([
+      'hero',
+      'traderReels',
+    ])
+  })
 })

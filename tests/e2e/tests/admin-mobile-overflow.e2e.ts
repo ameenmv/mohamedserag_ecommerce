@@ -2,6 +2,7 @@ import { afterEach, test } from '@e2e-dev/web';
 import { expect } from 'e2e';
 import { loginWithAdminSession, waitForHydration } from './support/auth.js';
 import { createSeed } from './support/seed.js';
+import { BRIDAL_ENABLED } from './support/features.js'
 
 let seed = createSeed();
 
@@ -17,7 +18,7 @@ const ADMIN_MOBILE_PATHS = [
   '/admin/catalog',
   '/admin/catalog?tab=brands',
   '/admin/catalog?tab=spec-templates',
-  '/admin/bridal',
+  ...(BRIDAL_ENABLED ? ['/admin/bridal'] : []),
   '/admin/promotions',
   '/admin/promotions?tab=coupons',
   '/admin/notify',

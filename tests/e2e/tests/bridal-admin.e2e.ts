@@ -3,6 +3,7 @@ import { expect } from 'e2e'
 import { apiUrl } from './api-url.js'
 import { createSeed, type SeedAdminSessionResult, type SeedHelper } from './support/seed.js'
 import { loginWithAdminSession, waitForHydration } from './support/auth.js'
+import { BRIDAL_SKIP } from './support/features.js'
 
 let seed = createSeed()
 
@@ -147,7 +148,7 @@ async function createAndLockReservation(
   }
 }
 
-test('admin bridal reservations and settings: filter list, detail panel, delivery date agreement, reprice, extend lock, dashboard expiring locks, and tier editor', async ({
+test('admin bridal reservations and settings: filter list, detail panel, delivery date agreement, reprice, extend lock, dashboard expiring locks, and tier editor', { skip: BRIDAL_SKIP }, async ({
   app,
   screen,
   browser,

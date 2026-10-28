@@ -12,6 +12,7 @@ export function useAdminCms() {
   async function saveDraft(input: {
     sections: HomeContent
     layout: HomeLayout
+    english?: HomeContent | null
   }): Promise<AdminHomeState> {
     return adminFetch<AdminHomeState>('/admin/content/home/draft', {
       method: 'PUT',
@@ -52,6 +53,14 @@ export function useAdminCms() {
     })
   }
 
+  /** A Facebook reel link → its plain embeddable address and a saved copy of its picture. */
+  async function previewReel(url: string): Promise<{ url: string; image: string | null; title: string | null }> {
+    return adminFetch<{ url: string; image: string | null; title: string | null }>(
+      '/admin/content/reels/preview',
+      { method: 'POST', body: { url } },
+    )
+  }
+
   return {
     getHome,
     saveDraft,
@@ -60,5 +69,6 @@ export function useAdminCms() {
     versions,
     restore,
     uploadImage,
+    previewReel,
   }
 }

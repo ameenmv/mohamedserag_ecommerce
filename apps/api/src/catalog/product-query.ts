@@ -1,6 +1,7 @@
 import {
   applyFlashToPrice,
   deriveAvailability,
+  localizedText,
   type AvailabilityMode,
   type AvailabilityState,
   type CatalogSort,
@@ -10,6 +11,7 @@ import {
   type SpecTemplateField,
 } from '@serag/shared'
 import { Prisma } from '../generated/prisma/client.js'
+import { currentLocale } from '../common/content-locale.middleware.js'
 
 export type ParsedSpecFilter =
   | { key: string; type: 'choice'; values: string[] }
@@ -314,6 +316,7 @@ export interface RawProductEntity {
   id: string
   slug: string
   name: string
+  translations?: unknown
   modelCode: string
   price: number
   oldPrice: number | null
@@ -324,10 +327,12 @@ export interface RawProductEntity {
   brand: {
     slug: string
     name: string
+    translations?: unknown
   }
   category: {
     slug: string
     name: string
+    translations?: unknown
   }
   images: Array<{
     url: string
@@ -349,11 +354,14 @@ export function toProductCard(
     flash,
   )
 
+  const locale = currentLocale()
+  const name = localizedText(product.name, product.translations, 'name', locale)
   const firstImg = product.images[0]
   const image = firstImg
     ? {
         url: firstImg.url,
-        alt: firstImg.alt,
+        // Alt texts are written in Arabic; the English page uses the product name instead
+        alt: locale === 'en' ? name : firstImg.alt,
         isReal: firstImg.isReal,
       }
     : null
@@ -367,15 +375,15 @@ export function toProductCard(
   return {
     id: product.id,
     slug: product.slug,
-    name: product.name,
+    name,
     modelCode: product.modelCode,
     brand: {
       slug: product.brand.slug,
-      name: product.brand.name,
+      name: localizedText(product.brand.name, product.brand.translations, 'name', locale),
     },
     category: {
       slug: product.category.slug,
-      name: product.category.name,
+      name: localizedText(product.category.name, product.category.translations, 'name', locale),
     },
     price: pricing.price,
     oldPrice: pricing.oldPrice,
@@ -385,7 +393,7 @@ export function toProductCard(
       state: derived.state,
       orderable: derived.orderable,
       maxQty: derived.maxQty,
-      leadTimeText: product.leadTimeText,
+      leadTimeText: localizedText(product.leadTimeText, product.translations, 'leadTimeText', locale),
     },
     flash,
     rating,

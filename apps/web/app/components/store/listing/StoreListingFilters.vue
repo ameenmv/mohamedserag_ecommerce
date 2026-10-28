@@ -195,7 +195,7 @@ function getSpecRange(key: string): { min?: number; max?: number } {
       >
         <StoreListingFilterChecklist
           :title="field.label"
-          :options="field.options.map((opt) => ({ value: opt, label: opt }))"
+          :options="field.options.map((opt, i) => ({ value: opt, label: field.optionLabels?.[i] ?? opt }))"
           :selected="getSpecChoiceValues(field.key)"
           @toggle="onSpecChoiceToggle(field.key, $event)"
         />
