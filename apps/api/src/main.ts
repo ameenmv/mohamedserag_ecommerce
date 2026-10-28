@@ -1,3 +1,5 @@
+// Must stay first: starts error tracking before the rest of the app loads
+import './instrument.js'
 import 'reflect-metadata'
 import { ConsoleLogger } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'

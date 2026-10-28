@@ -24,7 +24,21 @@ docker compose -f docker/compose.yml logs backup | grep backup_failed
 docker compose -f docker/compose.yml exec backup sh /backup/backup.sh --once
 ```
 
-Backups on the same disk protect against mistakes (a bad migration, a deleted product), **not** against losing the server. Copy them somewhere else regularly, for example:
+Backups on the same disk protect against mistakes (a bad migration, a deleted product), **not** against losing the server. The `offsite` service copies them to **Cloudflare R2** every 6 hours (it stays idle while the `R2_*` variables are empty):
+
+| Variable (`docker/.env`) | Meaning |
+|---|---|
+| `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY` | from Cloudflare → R2 → Manage API tokens (Object Read & Write) |
+| `R2_BUCKET_BACKUPS` | a **private** bucket, e.g. `serag-backups` |
+| `OFFSITE_RETENTION_DAYS` | days to keep remote copies (default 14); the newest dump and uploads archive are always kept |
+
+```bash
+docker compose -f docker/compose.yml logs offsite | grep -E "offsite_(ok|failed)"   # last copy result
+```
+
+To restore from R2, download the dump (R2 dashboard, `rclone copy r2:serag-backups/db ./` or any S3 client) and follow §3. R2's free allowance is 10 GB; the uploads archive is a full copy each day, so lower `OFFSITE_RETENTION_DAYS` if the images grow large.
+
+Other ways to copy them off the server, for example:
 
 ```bash
 docker compose -f docker/compose.yml cp backup:/backups ./serag-backups

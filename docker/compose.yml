@@ -74,6 +74,9 @@ services:
       API_PORT: 4000
       UPLOADS_DIR: /uploads
       ALLOW_TEST_SEED: "false"
+      # Error tracking (Sentry); empty = off
+      SENTRY_DSN: ${SENTRY_DSN_API:-}
+      SENTRY_RELEASE: ${GIT_SHA:-}
     volumes:
       - uploads:/uploads
     healthcheck:
@@ -103,6 +106,9 @@ services:
       # 'true' only on the real domain; otherwise robots.txt disallows everything
       NUXT_PUBLIC_SITE_INDEXABLE: ${SITE_INDEXABLE:-false}
       UPLOADS_DIR: /uploads
+      # Server-side error tracking (Sentry); empty = off
+      NUXT_SENTRY_DSN: ${SENTRY_DSN_WEB:-}
+      SENTRY_RELEASE: ${GIT_SHA:-}
     volumes:
       - uploads:/uploads:ro
     healthcheck:
@@ -133,6 +139,27 @@ services:
       - ./backup:/backup:ro
       - uploads:/uploads:ro
       - backups:/backups
+
+  # Copies the backups to Cloudflare R2 every 6 hours (idle until the R2_* variables are set).
+  offsite:
+    image: rclone/rclone:1.68
+    restart: unless-stopped
+    depends_on:
+      - backup
+    entrypoint: ["sh", "/backup/offsite.sh"]
+    environment:
+      RCLONE_CONFIG_R2_TYPE: s3
+      RCLONE_CONFIG_R2_PROVIDER: Cloudflare
+      RCLONE_CONFIG_R2_ACCESS_KEY_ID: ${R2_ACCESS_KEY_ID:-}
+      RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${R2_SECRET_ACCESS_KEY:-}
+      RCLONE_CONFIG_R2_ENDPOINT: https://${R2_ACCOUNT_ID:-}.r2.cloudflarestorage.com
+      # The API token may only touch objects, not create buckets
+      RCLONE_CONFIG_R2_NO_CHECK_BUCKET: "true"
+      R2_BUCKET_BACKUPS: ${R2_BUCKET_BACKUPS:-}
+      OFFSITE_RETENTION_DAYS: ${OFFSITE_RETENTION_DAYS:-14}
+    volumes:
+      - ./backup:/backup:ro
+      - backups:/backups:ro
 
   # Note: The Umami dashboard UI does not work under /stats (only the tracker and /api/send do).
   # Dashboard access for now via `docker compose port umami 3000` / SSH tunnel; a subdomain later.

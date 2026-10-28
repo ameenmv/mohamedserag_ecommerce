@@ -1,0 +1,8 @@
+# Run the production stack on a PC behind a tunnel (e.g. Cloudflare Tunnel): Caddy serves plain
+# HTTP on a local port and the tunnel adds HTTPS. Use together with compose.yml:
+#   docker compose -f docker/compose.yml -f docker/compose.tunnel.yml up -d --build
+# Set SITE_ADDRESS=:80 and PUBLIC_URL=<the tunnel's https URL> in docker/.env.
+services:
+  caddy:
+    ports: !override
+      - "127.0.0.1:8088:80"

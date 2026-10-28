@@ -26,6 +26,7 @@
     "@nestjs/throttler": "^6.7.1",
     "@prisma/adapter-pg": "7.10.1",
     "@prisma/client": "7.10.1",
+    "@sentry/nestjs": "^11.9.0",
     "@serag/shared": "workspace:*",
     "argon2": "^0.45.1",
     "cookie-parser": "^1.4.7",

@@ -20,7 +20,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      meta: [{ name: 'theme-color', content: '#16291E' }],
+      meta: [{ name: 'theme-color', content: '#141412' }],
       // Icons from the store's logo square (public/, generated from public/logo.jpg)
       link: [
         { rel: 'icon', href: '/favicon.ico', sizes: '48x48' },
@@ -33,7 +33,6 @@ export default defineNuxtConfig({
   $development: {
     runtimeConfig: {
       public: {
-        paletteLab: 'true',
         // Prefilled admin credentials only populated in `nuxt dev`.
         devLogin: {
           email: process.env.ADMIN_EMAIL ?? 'admin@serag.local',
@@ -46,14 +45,14 @@ export default defineNuxtConfig({
   runtimeConfig: {
     // Server-side (SSR) calls go straight to the API container.
     apiInternalBase: 'http://localhost:4000/api',
+    // Server-side error tracking (Sentry). Empty = off; set NUXT_SENTRY_DSN.
+    sentryDsn: '',
     public: {
       apiBase: 'http://localhost:4000/api',
       // Public origin used for canonical URLs, sitemap, robots and JSON-LD.
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
       // 'true' only on the production origin; otherwise robots.txt answers `Disallow: /`.
       siteIndexable: process.env.NUXT_PUBLIC_SITE_INDEXABLE || 'false',
-      // 'true' shows the floating palette picker (always on in nuxt dev).
-      paletteLab: process.env.NUXT_PUBLIC_PALETTE_LAB || 'false',
       umamiHost: '',
       umamiWebsiteId: '',
       // Only populated in nuxt dev via $development; empty in production.

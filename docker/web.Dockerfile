@@ -7,6 +7,9 @@ WORKDIR /repo
 FROM base AS build
 COPY . .
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+# nuxt.config bakes the image-optimiser (IPX) source dir at build time: it must be the uploads
+# volume's path in the runtime image, or every /_ipx/... request for an upload is a 404
+ENV UPLOADS_DIR=/uploads
 RUN pnpm turbo run build --filter=@serag/web...
 
 # Production runtime image: minimal, non-root, with Nuxt .output only
