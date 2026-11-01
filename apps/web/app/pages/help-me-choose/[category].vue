@@ -93,6 +93,8 @@ function onRestart(): void {
 
       <div class="mt-6">
         <StoreQuizQuestion
+          :key="step"
+          class="question-in"
           :question="current"
           :selected="currentAnswer"
           :disabled="submitting"

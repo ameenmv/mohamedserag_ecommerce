@@ -285,6 +285,12 @@
 .stagger-in > :nth-child(8) { animation-delay: 420ms; }
 @keyframes stagger-in { from { transform: translateY(18px) scale(.97); } }
 
+/* Quiz: each question slides in from the side the reader moves to (right in Arabic). */
+.question-in { animation: question-in .35s var(--ease-out-expo) both; }
+@keyframes question-in { from { transform: translateX(-24px); } }
+[dir='rtl'] .question-in { animation-name: question-in-rtl; }
+@keyframes question-in-rtl { from { transform: translateX(24px); } }
+
 /* A header counter pops when its number changes; a saved heart pops once. */
 .badge-bump { animation: pop .35s var(--ease-spring) both; }
 .heart-pop { animation: pop .4s var(--ease-spring) both; }
@@ -299,7 +305,7 @@
 @keyframes vt-in { from { opacity: 0; transform: translateY(10px); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .scroll-reveal, .badge-bump, .heart-pop, .hero-art-in, .stagger-in > * { animation: none; }
+  .scroll-reveal, .badge-bump, .heart-pop, .hero-art-in, .question-in, .stagger-in > * { animation: none; }
   button:not(:disabled):active, [role='button']:active, a.btn-press:active { scale: none; }
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
 }
