@@ -41,18 +41,19 @@ function next(): void {
   <div class="flex flex-col">
     <!-- Main image viewport -->
     <div
-      class="relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-[28px] border border-border bg-serag-cream p-4 sm:p-8 dark:bg-muted/30"
+      class="group relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-[28px] border border-border bg-serag-cream p-4 sm:p-8 dark:bg-muted/30"
     >
       <!-- NuxtImg with explicit width/height and LCP prioritization on first image -->
       <NuxtImg
         v-if="currentImage?.url"
+        :key="currentImage.url"
         :src="currentImage.url"
         :alt="currentImage.alt || productName"
         width="600"
         height="600"
         :loading="currentIndex === 0 ? 'eager' : 'lazy'"
         :fetchpriority="currentIndex === 0 ? 'high' : 'auto'"
-        class="size-full object-contain transition-transform duration-300"
+        class="img-swap size-full object-contain transition-transform duration-500 ease-out group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
       />
 
       <!-- Neutral placeholder when images are missing -->

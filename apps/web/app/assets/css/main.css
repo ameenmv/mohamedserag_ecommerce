@@ -403,6 +403,31 @@
 /* Two copies with a 1rem gap between every card: half the track plus half a gap is one copy */
 @keyframes reviews-drift { to { transform: translateY(calc(-50% - .5rem)); } }
 
+/* Page titles: a short sand rule draws itself under the title from the reading side. The title
+   itself never animates (it is often the largest paint). */
+.title-draw::after {
+  content: '';
+  display: block;
+  width: 72px;
+  height: 4px;
+  margin-top: .65rem;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, var(--color-serag-gold), var(--color-serag-gold-hi));
+  transform-origin: right;
+  animation: title-draw .9s var(--ease-out-expo) .15s both;
+}
+[dir='ltr'] .title-draw::after { transform-origin: left; }
+@keyframes title-draw { from { transform: scaleX(0); } }
+
+/* Product gallery: a newly chosen photo settles in (scale only: the first photo may be the
+   largest paint, so it never starts hidden) */
+.img-swap { animation: img-swap .5s var(--ease-out-expo) both; }
+@keyframes img-swap { from { transform: scale(.94); } }
+
+/* Order confirmed: two rings ripple out from the tick, once */
+.success-burst { animation: success-burst 1.1s var(--ease-out-expo) .2s both; }
+@keyframes success-burst { from { transform: scale(.8); opacity: .9; } to { transform: scale(2.2); opacity: 0; } }
+
 /* A header counter pops when its number changes; a saved heart pops once. */
 .badge-bump { animation: pop .35s var(--ease-spring) both; }
 .heart-pop { animation: pop .4s var(--ease-spring) both; }
@@ -417,7 +442,8 @@
 @keyframes vt-in { from { opacity: 0; transform: translateY(10px); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .scroll-reveal, .badge-bump, .heart-pop, .hero-art-in, .question-in, .stagger-in > * { animation: none; }
+  .scroll-reveal, .badge-bump, .heart-pop, .hero-art-in, .question-in, .stagger-in > *, .title-draw::after, .img-swap { animation: none; }
+  .success-burst { display: none; }
   .ink-fill { -webkit-text-fill-color: currentColor; background: none; }
   .reviews-track { animation: none; }
   .reviews-wall { overflow-y: auto; mask-image: none; }

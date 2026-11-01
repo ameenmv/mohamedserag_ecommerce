@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ProductCard } from '@serag/shared'
+import { useRevealOnScroll } from '~/composables/useRevealOnScroll'
 
 const props = withDefaults(
   defineProps<{
@@ -22,6 +23,10 @@ if (import.meta.client) {
 }
 
 const showSkeletons = computed(() => isMounted.value && props.pending)
+
+// Cards further down the page rise in as they come into view
+const gridRef = ref<HTMLElement | null>(null)
+useRevealOnScroll(gridRef, ':scope > article', () => props.products)
 </script>
 
 <template>
@@ -42,6 +47,7 @@ const showSkeletons = computed(() => isMounted.value && props.pending)
     <!-- Real product card grid -->
     <div
       v-else
+      ref="gridRef"
       class="grid grid-cols-2 gap-2.5 sm:gap-5 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3"
     >
       <StoreProductCard

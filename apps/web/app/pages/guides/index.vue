@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { BookOpen } from '@lucide/vue'
+import { useRevealOnScroll } from '~/composables/useRevealOnScroll'
 
 const { t } = useI18n()
 
@@ -10,6 +11,10 @@ useSeoPage({
 
 const { items, page, pageSize, total, pending, loadError, isEmpty, paginationFilters, refresh } =
   await useGuidesList()
+
+// Guides further down rise in as they scroll into view
+const gridRef = ref<HTMLElement | null>(null)
+useRevealOnScroll(gridRef, ':scope > *', items)
 </script>
 
 <template>
@@ -24,7 +29,7 @@ const { items, page, pageSize, total, pending, loadError, isEmpty, paginationFil
     <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
       <!-- Page Heading & Intro -->
       <div class="mb-6 flex flex-col gap-1.5 sm:mb-8">
-        <h1 class="font-display text-3xl text-foreground sm:text-4xl lg:text-5xl">
+        <h1 class="title-draw font-display text-4xl text-foreground sm:text-5xl lg:text-6xl">
           {{ t('store.guides.heading') }}
         </h1>
         <p class="max-w-2xl text-sm text-muted-foreground sm:text-base">
@@ -83,7 +88,7 @@ const { items, page, pageSize, total, pending, loadError, isEmpty, paginationFil
 
       <!-- Grid & Pagination -->
       <template v-else>
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div ref="gridRef" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <StoreGuidesCard
             v-for="(guide, index) in items"
             :key="guide.slug"

@@ -2,6 +2,7 @@
 import type { BreadcrumbItem } from '@serag/shared'
 import { buildBreadcrumbList } from '@serag/shared'
 import { buildProductJsonLd } from '~/utils/product-jsonld'
+import { useRevealOnScroll } from '~/composables/useRevealOnScroll'
 
 const { t, locale } = useI18n()
 const route = useRoute()
@@ -101,6 +102,10 @@ onMounted(() => {
 })
 
 const summaryRef = ref<{ addToCartButton: HTMLElement | null } | null>(null)
+
+// Related products rise in as they scroll into view
+const relatedRef = ref<HTMLElement | null>(null)
+useRevealOnScroll(relatedRef, ':scope > article', () => product.value?.related)
 </script>
 
 <template>
@@ -158,7 +163,7 @@ const summaryRef = ref<{ addToCartButton: HTMLElement | null } | null>(null)
         </h2>
       </div>
 
-      <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+      <div ref="relatedRef" class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
         <StoreProductCard
           v-for="rel in product.related"
           :key="rel.id"

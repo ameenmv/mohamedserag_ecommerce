@@ -35,7 +35,7 @@ function handleCheckout(): void {
 
     <!-- Page Content -->
     <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 sm:py-8">
-      <h1 class="mb-6 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+      <h1 class="title-draw mb-8 font-display text-3xl text-foreground sm:text-4xl">
         {{ t('store.cart.title') }}
       </h1>
 

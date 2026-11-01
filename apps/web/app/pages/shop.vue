@@ -48,7 +48,7 @@ function handleSortUpdate(sort: CatalogSort) {
 
       <!-- Page Heading & Intro -->
       <div class="flex flex-col gap-1.5">
-        <h1 class="font-display text-3xl text-foreground sm:text-4xl lg:text-5xl">
+        <h1 class="title-draw font-display text-4xl text-foreground sm:text-5xl lg:text-6xl">
           {{ pageTitle }}
         </h1>
         <p

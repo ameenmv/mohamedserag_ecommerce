@@ -25,7 +25,7 @@ const { flash, discounted, isEmpty, refresh } = await useOffers()
     <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
       <!-- Page Heading & Intro -->
       <div class="mb-6 flex flex-col gap-1.5 sm:mb-8">
-        <h1 class="font-display text-3xl text-foreground sm:text-4xl lg:text-5xl">
+        <h1 class="title-draw font-display text-4xl text-foreground sm:text-5xl lg:text-6xl">
           {{ t('store.offers.heading') }}
         </h1>
         <p class="max-w-2xl text-sm text-muted-foreground sm:text-base">
