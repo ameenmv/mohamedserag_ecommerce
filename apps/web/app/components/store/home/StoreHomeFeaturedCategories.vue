@@ -45,11 +45,11 @@ const headingId = useId()
           v-for="(category, index) in categories"
           :key="category.slug"
           :to="localePath(`/c/${category.slug}`)"
-          class="flex min-w-0 flex-col items-center gap-[18px] rounded-[var(--radius-card)] border-[1.5px] border-[#ECE6D3] bg-card px-3.5 py-5 text-center transition duration-200 hover:-translate-y-2 hover:border-serag-gold hover:shadow-[0_24px_40px_-18px_rgba(20,32,26,.35)] focus-visible:ring-2 focus-visible:ring-serag-gold focus-visible:outline-none sm:px-6 sm:py-[30px] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+          class="group flex min-w-0 flex-col items-center gap-[18px] rounded-[var(--radius-card)] border-[1.5px] border-[#ECE6D3] bg-card px-3.5 py-5 text-center transition duration-200 hover:-translate-y-2 hover:border-serag-gold hover:shadow-[0_24px_40px_-18px_rgba(20,32,26,.35)] focus-visible:ring-2 focus-visible:ring-serag-gold focus-visible:outline-none sm:px-6 sm:py-[30px] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
         >
           <span
             :class="[
-              'flex size-16 items-center justify-center rounded-full sm:size-24',
+              'flex size-16 items-center justify-center rounded-full transition-transform duration-300 ease-out group-hover:scale-110 group-hover:-rotate-6 sm:size-24 motion-reduce:transition-none motion-reduce:group-hover:transform-none',
               index % 2 === 0 ? 'bg-[#EAF2DC] text-serag-green' : 'bg-[#F4EFD6] text-serag-gold-ink',
             ]"
             aria-hidden="true"
