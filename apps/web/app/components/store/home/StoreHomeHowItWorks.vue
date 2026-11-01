@@ -27,7 +27,7 @@ const whatsappUrl = computed(() =>
         <p class="eyebrow text-serag-gold-ink">{{ t('store.home.howItWorksEyebrow') }}</p>
         <h2 :id="headingId" class="mt-2.5 mb-3.5 font-display text-[clamp(40px,5.5vw,72px)] leading-none text-serag-green">
           {{ t('store.home.how.title') }}
-          <span class="text-[#7C6A4B]">{{ t('store.home.how.titleHighlight') }}</span>
+          <span class="ink-fill text-[#7C6A4B]">{{ t('store.home.how.titleHighlight') }}</span>
         </h2>
         <p class="text-lg leading-[1.9] text-[#66625B] sm:text-[19px]">{{ t('store.home.how.subtitle') }}</p>
       </div>

@@ -365,6 +365,33 @@
 .hero-pool { background: radial-gradient(closest-side, rgb(236 220 180 / .22), transparent); filter: blur(6px); }
 .hero-card-px { translate: calc(var(--px, 0) * 1px) calc(var(--py, 0) * 1px); }
 
+/* Headline highlight words: start faded and the full colour sweeps across them (from the reading
+   side) as the heading scrolls into view. No outline: Arabic letters overlap where they join and
+   a stroke shows every seam. The colour property is unchanged, so contrast checks see the real
+   colour; browsers without scroll timelines show it as usual. */
+@supports (animation-timeline: view()) {
+  .ink-fill {
+    -webkit-text-fill-color: transparent;
+    background:
+      linear-gradient(currentColor, currentColor) no-repeat right / 0% 100%,
+      linear-gradient(color-mix(in srgb, currentColor 22%, transparent), color-mix(in srgb, currentColor 22%, transparent));
+    background-clip: text;
+    animation: ink-fill linear both;
+    animation-timeline: view();
+    animation-range: entry 100% cover 55%;
+  }
+  [dir='ltr'] .ink-fill { background-position: left, 0 0; }
+}
+@keyframes ink-fill { to { background-size: 100% 100%, auto; } }
+
+/* Coloured home sections ride up over the one before on a big curve, like stacked cards */
+.home-stack {
+  margin-top: calc(-1 * clamp(32px, 5vw, 64px));
+  border-start-start-radius: clamp(32px, 5vw, 64px);
+  border-start-end-radius: clamp(32px, 5vw, 64px);
+  box-shadow: 0 -24px 48px -28px rgb(20 20 18 / .35);
+}
+
 /* A header counter pops when its number changes; a saved heart pops once. */
 .badge-bump { animation: pop .35s var(--ease-spring) both; }
 .heart-pop { animation: pop .4s var(--ease-spring) both; }
@@ -380,6 +407,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .scroll-reveal, .badge-bump, .heart-pop, .hero-art-in, .question-in, .stagger-in > * { animation: none; }
+  .ink-fill { -webkit-text-fill-color: currentColor; background: none; }
   button:not(:disabled):active, [role='button']:active, a.btn-press:active { scale: none; }
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
 }

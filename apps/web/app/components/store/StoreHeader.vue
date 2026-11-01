@@ -26,11 +26,21 @@ const whatsappUrl = computed(() =>
   <!-- Logo, search and actions stay pinned; the category bar below scrolls away -->
   <header
     :class="[
-      'sticky top-0 z-40 border-b border-[#ECE6D3] bg-card transition-shadow duration-200 motion-reduce:transition-none',
-      isScrolled ? 'shadow-sm' : '',
+      'sticky top-0 z-40 border-b transition-[background-color,border-color,box-shadow,padding] duration-500 ease-out motion-reduce:transition-none',
+      // Scrolled on a wide screen, the bar lifts into a floating pill
+      isScrolled
+        ? 'border-[#ECE6D3] bg-card shadow-sm lg:border-transparent lg:bg-transparent lg:px-6 lg:pt-3 lg:shadow-none'
+        : 'border-[#ECE6D3] bg-card',
     ]"
   >
-    <div class="mx-auto flex max-w-7xl flex-wrap items-center gap-x-3 gap-y-3 px-4 py-3 sm:gap-x-8 sm:px-6 lg:px-10 lg:py-[18px]">
+    <div
+      :class="[
+        'mx-auto flex max-w-7xl flex-wrap items-center gap-x-3 gap-y-3 px-4 py-3 transition-all duration-500 ease-out sm:gap-x-8 sm:px-6 lg:px-10 motion-reduce:transition-none',
+        isScrolled
+          ? 'lg:max-w-6xl lg:rounded-full lg:border lg:border-[#ECE6D3] lg:bg-card/90 lg:py-2.5 lg:shadow-[0_18px_40px_-18px_rgba(20,20,18,.35)] lg:backdrop-blur-md'
+          : 'lg:py-[18px]',
+      ]"
+    >
       <div class="flex items-center gap-2 sm:gap-3">
         <StoreHeaderMobileMenu
           v-model:open="mobileMenuOpen"

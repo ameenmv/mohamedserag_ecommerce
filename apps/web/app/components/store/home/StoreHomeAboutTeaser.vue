@@ -31,7 +31,7 @@ const headingId = useId()
 </script>
 
 <template>
-  <section class="relative overflow-hidden bg-secondary" :aria-labelledby="headingId">
+  <section class="home-stack relative overflow-clip bg-secondary" :aria-labelledby="headingId">
     <div
       class="num text-outline pointer-events-none absolute top-8 -end-8 text-[clamp(180px,26vw,380px)] leading-[0.8] font-extrabold tracking-[-6px] [--outline-color:rgba(42,77,56,.12)]"
       aria-hidden="true"

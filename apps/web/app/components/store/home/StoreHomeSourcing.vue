@@ -23,7 +23,7 @@ const warrantyBrands = computed(() => props.brands.slice(0, 6))
 </script>
 
 <template>
-  <section class="relative overflow-hidden bg-serag-night text-serag-ivory" :aria-labelledby="headingId">
+  <section class="home-stack relative overflow-clip bg-serag-night text-serag-ivory" :aria-labelledby="headingId">
     <div
       class="pointer-events-none absolute -bottom-60 -end-40 size-[42rem] rounded-full bg-[radial-gradient(circle,rgba(90,143,107,.3)_0%,rgba(90,143,107,0)_65%)]"
       aria-hidden="true"
@@ -33,7 +33,7 @@ const warrantyBrands = computed(() => props.brands.slice(0, 6))
         <p class="eyebrow text-serag-gold-hi">{{ t('store.home.sourcingEyebrow') }}</p>
         <h2 :id="headingId" class="mt-2.5 mb-4 font-display text-[clamp(44px,6vw,84px)] leading-none">
           {{ t('store.home.sourcing.title') }}
-          <span class="text-serag-gold-hi">{{ t('store.home.sourcing.titleHighlight') }}</span>
+          <span class="ink-fill text-serag-gold-hi">{{ t('store.home.sourcing.titleHighlight') }}</span>
         </h2>
         <p class="text-lg leading-[1.9] text-[#D8D3C7] sm:text-[19px]">{{ t('store.home.sourcing.subtitle') }}</p>
       </div>

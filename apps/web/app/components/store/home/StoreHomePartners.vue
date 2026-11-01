@@ -27,13 +27,13 @@ const headingId = useId()
 </script>
 
 <template>
-  <section class="relative overflow-hidden bg-serag-ivory" :aria-labelledby="headingId">
+  <section class="relative overflow-clip bg-serag-ivory" :aria-labelledby="headingId">
     <div class="relative mx-auto max-w-7xl px-4 pt-16 pb-10 sm:px-6 lg:px-10 lg:pt-[104px]">
       <div class="mb-14 flex flex-wrap items-center justify-between gap-10">
         <div class="max-w-[720px] flex-[1_1_520px]">
           <p class="eyebrow text-serag-gold-ink">{{ t('store.home.trustedPartnersEyebrow') }}</p>
           <h2 :id="headingId" class="mt-2.5 mb-[18px] font-display text-[clamp(42px,5.5vw,76px)] leading-none text-serag-green">
-            {{ title.lead }}{{ title.highlight ? ' ' : '' }}<span v-if="title.highlight" class="text-[#7C6A4B]">{{ title.highlight }}</span>
+            {{ title.lead }}{{ title.highlight ? ' ' : '' }}<span v-if="title.highlight" class="ink-fill text-[#7C6A4B]">{{ title.highlight }}</span>
           </h2>
           <p class="text-lg leading-[1.9] text-[#66625B] sm:text-[19px]">{{ t('store.home.partners.subtitle') }}</p>
         </div>
