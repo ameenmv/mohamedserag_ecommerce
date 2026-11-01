@@ -3,8 +3,10 @@ import { toasterWanted } from '~/utils/toaster'
 
 useAppHead()
 
-// The splash plays on every full page load of the storefront (not the admin); CSS only.
-const showSplash = !/^\/(?:en\/)?admin(?:\/|$)/.test(useRoute().path)
+// The storefront's splash (not the admin's), CSS only. `?splash=word` previews the other design.
+const route = useRoute()
+const showSplash = !/^\/(?:en\/)?admin(?:\/|$)/.test(route.path)
+const splashVariant = route.query.splash === 'word' ? 'word' : 'shutter'
 
 // Theme chosen with the header switch (or the admin's), applied before first paint so a dark
 // page never flashes light. The store stays light unless the visitor picked dark.
@@ -14,6 +16,13 @@ useHead({
       key: 'theme',
       tagPosition: 'head',
       innerHTML: "try{if(localStorage.getItem('serag-theme')==='dark')document.documentElement.classList.add('dark')}catch(e){}",
+    },
+    {
+      // The splash greets the first page of a visit only; a `?splash=` preview always plays it.
+      key: 'splash-seen',
+      tagPosition: 'head',
+      innerHTML:
+        "try{if(location.search.indexOf('splash=')<0){if(sessionStorage.getItem('serag-splash'))document.documentElement.classList.add('splash-seen');else sessionStorage.setItem('serag-splash','1')}}catch(e){}",
     },
     {
       // Web fonts start loading only after the first paint (the splash covers the swap). Until
@@ -39,7 +48,7 @@ useHead({
     </NuxtLayout>
     <!-- Server-rendered only (no client JS): the logo symbols and the splash that uses them -->
     <LazyCommonBrandSymbols hydrate-never />
-    <LazyCommonSplash v-if="showSplash" hydrate-never />
+    <LazyCommonSplash v-if="showSplash" :variant="splashVariant" hydrate-never />
     <!-- Mounted on the first notification (see utils/toaster.ts) -->
     <LazyCommonAppToaster v-if="toasterWanted" />
   </div>

@@ -5,6 +5,10 @@
     "since": "Since 1972"
   },
   "common": {
+    "splash": {
+      "word": "SERAG",
+      "since": "Since 1972"
+    },
     "mainNav": "Main Navigation",
     "openMenu": "Open Menu",
     "skipToContent": "Skip to content",

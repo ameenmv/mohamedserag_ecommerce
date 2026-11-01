@@ -96,31 +96,53 @@
 @keyframes shimmer { to { transform: translateX(100%); } }
 @keyframes shimmer-rtl { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
 
-/* Splash on every full page load (components/common/CommonSplash.vue): the real logo assembles
-   itself, then fades away. Pure CSS, so it also clears without JavaScript; never takes taps. */
-.splash {
-  display: flex;
-  animation: splash-out 0.45s ease 1.45s forwards;
-}
-.splash-glow {
-  background: radial-gradient(circle, rgb(111 168 39 / 0.16) 0%, rgb(111 168 39 / 0) 65%);
-  animation: splash-glow 1.4s ease-out both;
-}
-.splash-mark {
-  animation: splash-pop 0.6s cubic-bezier(.2, .9, .3, 1.25) both;
-}
+/* Splash (components/common/CommonSplash.vue): first page of a visit only (the `splash-seen`
+   class comes from a head script in app.vue). Pure CSS, so it also clears without JavaScript,
+   and it never takes taps. Both designs are gone by 1.8 s. */
+.splash { display: flex; }
+.splash-seen .splash { display: none; }
+.splash-mark { animation: splash-pop .6s var(--ease-spring) .1s both; }
 /* Arabic reads right to left, so the name is revealed from the right */
-.splash-wordmark {
-  animation: splash-wipe 0.65s cubic-bezier(.6, 0, .2, 1) 0.3s both;
-}
-.splash-since {
-  animation: splash-open 0.55s ease-out 0.75s both;
-}
-@keyframes splash-out { to { opacity: 0; transform: scale(1.04); visibility: hidden; } }
-@keyframes splash-glow { from { opacity: 0; transform: scale(.6); } }
+.splash-wordmark { animation: splash-wipe .65s cubic-bezier(.6, 0, .2, 1) .3s both; }
 @keyframes splash-pop { from { opacity: 0; transform: scale(.4) rotate(-12deg); } }
 @keyframes splash-wipe { from { clip-path: inset(0 0 0 100%); opacity: 0; } }
 @keyframes splash-open { from { clip-path: inset(0 50% 0 50%); opacity: 0; } }
+
+/* Shutter: the shop's rolling metal door (slats, a light sweep, the bottom rail), the logo and
+   the years counting from 1972, then it unlocks with a small push down and rolls up. */
+.sp-shutter {
+  background:
+    linear-gradient(180deg, rgb(0 0 0 / .3), transparent 20%, transparent 78%, rgb(0 0 0 / .4)),
+    repeating-linear-gradient(180deg, #2A2925 0 18px, #3B3934 18px 20px, #1B1A18 20px 23px, #2A2925 23px 26px);
+  animation: sp-lift .62s cubic-bezier(.65, 0, .35, 1) 1.15s forwards;
+}
+.sp-shutter-shine {
+  background: linear-gradient(100deg, transparent 35%, rgb(255 255 255 / .08) 50%, transparent 65%) 120% 0 / 250% 100% no-repeat;
+  animation: sp-shine 1s ease .45s both;
+}
+.sp-year { counter-reset: sp-year var(--sp-year); animation: sp-count .8s cubic-bezier(.3, .7, .2, 1) .35s both; }
+.sp-year::after { content: counter(sp-year); }
+.sp-rule { animation: splash-open .5s ease-out .6s both; }
+@property --sp-year { syntax: '<integer>'; inherits: false; initial-value: 1972; }
+@keyframes sp-count { from { --sp-year: 1972; } to { --sp-year: var(--sp-to); } }
+@keyframes sp-shine { to { background-position: -20% 0; } }
+@keyframes sp-lift {
+  0% { transform: translateY(0); }
+  14% { transform: translateY(1.2%); }
+  100% { transform: translateY(-102%); visibility: hidden; }
+}
+
+/* Word: the name, outlined in sand, fills with colour from the reading side; then the panel
+   lifts away on a curved edge. */
+.sp-word { animation: sp-curve-up .7s cubic-bezier(.7, 0, .25, 1) 1.1s forwards; }
+.sp-word-fill { clip-path: inset(0 0 0 100%); animation: sp-fill .8s cubic-bezier(.6, 0, .2, 1) .2s forwards; }
+[dir='ltr'] .sp-word-fill { clip-path: inset(0 100% 0 0); }
+.sp-word-since { animation: sheet-rise .5s var(--ease-out-expo) .7s both; }
+@keyframes sp-fill { to { clip-path: inset(0); } }
+@keyframes sp-curve-up {
+  from { clip-path: ellipse(120% 150% at 50% 0%); }
+  to { clip-path: ellipse(120% 0% at 50% 0%); visibility: hidden; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   .animate-floaty, .animate-spin-slow, .animate-marquee, .animate-marquee-fast,
