@@ -22,8 +22,9 @@ const hydrated = useHydrated()
     <span class="sr-only">{{ srText || label }}</span>
     <span
       v-if="hydrated && count > 0"
+      :key="count"
       aria-hidden="true"
-      class="num absolute -top-1.5 -start-1.5 inline-flex min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[11px] font-bold text-primary-foreground"
+      class="badge-bump num absolute -top-1.5 -start-1.5 inline-flex min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[11px] font-bold text-primary-foreground"
     >
       {{ count }}
     </span>

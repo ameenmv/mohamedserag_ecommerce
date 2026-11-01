@@ -239,6 +239,58 @@
   .reel-viewer[data-state='open'] .reel-stage { animation: sheet-fade-in .15s ease both; }
 }
 
+/* Motion system. One set of curves and durations so every animation feels related.
+   Everything below is CSS only (no JavaScript, nothing waits for hydration) and off for
+   visitors who ask for reduced motion. */
+:root {
+  --ease-out-expo: cubic-bezier(.16, 1, .3, 1);
+  --ease-spring: cubic-bezier(.2, .9, .3, 1.25);
+  --dur-fast: .15s;
+  --dur-base: .25s;
+  --dur-slow: .6s;
+}
+
+/* Below-the-fold sections ease in as they scroll into view (scroll-driven, so there is no
+   observer to hydrate). Browsers without animation-timeline just show the section. Never put
+   it on the hero or anything in the first screen: it would hold back the largest paint. */
+@supports (animation-timeline: view()) {
+  .scroll-reveal {
+    animation: scroll-reveal linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 28%;
+  }
+}
+@keyframes scroll-reveal { from { opacity: 0; transform: translateY(28px); } }
+
+/* Press feedback on every button and button-like link */
+@layer base {
+  button:not(:disabled):active, [role='button']:active, a.btn-press:active { scale: .97; }
+}
+
+/* The hero's card cluster settles in once on load. Only the art: the headline is the largest
+   paint, so it must never wait on an animation. */
+.hero-art-in { animation: hero-art-in .9s var(--ease-out-expo) .15s both; }
+@keyframes hero-art-in { from { opacity: 0; transform: translateY(24px) scale(.94); } }
+
+/* A header counter pops when its number changes; a saved heart pops once. */
+.badge-bump { animation: pop .35s var(--ease-spring) both; }
+.heart-pop { animation: pop .4s var(--ease-spring) both; }
+@keyframes pop { 0% { transform: scale(.6); } 60% { transform: scale(1.2); } 100% { transform: scale(1); } }
+
+/* Page changes: the new page fades and rises in, the old one fades out (View Transitions). */
+@supports (view-transition-name: none) {
+  ::view-transition-old(root) { animation: vt-out .18s ease both; }
+  ::view-transition-new(root) { animation: vt-in .4s var(--ease-out-expo) .05s both; }
+}
+@keyframes vt-out { to { opacity: 0; } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(10px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal, .badge-bump, .heart-pop, .hero-art-in { animation: none; }
+  button:not(:disabled):active, [role='button']:active, a.btn-press:active { scale: none; }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}
+
 /* Compare pill: rises into place once the first product is added */
 .compare-pill { animation: compare-pill-in 0.35s cubic-bezier(.2, .9, .3, 1.2) both; }
 @keyframes compare-pill-in { from { opacity: 0; transform: translateY(14px) scale(.96); } }

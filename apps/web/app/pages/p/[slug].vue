@@ -130,7 +130,7 @@ const summaryRef = ref<{ addToCartButton: HTMLElement | null } | null>(null)
       </div>
 
       <!-- Product Details: Specs, Set Contents, Warranty, Delivery -->
-      <div class="flex flex-col gap-6 lg:col-span-7 lg:row-start-2">
+      <div class="scroll-reveal flex flex-col gap-6 lg:col-span-7 lg:row-start-2">
       <LazyStoreProductPageSpecs hydrate-never :specs="product.specs" />
       <LazyStoreProductPageSetContents hydrate-never :set-contents="product.setContents" />
       <LazyStoreProductPageWarranty
@@ -144,12 +144,12 @@ const summaryRef = ref<{ addToCartButton: HTMLElement | null } | null>(null)
     </div>
 
     <!-- Product Reviews -->
-    <StoreProductPageReviews :product="product" />
+    <StoreProductPageReviews :product="product" class="scroll-reveal" />
 
     <!-- Related Products -->
     <section
       v-if="product.related && product.related.length > 0"
-      class="mt-14 border-t border-border/80 pt-8 sm:mt-16 sm:pt-10 lg:mt-20"
+      class="scroll-reveal mt-14 border-t border-border/80 pt-8 sm:mt-16 sm:pt-10 lg:mt-20"
       :aria-label="t('store.productPage.related.title')"
     >
       <div class="mb-6 flex items-center justify-between">

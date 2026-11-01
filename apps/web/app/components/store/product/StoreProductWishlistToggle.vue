@@ -36,7 +36,9 @@ function onToggle(): void {
     @click.stop.prevent="onToggle"
   >
     <Heart
+      :key="isSaved ? 'saved' : 'idle'"
       :class="[
+        isSaved && 'heart-pop',
         'size-4 sm:size-4.5 transition-transform duration-150 motion-reduce:transition-none',
         isSaved
           ? 'fill-red-500 text-red-500 scale-105'

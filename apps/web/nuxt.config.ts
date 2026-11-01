@@ -116,6 +116,8 @@ export default defineNuxtConfig({
     // after a home edit or an API blip the cached HTML and the fresh data disagree and hydration
     // breaks the page. Inline, the data is cached in the same response as the HTML it renders.
     payloadExtraction: false,
+    // Native page-change animation (see ::view-transition rules in main.css); browsers without it navigate as before.
+    viewTransition: true,
     defaults: {
       // Prefetch a page's code when its link is hovered or focused, not as soon as it scrolls into
       // view: listings show dozens of links, and loading (and running) every target page's chunks

@@ -11,7 +11,7 @@ const { t } = useI18n()
 
 <!-- Decorative appliance cards from the prototype; the category names are visual only. -->
 <template>
-  <div class="relative mx-auto h-[420px] w-full max-w-[600px] sm:h-[580px]" aria-hidden="true">
+  <div class="hero-art-in relative mx-auto h-[420px] w-full max-w-[600px] sm:h-[580px]" aria-hidden="true">
     <div class="absolute inset-[6%] rounded-full border border-dashed border-serag-gold/40" />
     <div class="absolute inset-[18%] rounded-full border border-serag-gold/20" />
 

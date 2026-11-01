@@ -34,8 +34,9 @@ function handleClick(event: MouseEvent): void {
     <span class="hidden sm:inline" aria-hidden="true">{{ t('store.header.cart') }}</span>
     <span
       v-if="hydrated && count > 0"
+      :key="count"
       aria-hidden="true"
-      class="num inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-serag-ink px-1.5 text-xs font-extrabold text-serag-gold-hi"
+      class="badge-bump num inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-serag-ink px-1.5 text-xs font-extrabold text-serag-gold-hi"
     >
       {{ count }}
     </span>
