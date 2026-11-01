@@ -6,7 +6,7 @@ useSeoPage({
   description: () => t('store.home.metaDescription'),
 })
 
-const { sections, visibleSections, flashProducts, flashEndsAt, featuredCategories, partners, guides } =
+const { sections, visibleSections, flashProducts, flashEndsAt, featuredCategories, partners, guides, reviews } =
   await useHomeContent()
 </script>
 
@@ -20,6 +20,7 @@ const { sections, visibleSections, flashProducts, flashEndsAt, featuredCategorie
       :featured-categories="featuredCategories"
       :partners="partners"
       :guides="guides"
+      :reviews="reviews"
     />
   </main>
 </template>

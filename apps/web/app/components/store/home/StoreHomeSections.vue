@@ -6,6 +6,7 @@ import type {
   HomeContent,
   HomeSectionId,
   ProductCard,
+  StoreReviewsResponse,
 } from '@serag/shared'
 import { type Component, defineAsyncComponent, hydrateOnVisible } from 'vue'
 import StoreHomeAnnounce from './StoreHomeAnnounce.vue'
@@ -29,6 +30,8 @@ const props = defineProps<{
   featuredCategories: CategoryTreeNode[]
   partners: BrandSummary[]
   guides: GuideCard[]
+  /** Not passed by the admin's home preview, which then skips the reviews wall */
+  reviews?: StoreReviewsResponse | null
 }>()
 
 /** Static id → section component. */
@@ -91,7 +94,7 @@ function sectionProps(id: HomeSectionId) {
  * that is on the page (so hiding or reordering a CMS section never drops it); without any,
  * it goes last.
  */
-type ExtraSectionId = 'howItWorks' | 'sourcing' | 'contactCta'
+type ExtraSectionId = 'howItWorks' | 'sourcing' | 'reviewsWall' | 'contactCta'
 
 const EXTRA_SECTIONS: { id: ExtraSectionId; anchors: string[]; component: Component }[] = [
   {
@@ -105,6 +108,12 @@ const EXTRA_SECTIONS: { id: ExtraSectionId; anchors: string[]; component: Compon
     component: onVisible(() => import('./StoreHomeSourcing.vue')),
   },
   {
+    // Placed before «sourcing», which shares its first anchor (later entries land closer to it)
+    id: 'reviewsWall',
+    anchors: ['traderReels', 'partners', 'aboutTeaser', 'tradersTeaser'],
+    component: onVisible(() => import('./StoreHomeReviewsWall.vue')),
+  },
+  {
     id: 'contactCta',
     anchors: ['guides', 'partners', 'aboutTeaser'],
     component: onVisible(() => import('./StoreHomeContactCta.vue')),
@@ -112,8 +121,13 @@ const EXTRA_SECTIONS: { id: ExtraSectionId; anchors: string[]; component: Compon
 ]
 
 function extraProps(id: ExtraSectionId) {
-  return id === 'sourcing' ? { brands: props.partners } : {}
+  if (id === 'sourcing') return { brands: props.partners }
+  if (id === 'reviewsWall') return { reviews: props.reviews }
+  return {}
 }
+
+// The reviews wall needs enough reviews to fill its moving columns
+const MIN_WALL_REVIEWS = 4
 
 const renderedSections = computed(() => {
   const list: { id: string; component: Component; props: Record<string, unknown> }[] =
@@ -123,6 +137,7 @@ const renderedSections = computed(() => {
       props: sectionProps(id),
     }))
   for (const extra of EXTRA_SECTIONS) {
+    if (extra.id === 'reviewsWall' && (props.reviews?.items.length ?? 0) < MIN_WALL_REVIEWS) continue
     const entry = { id: extra.id, component: extra.component, props: extraProps(extra.id) }
     const anchor = extra.anchors.find((a) => list.some((item) => item.id === a))
     const at = anchor ? list.findIndex((item) => item.id === anchor) + 1 : list.length

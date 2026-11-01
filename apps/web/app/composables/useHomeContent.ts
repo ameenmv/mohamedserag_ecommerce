@@ -5,6 +5,7 @@ import type {
   HomeSectionId,
   ProductCard,
   PublicHome,
+  StoreReviewsResponse,
 } from '@serag/shared'
 import { DEFAULT_HOME_CONTENT, DEFAULT_HOME_LAYOUT } from '@serag/shared'
 
@@ -16,6 +17,7 @@ interface HomeBundle {
   categories: CategoryTreeNode[]
   brands: BrandSummary[]
   guides: GuideCard[]
+  reviews: StoreReviewsResponse
 }
 
 const EMPTY_HOME: PublicHome = {
@@ -46,19 +48,20 @@ export async function useHomeContent() {
   const storeApi = useStoreApi()
 
   const asyncData = await useAsyncData<HomeBundle>('store:home', async () => {
-    const [home, offers, categories, brands, guides] = await Promise.all([
+    const [home, offers, categories, brands, guides, reviews] = await Promise.all([
       storeApi.home().catch(() => EMPTY_HOME),
       storeApi.offers().catch(() => ({ flash: [], discounted: [] })),
       storeApi.categories().catch(() => [] as CategoryTreeNode[]),
       storeApi.brands().catch(() => [] as BrandSummary[]),
       storeApi.latestGuides(3).catch(() => [] as GuideCard[]),
+      storeApi.latestReviews().catch((): StoreReviewsResponse => ({ items: [], summary: { average: 0, count: 0 } })),
     ])
 
     const flashProducts = offers.flash.flatMap((group) => group.products)
     const flashEndsAt =
       offers.flash.map((group) => group.endsAt).sort((a, b) => Date.parse(a) - Date.parse(b))[0] ?? null
 
-    return { home, flashProducts, flashEndsAt, categories, brands, guides }
+    return { home, flashProducts, flashEndsAt, categories, brands, guides, reviews }
   })
 
   const home = computed(() => asyncData.data.value?.home ?? EMPTY_HOME)
@@ -67,6 +70,7 @@ export async function useHomeContent() {
   const flashEndsAt = computed(() => asyncData.data.value?.flashEndsAt ?? null)
   const brands = computed(() => asyncData.data.value?.brands ?? [])
   const guides = computed(() => asyncData.data.value?.guides ?? [])
+  const reviews = computed(() => asyncData.data.value?.reviews ?? null)
 
   const featuredCategories = computed<CategoryTreeNode[]>(() => {
     const index = indexCategories(asyncData.data.value?.categories ?? [])
@@ -101,5 +105,6 @@ export async function useHomeContent() {
     featuredCategories,
     partners,
     guides,
+    reviews,
   }
 }

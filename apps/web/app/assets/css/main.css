@@ -392,6 +392,17 @@
   box-shadow: 0 -24px 48px -28px rgb(20 20 18 / .35);
 }
 
+/* Home reviews wall: two columns drifting in opposite directions, faded at the edges; stops on
+   hover, keyboard focus or the pause button. Reduced motion: a still list you can scroll. */
+.reviews-wall { overflow: hidden; mask-image: linear-gradient(180deg, transparent, #000 12%, #000 88%, transparent); }
+.reviews-track { animation: reviews-drift 46s linear infinite; }
+.reviews-col-down .reviews-track { animation-direction: reverse; animation-duration: 54s; }
+.reviews-wall:hover .reviews-track,
+.reviews-wall:focus-within .reviews-track,
+.reviews-wall.is-paused .reviews-track { animation-play-state: paused; }
+/* Two copies with a 1rem gap between every card: half the track plus half a gap is one copy */
+@keyframes reviews-drift { to { transform: translateY(calc(-50% - .5rem)); } }
+
 /* A header counter pops when its number changes; a saved heart pops once. */
 .badge-bump { animation: pop .35s var(--ease-spring) both; }
 .heart-pop { animation: pop .4s var(--ease-spring) both; }
@@ -408,6 +419,8 @@
 @media (prefers-reduced-motion: reduce) {
   .scroll-reveal, .badge-bump, .heart-pop, .hero-art-in, .question-in, .stagger-in > * { animation: none; }
   .ink-fill { -webkit-text-fill-color: currentColor; background: none; }
+  .reviews-track { animation: none; }
+  .reviews-wall { overflow-y: auto; mask-image: none; }
   button:not(:disabled):active, [role='button']:active, a.btn-press:active { scale: none; }
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
 }

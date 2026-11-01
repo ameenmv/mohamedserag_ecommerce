@@ -117,6 +117,18 @@
       "account": "My Account"
     },
     "home": {
+      "reviewsWall": {
+        "eyebrow": "Customer reviews",
+        "title": "What people say",
+        "titleHighlight": "about Serag",
+        "subtitle": "Real reviews from people who bought from us, after the appliance arrived and got to work.",
+        "rating": "{average} of 5",
+        "ratingCount": "from {count} reviews",
+        "verified": "Verified buyer",
+        "about": "On {product}",
+        "pause": "Pause the moving reviews",
+        "play": "Play the moving reviews"
+      },
       "metaDescription": "Mohamed Serag Showroom, Mansoura, since 1972: genuine home appliances and houseware with an authorized warranty and delivery across Egypt.",
       "uspHeading": "Mohamed Serag promises",
       "categoriesEyebrow": "SHOP BY CATEGORY",

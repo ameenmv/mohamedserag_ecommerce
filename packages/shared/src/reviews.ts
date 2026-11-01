@@ -12,6 +12,23 @@ export interface PublicReview {
   createdAt: string
 }
 
+/** A shopper review shown on the home page, with the product it is about. */
+export interface StoreReview {
+  id: string
+  name: string
+  stars: number
+  text: string
+  verifiedBuyer: boolean
+  createdAt: string
+  product: { name: string; slug: string }
+}
+
+export interface StoreReviewsResponse {
+  items: StoreReview[]
+  /** Every approved review in the store, not only the ones listed. */
+  summary: { average: number; count: number }
+}
+
 export type ReviewRatingDistribution = Record<1 | 2 | 3 | 4 | 5, number>
 
 export interface ReviewRatingSummary {

@@ -18,6 +18,7 @@ import type {
   QuizAnswers,
   QuizResultsResponse,
   SearchResponse,
+  StoreReviewsResponse,
 } from '@serag/shared'
 import { apiFetch } from '../utils/api'
 
@@ -187,6 +188,14 @@ export function useStoreApi() {
         query: { pageSize: limit },
       })
       return response.items
+    },
+
+    /**
+     * GET /reviews/latest
+     * The newest approved 4–5 star reviews across the store, with the store-wide rating.
+     */
+    latestReviews(): Promise<StoreReviewsResponse> {
+      return apiFetch<StoreReviewsResponse>('/reviews/latest', { method: 'GET' })
     },
 
     /**
