@@ -428,6 +428,15 @@
 .success-burst { animation: success-burst 1.1s var(--ease-out-expo) .2s both; }
 @keyframes success-burst { from { transform: scale(.8); opacity: .9; } to { transform: scale(2.2); opacity: 0; } }
 
+/* Admin: each page's sections rise in one after another when it opens (transform only) */
+/* backwards, not both: a finished animation must leave no transform, or fixed save bars inside a section would position against it */
+#admin-main-content > * > * { animation: stagger-in .45s var(--ease-out-expo) backwards; }
+#admin-main-content > * > :nth-child(2) { animation-delay: 50ms; }
+#admin-main-content > * > :nth-child(3) { animation-delay: 100ms; }
+#admin-main-content > * > :nth-child(4) { animation-delay: 150ms; }
+#admin-main-content > * > :nth-child(5) { animation-delay: 200ms; }
+#admin-main-content > * > :nth-child(6) { animation-delay: 250ms; }
+
 /* A header counter pops when its number changes; a saved heart pops once. */
 .badge-bump { animation: pop .35s var(--ease-spring) both; }
 .heart-pop { animation: pop .4s var(--ease-spring) both; }
@@ -442,7 +451,7 @@
 @keyframes vt-in { from { opacity: 0; transform: translateY(10px); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .scroll-reveal, .badge-bump, .heart-pop, .hero-art-in, .question-in, .stagger-in > *, .title-draw::after, .img-swap { animation: none; }
+  .scroll-reveal, .badge-bump, .heart-pop, .hero-art-in, .question-in, .stagger-in > *, .title-draw::after, .img-swap, #admin-main-content > * > * { animation: none; }
   .success-burst { display: none; }
   .ink-fill { -webkit-text-fill-color: currentColor; background: none; }
   .reviews-track { animation: none; }

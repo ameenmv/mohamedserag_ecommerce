@@ -20,7 +20,7 @@ function tileClass(index: number): string {
   const size = index === 0 ? 'col-span-2 lg:row-span-2' : index === 1 ? 'col-span-2' : ''
   const tones = [
     'bg-serag-green text-serag-ivory',
-    'bg-[#EFE6D2] text-serag-ink',
+    'bg-[#EFE6D2] text-serag-ink dark:bg-[#2B2722]',
     'border border-[#E6DFCF] bg-card text-serag-ink',
     'bg-serag-night text-serag-ivory',
   ]
