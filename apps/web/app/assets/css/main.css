@@ -313,6 +313,58 @@
 [dir='rtl'] .question-in { animation-name: question-in-rtl; }
 @keyframes question-in-rtl { from { transform: translateX(24px); } }
 
+/* Home hero background (StoreHomeHero.vue; moved by composables/useHeroMotion.ts). The custom
+   properties are plain numbers so GSAP can tween them: --mx/--my in %, --px/--py and --hero-r in px. */
+.hero-bg {
+  background:
+    radial-gradient(120% 90% at 85% -10%, #322D24 0%, transparent 55%),
+    radial-gradient(90% 70% at 0% 110%, #1E2A19 0%, transparent 60%),
+    linear-gradient(180deg, #1D1C19 0%, #141412 100%);
+  border-start-start-radius: calc(var(--hero-r, 0) * 1px);
+  border-start-end-radius: calc(var(--hero-r, 0) * 1px);
+}
+.hero-blob { position: absolute; border-radius: 9999px; will-change: transform; }
+.hero-slats {
+  background: repeating-linear-gradient(180deg, rgb(255 255 255 / .035) 0 1px, transparent 1px 26px);
+  mask-image: radial-gradient(80% 70% at 30% 35%, #000 0%, transparent 78%);
+}
+.hero-spot { background: radial-gradient(560px circle at calc(var(--mx, 72) * 1%) calc(var(--my, 28) * 1%), rgb(201 177 137 / .14), transparent 62%); }
+.hero-grain {
+  opacity: .08;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.hero-year-fill { clip-path: inset(0 100% 0 0); }
+.hero-beam {
+  /* Conic angles start at the top: from 158deg, the brightest stop (+22deg) points straight down */
+  background: conic-gradient(from 158deg at 50% 0%, transparent 0deg, rgb(236 220 180 / .12) 10deg, rgb(248 238 210 / .34) 22deg, rgb(236 220 180 / .12) 34deg, transparent 44deg);
+  mask-image: linear-gradient(180deg, #000 0%, #000 45%, transparent 95%);
+  mix-blend-mode: screen;
+}
+/* The lamp itself, where the beam starts */
+.hero-beam::before {
+  content: '';
+  position: absolute;
+  top: 2.25rem;
+  left: 50%;
+  width: 5rem;
+  height: 1.25rem;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(255 248 228 / .95), rgb(236 220 180 / .35) 60%, transparent);
+  filter: blur(2px);
+}
+.hero-floor {
+  background:
+    linear-gradient(90deg, rgb(201 177 137 / .24) 1px, transparent 1px) 50% 0 / 64px 64px,
+    linear-gradient(0deg, rgb(201 177 137 / .24) 1px, transparent 1px) 50% 0 / 64px 64px;
+  transform: perspective(520px) rotateX(64deg);
+  transform-origin: 50% 100%;
+  mask-image: linear-gradient(0deg, #000 0%, transparent 85%);
+}
+.hero-pool { background: radial-gradient(closest-side, rgb(236 220 180 / .22), transparent); filter: blur(6px); }
+.hero-card-px { translate: calc(var(--px, 0) * 1px) calc(var(--py, 0) * 1px); }
+
 /* A header counter pops when its number changes; a saved heart pops once. */
 .badge-bump { animation: pop .35s var(--ease-spring) both; }
 .heart-pop { animation: pop .4s var(--ease-spring) both; }

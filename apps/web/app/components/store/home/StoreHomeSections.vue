@@ -137,7 +137,7 @@ const renderedSections = computed(() => {
     :is="section.component"
     v-for="section in renderedSections"
     :key="section.id"
-    :class="{ 'scroll-reveal': section.id !== 'announce' && section.id !== 'hero' }"
+    :class="section.id === 'announce' || section.id === 'hero' ? undefined : 'scroll-reveal'"
     v-bind="section.props"
   />
 </template>

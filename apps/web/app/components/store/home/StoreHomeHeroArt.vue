@@ -11,14 +11,15 @@ const { t } = useI18n()
 
 <!-- Decorative appliance cards from the prototype; the category names are visual only. -->
 <template>
-  <div class="hero-art-in relative mx-auto h-[420px] w-full max-w-[600px] sm:h-[580px]" aria-hidden="true">
+  <div class="relative mx-auto h-[420px] w-full max-w-[600px] sm:h-[580px]" aria-hidden="true">
     <div class="absolute inset-[6%] rounded-full border border-dashed border-serag-gold/40" />
     <div class="absolute inset-[18%] rounded-full border border-serag-gold/20" />
 
     <!-- Store photo (when uploaded) -->
     <div
       v-if="image"
-      class="animate-floaty absolute top-[8%] end-[31%] h-[76%] w-[36%] overflow-hidden rounded-[34px] border border-serag-gold-hi/55 bg-[#1B3526] shadow-[0_40px_70px_-24px_rgba(0,0,0,0.65)] [animation-delay:-1s]"
+      data-depth="1"
+      class="hero-card-px animate-floaty absolute top-[8%] end-[31%] h-[76%] w-[36%] overflow-hidden rounded-[34px] border border-serag-gold-hi/55 bg-[#1B3526] shadow-[0_40px_70px_-24px_rgba(0,0,0,0.65)] [animation-delay:-1s]"
     >
       <NuxtImg
         :src="image"
@@ -35,7 +36,8 @@ const { t } = useI18n()
     <!-- Fridge -->
     <div
       v-else
-      class="animate-floaty absolute top-[8%] end-[31%] flex h-[76%] w-[36%] flex-col items-center justify-center gap-4 rounded-[34px] border border-serag-gold-hi/55 bg-gradient-to-b from-[#4F7F1B] to-[#1B3526] text-serag-gold-hi shadow-[0_40px_70px_-24px_rgba(0,0,0,0.65)] [animation-delay:-1s]"
+      data-depth="1"
+      class="hero-card-px animate-floaty absolute top-[8%] end-[31%] flex h-[76%] w-[36%] flex-col items-center justify-center gap-4 rounded-[34px] border border-serag-gold-hi/55 bg-gradient-to-b from-[#4F7F1B] to-[#1B3526] text-serag-gold-hi shadow-[0_40px_70px_-24px_rgba(0,0,0,0.65)] [animation-delay:-1s]"
     >
       <svg viewBox="0 0 48 48" class="w-[64%]" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <rect x="13" y="4" width="22" height="40" rx="3" />
@@ -46,7 +48,8 @@ const { t } = useI18n()
 
     <!-- Washer -->
     <div
-      class="animate-floaty absolute top-[44%] end-0 flex h-[42%] w-[31%] flex-col items-center justify-center gap-3 rounded-[30px] border border-[#E4DDC6] bg-serag-ivory text-serag-green shadow-[0_30px_50px_-22px_rgba(0,0,0,0.6)] [--tilt:-5deg] [animation-delay:-3s]"
+      data-depth="2.2"
+      class="hero-card-px animate-floaty absolute top-[44%] end-0 flex h-[42%] w-[31%] flex-col items-center justify-center gap-3 rounded-[30px] border border-[#E4DDC6] bg-serag-ivory text-serag-green shadow-[0_30px_50px_-22px_rgba(0,0,0,0.6)] [--tilt:-5deg] [animation-delay:-3s]"
     >
       <svg viewBox="0 0 48 48" class="w-[56%]" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
         <rect x="9" y="4" width="30" height="40" rx="4" />
@@ -59,7 +62,8 @@ const { t } = useI18n()
 
     <!-- Screen -->
     <div
-      class="animate-floaty absolute top-[2%] end-[66%] flex h-[34%] w-[34%] flex-col items-center justify-center gap-2.5 rounded-[30px] bg-serag-gold text-serag-ink shadow-[0_30px_50px_-22px_rgba(0,0,0,0.6)] [--tilt:5deg] [animation-delay:-4.5s]"
+      data-depth="1.6"
+      class="hero-card-px animate-floaty absolute top-[2%] end-[66%] flex h-[34%] w-[34%] flex-col items-center justify-center gap-2.5 rounded-[30px] bg-serag-gold text-serag-ink shadow-[0_30px_50px_-22px_rgba(0,0,0,0.6)] [--tilt:5deg] [animation-delay:-4.5s]"
     >
       <svg viewBox="0 0 48 48" class="w-[62%]" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
         <rect x="4" y="8" width="40" height="27" rx="3" />
@@ -70,7 +74,8 @@ const { t } = useI18n()
 
     <!-- AC -->
     <div
-      class="animate-floaty absolute top-[58%] end-[68%] flex h-[26%] w-[32%] flex-col items-center justify-center gap-2 rounded-[26px] border border-serag-ivory/25 bg-serag-ivory/8 text-serag-ivory backdrop-blur-sm [--tilt:3deg] [animation-delay:-2s]"
+      data-depth="2.8"
+      class="hero-card-px animate-floaty absolute top-[58%] end-[68%] flex h-[26%] w-[32%] flex-col items-center justify-center gap-2 rounded-[26px] border border-serag-ivory/25 bg-serag-ivory/8 text-serag-ivory backdrop-blur-sm [--tilt:3deg] [animation-delay:-2s]"
     >
       <svg viewBox="0 0 48 48" class="w-1/2" fill="none" stroke="var(--color-serag-gold-hi)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
         <rect x="4" y="10" width="40" height="16" rx="3" />
@@ -80,7 +85,7 @@ const { t } = useI18n()
     </div>
 
     <!-- Rotating «since 1972» seal -->
-    <div class="absolute start-[2%] bottom-0 size-28 sm:size-[150px]" dir="ltr">
+    <div data-depth="-1.2" class="hero-card-px absolute start-[2%] bottom-0 size-28 sm:size-[150px]" dir="ltr">
       <svg class="animate-spin-slow size-full" viewBox="0 0 150 150">
         <circle cx="75" cy="75" r="72" fill="#22211F" stroke="rgba(210,194,122,.6)" stroke-width="1.5" />
         <defs>
