@@ -67,7 +67,7 @@ function getRowLabel(row: { key: string; label: string; type: string }): string 
       <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p class="eyebrow text-serag-gold-ink dark:text-serag-gold-hi">{{ t('store.compare.eyebrow', { count: products.length }) }}</p>
-          <h1 class="font-display mt-1 text-3xl text-foreground sm:text-4xl">
+          <h1 class="title-draw font-display mt-1 text-4xl text-foreground sm:text-5xl">
             {{ t('store.compare.title') }}
           </h1>
           <p class="mt-1 text-xs text-muted-foreground sm:text-sm">

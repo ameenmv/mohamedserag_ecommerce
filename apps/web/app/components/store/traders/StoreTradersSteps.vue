@@ -1,5 +1,11 @@
 <script setup lang="ts">
+import { useRevealOnScroll } from '~/composables/useRevealOnScroll'
+
 const { t } = useI18n()
+
+// The steps rise in one after another when they scroll into view
+const listRef = ref<HTMLElement | null>(null)
+useRevealOnScroll(listRef, ':scope > li')
 
 const steps = computed(() =>
   [1, 2, 3].map((index) => ({
@@ -18,7 +24,7 @@ const steps = computed(() =>
       {{ t('store.traders.steps.title') }}
     </h2>
 
-    <ol class="mt-5 grid gap-4 sm:grid-cols-3">
+    <ol ref="listRef" class="mt-5 grid gap-4 sm:grid-cols-3">
       <li
         v-for="(step, index) in steps"
         :key="index"

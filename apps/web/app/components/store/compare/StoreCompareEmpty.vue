@@ -30,7 +30,7 @@ const localePath = useLocalePath()
     <!-- 1-item State: hint to add one more product + product card -->
     <div v-else-if="products.length === 1" class="space-y-6">
       <div>
-        <h1 class="font-display text-3xl sm:text-4xl text-foreground">
+        <h1 class="title-draw font-display text-4xl sm:text-5xl text-foreground">
           {{ t('store.compare.title') }}
         </h1>
         <p class="mt-1 text-xs sm:text-sm text-muted-foreground">

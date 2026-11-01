@@ -20,7 +20,7 @@ const { t } = useI18n()
         {{ badge }}
       </span>
 
-      <h1 class="font-display text-3xl leading-tight text-serag-ivory sm:text-4xl lg:text-5xl">
+      <h1 class="title-draw font-display text-4xl leading-tight text-serag-ivory sm:text-5xl lg:text-6xl">
         {{ title }}
       </h1>
 

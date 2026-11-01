@@ -60,7 +60,7 @@ function onRestart(): void {
 
     <div class="mt-4 flex items-center gap-2">
       <Sparkles class="size-6 text-serag-gold" aria-hidden="true" />
-      <h1 class="font-display text-2xl text-foreground sm:text-3xl">{{ t('store.quiz.heading') }}</h1>
+      <h1 class="title-draw font-display text-3xl text-foreground sm:text-4xl">{{ t('store.quiz.heading') }}</h1>
     </div>
     <p class="mt-2 text-sm text-muted-foreground">{{ t('store.quiz.intro', { category: category.name }) }}</p>
 

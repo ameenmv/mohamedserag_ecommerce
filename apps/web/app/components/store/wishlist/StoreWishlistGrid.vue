@@ -2,6 +2,7 @@
 import { AlertCircle, Heart, Trash2 } from '@lucide/vue'
 import type { ProductCard } from '@serag/shared'
 import type { WishlistItem } from '~/composables/useWishlist'
+import { useRevealOnScroll } from '~/composables/useRevealOnScroll'
 
 const props = defineProps<{
   items: readonly WishlistItem[]
@@ -14,6 +15,10 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+
+// Saved products further down rise in as they scroll into view
+const gridRef = ref<HTMLElement | null>(null)
+useRevealOnScroll(gridRef, ':scope > *', () => props.items)
 
 const availableItems = computed(() =>
   props.items.filter((i) => i.card !== null),
@@ -54,7 +59,7 @@ const unavailableItems = computed(() =>
     <!-- Loaded Content: Grid + Unavailable List -->
     <div v-else class="space-y-6">
       <div>
-        <h1 class="font-display text-3xl sm:text-4xl text-foreground">
+        <h1 class="title-draw font-display text-4xl sm:text-5xl text-foreground">
           {{ t('store.wishlist.title') }}
         </h1>
         <p class="mt-1 text-xs sm:text-sm text-muted-foreground">
@@ -65,6 +70,7 @@ const unavailableItems = computed(() =>
       <!-- Available Products Grid -->
       <div
         v-if="availableItems.length > 0"
+        ref="gridRef"
         class="grid grid-cols-2 gap-2.5 sm:gap-4 md:grid-cols-3 xl:grid-cols-4"
       >
         <StoreWishlistItem
