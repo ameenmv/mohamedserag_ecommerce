@@ -93,7 +93,7 @@ function changeLabel(current: number, previous: number): string | null {
 
     <CardContent class="flex flex-col gap-6 pt-4">
       <!-- Totals row -->
-      <dl class="grid grid-cols-1 gap-4 sm:grid-cols-3 min-w-0">
+      <dl class="stagger-in grid grid-cols-1 gap-4 sm:grid-cols-3 min-w-0">
         <div class="flex flex-col gap-1 min-w-0">
           <dt class="text-xs font-semibold text-muted-foreground">
             {{ t('admin.dashboard.sales.revenue') }}

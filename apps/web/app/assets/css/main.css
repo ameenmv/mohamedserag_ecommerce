@@ -260,7 +260,8 @@
     animation-range: entry 0% entry 28%;
   }
 }
-@keyframes scroll-reveal { from { opacity: 0; transform: translateY(28px); } }
+/* Transform only on purpose: faded text would fail the contrast checks (axe) while it is unseen. */
+@keyframes scroll-reveal { from { transform: translateY(40px); } }
 
 /* Press feedback on every button and button-like link */
 @layer base {
@@ -271,6 +272,18 @@
    paint, so it must never wait on an animation. */
 .hero-art-in { animation: hero-art-in .9s var(--ease-out-expo) .15s both; }
 @keyframes hero-art-in { from { opacity: 0; transform: translateY(24px) scale(.94); } }
+
+/* Children rise in one after another (dashboard counters). Admin only: the storefront's first
+   screen never waits on motion. */
+.stagger-in > * { animation: stagger-in .5s var(--ease-out-expo) both; }
+.stagger-in > :nth-child(2) { animation-delay: 60ms; }
+.stagger-in > :nth-child(3) { animation-delay: 120ms; }
+.stagger-in > :nth-child(4) { animation-delay: 180ms; }
+.stagger-in > :nth-child(5) { animation-delay: 240ms; }
+.stagger-in > :nth-child(6) { animation-delay: 300ms; }
+.stagger-in > :nth-child(7) { animation-delay: 360ms; }
+.stagger-in > :nth-child(8) { animation-delay: 420ms; }
+@keyframes stagger-in { from { transform: translateY(18px) scale(.97); } }
 
 /* A header counter pops when its number changes; a saved heart pops once. */
 .badge-bump { animation: pop .35s var(--ease-spring) both; }
@@ -286,7 +299,7 @@
 @keyframes vt-in { from { opacity: 0; transform: translateY(10px); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .scroll-reveal, .badge-bump, .heart-pop, .hero-art-in { animation: none; }
+  .scroll-reveal, .badge-bump, .heart-pop, .hero-art-in, .stagger-in > * { animation: none; }
   button:not(:disabled):active, [role='button']:active, a.btn-press:active { scale: none; }
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
 }

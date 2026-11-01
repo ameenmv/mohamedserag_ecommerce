@@ -31,7 +31,7 @@ function linkTo(href: string): string {
   <nav
     v-if="visible.length > 0"
     :aria-label="t('admin.dashboard.counters.aria')"
-    class="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4 min-w-0"
+    class="stagger-in grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4 min-w-0"
   >
     <NuxtLink
       v-for="counter in visible"
