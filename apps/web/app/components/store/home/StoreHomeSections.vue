@@ -33,7 +33,7 @@ function onVisibleAfterInput(loader: () => Promise<Component>): Component {
   const visible = hydrateOnVisible()
   const hydrate: HydrationStrategy = (run, forEachElement) => {
     let cancelled = false
-    let teardown: (() => void) | void
+    let teardown: ReturnType<HydrationStrategy>
     void firstInput().then(() => {
       if (!cancelled) teardown = visible(run, forEachElement)
     })
