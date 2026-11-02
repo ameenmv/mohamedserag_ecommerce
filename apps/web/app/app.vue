@@ -38,13 +38,6 @@ useHead({
       innerHTML:
         "requestAnimationFrame(function(){requestAnimationFrame(function(){setTimeout(function(){document.documentElement.classList.add('fonts-ready')},100)})})",
     },
-    {
-      // Measures hero art cards and triggers precise splash card morph & landing if they fit in viewport.
-      key: 'splash-land',
-      tagPosition: 'bodyClose',
-      innerHTML:
-        "try{var d=document.documentElement,s=document.querySelector('.splash');if(s&&!d.classList.contains('splash-seen')&&!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)){d.classList.add('splash-landing');setTimeout(function(){try{var c=['fridges','washers','screens','acs'],h=[],p=[],iw=window.innerWidth,ih=window.innerHeight;for(var i=0;i<c.length;i++){var he=document.querySelector('[data-hero-card=\"'+c[i]+'\"]'),se=document.querySelector('[data-splash-card=\"'+c[i]+'\"]');if(!he||!se)return;var r=he.getBoundingClientRect();if(r.top<0||r.bottom>ih||r.left<0||r.right>iw)return;h.push(he);p.push(se)}for(var j=0;j<c.length;j++){var el=h[j],sp=p[j],rc=el.getBoundingClientRect(),cs=window.getComputedStyle(el);sp.style.setProperty('--land-x',(rc.left+rc.width/2-iw/2)+'px');sp.style.setProperty('--land-y',(rc.top+rc.height/2-ih/2)+'px');sp.style.setProperty('--land-w',el.offsetWidth+'px');sp.style.setProperty('--land-h',el.offsetHeight+'px');sp.style.setProperty('--land-r',cs.getPropertyValue('--tilt').trim()||'0deg');sp.style.setProperty('--land-rad',cs.borderTopLeftRadius)}s.setAttribute('data-land','hero')}catch(e){}},950);setTimeout(function(){d.classList.remove('splash-landing')},2000)}}catch(e){}",
-    },
   ],
   // Without JavaScript the class is never added: use the web fonts straight away
   noscript: [{ innerHTML: '<style>:root:not(.fonts-ready){--font-display:initial;--font-sans:initial;--font-num:initial}</style>' }],
