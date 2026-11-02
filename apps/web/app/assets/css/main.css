@@ -168,6 +168,10 @@
 .dark .text-serag-gold-ink, .dark .text-\[\#7C6A4B\] { color: var(--color-serag-gold-hi); }
 .dark .text-\[\#15803D\] { color: #4ADE80; }
 .dark .text-primary:not([class~='bg-serag-gold']):not([class~='bg-serag-gold-hi']) { color: #C9B189; }
+/* Native controls (checkboxes, selects, scrollbars) follow the theme instead of staying white */
+.dark { color-scheme: dark; }
+/* The faded half of an ink-fill word needs a little more ink to read on the dark background */
+.dark { --ink-faded: 34%; }
 
 /* Toasts (vue-sonner): the store's night green with a gold edge, icon in a tinted circle,
    gold pill for the action. Same look in light and dark. */
@@ -355,7 +359,7 @@
     -webkit-text-fill-color: transparent;
     background:
       linear-gradient(currentColor, currentColor) no-repeat right / 0% 100%,
-      linear-gradient(color-mix(in srgb, currentColor 22%, transparent), color-mix(in srgb, currentColor 22%, transparent));
+      linear-gradient(color-mix(in srgb, currentColor var(--ink-faded, 22%), transparent), color-mix(in srgb, currentColor var(--ink-faded, 22%), transparent));
     background-clip: text;
     animation: ink-fill linear both;
     animation-timeline: view();
@@ -402,17 +406,6 @@
   transform-origin: top center;
   transform: perspective(1000px) rotateX(40deg);
 }
-
-/* Home reviews wall: two columns drifting in opposite directions, faded at the edges; stops on
-   hover, keyboard focus or the pause button. Reduced motion: a still list you can scroll. */
-.reviews-wall { overflow: hidden; mask-image: linear-gradient(180deg, transparent, #000 12%, #000 88%, transparent); }
-.reviews-track { animation: reviews-drift 46s linear infinite; }
-.reviews-col-down .reviews-track { animation-direction: reverse; animation-duration: 54s; }
-.reviews-wall:hover .reviews-track,
-.reviews-wall:focus-within .reviews-track,
-.reviews-wall.is-paused .reviews-track { animation-play-state: paused; }
-/* Two copies with a 1rem gap between every card: half the track plus half a gap is one copy */
-@keyframes reviews-drift { to { transform: translateY(calc(-50% - .5rem)); } }
 
 /* Page titles: a short sand rule draws itself under the title from the reading side. The title
    itself never animates (it is often the largest paint). */
@@ -613,8 +606,6 @@
   .scroll-reveal, .badge-bump, .heart-pop, .hero-art-in, .question-in, .stagger-in > *, .title-draw::after, .img-swap, #admin-main-content > * > *, [data-hero-title], [data-hero-intro] { animation: none; }
   .success-burst { display: none; }
   .ink-fill { -webkit-text-fill-color: currentColor; background: none; }
-  .reviews-track { animation: none; }
-  .reviews-wall { overflow-y: auto; mask-image: none; }
   button:not(:disabled):active, [role='button']:active, a.btn-press:active { scale: none; }
   .page-wipe { display: none !important; }
   .cursor-dot, .cursor-ring { display: none !important; }
