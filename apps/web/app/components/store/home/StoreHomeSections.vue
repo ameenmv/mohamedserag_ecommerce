@@ -8,41 +8,29 @@ import type {
   ProductCard,
   StoreReviewsResponse,
 } from '@serag/shared'
-import { type Component, type HydrationStrategy, defineAsyncComponent, hydrateOnVisible } from 'vue'
+import { type Component, defineAsyncComponent, hydrateOnVisible } from 'vue'
 import { firstInput } from '~/composables/useGsap'
 import StoreHomeAnnounce from './StoreHomeAnnounce.vue'
 import StoreHomeHero from './StoreHomeHero.vue'
 
 /**
  * Every section except the announcement bar and the hero is server-rendered as usual but only
- * hydrated (and its code only downloaded) once it scrolls into view. That keeps the first-load
- * JS and main-thread work small on phones; a section the owner moves to the top still hydrates
- * right away because it is already visible.
+ * hydrated once it scrolls into view. That keeps main-thread work small on phones; a section the
+ * owner moves to the top still hydrates right away because it is already visible.
  */
 function onVisible(loader: () => Promise<Component>): Component {
   return defineAsyncComponent({ loader, hydrate: hydrateOnVisible() })
 }
 
 /**
- * Like onVisible, but only once the visitor has scrolled, touched or moved the pointer. For the
- * heavy motion sections far down the page: a visitor always scrolls to reach them, while
- * Lighthouse (which never interacts) would otherwise count their chunks into the home's
- * 200 KB script budget when its full-page screenshot makes every section visible.
+ * Like onVisible, but the section's code is not even downloaded before the visitor's first
+ * scroll, touch, key or pointer move (Vue downloads a lazily hydrated component up front and only
+ * delays the hydration). A visitor always does one of those before reaching a section further
+ * down, while Lighthouse never interacts: without this, every section's code counts into the
+ * home's 200 KB script budget, because its full-page screenshot brings them all into view.
  */
-function onVisibleAfterInput(loader: () => Promise<Component>): Component {
-  const visible = hydrateOnVisible()
-  const hydrate: HydrationStrategy = (run, forEachElement) => {
-    let cancelled = false
-    let teardown: ReturnType<HydrationStrategy>
-    void firstInput().then(() => {
-      if (!cancelled) teardown = visible(run, forEachElement)
-    })
-    return () => {
-      cancelled = true
-      teardown?.()
-    }
-  }
-  return defineAsyncComponent({ loader, hydrate })
+function afterInput(loader: () => Promise<Component>): Component {
+  return onVisible(() => (import.meta.server ? loader() : firstInput().then(loader)))
 }
 
 const props = defineProps<{
@@ -64,15 +52,15 @@ const COMPONENT_BY_SECTION: Record<HomeSectionId, Component> = {
   hero: StoreHomeHero,
   uspStrip: onVisible(() => import('./StoreHomeUspStrip.vue')),
   featuredCategories: onVisible(() => import('./StoreHomeFeaturedCategories.vue')),
-  flash: onVisible(() => import('./StoreHomeFlash.vue')),
-  productStory: onVisibleAfterInput(() => import('./StoreHomeProductStory.vue')),
-  bridalTeaser: onVisible(() => import('./StoreHomeBridalTeaser.vue')),
-  tradersTeaser: onVisible(() => import('./StoreHomeTradersTeaser.vue')),
-  aboutTeaser: onVisible(() => import('./StoreHomeAboutTeaser.vue')),
-  partners: onVisible(() => import('./StoreHomePartners.vue')),
-  traderReels: onVisible(() => import('./StoreHomeTraderReels.vue')),
-  reviews: onVisibleAfterInput(() => import('./StoreHomeReviews.vue')),
-  guides: onVisible(() => import('./StoreHomeGuides.vue')),
+  flash: afterInput(() => import('./StoreHomeFlash.vue')),
+  productStory: afterInput(() => import('./StoreHomeProductStory.vue')),
+  bridalTeaser: afterInput(() => import('./StoreHomeBridalTeaser.vue')),
+  tradersTeaser: afterInput(() => import('./StoreHomeTradersTeaser.vue')),
+  aboutTeaser: afterInput(() => import('./StoreHomeAboutTeaser.vue')),
+  partners: afterInput(() => import('./StoreHomePartners.vue')),
+  traderReels: afterInput(() => import('./StoreHomeTraderReels.vue')),
+  reviews: afterInput(() => import('./StoreHomeReviews.vue')),
+  guides: afterInput(() => import('./StoreHomeGuides.vue')),
 }
 
 function sectionProps(id: HomeSectionId) {
@@ -136,17 +124,17 @@ const EXTRA_SECTIONS: { id: ExtraSectionId; anchors: string[]; component: Compon
   {
     id: 'howItWorks',
     anchors: ['flash', 'featuredCategories', 'uspStrip', 'hero'],
-    component: onVisible(() => import('./StoreHomeHowItWorks.vue')),
+    component: afterInput(() => import('./StoreHomeHowItWorks.vue')),
   },
   {
     id: 'sourcing',
     anchors: ['traderReels', 'partners', 'aboutTeaser', 'tradersTeaser'],
-    component: onVisible(() => import('./StoreHomeSourcing.vue')),
+    component: afterInput(() => import('./StoreHomeSourcing.vue')),
   },
   {
     id: 'contactCta',
     anchors: ['guides', 'partners', 'aboutTeaser'],
-    component: onVisible(() => import('./StoreHomeContactCta.vue')),
+    component: afterInput(() => import('./StoreHomeContactCta.vue')),
   },
 ]
 
