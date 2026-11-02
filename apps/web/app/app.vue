@@ -4,7 +4,7 @@ import { firstInput } from '~/composables/useGsap'
 
 useAppHead()
 
-// The storefront's splash (not the admin's), CSS only. `?splash=word` previews the other design.
+// The storefront's splash (not the admin's), CSS only. `?splash=` (any value) replays it.
 const route = useRoute()
 const isStorefront = computed(() => !/^\/(?:en\/)?admin(?:\/|$)/.test(route.path))
 const showSplash = isStorefront
@@ -13,7 +13,6 @@ const showSplash = isStorefront
 // the first-load script budget (CI Lighthouse) has no room, and neither is needed before it.
 const motionReady = ref(false)
 onMounted(() => { firstInput().then(() => { motionReady.value = true }) })
-const splashVariant = route.query.splash === 'word' ? 'word' : 'shutter'
 
 // Theme chosen with the header switch (or the admin's), applied before first paint so a dark
 // page never flashes light. The store stays light unless the visitor picked dark.
@@ -55,7 +54,7 @@ useHead({
     </NuxtLayout>
     <!-- Server-rendered only (no client JS): the logo symbols and the splash that uses them -->
     <LazyCommonBrandSymbols hydrate-never />
-    <LazyCommonSplash v-if="showSplash" :variant="splashVariant" hydrate-never />
+    <LazyCommonSplash v-if="showSplash" hydrate-never />
     <!-- Storefront page transition overlay and custom cursor -->
     <template v-if="motionReady && isStorefront">
       <LazyCommonPageWipe />
