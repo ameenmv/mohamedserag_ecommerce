@@ -8,7 +8,8 @@ import type {
   ProductCard,
   StoreReviewsResponse,
 } from '@serag/shared'
-import { type Component, defineAsyncComponent, hydrateOnVisible } from 'vue'
+import { type Component, type HydrationStrategy, defineAsyncComponent, hydrateOnVisible } from 'vue'
+import { firstInput } from '~/composables/useGsap'
 import StoreHomeAnnounce from './StoreHomeAnnounce.vue'
 import StoreHomeHero from './StoreHomeHero.vue'
 
@@ -20,6 +21,28 @@ import StoreHomeHero from './StoreHomeHero.vue'
  */
 function onVisible(loader: () => Promise<Component>): Component {
   return defineAsyncComponent({ loader, hydrate: hydrateOnVisible() })
+}
+
+/**
+ * Like onVisible, but only once the visitor has scrolled, touched or moved the pointer. For the
+ * heavy motion sections far down the page: a visitor always scrolls to reach them, while
+ * Lighthouse (which never interacts) would otherwise count their chunks into the home's
+ * 200 KB script budget when its full-page screenshot makes every section visible.
+ */
+function onVisibleAfterInput(loader: () => Promise<Component>): Component {
+  const visible = hydrateOnVisible()
+  const hydrate: HydrationStrategy = (run, forEachElement) => {
+    let cancelled = false
+    let teardown: (() => void) | void
+    void firstInput().then(() => {
+      if (!cancelled) teardown = visible(run, forEachElement)
+    })
+    return () => {
+      cancelled = true
+      teardown?.()
+    }
+  }
+  return defineAsyncComponent({ loader, hydrate })
 }
 
 const props = defineProps<{
@@ -42,13 +65,13 @@ const COMPONENT_BY_SECTION: Record<HomeSectionId, Component> = {
   uspStrip: onVisible(() => import('./StoreHomeUspStrip.vue')),
   featuredCategories: onVisible(() => import('./StoreHomeFeaturedCategories.vue')),
   flash: onVisible(() => import('./StoreHomeFlash.vue')),
-  productStory: onVisible(() => import('./StoreHomeProductStory.vue')),
+  productStory: onVisibleAfterInput(() => import('./StoreHomeProductStory.vue')),
   bridalTeaser: onVisible(() => import('./StoreHomeBridalTeaser.vue')),
   tradersTeaser: onVisible(() => import('./StoreHomeTradersTeaser.vue')),
   aboutTeaser: onVisible(() => import('./StoreHomeAboutTeaser.vue')),
   partners: onVisible(() => import('./StoreHomePartners.vue')),
   traderReels: onVisible(() => import('./StoreHomeTraderReels.vue')),
-  reviews: onVisible(() => import('./StoreHomeReviews.vue')),
+  reviews: onVisibleAfterInput(() => import('./StoreHomeReviews.vue')),
   guides: onVisible(() => import('./StoreHomeGuides.vue')),
 }
 
