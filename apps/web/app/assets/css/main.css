@@ -375,6 +375,34 @@
   box-shadow: 0 -24px 48px -28px rgb(20 20 18 / .35);
 }
 
+/* Product story */
+.story-appliance-3d {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+.story-door-fridge-top,
+.story-door-fridge-bottom,
+.story-door-washer {
+  transform-origin: right center;
+  transform: perspective(1000px) rotateY(105deg);
+}
+.story-door-fridge-bottom {
+  transform: perspective(1000px) rotateY(95deg);
+}
+[dir='ltr'] .story-door-fridge-top,
+[dir='ltr'] .story-door-fridge-bottom,
+[dir='ltr'] .story-door-washer {
+  transform-origin: left center;
+  transform: perspective(1000px) rotateY(-105deg);
+}
+[dir='ltr'] .story-door-fridge-bottom {
+  transform: perspective(1000px) rotateY(-95deg);
+}
+.story-louver-open {
+  transform-origin: top center;
+  transform: perspective(1000px) rotateX(40deg);
+}
+
 /* Home reviews wall: two columns drifting in opposite directions, faded at the edges; stops on
    hover, keyboard focus or the pause button. Reduced motion: a still list you can scroll. */
 .reviews-wall { overflow: hidden; mask-image: linear-gradient(180deg, transparent, #000 12%, #000 88%, transparent); }

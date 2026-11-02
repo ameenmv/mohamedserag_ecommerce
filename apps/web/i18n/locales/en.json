@@ -122,6 +122,11 @@
       "account": "My Account"
     },
     "home": {
+      "productStory": {
+        "eyebrow": "Product story",
+        "details": "Details",
+        "was": "was"
+      },
       "reviews": {
         "rating": "{average} of 5",
         "ratingCount": "from {count} reviews",

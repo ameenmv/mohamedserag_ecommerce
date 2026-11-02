@@ -122,6 +122,11 @@
       "account": "حسابي"
     },
     "home": {
+      "productStory": {
+        "eyebrow": "قصة منتج",
+        "details": "التفاصيل",
+        "was": "بدل"
+      },
       "reviews": {
         "rating": "{average} من 5",
         "ratingCount": "من {count} تقييم",

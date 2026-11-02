@@ -132,6 +132,10 @@ function extraProps(id: ExtraSectionId) {
   return {}
 }
 
+// The scroll reveal leaves a transform on the section, and a transformed ancestor breaks the
+// product story's pinned (position: fixed) scene.
+const NO_REVEAL = new Set<string>(['announce', 'hero', 'productStory'])
+
 const renderedSections = computed(() => {
   const list: { id: string; component: Component; props: Record<string, unknown> }[] =
     props.visibleSections.map((id) => ({
@@ -154,7 +158,7 @@ const renderedSections = computed(() => {
     :is="section.component"
     v-for="section in renderedSections"
     :key="section.id"
-    :class="section.id === 'announce' || section.id === 'hero' ? undefined : 'scroll-reveal'"
+    :class="NO_REVEAL.has(section.id) ? undefined : 'scroll-reveal'"
     v-bind="section.props"
   />
 </template>
