@@ -82,7 +82,7 @@ useHeroMotion(heroRef, marqueeRef)
       <div class="flex min-w-0 flex-[1_1_600px] flex-col gap-7 lg:gap-5">
         <span
           data-hero-intro
-          class="inline-flex items-center gap-2.5 self-start rounded-full border border-serag-gold/50 bg-serag-gold/10 px-[18px] py-2 text-[15px] font-medium text-[#E8DFB0]"
+          class="[--d:0s] inline-flex items-center gap-2.5 self-start rounded-full border border-serag-gold/50 bg-serag-gold/10 px-[18px] py-2 text-[15px] font-medium text-[#E8DFB0]"
         >
           <span class="animate-pulse-soft size-2 rounded-full bg-serag-gold-hi" aria-hidden="true" />
           {{ content.eyebrow }}
@@ -96,11 +96,11 @@ useHeroMotion(heroRef, marqueeRef)
           {{ title.lead }}<template v-if="title.highlight"><br><span class="text-serag-gold-hi">{{ title.highlight }}</span></template>
         </h1>
 
-        <p data-hero-intro class="max-w-[560px] text-lg leading-[1.8] text-[#D8D3C7] sm:text-[clamp(18px,2vw,22px)]">
+        <p data-hero-intro class="[--d:.12s] max-w-[560px] text-lg leading-[1.8] text-[#D8D3C7] sm:text-[clamp(18px,2vw,22px)]">
           {{ content.subtitle }}
         </p>
 
-        <div data-hero-intro class="flex flex-wrap gap-3.5">
+        <div data-hero-intro class="[--d:.22s] flex flex-wrap gap-3.5">
           <NuxtLink
             data-magnetic
             :to="primary.to"
@@ -123,7 +123,7 @@ useHeroMotion(heroRef, marqueeRef)
           </NuxtLink>
         </div>
 
-        <dl data-hero-intro class="mt-3 flex flex-wrap gap-5 border-t border-serag-ivory/15 pt-7 sm:gap-9 lg:mt-1 lg:pt-5">
+        <dl data-hero-intro class="[--d:.32s] mt-3 flex flex-wrap gap-5 border-t border-serag-ivory/15 pt-7 sm:gap-9 lg:mt-1 lg:pt-5">
           <div v-for="stat in content.stats" :key="stat.label" class="flex flex-col-reverse gap-1.5">
             <dt class="text-sm text-[#C4BEB0]">{{ stat.label }}</dt>
             <dd data-hero-stat class="num text-[28px] leading-none font-extrabold text-serag-gold-hi sm:text-[40px]">

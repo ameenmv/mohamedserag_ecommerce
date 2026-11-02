@@ -2,9 +2,8 @@ import { loadGsap } from './useGsap'
 import type { Ref } from 'vue'
 
 /**
- * The home hero's motion (GSAP, loaded after the page is up; nothing here for reduced motion):
- *  - an entrance that plays while the splash still covers the page, so the headline was already
- *    painted (largest paint unaffected) and nothing visible ever blinks out;
+ * The home hero's motion (GSAP, loaded on the visitor's first interaction; nothing here for
+ * reduced motion; the entrance under the splash is CSS):
  *  - the stats count up when they first come into view;
  *  - the light follows the pointer and the appliance cards shift with depth;
  *  - on scroll the hero shrinks into a rounded card, the art and «1972» move at their own
@@ -18,51 +17,28 @@ export function useHeroMotion(rootRef: Ref<HTMLElement | null>, marqueeRef: Ref<
     const kit = await loadGsap()
     const root = rootRef.value
     if (!kit || !root) return
-    const { gsap, ScrollTrigger, SplitText } = kit
+    const { gsap, ScrollTrigger } = kit
 
     const ctx = gsap.context(() => {
       const q = gsap.utils.selector(root)
-      const isRtl = document.documentElement.dir === 'rtl'
 
-      // Entrance, only while the splash still hides the page (and not after the first page)
-      const splash = document.querySelector<HTMLElement>('.splash')
-      const splashLeft = splash && getComputedStyle(splash).display !== 'none' ? 1.15 - performance.now() / 1000 : 0
-      const intro = splashLeft > 0.15
-      if (intro) {
-        const title = q('[data-hero-title]')[0]
-        const split = title ? SplitText.create(title, { type: 'words', mask: 'words' }) : null
-        const tl = gsap.timeline({ delay: splashLeft, onComplete: () => split?.revert() })
-        if (split) tl.from(split.words, { yPercent: 115, duration: 1.1, ease: 'expo.out', stagger: 0.09 }, 0)
-        tl.from(q('[data-hero-intro]'), { y: 34, autoAlpha: 0, duration: 0.9, ease: 'power3.out', stagger: 0.08 }, 0.2)
-          .from(q('[data-hero-art]'), { y: 90, scale: 0.86, rotate: isRtl ? 4 : -4, autoAlpha: 0, duration: 1.4, ease: 'expo.out' }, 0.05)
-          .from(q('[data-hero-year]'), { yPercent: 25, autoAlpha: 0, duration: 1.6, ease: 'power2.out' }, 0)
-          .from(q('[data-hero-blob]'), { scale: 0.4, autoAlpha: 0, duration: 1.8, ease: 'power2.out', stagger: 0.12 }, 0)
-          // The showroom lights switch on, with a fluorescent flicker
-          .fromTo(q('[data-hero-beam]'), { autoAlpha: 0 }, {
-            keyframes: [{ autoAlpha: 0.7, duration: 0.06 }, { autoAlpha: 0.1, duration: 0.08 }, { autoAlpha: 0.9, duration: 0.06 }, { autoAlpha: 0.3, duration: 0.1 }, { autoAlpha: 1, duration: 0.3 }],
-            stagger: 0.18,
-          }, 0.35)
-      }
-
-      // Stats count up: with the entrance, or when they first scroll into view (phones)
+      // Stats count up when they first scroll into view (phones: they start below the screen).
+      // The entrance under the splash is CSS (main.css, «Hero entrance»): GSAP only arrives
+      // after the visitor's first scroll or pointer move.
       for (const el of q('[data-hero-stat]')) {
         const match = /^(\D*)(\d+)(\D*)$/.exec(el.textContent?.trim() ?? '')
-        if (!match) continue
+        if (!match || el.getBoundingClientRect().top <= window.innerHeight) continue
         const [, before = '', digits = '0', after = ''] = match
         const target = Number(digits)
-        const from = target > 1000 ? target - 60 : 0
-        const below = el.getBoundingClientRect().top > window.innerHeight
-        if (!intro && !below) continue
-        const counter = { value: from }
-        el.textContent = `${before}${from}${after}`
+        const counter = { value: target > 1000 ? target - 60 : 0 }
+        el.textContent = `${before}${counter.value}${after}`
         gsap.to(counter, {
           value: target,
           duration: 1.6,
           ease: 'power3.out',
-          delay: intro ? splashLeft + 0.3 : 0,
           snap: { value: 1 },
           onUpdate: () => { el.textContent = `${before}${counter.value}${after}` },
-          scrollTrigger: below ? { trigger: el, start: 'top 92%', once: true } : undefined,
+          scrollTrigger: { trigger: el, start: 'top 92%', once: true },
         })
       }
 
