@@ -122,11 +122,7 @@
       "account": "My Account"
     },
     "home": {
-      "reviewsWall": {
-        "eyebrow": "Customer reviews",
-        "title": "What people say",
-        "titleHighlight": "about Serag",
-        "subtitle": "Real reviews from people who bought from us, after the appliance arrived and got to work.",
+      "reviews": {
         "rating": "{average} of 5",
         "ratingCount": "from {count} reviews",
         "verified": "Verified buyer",

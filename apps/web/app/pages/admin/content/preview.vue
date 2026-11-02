@@ -8,6 +8,7 @@ import type {
   ProductCard,
 } from '@serag/shared'
 import { DEFAULT_HOME_CONTENT, DEFAULT_HOME_LAYOUT, PERMISSIONS } from '@serag/shared'
+import { toProductCard } from '~/utils/product-card-mapper'
 import { useAdminCms } from '~/composables/useAdminCms'
 
 definePageMeta({
@@ -35,6 +36,7 @@ const flashEndsAt = ref<string | null>(null)
 const categories = ref<CategoryTreeNode[]>([])
 const brands = ref<BrandSummary[]>([])
 const guides = ref<GuideCard[]>([])
+const storyProduct = ref<ProductCard | null>(null)
 
 function indexCategories(nodes: CategoryTreeNode[]): Map<string, CategoryTreeNode> {
   const map = new Map<string, CategoryTreeNode>()
@@ -66,6 +68,8 @@ const visibleSections = computed(() =>
     partnerCount: partners.value.length,
     guideCount: guides.value.length,
     featuredCategoryCount: featuredCategories.value.length,
+    storyProduct: storyProduct.value !== null,
+    reviewCount: 0,
   }),
 )
 
@@ -87,6 +91,14 @@ async function loadPreview(): Promise<void> {
     categories.value = cats
     brands.value = brandList
     guides.value = guideList
+
+    const slug = draftSections.value.productStory?.productSlug
+    if (slug) {
+      const detail = await storeApi.product(slug).catch(() => null)
+      storyProduct.value = detail ? toProductCard(detail) : null
+    } else {
+      storyProduct.value = null
+    }
   } catch {
     // Any failure renders the built-in defaults.
   }
@@ -110,6 +122,7 @@ onMounted(async () => {
       :featured-categories="featuredCategories"
       :partners="partners"
       :guides="guides"
+      :story-product="storyProduct"
     />
   </div>
 </template>

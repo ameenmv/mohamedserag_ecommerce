@@ -2,6 +2,9 @@ import { z } from 'zod'
 import {
   DEFAULT_HOME_CONTENT,
   HOME_SECTION_IDS,
+  PRODUCT_STORY_APPLIANCES,
+  PRODUCT_STORY_CALLOUTS_MAX,
+  PRODUCT_STORY_CALLOUTS_MIN,
   TRADER_REELS_MAX,
   isSafeContentLink,
   isUploadedImage,
@@ -237,6 +240,64 @@ const traderReelsSchema = z
   })
   .default(() => DEFAULT_HOME_CONTENT.traderReels)
 
+// Content saved before this section existed has no `productStory`: it reads as the defaults
+const productStorySchema = z
+  .object({
+    title: z
+      .string({ message: 'عنوان قصة المنتج مطلوب' })
+      .trim()
+      .min(1, 'عنوان قصة المنتج مطلوب')
+      .max(80, 'عنوان قصة المنتج بيزيد عن 80 حرف'),
+    appliance: z.enum(PRODUCT_STORY_APPLIANCES, { message: 'نوع الجهاز غير صالح' }),
+    productSlug: z
+      .string({ message: 'رابط المنتج مطلوب' })
+      .trim()
+      .min(1, 'رابط المنتج مطلوب')
+      .max(120, 'رابط المنتج بيزيد عن 120 حرف'),
+    callouts: z
+      .array(
+        z.object({
+          value: z
+            .string({ message: 'قيمة الميزة غير صالحة' })
+            .trim()
+            .min(1, 'قيمة الميزة مطلوبة')
+            .max(24, 'قيمة الميزة بتزيد عن 24 حرف'),
+          label: z
+            .string({ message: 'وصف الميزة غير صالح' })
+            .trim()
+            .min(1, 'وصف الميزة مطلوب')
+            .max(60, 'وصف الميزة بيزيد عن 60 حرف'),
+        }),
+      )
+      .min(PRODUCT_STORY_CALLOUTS_MIN, `أقل عدد مميزات ${PRODUCT_STORY_CALLOUTS_MIN}`)
+      .max(PRODUCT_STORY_CALLOUTS_MAX, `أقصى عدد مميزات ${PRODUCT_STORY_CALLOUTS_MAX}`),
+  })
+  .default(() => DEFAULT_HOME_CONTENT.productStory)
+
+// Content saved before this section existed has no `reviews`: it reads as the defaults
+const reviewsSchema = z
+  .object({
+    eyebrow: z
+      .string({ message: 'السطر الصغير فوق العنوان غير صالح' })
+      .trim()
+      .max(40, 'السطر الصغير فوق العنوان بيزيد عن 40 حرف'),
+    title: z
+      .string({ message: 'عنوان آراء العملاء مطلوب' })
+      .trim()
+      .min(1, 'عنوان آراء العملاء مطلوب')
+      .max(60, 'عنوان آراء العملاء بيزيد عن 60 حرف'),
+    highlight: z
+      .string({ message: 'الكلمة المميزة مطلوبة' })
+      .trim()
+      .min(1, 'الكلمة المميزة مطلوبة')
+      .max(30, 'الكلمة المميزة بتزيد عن 30 حرف'),
+    subtitle: z
+      .string({ message: 'نص آراء العملاء غير صالح' })
+      .trim()
+      .max(200, 'نص آراء العملاء بيزيد عن 200 حرف'),
+  })
+  .default(() => DEFAULT_HOME_CONTENT.reviews)
+
 const guidesSchema = z.object({
   title: z
     .string({ message: 'عنوان الدليل مطلوب' })
@@ -251,11 +312,13 @@ export const homeContentSchema = z.object({
   uspStrip: uspStripSchema,
   featuredCategories: featuredCategoriesSchema,
   flash: flashSchema,
+  productStory: productStorySchema,
   bridalTeaser: bridalTeaserSchema,
   tradersTeaser: tradersTeaserSchema,
   aboutTeaser: aboutTeaserSchema,
   partners: partnersSchema,
   traderReels: traderReelsSchema,
+  reviews: reviewsSchema,
   guides: guidesSchema,
 })
 

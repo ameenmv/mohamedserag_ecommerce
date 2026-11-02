@@ -8,6 +8,7 @@ import type {
   StoreReviewsResponse,
 } from '@serag/shared'
 import { DEFAULT_HOME_CONTENT, DEFAULT_HOME_LAYOUT } from '@serag/shared'
+import { toProductCard } from '~/utils/product-card-mapper'
 
 interface HomeBundle {
   home: PublicHome
@@ -18,6 +19,7 @@ interface HomeBundle {
   brands: BrandSummary[]
   guides: GuideCard[]
   reviews: StoreReviewsResponse
+  storyProduct: ProductCard | null
 }
 
 const EMPTY_HOME: PublicHome = {
@@ -61,7 +63,13 @@ export async function useHomeContent() {
     const flashEndsAt =
       offers.flash.map((group) => group.endsAt).sort((a, b) => Date.parse(a) - Date.parse(b))[0] ?? null
 
-    return { home, flashProducts, flashEndsAt, categories, brands, guides, reviews }
+    const productSlug = home.sections.productStory?.productSlug
+    const rawStoryProduct = productSlug
+      ? await storeApi.product(productSlug).catch(() => null)
+      : null
+    const storyProduct = rawStoryProduct ? toProductCard(rawStoryProduct) : null
+
+    return { home, flashProducts, flashEndsAt, categories, brands, guides, reviews, storyProduct }
   })
 
   const home = computed(() => asyncData.data.value?.home ?? EMPTY_HOME)
@@ -71,6 +79,7 @@ export async function useHomeContent() {
   const brands = computed(() => asyncData.data.value?.brands ?? [])
   const guides = computed(() => asyncData.data.value?.guides ?? [])
   const reviews = computed(() => asyncData.data.value?.reviews ?? null)
+  const storyProduct = computed(() => asyncData.data.value?.storyProduct ?? null)
 
   const featuredCategories = computed<CategoryTreeNode[]>(() => {
     const index = indexCategories(asyncData.data.value?.categories ?? [])
@@ -92,6 +101,8 @@ export async function useHomeContent() {
       partnerCount: partners.value.length,
       guideCount: guides.value.length,
       featuredCategoryCount: featuredCategories.value.length,
+      storyProduct: storyProduct.value !== null,
+      reviewCount: reviews.value?.items.length ?? 0,
     }),
   )
 
@@ -106,5 +117,6 @@ export async function useHomeContent() {
     partners,
     guides,
     reviews,
+    storyProduct,
   }
 }

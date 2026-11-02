@@ -122,11 +122,7 @@
       "account": "حسابي"
     },
     "home": {
-      "reviewsWall": {
-        "eyebrow": "آراء عملائنا",
-        "title": "الناس بتقول إيه",
-        "titleHighlight": "عن سراج",
-        "subtitle": "تقييمات حقيقية من ناس اشترت مننا، بعد ما الجهاز وصل واشتغل.",
+      "reviews": {
         "rating": "{average} من 5",
         "ratingCount": "من {count} تقييم",
         "verified": "مشتري موثّق",

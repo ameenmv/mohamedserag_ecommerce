@@ -1,6 +1,8 @@
 import type { HomeContent, HomeLayout, HomeSectionId } from '@serag/shared'
 import { FEATURES } from '../constants/features'
 
+export const MIN_HOME_REVIEWS = 4
+
 /**
  * Live data available at render time, used to decide whether a dynamic
  * section has anything to show. Static sections (announce, hero, USP,
@@ -11,6 +13,8 @@ export interface HomeLiveData {
   partnerCount: number
   guideCount: number
   featuredCategoryCount: number
+  storyProduct: boolean
+  reviewCount: number
 }
 
 function hasText(value: string): boolean {
@@ -38,6 +42,10 @@ function isHomeSectionEmpty(
       return live.partnerCount === 0
     case 'traderReels':
       return sections.traderReels.items.length === 0
+    case 'productStory':
+      return !live.storyProduct
+    case 'reviews':
+      return live.reviewCount < MIN_HOME_REVIEWS
     case 'guides':
       return live.guideCount === 0
     default:

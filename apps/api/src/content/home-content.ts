@@ -97,9 +97,17 @@ export function parseStoredHome(data: unknown, layout: unknown): StoredHome {
   const rawEnglish = typeof data === 'object' && data !== null ? (data as Record<string, unknown>).en : undefined
   const parsedEnglish = rawEnglish === undefined ? null : homeContentSchema.safeParse(rawEnglish)
   let english = parsedEnglish?.success ? parsedEnglish.data : null
-  // English saved before the video strip existed must not fall back to the Arabic default names
-  if (english && typeof rawEnglish === 'object' && rawEnglish !== null && !('traderReels' in rawEnglish)) {
-    english = { ...english, traderReels: DEFAULT_HOME_CONTENT_EN.traderReels }
+  // English saved before new sections existed must not fall back to Arabic default names
+  if (english && typeof rawEnglish === 'object' && rawEnglish !== null) {
+    if (!('traderReels' in rawEnglish)) {
+      english = { ...english, traderReels: DEFAULT_HOME_CONTENT_EN.traderReels }
+    }
+    if (!('productStory' in rawEnglish)) {
+      english = { ...english, productStory: DEFAULT_HOME_CONTENT_EN.productStory }
+    }
+    if (!('reviews' in rawEnglish)) {
+      english = { ...english, reviews: DEFAULT_HOME_CONTENT_EN.reviews }
+    }
   }
   return {
     sections: parsedContent.success ? parsedContent.data : DEFAULT_HOME_CONTENT,

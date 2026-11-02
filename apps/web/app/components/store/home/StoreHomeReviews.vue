@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { BadgeCheck, Pause, Play, Star } from '@lucide/vue'
-import type { StoreReview, StoreReviewsResponse } from '@serag/shared'
+import type { HomeContent, StoreReview, StoreReviewsResponse } from '@serag/shared'
 
 const props = defineProps<{
+  content: HomeContent['reviews']
   reviews: StoreReviewsResponse | null
 }>()
 
@@ -32,12 +33,12 @@ const paused = ref(false)
   <section class="relative overflow-clip bg-serag-cream" :aria-labelledby="headingId">
     <div class="mx-auto grid max-w-7xl items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16 lg:px-10 lg:py-28">
       <div class="flex flex-col gap-5">
-        <p class="eyebrow text-serag-gold-ink">{{ t('store.home.reviewsWall.eyebrow') }}</p>
+        <p v-if="content.eyebrow" class="eyebrow text-serag-gold-ink">{{ content.eyebrow }}</p>
         <h2 :id="headingId" class="font-display text-[clamp(42px,5.5vw,76px)] leading-none text-serag-green">
-          {{ t('store.home.reviewsWall.title') }}
-          <span class="ink-fill text-serag-gold-ink">{{ t('store.home.reviewsWall.titleHighlight') }}</span>
+          {{ content.title }}
+          <span v-if="content.highlight" class="ink-fill text-serag-gold-ink">{{ content.highlight }}</span>
         </h2>
-        <p class="max-w-[460px] text-lg leading-[1.9] text-[#4A4640]">{{ t('store.home.reviewsWall.subtitle') }}</p>
+        <p v-if="content.subtitle" class="max-w-[460px] text-lg leading-[1.9] text-[#4A4640]">{{ content.subtitle }}</p>
 
         <div v-if="summary.count > 0" class="mt-2 flex items-center gap-4">
           <p class="num text-[64px] leading-none font-extrabold text-serag-green" dir="ltr">{{ summary.average.toFixed(1) }}</p>
@@ -46,8 +47,8 @@ const paused = ref(false)
               <Star v-for="n in 5" :key="n" class="size-5 fill-current" />
             </div>
             <p class="text-sm text-muted-foreground">
-              <span class="sr-only">{{ t('store.home.reviewsWall.rating', { average: summary.average.toFixed(1) }) }}</span>
-              {{ t('store.home.reviewsWall.ratingCount', { count: summary.count }) }}
+              <span class="sr-only">{{ t('store.home.reviews.rating', { average: summary.average.toFixed(1) }) }}</span>
+              {{ t('store.home.reviews.ratingCount', { count: summary.count }) }}
             </p>
           </div>
         </div>
@@ -60,7 +61,7 @@ const paused = ref(false)
           @click="paused = !paused"
         >
           <component :is="paused ? Play : Pause" class="size-4" aria-hidden="true" />
-          {{ paused ? t('store.home.reviewsWall.play') : t('store.home.reviewsWall.pause') }}
+          {{ paused ? t('store.home.reviews.play') : t('store.home.reviews.pause') }}
         </button>
       </div>
 
@@ -81,14 +82,14 @@ const paused = ref(false)
                 <div class="flex gap-0.5 text-serag-gold" aria-hidden="true">
                   <Star v-for="n in review.stars" :key="n" class="size-4 fill-current" />
                 </div>
-                <p class="sr-only">{{ t('store.home.reviewsWall.rating', { average: review.stars }) }}</p>
+                <p class="sr-only">{{ t('store.home.reviews.rating', { average: review.stars }) }}</p>
                 <p class="line-clamp-5 text-base leading-[1.85] text-foreground">{{ review.text }}</p>
                 <div class="mt-1 flex flex-wrap items-center justify-between gap-2 border-t border-border/70 pt-3">
                   <p class="flex items-center gap-1.5 font-bold text-foreground">
                     {{ review.name }}
                     <span v-if="review.verifiedBuyer" class="inline-flex items-center gap-1 text-xs font-semibold text-serag-green">
                       <BadgeCheck class="size-4" aria-hidden="true" />
-                      {{ t('store.home.reviewsWall.verified') }}
+                      {{ t('store.home.reviews.verified') }}
                     </span>
                   </p>
                   <NuxtLink
@@ -96,7 +97,7 @@ const paused = ref(false)
                     :tabindex="copy === 2 ? -1 : undefined"
                     class="max-w-full truncate text-xs text-muted-foreground underline-offset-4 hover:text-serag-gold-ink hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                   >
-                    {{ t('store.home.reviewsWall.about', { product: review.product.name }) }}
+                    {{ t('store.home.reviews.about', { product: review.product.name }) }}
                   </NuxtLink>
                 </div>
               </article>

@@ -325,4 +325,91 @@ describe('content', () => {
       expect(facebookEmbedSrc(null)).toBeNull()
     })
   })
+
+  describe('productStory section', () => {
+    it('content without productStory reads as the default product story', () => {
+      const { productStory: _omitted, ...old } = DEFAULT_HOME_CONTENT
+      const result = homeContentSchema.safeParse(old)
+      expect(result.success && result.data.productStory).toEqual(DEFAULT_HOME_CONTENT.productStory)
+    })
+
+    it('rejects 1 or 5 callouts', () => {
+      const oneCallout = {
+        ...DEFAULT_HOME_CONTENT,
+        productStory: {
+          ...DEFAULT_HOME_CONTENT.productStory,
+          callouts: [{ value: '450 لتر', label: 'مساحة' }],
+        },
+      }
+      expect(homeContentSchema.safeParse(oneCallout).success).toBe(false)
+
+      const fiveCallouts = {
+        ...DEFAULT_HOME_CONTENT,
+        productStory: {
+          ...DEFAULT_HOME_CONTENT.productStory,
+          callouts: [
+            { value: '1', label: '1' },
+            { value: '2', label: '2' },
+            { value: '3', label: '3' },
+            { value: '4', label: '4' },
+            { value: '5', label: '5' },
+          ],
+        },
+      }
+      expect(homeContentSchema.safeParse(fiveCallouts).success).toBe(false)
+    })
+
+    it('accepts 2 to 4 callouts', () => {
+      const twoCallouts = {
+        ...DEFAULT_HOME_CONTENT,
+        productStory: {
+          ...DEFAULT_HOME_CONTENT.productStory,
+          callouts: [
+            { value: '1', label: '1' },
+            { value: '2', label: '2' },
+          ],
+        },
+      }
+      expect(homeContentSchema.safeParse(twoCallouts).success).toBe(true)
+    })
+
+    it('rejects an unknown appliance', () => {
+      const badAppliance = {
+        ...DEFAULT_HOME_CONTENT,
+        productStory: {
+          ...DEFAULT_HOME_CONTENT.productStory,
+          appliance: 'microwave',
+        },
+      }
+      expect(homeContentSchema.safeParse(badAppliance).success).toBe(false)
+    })
+  })
+
+  describe('reviews section', () => {
+    it('content without reviews reads as the default reviews', () => {
+      const { reviews: _omitted, ...old } = DEFAULT_HOME_CONTENT
+      const result = homeContentSchema.safeParse(old)
+      expect(result.success && result.data.reviews).toEqual(DEFAULT_HOME_CONTENT.reviews)
+    })
+
+    it('rejects empty title or highlight', () => {
+      const badTitle = {
+        ...DEFAULT_HOME_CONTENT,
+        reviews: {
+          ...DEFAULT_HOME_CONTENT.reviews,
+          title: '',
+        },
+      }
+      expect(homeContentSchema.safeParse(badTitle).success).toBe(false)
+
+      const badHighlight = {
+        ...DEFAULT_HOME_CONTENT,
+        reviews: {
+          ...DEFAULT_HOME_CONTENT.reviews,
+          highlight: '',
+        },
+      }
+      expect(homeContentSchema.safeParse(badHighlight).success).toBe(false)
+    })
+  })
 })

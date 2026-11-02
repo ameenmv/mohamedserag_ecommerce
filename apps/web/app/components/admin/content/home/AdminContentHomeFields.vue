@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { facebookEmbedSrc, isSafeContentLink, isUploadedImage } from '@serag/shared'
+import {
+  PRODUCT_STORY_APPLIANCES,
+  facebookEmbedSrc,
+  isSafeContentLink,
+  isUploadedImage,
+} from '@serag/shared'
 import type { HomeContent, HomeSectionId } from '@serag/shared'
 import { ArrowDown, ArrowUp, Plus, RotateCcw, Trash2, Upload, X } from '@lucide/vue'
 import { HOME_SECTION_META, homeFieldErrorKey } from '~/utils/admin-home-fields'
@@ -643,7 +648,7 @@ onMounted(() => {
               :model-value="row.value"
               :disabled="!hydrated"
               :dir="locale === 'en' ? 'ltr' : undefined"
-              maxlength="10"
+              :maxlength="field.valueMax ?? 10"
               :placeholder="t('admin.content.fields.statValue')"
               @update:model-value="updateStat(field.key, index, 'value', String($event))"
             />
@@ -661,7 +666,7 @@ onMounted(() => {
               variant="ghost"
               size="icon"
               class="min-h-11 min-w-11 shrink-0"
-              :disabled="!hydrated"
+              :disabled="!hydrated || (field.minItems !== undefined && statsValue(field.key).length <= field.minItems)"
               :aria-label="t('admin.content.fields.removeItem')"
               @click="removeStat(field.key, index)"
             >
@@ -669,10 +674,9 @@ onMounted(() => {
             </Button>
           </div>
           <Button
-            v-if="statsValue(field.key).length < (field.maxItems ?? 3)"
             type="button"
             variant="outline"
-            :disabled="!hydrated"
+            :disabled="!hydrated || (field.maxItems !== undefined && statsValue(field.key).length >= field.maxItems)"
             class="min-h-11 w-fit"
             @click="addStat(field.key)"
           >
@@ -680,6 +684,33 @@ onMounted(() => {
             <span>{{ t('admin.content.fields.addItem') }}</span>
           </Button>
         </div>
+      </template>
+
+      <!-- appliance -->
+      <template v-else-if="field.kind === 'appliance'">
+        <Select
+          :model-value="textValue(field.key)"
+          :disabled="!hydrated"
+          @update:model-value="emit('set', field.key, $event, locale)"
+        >
+          <SelectTrigger
+            :id="`f-${sectionId}-${field.key}`"
+            class="min-h-11 w-full justify-between"
+            :aria-invalid="Boolean(fieldError(field.key))"
+            :aria-describedby="fieldError(field.key) ? `e-${sectionId}-${field.key}` : undefined"
+          >
+            <SelectValue :placeholder="t('admin.content.fields.selectAppliance')" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem
+              v-for="appliance in PRODUCT_STORY_APPLIANCES"
+              :key="appliance"
+              :value="appliance"
+            >
+              {{ t(`admin.content.appliances.${appliance}`) }}
+            </SelectItem>
+          </SelectContent>
+        </Select>
       </template>
 
       <!-- usp items -->
@@ -955,6 +986,13 @@ onMounted(() => {
           </div>
         </div>
       </template>
+
+      <p
+        v-if="field.hintKey"
+        class="text-xs text-muted-foreground"
+      >
+        {{ t(field.hintKey) }}
+      </p>
 
       <span
         v-if="fieldError(field.key)"

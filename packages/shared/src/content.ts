@@ -6,11 +6,13 @@ export const HOME_SECTION_IDS = [
   'uspStrip',
   'featuredCategories',
   'flash',
+  'productStory',
   'bridalTeaser',
   'tradersTeaser',
   'aboutTeaser',
   'partners',
   'traderReels',
+  'reviews',
   'guides',
 ] as const
 
@@ -35,6 +37,30 @@ export interface TraderReelItem {
 
 export const TRADER_REELS_MAX = 12
 
+export const PRODUCT_STORY_APPLIANCES = ['fridge', 'washer', 'cooker', 'tv', 'ac'] as const
+export type ProductStoryAppliance = (typeof PRODUCT_STORY_APPLIANCES)[number]
+export const PRODUCT_STORY_CALLOUTS_MIN = 2
+export const PRODUCT_STORY_CALLOUTS_MAX = 4
+
+export interface ProductStoryCallout {
+  value: string
+  label: string
+}
+
+export interface ProductStoryContent {
+  title: string
+  appliance: ProductStoryAppliance
+  productSlug: string
+  callouts: ProductStoryCallout[]
+}
+
+export interface ReviewsHomeContent {
+  eyebrow: string
+  title: string
+  highlight: string
+  subtitle: string
+}
+
 export interface HomeContent {
   announce: { text: string; href: string | null }
   hero: {
@@ -49,11 +75,13 @@ export interface HomeContent {
   uspStrip: { items: { title: string; description: string }[] }
   featuredCategories: { title: string; categorySlugs: string[] }
   flash: { title: string; subtitle: string }
+  productStory: ProductStoryContent
   bridalTeaser: { eyebrow: string; title: string; subtitle: string; cta: HomeLink }
   tradersTeaser: { badge: string; title: string; subtitle: string; cta: HomeLink; points: string[] }
   aboutTeaser: { eyebrow: string; title: string; subtitle: string; cta: HomeLink | null }
   partners: { title: string }
   traderReels: { items: TraderReelItem[] }
+  reviews: ReviewsHomeContent
   guides: { title: string }
 }
 
@@ -130,6 +158,17 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
     title: 'عروض الفلاش',
     subtitle: 'عروض لفترة محدودة، تخلص قبل ما تلحق',
   },
+  productStory: {
+    title: 'ثلاجة سامسونج نوفروست 450 لتر',
+    appliance: 'fridge',
+    productSlug: 'samsung-fridge-450l-s1',
+    callouts: [
+      { value: '450 لتر', label: 'مساحة لعيلة كاملة' },
+      { value: 'نوفروست', label: 'من غير تلج ولا تنضيف' },
+      { value: '5 سنين', label: 'ضمان الوكيل على الموتور' },
+      { value: 'لحد بيتك', label: 'توصيل وتركيب في المنصورة' },
+    ],
+  },
   bridalTeaser: {
     eyebrow: 'باقات العرايس',
     title: 'تجهيز العرايس — جهّز بيتك',
@@ -169,6 +208,12 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
       { name: 'الخواجة للأدوات المنزلية', place: 'أحدث أطقم العشاء التركي', url: 'https://www.facebook.com/Elkawagastore/videos/1725780245171281/', embed: true, image: null },
       { name: 'الشرقاوي للأدوات المنزلية', place: 'تيتانيوم تركي · ضمان سنتين', url: 'https://www.facebook.com/reel/1059485930202915/', embed: true, image: null },
     ],
+  },
+  reviews: {
+    eyebrow: 'آراء عملائنا',
+    title: 'الناس بتقول إيه',
+    highlight: 'عن سراج',
+    subtitle: 'تقييمات حقيقية من ناس اشترت مننا، بعد ما الجهاز وصل واشتغل.',
   },
   guides: {
     title: 'اشترِ صح',
@@ -214,6 +259,17 @@ export const DEFAULT_HOME_CONTENT_EN: HomeContent = {
     title: 'Flash deals',
     subtitle: 'Limited-time offers that end before you know it',
   },
+  productStory: {
+    title: 'Samsung No Frost fridge, 450 L',
+    appliance: 'fridge',
+    productSlug: 'samsung-fridge-450l-s1',
+    callouts: [
+      { value: '450 L', label: 'Room for the whole family' },
+      { value: 'No Frost', label: 'No ice, no defrosting' },
+      { value: '5 years', label: 'Agent warranty on the motor' },
+      { value: 'To your door', label: 'Delivery and installation' },
+    ],
+  },
   bridalTeaser: {
     eyebrow: 'BRIDAL PACKAGES',
     title: 'Bridal packages — set up your home',
@@ -253,6 +309,12 @@ export const DEFAULT_HOME_CONTENT_EN: HomeContent = {
       { name: 'El Khawaga Housewares', place: 'Latest Turkish dinner sets', url: 'https://www.facebook.com/Elkawagastore/videos/1725780245171281/', embed: true, image: null },
       { name: 'El Sharkawy Housewares', place: 'Turkish titanium · 2-year warranty', url: 'https://www.facebook.com/reel/1059485930202915/', embed: true, image: null },
     ],
+  },
+  reviews: {
+    eyebrow: 'Customer reviews',
+    title: 'What people say',
+    highlight: 'about Serag',
+    subtitle: 'Real reviews from people who bought from us, after the appliance arrived and got to work.',
   },
   guides: {
     title: 'Buy smart',

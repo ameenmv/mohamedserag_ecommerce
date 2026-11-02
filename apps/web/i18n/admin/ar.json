@@ -1413,7 +1413,9 @@
         "hiddenBadge": "مخفي عن الزوار",
         "fieldCount": "{count} حقول",
         "changedCount": "{count} تعديل",
-        "traderReels": "فيديوهات التجار"
+        "traderReels": "فيديوهات التجار",
+        "productStory": "قصة منتج",
+        "reviews": "آراء العملاء"
       },
       "fields": {
         "reset": "رجّع",
@@ -1427,6 +1429,7 @@
         "removeImage": "امسح الصورة",
         "addItem": "أضف عنصر",
         "removeItem": "امسح العنصر",
+        "selectAppliance": "اختر نوع الجهاز",
         "statValue": "القيمة",
         "statLabel": "الوصف",
         "uspTitle": "العنوان",
@@ -1455,6 +1458,13 @@
         "flash": {
           "title": "عنوان القسم",
           "subtitle": "الوصف"
+        },
+        "productStory": {
+          "title": "العنوان",
+          "appliance": "نوع الجهاز",
+          "productSlug": "المنتج المعروض (الـ slug)",
+          "productSlugHint": "اكتب الـslug بتاع المنتج من رابط صفحته، مثلاً samsung-fridge-450l-s1",
+          "callouts": "أبرز المواصفات"
         },
         "bridalTeaser": {
           "eyebrow": "السطر العلوي",
@@ -1491,6 +1501,12 @@
         "moveItemDown": "نزّل العنصر لتحت",
         "traderReels": {
           "items": "الفيديوهات"
+        },
+        "reviews": {
+          "eyebrow": "السطر العلوي",
+          "title": "العنوان",
+          "highlight": "الكلمة المميزة",
+          "subtitle": "الوصف"
         },
         "reelThumbnail": "صورة الفيديو",
         "reelNoThumbnail": "من غير صورة",
@@ -1554,6 +1570,13 @@
         "published": "اتنشرت التعديلات",
         "discarded": "اتلغت التعديلات",
         "restored": "اترجعت النسخة كمسودة، انشرها عشان تتأكد"
+      },
+      "appliances": {
+        "fridge": "ثلاجة",
+        "washer": "غسالة",
+        "cooker": "بوتاجاز",
+        "tv": "شاشة",
+        "ac": "تكييف"
       }
     },
     "richText": {

@@ -1413,7 +1413,9 @@
         "hiddenBadge": "Hidden from shoppers",
         "fieldCount": "{count} fields",
         "changedCount": "{count} changes",
-        "traderReels": "Trader videos"
+        "traderReels": "Trader videos",
+        "productStory": "Product story",
+        "reviews": "Customer reviews"
       },
       "fields": {
         "reset": "Reset",
@@ -1427,6 +1429,7 @@
         "removeImage": "Remove image",
         "addItem": "Add item",
         "removeItem": "Remove item",
+        "selectAppliance": "Select appliance type",
         "statValue": "Value",
         "statLabel": "Label",
         "uspTitle": "Title",
@@ -1455,6 +1458,13 @@
         "flash": {
           "title": "Section title",
           "subtitle": "Description"
+        },
+        "productStory": {
+          "title": "Title",
+          "appliance": "Appliance type",
+          "productSlug": "Featured product (slug)",
+          "productSlugHint": "The product's slug from its page address, e.g. samsung-fridge-450l-s1",
+          "callouts": "Key callouts"
         },
         "bridalTeaser": {
           "eyebrow": "Top line",
@@ -1491,6 +1501,12 @@
         "moveItemDown": "Move item down",
         "traderReels": {
           "items": "Videos"
+        },
+        "reviews": {
+          "eyebrow": "Eyebrow",
+          "title": "Title",
+          "highlight": "Highlight word",
+          "subtitle": "Subtitle"
         },
         "reelThumbnail": "Video picture",
         "reelNoThumbnail": "No picture",
@@ -1554,6 +1570,13 @@
         "published": "Changes published",
         "discarded": "Changes discarded",
         "restored": "Version restored as a draft, publish it to confirm"
+      },
+      "appliances": {
+        "fridge": "Fridge",
+        "washer": "Washer",
+        "cooker": "Cooker",
+        "tv": "TV",
+        "ac": "Air conditioner"
       }
     },
     "richText": {
