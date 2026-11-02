@@ -572,21 +572,22 @@
 }
 
 .cursor-ring.is-hover {
-  width: 60px;
-  height: 60px;
+  width: 48px;
+  height: 48px;
   border-color: var(--color-serag-gold-hi);
 }
 
 .cursor-ring.is-label {
-  width: 84px;
-  height: 84px;
+  width: 54px;
+  height: 54px;
   border-color: var(--color-serag-gold-hi);
-  background: var(--color-serag-gold-hi);
+  /* Slightly see-through: it floats over product photos */
+  background: color-mix(in srgb, var(--color-serag-gold-hi) 88%, transparent);
 }
 
 .cursor-ring .cursor-label {
   color: var(--color-serag-ink);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   line-height: 1;
   user-select: none;
