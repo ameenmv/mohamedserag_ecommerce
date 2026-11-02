@@ -7,19 +7,13 @@
 const { t } = useI18n()
 
 // Measures the hero cards just before the landing and hands their geometry to the splash cards
-// (see "Splash: the hero cards" in main.css). Registered here, in a component that only ever
-// renders on the server, so the script text sits in the page HTML and not in the JavaScript
-// every page downloads (home script budget). It runs once, while the page is parsed.
-useHead({
-  script: [
-    {
-      key: 'splash-land',
-      tagPosition: 'bodyClose',
-      innerHTML:
-        "try{var d=document.documentElement,s=document.querySelector('.splash');if(s&&!d.classList.contains('splash-seen')&&!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)){d.classList.add('splash-landing');setTimeout(function(){try{var c=['fridges','washers','screens','acs'],h=[],p=[],iw=window.innerWidth,ih=window.innerHeight;for(var i=0;i<c.length;i++){var he=document.querySelector('[data-hero-card=\"'+c[i]+'\"]'),se=document.querySelector('[data-splash-card=\"'+c[i]+'\"]');if(!he||!se)return;var r=he.getBoundingClientRect();if(r.top<0||r.bottom>ih||r.left<0||r.right>iw)return;h.push(he);p.push(se)}for(var j=0;j<c.length;j++){var el=h[j],sp=p[j],rc=el.getBoundingClientRect(),cs=window.getComputedStyle(el);sp.style.setProperty('--land-x',(rc.left+rc.width/2-iw/2)+'px');sp.style.setProperty('--land-y',(rc.top+rc.height/2-ih/2)+'px');sp.style.setProperty('--land-w',el.offsetWidth+'px');sp.style.setProperty('--land-h',el.offsetHeight+'px');sp.style.setProperty('--land-r',cs.getPropertyValue('--tilt').trim()||'0deg');sp.style.setProperty('--land-rad',cs.borderTopLeftRadius)}s.setAttribute('data-land','hero')}catch(e){}},950);setTimeout(function(){d.classList.remove('splash-landing')},2000)}}catch(e){}",
-    },
-  ],
-})
+// (see "Splash: the hero cards" in main.css). A plain inline script in this server-only markup
+// (the component is never hydrated), so it costs no client JavaScript: registering it through
+// useHead pulled a shared chunk into the home's first load. The hero is already parsed when it
+// runs (the splash comes after the page in app.vue); the CSP hashes it like every inline script.
+const LAND_SCRIPT = "try{var d=document.documentElement,s=document.querySelector('.splash');if(s&&!d.classList.contains('splash-seen')&&!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)){d.classList.add('splash-landing');setTimeout(function(){try{var c=['fridges','washers','screens','acs'],h=[],p=[],iw=window.innerWidth,ih=window.innerHeight;for(var i=0;i<c.length;i++){var he=document.querySelector('[data-hero-card=\"'+c[i]+'\"]'),se=document.querySelector('[data-splash-card=\"'+c[i]+'\"]');if(!he||!se)return;var r=he.getBoundingClientRect();if(r.top<0||r.bottom>ih||r.left<0||r.right>iw)return;h.push(he);p.push(se)}for(var j=0;j<c.length;j++){var el=h[j],sp=p[j],rc=el.getBoundingClientRect(),cs=window.getComputedStyle(el);sp.style.setProperty('--land-x',(rc.left+rc.width/2-iw/2)+'px');sp.style.setProperty('--land-y',(rc.top+rc.height/2-ih/2)+'px');sp.style.setProperty('--land-w',el.offsetWidth+'px');sp.style.setProperty('--land-h',el.offsetHeight+'px');sp.style.setProperty('--land-r',cs.getPropertyValue('--tilt').trim()||'0deg');sp.style.setProperty('--land-rad',cs.borderTopLeftRadius)}s.setAttribute('data-land','hero')}catch(e){}},950);setTimeout(function(){d.classList.remove('splash-landing')},2000)}}catch(e){}"
+// A render function: templates drop <script> tags, the server renderer outputs this one as is
+const LandScript = () => h('script', { innerHTML: LAND_SCRIPT })
 </script>
 
 <template>
@@ -87,5 +81,6 @@ useHead({
         </span>
       </div>
     </div>
+    <LandScript />
   </div>
 </template>
