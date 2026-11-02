@@ -154,10 +154,9 @@
 
 /* Cards deck wrapper: centers all 4 cards, fades out over the last 20% of landing (1.73–1.85s) */
 .splash-deck {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
   animation: splash-deck-fade .12s ease-out 1.73s forwards;
 }
 @keyframes splash-deck-fade {
@@ -168,19 +167,23 @@
 /* Card base geometry */
 .splash-card {
   position: absolute;
-  width: var(--card-w, clamp(76px, 20vw, 170px));
-  aspect-ratio: 3 / 4;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: var(--w);
+  height: var(--h);
   border-radius: clamp(18px, 1.8vw, 26px);
   box-shadow: 0 24px 40px -18px rgb(0 0 0 / .6);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.65rem;
   user-select: none;
-  will-change: transform;
+  will-change: transform, width, height, border-radius;
   /* Landing parameters: below lg, cards drop down together off the bottom */
   --card-w: clamp(76px, 20vw, 170px);
+  --w: var(--card-w);
+  --h: calc(var(--card-w) * 4 / 3);
   --tx: 0px;
   --ty: 60vh;
   --ts: 1;
@@ -220,15 +223,25 @@
 .splash-card-3 { animation: splash-card-3 1.85s forwards; }
 .splash-card-4 { animation: splash-card-4 1.85s forwards; }
 
+/* Precise hero landing mode: cards reshape, retilt, and land exactly over matching hero cards */
+.splash[data-land='hero'] .splash-deck {
+  animation: none;
+}
+.splash[data-land='hero'] .splash-card {
+  /* No zoom in the hero landing: the card reaches the hero card's own size instead */
+  --ts: 1;
+}
+
 @keyframes splash-card-1 {
   0% { transform: translateY(-60vh) rotate(-18deg); opacity: 0; animation-timing-function: cubic-bezier(.2, .9, .3, 1.2); }
   2.7% { opacity: 1; }
   21.6% { transform: translateY(0) rotate(-4deg); opacity: 1; }
   32.4% { transform: translateY(0) rotate(-4deg); opacity: 1; animation-timing-function: cubic-bezier(.3, .7, .2, 1); }
   54.1% { transform: translateX(calc(-1.6 * var(--card-w))) rotate(-12deg); opacity: 1; }
-  67.6% { transform: translateX(calc(-1.6 * var(--card-w))) rotate(-12deg); opacity: 1; animation-timing-function: cubic-bezier(.25, .8, .25, 1); }
-  100% { transform: translate(calc(var(--dir) * var(--tx)), var(--ty)) rotate(var(--tr)) scale(var(--ts)); opacity: 1; }
+  67.6% { transform: translateX(calc(-1.6 * var(--card-w))) rotate(-12deg); width: var(--w); height: var(--h); border-radius: clamp(18px, 1.8vw, 26px); opacity: 1; animation-timing-function: cubic-bezier(.76, 0, .24, 1); }
+  100% { transform: translate(var(--land-x, calc(var(--dir) * var(--tx))), var(--land-y, var(--ty))) rotate(var(--land-r, var(--tr))) scale(var(--ts)); width: var(--land-w, var(--w)); height: var(--land-h, var(--h)); border-radius: var(--land-rad, clamp(18px, 1.8vw, 26px)); opacity: 1; }
 }
+
 
 @keyframes splash-card-2 {
   0%, 4.3% { transform: translateY(-60vh) rotate(-18deg); opacity: 0; animation-timing-function: cubic-bezier(.2, .9, .3, 1.2); }
@@ -236,9 +249,10 @@
   25.9% { transform: translateY(0) rotate(3deg); opacity: 1; }
   32.4% { transform: translateY(0) rotate(3deg); opacity: 1; animation-timing-function: cubic-bezier(.3, .7, .2, 1); }
   54.1% { transform: translateX(calc(-0.55 * var(--card-w))) rotate(-4deg); opacity: 1; }
-  67.6% { transform: translateX(calc(-0.55 * var(--card-w))) rotate(-4deg); opacity: 1; animation-timing-function: cubic-bezier(.25, .8, .25, 1); }
-  100% { transform: translate(calc(var(--dir) * var(--tx)), var(--ty)) rotate(var(--tr)) scale(var(--ts)); opacity: 1; }
+  67.6% { transform: translateX(calc(-0.55 * var(--card-w))) rotate(-4deg); width: var(--w); height: var(--h); border-radius: clamp(18px, 1.8vw, 26px); opacity: 1; animation-timing-function: cubic-bezier(.76, 0, .24, 1); }
+  100% { transform: translate(var(--land-x, calc(var(--dir) * var(--tx))), var(--land-y, var(--ty))) rotate(var(--land-r, var(--tr))) scale(var(--ts)); width: var(--land-w, var(--w)); height: var(--land-h, var(--h)); border-radius: var(--land-rad, clamp(18px, 1.8vw, 26px)); opacity: 1; }
 }
+
 
 @keyframes splash-card-3 {
   0%, 8.6% { transform: translateY(-60vh) rotate(-18deg); opacity: 0; animation-timing-function: cubic-bezier(.2, .9, .3, 1.2); }
@@ -246,9 +260,10 @@
   29.2% { transform: translateY(0) rotate(-2deg); opacity: 1; }
   32.4% { transform: translateY(0) rotate(-2deg); opacity: 1; animation-timing-function: cubic-bezier(.3, .7, .2, 1); }
   54.1% { transform: translateX(calc(0.55 * var(--card-w))) rotate(4deg); opacity: 1; }
-  67.6% { transform: translateX(calc(0.55 * var(--card-w))) rotate(4deg); opacity: 1; animation-timing-function: cubic-bezier(.25, .8, .25, 1); }
-  100% { transform: translate(calc(var(--dir) * var(--tx)), var(--ty)) rotate(var(--tr)) scale(var(--ts)); opacity: 1; }
+  67.6% { transform: translateX(calc(0.55 * var(--card-w))) rotate(4deg); width: var(--w); height: var(--h); border-radius: clamp(18px, 1.8vw, 26px); opacity: 1; animation-timing-function: cubic-bezier(.76, 0, .24, 1); }
+  100% { transform: translate(var(--land-x, calc(var(--dir) * var(--tx))), var(--land-y, var(--ty))) rotate(var(--land-r, var(--tr))) scale(var(--ts)); width: var(--land-w, var(--w)); height: var(--land-h, var(--h)); border-radius: var(--land-rad, clamp(18px, 1.8vw, 26px)); opacity: 1; }
 }
+
 
 @keyframes splash-card-4 {
   0%, 13.0% { transform: translateY(-60vh) rotate(-18deg); opacity: 0; animation-timing-function: cubic-bezier(.2, .9, .3, 1.2); }
@@ -256,9 +271,10 @@
   31.4% { transform: translateY(0) rotate(5deg); opacity: 1; }
   32.4% { transform: translateY(0) rotate(5deg); opacity: 1; animation-timing-function: cubic-bezier(.3, .7, .2, 1); }
   54.1% { transform: translateX(calc(1.6 * var(--card-w))) rotate(12deg); opacity: 1; }
-  67.6% { transform: translateX(calc(1.6 * var(--card-w))) rotate(12deg); opacity: 1; animation-timing-function: cubic-bezier(.25, .8, .25, 1); }
-  100% { transform: translate(calc(var(--dir) * var(--tx)), var(--ty)) rotate(var(--tr)) scale(var(--ts)); opacity: 1; }
+  67.6% { transform: translateX(calc(1.6 * var(--card-w))) rotate(12deg); width: var(--w); height: var(--h); border-radius: clamp(18px, 1.8vw, 26px); opacity: 1; animation-timing-function: cubic-bezier(.76, 0, .24, 1); }
+  100% { transform: translate(var(--land-x, calc(var(--dir) * var(--tx))), var(--land-y, var(--ty))) rotate(var(--land-r, var(--tr))) scale(var(--ts)); width: var(--land-w, var(--w)); height: var(--land-h, var(--h)); border-radius: var(--land-rad, clamp(18px, 1.8vw, 26px)); opacity: 1; }
 }
+
 
 @media (prefers-reduced-motion: reduce) {
   .animate-floaty, .animate-spin-slow, .animate-marquee, .animate-marquee-fast,
@@ -561,7 +577,8 @@
    every text block counts as painted from the first frame (largest paint unaffected). CSS, not GSAP: GSAP only loads after the first interaction. */
 :root:not(.splash-seen) [data-hero-title] { animation: hero-rise 1.1s var(--ease-out-expo) 1.35s backwards; }
 :root:not(.splash-seen) [data-hero-intro] { animation: hero-rise .9s var(--ease-out-expo) backwards; animation-delay: calc(1.45s + var(--d, 0s)); }
-:root:not(.splash-seen) .hero-art-in { animation-delay: 1.5s; }
+:root:not(.splash-seen) .hero-art-in { animation: none; }
+.splash-landing .hero-card-px.animate-floaty { animation-play-state: paused; }
 @keyframes hero-rise { from { transform: translateY(42px); } }
 
 /* A header counter pops when its number changes; a saved heart pops once. */

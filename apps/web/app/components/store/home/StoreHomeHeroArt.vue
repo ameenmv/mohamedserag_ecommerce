@@ -19,6 +19,7 @@ const { t } = useI18n()
     <div
       v-if="image"
       data-depth="1"
+      data-hero-card="fridges"
       class="hero-card-px animate-floaty absolute top-[8%] end-[31%] h-[76%] w-[36%] overflow-hidden rounded-[34px] border border-serag-gold-hi/55 bg-[#1B3526] shadow-[0_40px_70px_-24px_rgba(0,0,0,0.65)] [animation-delay:-1s]"
     >
       <NuxtImg
@@ -37,6 +38,7 @@ const { t } = useI18n()
     <div
       v-else
       data-depth="1"
+      data-hero-card="fridges"
       class="hero-card-px animate-floaty absolute top-[8%] end-[31%] flex h-[76%] w-[36%] flex-col items-center justify-center gap-4 rounded-[34px] border border-serag-gold-hi/55 bg-gradient-to-b from-[#4F7F1B] to-[#1B3526] text-serag-gold-hi shadow-[0_40px_70px_-24px_rgba(0,0,0,0.65)] [animation-delay:-1s]"
     >
       <svg viewBox="0 0 48 48" class="w-[64%]" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -49,6 +51,7 @@ const { t } = useI18n()
     <!-- Washer -->
     <div
       data-depth="2.2"
+      data-hero-card="washers"
       class="hero-card-px animate-floaty absolute top-[44%] end-0 flex h-[42%] w-[31%] flex-col items-center justify-center gap-3 rounded-[30px] border border-[#E4DDC6] bg-serag-ivory text-serag-green shadow-[0_30px_50px_-22px_rgba(0,0,0,0.6)] [--tilt:-5deg] [animation-delay:-3s]"
     >
       <svg viewBox="0 0 48 48" class="w-[56%]" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
@@ -63,6 +66,7 @@ const { t } = useI18n()
     <!-- Screen -->
     <div
       data-depth="1.6"
+      data-hero-card="screens"
       class="hero-card-px animate-floaty absolute top-[2%] end-[66%] flex h-[34%] w-[34%] flex-col items-center justify-center gap-2.5 rounded-[30px] bg-serag-gold text-serag-ink shadow-[0_30px_50px_-22px_rgba(0,0,0,0.6)] [--tilt:5deg] [animation-delay:-4.5s]"
     >
       <svg viewBox="0 0 48 48" class="w-[62%]" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
@@ -75,6 +79,7 @@ const { t } = useI18n()
     <!-- AC -->
     <div
       data-depth="2.8"
+      data-hero-card="acs"
       class="hero-card-px animate-floaty absolute top-[58%] end-[68%] flex h-[26%] w-[32%] flex-col items-center justify-center gap-2 rounded-[26px] border border-serag-ivory/25 bg-serag-ivory/8 text-serag-ivory backdrop-blur-sm [--tilt:3deg] [animation-delay:-2s]"
     >
       <svg viewBox="0 0 48 48" class="w-1/2" fill="none" stroke="var(--color-serag-gold-hi)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
