@@ -41,6 +41,7 @@ function next(): void {
   <div class="flex flex-col">
     <!-- Main image viewport -->
     <div
+      data-fly-source
       class="group relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-[28px] border border-border bg-serag-cream p-4 sm:p-8 dark:bg-muted/30"
     >
       <!-- NuxtImg with explicit width/height and LCP prioritization on first image -->

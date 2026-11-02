@@ -39,6 +39,11 @@
     "en": "English"
   },
   "store": {
+    "cursor": {
+      "view": "عرض",
+      "add": "أضف",
+      "open": "افتح"
+    },
     "header": {
       "announcementAuthentic": "أصلي 100% وبضمان حقيقي",
       "announcementDelivery": "استلام من المعرض أو توصيل لحد باب البيت",

@@ -30,6 +30,7 @@ const items: { labelKey: string; to: string; icon: Component; showCartBadge?: bo
       :key="item.to"
       :to="localePath(item.to)"
       :aria-current="isActive(item.to) ? 'page' : undefined"
+      :data-cart-target="item.showCartBadge ? '' : undefined"
       :class="[
         'relative flex min-h-11 flex-1 flex-col items-center justify-center gap-0.5 rounded-xl py-1 text-[11px] font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:outline-none motion-reduce:transition-none',
         isActive(item.to)

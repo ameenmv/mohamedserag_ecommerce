@@ -10,15 +10,19 @@ let kit: Promise<GsapKit> | null = null
 
 const FIRST_INPUT_EVENTS = ['pointerdown', 'pointermove', 'keydown', 'touchstart', 'wheel', 'scroll'] as const
 
-/** Resolves on the visitor's first scroll, touch, mouse move or key press. */
-function firstInput(): Promise<void> {
-  return new Promise((resolve) => {
+let firstInputPromise: Promise<void> | null = null
+
+/** Resolves on the visitor's first scroll, touch, mouse move or key press (once per page). */
+export function firstInput(): Promise<void> {
+  if (firstInputPromise) return firstInputPromise
+  firstInputPromise = new Promise((resolve) => {
     const done = (): void => {
       for (const type of FIRST_INPUT_EVENTS) window.removeEventListener(type, done)
       resolve()
     }
     for (const type of FIRST_INPUT_EVENTS) window.addEventListener(type, done, { once: true, passive: true })
   })
+  return firstInputPromise
 }
 
 /**

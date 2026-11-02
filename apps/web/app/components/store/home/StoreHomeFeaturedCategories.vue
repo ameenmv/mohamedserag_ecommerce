@@ -46,6 +46,7 @@ const headingId = useId()
           :key="category.slug"
           :to="localePath(`/c/${category.slug}`)"
           class="group flex min-w-0 flex-col items-center gap-[18px] rounded-[var(--radius-card)] border-[1.5px] border-[#ECE6D3] bg-card px-3.5 py-5 text-center transition duration-200 hover:-translate-y-2 hover:border-serag-gold hover:shadow-[0_24px_40px_-18px_rgba(20,32,26,.35)] focus-visible:ring-2 focus-visible:ring-serag-gold focus-visible:outline-none sm:px-6 sm:py-[30px] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+          :data-cursor="t('store.cursor.open')"
         >
           <span
             :class="[

@@ -39,6 +39,11 @@
     "en": "English"
   },
   "store": {
+    "cursor": {
+      "view": "View",
+      "add": "Add",
+      "open": "Open"
+    },
     "header": {
       "announcementAuthentic": "100% Authentic with Genuine Warranty",
       "announcementDelivery": "Showroom Pickup or Doorstep Delivery",

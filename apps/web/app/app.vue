@@ -1,11 +1,18 @@
 <script setup lang="ts">
 import { toasterWanted } from '~/utils/toaster'
+import { firstInput } from '~/composables/useGsap'
 
 useAppHead()
 
 // The storefront's splash (not the admin's), CSS only. `?splash=word` previews the other design.
 const route = useRoute()
-const showSplash = !/^\/(?:en\/)?admin(?:\/|$)/.test(route.path)
+const isStorefront = computed(() => !/^\/(?:en\/)?admin(?:\/|$)/.test(route.path))
+const showSplash = isStorefront
+
+// The page transition and the cursor follower download on the visitor's first interaction:
+// the first-load script budget (CI Lighthouse) has no room, and neither is needed before it.
+const motionReady = ref(false)
+onMounted(() => { firstInput().then(() => { motionReady.value = true }) })
 const splashVariant = route.query.splash === 'word' ? 'word' : 'shutter'
 
 // Theme chosen with the header switch (or the admin's), applied before first paint so a dark
@@ -49,6 +56,11 @@ useHead({
     <!-- Server-rendered only (no client JS): the logo symbols and the splash that uses them -->
     <LazyCommonBrandSymbols hydrate-never />
     <LazyCommonSplash v-if="showSplash" :variant="splashVariant" hydrate-never />
+    <!-- Storefront page transition overlay and custom cursor -->
+    <template v-if="motionReady && isStorefront">
+      <LazyCommonPageWipe />
+      <LazyCommonCursor />
+    </template>
     <!-- Mounted on the first notification (see utils/toaster.ts) -->
     <LazyCommonAppToaster v-if="toasterWanted" />
   </div>

@@ -61,11 +61,13 @@ const whatsappUrl = computed(() => {
       class="absolute inset-0 z-0 rounded-[20px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:rounded-[26px]"
       aria-hidden="true"
       tabindex="-1"
+      :data-cursor="t('store.cursor.view')"
     />
 
     <!-- Image with badges and toggles -->
     <div
-      class="relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-2xl bg-serag-cream sm:rounded-[20px] dark:bg-muted/30"
+      data-fly-source
+      class="pointer-events-none relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-2xl bg-serag-cream sm:rounded-[20px] dark:bg-muted/30"
     >
       <NuxtImg
         v-if="product.image?.url"
@@ -107,7 +109,7 @@ const whatsappUrl = computed(() => {
       </div>
 
       <!-- Wishlist and compare, top end -->
-      <div class="absolute top-2 end-2 z-10 flex flex-col gap-1.5 sm:top-3 sm:end-3">
+      <div class="pointer-events-auto absolute top-2 end-2 z-10 flex flex-col gap-1.5 sm:top-3 sm:end-3">
         <StoreProductWishlistToggle :product="product" />
         <StoreProductCompareToggle
           :product="product"

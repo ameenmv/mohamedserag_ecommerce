@@ -26,6 +26,7 @@ function handleClick(event: MouseEvent): void {
   <NuxtLink v-slot="{ href }" :to="localePath('/cart')" custom>
     <a
       :href="href ?? undefined"
+      data-cart-target
       class="relative inline-flex h-10 items-center gap-2.5 rounded-xl bg-accent px-2.5 sm:h-[46px] sm:rounded-[14px] text-[15px] font-bold text-accent-foreground transition-colors hover:bg-serag-gold-hi focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:px-5 motion-reduce:transition-none"
       @click="handleClick"
     >
