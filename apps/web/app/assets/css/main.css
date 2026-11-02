@@ -323,7 +323,7 @@
   border-start-start-radius: calc(var(--hero-r, 0) * 1px);
   border-start-end-radius: calc(var(--hero-r, 0) * 1px);
 }
-.hero-blob { position: absolute; border-radius: 9999px; will-change: transform; }
+.hero-blob { position: absolute; border-radius: 9999px; }
 .hero-slats {
   background: repeating-linear-gradient(180deg, rgb(255 255 255 / .035) 0 1px, transparent 1px 26px);
   mask-image: radial-gradient(80% 70% at 30% 35%, #000 0%, transparent 78%);

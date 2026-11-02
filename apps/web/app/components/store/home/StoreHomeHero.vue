@@ -2,7 +2,7 @@
 import { ArrowRight } from '@lucide/vue'
 import type { HomeContent } from '@serag/shared'
 import { FEATURES } from '~/constants/features'
-import { useHeroMotion } from '~/composables/useHeroMotion'
+import { loadGsap } from '~/composables/useGsap'
 
 const props = defineProps<{
   content: HomeContent['hero']
@@ -49,7 +49,21 @@ const title = computed(() => splitHighlight(props.content.title))
 
 const heroRef = ref<HTMLElement | null>(null)
 const marqueeRef = ref<HTMLElement | null>(null)
-useHeroMotion(heroRef, marqueeRef)
+
+// The hero's motion and GSAP download on the visitor's first interaction (utils/hero-motion.ts)
+let stopMotion: (() => void) | undefined
+let unmounted = false
+onMounted(async () => {
+  const kit = await loadGsap()
+  if (!kit || unmounted || !heroRef.value) return
+  const { startHeroMotion } = await import('~/utils/hero-motion')
+  if (unmounted) return
+  stopMotion = startHeroMotion(kit, heroRef.value, marqueeRef.value)
+})
+onBeforeUnmount(() => {
+  unmounted = true
+  stopMotion?.()
+})
 </script>
 
 <template>
@@ -59,23 +73,25 @@ useHeroMotion(heroRef, marqueeRef)
     :aria-labelledby="headingId"
   >
     <!-- Background, all decorative: drifting brand-colour light, faint shutter slats, film grain,
-         a spotlight that follows the pointer, and the outlined «1972» that fills as you scroll. -->
+         a spotlight that follows the pointer, and the outlined «1972» that fills as you scroll.
+         The costly layers (blend modes, masks, perspective) are wide-screen only: phones are
+         where the page-speed budget is measured. -->
     <div class="pointer-events-none absolute inset-0" aria-hidden="true">
       <div data-hero-blob class="hero-blob -top-48 -end-40 size-[46rem] bg-[radial-gradient(circle,rgba(201,177,137,.30)_0%,rgba(201,177,137,0)_62%)]" />
       <div data-hero-blob class="hero-blob -bottom-72 -start-40 size-[44rem] bg-[radial-gradient(circle,rgba(85,120,64,.50)_0%,rgba(85,120,64,0)_62%)]" />
       <div data-hero-blob class="hero-blob top-1/3 start-1/3 size-[30rem] bg-[radial-gradient(circle,rgba(166,138,100,.16)_0%,rgba(166,138,100,0)_65%)]" />
-      <div class="hero-slats absolute inset-0" />
+      <div class="hero-slats absolute inset-0 hidden lg:block" />
       <!-- The showroom: ceiling spotlights over the appliances and the lit floor they stand on -->
-      <div class="hero-floor absolute inset-x-0 bottom-0 h-[42%]" />
+      <div class="hero-floor absolute inset-x-0 bottom-0 hidden h-[42%] lg:block" />
       <div class="hero-pool absolute hidden lg:block bottom-[4%] end-[8%] h-40 w-[46rem] max-w-full rounded-[50%]" />
       <div data-hero-beam class="hero-beam absolute -top-10 hidden lg:block end-[6%] h-[115%] w-[34rem] origin-top" />
       <div data-hero-beam class="hero-beam absolute -top-10 hidden lg:block end-[21%] h-[110%] w-[28rem] origin-top opacity-70" />
-      <div class="hero-spot absolute inset-0" />
+      <div class="hero-spot absolute inset-0 hidden lg:block" />
       <div data-hero-year class="num absolute -bottom-16 left-1/2 -translate-x-1/2 text-[clamp(200px,34vw,520px)] leading-[0.8] font-extrabold tracking-[-8px] whitespace-nowrap" dir="ltr">
         <span class="text-outline block [--outline-color:rgba(201,177,137,.18)]">1972</span>
         <span data-hero-year-fill class="hero-year-fill absolute inset-0 block text-[rgba(201,177,137,.10)]">1972</span>
       </div>
-      <div class="hero-grain absolute inset-0" />
+      <div class="hero-grain absolute inset-0 hidden lg:block" />
     </div>
 
     <div class="relative mx-auto flex max-w-7xl flex-wrap items-center gap-14 px-4 pt-10 pb-14 sm:px-6 lg:px-10 lg:pt-10 lg:pb-20">
