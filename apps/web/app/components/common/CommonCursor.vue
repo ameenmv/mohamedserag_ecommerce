@@ -2,14 +2,13 @@
 /**
  * Custom cursor follower:
  * A small sand dot follows the mouse exactly and a ring trails it with a lerp.
- * Over [data-cursor], a discreet pill label appears beside the pointer.
- * The ring grows slightly over interactive elements, and hides over form inputs.
+ * The ring grows and displays a label over [data-cursor], grows over interactive
+ * elements, and hides over form inputs.
  * Active only on devices with a fine pointer (mouse/trackpad) and when reduced motion is off.
  */
 const isEnabled = ref(false)
 const dotEl = ref<HTMLElement | null>(null)
 const ringEl = ref<HTMLElement | null>(null)
-const labelEl = ref<HTMLElement | null>(null)
 
 const isHidden = ref(true)
 const isInputHidden = ref(false)
@@ -63,6 +62,7 @@ function onPointerOver(e: Event): void {
     isInputHidden.value = true
     isLabel.value = false
     isHover.value = false
+    cursorLabel.value = ''
     return
   }
 
@@ -80,23 +80,19 @@ function onPointerOver(e: Event): void {
   ) {
     isLabel.value = false
     isHover.value = true
+    cursorLabel.value = ''
   } else if (cursorEl) {
-    const label = cursorEl.getAttribute('data-cursor')
-    if (label) {
-      // Retain label text so it does not collapse while fading out
-      cursorLabel.value = label
-      isLabel.value = true
-      isHover.value = false
-    } else {
-      isLabel.value = false
-      isHover.value = false
-    }
+    isLabel.value = true
+    isHover.value = false
+    cursorLabel.value = cursorEl.getAttribute('data-cursor') || ''
   } else if (interactiveEl) {
     isLabel.value = false
     isHover.value = true
+    cursorLabel.value = ''
   } else {
     isLabel.value = false
     isHover.value = false
+    cursorLabel.value = ''
   }
 }
 
@@ -110,14 +106,6 @@ function loop(): void {
   }
   if (ringEl.value) {
     ringEl.value.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`
-  }
-  if (labelEl.value) {
-    // Keep pill next to the pointer: 18px down and 18px inline-end (flipped in RTL)
-    const isRtl = document.documentElement.dir === 'rtl'
-    const offsetX = isRtl ? -18 : 18
-    const offsetY = 18
-    const alignX = isRtl ? '-100%' : '0'
-    labelEl.value.style.transform = `translate3d(${ringX + offsetX}px, ${ringY + offsetY}px, 0) translate(${alignX}, 0)`
   }
 
   rafId = requestAnimationFrame(loop)
@@ -164,19 +152,13 @@ onBeforeUnmount(() => {
         'is-pressed': isPressed,
       }"
       aria-hidden="true"
-    />
-    <div
-      ref="labelEl"
-      class="cursor-label"
-      :class="{ 'is-visible': isLabel && !isHidden && !isInputHidden }"
-      aria-hidden="true"
     >
-      {{ cursorLabel }}
+      <span v-if="isLabel" class="cursor-label">{{ cursorLabel }}</span>
     </div>
     <div
       ref="dotEl"
       class="cursor-dot"
-      :class="{ 'is-hidden': isHidden || isInputHidden }"
+      :class="{ 'is-hidden': isHidden || isInputHidden || isLabel }"
       aria-hidden="true"
     />
   </div>

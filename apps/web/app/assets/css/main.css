@@ -552,15 +552,19 @@
   top: 0;
   left: 0;
   z-index: 95;
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   border-radius: 9999px;
   border: 1.5px solid var(--color-serag-gold);
   background: transparent;
   pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   opacity: 1;
   transition: width .35s var(--ease-out-expo),
               height .35s var(--ease-out-expo),
+              background .25s,
               border-color .25s,
               opacity .2s,
               scale .15s ease;
@@ -568,49 +572,26 @@
 }
 
 .cursor-ring.is-hover {
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   border-color: var(--color-serag-gold-hi);
 }
 
 .cursor-ring.is-label {
+  width: 40px;
+  height: 40px;
   border-color: var(--color-serag-gold-hi);
+  /* Slightly see-through: it floats over product photos */
+  background: color-mix(in srgb, var(--color-serag-gold-hi) 88%, transparent);
 }
 
-.cursor-label {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 95;
-  height: 24px;
-  padding: 0 10px;
-  border-radius: 9999px;
-  background: var(--color-serag-night);
-  color: var(--color-serag-ivory);
-  font-size: 11px;
+.cursor-ring .cursor-label {
+  color: var(--color-serag-ink);
+  font-size: 10px;
   font-weight: 700;
   line-height: 1;
-  white-space: nowrap;
   user-select: none;
-  pointer-events: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgb(0 0 0 / .2);
-  transform-origin: top left;
-  opacity: 0;
-  scale: .9;
-  transition: opacity .15s ease, scale .15s ease;
-  will-change: transform, opacity, scale;
-}
-
-[dir='rtl'] .cursor-label {
-  transform-origin: top right;
-}
-
-.cursor-label.is-visible {
-  opacity: 1;
-  scale: 1;
+  white-space: nowrap;
 }
 
 .cursor-ring.is-pressed {
@@ -628,7 +609,7 @@
   .ink-fill { -webkit-text-fill-color: currentColor; background: none; }
   button:not(:disabled):active, [role='button']:active, a.btn-press:active { scale: none; }
   .page-wipe { display: none !important; }
-  .cursor-dot, .cursor-ring, .cursor-label { display: none !important; }
+  .cursor-dot, .cursor-ring { display: none !important; }
 }
 
 /* Compare pill: rises into place once the first product is added */
