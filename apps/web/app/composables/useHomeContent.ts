@@ -8,7 +8,6 @@ import type {
   StoreReviewsResponse,
 } from '@serag/shared'
 import { DEFAULT_HOME_CONTENT, DEFAULT_HOME_LAYOUT } from '@serag/shared'
-import { toProductCard } from '~/utils/product-card-mapper'
 
 interface HomeBundle {
   home: PublicHome
@@ -71,7 +70,9 @@ export async function useHomeContent() {
     const storyProduct = productSlug
       ? await nuxtApp
           .runWithContext(() => storeApi.product(productSlug))
-          .then(toProductCard, () => null)
+          // Imported here, not at the top: on first load the card arrives in the page data, so
+          // the mapper stays out of the home's first-load scripts (Lighthouse budget)
+          .then(async (detail) => (await import('~/utils/product-card-mapper')).toProductCard(detail), () => null)
       : null
 
     return { home, flashProducts, flashEndsAt, categories, brands, guides, reviews, storyProduct }
