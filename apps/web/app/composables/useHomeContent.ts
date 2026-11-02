@@ -48,6 +48,7 @@ function indexCategories(nodes: CategoryTreeNode[]): Map<string, CategoryTreeNod
  */
 export async function useHomeContent() {
   const storeApi = useStoreApi()
+  const nuxtApp = useNuxtApp()
 
   const asyncData = await useAsyncData<HomeBundle>('store:home', async () => {
     const [home, offers, categories, brands, guides, reviews] = await Promise.all([
@@ -63,11 +64,15 @@ export async function useHomeContent() {
     const flashEndsAt =
       offers.flash.map((group) => group.endsAt).sort((a, b) => Date.parse(a) - Date.parse(b))[0] ?? null
 
+    // After the `await` above the Nuxt context is gone on the server, and the API helper reads the
+    // runtime config synchronously: without runWithContext it throws (not rejects), failing the
+    // whole bundle so the home falls back to the built-in defaults.
     const productSlug = home.sections.productStory?.productSlug
-    const rawStoryProduct = productSlug
-      ? await storeApi.product(productSlug).catch(() => null)
+    const storyProduct = productSlug
+      ? await nuxtApp
+          .runWithContext(() => storeApi.product(productSlug))
+          .then(toProductCard, () => null)
       : null
-    const storyProduct = rawStoryProduct ? toProductCard(rawStoryProduct) : null
 
     return { home, flashProducts, flashEndsAt, categories, brands, guides, reviews, storyProduct }
   })
