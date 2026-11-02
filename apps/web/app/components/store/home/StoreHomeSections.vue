@@ -8,7 +8,7 @@ import type {
   ProductCard,
   StoreReviewsResponse,
 } from '@serag/shared'
-import { type Component, defineAsyncComponent, hydrateOnVisible } from 'vue'
+import { type Component, defineAsyncComponent, defineComponent, h, hydrateOnVisible } from 'vue'
 import { firstInput } from '~/composables/useGsap'
 import StoreHomeAnnounce from './StoreHomeAnnounce.vue'
 import StoreHomeHero from './StoreHomeHero.vue'
@@ -23,14 +23,26 @@ function onVisible(loader: () => Promise<Component>): Component {
 }
 
 /**
- * Like onVisible, but the section's code is not even downloaded before the visitor's first
- * scroll, touch, key or pointer move (Vue downloads a lazily hydrated component up front and only
- * delays the hydration). A visitor always does one of those before reaching a section further
- * down, while Lighthouse never interacts: without this, every section's code counts into the
- * home's 200 KB script budget, because its full-page screenshot brings them all into view.
+ * The product story is rendered in the browser only, once the visitor first scrolls, touches,
+ * types or moves the pointer: its code (five illustrated appliances) then never counts into the
+ * home's 200 KB first-load script budget. It sits far below the fold, so it is in place long
+ * before anyone reaches it. (A lazily hydrated section would not help: Vue downloads its code up
+ * front and only delays the hydration.)
  */
-function afterInput(loader: () => Promise<Component>): Component {
-  return onVisible(() => (import.meta.server ? loader() : firstInput().then(loader)))
+function afterFirstInput(loader: () => Promise<Component>): Component {
+  const inner = defineAsyncComponent({ loader, suspensible: false })
+  return defineComponent({
+    inheritAttrs: false,
+    setup(_, { attrs }) {
+      const ready = ref(false)
+      onMounted(() => {
+        void firstInput().then(() => {
+          ready.value = true
+        })
+      })
+      return () => (ready.value ? h(inner, attrs) : null)
+    },
+  })
 }
 
 const props = defineProps<{
@@ -52,15 +64,15 @@ const COMPONENT_BY_SECTION: Record<HomeSectionId, Component> = {
   hero: StoreHomeHero,
   uspStrip: onVisible(() => import('./StoreHomeUspStrip.vue')),
   featuredCategories: onVisible(() => import('./StoreHomeFeaturedCategories.vue')),
-  flash: afterInput(() => import('./StoreHomeFlash.vue')),
-  productStory: afterInput(() => import('./StoreHomeProductStory.vue')),
-  bridalTeaser: afterInput(() => import('./StoreHomeBridalTeaser.vue')),
-  tradersTeaser: afterInput(() => import('./StoreHomeTradersTeaser.vue')),
-  aboutTeaser: afterInput(() => import('./StoreHomeAboutTeaser.vue')),
-  partners: afterInput(() => import('./StoreHomePartners.vue')),
-  traderReels: afterInput(() => import('./StoreHomeTraderReels.vue')),
-  reviews: afterInput(() => import('./StoreHomeReviews.vue')),
-  guides: afterInput(() => import('./StoreHomeGuides.vue')),
+  flash: onVisible(() => import('./StoreHomeFlash.vue')),
+  productStory: afterFirstInput(() => import('./StoreHomeProductStory.vue')),
+  bridalTeaser: onVisible(() => import('./StoreHomeBridalTeaser.vue')),
+  tradersTeaser: onVisible(() => import('./StoreHomeTradersTeaser.vue')),
+  aboutTeaser: onVisible(() => import('./StoreHomeAboutTeaser.vue')),
+  partners: onVisible(() => import('./StoreHomePartners.vue')),
+  traderReels: onVisible(() => import('./StoreHomeTraderReels.vue')),
+  reviews: onVisible(() => import('./StoreHomeReviews.vue')),
+  guides: onVisible(() => import('./StoreHomeGuides.vue')),
 }
 
 function sectionProps(id: HomeSectionId) {
@@ -124,17 +136,17 @@ const EXTRA_SECTIONS: { id: ExtraSectionId; anchors: string[]; component: Compon
   {
     id: 'howItWorks',
     anchors: ['flash', 'featuredCategories', 'uspStrip', 'hero'],
-    component: afterInput(() => import('./StoreHomeHowItWorks.vue')),
+    component: onVisible(() => import('./StoreHomeHowItWorks.vue')),
   },
   {
     id: 'sourcing',
     anchors: ['traderReels', 'partners', 'aboutTeaser', 'tradersTeaser'],
-    component: afterInput(() => import('./StoreHomeSourcing.vue')),
+    component: onVisible(() => import('./StoreHomeSourcing.vue')),
   },
   {
     id: 'contactCta',
     anchors: ['guides', 'partners', 'aboutTeaser'],
-    component: afterInput(() => import('./StoreHomeContactCta.vue')),
+    component: onVisible(() => import('./StoreHomeContactCta.vue')),
   },
 ]
 
