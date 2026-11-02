@@ -2,12 +2,17 @@ import { describe, expect, it } from 'vitest'
 import {
   adminProductQuerySchema,
   adminSpecTemplateFieldSchema,
+  brandTranslationsEnSchema,
+  categoryTranslationsEnSchema,
   createBrandSchema,
   createCategorySchema,
   createProductSchema,
   createSpecTemplateSchema,
+  productTranslationsEnSchema,
   reorderCategoriesSchema,
   reorderProductImagesSchema,
+  updateBrandSchema,
+  updateCategorySchema,
   updateProductSchema,
   validateProductSpecs,
 } from './admin-catalog-schema.js'
@@ -296,6 +301,263 @@ describe('Admin Catalog Schemas', () => {
         slug: 'samsung',
       })
       expect(res.success).toBe(true)
+    })
+  })
+
+  describe('categoryTranslationsEnSchema', () => {
+    it('accepts valid English category fields', () => {
+      const res = categoryTranslationsEnSchema.safeParse({
+        name: 'Refrigerators',
+        intro: 'Modern cooling appliances',
+        seoTitle: 'Best Refrigerators in Egypt',
+        seoDescription: 'Explore our refrigerator collection.',
+      })
+      expect(res.success).toBe(true)
+      if (res.success) {
+        expect(res.data).toEqual({
+          name: 'Refrigerators',
+          intro: 'Modern cooling appliances',
+          seoTitle: 'Best Refrigerators in Egypt',
+          seoDescription: 'Explore our refrigerator collection.',
+        })
+      }
+    })
+
+    it('trims strings and drops empty/whitespace values', () => {
+      const res = categoryTranslationsEnSchema.safeParse({
+        name: '  Refrigerators  ',
+        intro: '   ',
+        seoTitle: '',
+        seoDescription: null,
+      })
+      expect(res.success).toBe(true)
+      if (res.success) {
+        expect(res.data).toEqual({
+          name: 'Refrigerators',
+        })
+        expect('intro' in res.data).toBe(false)
+        expect('seoTitle' in res.data).toBe(false)
+        expect('seoDescription' in res.data).toBe(false)
+      }
+    })
+
+    it('rejects wrong types', () => {
+      expect(categoryTranslationsEnSchema.safeParse({ name: 123 }).success).toBe(false)
+      expect(categoryTranslationsEnSchema.safeParse({ intro: true }).success).toBe(false)
+      expect(categoryTranslationsEnSchema.safeParse({ seoTitle: ['array'] }).success).toBe(false)
+      expect(categoryTranslationsEnSchema.safeParse({ seoDescription: { obj: true } }).success).toBe(false)
+    })
+
+    it('createCategorySchema and updateCategorySchema accept translations', () => {
+      const created = createCategorySchema.safeParse({
+        name: 'أجهزة تبريد',
+        slug: 'fridges',
+        translations: {
+          en: {
+            name: 'Refrigerators',
+            intro: '  ',
+          },
+        },
+      })
+      expect(created.success).toBe(true)
+      if (created.success) {
+        expect(created.data.translations?.en).toEqual({ name: 'Refrigerators' })
+      }
+
+      const updated = updateCategorySchema.safeParse({
+        translations: {
+          en: {
+            name: '  Fridges & Freezers  ',
+          },
+        },
+      })
+      expect(updated.success).toBe(true)
+      if (updated.success) {
+        expect(updated.data.translations?.en).toEqual({ name: 'Fridges & Freezers' })
+      }
+    })
+  })
+
+  describe('brandTranslationsEnSchema', () => {
+    it('accepts valid English brand fields', () => {
+      const res = brandTranslationsEnSchema.safeParse({
+        name: 'Samsung',
+        intro: 'Leading electronics brand',
+        seoTitle: 'Samsung Appliances',
+        seoDescription: 'Original Samsung home appliances with warranty.',
+      })
+      expect(res.success).toBe(true)
+      if (res.success) {
+        expect(res.data).toEqual({
+          name: 'Samsung',
+          intro: 'Leading electronics brand',
+          seoTitle: 'Samsung Appliances',
+          seoDescription: 'Original Samsung home appliances with warranty.',
+        })
+      }
+    })
+
+    it('trims strings and drops empty/whitespace values', () => {
+      const res = brandTranslationsEnSchema.safeParse({
+        name: '  Samsung  ',
+        intro: '',
+        seoTitle: '   ',
+        seoDescription: undefined,
+      })
+      expect(res.success).toBe(true)
+      if (res.success) {
+        expect(res.data).toEqual({
+          name: 'Samsung',
+        })
+        expect('intro' in res.data).toBe(false)
+        expect('seoTitle' in res.data).toBe(false)
+      }
+    })
+
+    it('rejects wrong types', () => {
+      expect(brandTranslationsEnSchema.safeParse({ name: 456 }).success).toBe(false)
+      expect(brandTranslationsEnSchema.safeParse({ intro: false }).success).toBe(false)
+    })
+
+    it('createBrandSchema and updateBrandSchema accept translations', () => {
+      const created = createBrandSchema.safeParse({
+        name: 'سامسونج',
+        slug: 'samsung',
+        translations: {
+          en: {
+            name: 'Samsung',
+          },
+        },
+      })
+      expect(created.success).toBe(true)
+      if (created.success) {
+        expect(created.data.translations?.en).toEqual({ name: 'Samsung' })
+      }
+
+      const updated = updateBrandSchema.safeParse({
+        translations: {
+          en: {
+            intro: 'Korean appliance leader',
+          },
+        },
+      })
+      expect(updated.success).toBe(true)
+      if (updated.success) {
+        expect(updated.data.translations?.en).toEqual({ intro: 'Korean appliance leader' })
+      }
+    })
+  })
+
+  describe('productTranslationsEnSchema', () => {
+    it('accepts valid English product fields including setContents', () => {
+      const res = productTranslationsEnSchema.safeParse({
+        name: 'Samsung Refrigerator 450L',
+        leadTimeText: 'Delivery in 3 to 5 business days',
+        warranty: '10-Year Inverter Warranty',
+        warrantyActivation: 'Call 16xxx to activate warranty',
+        origin: 'Egypt',
+        seoTitle: 'Samsung Refrigerator 450L RT45K6000S8',
+        seoDescription: 'Buy Samsung refrigerator with warranty in Mansoura.',
+        setContents: [
+          { item: 'Cooking Pot', size: '24 cm', qty: 1 },
+          { item: 'Frying Pan', size: '20 cm', qty: 2 },
+        ],
+      })
+      expect(res.success).toBe(true)
+      if (res.success) {
+        expect(res.data).toEqual({
+          name: 'Samsung Refrigerator 450L',
+          leadTimeText: 'Delivery in 3 to 5 business days',
+          warranty: '10-Year Inverter Warranty',
+          warrantyActivation: 'Call 16xxx to activate warranty',
+          origin: 'Egypt',
+          seoTitle: 'Samsung Refrigerator 450L RT45K6000S8',
+          seoDescription: 'Buy Samsung refrigerator with warranty in Mansoura.',
+          setContents: [
+            { item: 'Cooking Pot', size: '24 cm', qty: 1 },
+            { item: 'Frying Pan', size: '20 cm', qty: 2 },
+          ],
+        })
+      }
+    })
+
+    it('trims strings and drops empty/whitespace values and empty setContents', () => {
+      const res = productTranslationsEnSchema.safeParse({
+        name: '  LG Washing Machine  ',
+        leadTimeText: '   ',
+        warranty: '',
+        warrantyActivation: null,
+        origin: '  Korea  ',
+        seoTitle: '',
+        seoDescription: '  ',
+        setContents: [],
+      })
+      expect(res.success).toBe(true)
+      if (res.success) {
+        expect(res.data).toEqual({
+          name: 'LG Washing Machine',
+          origin: 'Korea',
+        })
+        expect('leadTimeText' in res.data).toBe(false)
+        expect('warranty' in res.data).toBe(false)
+        expect('warrantyActivation' in res.data).toBe(false)
+        expect('seoTitle' in res.data).toBe(false)
+        expect('seoDescription' in res.data).toBe(false)
+        expect('setContents' in res.data).toBe(false)
+      }
+    })
+
+    it('rejects wrong types in fields and setContents', () => {
+      expect(productTranslationsEnSchema.safeParse({ name: 123 }).success).toBe(false)
+      expect(productTranslationsEnSchema.safeParse({ warranty: true }).success).toBe(false)
+      expect(productTranslationsEnSchema.safeParse({ setContents: 'not-array' }).success).toBe(false)
+      expect(
+        productTranslationsEnSchema.safeParse({
+          setContents: [{ item: '' }],
+        }).success,
+      ).toBe(false)
+      expect(
+        productTranslationsEnSchema.safeParse({
+          setContents: [{ item: 'Pot', qty: 0 }],
+        }).success,
+      ).toBe(false)
+    })
+
+    it('createProductSchema and updateProductSchema accept translations', () => {
+      const created = createProductSchema.safeParse({
+        name: 'ثلاجة سامسونج',
+        modelCode: 'RT45K6000S8',
+        brandId: 'b1',
+        categoryId: 'c1',
+        price: 100000,
+        translations: {
+          en: {
+            name: 'Samsung Refrigerator',
+            origin: 'Egypt',
+          },
+        },
+      })
+      expect(created.success).toBe(true)
+      if (created.success) {
+        expect(created.data.translations?.en).toEqual({
+          name: 'Samsung Refrigerator',
+          origin: 'Egypt',
+        })
+      }
+
+      const updated = updateProductSchema.safeParse({
+        translations: {
+          en: {
+            warranty: '10 Years',
+          },
+        },
+      })
+      expect(updated.success).toBe(true)
+      if (updated.success) {
+        expect(updated.data.translations?.en).toEqual({
+          warranty: '10 Years',
+        })
+      }
     })
   })
 })

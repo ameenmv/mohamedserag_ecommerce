@@ -2,6 +2,7 @@
 import type { BreadcrumbItem } from '@serag/shared'
 import { buildBreadcrumbList } from '@serag/shared'
 import { buildProductJsonLd } from '~/utils/product-jsonld'
+import { useRevealOnScroll } from '~/composables/useRevealOnScroll'
 
 const { t, locale } = useI18n()
 const route = useRoute()
@@ -101,6 +102,10 @@ onMounted(() => {
 })
 
 const summaryRef = ref<{ addToCartButton: HTMLElement | null } | null>(null)
+
+// Related products rise in as they scroll into view
+const relatedRef = ref<HTMLElement | null>(null)
+useRevealOnScroll(relatedRef, ':scope > article', () => product.value?.related)
 </script>
 
 <template>
@@ -111,26 +116,26 @@ const summaryRef = ref<{ addToCartButton: HTMLElement | null } | null>(null)
     <!-- Breadcrumb -->
     <StoreListingBreadcrumb :items="breadcrumbItems" />
 
-    <!-- Top section: Gallery (start side) + Buy box (end side, sticky top on lg) -->
-    <div class="mt-4 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-10 items-start">
-      <div class="lg:col-span-7">
+    <!-- Gallery and details on the start side; the buy box stays in view beside both on lg -->
+    <div class="mt-4 grid grid-cols-1 items-start gap-6 lg:grid-cols-12 lg:gap-x-10 lg:gap-y-8">
+      <div class="lg:col-span-7 lg:row-start-1">
         <StoreProductPageGallery
           :images="product.images"
           :product-name="product.name"
+          :category-slug="product.category.slug"
         />
       </div>
 
-      <div class="lg:col-span-5 lg:sticky lg:top-24">
+      <div class="lg:col-span-5 lg:col-start-8 lg:row-span-2 lg:row-start-1 lg:sticky lg:top-28 lg:self-start">
         <StoreProductPageSummary
           ref="summaryRef"
           :product="product"
           @flash-ended="refreshNuxtData(`product:${slug}`)"
         />
       </div>
-    </div>
 
-    <!-- Product Details: Specs, Set Contents, Warranty, Delivery -->
-    <div class="mt-10 flex max-w-4xl flex-col gap-6 lg:mt-12">
+      <!-- Product Details: Specs, Set Contents, Warranty, Delivery -->
+      <div class="scroll-reveal flex flex-col gap-6 lg:col-span-7 lg:row-start-2">
       <LazyStoreProductPageSpecs hydrate-never :specs="product.specs" />
       <LazyStoreProductPageSetContents hydrate-never :set-contents="product.setContents" />
       <LazyStoreProductPageWarranty
@@ -140,15 +145,16 @@ const summaryRef = ref<{ addToCartButton: HTMLElement | null } | null>(null)
         :origin="product.origin"
       />
       <LazyStoreProductPageDelivery hydrate-never />
+      </div>
     </div>
 
     <!-- Product Reviews -->
-    <StoreProductPageReviews :product="product" />
+    <StoreProductPageReviews :product="product" class="scroll-reveal" />
 
     <!-- Related Products -->
     <section
       v-if="product.related && product.related.length > 0"
-      class="mt-14 border-t border-border/80 pt-8 sm:mt-16 sm:pt-10 lg:mt-20"
+      class="scroll-reveal mt-14 border-t border-border/80 pt-8 sm:mt-16 sm:pt-10 lg:mt-20"
       :aria-label="t('store.productPage.related.title')"
     >
       <div class="mb-6 flex items-center justify-between">
@@ -157,7 +163,7 @@ const summaryRef = ref<{ addToCartButton: HTMLElement | null } | null>(null)
         </h2>
       </div>
 
-      <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+      <div ref="relatedRef" class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
         <StoreProductCard
           v-for="rel in product.related"
           :key="rel.id"

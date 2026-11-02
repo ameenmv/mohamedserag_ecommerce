@@ -74,6 +74,7 @@ export class AdminBrandsService {
         seoDescription: data.seoDescription ?? null,
         sort: data.sort,
         visible: data.visible,
+        translations: (data.translations ?? {}) as Prisma.InputJsonValue,
       },
       include: brandInclude,
     })
@@ -108,6 +109,9 @@ export class AdminBrandsService {
     if (data.seoDescription !== undefined) updateData.seoDescription = data.seoDescription
     if (data.sort !== undefined) updateData.sort = data.sort
     if (data.visible !== undefined) updateData.visible = data.visible
+    if (data.translations !== undefined) {
+      updateData.translations = (data.translations ?? {}) as Prisma.InputJsonValue
+    }
 
     const updated = await this.prisma.brand.update({
       where: { id },
@@ -192,6 +196,7 @@ export class AdminBrandsService {
       sort: b.sort,
       visible: b.visible,
       productCount: b._count.products,
+      translations: (b.translations as AdminBrand['translations']) ?? null,
       createdAt: b.createdAt.toISOString(),
       updatedAt: b.updatedAt.toISOString(),
     }

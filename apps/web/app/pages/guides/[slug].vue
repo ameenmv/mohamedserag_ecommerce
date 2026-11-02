@@ -2,6 +2,7 @@
 import type { BreadcrumbItem } from '@serag/shared'
 import { buildBreadcrumbList } from '@serag/shared'
 import { buildGuideJsonLd } from '~/utils/guide-jsonld'
+import { useRevealOnScroll } from '~/composables/useRevealOnScroll'
 
 const { t, locale } = useI18n()
 const requestUrl = useRequestURL()
@@ -9,6 +10,10 @@ const config = useRuntimeConfig()
 const siteUrl = String(config.public.siteUrl)
 
 const { guide, title, seoTitle, seoDescription, ogImage, publishedLabel } = await useGuide()
+
+// The guide's products rise in as they scroll into view
+const productsRef = ref<HTMLElement | null>(null)
+useRevealOnScroll(productsRef, ':scope > article', () => guide.value)
 
 useSeoPage({
   title: () => seoTitle.value,
@@ -46,7 +51,7 @@ const breadcrumbItems = computed(() => [{ label: t('store.guides.heading'), to: 
     <StoreListingBreadcrumb :items="breadcrumbItems" />
 
     <article v-if="guide" class="mt-4">
-      <h1 class="font-display text-3xl text-foreground sm:text-4xl lg:text-5xl">
+      <h1 class="title-draw font-display text-4xl text-foreground sm:text-5xl lg:text-6xl">
         {{ title }}
       </h1>
 
@@ -73,7 +78,7 @@ const breadcrumbItems = computed(() => [{ label: t('store.guides.heading'), to: 
         <h2 class="mb-6 font-display text-2xl text-foreground sm:text-3xl">
           {{ t('store.guides.relatedProducts') }}
         </h2>
-        <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+        <div ref="productsRef" class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
           <StoreProductCard
             v-for="product in guide.products"
             :key="product.id"

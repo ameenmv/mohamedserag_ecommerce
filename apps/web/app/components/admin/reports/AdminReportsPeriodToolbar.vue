@@ -106,26 +106,20 @@ const presetOptions: (ReportPreset | 'custom')[] = [...REPORT_PRESETS, 'custom']
 
     <!-- Custom range -->
     <div v-if="preset === 'custom'" class="flex flex-wrap items-end gap-2.5" data-test="reports-custom-range">
-      <!-- Visible label: the native date field only shows a format placeholder. -->
-      <label class="flex flex-col gap-1 text-[11px] font-bold text-muted-foreground min-w-40">
-        <span>{{ t('admin.reports.period.from') }}</span>
-        <input
-          :value="from"
-          type="date"
-          class="border-input bg-background h-11 w-full rounded-xl border px-3 text-sm shadow-xs transition-colors outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring"
-          @input="emit('update:from', ($event.target as HTMLInputElement).value)"
-        >
-      </label>
-
-      <label class="flex flex-col gap-1 text-[11px] font-bold text-muted-foreground min-w-40">
-        <span>{{ t('admin.reports.period.to') }}</span>
-        <input
-          :value="to"
-          type="date"
-          class="border-input bg-background h-11 w-full rounded-xl border px-3 text-sm shadow-xs transition-colors outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring"
-          @input="emit('update:to', ($event.target as HTMLInputElement).value)"
-        >
-      </label>
+      <AdminFormDatePicker
+        :model-value="from"
+        :label="t('admin.reports.period.from')"
+        :max="to || undefined"
+        class="min-w-44"
+        @update:model-value="emit('update:from', $event)"
+      />
+      <AdminFormDatePicker
+        :model-value="to"
+        :label="t('admin.reports.period.to')"
+        :min="from || undefined"
+        class="min-w-44"
+        @update:model-value="emit('update:to', $event)"
+      />
 
       <Button
         type="button"

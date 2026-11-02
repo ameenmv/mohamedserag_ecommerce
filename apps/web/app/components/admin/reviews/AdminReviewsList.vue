@@ -127,7 +127,13 @@ function onSearchInput(val: string) {
   }, 350)
 }
 
-function onStarsChange() {
+const starOptions = computed(() => [
+  { value: 'all', label: t('admin.reviews.starsAll') },
+  ...[5, 4, 3, 2, 1].map((n) => ({ value: String(n), label: t('admin.reviews.starsFilter', { stars: n }) })),
+])
+
+function onStarsSelect(value: string) {
+  selectedStars.value = value === 'all' ? '' : Number(value)
   page.value = 1
   void fetchReviews()
 }
@@ -231,21 +237,14 @@ async function executeDelete() {
         </div>
 
         <!-- Stars Select -->
-        <div class="w-full sm:w-auto">
-          <select
-            v-model="selectedStars"
-            class="border-input bg-card h-10 w-full sm:w-auto rounded-xl border px-3 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring text-start min-w-40 cursor-pointer"
-            :aria-label="t('admin.reviews.starsSelectLabel')"
-            @change="onStarsChange"
-          >
-            <option value="">{{ t('admin.reviews.starsAll') }}</option>
-            <option :value="5">{{ t('admin.reviews.starsFilter', { stars: 5 }) }}</option>
-            <option :value="4">{{ t('admin.reviews.starsFilter', { stars: 4 }) }}</option>
-            <option :value="3">{{ t('admin.reviews.starsFilter', { stars: 3 }) }}</option>
-            <option :value="2">{{ t('admin.reviews.starsFilter', { stars: 2 }) }}</option>
-            <option :value="1">{{ t('admin.reviews.starsFilter', { stars: 1 }) }}</option>
-          </select>
-        </div>
+        <AdminFormFilterSelect
+          :model-value="selectedStars === '' ? 'all' : String(selectedStars)"
+          :options="starOptions"
+          :label="t('admin.reviews.starsSelectLabel')"
+          neutral="all"
+          class="w-full sm:w-52"
+          @update:model-value="onStarsSelect"
+        />
       </div>
 
       <!-- Refresh Button -->

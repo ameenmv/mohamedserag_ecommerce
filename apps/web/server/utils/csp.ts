@@ -116,7 +116,8 @@ export function buildCsp(input: BuildCspInput): string {
     `img-src ${imgTokens.join(' ')}`,
     'font-src \'self\' data:',
     `connect-src ${connectTokens.join(' ')}`,
-    'frame-src \'self\'',
+    // Facebook's video player, for the trader reels popup (loaded only when a visitor opens one)
+    'frame-src \'self\' https://www.facebook.com',
     'frame-ancestors \'self\'',
     'object-src \'none\'',
     'base-uri \'self\'',

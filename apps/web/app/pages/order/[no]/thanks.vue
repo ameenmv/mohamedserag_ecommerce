@@ -68,7 +68,9 @@ async function copyOrderNo(): Promise<void> {
     <div v-else class="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8 sm:py-12 flex flex-col gap-8">
       <!-- Success Header -->
       <div class="flex flex-col items-center text-center gap-4">
-        <div class="flex size-18 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+        <div class="heart-pop relative flex size-18 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+          <span class="success-burst absolute inset-0 rounded-full border-2 border-emerald-500/50" aria-hidden="true" />
+          <span class="success-burst absolute inset-0 rounded-full border-2 border-serag-gold/60 [animation-delay:.25s]" aria-hidden="true" />
           <CheckCircle2 class="size-10" aria-hidden="true" />
         </div>
 

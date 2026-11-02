@@ -11,7 +11,6 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
-const notify = useNotify()
 const { has, toggle } = useCompare()
 const hydrated = useHydrated()
 
@@ -24,10 +23,6 @@ function onToggle(): void {
   if (result === 'full') {
     pendingCompare.value = props.product
     emit('full', props.product)
-  } else if (result === 'added') {
-    notify.success(t('store.compare.addedNotice'))
-  } else {
-    notify.info(t('store.compare.removedNotice'))
   }
 }
 </script>

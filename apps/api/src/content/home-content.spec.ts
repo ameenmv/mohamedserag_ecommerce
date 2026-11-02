@@ -1,5 +1,6 @@
 import {
   DEFAULT_HOME_CONTENT,
+  DEFAULT_HOME_CONTENT_EN,
   DEFAULT_HOME_LAYOUT,
   HOME_SECTION_IDS,
   type HomeLayout,
@@ -57,5 +58,78 @@ describe('parseStoredHome', () => {
     const result = parseStoredHome(DEFAULT_HOME_CONTENT, { order: ['hero'] })
 
     expect(result.layout).toEqual(DEFAULT_HOME_LAYOUT)
+  })
+
+  describe('content saved before the trader videos section existed', () => {
+    const { traderReels: _reels, ...oldContent } = DEFAULT_HOME_CONTENT
+    const oldOrder = HOME_SECTION_IDS.filter((id) => id !== 'traderReels')
+
+    it('keeps the owner content and fills the videos with the defaults', () => {
+      const edited = { ...oldContent, hero: { ...oldContent.hero, title: 'عنوان المالك' } }
+
+      const result = parseStoredHome(edited, DEFAULT_HOME_LAYOUT)
+
+      expect(result.sections.hero.title).toBe('عنوان المالك')
+      expect(result.sections.traderReels).toEqual(DEFAULT_HOME_CONTENT.traderReels)
+    })
+
+    it('slots the new section into an old layout after the section that precedes it', () => {
+      const layout = { order: [...oldOrder].reverse(), hidden: ['guides'] }
+
+      const result = parseStoredHome(oldContent, layout)
+
+      expect(result.layout.order).toHaveLength(HOME_SECTION_IDS.length)
+      expect(result.layout.order.indexOf('traderReels')).toBe(
+        result.layout.order.indexOf('partners') + 1,
+      )
+      expect(result.layout.hidden).toEqual(['guides'])
+    })
+
+    it('shows English video names for English content saved without the section', () => {
+      const { traderReels: _enReels, ...oldEnglish } = DEFAULT_HOME_CONTENT_EN
+
+      const result = parseStoredHome({ ...oldContent, en: oldEnglish }, DEFAULT_HOME_LAYOUT)
+
+      expect(result.english?.traderReels).toEqual(DEFAULT_HOME_CONTENT_EN.traderReels)
+    })
+  })
+
+  describe('content saved before productStory and reviews sections existed', () => {
+    const { productStory: _story, reviews: _rev, ...oldContent } = DEFAULT_HOME_CONTENT
+    const oldOrder = HOME_SECTION_IDS.filter((id) => id !== 'productStory' && id !== 'reviews')
+
+    it('keeps the owner content and fills productStory and reviews with the defaults', () => {
+      const edited = { ...oldContent, hero: { ...oldContent.hero, title: 'عنوان المالك' } }
+
+      const result = parseStoredHome(edited, DEFAULT_HOME_LAYOUT)
+
+      expect(result.sections.hero.title).toBe('عنوان المالك')
+      expect(result.sections.productStory).toEqual(DEFAULT_HOME_CONTENT.productStory)
+      expect(result.sections.reviews).toEqual(DEFAULT_HOME_CONTENT.reviews)
+    })
+
+    it('slots the new sections into an old layout after the sections that precede them', () => {
+      const layout = { order: [...oldOrder].reverse(), hidden: ['guides'] }
+
+      const result = parseStoredHome(oldContent, layout)
+
+      expect(result.layout.order).toHaveLength(HOME_SECTION_IDS.length)
+      expect(result.layout.order.indexOf('productStory')).toBe(
+        result.layout.order.indexOf('flash') + 1,
+      )
+      expect(result.layout.order.indexOf('reviews')).toBe(
+        result.layout.order.indexOf('traderReels') + 1,
+      )
+      expect(result.layout.hidden).toEqual(['guides'])
+    })
+
+    it('shows English defaults for English content saved without the two sections', () => {
+      const { productStory: _enStory, reviews: _enRev, ...oldEnglish } = DEFAULT_HOME_CONTENT_EN
+
+      const result = parseStoredHome({ ...oldContent, en: oldEnglish }, DEFAULT_HOME_LAYOUT)
+
+      expect(result.english?.productStory).toEqual(DEFAULT_HOME_CONTENT_EN.productStory)
+      expect(result.english?.reviews).toEqual(DEFAULT_HOME_CONTENT_EN.reviews)
+    })
   })
 })

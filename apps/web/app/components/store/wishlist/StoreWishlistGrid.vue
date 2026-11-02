@@ -2,6 +2,7 @@
 import { AlertCircle, Heart, Trash2 } from '@lucide/vue'
 import type { ProductCard } from '@serag/shared'
 import type { WishlistItem } from '~/composables/useWishlist'
+import { useRevealOnScroll } from '~/composables/useRevealOnScroll'
 
 const props = defineProps<{
   items: readonly WishlistItem[]
@@ -14,7 +15,10 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
-const localePath = useLocalePath()
+
+// Saved products further down rise in as they scroll into view
+const gridRef = ref<HTMLElement | null>(null)
+useRevealOnScroll(gridRef, ':scope > *', () => props.items)
 
 const availableItems = computed(() =>
   props.items.filter((i) => i.card !== null),
@@ -38,55 +42,24 @@ const unavailableItems = computed(() =>
         <Skeleton class="h-4 w-72 rounded-md" />
       </div>
       <div class="grid grid-cols-2 gap-2.5 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
-        <div
-          v-for="i in 4"
-          :key="i"
-          class="flex flex-col justify-between rounded-2xl border border-border bg-card p-3 sm:p-4"
-        >
-          <div>
-            <Skeleton class="mb-3 aspect-square w-full rounded-xl" />
-            <Skeleton class="mb-2 h-3 w-16 rounded-md" />
-            <Skeleton class="mb-3 h-4 w-full rounded-md" />
-          </div>
-          <div class="space-y-2">
-            <Skeleton class="h-6 w-24 rounded-md" />
-            <Skeleton class="h-11 w-full rounded-xl" />
-          </div>
-        </div>
+        <StoreProductCardSkeleton v-for="i in 4" :key="i" />
       </div>
     </div>
 
     <!-- Empty State -->
-    <div
+    <StoreEmptyState
       v-else-if="items.length === 0"
-      class="flex flex-col items-center justify-center rounded-3xl border border-dashed border-border/80 bg-card/60 px-6 py-16 text-center"
-    >
-      <div
-        class="mb-4 flex size-16 items-center justify-center rounded-2xl bg-secondary text-muted-foreground"
-        aria-hidden="true"
-      >
-        <Heart class="size-8" />
-      </div>
-      <h1 class="font-display text-2xl sm:text-3xl text-foreground">
-        {{ t('store.wishlist.emptyTitle') }}
-      </h1>
-      <p class="mt-2 max-w-md text-sm text-muted-foreground sm:text-base">
-        {{ t('store.wishlist.emptyDescription') }}
-      </p>
-      <div class="mt-6">
-        <NuxtLink
-          :to="localePath('/shop')"
-          class="inline-flex min-h-12 items-center justify-center rounded-full bg-primary px-6 text-sm font-bold text-primary-foreground shadow-xs transition-colors hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-        >
-          {{ t('store.wishlist.browseProducts') }}
-        </NuxtLink>
-      </div>
-    </div>
+      :icon="Heart"
+      heading-tag="h1"
+      :title="t('store.wishlist.emptyTitle')"
+      :description="t('store.wishlist.emptyDescription')"
+      :cta-label="t('store.wishlist.browseProducts')"
+    />
 
     <!-- Loaded Content: Grid + Unavailable List -->
     <div v-else class="space-y-6">
       <div>
-        <h1 class="font-display text-3xl sm:text-4xl text-foreground">
+        <h1 class="title-draw font-display text-4xl sm:text-5xl text-foreground">
           {{ t('store.wishlist.title') }}
         </h1>
         <p class="mt-1 text-xs sm:text-sm text-muted-foreground">
@@ -97,6 +70,7 @@ const unavailableItems = computed(() =>
       <!-- Available Products Grid -->
       <div
         v-if="availableItems.length > 0"
+        ref="gridRef"
         class="grid grid-cols-2 gap-2.5 sm:gap-4 md:grid-cols-3 xl:grid-cols-4"
       >
         <StoreWishlistItem

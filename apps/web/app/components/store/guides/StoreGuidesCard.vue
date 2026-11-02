@@ -1,11 +1,23 @@
 <script setup lang="ts">
-import { ArrowRight, BookOpen } from '@lucide/vue'
+import { ArrowRight, House } from '@lucide/vue'
 import type { GuideCard } from '@serag/shared'
 
 const props = defineProps<{
   guide: GuideCard
   headingLevel?: 2 | 3
+  /** Position in a row: cycles the cover color green → gold → dark, as in the prototype. */
+  tone?: number
+  /** Home page card: cover, tag and title only. */
+  compact?: boolean
 }>()
+
+const TONES = [
+  { cover: 'bg-serag-green text-serag-ivory', tag: 'bg-[#EAF2DC] text-serag-green' },
+  { cover: 'bg-serag-gold text-serag-ink', tag: 'bg-[#F4EFD6] text-serag-gold-ink' },
+  { cover: 'bg-serag-deep text-serag-gold-hi', tag: 'bg-[#EAF2DC] text-serag-green' },
+] as const
+const tone = computed(() => TONES[(props.tone ?? 0) % TONES.length] ?? TONES[0])
+const categorySlug = computed(() => props.guide.categories[0]?.slug ?? null)
 
 const { t } = useI18n()
 const localePath = useLocalePath()
@@ -17,9 +29,9 @@ const headingTag = computed(() => `h${props.headingLevel ?? 3}`)
 <template>
   <NuxtLink
     :to="guideUrl"
-    class="group flex min-w-0 flex-col overflow-hidden rounded-[var(--radius-card)] border border-border bg-card transition-colors hover:border-serag-gold/60 focus-visible:ring-2 focus-visible:ring-serag-gold focus-visible:outline-none"
+    class="group flex min-w-0 flex-col overflow-hidden rounded-[var(--radius-card)] border border-border bg-card transition duration-200 hover:-translate-y-1.5 hover:shadow-[0_28px_48px_-22px_rgba(20,32,26,.4)] focus-visible:ring-2 focus-visible:ring-serag-gold focus-visible:outline-none motion-reduce:transition-none motion-reduce:hover:translate-y-0"
   >
-    <div class="flex h-44 items-center justify-center overflow-hidden bg-serag-green text-serag-gold-hi">
+    <div :class="['flex h-[190px] items-center justify-center overflow-hidden', tone.cover]">
       <NuxtImg
         v-if="guide.cover"
         :src="guide.cover"
@@ -29,25 +41,26 @@ const headingTag = computed(() => `h${props.headingLevel ?? 3}`)
         loading="lazy"
         class="size-full object-cover"
       />
-      <BookOpen v-else class="size-16" aria-hidden="true" />
+      <StoreCategoryIcon v-else-if="categorySlug" :slug="categorySlug" class="size-[90px]" stroke-width="1.6" />
+      <House v-else class="size-[90px]" :stroke-width="1.1" aria-hidden="true" />
     </div>
-    <div class="flex flex-1 flex-col gap-3 p-6">
+    <div class="flex flex-1 flex-col gap-3 p-[26px]">
       <span
         v-if="guide.categories[0]"
-        class="self-start rounded-full bg-serag-green/10 px-3.5 py-1 text-xs font-bold text-serag-green"
+        :class="['self-start rounded-full px-3.5 py-1 text-[13px] font-bold', tone.tag]"
       >
         {{ guide.categories[0]?.name }}
       </span>
       <component
         :is="headingTag"
-        class="text-lg font-bold leading-snug text-foreground transition-colors group-hover:text-serag-green"
+        class="text-[22px] leading-normal font-bold text-foreground transition-colors group-hover:text-serag-green"
       >
         {{ guide.title }}
       </component>
-      <p v-if="guide.summary" class="line-clamp-2 text-sm text-muted-foreground">
+      <p v-if="guide.summary && !compact" class="line-clamp-2 text-sm text-muted-foreground">
         {{ guide.summary }}
       </p>
-      <span class="mt-auto inline-flex items-center gap-2 text-sm font-bold text-serag-green">
+      <span v-if="!compact" class="mt-auto inline-flex items-center gap-2 text-sm font-bold text-serag-green">
         {{ t('store.guides.readGuide') }}
         <ArrowRight class="size-4 rtl:-scale-x-100" aria-hidden="true" />
       </span>

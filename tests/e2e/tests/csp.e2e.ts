@@ -4,6 +4,7 @@ import { createSeed } from './support/seed.js'
 import { loginWithAdminSession, waitForHydration } from './support/auth.js'
 import { watchCsp, cspViolations, brokenImages } from './support/csp.js'
 import { appUrl } from './app-url.js'
+import { BRIDAL_ENABLED } from './support/features.js'
 
 let seed = createSeed()
 
@@ -121,13 +122,15 @@ test('storefront journey runs with zero CSP violations and broken images', async
   expect(await cspViolations(browser)).toEqual([])
   expect(await brokenImages(browser)).toEqual([])
 
-  // 7. /bridal
-  await app.open('/bridal')
-  await waitForHydration(browser)
-  await watchCsp(browser)
-  await browser.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
-  expect(await cspViolations(browser)).toEqual([])
-  expect(await brokenImages(browser)).toEqual([])
+  // 7. /bridal (while the feature is on)
+  if (BRIDAL_ENABLED) {
+    await app.open('/bridal')
+    await waitForHydration(browser)
+    await watchCsp(browser)
+    await browser.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
+    expect(await cspViolations(browser)).toEqual([])
+    expect(await brokenImages(browser)).toEqual([])
+  }
 })
 
 test('admin journey runs with zero CSP violations and broken images', async ({

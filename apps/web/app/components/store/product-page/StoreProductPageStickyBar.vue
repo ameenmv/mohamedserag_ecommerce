@@ -32,9 +32,14 @@ if (import.meta.client) {
   )
 }
 
-function handleAddToCart(): void {
+function handleAddToCart(event: MouseEvent): void {
   if (isOrderable.value) {
     add(card.value, 1)
+    const gallery = document.querySelector<HTMLElement>('[data-fly-source]')
+    const fallback = event.currentTarget instanceof HTMLElement ? event.currentTarget : null
+    const source = gallery ?? fallback
+    // Loaded on the first add to cart: never part of the page's first load
+    if (source) void import('~/utils/fly-to-cart').then(({ flyToCart }) => flyToCart(source))
   }
 }
 

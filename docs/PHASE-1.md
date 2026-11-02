@@ -1,6 +1,6 @@
 # Phase 1 — Launch: progress
 
-> **تجهيز الإطلاق:** حدود الطلبات بقت لكل زائر، وفيه CSP وheaders أمان، وباك أب يومي متجرّب، ولوجز من غير بيانات العملاء، وفحص accessibility وLighthouse في CI، ودليل نشر وقائمة بالحاجات المطلوبة من صاحب المحل. الباقي: سرعة صفحات القسم والمنتج والدفع، وبيانات المحل الحقيقية والسيرفر.
+> **تجهيز الإطلاق:** حدود الطلبات بقت لكل زائر، وفيه CSP وheaders أمان، وباك أب يومي متجرّب، ولوجز من غير بيانات العملاء، وفحص accessibility وLighthouse في CI، ودليل نشر وقائمة بالحاجات المطلوبة من صاحب المحل. وصفحات الرئيسية والقسم والمنتج والدفع بقت في حدود السرعة المطلوبة، والـ CI بيوقف أي تغيير يبطّأها. الباقي: بيانات المحل الحقيقية والسيرفر.
 >
 > المرحلة الأولى (الإطلاق) — **Slice 0 (الأساس) و Slice 1 (الكتالوج) و Slice 2 (السلة والدفع) و Slice 3 (جهّز بيتك) و Slice 4 (العروض وتنبيهات التوفر) و Slice 5 (التقييمات) و Slice 6 (المحتوى والـSEO) و Slice 7 (لوحة التحكم والتقارير والإعدادات) خلصوا بالكامل** — كل شرائح المرحلة الأولى خلصت، والباقي تجهيز الإطلاق.
 > في Slice 7: «نظرة عامة» بقت شاشة الصبح: عدادات للطلبات الجديدة والمدفوعات المستنية تأكيد والعرابين وتثبيتات العرايس اللي قربت تخلص والتقييمات وطلبات «بلّغني» الجاهزة والمنتجات اللي قربت تخلص، كل عداد بيفتح الصفحة متفلترة، ورسوم للإيراد (الطلبات المتسلمة بس) والعرابين لوحدها. صفحة «التقارير» فيها الإيراد والتقسيمات والأكثر مبيعاً والكوبونات والعروض ومسار العروسة والعملاء المتكررين، وكل تقرير بيتصدّر CSV بيفتح على Excel بالعربي. وصفحة «الإعدادات» بتخلّي صاحب المعرض يغيّر بيانات المعرض والأرقام وطرق الدفع ومناطق التوصيل والعربون وحد المخزون وكلمات البحث وقوالب الرسائل من غير مبرمج.
@@ -19,7 +19,7 @@
 | **5 — Reviews** | Review form, moderation, verified buyers, ratings | ✅ **Done** (branch `006-reviews`) |
 | **6 — Content, CMS & SEO** | Homepage CMS, pages, guides, quiz, SEO, Merchant feed | ✅ **Done** (branch `007-content-seo`) |
 | **7 — Dashboard, reports & settings** | Overview counters and charts, reports with CSV, settings | ✅ **Done** (branch `008-dashboard-reports`) |
-| **Launch readiness** | Per-visitor rate limits, CSP and headers, backups, logs, Lighthouse and accessibility in CI, viewport regression, runbook | 🟡 **Code done except page speed** (branch `009-launch-readiness`); owner items in the [launch checklist](LAUNCH-CHECKLIST.md) |
+| **Launch readiness** | Per-visitor rate limits, CSP and headers, backups, logs, Lighthouse and accessibility in CI, viewport regression, runbook | ✅ **Code done** (branches `009-launch-readiness`, `010-page-speed`); owner items in the [launch checklist](LAUNCH-CHECKLIST.md) |
 
 ## Slice 0 — task by task
 
@@ -117,7 +117,16 @@
 - **Backups:** a `backup` service dumps the database and archives uploads daily, keeps 30 days, logs `backup_ok` / `backup_failed`; restore and verify scripts, tested end to end against the dev database (counts matched). See [OPERATIONS.md](OPERATIONS.md).
 - **Logs and health:** JSON logs in production, `X-Request-Id` on every response, one redacted `HttpError` entry per 5xx (no query strings, phones or tokens; Nest's own raw error log is suppressed), `/healthz` for the web and `/api/health` for the API.
 - **Accessibility:** axe-core scans 13 public and admin pages in the browser suite with zero serious/critical issues; it found and we fixed muted text at 4.49:1 (token darkened to `#5C6660`) and amber badge text.
-- **Page speed (open):** Lighthouse CI now measures home, a category, a product and checkout against the seeded catalogue. Done: link prefetch on interaction, home sections hydrate when visible, only the body font preloaded, Zod config without loading all of Zod. Home is gated (perf ≥ 0.9, LCP < 2.5 s, JS ≤ 200 KB); the other three pages report as warnings until their LCP (≈3.1–3.3 s locally, text element) is fixed — the measurement shows the first paint is held by CSS/text layout, not by JavaScript.
+- **Page speed:** Lighthouse CI (mobile, 375 px, behind Caddy with HTTP/2) measures home, a category, a product and checkout, with one product in the cart so checkout is measured as shoppers reach it. On all four URLs these are errors that fail CI: performance ≥ 0.9, LCP < 2.5 s, CLS < 0.1, accessibility = 1, no console errors; home also keeps JS ≤ 200 KB. Done: link prefetch on interaction, home sections hydrate when visible, only the body font preloaded, Zod jitless, all icons in one chunk, and checkout renders the stored cart after hydration (it logged a hydration mismatch). Spec [010](../specs/010-page-speed/spec.md).
+
+  | Page | Before (PR #7, `e4f0122`, empty cart) | After (PR #8, `b3e4201`, item in cart) | LCP element after |
+  |---|---|---|---|
+  | Home | 0.98 · LCP 2.12 s | 0.92 · LCP 2.20 s | hero text |
+  | Category | 0.95 · LCP 2.27 s | 0.90 · LCP 2.20 s | category description |
+  | Product | 0.97 · LCP 1.82 s | 0.94 · LCP 2.13 s | product title |
+  | Checkout | 0.93 · LCP **2.94 s** | 0.93 · LCP 2.13 s | order form |
+
+  Median of 3 CI runs. With an item in the cart every page also asks for a cart quote, which adds main-thread time (TBT 81–173 ms → 230–375 ms), so the scores are lower than with an empty cart but all within budget. The icons chunk (after `b3e4201`) cuts home from 89 to 60 script requests.
 - **Regression:** CI runs the browser suite on the production build (not `pnpm dev`) and repeats the shopper journeys at 375 and 320 px.
 - **Deploy:** [DEPLOY.md](DEPLOY.md) (server, env with secrets marked, first deploy, Umami, update, rollback), `docker/.env.production.example`, the seed skips demo orders on a server (`SEED_DEMO_ORDERS=false`), and compose now passes the public URL to the web app (canonical URLs, hreflang, sitemap). The admin overview warns while store details are placeholders.
 

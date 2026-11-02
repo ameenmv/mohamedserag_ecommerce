@@ -2,7 +2,7 @@
 import type { AdminBrand, AdminCategory, AdminProductSort, AdminProductStatus } from '@serag/shared'
 import { FileSpreadsheet, Plus, Search } from '@lucide/vue'
 
-defineProps<{
+const props = defineProps<{
   searchQuery: string
   selectedCategory: string
   selectedBrand: string
@@ -24,6 +24,30 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+
+// The select has no empty value: '' (no filter) is carried as 'all'
+const ALL = 'all'
+const categoryOptions = computed(() => [
+  { value: ALL, label: t('admin.products.allCategories') },
+  ...props.categories.map((c) => ({ value: c.id, label: c.name })),
+])
+const brandOptions = computed(() => [
+  { value: ALL, label: t('admin.products.allBrands') },
+  ...props.brands.map((b) => ({ value: b.id, label: b.name })),
+])
+const statusOptions = computed(() =>
+  (['all', 'active', 'hidden', 'archived'] as const).map((v) => ({ value: v, label: t(`admin.products.status.${v}`) })),
+)
+const stockOptions = computed(() => [
+  { value: ALL, label: t('admin.products.stockFilter.all') },
+  { value: 'low', label: t('admin.products.stockFilter.low') },
+  { value: 'out', label: t('admin.products.stockFilter.out') },
+])
+const sortOptions = computed(() =>
+  (['updated', 'name', 'price', 'stock'] as const).map((v) => ({ value: v, label: t(`admin.products.sort.${v}`) })),
+)
+
+const fromAll = (v: string): string => (v === ALL ? '' : v)
 const localePath = useLocalePath()
 </script>
 
@@ -68,96 +92,42 @@ const localePath = useLocalePath()
     </div>
 
     <!-- Filters row -->
-    <div class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-5">
-      <!-- Category Filter -->
-      <AdminFormSelect
-        :model-value="selectedCategory"
-        :aria-label="t('admin.products.allCategories')"
-        class="h-9 rounded-lg text-xs"
-        @update:model-value="emit('update:selectedCategory', String($event)); emit('change')"
-      >
-        <option value="">
-          {{ t('admin.products.allCategories') }}
-        </option>
-        <option v-for="c in categories" :key="c.id" :value="c.id">
-          {{ c.name }}
-        </option>
-      </AdminFormSelect>
-
-      <!-- Brand Filter -->
-      <AdminFormSelect
-        :model-value="selectedBrand"
-        :aria-label="t('admin.products.allBrands')"
-        class="h-9 rounded-lg text-xs"
-        @update:model-value="emit('update:selectedBrand', String($event)); emit('change')"
-      >
-        <option value="">
-          {{ t('admin.products.allBrands') }}
-        </option>
-        <option v-for="b in brands" :key="b.id" :value="b.id">
-          {{ b.name }}
-        </option>
-      </AdminFormSelect>
-
-      <!-- Status Filter -->
-      <AdminFormSelect
+    <div class="grid grid-cols-2 gap-2.5 rounded-2xl border border-border bg-card p-3 shadow-xs sm:grid-cols-3 md:grid-cols-5">
+      <AdminFormFilterSelect
+        :model-value="selectedCategory || ALL"
+        :options="categoryOptions"
+        :label="t('admin.products.allCategories')"
+        :neutral="ALL"
+        @update:model-value="emit('update:selectedCategory', fromAll($event)); emit('change')"
+      />
+      <AdminFormFilterSelect
+        :model-value="selectedBrand || ALL"
+        :options="brandOptions"
+        :label="t('admin.products.allBrands')"
+        :neutral="ALL"
+        @update:model-value="emit('update:selectedBrand', fromAll($event)); emit('change')"
+      />
+      <AdminFormFilterSelect
         :model-value="selectedStatus"
-        :aria-label="t('admin.products.status.all')"
-        class="h-9 rounded-lg text-xs"
+        :options="statusOptions"
+        :label="t('admin.products.status.all')"
+        neutral="all"
         @update:model-value="emit('update:selectedStatus', $event as AdminProductStatus); emit('change')"
-      >
-        <option value="all">
-          {{ t('admin.products.status.all') }}
-        </option>
-        <option value="active">
-          {{ t('admin.products.status.active') }}
-        </option>
-        <option value="hidden">
-          {{ t('admin.products.status.hidden') }}
-        </option>
-        <option value="archived">
-          {{ t('admin.products.status.archived') }}
-        </option>
-      </AdminFormSelect>
-
-      <!-- Stock Filter -->
-      <AdminFormSelect
-        :model-value="selectedStock"
-        :aria-label="t('admin.products.stockFilter.all')"
-        class="h-9 rounded-lg text-xs"
-        @update:model-value="emit('update:selectedStock', $event as 'low' | 'out' | ''); emit('change')"
-      >
-        <option value="">
-          {{ t('admin.products.stockFilter.all') }}
-        </option>
-        <option value="low">
-          {{ t('admin.products.stockFilter.low') }}
-        </option>
-        <option value="out">
-          {{ t('admin.products.stockFilter.out') }}
-        </option>
-      </AdminFormSelect>
-
-      <!-- Sort -->
-      <AdminFormSelect
+      />
+      <AdminFormFilterSelect
+        :model-value="selectedStock || ALL"
+        :options="stockOptions"
+        :label="t('admin.products.stockFilter.all')"
+        :neutral="ALL"
+        @update:model-value="emit('update:selectedStock', fromAll($event) as 'low' | 'out' | ''); emit('change')"
+      />
+      <AdminFormFilterSelect
         :model-value="selectedSort"
-        :aria-label="t('admin.products.sort.label')"
-        class="col-span-2 sm:col-span-1 h-9 rounded-lg text-xs"
+        :options="sortOptions"
+        :label="t('admin.products.sort.label')"
+        class="col-span-2 sm:col-span-1"
         @update:model-value="emit('update:selectedSort', $event as AdminProductSort); emit('change')"
-      >
-        <option value="updated">
-          {{ t('admin.products.sort.updated') }}
-        </option>
-        <option value="name">
-          {{ t('admin.products.sort.name') }}
-        </option>
-        <option value="price">
-          {{ t('admin.products.sort.price') }}
-        </option>
-        <option value="stock">
-          {{ t('admin.products.sort.stock') }}
-        </option>
-      </AdminFormSelect>
+      />
     </div>
   </div>
 </template>

@@ -27,7 +27,7 @@ test('category page displays heading, lists product cards, filters by brand, and
 
   // Every card shows the brand سامسونج
   await expect(browser.locator('article').first()).toBeVisible();
-  const brandLabels = await browser.locator('article span.text-serag-gold').allTextContents();
+  const brandLabels = await browser.locator('article [data-brand]').allTextContents();
   expect(brandLabels.length).toBeGreaterThan(0);
   for (const brand of brandLabels) {
     expect(brand.trim()).toBe('سامسونج');

@@ -4,6 +4,7 @@ import { ensureStoreContact } from './support/store-contact.js'
 import { createSeed } from './support/seed.js'
 import { waitForHydration } from './support/hydration.js'
 import { apiUrl } from './api-url.js'
+import { BRIDAL_SKIP } from './support/features.js'
 
 let seed = createSeed()
 
@@ -12,7 +13,7 @@ afterEach(async () => {
   seed = createSeed()
 })
 
-test('bridal share: view mode omits edit controls, reveals showroom contact, suppresses editToken over API, and handles unknown token', async ({
+test('bridal share: view mode omits edit controls, reveals showroom contact, suppresses editToken over API, and handles unknown token', { skip: BRIDAL_SKIP }, async ({
   app,
   screen,
   browser,

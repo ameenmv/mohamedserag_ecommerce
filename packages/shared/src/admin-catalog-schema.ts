@@ -28,6 +28,10 @@ export const adminSpecTemplateFieldSchema = z
       .array(z.string().trim().min(1, 'خيار القائمة لا يمكن أن يكون فارغاً'))
       .nullable()
       .optional(),
+    // English for the /en storefront; optionsEn lines up with options (same order and length)
+    labelEn: z.string().trim().nullable().optional(),
+    unitEn: z.string().trim().nullable().optional(),
+    optionsEn: z.array(z.string().trim()).nullable().optional(),
     filterable: z.boolean().default(false),
     comparable: z.boolean().default(false),
   })
@@ -40,6 +44,13 @@ export const adminSpecTemplateFieldSchema = z
           path: ['options'],
         })
       }
+    }
+    if (data.optionsEn && data.optionsEn.length > 0 && data.optionsEn.length !== (data.options?.length ?? 0)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'عدد الخيارات بالإنجليزي لازم يساوي عدد الخيارات بالعربي',
+        path: ['optionsEn'],
+      })
     }
   })
 
@@ -97,6 +108,41 @@ export type UpdateSpecTemplateInput = z.input<typeof updateSpecTemplateSchema>
 export type UpdateSpecTemplateOutput = z.output<typeof updateSpecTemplateSchema>
 
 /**
+ * English translations schema for categories.
+ * Drops empty and whitespace-only strings so Arabic fallback applies.
+ */
+export const categoryTranslationsEnSchema = z
+  .object({
+    name: z.string().trim().nullable().optional(),
+    intro: z.string().trim().nullable().optional(),
+    seoTitle: z.string().trim().nullable().optional(),
+    seoDescription: z.string().trim().nullable().optional(),
+  })
+  .transform((data) => {
+    const res: {
+      name?: string
+      intro?: string
+      seoTitle?: string
+      seoDescription?: string
+    } = {}
+    if (data.name && data.name.length > 0) res.name = data.name
+    if (data.intro && data.intro.length > 0) res.intro = data.intro
+    if (data.seoTitle && data.seoTitle.length > 0) res.seoTitle = data.seoTitle
+    if (data.seoDescription && data.seoDescription.length > 0) res.seoDescription = data.seoDescription
+    return res
+  })
+
+export type CategoryTranslationsEnInput = z.input<typeof categoryTranslationsEnSchema>
+export type CategoryTranslationsEn = z.output<typeof categoryTranslationsEnSchema>
+
+export const categoryTranslationsSchema = z.object({
+  en: categoryTranslationsEnSchema.optional(),
+})
+
+export type CategoryTranslationsInput = z.input<typeof categoryTranslationsSchema>
+export type CategoryTranslations = z.output<typeof categoryTranslationsSchema>
+
+/**
  * Category creation and update schemas.
  */
 export const createCategorySchema = z.object({
@@ -109,6 +155,7 @@ export const createCategorySchema = z.object({
   seoDescription: z.string().trim().nullable().optional(),
   sort: z.coerce.number().int().default(0),
   visible: z.boolean().default(true),
+  translations: categoryTranslationsSchema.nullable().optional(),
 })
 
 export type CreateCategoryInput = z.input<typeof createCategorySchema>
@@ -124,6 +171,7 @@ export const updateCategorySchema = z.object({
   seoDescription: z.string().trim().nullable().optional(),
   sort: z.coerce.number().int().optional(),
   visible: z.boolean().optional(),
+  translations: categoryTranslationsSchema.nullable().optional(),
 })
 
 export type UpdateCategoryInput = z.input<typeof updateCategorySchema>
@@ -134,6 +182,41 @@ export const reorderCategoriesSchema = z.object({
 })
 
 export type ReorderCategoriesInput = z.input<typeof reorderCategoriesSchema>
+
+/**
+ * English translations schema for brands.
+ * Drops empty and whitespace-only strings so Arabic fallback applies.
+ */
+export const brandTranslationsEnSchema = z
+  .object({
+    name: z.string().trim().nullable().optional(),
+    intro: z.string().trim().nullable().optional(),
+    seoTitle: z.string().trim().nullable().optional(),
+    seoDescription: z.string().trim().nullable().optional(),
+  })
+  .transform((data) => {
+    const res: {
+      name?: string
+      intro?: string
+      seoTitle?: string
+      seoDescription?: string
+    } = {}
+    if (data.name && data.name.length > 0) res.name = data.name
+    if (data.intro && data.intro.length > 0) res.intro = data.intro
+    if (data.seoTitle && data.seoTitle.length > 0) res.seoTitle = data.seoTitle
+    if (data.seoDescription && data.seoDescription.length > 0) res.seoDescription = data.seoDescription
+    return res
+  })
+
+export type BrandTranslationsEnInput = z.input<typeof brandTranslationsEnSchema>
+export type BrandTranslationsEn = z.output<typeof brandTranslationsEnSchema>
+
+export const brandTranslationsSchema = z.object({
+  en: brandTranslationsEnSchema.optional(),
+})
+
+export type BrandTranslationsInput = z.input<typeof brandTranslationsSchema>
+export type BrandTranslations = z.output<typeof brandTranslationsSchema>
 
 /**
  * Brand creation and update schemas.
@@ -147,6 +230,7 @@ export const createBrandSchema = z.object({
   seoDescription: z.string().trim().nullable().optional(),
   sort: z.coerce.number().int().default(0),
   visible: z.boolean().default(true),
+  translations: brandTranslationsSchema.nullable().optional(),
 })
 
 export type CreateBrandInput = z.input<typeof createBrandSchema>
@@ -161,6 +245,7 @@ export const updateBrandSchema = z.object({
   seoDescription: z.string().trim().nullable().optional(),
   sort: z.coerce.number().int().optional(),
   visible: z.boolean().optional(),
+  translations: brandTranslationsSchema.nullable().optional(),
 })
 
 export type UpdateBrandInput = z.input<typeof updateBrandSchema>
@@ -177,6 +262,55 @@ export const productSetContentPieceSchema = z.object({
 
 export type ProductSetContentPieceInput = z.input<typeof productSetContentPieceSchema>
 export type ProductSetContentPieceOutput = z.output<typeof productSetContentPieceSchema>
+
+/**
+ * English translations schema for products.
+ * Drops empty and whitespace-only strings so Arabic fallback applies.
+ * Set contents rows reuse the productSetContentPieceSchema.
+ */
+export const productTranslationsEnSchema = z
+  .object({
+    name: z.string().trim().nullable().optional(),
+    leadTimeText: z.string().trim().nullable().optional(),
+    warranty: z.string().trim().nullable().optional(),
+    warrantyActivation: z.string().trim().nullable().optional(),
+    origin: z.string().trim().nullable().optional(),
+    seoTitle: z.string().trim().nullable().optional(),
+    seoDescription: z.string().trim().nullable().optional(),
+    setContents: z.array(productSetContentPieceSchema).nullable().optional(),
+  })
+  .transform((data) => {
+    const res: {
+      name?: string
+      leadTimeText?: string
+      warranty?: string
+      warrantyActivation?: string
+      origin?: string
+      seoTitle?: string
+      seoDescription?: string
+      setContents?: z.output<typeof productSetContentPieceSchema>[]
+    } = {}
+    if (data.name && data.name.length > 0) res.name = data.name
+    if (data.leadTimeText && data.leadTimeText.length > 0) res.leadTimeText = data.leadTimeText
+    if (data.warranty && data.warranty.length > 0) res.warranty = data.warranty
+    if (data.warrantyActivation && data.warrantyActivation.length > 0)
+      res.warrantyActivation = data.warrantyActivation
+    if (data.origin && data.origin.length > 0) res.origin = data.origin
+    if (data.seoTitle && data.seoTitle.length > 0) res.seoTitle = data.seoTitle
+    if (data.seoDescription && data.seoDescription.length > 0) res.seoDescription = data.seoDescription
+    if (data.setContents && data.setContents.length > 0) res.setContents = data.setContents
+    return res
+  })
+
+export type ProductTranslationsEnInput = z.input<typeof productTranslationsEnSchema>
+export type ProductTranslationsEn = z.output<typeof productTranslationsEnSchema>
+
+export const productTranslationsSchema = z.object({
+  en: productTranslationsEnSchema.optional(),
+})
+
+export type ProductTranslationsInput = z.input<typeof productTranslationsSchema>
+export type ProductTranslations = z.output<typeof productTranslationsSchema>
 
 /**
  * Product creation schema.
@@ -210,6 +344,7 @@ export const createProductSchema = z
     seoTitle: z.string().trim().nullable().optional(),
     seoDescription: z.string().trim().nullable().optional(),
     taxRate: z.coerce.number().int().min(0, 'نسبة الضريبة لا يمكن أن تكون سالبة').default(14),
+    translations: productTranslationsSchema.nullable().optional(),
   })
   .superRefine((data, ctx) => {
     if (data.oldPrice !== null && data.oldPrice !== undefined) {
@@ -253,6 +388,7 @@ export const updateProductSchema = z
     seoTitle: z.string().trim().nullable().optional(),
     seoDescription: z.string().trim().nullable().optional(),
     taxRate: z.coerce.number().int().min(0, 'نسبة الضريبة لا يمكن أن تكون سالبة').optional(),
+    translations: productTranslationsSchema.nullable().optional(),
   })
   .superRefine((data, ctx) => {
     if (

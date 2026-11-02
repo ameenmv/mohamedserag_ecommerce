@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common'
-import type { PublicHome } from '@serag/shared'
+import { homeContentForLocale, type PublicHome } from '@serag/shared'
 import { PrismaService } from '../prisma/prisma.service.js'
 import { parseStoredHome } from './home-content.js'
+import { currentLocale } from '../common/content-locale.middleware.js'
 
 @Injectable()
 export class ContentService {
@@ -25,7 +26,7 @@ export class ContentService {
     if (!version) {
       const defaults = parseStoredHome(undefined, undefined)
       return {
-        sections: defaults.sections,
+        sections: homeContentForLocale(defaults.sections, null, currentLocale()),
         layout: defaults.layout,
         publishedAt: null,
       }
@@ -33,7 +34,7 @@ export class ContentService {
 
     const parsed = parseStoredHome(version.data, version.layout)
     return {
-      sections: parsed.sections,
+      sections: homeContentForLocale(parsed.sections, parsed.english, currentLocale()),
       layout: parsed.layout,
       publishedAt: version.publishedAt?.toISOString() ?? null,
     }

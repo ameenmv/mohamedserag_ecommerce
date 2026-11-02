@@ -25,8 +25,8 @@ export class OffersService {
           include: {
             product: {
               include: {
-                brand: { select: { slug: true, name: true, visible: true } },
-                category: { select: { slug: true, name: true, visible: true } },
+                brand: { select: { slug: true, name: true, visible: true, translations: true } },
+                category: { select: { slug: true, name: true, visible: true, translations: true } },
                 images: { orderBy: [{ sort: 'asc' }, { createdAt: 'asc' }], take: 1 },
               },
             },
@@ -123,8 +123,8 @@ export class OffersService {
       const products = await this.prisma.product.findMany({
         where: { id: { in: discountedIds } },
         include: {
-          brand: { select: { slug: true, name: true } },
-          category: { select: { slug: true, name: true } },
+          brand: { select: { slug: true, name: true, translations: true } },
+          category: { select: { slug: true, name: true, translations: true } },
           images: { orderBy: [{ sort: 'asc' }, { createdAt: 'asc' }], take: 1 },
         },
       })

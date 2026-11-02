@@ -1,13 +1,14 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Ip,
   Post,
 } from '@nestjs/common'
 import { Throttle } from '@nestjs/throttler'
-import { reviewInputSchema, type ReviewInput } from '@serag/shared'
+import { reviewInputSchema, type ReviewInput, type StoreReviewsResponse } from '@serag/shared'
 import { Public } from '../auth/decorators.js'
 import { ZodValidationPipe } from '../common/zod-validation.pipe.js'
 import { ReviewsService } from './reviews.service.js'
@@ -15,6 +16,16 @@ import { ReviewsService } from './reviews.service.js'
 @Controller('reviews')
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
+
+  /**
+   * GET /api/reviews/latest
+   * The newest approved 4–5 star reviews across the store, for the home page.
+   */
+  @Get('latest')
+  @Public()
+  async latest(): Promise<StoreReviewsResponse> {
+    return this.reviewsService.listLatest(12)
+  }
 
   /**
    * POST /api/reviews

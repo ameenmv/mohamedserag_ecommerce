@@ -140,6 +140,8 @@ model Category {
   intro          String?
   seoTitle       String?       @map("seo_title")
   seoDescription String?       @map("seo_description")
+  /// English text for the /en storefront: { en: { name, intro, seoTitle, seoDescription } }
+  translations   Json          @default("{}")
   sort           Int           @default(0)
   visible        Boolean       @default(true)
   products       Product[]
@@ -161,6 +163,8 @@ model Brand {
   intro          String?
   seoTitle       String?   @map("seo_title")
   seoDescription String?   @map("seo_description")
+  /// English text for the /en storefront: { en: { name, intro, seoTitle, seoDescription } }
+  translations   Json      @default("{}")
   sort           Int       @default(0)
   visible        Boolean   @default(true)
   products       Product[]
@@ -204,6 +208,8 @@ model Product {
   etaItemCode        String?          @map("eta_item_code")
   seoTitle           String?          @map("seo_title")
   seoDescription     String?          @map("seo_description")
+  /// English text for the /en storefront: { en: { name, leadTimeText, warranty, warrantyActivation, origin, seoTitle, seoDescription, setContents } }
+  translations       Json             @default("{}")
   /// Normalized Arabic search text (folded letters, Latin digits, expanded synonyms)
   searchText         String           @default("") @map("search_text")
   images             ProductImage[]
@@ -593,6 +599,8 @@ model Page {
   body           String
   seoTitle       String?  @map("seo_title")
   seoDescription String?  @map("seo_description")
+  /// English text for the /en storefront: { en: { title, body, seoTitle, seoDescription } }
+  translations   Json     @default("{}")
   published      Boolean  @default(false)
   createdAt      DateTime @default(now()) @map("created_at")
   updatedAt      DateTime @updatedAt @map("updated_at")
@@ -612,6 +620,8 @@ model Guide {
   productIds     String[]  @default([]) @map("product_ids")
   seoTitle       String?   @map("seo_title")
   seoDescription String?   @map("seo_description")
+  /// English text for the /en storefront: { en: { title, summary, body, seoTitle, seoDescription } }
+  translations   Json      @default("{}")
   published      Boolean   @default(false)
   publishedAt    DateTime? @map("published_at")
   createdAt      DateTime  @default(now()) @map("created_at")

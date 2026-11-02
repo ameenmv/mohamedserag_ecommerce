@@ -44,8 +44,8 @@ function onSelect(answerId: string): void {
       <label
         v-for="answer in question.answers"
         :key="answer.id"
-        class="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border border-border bg-card px-4 py-3 text-sm font-semibold text-foreground transition-colors hover:border-serag-gold/60 focus-within:ring-2 focus-within:ring-ring motion-reduce:transition-none"
-        :class="selected === answer.id ? 'border-serag-gold bg-serag-gold/10' : ''"
+        class="flex min-h-14 cursor-pointer items-center gap-3 rounded-2xl border-2 border-border bg-background px-4 py-3 text-sm font-bold sm:text-base text-foreground transition-colors hover:border-serag-gold/60 focus-within:ring-2 focus-within:ring-ring motion-reduce:transition-none"
+        :class="selected === answer.id ? 'border-serag-green bg-serag-cream' : ''"
       >
         <input
           type="radio"
@@ -53,15 +53,15 @@ function onSelect(answerId: string): void {
           :value="answer.id"
           :checked="selected === answer.id"
           :disabled="disabled"
-          class="size-4 shrink-0 accent-serag-green"
+          class="size-5 shrink-0 accent-serag-green"
           @change="onSelect(answer.id)"
         >
         <span>{{ answer.text }}</span>
       </label>
 
       <label
-        class="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border border-dashed border-border bg-muted/30 px-4 py-3 text-sm font-semibold text-muted-foreground transition-colors hover:border-serag-gold/60 focus-within:ring-2 focus-within:ring-ring motion-reduce:transition-none"
-        :class="selected === unsureValue ? 'border-serag-gold bg-serag-gold/10 text-foreground' : ''"
+        class="flex min-h-14 cursor-pointer items-center gap-3 rounded-2xl border-2 border-dashed border-border bg-muted/30 px-4 py-3 text-sm font-bold sm:text-base text-muted-foreground transition-colors hover:border-serag-gold/60 focus-within:ring-2 focus-within:ring-ring motion-reduce:transition-none"
+        :class="selected === unsureValue ? 'border-serag-green bg-serag-cream text-foreground' : ''"
       >
         <input
           type="radio"
@@ -69,7 +69,7 @@ function onSelect(answerId: string): void {
           :value="unsureValue"
           :checked="selected === unsureValue"
           :disabled="disabled"
-          class="size-4 shrink-0 accent-serag-green"
+          class="size-5 shrink-0 accent-serag-green"
           @change="onSelect(unsureValue)"
         >
         <span>{{ t('store.quiz.unsure') }}</span>

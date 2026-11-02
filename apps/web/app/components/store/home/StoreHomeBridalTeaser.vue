@@ -32,7 +32,7 @@ const headingId = useId()
     <div class="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
       <div class="flex flex-wrap items-end justify-between gap-6">
         <div class="max-w-2xl">
-          <p class="text-xs font-bold tracking-[0.25em] text-serag-gold-hi uppercase">
+          <p class="eyebrow text-serag-gold-hi">
             {{ content.eyebrow }}
           </p>
           <h2

@@ -9,7 +9,7 @@ export function useLocalBusinessJsonLd(): void {
   const siteUrl = String(config.public.siteUrl)
   const storeApi = useStoreApi()
 
-  const { data } = useAsyncData('store:info', () => storeApi.storeInfo())
+  const { data } = useAsyncData('store:info', () => storeApi.storeInfo(), { getCachedData: payloadCache })
 
   const jsonLd = computed(() => {
     const info = data.value

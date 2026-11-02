@@ -1,4 +1,4 @@
-import type { HomeSectionId } from '@serag/shared'
+import { TRADER_REELS_MAX, type HomeSectionId } from '@serag/shared'
 
 /**
  * Editable field kinds for the home CMS editor. Each kind maps to a control
@@ -14,6 +14,8 @@ export type HomeFieldKind =
   | 'uspItems'
   | 'stringList'
   | 'categorySlugs'
+  | 'reels'
+  | 'appliance'
 
 export interface HomeFieldMeta {
   /** Top-level key on the section content object. */
@@ -27,6 +29,10 @@ export interface HomeFieldMeta {
   minItems?: number
   /** Maximum number of items for repeater kinds. */
   maxItems?: number
+  /** Value input character limit for stats/callouts repeater. */
+  valueMax?: number
+  /** Optional i18n key for a hint displayed below the field. */
+  hintKey?: string
 }
 
 export interface HomeSectionMeta {
@@ -108,6 +114,29 @@ export const HOME_SECTION_META: Record<HomeSectionId, HomeSectionMeta> = {
       { key: 'subtitle', kind: 'textarea', labelKey: 'admin.content.fields.flash.subtitle', max: 120 },
     ],
   },
+  productStory: {
+    nameKey: 'admin.content.sections.productStory',
+    fields: [
+      { key: 'title', kind: 'text', labelKey: 'admin.content.fields.productStory.title', max: 80 },
+      { key: 'appliance', kind: 'appliance', labelKey: 'admin.content.fields.productStory.appliance', max: 20 },
+      {
+        key: 'productSlug',
+        kind: 'text',
+        labelKey: 'admin.content.fields.productStory.productSlug',
+        hintKey: 'admin.content.fields.productStory.productSlugHint',
+        max: 120,
+      },
+      {
+        key: 'callouts',
+        kind: 'stats',
+        labelKey: 'admin.content.fields.productStory.callouts',
+        max: 60,
+        valueMax: 24,
+        minItems: 2,
+        maxItems: 4,
+      },
+    ],
+  },
   bridalTeaser: {
     nameKey: 'admin.content.sections.bridalTeaser',
     fields: [
@@ -166,6 +195,27 @@ export const HOME_SECTION_META: Record<HomeSectionId, HomeSectionMeta> = {
     nameKey: 'admin.content.sections.partners',
     fields: [
       { key: 'title', kind: 'text', labelKey: 'admin.content.fields.partners.title', max: 60 },
+    ],
+  },
+  traderReels: {
+    nameKey: 'admin.content.sections.traderReels',
+    fields: [
+      {
+        key: 'items',
+        kind: 'reels',
+        labelKey: 'admin.content.fields.traderReels.items',
+        max: 80,
+        maxItems: TRADER_REELS_MAX,
+      },
+    ],
+  },
+  reviews: {
+    nameKey: 'admin.content.sections.reviews',
+    fields: [
+      { key: 'eyebrow', kind: 'text', labelKey: 'admin.content.fields.reviews.eyebrow', max: 40 },
+      { key: 'title', kind: 'text', labelKey: 'admin.content.fields.reviews.title', max: 60 },
+      { key: 'highlight', kind: 'text', labelKey: 'admin.content.fields.reviews.highlight', max: 30 },
+      { key: 'subtitle', kind: 'textarea', labelKey: 'admin.content.fields.reviews.subtitle', max: 200 },
     ],
   },
   guides: {

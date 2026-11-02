@@ -2,6 +2,7 @@ import { afterEach, test } from '@e2e-dev/web'
 import { expect } from 'e2e'
 import { createSeed } from './support/seed.js'
 import { waitForHydration } from './support/hydration.js'
+import { BRIDAL_SKIP } from './support/features.js'
 
 let seed = createSeed()
 
@@ -10,7 +11,7 @@ afterEach(async () => {
   seed = createSeed()
 })
 
-test('bridal product page button: add from product page, toast link navigation, second product appends to same list by category room, and funnel events', async ({
+test('bridal product page button: add from product page, toast link navigation, second product appends to same list by category room, and funnel events', { skip: BRIDAL_SKIP }, async ({
   app,
   screen,
   browser,

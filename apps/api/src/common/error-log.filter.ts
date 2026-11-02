@@ -9,9 +9,11 @@ import {
 } from '@nestjs/common'
 import { AbstractHttpAdapter, BaseExceptionFilter, HttpAdapterHost } from '@nestjs/core'
 import type { HttpServer } from '@nestjs/common'
+import * as Sentry from '@sentry/nestjs'
 import type { Request } from 'express'
 import { getRequestId } from './request-id.middleware.js'
 import { redactPii } from './redact-pii.js'
+import { buildSentryContext } from './sentry-context.js'
 
 function getExceptionName(exception: unknown): string {
   if (exception instanceof Error) {
@@ -107,6 +109,17 @@ export class ErrorLogFilter extends BaseExceptionFilter {
       } else {
         this.logger.error(entry)
       }
+
+      // Server errors only; a no-op until Sentry is started (SENTRY_DSN), and the event is scrubbed
+      // of personal data in instrument.ts before it is sent
+      const context = buildSentryContext(req, status)
+      Sentry.withScope((scope) => {
+        scope.setTransactionName(context.transaction)
+        scope.setTags(context.tags)
+        scope.setContext('request', context.request)
+        if (context.userId) scope.setUser({ id: context.userId })
+        Sentry.captureException(exception)
+      })
     }
 
     super.catch(exception, host)

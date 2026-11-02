@@ -14,6 +14,7 @@ import { FileInterceptor } from '@nestjs/platform-express'
 import {
   homeDraftInputSchema,
   homePublishInputSchema,
+  reelPreviewInputSchema,
   PERMISSIONS,
   type AdminHomeState,
   type HomeDraftOutput,
@@ -80,6 +81,16 @@ export class AdminContentController {
     @CurrentAdmin() admin: AdminContext | undefined,
   ): Promise<AdminHomeState> {
     return this.adminContentService.restore(id, admin?.userId ?? null)
+  }
+
+  @Post('reels/preview')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission(PERMISSIONS.content.manage)
+  @Audit('content')
+  async previewReel(
+    @Body(new ZodValidationPipe(reelPreviewInputSchema)) body: { url: string },
+  ): Promise<{ url: string; image: string | null; title: string | null }> {
+    return this.adminContentService.previewReel(body.url)
   }
 
   @Post('images')

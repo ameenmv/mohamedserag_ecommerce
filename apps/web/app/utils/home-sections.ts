@@ -1,4 +1,7 @@
 import type { HomeContent, HomeLayout, HomeSectionId } from '@serag/shared'
+import { FEATURES } from '../constants/features'
+
+export const MIN_HOME_REVIEWS = 4
 
 /**
  * Live data available at render time, used to decide whether a dynamic
@@ -10,6 +13,8 @@ export interface HomeLiveData {
   partnerCount: number
   guideCount: number
   featuredCategoryCount: number
+  storyProduct: boolean
+  reviewCount: number
 }
 
 function hasText(value: string): boolean {
@@ -35,6 +40,12 @@ function isHomeSectionEmpty(
       return live.flashCount === 0
     case 'partners':
       return live.partnerCount === 0
+    case 'traderReels':
+      return sections.traderReels.items.length === 0
+    case 'productStory':
+      return !live.storyProduct
+    case 'reviews':
+      return live.reviewCount < MIN_HOME_REVIEWS
     case 'guides':
       return live.guideCount === 0
     default:
@@ -55,6 +66,8 @@ export function visibleHomeSections(
   const result: HomeSectionId[] = []
   for (const id of layout.order) {
     if (hidden.has(id)) continue
+    // A switched-off feature's teaser never renders, whatever the published layout says
+    if (id === 'bridalTeaser' && !FEATURES.bridal) continue
     if (isHomeSectionEmpty(id, sections, live)) continue
     result.push(id)
   }

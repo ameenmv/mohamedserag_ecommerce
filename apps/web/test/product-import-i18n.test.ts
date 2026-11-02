@@ -1,7 +1,13 @@
 import { PRODUCT_IMPORT_ERROR_KEYS } from '@serag/shared'
 import { describe, expect, it } from 'vitest'
+import adminAr from '../i18n/admin/ar.json'
+import adminEn from '../i18n/admin/en.json'
 import ar from '../i18n/locales/ar.json'
 import en from '../i18n/locales/en.json'
+
+// The product-import messages live under `admin`, whose files are separate from the storefront's
+const arMessages = { ...ar, ...adminAr }
+const enMessages = { ...en, ...adminEn }
 
 function flattenKeys(obj: Record<string, unknown>, prefix = ''): Record<string, string> {
   const result: Record<string, string> = {}
@@ -17,8 +23,8 @@ function flattenKeys(obj: Record<string, unknown>, prefix = ''): Record<string, 
 }
 
 describe('product import i18n parity', () => {
-  const arFlat = flattenKeys(ar)
-  const enFlat = flattenKeys(en)
+  const arFlat = flattenKeys(arMessages)
+  const enFlat = flattenKeys(enMessages)
 
   it('ensures every PRODUCT_IMPORT_ERROR_KEYS used in @serag/shared exists in ar.json and en.json', () => {
     const sharedErrorKeys = Object.values(PRODUCT_IMPORT_ERROR_KEYS)

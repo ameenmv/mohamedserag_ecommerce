@@ -37,10 +37,37 @@ const guideSelect = {
   productIds: true,
   seoTitle: true,
   seoDescription: true,
+  translations: true,
   published: true,
   publishedAt: true,
   updatedAt: true,
 } satisfies Prisma.GuideSelect
+
+function cleanGuideTranslations(
+  translations: GuideInputOutput['translations'],
+): Prisma.InputJsonValue {
+  if (!translations || !translations.en) return {}
+  const en: Record<string, string> = {}
+  if (translations.en.title && translations.en.title.trim().length > 0) {
+    en.title = translations.en.title.trim()
+  }
+  if (translations.en.summary && translations.en.summary.trim().length > 0) {
+    en.summary = translations.en.summary.trim()
+  }
+  if (translations.en.body) {
+    const cleanBody = sanitizeRichText(translations.en.body, 'guide')
+    if (cleanBody && cleanBody.trim().length > 0) {
+      en.body = cleanBody
+    }
+  }
+  if (translations.en.seoTitle && translations.en.seoTitle.trim().length > 0) {
+    en.seoTitle = translations.en.seoTitle.trim()
+  }
+  if (translations.en.seoDescription && translations.en.seoDescription.trim().length > 0) {
+    en.seoDescription = translations.en.seoDescription.trim()
+  }
+  return Object.keys(en).length > 0 ? { en } : {}
+}
 
 type GuideRow = Prisma.GuideGetPayload<{ select: typeof guideSelect }>
 type CategorySummary = AdminGuide['categories'][number]
@@ -108,6 +135,7 @@ export class AdminGuidesService {
           seoDescription: input.seoDescription,
           published: input.published,
           publishedAt: input.published ? new Date() : null,
+          translations: cleanGuideTranslations(input.translations),
         },
         select: guideSelect,
       })
@@ -162,6 +190,9 @@ export class AdminGuidesService {
       ...(patch.seoDescription !== undefined ? { seoDescription: patch.seoDescription } : {}),
       ...(patch.published !== undefined ? { published: patch.published } : {}),
       ...(firstPublish ? { publishedAt: new Date() } : {}),
+      ...(patch.translations !== undefined
+        ? { translations: cleanGuideTranslations(patch.translations) }
+        : {}),
     }
 
     try {
@@ -266,6 +297,7 @@ export class AdminGuidesService {
       productIds: [...row.productIds],
       seoTitle: row.seoTitle,
       seoDescription: row.seoDescription,
+      translations: (row.translations as AdminGuide['translations']) ?? null,
       categories,
       products,
     }

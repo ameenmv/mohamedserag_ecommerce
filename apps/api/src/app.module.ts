@@ -34,7 +34,9 @@ import { TestSeedModule } from './test-seed/test-seed.module.js'
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ['../../.env', '.env'] }),
     TestSeedModule.forRoot(),
-    ThrottlerModule.forRoot([{ ttl: 60_000, limit: 120 }]),
+    // 120 requests a minute per visitor. THROTTLE_LIMIT raises it only where one address stands for
+    // many visitors on purpose: CI's browser suite, whose every test shares the runner's IP.
+    ThrottlerModule.forRoot([{ ttl: 60_000, limit: Number(process.env.THROTTLE_LIMIT) || 120 }]),
     PrismaModule,
     SettingsModule,
     PromotionsModule,

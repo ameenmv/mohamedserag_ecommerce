@@ -76,6 +76,27 @@ export function buildRequestHeaders(
 type ApiFetchOptions = NonNullable<Parameters<typeof $fetch>[1]>
 
 /**
+ * True when the page being rendered is the English storefront. Uses the i18n locale, and the URL
+ * when the Nuxt context is gone (a call made after an `await`).
+ */
+export function isEnglishPage(): boolean {
+  const locale = tryUseNuxtApp()?.$i18n?.locale.value
+  if (locale) return locale === 'en'
+  const path = import.meta.server
+    ? (tryUseNuxtApp()?.ssrContext?.event.path ?? '')
+    : typeof window !== 'undefined'
+      ? window.location.pathname
+      : ''
+  return /^\/en(?:\/|$|\?)/.test(path)
+}
+
+/** Store API paths answer in English for `?lang=en`; admin and auth calls always stay Arabic. */
+function withContentLocale(path: string, query: ApiFetchOptions['query']): ApiFetchOptions['query'] {
+  if (/^\/(?:admin|auth)(?:\/|$)/.test(path) || !isEnglishPage()) return query
+  return { ...(query ?? {}), lang: 'en' }
+}
+
+/**
  * Typed `$fetch` against the backend API that always targets the resolved base URL and
  * forwards the SSR visitor IP for per-visitor rate limiting.
  * All backend API calls should go through this helper rather than calling `$fetch` directly.
@@ -87,6 +108,7 @@ export function apiFetch<T = unknown>(
   const headers = mergeForwardingHeaders(new Headers(options.headers))
   return ($fetch as <R>(url: string, opts?: ApiFetchOptions) => Promise<R>)<T>(path, {
     ...options,
+    query: withContentLocale(path, options.query),
     baseURL: options.baseURL ?? getApiBaseUrl(),
     headers,
   })

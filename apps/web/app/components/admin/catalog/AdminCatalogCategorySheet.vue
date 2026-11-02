@@ -43,6 +43,14 @@ const form = reactive({
   seoTitle: '',
   seoDescription: '',
   visible: true,
+  translations: {
+    en: {
+      name: '',
+      intro: '',
+      seoTitle: '',
+      seoDescription: '',
+    },
+  },
 })
 
 watch(
@@ -60,6 +68,11 @@ watch(
         form.seoTitle = props.category.seoTitle ?? ''
         form.seoDescription = props.category.seoDescription ?? ''
         form.visible = props.category.visible
+        const en = props.category.translations?.en
+        form.translations.en.name = en?.name ?? ''
+        form.translations.en.intro = en?.intro ?? ''
+        form.translations.en.seoTitle = en?.seoTitle ?? ''
+        form.translations.en.seoDescription = en?.seoDescription ?? ''
       } else {
         form.name = ''
         form.slug = ''
@@ -69,6 +82,10 @@ watch(
         form.seoTitle = ''
         form.seoDescription = ''
         form.visible = true
+        form.translations.en.name = ''
+        form.translations.en.intro = ''
+        form.translations.en.seoTitle = ''
+        form.translations.en.seoDescription = ''
       }
     }
   },
@@ -84,7 +101,7 @@ async function handleSubmit() {
   errors.value = {}
   serverError.value = ''
 
-  const payload = {
+  const payload: CreateCategoryInput = {
     name: form.name.trim(),
     slug: form.slug.trim(),
     parentId: form.parentId ? form.parentId : null,
@@ -93,6 +110,14 @@ async function handleSubmit() {
     seoTitle: form.seoTitle.trim() || null,
     seoDescription: form.seoDescription.trim() || null,
     visible: form.visible,
+    translations: {
+      en: {
+        name: form.translations.en.name.trim() || undefined,
+        intro: form.translations.en.intro.trim() || undefined,
+        seoTitle: form.translations.en.seoTitle.trim() || undefined,
+        seoDescription: form.translations.en.seoDescription.trim() || undefined,
+      },
+    },
   }
 
   const schema = isEdit.value ? updateCategorySchema : createCategorySchema
@@ -282,6 +307,100 @@ async function handleSubmit() {
             />
           </template>
         </FormField>
+
+        <!-- English (for the /en site) Section -->
+        <div class="rounded-xl border border-border bg-muted/20 p-4 flex flex-col gap-3">
+          <div class="flex flex-col gap-0.5">
+            <h3 class="text-sm font-bold text-foreground">
+              {{ t('admin.catalog.english.sectionTitle') }}
+            </h3>
+            <p class="text-xs text-muted-foreground">
+              {{ t('admin.catalog.english.sectionHint') }}
+            </p>
+          </div>
+
+          <FormField
+            id="cat-name-en"
+            :label="t('admin.catalog.english.name')"
+            :error="errors['translations.en.name']"
+          >
+            <template #default="{ id, invalid, describedBy }">
+              <Input
+                :id="id"
+                v-model="form.translations.en.name"
+                type="text"
+                dir="ltr"
+                lang="en"
+                :placeholder="t('admin.catalog.english.namePlaceholder')"
+                :disabled="saving"
+                :aria-invalid="invalid"
+                :aria-describedby="describedBy"
+                class="h-10 rounded-lg text-start"
+              />
+            </template>
+          </FormField>
+
+          <FormField
+            id="cat-intro-en"
+            :label="t('admin.catalog.english.intro')"
+            :error="errors['translations.en.intro']"
+          >
+            <template #default="{ id, invalid, describedBy }">
+              <AdminFormTextarea
+                :id="id"
+                v-model="form.translations.en.intro"
+                :rows="2"
+                dir="ltr"
+                lang="en"
+                :placeholder="t('admin.catalog.english.introPlaceholder')"
+                :disabled="saving"
+                :aria-invalid="invalid"
+                :aria-describedby="describedBy"
+                class="text-start"
+              />
+            </template>
+          </FormField>
+
+          <FormField
+            id="cat-seo-title-en"
+            :label="t('admin.catalog.english.seoTitle')"
+            :error="errors['translations.en.seoTitle']"
+          >
+            <template #default="{ id, invalid, describedBy }">
+              <Input
+                :id="id"
+                v-model="form.translations.en.seoTitle"
+                type="text"
+                dir="ltr"
+                lang="en"
+                :disabled="saving"
+                :aria-invalid="invalid"
+                :aria-describedby="describedBy"
+                class="h-10 rounded-lg text-start"
+              />
+            </template>
+          </FormField>
+
+          <FormField
+            id="cat-seo-desc-en"
+            :label="t('admin.catalog.english.seoDescription')"
+            :error="errors['translations.en.seoDescription']"
+          >
+            <template #default="{ id, invalid, describedBy }">
+              <AdminFormTextarea
+                :id="id"
+                v-model="form.translations.en.seoDescription"
+                :rows="2"
+                dir="ltr"
+                lang="en"
+                :disabled="saving"
+                :aria-invalid="invalid"
+                :aria-describedby="describedBy"
+                class="text-start"
+              />
+            </template>
+          </FormField>
+        </div>
 
         <div class="flex items-center justify-between rounded-xl border border-border p-3 mt-1">
           <span class="text-sm font-semibold">{{ t('admin.catalog.categories.visible') }}</span>

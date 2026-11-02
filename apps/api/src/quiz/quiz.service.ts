@@ -119,8 +119,8 @@ export class QuizService {
       this.prisma.product.findMany({
         where: { id: { in: ids } },
         include: {
-          brand: { select: { slug: true, name: true } },
-          category: { select: { slug: true, name: true } },
+          brand: { select: { slug: true, name: true, translations: true } },
+          category: { select: { slug: true, name: true, translations: true } },
           images: { orderBy: [{ sort: 'asc' }, { createdAt: 'asc' }], take: 1 },
         },
       }),

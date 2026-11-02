@@ -14,7 +14,7 @@ import { parseAdminApiError } from '~/utils/admin-api-errors'
 import {
   deserializeReportQuery,
   serializeReportQuery,
-  toApiQuery,
+  toAdminReportApiQuery,
   validateReportQuery,
   type AdminReportPayload,
   type AdminReportQueryState,
@@ -55,7 +55,7 @@ export function useAdminReports() {
   })
 
   function resolvedRange(): { from: string; to: string } {
-    const query = toApiQuery(state.value, new Date())
+    const query = toAdminReportApiQuery(state.value, new Date())
     return { from: query.from, to: query.to }
   }
 
@@ -85,7 +85,7 @@ export function useAdminReports() {
     loading.value = true
     fetchError.value = null
     try {
-      const query = toApiQuery(state.value, new Date())
+      const query = toAdminReportApiQuery(state.value, new Date())
       const kind = state.value.tab
       let next: AdminReportPayload
       switch (kind) {
@@ -192,7 +192,7 @@ export function useAdminReports() {
     if (queryError.value !== null) return null
     const base = config.public.apiBase || '/api'
     const target = kind ?? state.value.tab
-    const query = toApiQuery(state.value, new Date())
+    const query = toAdminReportApiQuery(state.value, new Date())
     const params = new URLSearchParams(query)
     return `${base}/admin/reports/${target}/export?${params.toString()}`
   }

@@ -7,15 +7,16 @@ import {
   isEditableTarget,
   stepShortcutSequence,
 } from '../app/utils/shortcuts'
+import { FEATURES } from '../app/constants/features'
 
 describe('ADMIN_NAV_SHORTCUTS', () => {
-  it('maps all eleven admin routes to their expected G-chord letters', () => {
+  it('maps the admin routes to their expected G-chord letters (bridal only while it is switched on)', () => {
     expect(ADMIN_SHORTCUT_ROUTES).toEqual({
       h: '/admin',
       o: '/admin/orders',
       p: '/admin/products',
       c: '/admin/catalog',
-      b: '/admin/bridal',
+      ...(FEATURES.bridal ? { b: '/admin/bridal' } : {}),
       m: '/admin/promotions',
       n: '/admin/notify',
       r: '/admin/reviews',
@@ -23,7 +24,7 @@ describe('ADMIN_NAV_SHORTCUTS', () => {
       t: '/admin/reports',
       s: '/admin/settings',
     })
-    expect(ADMIN_NAV_SHORTCUTS).toHaveLength(11)
+    expect(ADMIN_NAV_SHORTCUTS).toHaveLength(FEATURES.bridal ? 11 : 10)
     for (const item of ADMIN_NAV_SHORTCUTS) {
       expect(item.labelKey).toMatch(/^admin\.nav\./)
       expect(['main', 'store', 'content', 'system']).toContain(item.group)

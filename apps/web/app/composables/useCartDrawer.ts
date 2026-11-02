@@ -3,8 +3,11 @@
  */
 export function useCartDrawer() {
   const isOpen = useState<boolean>('storefront-cart-drawer-open', () => false)
+  const notify = useNotify()
 
+  // The drawer shows the cart itself, so an "added to cart" toast over its buttons is just noise.
   function open(): void {
+    notify.dismissAll()
     isOpen.value = true
   }
 
@@ -13,7 +16,8 @@ export function useCartDrawer() {
   }
 
   function toggle(): void {
-    isOpen.value = !isOpen.value
+    if (isOpen.value) close()
+    else open()
   }
 
   return {

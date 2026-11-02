@@ -25,7 +25,7 @@ function isNumeric(spec: ProductDetailMergedSpec): boolean {
 <template>
   <section
     v-if="specs && specs.length > 0"
-    class="rounded-3xl border border-border bg-card p-5 sm:p-6"
+    class="rounded-[28px] border border-border bg-card p-5 sm:p-7"
     :aria-label="t('store.productPage.specs.title')"
   >
     <h2 class="mb-4 text-base font-bold text-foreground sm:text-lg">
@@ -43,7 +43,7 @@ function isNumeric(spec: ProductDetailMergedSpec): boolean {
             :key="spec.key"
             :class="[
               'border-b border-border/60 last:border-0 transition-colors',
-              idx % 2 === 0 ? 'bg-serag-ivory/30 dark:bg-muted/15' : 'bg-background',
+              idx % 2 === 0 ? 'bg-serag-cream/70 dark:bg-muted/15' : 'bg-background',
             ]"
           >
             <th
@@ -52,13 +52,9 @@ function isNumeric(spec: ProductDetailMergedSpec): boolean {
             >
               {{ spec.label }}
             </th>
-            <td
-              :class="[
-                'w-3/5 p-3.5 sm:px-5 sm:py-4 text-start text-foreground/80',
-                isNumeric(spec) ? 'num font-medium' : '',
-              ]"
-            >
-              {{ formatSpecValue(spec) }}
+            <!-- num on an inner span: on the cell its LTR direction pushed numbers to the far side -->
+            <td class="w-3/5 p-3.5 text-start font-semibold text-foreground/85 sm:px-5 sm:py-4">
+              <span :class="isNumeric(spec) ? 'num inline-block' : ''">{{ formatSpecValue(spec) }}</span>
             </td>
           </tr>
         </tbody>

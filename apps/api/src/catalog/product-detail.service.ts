@@ -1,5 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import {
+  localizedArray,
+  localizedSpec,
+  localizedText,
   specTemplateFieldSchema,
   type ProductCard,
   type ProductDetail,
@@ -10,6 +13,7 @@ import {
 } from '@serag/shared'
 import { z } from 'zod'
 import { PrismaService } from '../prisma/prisma.service.js'
+import { currentLocale } from '../common/content-locale.middleware.js'
 import { FlashPricingService } from '../promotions/flash-pricing.service.js'
 import { ReviewRatingsService } from '../reviews/review-ratings.service.js'
 import { popularityJoinSql, toProductCard } from './product-query.js'
@@ -50,13 +54,14 @@ export class ProductDetailService {
         category: { visible: true },
       },
       include: {
-        brand: { select: { slug: true, name: true, logoUrl: true } },
+        brand: { select: { slug: true, name: true, logoUrl: true, translations: true } },
         category: {
           select: {
             id: true,
             slug: true,
             name: true,
-            parent: { select: { slug: true, name: true, visible: true } },
+            translations: true,
+            parent: { select: { slug: true, name: true, visible: true, translations: true } },
             specTemplate: true,
           },
         },
@@ -110,15 +115,14 @@ export class ProductDetailService {
     const mergedSpecs: ProductDetailMergedSpec[] = []
     const seenSpecKeys = new Set<string>()
 
+    const locale = currentLocale()
     for (const field of templateFields) {
       const val = rawSpecs[field.key]
       if (isSpecValue(val) && val !== '') {
         seenSpecKeys.add(field.key)
         mergedSpecs.push({
           key: field.key,
-          label: field.label,
-          value: val,
-          unit: field.unit ?? null,
+          ...localizedSpec(field, val, locale),
           type: field.type,
         })
       }
@@ -141,8 +145,8 @@ export class ProductDetailService {
       const relatedProducts = await this.prisma.product.findMany({
         where: { id: { in: relatedIds } },
         include: {
-          brand: { select: { slug: true, name: true } },
-          category: { select: { slug: true, name: true } },
+          brand: { select: { slug: true, name: true, translations: true } },
+          category: { select: { slug: true, name: true, translations: true } },
           images: { orderBy: [{ sort: 'asc' }, { createdAt: 'asc' }], take: 1 },
         },
       })
@@ -162,17 +166,27 @@ export class ProductDetailService {
     const detailImages: ProductDetailImage[] = product.images.map((img) => ({
       id: img.id,
       url: img.url,
-      alt: img.alt,
+      // Alt texts are written in Arabic; the English page uses the product name instead
+      alt: locale === 'en' ? card.name : img.alt,
       isReal: img.isReal,
       sort: img.sort,
     }))
 
     const parentBreadcrumb =
       product.category.parent && product.category.parent.visible
-        ? { slug: product.category.parent.slug, name: product.category.parent.name }
+        ? {
+            slug: product.category.parent.slug,
+            name: localizedText(product.category.parent.name, product.category.parent.translations, 'name', locale),
+          }
         : null
 
-    const setContents = Array.isArray(product.setContents) ? (product.setContents as unknown[]) : null
+    const setContents = localizedArray(
+      Array.isArray(product.setContents) ? (product.setContents as unknown[]) : null,
+      product.translations,
+      'setContents',
+      locale,
+    )
+    const tr = product.translations
 
     return {
       id: card.id,
@@ -189,21 +203,21 @@ export class ProductDetailService {
       images: detailImages,
       specs: mergedSpecs,
       setContents,
-      warranty: product.warranty,
-      warrantyActivation: product.warrantyActivation,
-      origin: product.origin,
-      leadTimeText: product.leadTimeText,
+      warranty: localizedText(product.warranty, tr, 'warranty', locale),
+      warrantyActivation: localizedText(product.warrantyActivation, tr, 'warrantyActivation', locale),
+      origin: localizedText(product.origin, tr, 'origin', locale),
+      leadTimeText: card.availability.leadTimeText,
       taxRate: product.taxRate,
-      seoTitle: product.seoTitle,
-      seoDescription: product.seoDescription,
+      seoTitle: localizedText(product.seoTitle, tr, 'seoTitle', locale),
+      seoDescription: localizedText(product.seoDescription, tr, 'seoDescription', locale),
       category: {
         slug: product.category.slug,
-        name: product.category.name,
+        name: card.category.name,
         parent: parentBreadcrumb,
       },
       brand: {
         slug: product.brand.slug,
-        name: product.brand.name,
+        name: card.brand.name,
         logoUrl: product.brand.logoUrl,
       },
       related,

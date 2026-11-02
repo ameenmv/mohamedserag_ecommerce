@@ -67,7 +67,9 @@ const { t } = useI18n()
             :error="errors[`specs.${field.key}`]"
           >
             <template #default="{ id, invalid, describedBy }">
-              <div class="relative flex items-center">
+              <!-- dir="ltr": a number input writes its digits from the left even on a rtl page, so the
+                   unit sits on the right, clear of them -->
+              <div class="relative flex items-center" dir="ltr">
                 <Input
                   :id="id"
                   :model-value="specNumber(form.specs[field.key])"
@@ -76,7 +78,7 @@ const { t } = useI18n()
                   :disabled="disabled"
                   :aria-invalid="invalid"
                   :aria-describedby="describedBy"
-                  class="num h-10 rounded-lg pe-12"
+                  class="num h-10 rounded-lg pe-16"
                   @update:model-value="(val) => (form.specs[field.key] = parseSpecInput('number', val))"
                 />
                 <span

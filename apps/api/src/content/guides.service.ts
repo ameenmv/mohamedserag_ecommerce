@@ -1,8 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
-import type { GuideCard, ProductCard, PublicGuide } from '@serag/shared'
+import { localizedText, type GuideCard, type ProductCard, type PublicGuide } from '@serag/shared'
 import { toProductCard } from '../catalog/product-query.js'
 import { Prisma } from '../generated/prisma/client.js'
 import { PrismaService } from '../prisma/prisma.service.js'
+import { currentLocale } from '../common/content-locale.middleware.js'
 import { FlashPricingService } from '../promotions/flash-pricing.service.js'
 import { ReviewRatingsService } from '../reviews/review-ratings.service.js'
 
@@ -13,6 +14,7 @@ const cardSelect = {
   cover: true,
   publishedAt: true,
   categoryIds: true,
+  translations: true,
 } satisfies Prisma.GuideSelect
 
 const guideSelect = {
@@ -27,6 +29,7 @@ const guideSelect = {
   seoDescription: true,
   publishedAt: true,
   updatedAt: true,
+  translations: true,
 } satisfies Prisma.GuideSelect
 
 type CategoryLabel = { slug: string; name: string }
@@ -58,10 +61,11 @@ export class GuidesService {
 
     const categoriesById = await this.visibleCategoriesMap(rows.flatMap((row) => row.categoryIds))
 
+    const locale = currentLocale()
     const items = rows.map((row) => ({
       slug: row.slug,
-      title: row.title,
-      summary: row.summary,
+      title: localizedText(row.title, row.translations, 'title', locale),
+      summary: localizedText(row.summary, row.translations, 'summary', locale),
       cover: row.cover,
       publishedAt: row.publishedAt?.toISOString() ?? null,
       categories: this.orderedCategories(row.categoryIds, categoriesById),
@@ -83,16 +87,18 @@ export class GuidesService {
     const categoriesById = await this.visibleCategoriesMap(row.categoryIds)
     const products = await this.resolveProductCards(row.productIds)
 
+    const locale = currentLocale()
+    const tr = row.translations
     return {
       slug: row.slug,
-      title: row.title,
-      summary: row.summary,
+      title: localizedText(row.title, tr, 'title', locale),
+      summary: localizedText(row.summary, tr, 'summary', locale),
       cover: row.cover,
-      body: row.body,
+      body: localizedText(row.body, tr, 'body', locale),
       publishedAt: row.publishedAt?.toISOString() ?? null,
       updatedAt: row.updatedAt.toISOString(),
-      seoTitle: row.seoTitle,
-      seoDescription: row.seoDescription,
+      seoTitle: localizedText(row.seoTitle, tr, 'seoTitle', locale),
+      seoDescription: localizedText(row.seoDescription, tr, 'seoDescription', locale),
       categories: this.orderedCategories(row.categoryIds, categoriesById),
       products,
     }
@@ -105,10 +111,13 @@ export class GuidesService {
 
     const rows = await this.prisma.category.findMany({
       where: { id: { in: uniqueIds }, visible: true },
-      select: { id: true, slug: true, name: true },
+      select: { id: true, slug: true, name: true, translations: true },
     })
 
-    return new Map(rows.map((row) => [row.id, { slug: row.slug, name: row.name }]))
+    const locale = currentLocale()
+    return new Map(
+      rows.map((row) => [row.id, { slug: row.slug, name: localizedText(row.name, row.translations, 'name', locale) }]),
+    )
   }
 
   private orderedCategories(
@@ -134,8 +143,8 @@ export class GuidesService {
         category: { visible: true },
       },
       include: {
-        brand: { select: { slug: true, name: true } },
-        category: { select: { slug: true, name: true } },
+        brand: { select: { slug: true, name: true, translations: true } },
+        category: { select: { slug: true, name: true, translations: true } },
         images: { orderBy: [{ sort: 'asc' }, { createdAt: 'asc' }], take: 1 },
       },
     })

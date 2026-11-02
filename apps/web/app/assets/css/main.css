@@ -4,12 +4,755 @@
 @custom-variant dark (&:is(.dark *));
 
 :root:lang(en) {
-  --font-display: 'Outfit', sans-serif;
-  --font-sans: 'Outfit', system-ui, sans-serif;
+  --font-display: 'Bricolage Grotesque', 'Plus Jakarta Sans', sans-serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-num: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+/* The web fonts are applied only once `fonts-ready` is on <html> (an inline head script adds it
+   right after the first paint). Before it the stacks are the system fonts, so no font is requested
+   ahead of the first paint; the splash screen covers the swap. Specificity beats the token and
+   per-language stacks, whichever file defines them. */
+:root:not(.fonts-ready):lang(ar),
+:root:not(.fonts-ready):lang(en) {
+  --font-display: system-ui, sans-serif;
+  --font-sans: system-ui, sans-serif;
+  --font-num: system-ui, sans-serif;
 }
 
 @layer base {
   * { @apply border-border outline-ring/50; }
   body { @apply bg-background text-foreground font-sans antialiased; }
   .num { font-family: var(--font-num); direction: ltr; unicode-bidi: isolate; }
+  /* Tailwind v4 dropped the pointer cursor on buttons; every clickable control gets it back. */
+  :is(button, [role='button'], [role='tab'], [role='menuitem'], [role='option'], [role='checkbox'], [role='radio'], [role='switch'], summary, select, label[for], input:is([type='checkbox'], [type='radio'], [type='submit'], [type='button'], [type='file'], [type='range'])):not(:disabled, [aria-disabled='true']) {
+    cursor: pointer;
+  }
+  :is(button, [role='button'], select, input):is(:disabled, [aria-disabled='true']) { cursor: not-allowed; }
 }
+
+/* Small label above a section title. Wide-tracked capitals in English; Arabic letters must stay
+   joined, so Arabic gets normal tracking and a size that matches the script's x-height. */
+@utility eyebrow {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  &:lang(ar) { font-size: 15px; letter-spacing: 0; }
+}
+
+/* Storefront motion from the prototype: floating hero cards, rotating seal, marquee strips. */
+@theme {
+  --animate-floaty: floaty 6s ease-in-out infinite;
+  --animate-spin-slow: spin 22s linear infinite;
+  --animate-marquee: marquee 48s linear infinite;
+  --animate-marquee-fast: marquee 38s linear infinite;
+  --animate-pulse-soft: pulse-soft 1.4s ease-in-out infinite;
+  --animate-ping-soft: ping-soft 2.2s ease-out infinite;
+
+  @keyframes floaty {
+    0%, 100% { transform: translateY(0) rotate(var(--tilt, 0deg)); }
+    50% { transform: translateY(-14px) rotate(var(--tilt, 0deg)); }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes pulse-soft {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+  @keyframes ping-soft {
+    0% { transform: scale(0.9); opacity: 1; }
+    100% { transform: scale(1.5); opacity: 0; }
+  }
+}
+
+/* Big outlined background numerals/words ("1972", "MS", "ثقة"). */
+@utility text-outline {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--outline-color, currentColor);
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+/* Skeletons: a soft light sweep across a cream block (direction follows the page). */
+@utility skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.65), transparent);
+    animation: shimmer 1.6s ease-in-out infinite;
+  }
+  &:where([dir='rtl'], [dir='rtl'] *)::after { animation-name: shimmer-rtl; }
+}
+@keyframes shimmer { to { transform: translateX(100%); } }
+@keyframes shimmer-rtl { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
+
+/* Splash: the hero cards (components/common/CommonSplash.vue): first page of a visit only.
+   Pure CSS, server-rendered only (hydrate-never). Deck drops (0.0–0.55s), fans (0.6–1.0s),
+   logo shows (0.7–1.35s), cards fly into hero positions (1.25–1.85s) while background fades (1.4–1.85s).
+   Fully hidden by 1.9s, hero fully usable by 2.0s. */
+:root {
+  --dir: -1;
+}
+[dir='ltr'] {
+  --dir: 1;
+}
+
+.splash {
+  display: flex;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: none;
+  animation: splash-exit 0s linear 1.9s forwards;
+}
+.splash-seen .splash { display: none; }
+@keyframes splash-exit { to { visibility: hidden; } }
+
+/* Radial dark background matches the hero and fades out smoothly (1.40–1.85s) */
+.splash::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(70% 90% at 30% 20%, #3a3f2c, #22211F 60%);
+  animation: splash-bg-fade .45s ease-out 1.4s forwards;
+}
+@keyframes splash-bg-fade {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Center brand showcase: rises and fades in above the fan (0.7–1.0s), fades out (1.15–1.35s) */
+.splash-logo {
+  position: absolute;
+  bottom: calc(50% + clamp(85px, 11vw, 130px));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: splash-logo 1.35s ease forwards;
+  will-change: transform, opacity;
+}
+@keyframes splash-logo {
+  0%, 51.8% { opacity: 0; transform: translateY(12px); animation-timing-function: cubic-bezier(.2, .8, .2, 1); }
+  74.1% { opacity: 1; transform: translateY(0); }
+  85.2% { opacity: 1; transform: translateY(0); animation-timing-function: ease-in; }
+  100% { opacity: 0; transform: translateY(-8px); visibility: hidden; }
+}
+
+/* Cards deck wrapper: centers all 4 cards, fades out over the last 20% of landing (1.73–1.85s) */
+.splash-deck {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  animation: splash-deck-fade .12s ease-out 1.73s forwards;
+}
+@keyframes splash-deck-fade {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Card base geometry */
+.splash-card {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: var(--w);
+  height: var(--h);
+  border-radius: clamp(18px, 1.8vw, 26px);
+  box-shadow: 0 24px 40px -18px rgb(0 0 0 / .6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  will-change: transform, width, height, border-radius;
+  /* Landing parameters: below lg, cards drop down together off the bottom */
+  --card-w: clamp(76px, 20vw, 170px);
+  --w: var(--card-w);
+  --h: calc(var(--card-w) * 4 / 3);
+  --tx: 0px;
+  --ty: 60vh;
+  --ts: 1;
+  --tr: 0deg;
+}
+
+/* On desktop (lg, ≥1024px) each card flies into its matching spot in the hero art column */
+@media (min-width: 1024px) {
+  .splash-card-1 {
+    --tx: 27vw;
+    --ty: 2vh;
+    --ts: 1.3;
+    --tr: 0deg;
+  }
+  .splash-card-2 {
+    --tx: 36vw;
+    --ty: 12vh;
+    --ts: 1.05;
+    --tr: -5deg;
+  }
+  .splash-card-3 {
+    --tx: 19vw;
+    --ty: -14vh;
+    --ts: 1.1;
+    --tr: 5deg;
+  }
+  .splash-card-4 {
+    --tx: 18vw;
+    --ty: 16vh;
+    --ts: 0.95;
+    --tr: 3deg;
+  }
+}
+
+.splash-card-1 { animation: splash-card-1 1.85s forwards; }
+.splash-card-2 { animation: splash-card-2 1.85s forwards; }
+.splash-card-3 { animation: splash-card-3 1.85s forwards; }
+.splash-card-4 { animation: splash-card-4 1.85s forwards; }
+
+/* Precise hero landing mode: cards reshape, retilt, and land exactly over matching hero cards */
+.splash[data-land='hero'] .splash-deck {
+  animation: none;
+}
+.splash[data-land='hero'] .splash-card {
+  /* No zoom in the hero landing: the card reaches the hero card's own size instead */
+  --ts: 1;
+}
+
+@keyframes splash-card-1 {
+  0% { transform: translateY(-60vh) rotate(-18deg); opacity: 0; animation-timing-function: cubic-bezier(.2, .9, .3, 1.2); }
+  2.7% { opacity: 1; }
+  21.6% { transform: translateY(0) rotate(-4deg); opacity: 1; }
+  32.4% { transform: translateY(0) rotate(-4deg); opacity: 1; animation-timing-function: cubic-bezier(.3, .7, .2, 1); }
+  54.1% { transform: translateX(calc(-1.6 * var(--card-w))) rotate(-12deg); opacity: 1; }
+  67.6% { transform: translateX(calc(-1.6 * var(--card-w))) rotate(-12deg); width: var(--w); height: var(--h); border-radius: clamp(18px, 1.8vw, 26px); opacity: 1; animation-timing-function: cubic-bezier(.76, 0, .24, 1); }
+  100% { transform: translate(var(--land-x, calc(var(--dir) * var(--tx))), var(--land-y, var(--ty))) rotate(var(--land-r, var(--tr))) scale(var(--ts)); width: var(--land-w, var(--w)); height: var(--land-h, var(--h)); border-radius: var(--land-rad, clamp(18px, 1.8vw, 26px)); opacity: 1; }
+}
+
+
+@keyframes splash-card-2 {
+  0%, 4.3% { transform: translateY(-60vh) rotate(-18deg); opacity: 0; animation-timing-function: cubic-bezier(.2, .9, .3, 1.2); }
+  7.0% { opacity: 1; }
+  25.9% { transform: translateY(0) rotate(3deg); opacity: 1; }
+  32.4% { transform: translateY(0) rotate(3deg); opacity: 1; animation-timing-function: cubic-bezier(.3, .7, .2, 1); }
+  54.1% { transform: translateX(calc(-0.55 * var(--card-w))) rotate(-4deg); opacity: 1; }
+  67.6% { transform: translateX(calc(-0.55 * var(--card-w))) rotate(-4deg); width: var(--w); height: var(--h); border-radius: clamp(18px, 1.8vw, 26px); opacity: 1; animation-timing-function: cubic-bezier(.76, 0, .24, 1); }
+  100% { transform: translate(var(--land-x, calc(var(--dir) * var(--tx))), var(--land-y, var(--ty))) rotate(var(--land-r, var(--tr))) scale(var(--ts)); width: var(--land-w, var(--w)); height: var(--land-h, var(--h)); border-radius: var(--land-rad, clamp(18px, 1.8vw, 26px)); opacity: 1; }
+}
+
+
+@keyframes splash-card-3 {
+  0%, 8.6% { transform: translateY(-60vh) rotate(-18deg); opacity: 0; animation-timing-function: cubic-bezier(.2, .9, .3, 1.2); }
+  11.4% { opacity: 1; }
+  29.2% { transform: translateY(0) rotate(-2deg); opacity: 1; }
+  32.4% { transform: translateY(0) rotate(-2deg); opacity: 1; animation-timing-function: cubic-bezier(.3, .7, .2, 1); }
+  54.1% { transform: translateX(calc(0.55 * var(--card-w))) rotate(4deg); opacity: 1; }
+  67.6% { transform: translateX(calc(0.55 * var(--card-w))) rotate(4deg); width: var(--w); height: var(--h); border-radius: clamp(18px, 1.8vw, 26px); opacity: 1; animation-timing-function: cubic-bezier(.76, 0, .24, 1); }
+  100% { transform: translate(var(--land-x, calc(var(--dir) * var(--tx))), var(--land-y, var(--ty))) rotate(var(--land-r, var(--tr))) scale(var(--ts)); width: var(--land-w, var(--w)); height: var(--land-h, var(--h)); border-radius: var(--land-rad, clamp(18px, 1.8vw, 26px)); opacity: 1; }
+}
+
+
+@keyframes splash-card-4 {
+  0%, 13.0% { transform: translateY(-60vh) rotate(-18deg); opacity: 0; animation-timing-function: cubic-bezier(.2, .9, .3, 1.2); }
+  15.7% { opacity: 1; }
+  31.4% { transform: translateY(0) rotate(5deg); opacity: 1; }
+  32.4% { transform: translateY(0) rotate(5deg); opacity: 1; animation-timing-function: cubic-bezier(.3, .7, .2, 1); }
+  54.1% { transform: translateX(calc(1.6 * var(--card-w))) rotate(12deg); opacity: 1; }
+  67.6% { transform: translateX(calc(1.6 * var(--card-w))) rotate(12deg); width: var(--w); height: var(--h); border-radius: clamp(18px, 1.8vw, 26px); opacity: 1; animation-timing-function: cubic-bezier(.76, 0, .24, 1); }
+  100% { transform: translate(var(--land-x, calc(var(--dir) * var(--tx))), var(--land-y, var(--ty))) rotate(var(--land-r, var(--tr))) scale(var(--ts)); width: var(--land-w, var(--w)); height: var(--land-h, var(--h)); border-radius: var(--land-rad, clamp(18px, 1.8vw, 26px)); opacity: 1; }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-floaty, .animate-spin-slow, .animate-marquee, .animate-marquee-fast,
+  .animate-pulse-soft, .animate-ping-soft { animation: none !important; }
+  .skeleton-shimmer::after { animation: none; }
+  .splash { display: none; }
+}
+
+/* Storefront dark theme (header switch). The storefront was designed light, with brand colours
+   written into components; this maps those light surfaces and dark inks onto the dark tokens in
+   one place. Unlayered on purpose so it wins over the light utilities. Elements on gold keep
+   their dark ink. */
+.dark .bg-serag-ivory, .dark .bg-serag-cream, .dark .bg-white,
+.dark .bg-\[\#FBF8EF\], .dark .bg-\[\#F6F2E4\] { background-color: var(--card); }
+.dark .bg-\[\#F4EFD6\], .dark .bg-\[\#EAF2DC\], .dark .bg-\[\#EDE8D5\], .dark .bg-\[\#E8DFB0\] { background-color: var(--secondary); }
+.dark .bg-\[\#F1FAF3\] { background-color: rgb(22 163 74 / 0.12); }
+.dark .border-\[\#E4DDC6\], .dark .border-\[\#ECE6D3\], .dark .border-\[\#D8D0B4\], .dark .border-\[\#E7E0C8\] { border-color: var(--border); }
+.dark .border-\[\#CFE7D6\] { border-color: rgb(22 163 74 / 0.35); }
+.dark .text-serag-ink:not([class~='bg-serag-gold']):not([class~='bg-serag-gold-hi']), .dark .text-serag-night:not([class~='bg-serag-gold']):not([class~='bg-serag-gold-hi']),
+.dark .text-\[\#2B2925\], .dark .text-\[\#4A4640\] { color: var(--foreground); }
+.dark .text-\[\#66625B\] { color: var(--muted-foreground); }
+.dark .text-serag-green:not([class~='bg-serag-gold']):not([class~='bg-serag-gold-hi']) { color: #8DBB4F; }
+.dark .text-serag-gold-ink, .dark .text-\[\#7C6A4B\] { color: var(--color-serag-gold-hi); }
+.dark .text-\[\#15803D\] { color: #4ADE80; }
+.dark .text-primary:not([class~='bg-serag-gold']):not([class~='bg-serag-gold-hi']) { color: #C9B189; }
+/* Native controls (checkboxes, selects, scrollbars) follow the theme instead of staying white */
+.dark { color-scheme: dark; }
+/* The faded half of an ink-fill word needs a little more ink to read on the dark background */
+.dark { --ink-faded: 34%; }
+
+/* Toasts (vue-sonner): the store's night green with a gold edge, icon in a tinted circle,
+   gold pill for the action. Same look in light and dark. */
+[data-sonner-toaster][dir] [data-sonner-toast][data-styled='true'] {
+  background: var(--color-serag-night);
+  color: var(--color-serag-ivory);
+  border: 1px solid rgb(210 194 122 / 0.35);
+  border-radius: 18px;
+  padding: 14px 16px;
+  gap: 12px;
+  box-shadow: 0 24px 48px -20px rgb(0 0 0 / 0.55);
+  font-family: var(--font-sans);
+}
+[data-sonner-toaster][dir] [data-sonner-toast][data-styled='true'] [data-icon] {
+  width: 34px;
+  height: 34px;
+  margin: 0;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgb(210 194 122 / 0.16);
+  color: var(--color-serag-gold-hi);
+}
+[data-sonner-toaster][dir] [data-sonner-toast][data-type='success'] [data-icon] { background: rgb(74 222 128 / 0.16); color: #4ade80; }
+[data-sonner-toaster][dir] [data-sonner-toast][data-type='error'] [data-icon] { background: rgb(240 138 106 / 0.18); color: #f08a6a; }
+[data-sonner-toaster][dir] [data-sonner-toast][data-type='warning'] [data-icon] { background: rgb(251 191 36 / 0.16); color: #fbbf24; }
+[data-sonner-toaster][dir] [data-sonner-toast][data-styled='true'] [data-title] { font-size: 14px; font-weight: 700; line-height: 1.4; }
+[data-sonner-toaster][dir] [data-sonner-toast][data-styled='true'] [data-description] { color: #D8D3C7; font-size: 12.5px; line-height: 1.5; }
+[data-sonner-toaster][dir] [data-sonner-toast][data-styled='true'] [data-button] {
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--color-serag-gold);
+  color: var(--color-serag-ink);
+  font-weight: 700;
+  font-size: 12.5px;
+}
+[data-sonner-toaster][dir] [data-sonner-toast][data-styled='true'] [data-button]:hover { background: var(--color-serag-gold-hi); }
+[data-sonner-toaster][dir] [data-sonner-toast][data-styled='true'] [data-close-button] {
+  background: var(--color-serag-deep);
+  color: var(--color-serag-ivory);
+  border-color: rgb(210 194 122 / 0.35);
+}
+/* A toast never blocks the page under it (e.g. checkout's submit right after adding to cart):
+   taps on its body pass through; its own buttons stay clickable. */
+[data-sonner-toaster][dir] [data-sonner-toast] { pointer-events: none; }
+[data-sonner-toaster][dir] [data-sonner-toast] :is(button, a) { pointer-events: auto; }
+
+/* Sheets (cart drawer, mobile menu, filters): the panel glides in from its side and the backdrop
+   fades. Reka keeps a closing sheet mounted until its animation ends, so the exit plays too. */
+.sheet-overlay[data-state='open'] { animation: sheet-fade-in .3s ease both; }
+.sheet-overlay[data-state='closed'] { animation: sheet-fade-out .22s ease both; }
+.sheet-panel { --sheet-from: translate3d(100%, 0, 0); }
+.sheet-panel[data-side='left'] { --sheet-from: translate3d(-100%, 0, 0); }
+.sheet-panel[data-side='top'] { --sheet-from: translate3d(0, -100%, 0); }
+.sheet-panel[data-side='bottom'] { --sheet-from: translate3d(0, 100%, 0); }
+.sheet-panel[data-state='open'] { animation: sheet-in .48s cubic-bezier(.32, .72, 0, 1) both; }
+.sheet-panel[data-state='closed'] { animation: sheet-out .26s cubic-bezier(.4, 0, 1, 1) both; }
+/* Content rises in just behind the panel. */
+.sheet-panel[data-state='open'] > :not(button) { animation: sheet-rise .5s cubic-bezier(.32, .72, 0, 1) .08s both; }
+@keyframes sheet-in { from { transform: var(--sheet-from); } }
+@keyframes sheet-out { to { transform: var(--sheet-from); } }
+@keyframes sheet-rise { from { opacity: 0; transform: translateY(10px); } }
+@keyframes sheet-fade-in { from { opacity: 0; } }
+@keyframes sheet-fade-out { to { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .sheet-panel[data-state], .sheet-panel[data-state='open'] > :not(button) { animation-name: sheet-fade-in; animation-duration: .15s; }
+  .sheet-panel[data-state='closed'] { animation-name: sheet-fade-out; }
+}
+
+/* Cart drawer lines: stagger in when the drawer opens, slide away when removed. */
+.sheet-panel[data-state='open'] .cart-line-enter { animation: sheet-rise .45s cubic-bezier(.32, .72, 0, 1) both; }
+.cart-line-move, .cart-line-leave-active { transition: transform .3s ease, opacity .25s ease; }
+.cart-line-leave-active { position: absolute; inset-inline: 0; }
+.cart-line-leave-to { opacity: 0; transform: translateX(24px); }
+[dir='rtl'] .cart-line-leave-to { transform: translateX(-24px); }
+@media (prefers-reduced-motion: reduce) {
+  .sheet-panel[data-state='open'] .cart-line-enter { animation: none; }
+}
+
+/* Trader reels popup: backdrop fades, the player rises in; both reduced when motion is. */
+.reel-overlay[data-state='open'] { animation: sheet-fade-in .25s ease both; }
+.reel-overlay[data-state='closed'] { animation: sheet-fade-out .18s ease both; }
+.reel-viewer[data-state='open'] .reel-stage { animation: reel-pop .38s cubic-bezier(.32, .72, 0, 1) both; }
+.reel-viewer[data-state='closed'] { animation: sheet-fade-out .18s ease both; }
+.reel-frame { animation: sheet-fade-in .3s ease both; }
+@keyframes reel-pop { from { opacity: 0; transform: translateY(18px) scale(.96); } }
+@media (prefers-reduced-motion: reduce) {
+  .reel-viewer[data-state='open'] .reel-stage { animation: sheet-fade-in .15s ease both; }
+}
+
+/* Motion system. One set of curves and durations so every animation feels related.
+   Everything below is CSS only (no JavaScript, nothing waits for hydration) and off for
+   visitors who ask for reduced motion. */
+:root {
+  --ease-out-expo: cubic-bezier(.16, 1, .3, 1);
+  --ease-spring: cubic-bezier(.2, .9, .3, 1.25);
+  --dur-fast: .15s;
+  --dur-base: .25s;
+  --dur-slow: .6s;
+}
+
+/* Below-the-fold sections ease in as they scroll into view (scroll-driven, so there is no
+   observer to hydrate). Browsers without animation-timeline just show the section. Never put
+   it on the hero or anything in the first screen: it would hold back the largest paint. */
+@supports (animation-timeline: view()) {
+  .scroll-reveal {
+    animation: scroll-reveal linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 28%;
+  }
+}
+/* Transform only on purpose: faded text would fail the contrast checks (axe) while it is unseen. */
+@keyframes scroll-reveal { from { transform: translateY(40px); } }
+
+/* Press feedback on every button and button-like link */
+@layer base {
+  button:not(:disabled):active, [role='button']:active, a.btn-press:active { scale: .97; }
+}
+
+/* The hero's card cluster settles in once on load. Only the art: the headline is the largest
+   paint, so it must never wait on an animation. */
+.hero-art-in { animation: hero-art-in .9s var(--ease-out-expo) .15s both; }
+@keyframes hero-art-in { from { opacity: 0; transform: translateY(24px) scale(.94); } }
+
+/* Children rise in one after another (dashboard counters). Admin only: the storefront's first
+   screen never waits on motion. */
+.stagger-in > * { animation: stagger-in .5s var(--ease-out-expo) both; }
+.stagger-in > :nth-child(2) { animation-delay: 60ms; }
+.stagger-in > :nth-child(3) { animation-delay: 120ms; }
+.stagger-in > :nth-child(4) { animation-delay: 180ms; }
+.stagger-in > :nth-child(5) { animation-delay: 240ms; }
+.stagger-in > :nth-child(6) { animation-delay: 300ms; }
+.stagger-in > :nth-child(7) { animation-delay: 360ms; }
+.stagger-in > :nth-child(8) { animation-delay: 420ms; }
+@keyframes stagger-in { from { transform: translateY(18px) scale(.97); } }
+
+/* Quiz: each question slides in from the side the reader moves to (right in Arabic). */
+.question-in { animation: question-in .35s var(--ease-out-expo) both; }
+@keyframes question-in { from { transform: translateX(-24px); } }
+[dir='rtl'] .question-in { animation-name: question-in-rtl; }
+@keyframes question-in-rtl { from { transform: translateX(24px); } }
+
+/* Home hero background (StoreHomeHero.vue; moved by composables/useHeroMotion.ts). The custom
+   properties are plain numbers so GSAP can tween them: --mx/--my in %, --px/--py and --hero-r in px. */
+.hero-bg {
+  background:
+    radial-gradient(120% 90% at 85% -10%, #322D24 0%, transparent 55%),
+    radial-gradient(90% 70% at 0% 110%, #1E2A19 0%, transparent 60%),
+    linear-gradient(180deg, #1D1C19 0%, #141412 100%);
+  border-start-start-radius: calc(var(--hero-r, 0) * 1px);
+  border-start-end-radius: calc(var(--hero-r, 0) * 1px);
+}
+.hero-blob { position: absolute; border-radius: 9999px; }
+.hero-slats {
+  background: repeating-linear-gradient(180deg, rgb(255 255 255 / .035) 0 1px, transparent 1px 26px);
+  mask-image: radial-gradient(80% 70% at 30% 35%, #000 0%, transparent 78%);
+}
+.hero-spot { background: radial-gradient(560px circle at calc(var(--mx, 72) * 1%) calc(var(--my, 28) * 1%), rgb(201 177 137 / .14), transparent 62%); }
+.hero-grain {
+  opacity: .08;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.hero-year-fill { clip-path: inset(0 100% 0 0); }
+.hero-floor {
+  background:
+    linear-gradient(90deg, rgb(201 177 137 / .24) 1px, transparent 1px) 50% 0 / 64px 64px,
+    linear-gradient(0deg, rgb(201 177 137 / .24) 1px, transparent 1px) 50% 0 / 64px 64px;
+  transform: perspective(520px) rotateX(64deg);
+  transform-origin: 50% 100%;
+  mask-image: linear-gradient(0deg, #000 0%, transparent 85%);
+}
+.hero-pool { background: radial-gradient(closest-side, rgb(236 220 180 / .22), transparent); filter: blur(6px); }
+.hero-card-px { translate: calc(var(--px, 0) * 1px) calc(var(--py, 0) * 1px); }
+
+/* Headline highlight words: start faded and the full colour sweeps across them (from the reading
+   side) as the heading scrolls into view. No outline: Arabic letters overlap where they join and
+   a stroke shows every seam. The colour property is unchanged, so contrast checks see the real
+   colour; browsers without scroll timelines show it as usual. */
+@supports (animation-timeline: view()) {
+  .ink-fill {
+    -webkit-text-fill-color: transparent;
+    background:
+      linear-gradient(currentColor, currentColor) no-repeat right / 0% 100%,
+      linear-gradient(color-mix(in srgb, currentColor var(--ink-faded, 22%), transparent), color-mix(in srgb, currentColor var(--ink-faded, 22%), transparent));
+    background-clip: text;
+    animation: ink-fill linear both;
+    animation-timeline: view();
+    animation-range: entry 100% cover 55%;
+  }
+  [dir='ltr'] .ink-fill { background-position: left, 0 0; }
+  /* At the very end of the page an element can never reach mid-screen: fill while it enters */
+  .ink-fill-end { animation-range: entry 10% entry 100%; }
+}
+@keyframes ink-fill { to { background-size: 100% 100%, auto; } }
+
+/* Coloured home sections ride up over the one before on a big curve, like stacked cards */
+.home-stack {
+  margin-top: calc(-1 * clamp(32px, 5vw, 64px));
+  border-start-start-radius: clamp(32px, 5vw, 64px);
+  border-start-end-radius: clamp(32px, 5vw, 64px);
+  box-shadow: 0 -24px 48px -28px rgb(20 20 18 / .35);
+}
+
+/* Product story */
+.story-appliance-3d {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+.story-door-fridge-top,
+.story-door-fridge-bottom,
+.story-door-washer {
+  transform-origin: right center;
+  transform: perspective(1000px) rotateY(105deg);
+}
+.story-door-fridge-bottom {
+  transform: perspective(1000px) rotateY(95deg);
+}
+[dir='ltr'] .story-door-fridge-top,
+[dir='ltr'] .story-door-fridge-bottom,
+[dir='ltr'] .story-door-washer {
+  transform-origin: left center;
+  transform: perspective(1000px) rotateY(-105deg);
+}
+[dir='ltr'] .story-door-fridge-bottom {
+  transform: perspective(1000px) rotateY(-95deg);
+}
+.story-louver-open {
+  transform-origin: top center;
+  transform: perspective(1000px) rotateX(40deg);
+}
+
+/* Page titles: a short sand rule draws itself under the title from the reading side. The title
+   itself never animates (it is often the largest paint). */
+.title-draw::after {
+  content: '';
+  display: block;
+  width: 72px;
+  height: 4px;
+  margin-top: .65rem;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, var(--color-serag-gold), var(--color-serag-gold-hi));
+  transform-origin: right;
+  animation: title-draw .9s var(--ease-out-expo) .15s both;
+}
+[dir='ltr'] .title-draw::after { transform-origin: left; }
+@keyframes title-draw { from { transform: scaleX(0); } }
+
+/* Product gallery: a newly chosen photo settles in (scale only: the first photo may be the
+   largest paint, so it never starts hidden) */
+.img-swap { animation: img-swap .5s var(--ease-out-expo) both; }
+@keyframes img-swap { from { transform: scale(.94); } }
+
+/* Order confirmed: two rings ripple out from the tick, once */
+.success-burst { animation: success-burst 1.1s var(--ease-out-expo) .2s both; }
+@keyframes success-burst { from { transform: scale(.8); opacity: .9; } to { transform: scale(2.2); opacity: 0; } }
+
+/* Admin: each page's sections rise in one after another when it opens (transform only) */
+/* backwards, not both: a finished animation must leave no transform, or fixed save bars inside a section would position against it */
+#admin-main-content > * > * { animation: stagger-in .45s var(--ease-out-expo) backwards; }
+#admin-main-content > * > :nth-child(2) { animation-delay: 50ms; }
+#admin-main-content > * > :nth-child(3) { animation-delay: 100ms; }
+#admin-main-content > * > :nth-child(4) { animation-delay: 150ms; }
+#admin-main-content > * > :nth-child(5) { animation-delay: 200ms; }
+#admin-main-content > * > :nth-child(6) { animation-delay: 250ms; }
+
+/* Hero entrance: the first page of a visit, as the splash lifts (~1.35 s). Transform only, so
+   every text block counts as painted from the first frame (largest paint unaffected). CSS, not GSAP: GSAP only loads after the first interaction. */
+:root:not(.splash-seen) [data-hero-title] { animation: hero-rise 1.1s var(--ease-out-expo) 1.35s backwards; }
+:root:not(.splash-seen) [data-hero-intro] { animation: hero-rise .9s var(--ease-out-expo) backwards; animation-delay: calc(1.45s + var(--d, 0s)); }
+:root:not(.splash-seen) .hero-art-in { animation: none; }
+.splash-landing .hero-card-px.animate-floaty { animation-play-state: paused; }
+@keyframes hero-rise { from { transform: translateY(42px); } }
+
+/* A header counter pops when its number changes; a saved heart pops once. */
+.badge-bump { animation: pop .35s var(--ease-spring) both; }
+.heart-pop { animation: pop .4s var(--ease-spring) both; }
+@keyframes pop { 0% { transform: scale(.6); } 60% { transform: scale(1.2); } 100% { transform: scale(1); } }
+
+/* Page transition overlay (components/common/CommonPageWipe.vue) */
+.page-wipe {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.page-wipe-col {
+  width: 100%;
+  height: 100%;
+  background: var(--color-serag-night);
+  box-shadow: inset 1px 0 0 rgb(201 177 137 / .08);
+  transform: scaleY(0);
+}
+
+.page-wipe-logo {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.page-wipe-logo svg {
+  width: 72px;
+  height: 72px;
+}
+
+/* State: in */
+.page-wipe[data-state='in'] .page-wipe-col {
+  transform: scaleY(1);
+  transform-origin: bottom;
+  transition: transform .45s cubic-bezier(.76, 0, .24, 1);
+}
+.page-wipe[data-state='in'] .page-wipe-col:nth-child(1) { transition-delay: 0ms; }
+.page-wipe[data-state='in'] .page-wipe-col:nth-child(2) { transition-delay: 40ms; }
+.page-wipe[data-state='in'] .page-wipe-col:nth-child(3) { transition-delay: 80ms; }
+.page-wipe[data-state='in'] .page-wipe-col:nth-child(4) { transition-delay: 120ms; }
+.page-wipe[data-state='in'] .page-wipe-col:nth-child(5) { transition-delay: 160ms; }
+.page-wipe[data-state='in'] .page-wipe-col:nth-child(6) { transition-delay: 200ms; }
+
+.page-wipe[data-state='in'] .page-wipe-logo {
+  opacity: 1;
+  transition: opacity .25s ease .25s;
+}
+
+/* State: out */
+.page-wipe[data-state='out'] .page-wipe-col {
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform .45s cubic-bezier(.76, 0, .24, 1);
+}
+.page-wipe[data-state='out'] .page-wipe-col:nth-child(3),
+.page-wipe[data-state='out'] .page-wipe-col:nth-child(4) { transition-delay: 0ms; }
+.page-wipe[data-state='out'] .page-wipe-col:nth-child(2),
+.page-wipe[data-state='out'] .page-wipe-col:nth-child(5) { transition-delay: 40ms; }
+.page-wipe[data-state='out'] .page-wipe-col:nth-child(1),
+.page-wipe[data-state='out'] .page-wipe-col:nth-child(6) { transition-delay: 80ms; }
+
+.page-wipe[data-state='out'] .page-wipe-logo {
+  opacity: 0;
+  transition: opacity .15s ease 0s;
+}
+
+/* State: idle */
+.page-wipe[data-state='idle'] {
+  visibility: hidden;
+  transition: none;
+}
+.page-wipe[data-state='idle'] * {
+  transition: none;
+}
+
+/* Custom cursor follower (components/common/CommonCursor.vue) */
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 95;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--color-serag-gold-hi);
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity .2s ease;
+  will-change: transform;
+}
+
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 95;
+  width: 28px;
+  height: 28px;
+  border-radius: 9999px;
+  border: 1.5px solid var(--color-serag-gold);
+  background: transparent;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transition: width .35s var(--ease-out-expo),
+              height .35s var(--ease-out-expo),
+              background .25s,
+              border-color .25s,
+              opacity .2s,
+              scale .15s ease;
+  will-change: transform, width, height;
+}
+
+.cursor-ring.is-hover {
+  width: 36px;
+  height: 36px;
+  border-color: var(--color-serag-gold-hi);
+}
+
+.cursor-ring.is-label {
+  width: 40px;
+  height: 40px;
+  border-color: var(--color-serag-gold-hi);
+  /* Slightly see-through: it floats over product photos */
+  background: color-mix(in srgb, var(--color-serag-gold-hi) 88%, transparent);
+}
+
+.cursor-ring .cursor-label {
+  color: var(--color-serag-ink);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.cursor-ring.is-pressed {
+  scale: .85;
+}
+
+.cursor-dot.is-hidden,
+.cursor-ring.is-hidden {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal, .badge-bump, .heart-pop, .hero-art-in, .question-in, .stagger-in > *, .title-draw::after, .img-swap, #admin-main-content > * > *, [data-hero-title], [data-hero-intro] { animation: none; }
+  .success-burst { display: none; }
+  .ink-fill { -webkit-text-fill-color: currentColor; background: none; }
+  button:not(:disabled):active, [role='button']:active, a.btn-press:active { scale: none; }
+  .page-wipe { display: none !important; }
+  .cursor-dot, .cursor-ring { display: none !important; }
+}
+
+/* Compare pill: rises into place once the first product is added */
+.compare-pill { animation: compare-pill-in 0.35s cubic-bezier(.2, .9, .3, 1.2) both; }
+@keyframes compare-pill-in { from { opacity: 0; transform: translateY(14px) scale(.96); } }
+@media (prefers-reduced-motion: reduce) { .compare-pill { animation: none; } }
+
+/* Whites lean beige: text-white is the ivory. */
+.text-white { color: var(--color-serag-ivory); }
+
+/* Green text on a pale green tint (badges, chips) needs a deeper green than on plain surfaces to
+   keep 4.5:1; the dark theme has its own colours for these. */
+:root:not(.dark) .text-serag-green[class*='bg-serag-green/'] { color: #3F5B2D; }

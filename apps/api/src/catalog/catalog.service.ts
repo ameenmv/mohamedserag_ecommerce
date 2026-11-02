@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import {
+  localizedSpecFields,
+  localizedText,
   specTemplateFieldSchema,
   type BrandDetail,
   type BrandSummary,
@@ -9,6 +11,7 @@ import {
 } from '@serag/shared'
 import { z } from 'zod'
 import { PrismaService } from '../prisma/prisma.service.js'
+import { currentLocale } from '../common/content-locale.middleware.js'
 
 @Injectable()
 export class CatalogService {
@@ -31,8 +34,10 @@ export class CatalogService {
         seoTitle: true,
         seoDescription: true,
         sort: true,
+        translations: true,
       },
     })
+    const locale = currentLocale()
 
     const productCounts = await this.prisma.product.groupBy({
       by: ['categoryId'],
@@ -73,15 +78,15 @@ export class CatalogService {
         return null
       }
 
-      nonZeroChildren.sort((a, b) => a.sort - b.sort || a.name.localeCompare(b.name, 'ar'))
+      nonZeroChildren.sort((a, b) => a.sort - b.sort || a.name.localeCompare(b.name, locale))
 
       return {
         id: cat.id,
-        name: cat.name,
+        name: localizedText(cat.name, cat.translations, 'name', locale),
         slug: cat.slug,
-        intro: cat.intro,
-        seoTitle: cat.seoTitle,
-        seoDescription: cat.seoDescription,
+        intro: localizedText(cat.intro, cat.translations, 'intro', locale),
+        seoTitle: localizedText(cat.seoTitle, cat.translations, 'seoTitle', locale),
+        seoDescription: localizedText(cat.seoDescription, cat.translations, 'seoDescription', locale),
         sort: cat.sort,
         productCount: totalCount,
         children: nonZeroChildren,
@@ -97,7 +102,7 @@ export class CatalogService {
       }
     }
 
-    tree.sort((a, b) => a.sort - b.sort || a.name.localeCompare(b.name, 'ar'))
+    tree.sort((a, b) => a.sort - b.sort || a.name.localeCompare(b.name, locale))
     return tree
   }
 
@@ -110,12 +115,12 @@ export class CatalogService {
       where: { slug, visible: true },
       include: {
         parent: {
-          select: { slug: true, name: true, visible: true },
+          select: { slug: true, name: true, visible: true, translations: true },
         },
         children: {
           where: { visible: true },
           orderBy: [{ sort: 'asc' }, { name: 'asc' }],
-          select: { id: true, slug: true, name: true, sort: true },
+          select: { id: true, slug: true, name: true, sort: true, translations: true },
         },
         specTemplate: true,
       },
@@ -124,6 +129,7 @@ export class CatalogService {
     if (!category) {
       throw new NotFoundException('القسم غير موجود')
     }
+    const locale = currentLocale()
 
     // Compute product counts for each child category including descendants
     const allDescendantCategories = await this.prisma.category.findMany({
@@ -164,28 +170,31 @@ export class CatalogService {
       .map((ch) => ({
         id: ch.id,
         slug: ch.slug,
-        name: ch.name,
+        name: localizedText(ch.name, ch.translations, 'name', locale),
         productCount: computeRecursiveCount(ch.id),
       }))
       .filter((ch) => ch.productCount > 0)
 
     let fields: SpecTemplateField[] = []
     if (category.specTemplate?.fields && Array.isArray(category.specTemplate.fields)) {
-      fields = z.array(specTemplateFieldSchema).parse(category.specTemplate.fields)
+      fields = localizedSpecFields(z.array(specTemplateFieldSchema).parse(category.specTemplate.fields), locale)
     }
 
     const parent =
       category.parent && category.parent.visible
-        ? { slug: category.parent.slug, name: category.parent.name }
+        ? {
+            slug: category.parent.slug,
+            name: localizedText(category.parent.name, category.parent.translations, 'name', locale),
+          }
         : null
 
     return {
       id: category.id,
-      name: category.name,
+      name: localizedText(category.name, category.translations, 'name', locale),
       slug: category.slug,
-      intro: category.intro,
-      seoTitle: category.seoTitle,
-      seoDescription: category.seoDescription,
+      intro: localizedText(category.intro, category.translations, 'intro', locale),
+      seoTitle: localizedText(category.seoTitle, category.translations, 'seoTitle', locale),
+      seoDescription: localizedText(category.seoDescription, category.translations, 'seoDescription', locale),
       parent,
       children: childrenWithCounts,
       fields,
@@ -210,6 +219,7 @@ export class CatalogService {
         slug: true,
         name: true,
         logoUrl: true,
+        translations: true,
         _count: {
           select: {
             products: {
@@ -220,10 +230,11 @@ export class CatalogService {
       },
     })
 
+    const locale = currentLocale()
     return brands.map((b) => ({
       id: b.id,
       slug: b.slug,
-      name: b.name,
+      name: localizedText(b.name, b.translations, 'name', locale),
       logoUrl: b.logoUrl,
       productCount: b._count.products,
     }))
@@ -243,6 +254,7 @@ export class CatalogService {
         intro: true,
         seoTitle: true,
         seoDescription: true,
+        translations: true,
         _count: {
           select: {
             products: {
@@ -257,14 +269,15 @@ export class CatalogService {
       throw new NotFoundException('الماركة غير موجودة')
     }
 
+    const locale = currentLocale()
     return {
       id: brand.id,
       slug: brand.slug,
-      name: brand.name,
+      name: localizedText(brand.name, brand.translations, 'name', locale),
       logoUrl: brand.logoUrl,
-      intro: brand.intro,
-      seoTitle: brand.seoTitle,
-      seoDescription: brand.seoDescription,
+      intro: localizedText(brand.intro, brand.translations, 'intro', locale),
+      seoTitle: localizedText(brand.seoTitle, brand.translations, 'seoTitle', locale),
+      seoDescription: localizedText(brand.seoDescription, brand.translations, 'seoDescription', locale),
       productCount: brand._count.products,
     }
   }

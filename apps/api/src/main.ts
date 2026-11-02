@@ -1,3 +1,5 @@
+// Must stay first: starts error tracking before the rest of the app loads
+import './instrument.js'
 import 'reflect-metadata'
 import { ConsoleLogger } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
@@ -6,6 +8,7 @@ import helmet from 'helmet'
 import cookieParser from 'cookie-parser'
 import { AppModule } from './app.module.js'
 import { requestId } from './common/request-id.middleware.js'
+import { contentLocale } from './common/content-locale.middleware.js'
 
 async function bootstrap() {
   const isProd = process.env.NODE_ENV === 'production'
@@ -20,6 +23,7 @@ async function bootstrap() {
   // rate limit instead of one shared bucket for the web server's address.
   app.set('trust proxy', 1)
   app.use(requestId)
+  app.use(contentLocale)
   app.use(helmet())
   app.use(cookieParser())
   app.setGlobalPrefix('api')

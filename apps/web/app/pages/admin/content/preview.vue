@@ -8,6 +8,7 @@ import type {
   ProductCard,
 } from '@serag/shared'
 import { DEFAULT_HOME_CONTENT, DEFAULT_HOME_LAYOUT, PERMISSIONS } from '@serag/shared'
+import { toProductCard } from '~/utils/product-card-mapper'
 import { useAdminCms } from '~/composables/useAdminCms'
 
 definePageMeta({
@@ -31,9 +32,11 @@ const cms = useAdminCms()
 const draftSections = ref<HomeContent>(DEFAULT_HOME_CONTENT)
 const draftLayout = ref<HomeLayout>(DEFAULT_HOME_LAYOUT)
 const flashProducts = ref<ProductCard[]>([])
+const flashEndsAt = ref<string | null>(null)
 const categories = ref<CategoryTreeNode[]>([])
 const brands = ref<BrandSummary[]>([])
 const guides = ref<GuideCard[]>([])
+const storyProduct = ref<ProductCard | null>(null)
 
 function indexCategories(nodes: CategoryTreeNode[]): Map<string, CategoryTreeNode> {
   const map = new Map<string, CategoryTreeNode>()
@@ -65,6 +68,8 @@ const visibleSections = computed(() =>
     partnerCount: partners.value.length,
     guideCount: guides.value.length,
     featuredCategoryCount: featuredCategories.value.length,
+    storyProduct: storyProduct.value !== null,
+    reviewCount: 0,
   }),
 )
 
@@ -81,9 +86,19 @@ async function loadPreview(): Promise<void> {
     draftSections.value = home.draft.sections
     draftLayout.value = home.draft.layout
     flashProducts.value = offers.flash.flatMap((group) => group.products)
+    flashEndsAt.value =
+      offers.flash.map((group) => group.endsAt).sort((a, b) => Date.parse(a) - Date.parse(b))[0] ?? null
     categories.value = cats
     brands.value = brandList
     guides.value = guideList
+
+    const slug = draftSections.value.productStory?.productSlug
+    if (slug) {
+      const detail = await storeApi.product(slug).catch(() => null)
+      storyProduct.value = detail ? toProductCard(detail) : null
+    } else {
+      storyProduct.value = null
+    }
   } catch {
     // Any failure renders the built-in defaults.
   }
@@ -103,9 +118,11 @@ onMounted(async () => {
       :visible-sections="visibleSections"
       :sections="draftSections"
       :flash-products="flashProducts"
+      :flash-ends-at="flashEndsAt"
       :featured-categories="featuredCategories"
       :partners="partners"
       :guides="guides"
+      :story-product="storyProduct"
     />
   </div>
 </template>

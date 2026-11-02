@@ -3,6 +3,7 @@ import { expect } from 'e2e'
 import { createSeed } from './support/seed.js'
 import { loginWithAdminSession, waitForHydration } from './support/auth.js'
 import { seriousA11yViolations } from './support/a11y.js'
+import { BRIDAL_ENABLED } from './support/features.js'
 
 let seed = createSeed()
 
@@ -14,7 +15,7 @@ afterEach(async () => {
 test('public pages have no serious or critical accessibility violations', async ({ app, browser, screen }) => {
   const product = await seed.product({ name: `مكنسة وصول ${seed.runId}`, priceEgp: 2500, stock: 5 })
 
-  const pages = ['/', '/c/refrigerators', `/p/${product.slug}`, '/guides', '/bridal']
+  const pages = ['/', '/c/refrigerators', `/p/${product.slug}`, '/guides', ...(BRIDAL_ENABLED ? ['/bridal'] : [])]
   for (const path of pages) {
     await app.open(path)
     await waitForHydration(browser)

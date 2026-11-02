@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import {
   buildSearchTerms,
   computeTrigramSimilarity,
+  localizedText,
   normalizeArabic,
   type ProductCard,
   type SearchCategorySuggestion,
@@ -9,6 +10,7 @@ import {
 } from '@serag/shared'
 import { z } from 'zod'
 import { PrismaService } from '../prisma/prisma.service.js'
+import { currentLocale } from '../common/content-locale.middleware.js'
 import { FlashPricingService } from '../promotions/flash-pricing.service.js'
 import { ReviewRatingsService } from '../reviews/review-ratings.service.js'
 import {
@@ -157,8 +159,8 @@ export class SearchService {
         const records = await this.prisma.product.findMany({
           where: { id: { in: ids } },
           include: {
-            brand: { select: { slug: true, name: true } },
-            category: { select: { slug: true, name: true } },
+            brand: { select: { slug: true, name: true, translations: true } },
+            category: { select: { slug: true, name: true, translations: true } },
             images: { orderBy: [{ sort: 'asc' }, { createdAt: 'asc' }], take: 1 },
           },
         })
@@ -185,15 +187,18 @@ export class SearchService {
           some: { visible: true, archivedAt: null },
         },
       },
-      select: { slug: true, name: true },
+      select: { slug: true, name: true, translations: true },
       orderBy: [{ sort: 'asc' }, { name: 'asc' }],
     })
+    const locale = currentLocale()
 
     const categories: SearchCategorySuggestion[] = []
     if (terms.length > 0 || normalizedQuery.length >= 2) {
       for (const cat of candidateCategories) {
-        if (categoryMatchesTerms(cat.name, terms, normalizedQuery)) {
-          categories.push({ slug: cat.slug, name: cat.name })
+        const name = localizedText(cat.name, cat.translations, 'name', locale)
+        // Match the Arabic name (what the search index uses) or the English one
+        if (categoryMatchesTerms(cat.name, terms, normalizedQuery) || (name !== cat.name && name.toLowerCase().includes(trimmed.toLowerCase()))) {
+          categories.push({ slug: cat.slug, name })
           if (categories.length >= 4) break
         }
       }

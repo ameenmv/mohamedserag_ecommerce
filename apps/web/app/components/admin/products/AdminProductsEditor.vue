@@ -101,7 +101,13 @@ function handleCancel() {
           :disabled="!hydrated || saving"
         />
 
-        <!-- 6. Images -->
+        <!-- 6. English Content -->
+        <AdminProductsEnglishSection
+          :errors="errors"
+          :disabled="!hydrated || saving"
+        />
+
+        <!-- 7. Images -->
         <AdminProductsImagesSection
           :is-edit-mode="isEditMode"
           :images="form.images"
@@ -113,7 +119,7 @@ function handleCancel() {
           @remove-image="removeImage"
         />
 
-        <!-- 7. Visibility & SEO -->
+        <!-- 8. Visibility & SEO -->
         <AdminProductsSeoSection
           :errors="errors"
           :disabled="!hydrated || saving"

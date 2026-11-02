@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ChevronDown, Tag, AlertTriangle, ShieldCheck, X } from '@lucide/vue'
+import { AlertTriangle, ChevronDown, Package, ShieldCheck, Tag, X } from '@lucide/vue'
 import type { CartQuote } from '@serag/shared'
 import type { CartLine } from '~/utils/cart'
 
@@ -107,7 +107,8 @@ function handleRemoveCoupon(): void {
         <div class="flex items-center gap-2.5 min-w-0">
           <NuxtLink
             :to="localePath(`/p/${line.slug}`)"
-            class="relative size-12 shrink-0 overflow-hidden rounded-lg border border-border/40 bg-muted/40"
+            :aria-label="line.name"
+            class="relative size-12 shrink-0 overflow-hidden rounded-lg border border-border bg-serag-cream"
           >
             <img
               v-if="line.image"
@@ -116,9 +117,9 @@ function handleRemoveCoupon(): void {
               class="size-full object-contain p-0.5"
               loading="lazy"
             >
-            <div v-else class="flex size-full items-center justify-center text-[10px] text-muted-foreground">
-              Serag
-            </div>
+            <div v-else class="flex size-full items-center justify-center bg-serag-cream text-serag-green" aria-hidden="true">
+          <Package class="size-5" stroke-width="1.4" />
+        </div>
           </NuxtLink>
 
           <div class="flex flex-col min-w-0">

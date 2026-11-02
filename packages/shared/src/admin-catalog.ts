@@ -8,6 +8,9 @@ export interface AdminSpecTemplateField {
   type: SpecFieldType
   unit?: string | null
   options?: string[] | null
+  labelEn?: string | null
+  unitEn?: string | null
+  optionsEn?: string[] | null
   filterable: boolean
   comparable: boolean
 }
@@ -21,6 +24,13 @@ export interface AdminSpecTemplate {
   updatedAt: string
 }
 
+export interface AdminCategoryTranslationsEn {
+  name?: string
+  intro?: string
+  seoTitle?: string
+  seoDescription?: string
+}
+
 export interface AdminCategory {
   id: string
   name: string
@@ -30,6 +40,9 @@ export interface AdminCategory {
   intro: string | null
   seoTitle: string | null
   seoDescription: string | null
+  translations?: {
+    en?: AdminCategoryTranslationsEn
+  } | null
   sort: number
   visible: boolean
   productCount: number
@@ -46,6 +59,13 @@ export interface AdminCategory {
   updatedAt: string
 }
 
+export interface AdminBrandTranslationsEn {
+  name?: string
+  intro?: string
+  seoTitle?: string
+  seoDescription?: string
+}
+
 export interface AdminBrand {
   id: string
   name: string
@@ -54,6 +74,9 @@ export interface AdminBrand {
   intro: string | null
   seoTitle: string | null
   seoDescription: string | null
+  translations?: {
+    en?: AdminBrandTranslationsEn
+  } | null
   sort: number
   visible: boolean
   productCount: number
@@ -108,7 +131,21 @@ export interface AdminProductListItem {
   archived: boolean
   archivedAt: string | null
   availability: AdminProductListItemAvailability
+  translations?: {
+    en?: AdminProductTranslationsEn
+  } | null
   updatedAt: string
+}
+
+export interface AdminProductTranslationsEn {
+  name?: string
+  leadTimeText?: string
+  warranty?: string
+  warrantyActivation?: string
+  origin?: string
+  seoTitle?: string
+  seoDescription?: string
+  setContents?: AdminProductSetContent[]
 }
 
 export interface AdminProductDetail {
@@ -136,6 +173,9 @@ export interface AdminProductDetail {
   etaItemCode: string | null
   seoTitle: string | null
   seoDescription: string | null
+  translations?: {
+    en?: AdminProductTranslationsEn
+  } | null
   images: AdminProductImage[]
   inOrders: boolean
   brand: {

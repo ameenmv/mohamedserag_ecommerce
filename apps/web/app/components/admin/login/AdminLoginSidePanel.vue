@@ -32,7 +32,7 @@ const features = computed(() => [
         <br>
         <span class="text-serag-gold-hi">{{ t('brand.name') }}</span>
       </h2>
-      <p class="text-base leading-relaxed text-[#C9D5C6] max-w-sm">
+      <p class="text-base leading-relaxed text-[#D8D3C7] max-w-sm">
         {{ t('admin.login.sideDescription') }}
       </p>
     </div>

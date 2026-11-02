@@ -10,7 +10,7 @@ const { t } = useI18n()
 
 <template>
   <div>
-    <h1 class="font-display text-3xl sm:text-4xl text-foreground">
+    <h1 class="title-draw font-display text-3xl sm:text-4xl text-foreground">
       {{ t('admin.dashboard.welcome', { name: name ?? '' }) }}
     </h1>
     <p class="mt-1 text-sm text-muted-foreground">

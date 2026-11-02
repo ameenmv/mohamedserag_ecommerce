@@ -20,6 +20,10 @@ export const specTemplateFieldSchema = z.object({
   type: z.preprocess((val) => (val === 'select' ? 'choice' : val), specFieldTypeSchema),
   unit: z.string().nullable().optional(),
   options: z.array(z.string()).nullable().optional(),
+  labelEn: z.string().nullable().optional(),
+  unitEn: z.string().nullable().optional(),
+  optionsEn: z.array(z.string()).nullable().optional(),
+  optionLabels: z.array(z.string()).nullable().optional(),
   filterable: z.boolean().default(false),
   comparable: z.boolean().default(false),
 })
@@ -28,12 +32,15 @@ export const specTemplateFieldSchema = z.object({
  * Validates the query string for `GET /api/products`.
  * Reused by web for URL query synchronization.
  */
+/** Upper bound for the price filters (EGP): prices are stored as int4 piastres. */
+export const PRICE_FILTER_MAX_EGP = 10_000_000
+
 export const productQuerySchema = z
   .object({
     category: z.string().trim().min(1).optional(),
     brand: z.string().trim().min(1).optional(),
-    minPrice: z.coerce.number().int().min(0, 'السعر الأدنى لا يمكن أن يكون سالباً').optional(),
-    maxPrice: z.coerce.number().int().min(0, 'السعر الأقصى لا يمكن أن يكون سالباً').optional(),
+    minPrice: z.coerce.number().int().min(0, 'السعر الأدنى لا يمكن أن يكون سالباً').max(PRICE_FILTER_MAX_EGP, 'السعر الأدنى كبير جداً').optional(),
+    maxPrice: z.coerce.number().int().min(0, 'السعر الأقصى لا يمكن أن يكون سالباً').max(PRICE_FILTER_MAX_EGP, 'السعر الأقصى كبير جداً').optional(),
     availability: z.string().trim().min(1).optional(),
     discounted: z
       .preprocess((val) => {

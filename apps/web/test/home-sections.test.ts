@@ -11,6 +11,8 @@ const ALL_VISIBLE: HomeLiveData = {
   partnerCount: 5,
   guideCount: 3,
   featuredCategoryCount: 4,
+  storyProduct: true,
+  reviewCount: 5,
 }
 
 function layout(order: HomeLayout['order'], hidden: HomeLayout['hidden'] = []): HomeLayout {
@@ -42,6 +44,8 @@ describe('visibleHomeSections', () => {
       partnerCount: 0,
       guideCount: 0,
       featuredCategoryCount: 0,
+      storyProduct: false,
+      reviewCount: 0,
     }
     const result = visibleHomeSections(
       layout([
@@ -49,6 +53,8 @@ describe('visibleHomeSections', () => {
         'flash',
         'partners',
         'guides',
+        'productStory',
+        'reviews',
         'hero',
       ]),
       DEFAULT_HOME_CONTENT,
@@ -77,5 +83,34 @@ describe('visibleHomeSections', () => {
       ALL_VISIBLE,
     )
     expect(result).toEqual(['flash', 'partners', 'guides', 'featuredCategories'])
+  })
+
+  it('drops the trader videos section when there are no videos', () => {
+    const empty: HomeContent = { ...DEFAULT_HOME_CONTENT, traderReels: { items: [] } }
+    expect(visibleHomeSections(layout(['hero', 'traderReels']), empty, ALL_VISIBLE)).toEqual(['hero'])
+    expect(visibleHomeSections(layout(['hero', 'traderReels']), DEFAULT_HOME_CONTENT, ALL_VISIBLE)).toEqual([
+      'hero',
+      'traderReels',
+    ])
+  })
+
+  it('drops productStory when the featured product did not load', () => {
+    const withoutProduct: HomeLiveData = { ...ALL_VISIBLE, storyProduct: false }
+    expect(
+      visibleHomeSections(layout(['hero', 'productStory']), DEFAULT_HOME_CONTENT, withoutProduct),
+    ).toEqual(['hero'])
+    expect(
+      visibleHomeSections(layout(['hero', 'productStory']), DEFAULT_HOME_CONTENT, ALL_VISIBLE),
+    ).toEqual(['hero', 'productStory'])
+  })
+
+  it('drops reviews when there are fewer than 4 reviews', () => {
+    const lowReviews: HomeLiveData = { ...ALL_VISIBLE, reviewCount: 3 }
+    expect(
+      visibleHomeSections(layout(['hero', 'reviews']), DEFAULT_HOME_CONTENT, lowReviews),
+    ).toEqual(['hero'])
+    expect(
+      visibleHomeSections(layout(['hero', 'reviews']), DEFAULT_HOME_CONTENT, { ...ALL_VISIBLE, reviewCount: 4 }),
+    ).toEqual(['hero', 'reviews'])
   })
 })

@@ -4,6 +4,7 @@ import {
   type PublicReview,
   type PublicReviewListResponse,
   type ReviewInput,
+  type StoreReviewsResponse,
 } from '@serag/shared'
 import { Prisma } from '../generated/prisma/client.js'
 import { PrismaService } from '../prisma/prisma.service.js'
@@ -102,6 +103,43 @@ export class ReviewsService {
     }
 
     return { ok: true }
+  }
+
+  /**
+   * The newest approved 4–5 star reviews across visible products, for the home page, with the
+   * store-wide rating. Same privacy as listPublic: no phone, ip or status.
+   */
+  async listLatest(limit: number): Promise<StoreReviewsResponse> {
+    const product = this.publicProductWhere({})
+    const [stats, items] = await Promise.all([
+      this.prisma.review.aggregate({
+        where: { status: 'approved', product },
+        _avg: { stars: true },
+        _count: { _all: true },
+      }),
+      this.prisma.review.findMany({
+        where: { status: 'approved', stars: { gte: 4 }, product },
+        orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+        take: limit,
+        select: {
+          id: true,
+          name: true,
+          stars: true,
+          text: true,
+          verifiedBuyer: true,
+          createdAt: true,
+          product: { select: { name: true, slug: true } },
+        },
+      }),
+    ])
+
+    return {
+      items: items.map((r) => ({ ...r, createdAt: r.createdAt.toISOString() })),
+      summary: {
+        average: Math.round((stats._avg.stars ?? 0) * 10) / 10,
+        count: stats._count._all,
+      },
+    }
   }
 
   /**

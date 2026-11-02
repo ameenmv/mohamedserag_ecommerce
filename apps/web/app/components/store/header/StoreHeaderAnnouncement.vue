@@ -5,31 +5,44 @@ defineProps<{
   phone: string
 }>()
 
-const { t } = useI18n()
+const { t, locale, locales } = useI18n()
+const switchLocalePath = useSwitchLocalePath()
+
+const otherLocale = computed(() => locales.value.find((l) => l.code !== locale.value)!)
 </script>
 
 <template>
-  <div class="bg-serag-night text-serag-ivory text-xs sm:text-sm">
-    <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-2 px-4 py-2 sm:px-6 lg:px-8">
-      <div class="flex flex-wrap items-center gap-4 sm:gap-6">
-        <span class="inline-flex items-center gap-1.5">
+  <div class="bg-serag-night text-xs text-[#E8DFB0] sm:text-sm">
+    <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-7 gap-y-2 px-4 py-2.5 sm:px-6 lg:px-10">
+      <div class="flex flex-wrap items-center gap-x-6 gap-y-1.5">
+        <span class="inline-flex items-center gap-2">
           <ShieldCheck class="size-4 text-serag-gold" aria-hidden="true" />
           <span>{{ t('store.header.announcementAuthentic') }}</span>
         </span>
-        <span class="hidden items-center gap-1.5 md:inline-flex">
+        <span class="hidden items-center gap-2 md:inline-flex">
           <Truck class="size-4 text-serag-gold" aria-hidden="true" />
           <span>{{ t('store.header.announcementDelivery') }}</span>
         </span>
       </div>
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-5">
         <a
           v-if="phone"
           :href="`tel:${phone}`"
-          class="inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 transition-colors hover:text-serag-gold-hi focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-reduce:transition-none"
+          class="inline-flex min-h-8 items-center gap-2 rounded-full transition-colors hover:text-serag-gold-hi focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
         >
-          <Phone class="size-3.5 text-serag-gold" aria-hidden="true" />
+          <Phone class="size-4 text-serag-gold" aria-hidden="true" />
           <span class="num font-medium">{{ phone }}</span>
         </a>
+        <NuxtLink
+          :to="switchLocalePath(otherLocale.code)"
+          external
+          :lang="otherLocale.code"
+          :hreflang="otherLocale.language"
+          :aria-label="otherLocale.name"
+          class="num inline-flex min-h-8 items-center rounded-full border border-serag-gold/50 px-3 text-[13px] font-bold uppercase transition-colors hover:bg-serag-gold/15 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+        >
+          {{ otherLocale.code === 'en' ? 'EN' : 'ع' }}
+        </NuxtLink>
       </div>
     </div>
   </div>

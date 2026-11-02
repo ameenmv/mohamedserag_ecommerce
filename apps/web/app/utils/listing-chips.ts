@@ -124,9 +124,12 @@ export function buildActiveChips(
             remaining.length > 0
               ? { type: spec.type, values: remaining }
               : undefined
+          // English option name when the API sent one; the value itself stays Arabic
+          const optionIndex = fieldDef?.options?.indexOf(val) ?? -1
+          const valueLabel = (optionIndex >= 0 ? fieldDef?.optionLabels?.[optionIndex] : undefined) ?? val
           chips.push({
             id: `spec:${key}:${val}`,
-            label: `${fieldLabel}: ${val}`,
+            label: `${fieldLabel}: ${valueLabel}`,
             patch: {
               specs: withSpec(filters.specs, key, nextSpecVal),
             },

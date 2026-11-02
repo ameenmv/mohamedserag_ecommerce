@@ -60,7 +60,7 @@ function onRestart(): void {
 
     <div class="mt-4 flex items-center gap-2">
       <Sparkles class="size-6 text-serag-gold" aria-hidden="true" />
-      <h1 class="font-display text-2xl text-foreground sm:text-3xl">{{ t('store.quiz.heading') }}</h1>
+      <h1 class="title-draw font-display text-3xl text-foreground sm:text-4xl">{{ t('store.quiz.heading') }}</h1>
     </div>
     <p class="mt-2 text-sm text-muted-foreground">{{ t('store.quiz.intro', { category: category.name }) }}</p>
 
@@ -88,11 +88,13 @@ function onRestart(): void {
       @restart="onRestart"
     />
 
-    <template v-else-if="current">
-      <StoreQuizProgress class="mt-6" :current="step + 1" :total="total" />
+    <div v-else-if="current" class="mt-6 rounded-[28px] border border-border bg-card p-5 shadow-[0_24px_48px_-32px_rgba(20,32,26,.3)] sm:p-8">
+      <StoreQuizProgress :current="step + 1" :total="total" />
 
       <div class="mt-6">
         <StoreQuizQuestion
+          :key="step"
+          class="question-in"
           :question="current"
           :selected="currentAnswer"
           :disabled="submitting"
@@ -134,6 +136,6 @@ function onRestart(): void {
           <span>{{ t('store.quiz.showResults') }}</span>
         </button>
       </div>
-    </template>
+    </div>
   </main>
 </template>

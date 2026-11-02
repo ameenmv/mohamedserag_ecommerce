@@ -300,6 +300,7 @@ export class AdminProductsService {
         seoTitle: data.seoTitle ?? null,
         seoDescription: data.seoDescription ?? null,
         taxRate: data.taxRate,
+        translations: (data.translations ?? {}) as Prisma.InputJsonValue,
       },
     })
 
@@ -407,6 +408,9 @@ export class AdminProductsService {
     if (data.seoTitle !== undefined) updateData.seoTitle = data.seoTitle
     if (data.seoDescription !== undefined) updateData.seoDescription = data.seoDescription
     if (data.taxRate !== undefined) updateData.taxRate = data.taxRate
+    if (data.translations !== undefined) {
+      updateData.translations = (data.translations ?? {}) as Prisma.InputJsonValue
+    }
 
     const stockChanged = data.stock !== undefined && data.stock !== existing.stock
     const stockDiff = stockChanged ? data.stock! - existing.stock : 0
@@ -518,6 +522,7 @@ export class AdminProductsService {
       etaItemCode: p.etaItemCode,
       seoTitle: p.seoTitle,
       seoDescription: p.seoDescription,
+      translations: (p.translations as AdminProductDetail['translations']) ?? null,
       images: p.images.map((img) => ({
         id: img.id,
         url: img.url,

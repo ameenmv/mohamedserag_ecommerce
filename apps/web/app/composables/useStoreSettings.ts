@@ -21,7 +21,7 @@ const INSTALLMENT_MIN_PRICE_PIASTRES = 1_000_000
 export function useStoreSettings(): StoreSettings {
   const { t } = useI18n()
   const storeApi = useStoreApi()
-  const { data } = useAsyncData('store:info', () => storeApi.storeInfo())
+  const { data } = useAsyncData('store:info', () => storeApi.storeInfo(), { getCachedData: payloadCache })
 
   const whatsapp = computed(() => storeWhatsappDigits(data.value?.whatsapp))
   const phone = computed(() => storePhoneDisplay(data.value?.phone))
