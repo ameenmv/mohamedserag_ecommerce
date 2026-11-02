@@ -102,6 +102,7 @@ useHeroMotion(heroRef, marqueeRef)
 
         <div data-hero-intro class="flex flex-wrap gap-3.5">
           <NuxtLink
+            data-magnetic
             :to="primary.to"
             :target="primary.external ? '_blank' : undefined"
             :rel="primary.external ? 'noopener noreferrer' : undefined"
@@ -112,6 +113,7 @@ useHeroMotion(heroRef, marqueeRef)
           </NuxtLink>
           <NuxtLink
             v-if="secondary"
+            data-magnetic
             :to="secondary.to"
             :target="secondary.external ? '_blank' : undefined"
             :rel="secondary.external ? 'noopener noreferrer' : undefined"

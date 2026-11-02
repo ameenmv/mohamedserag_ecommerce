@@ -22,7 +22,7 @@ const contactLinkClass =
 </script>
 
 <template>
-  <footer class="bg-serag-night text-[#D8D3C7]">
+  <footer class="overflow-clip bg-serag-night text-[#D8D3C7]">
     <div class="mx-auto max-w-7xl px-4 pt-14 pb-6 sm:px-6 lg:px-10">
       <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1.2fr]">
         <StoreFooterBrand />
@@ -64,6 +64,14 @@ const contactLinkClass =
           {{ t('store.footer.legacyTagline') }} · <span class="font-extrabold">{{ t('store.footer.since') }}</span>
         </NuxtLink>
       </div>
+    </div>
+    <!-- The name, huge, closing the page; fills with sand as the visitor reaches the end -->
+    <!-- The fill is on the wrapper: the word itself runs past the footer's edge, and a scroll
+         timeline needs a box that fully enters the screen -->
+    <div class="ink-fill ink-fill-end h-[0.88em] text-[clamp(120px,30vw,440px)] text-serag-gold" aria-hidden="true">
+      <p class="text-center font-display leading-[0.95]">
+        {{ t('common.splash.word') }}
+      </p>
     </div>
   </footer>
 </template>

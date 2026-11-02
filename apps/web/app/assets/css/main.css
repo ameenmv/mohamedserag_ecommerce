@@ -381,6 +381,8 @@
     animation-range: entry 100% cover 55%;
   }
   [dir='ltr'] .ink-fill { background-position: left, 0 0; }
+  /* At the very end of the page an element can never reach mid-screen: fill while it enters */
+  .ink-fill-end { animation-range: entry 10% entry 100%; }
 }
 @keyframes ink-fill { to { background-size: 100% 100%, auto; } }
 

@@ -106,7 +106,30 @@ export function useHeroMotion(rootRef: Ref<HTMLElement | null>, marqueeRef: Ref<
           }
         }
         root.addEventListener('pointermove', onMove)
-        revert = () => root.removeEventListener('pointermove', onMove)
+
+        // The call-to-action buttons lean toward the pointer, then spring back
+        const magnets = [...root.querySelectorAll<HTMLElement>('[data-magnetic]')].map((el) => {
+          const x = gsap.quickTo(el, 'x', { duration: 0.5, ease: 'power3.out' })
+          const y = gsap.quickTo(el, 'y', { duration: 0.5, ease: 'power3.out' })
+          const pull = (event: PointerEvent): void => {
+            const box = el.getBoundingClientRect()
+            x((event.clientX - box.left - box.width / 2) * 0.3)
+            y((event.clientY - box.top - box.height / 2) * 0.4)
+          }
+          const release = (): void => {
+            gsap.to(el, { x: 0, y: 0, duration: 0.9, ease: 'elastic.out(1, 0.4)', overwrite: true })
+          }
+          el.addEventListener('pointermove', pull)
+          el.addEventListener('pointerleave', release)
+          return () => {
+            el.removeEventListener('pointermove', pull)
+            el.removeEventListener('pointerleave', release)
+          }
+        })
+        revert = () => {
+          root.removeEventListener('pointermove', onMove)
+          for (const off of magnets) off()
+        }
       }
 
       // Scroll: the hero becomes a rounded card as it leaves; layers move at their own speeds
