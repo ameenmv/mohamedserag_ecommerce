@@ -25,7 +25,7 @@ const whatsappUrl = computed(() =>
           <h2 :id="headingId" class="mb-3.5 font-display text-[clamp(38px,5vw,68px)] leading-none">
             {{ t('store.home.contact.title') }}
           </h2>
-          <p class="text-lg leading-[1.8] text-[#2F2A10] sm:text-[19px]">{{ t('store.home.contact.subtitle') }}</p>
+          <p class="text-lg leading-[1.8] text-[#1C1A0E] sm:text-[19px]">{{ t('store.home.contact.subtitle') }}</p>
         </div>
         <div class="relative flex flex-wrap gap-3.5">
           <a

@@ -64,7 +64,7 @@ const whatsappUrl = computed(() =>
             />
           </div>
           <h3 class="text-[21px] font-bold">{{ t(`store.home.how.steps.${step.key}.title`) }}</h3>
-          <p :class="['text-[15px] leading-[1.8]', step.featured ? 'text-[#D8D3C7]' : 'text-[#66625B]']">
+          <p :class="['text-[15px] leading-[1.8]', step.featured ? 'text-serag-ivory' : 'text-[#66625B]']">
             {{ t(`store.home.how.steps.${step.key}.body`) }}
           </p>
           <span

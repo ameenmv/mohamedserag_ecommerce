@@ -109,7 +109,7 @@ const headingId = useId()
             {{ m.year }}
           </div>
           <div class="mt-3 text-lg font-bold">{{ t(`store.home.about.milestones.${m.key}.title`) }}</div>
-          <div :class="['mt-1.5 text-[15px] leading-[1.7]', m.accent === 'dark' ? 'text-[#D8D3C7]' : 'text-[#66625B]']">
+          <div :class="['mt-1.5 text-[15px] leading-[1.7]', m.accent === 'dark' ? 'text-serag-ivory' : 'text-[#66625B]']">
             {{ t(`store.home.about.milestones.${m.key}.body`) }}
           </div>
         </li>
