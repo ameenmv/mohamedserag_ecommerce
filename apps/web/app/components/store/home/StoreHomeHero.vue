@@ -81,11 +81,9 @@ onBeforeUnmount(() => {
       <div data-hero-blob class="hero-blob -bottom-72 -start-40 size-[44rem] bg-[radial-gradient(circle,rgba(85,120,64,.50)_0%,rgba(85,120,64,0)_62%)]" />
       <div data-hero-blob class="hero-blob top-1/3 start-1/3 size-[30rem] bg-[radial-gradient(circle,rgba(166,138,100,.16)_0%,rgba(166,138,100,0)_65%)]" />
       <div class="hero-slats absolute inset-0 hidden lg:block" />
-      <!-- The showroom: ceiling spotlights over the appliances and the lit floor they stand on -->
+      <!-- The showroom floor the appliances stand on, with a pool of light under them -->
       <div class="hero-floor absolute inset-x-0 bottom-0 hidden h-[42%] lg:block" />
       <div class="hero-pool absolute hidden lg:block bottom-[4%] end-[8%] h-40 w-[46rem] max-w-full rounded-[50%]" />
-      <div data-hero-beam class="hero-beam absolute -top-10 hidden lg:block end-[6%] h-[115%] w-[34rem] origin-top" />
-      <div data-hero-beam class="hero-beam absolute -top-10 hidden lg:block end-[21%] h-[110%] w-[28rem] origin-top opacity-70" />
       <div class="hero-spot absolute inset-0 hidden lg:block" />
       <div data-hero-year class="num absolute -bottom-16 left-1/2 -translate-x-1/2 text-[clamp(200px,34vw,520px)] leading-[0.8] font-extrabold tracking-[-8px] whitespace-nowrap" dir="ltr">
         <span class="text-outline block [--outline-color:rgba(201,177,137,.18)]">1972</span>

@@ -36,10 +36,6 @@ export function startHeroMotion(kit: GsapKit, root: HTMLElement, marquee: HTMLEl
       })
     }
 
-    // The spotlights sway a little, like lamps on a ceiling rail
-    q('[data-hero-beam]').forEach((beam, i) => {
-      gsap.fromTo(beam, { rotate: i % 2 ? 5 : -5 }, { rotate: i % 2 ? -4 : 4, duration: 6 + i * 1.5, ease: 'sine.inOut', repeat: -1, yoyo: true })
-    })
 
     // Brand-colour light drifts slowly, forever
     for (const blob of q('[data-hero-blob]')) {
