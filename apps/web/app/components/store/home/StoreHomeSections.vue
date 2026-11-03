@@ -140,7 +140,7 @@ const EXTRA_SECTIONS: { id: ExtraSectionId; anchors: string[]; component: Compon
   },
   {
     id: 'sourcing',
-    anchors: ['traderReels', 'partners', 'aboutTeaser', 'tradersTeaser'],
+    anchors: ['partners', 'aboutTeaser', 'tradersTeaser'],
     component: onVisible(() => import('./StoreHomeSourcing.vue')),
   },
   {
@@ -161,11 +161,13 @@ const NO_REVEAL = new Set<string>(['announce', 'hero', 'productStory'])
 
 const renderedSections = computed(() => {
   const list: { id: string; component: Component; props: Record<string, unknown> }[] =
-    props.visibleSections.map((id) => ({
-      id,
-      component: COMPONENT_BY_SECTION[id],
-      props: sectionProps(id),
-    }))
+    props.visibleSections
+      .filter((id) => id !== 'traderReels')
+      .map((id) => ({
+        id,
+        component: COMPONENT_BY_SECTION[id],
+        props: sectionProps(id),
+      }))
   for (const extra of EXTRA_SECTIONS) {
     const entry = { id: extra.id, component: extra.component, props: extraProps(extra.id) }
     const anchor = extra.anchors.find((a) => list.some((item) => item.id === a))

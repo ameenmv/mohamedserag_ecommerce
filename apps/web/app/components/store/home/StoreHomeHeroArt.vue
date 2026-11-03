@@ -63,17 +63,22 @@ const { t } = useI18n()
       <span class="text-sm font-bold sm:text-[15px]">{{ t('store.home.heroArt.washers') }}</span>
     </div>
 
-    <!-- Screen -->
+    <!-- Household -->
     <div
       data-depth="1.6"
-      data-hero-card="screens"
+      data-hero-card="household"
       class="hero-card-px animate-floaty absolute top-[2%] end-[66%] flex h-[34%] w-[34%] flex-col items-center justify-center gap-2.5 rounded-[30px] bg-serag-gold text-serag-ink shadow-[0_30px_50px_-22px_rgba(0,0,0,0.6)] [--tilt:5deg] [animation-delay:-4.5s]"
     >
       <svg viewBox="0 0 48 48" class="w-[62%]" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="4" y="8" width="40" height="27" rx="3" />
-        <path d="M16 42h16M24 35v7" />
+        <path d="M20 9h8" />
+        <path d="M24 9v4" />
+        <path d="M12 18c1.5-3.5 6-5 12-5s10.5 1.5 12 5" />
+        <path d="M8 18h32" />
+        <path d="M11 18v13c0 5 4 9 9 9h8c5 0 9-4 9-9V18" />
+        <path d="M11 23H6a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h5" />
+        <path d="M37 23h5a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-5" />
       </svg>
-      <span class="text-sm font-bold sm:text-[15px]">{{ t('store.home.heroArt.screens') }}</span>
+      <span class="text-sm font-bold sm:text-[15px]">{{ t('store.home.heroArt.household') }}</span>
     </div>
 
     <!-- AC -->

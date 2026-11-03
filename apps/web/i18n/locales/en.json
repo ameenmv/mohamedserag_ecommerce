@@ -81,7 +81,6 @@
       "allCategories": "Shop all",
       "flashDeals": "Flash deals",
       "tradersWholesale": "Wholesale",
-      "tradersReviews": "Reviews",
       "aboutUs": "About us",
       "toggleTheme": "Switch light or dark theme",
       "darkMode": "Dark mode",
@@ -146,11 +145,10 @@
       "authorizedDealer": "Authorized dealer",
       "guidesEyebrow": "GUIDES",
       "allGuides": "Read the buying guides",
-      "heroTradersCta": "Wholesale prices for traders",
       "heroArt": {
         "fridges": "Fridges",
         "washers": "Washers",
-        "screens": "Screens",
+        "household": "Household",
         "acs": "ACs"
       },
       "marquee": [

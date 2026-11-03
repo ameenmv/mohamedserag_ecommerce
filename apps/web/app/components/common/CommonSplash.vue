@@ -11,7 +11,7 @@ const { t } = useI18n()
 // (the component is never hydrated), so it costs no client JavaScript: registering it through
 // useHead pulled a shared chunk into the home's first load. The hero is already parsed when it
 // runs (the splash comes after the page in app.vue); the CSP hashes it like every inline script.
-const LAND_SCRIPT = "try{var d=document.documentElement,s=document.querySelector('.splash');if(s&&!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)){d.classList.add('splash-landing');var f=parseFloat(getComputedStyle(d).getPropertyValue('--sp'))||1;setTimeout(function(){try{var c=['fridges','washers','screens','acs'],h=[],p=[],iw=window.innerWidth,ih=window.innerHeight;for(var i=0;i<c.length;i++){var he=document.querySelector('[data-hero-card=\"'+c[i]+'\"]'),se=document.querySelector('[data-splash-card=\"'+c[i]+'\"]');if(!he||!se)return;var r=he.getBoundingClientRect();if(r.top<0||r.bottom>ih||r.left<0||r.right>iw)return;h.push(he);p.push(se)}for(var j=0;j<c.length;j++){var el=h[j],sp=p[j],rc=el.getBoundingClientRect(),cs=window.getComputedStyle(el);sp.style.setProperty('--land-x',(rc.left+rc.width/2-iw/2)+'px');sp.style.setProperty('--land-y',(rc.top+rc.height/2-ih/2)+'px');sp.style.setProperty('--land-w',el.offsetWidth+'px');sp.style.setProperty('--land-h',el.offsetHeight+'px');sp.style.setProperty('--land-r',cs.getPropertyValue('--tilt').trim()||'0deg');sp.style.setProperty('--land-rad',cs.borderTopLeftRadius)}s.setAttribute('data-land','hero')}catch(e){}},950*f);setTimeout(function(){d.classList.remove('splash-landing')},2000*f)}}catch(e){}"
+const LAND_SCRIPT = "try{var d=document.documentElement,s=document.querySelector('.splash');if(s&&!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)){d.classList.add('splash-landing');var f=parseFloat(getComputedStyle(d).getPropertyValue('--sp'))||1;setTimeout(function(){try{var c=['fridges','washers','household','acs'],h=[],p=[],iw=window.innerWidth,ih=window.innerHeight;for(var i=0;i<c.length;i++){var he=document.querySelector('[data-hero-card=\"'+c[i]+'\"]'),se=document.querySelector('[data-splash-card=\"'+c[i]+'\"]');if(!he||!se)return;var r=he.getBoundingClientRect();if(r.top<0||r.bottom>ih||r.left<0||r.right>iw)return;h.push(he);p.push(se)}for(var j=0;j<c.length;j++){var el=h[j],sp=p[j],rc=el.getBoundingClientRect(),cs=window.getComputedStyle(el);sp.style.setProperty('--land-x',(rc.left+rc.width/2-iw/2)+'px');sp.style.setProperty('--land-y',(rc.top+rc.height/2-ih/2)+'px');sp.style.setProperty('--land-w',el.offsetWidth+'px');sp.style.setProperty('--land-h',el.offsetHeight+'px');sp.style.setProperty('--land-r',cs.getPropertyValue('--tilt').trim()||'0deg');sp.style.setProperty('--land-rad',cs.borderTopLeftRadius)}s.setAttribute('data-land','hero')}catch(e){}},950*f);setTimeout(function(){d.classList.remove('splash-landing')},2000*f)}}catch(e){}"
 // A render function: templates drop <script> tags, the server renderer outputs this one as is
 const LandScript = () => h('script', { innerHTML: LAND_SCRIPT })
 </script>
@@ -76,14 +76,19 @@ const LandScript = () => h('script', { innerHTML: LAND_SCRIPT })
         </span>
       </div>
 
-      <!-- 3. Screen -->
-      <div data-splash-card="screens" class="splash-card splash-card-3 gap-2.5 bg-serag-gold text-serag-ink">
+      <!-- 3. Household -->
+      <div data-splash-card="household" class="splash-card splash-card-3 gap-2.5 bg-serag-gold text-serag-ink">
         <svg viewBox="0 0 48 48" class="w-[62%]" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="4" y="8" width="40" height="27" rx="3" />
-          <path d="M16 42h16M24 35v7" />
+          <path d="M20 9h8" />
+          <path d="M24 9v4" />
+          <path d="M12 18c1.5-3.5 6-5 12-5s10.5 1.5 12 5" />
+          <path d="M8 18h32" />
+          <path d="M11 18v13c0 5 4 9 9 9h8c5 0 9-4 9-9V18" />
+          <path d="M11 23H6a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h5" />
+          <path d="M37 23h5a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-5" />
         </svg>
         <span class="text-sm font-bold sm:text-[15px]">
-          {{ t('store.home.heroArt.screens') }}
+          {{ t('store.home.heroArt.household') }}
         </span>
       </div>
 

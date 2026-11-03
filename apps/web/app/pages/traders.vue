@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { DEFAULT_HOME_CONTENT, hasPlaceholder, waLink } from '@serag/shared'
+import StoreHomeTraderReels from '~/components/store/home/StoreHomeTraderReels.vue'
 
 const { t } = useI18n()
 const storeApi = useStoreApi()
@@ -9,6 +10,10 @@ const { data: store } = await useAsyncData('traders:store', () => storeApi.store
 
 const teaser = computed(
   () => home.value?.sections.tradersTeaser ?? DEFAULT_HOME_CONTENT.tradersTeaser,
+)
+
+const traderReels = computed(
+  () => home.value?.sections.traderReels ?? DEFAULT_HOME_CONTENT.traderReels,
 )
 
 useSeoPage({
@@ -39,24 +44,31 @@ const contact = computed(() => {
 </script>
 
 <template>
-  <main class="mx-auto w-full min-w-0 max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
-    <div class="flex flex-col gap-6 sm:gap-8">
-      <StoreTradersHero
-        :badge="teaser.badge"
-        :title="teaser.title"
-        :subtitle="teaser.subtitle"
-        :points="teaser.points"
-        :whatsapp-href="whatsappHref"
-        :whatsapp-disabled="tradersNumber.length === 0"
-      />
+  <main class="w-full min-w-0">
+    <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+      <div class="flex flex-col gap-6 sm:gap-8">
+        <StoreTradersHero
+          :badge="teaser.badge"
+          :title="teaser.title"
+          :subtitle="teaser.subtitle"
+          :points="teaser.points"
+          :whatsapp-href="whatsappHref"
+          :whatsapp-disabled="tradersNumber.length === 0"
+        />
 
-      <StoreTradersSteps />
+        <StoreTradersSteps />
 
-      <StoreTradersContact
-        :phone="contact.phone"
-        :address="contact.address"
-        :hours="contact.hours"
-      />
+        <StoreTradersContact
+          :phone="contact.phone"
+          :address="contact.address"
+          :hours="contact.hours"
+        />
+      </div>
     </div>
+
+    <StoreHomeTraderReels
+      v-if="traderReels.items.length > 0"
+      :content="traderReels"
+    />
   </main>
 </template>

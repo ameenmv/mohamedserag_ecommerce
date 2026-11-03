@@ -80,8 +80,7 @@
       "categoriesNav": "أقسام المتجر",
       "allCategories": "كل الأقسام",
       "flashDeals": "عروض الفلاش",
-      "tradersWholesale": "للتجار والجملة",
-      "tradersReviews": "آراء التجار",
+      "tradersWholesale": "للتجار",
       "aboutUs": "من نحن",
       "toggleTheme": "بدّل بين الوضع الفاتح والغامق",
       "darkMode": "الوضع الغامق",
@@ -146,11 +145,10 @@
       "authorizedDealer": "وكيل معتمد",
       "guidesEyebrow": "دليل الشراء",
       "allGuides": "اقرأ دليل الشراء",
-      "heroTradersCta": "أسعار الجملة للتجار",
       "heroArt": {
         "fridges": "ثلاجات",
         "washers": "غسالات",
-        "screens": "شاشات",
+        "household": "منزلي",
         "acs": "تكييفات"
       },
       "marquee": [

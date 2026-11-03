@@ -152,7 +152,7 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
   },
   featuredCategories: {
     title: 'تسوّق حسب القسم',
-    categorySlugs: ['refrigerators', 'washers', 'tvs', 'acs', 'cookers', 'cookware'],
+    categorySlugs: ['household', 'refrigerators', 'washers', 'acs', 'cookers', 'tvs'],
   },
   flash: {
     title: 'عروض الفلاش',

@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import { ArrowRight } from '@lucide/vue'
 import type { HomeContent } from '@serag/shared'
-import { FEATURES } from '~/constants/features'
 import { loadGsap } from '~/composables/useGsap'
 
 const props = defineProps<{
   content: HomeContent['hero']
 }>()
 
-const { t, tm, rt } = useI18n()
+const { tm, rt } = useI18n()
 const localePath = useLocalePath()
 
 // A list in the locale files: a «|» in a message is vue-i18n's plural separator, so t() returned one word
@@ -24,20 +23,6 @@ const primary = computed(() => {
     to: resolveLink(href),
     external: isExternalHref(href),
     label: props.content.cta.label,
-  }
-})
-
-const secondary = computed(() => {
-  let cta = props.content.secondaryCta
-  if (!cta) return null
-  // Older published content still points at the switched-off bridal builder
-  if (!FEATURES.bridal && cta.href.startsWith('/bridal')) {
-    cta = { label: t('store.home.heroTradersCta'), href: '/traders' }
-  }
-  return {
-    to: resolveLink(cta.href),
-    external: isExternalHref(cta.href),
-    label: cta.label,
   }
 })
 
@@ -124,16 +109,6 @@ onBeforeUnmount(() => {
           >
             {{ primary.label }}
             <ArrowRight class="size-5 rtl:-scale-x-100" aria-hidden="true" />
-          </NuxtLink>
-          <NuxtLink
-            v-if="secondary"
-            data-magnetic
-            :to="secondary.to"
-            :target="secondary.external ? '_blank' : undefined"
-            :rel="secondary.external ? 'noopener noreferrer' : undefined"
-            class="inline-flex min-h-11 w-full items-center justify-center gap-3 rounded-full border-[1.5px] border-serag-ivory/55 px-8 py-4 text-base font-bold text-serag-ivory transition-colors hover:bg-serag-ivory hover:text-serag-deep focus-visible:ring-2 focus-visible:ring-serag-gold focus-visible:outline-none sm:w-auto sm:text-lg"
-          >
-            {{ secondary.label }}
           </NuxtLink>
         </div>
 

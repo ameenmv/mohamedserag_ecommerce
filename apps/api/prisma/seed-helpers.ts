@@ -87,6 +87,8 @@ const CATEGORY_SLUG_WORDS: Record<string, string> = {
   acs: 'ac',
   cookers: 'cooker',
   cookware: 'cookware',
+  household: 'household',
+  'small-appliances': 'small-appliance',
 }
 
 /**
@@ -265,6 +267,18 @@ export function parseSpecs(cap: string, tech: string, categorySlug: string): Par
 
       specs.induction = /(?:ال)?حث (?:ال)?حراري|اندكشن|انداكشن|induction/i.test(combined)
       specs.dishwasher_safe = /غسالة الأطباق|غسالة اطباق|dishwasher/i.test(combined)
+      return specs
+    }
+
+    case 'small-appliances': {
+      const litersMatch = /(\d+(?:\.\d+)?)\s*لتر/.exec(combined)
+      if (litersMatch?.[1]) {
+        specs.capacity_l = Number(litersMatch[1])
+      }
+      const wattsMatch = /(\d+)\s*وات/.exec(combined)
+      if (wattsMatch?.[1]) {
+        specs.power_w = Number(wattsMatch[1])
+      }
       return specs
     }
 

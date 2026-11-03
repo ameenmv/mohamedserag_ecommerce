@@ -38,9 +38,6 @@ const linkClass =
       <NuxtLink :to="localePath('/traders')" :class="[linkClass, 'font-bold text-serag-ivory']">
         {{ t('store.header.tradersWholesale') }}
       </NuxtLink>
-      <NuxtLink :to="localePath({ path: '/', hash: '#traders-reviews' })" :class="[linkClass, 'font-medium']">
-        {{ t('store.header.tradersReviews') }}
-      </NuxtLink>
       <NuxtLink :to="localePath('/pages/about')" :class="[linkClass, 'font-medium']">
         {{ t('store.header.aboutUs') }}
       </NuxtLink>

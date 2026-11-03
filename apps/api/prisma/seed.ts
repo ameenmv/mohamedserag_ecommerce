@@ -110,6 +110,7 @@ interface CategoryTranslationsEn {
 interface CategorySeedDef {
   slug: string
   name: string
+  parentSlug?: string
   templateName: string
   sort: number
   intro: string
@@ -121,10 +122,29 @@ interface CategorySeedDef {
 
 const CATEGORY_DEFS: CategorySeedDef[] = [
   {
+    slug: 'household',
+    name: 'منزلي',
+    templateName: 'منزلي',
+    sort: 1,
+    intro: 'تشكيلة أدوات منزلية وأواني طهي وأجهزة صغيرة لكل بيت مصري.',
+    seoTitle: 'أدوات منزلية وأجهزة صغيرة | معرض محمد سراج',
+    seoDescription: 'تسوق أفضل الأدوات المنزلية وأواني الطهي التركية والأجهزة الصغيرة بضمان معتمد من معرض محمد سراج بالمنصورة.',
+    translations: {
+      en: {
+        name: 'Household',
+        intro: 'A wide selection of housewares, cookware, and small appliances for every home.',
+        seoTitle: 'Household & Small Appliances | Mohamed Serag',
+        seoDescription:
+          'Shop housewares, imported Turkish cookware, and small appliances with authorized warranty at Mohamed Serag in Mansoura.',
+      },
+    },
+    fields: [],
+  },
+  {
     slug: 'refrigerators',
     name: 'ثلاجات وفريزر',
     templateName: 'ثلاجات',
-    sort: 1,
+    sort: 2,
     intro: 'تشكيلة ثلاجات نوفروست وديفروست أصلية بضمان الوكيل الرسمي وتوصيل لحد باب البيت.',
     seoTitle: 'ثلاجات وفريزر بأفضل سعر في مصر | معرض محمد سراج',
     seoDescription: 'اشترِ ثلاجات سامسونج وإل جي وتوشيبا وفريش بضمان الوكيل الرسمي من معرض محمد سراج بالمنصورة.',
@@ -200,7 +220,7 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
     slug: 'washers',
     name: 'غسالات',
     templateName: 'غسالات',
-    sort: 2,
+    sort: 3,
     intro: 'غسالات أوتوماتيك تحميل أمامي وفوق أوتوماتيك ونصف أوتوماتيك من أكبر الماركات المعتمدة.',
     seoTitle: 'غسالات ملابس أوتوماتيك وفوق أوتوماتيك | معرض محمد سراج',
     seoDescription: 'قارن أسعار ومواصفات غسالات إل جي وسامسونج وتوشيبا وتورنيدو بضمان الوكيل الرسمي.',
@@ -266,7 +286,7 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
     slug: 'tvs',
     name: 'شاشات وتلفزيونات',
     templateName: 'شاشات',
-    sort: 3,
+    sort: 4,
     intro: 'شاشات سمارت 4K وQLED وFull HD بريسيفر داخلي وضمان رسمي.',
     seoTitle: 'شاشات وتلفزيونات سمارت 4K وQLED | معرض محمد سراج',
     seoDescription: 'تسوق أحدث شاشات سامسونج وإل جي وشارب بمقاسات متنوعة وضمان الوكيل المعتمد.',
@@ -322,7 +342,7 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
     slug: 'acs',
     name: 'تكييفات',
     templateName: 'تكييفات',
-    sort: 4,
+    sort: 5,
     intro: 'تكييفات سبليت بارد وبارد ساخن وتكنولوجيا انفرتر موفرة للكهرباء.',
     seoTitle: 'تكييفات شارب وتوشيبا وفريش إنفرتر | معرض محمد سراج',
     seoDescription: 'أفضل أسعار التكييفات السبليت 1.5 و2.25 و3 حصان بضمان العربي جروب ومصانع فريش.',
@@ -380,7 +400,7 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
     slug: 'cookers',
     name: 'بوتاجازات',
     templateName: 'بوتاجازات',
-    sort: 5,
+    sort: 6,
     intro: 'بوتاجازات غاز 4 و5 شعلة استانلس كامل وأمان كامل من أشهر المصانع المصرية.',
     seoTitle: 'بوتاجازات 4 و5 شعلة استانلس وأمان كامل | معرض محمد سراج',
     seoDescription: 'بوتاجازات يونيون إير وفريش وتورنيدو العربي بمروحة فرن وإشعال ذاتي بضمان المصنع.',
@@ -435,8 +455,9 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
   {
     slug: 'cookware',
     name: 'أدوات مطبخ تركي',
+    parentSlug: 'household',
     templateName: 'أدوات مطبخ',
-    sort: 6,
+    sort: 1,
     intro: 'أطقم حلل وأواني طهي تركية أصلية مستوردة مباشرة (جرانيت، ستانلس 18/10، سيراميك، تيفال).',
     seoTitle: 'أدوات مطبخ وأطقم حلل تركي أصلية | معرض محمد سراج',
     seoDescription: 'أطقم حلل تركي مستوردة حصرياً من مصانع TAÇ وGlore وÖztef وYonca وMarti وEdessa.',
@@ -488,15 +509,58 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
       },
     ],
   },
+  {
+    slug: 'small-appliances',
+    name: 'أجهزة منزلية صغيرة',
+    parentSlug: 'household',
+    templateName: 'أجهزة صغيرة',
+    sort: 2,
+    intro: 'خلاطات، غلايات، قلايات هوائية، ومكاوي ملابس بضمان معتمد من كبرى الماركات العالمية والمصرية.',
+    seoTitle: 'أجهزة منزلية صغيرة | خلاطات وغلايات وقلايات | معرض محمد سراج',
+    seoDescription: 'تسوق خلاطات، قلايات هوائية، غلايات كهربائية ومكاوي أصلية بضمان معتمد من معرض محمد سراج بالمنصورة.',
+    translations: {
+      en: {
+        name: 'Small Appliances',
+        intro: 'Blenders, kettles, air fryers, and garment irons with authorized warranties from leading brands.',
+        seoTitle: 'Small Kitchen & Home Appliances | Mohamed Serag',
+        seoDescription:
+          'Shop blenders, air fryers, electric kettles, and irons with authorized warranty at Mohamed Serag showroom.',
+      },
+    },
+    fields: [
+      {
+        key: 'power_w',
+        label: 'القدرة بالوات',
+        labelEn: 'Power (Watts)',
+        type: 'number',
+        unit: 'وات',
+        unitEn: 'W',
+        filterable: true,
+        comparable: true,
+      },
+      {
+        key: 'capacity_l',
+        label: 'السعة باللتر',
+        labelEn: 'Capacity (Liters)',
+        type: 'number',
+        unit: 'لتر',
+        unitEn: 'L',
+        filterable: true,
+        comparable: true,
+      },
+    ],
+  },
 ]
 
 const CATEGORY_AR_TO_SLUG: Record<string, string> = {
+  منزلي: 'household',
   'ثلاجات وفريزر': 'refrigerators',
   غسالات: 'washers',
   'شاشات وتلفزيونات': 'tvs',
   تكييفات: 'acs',
   بوتاجازات: 'cookers',
   'أدوات مطبخ تركي': 'cookware',
+  'أجهزة منزلية صغيرة': 'small-appliances',
 }
 
 // ============================================================================
@@ -913,6 +977,62 @@ const COOKWARE_CATALOG: CatalogSeedItem[] = [
       { item: 'صينية فرن سيراميك بيضاوية', size: '26 سم', qty: 1 },
       { item: 'مقلاية سيراميك', size: '24 سم', qty: 1 },
     ],
+  },
+]
+
+// 4 sample small appliances (mixer, kettle, air fryer, iron) for the household category
+const SMALL_APPLIANCES_CATALOG: CatalogSeedItem[] = [
+  {
+    id: 'sm1',
+    name: 'خلاط كهربائي تورنيدو 1.5 لتر بالمطحنة',
+    brand: 'Tornado · تورنيدو',
+    cat: 'أجهزة منزلية صغيرة',
+    price: 1450,
+    old: 1650,
+    cap: '1.5 لتر · 500 وات',
+    tech: 'دورق غير قابل للكسر · سرعتان + نبضات · مطحنة توابل',
+    warranty: 'سنة ضمان العربي جروب',
+    origin: 'مصر — ضمان العربي',
+    stock: 15,
+  },
+  {
+    id: 'sm2',
+    name: 'غلاية مياه ستانلس 1.7 لتر فريش',
+    brand: 'Fresh · فريش',
+    cat: 'أجهزة منزلية صغيرة',
+    price: 850,
+    old: 980,
+    cap: '1.7 لتر · 2200 وات',
+    tech: 'ستانلس ستيل 304 · فصل تلقائي عند الغليان · قاعدة دوارة 360 درجة',
+    warranty: 'سنة ضمان فريش',
+    origin: 'مصر — مصانع فريش',
+    stock: 20,
+  },
+  {
+    id: 'sm3',
+    name: 'قلاية هوائية ديجيتال بدون زيت 5.5 لتر تورنيدو',
+    brand: 'Tornado · تورنيدو',
+    cat: 'أجهزة منزلية صغيرة',
+    price: 4200,
+    old: 4800,
+    cap: '5.5 لتر · 1800 وات',
+    tech: 'شاشة لمس ديجيتال · 8 برامج طهي مسبقة · سلة غير لاصقة سهلة التنظيف',
+    warranty: 'سنة ضمان العربي جروب',
+    origin: 'مصر — ضمان العربي',
+    stock: 10,
+  },
+  {
+    id: 'sm4',
+    name: 'مكواة بخار للملابس قاعدة سيراميك فريش',
+    brand: 'Fresh · فريش',
+    cat: 'أجهزة منزلية صغيرة',
+    price: 950,
+    old: 1100,
+    cap: '2200 وات',
+    tech: 'قاعدة سيراميك مانعة للالتصاق · بخار مستمر ونبضات بخار عمودية · خاصية التنظيف الذاتي',
+    warranty: 'سنة ضمان فريش',
+    origin: 'مصر — مصانع فريش',
+    stock: 18,
   },
 ]
 
@@ -1343,6 +1463,38 @@ const PRODUCT_TRANSLATIONS_EN: Record<string, ProductTranslationSeedDef> = {
       { item: 'Ceramic Frying Pan', size: '24 cm', qty: 1 },
     ],
   },
+  sm1: {
+    name: 'Tornado 1.5L Blender with Grinder',
+    warranty: '1 Year El Araby Group Warranty',
+    origin: 'Egypt — El Araby Warranty',
+    seoTitle: 'Tornado 1.5L Blender with Grinder | Mohamed Serag',
+    seoDescription:
+      'Tornado 1.5L 500W electric blender with unbreakable jar, 2 speeds with pulse, and spice grinder with 1 year El Araby warranty.',
+  },
+  sm2: {
+    name: 'Fresh 1.7L Stainless Steel Electric Kettle',
+    warranty: '1 Year Fresh Warranty',
+    origin: 'Egypt — Fresh Factories',
+    seoTitle: 'Fresh 1.7L Stainless Steel Kettle | Mohamed Serag',
+    seoDescription:
+      'Fresh 1.7L 2200W electric kettle in food-grade 304 stainless steel with auto shut-off and 360° swivel base, 1 year warranty.',
+  },
+  sm3: {
+    name: 'Tornado 5.5L Digital Air Fryer',
+    warranty: '1 Year El Araby Group Warranty',
+    origin: 'Egypt — El Araby Warranty',
+    seoTitle: 'Tornado 5.5L Digital Air Fryer | Mohamed Serag',
+    seoDescription:
+      'Tornado 5.5L 1800W digital air fryer with touchscreen, 8 preset cooking programs, and non-stick basket with 1 year warranty.',
+  },
+  sm4: {
+    name: 'Fresh Steam Iron Ceramic Soleplate',
+    warranty: '1 Year Fresh Warranty',
+    origin: 'Egypt — Fresh Factories',
+    seoTitle: 'Fresh Steam Iron Ceramic Soleplate | Mohamed Serag',
+    seoDescription:
+      'Fresh 2200W steam iron with non-stick ceramic soleplate, vertical steam burst, and self-cleaning feature with 1 year warranty.',
+  },
 }
 
 // ============================================================================
@@ -1513,11 +1665,13 @@ async function main() {
           },
         })
 
+    const parentId = catDef.parentSlug ? (categoryBySlug.get(catDef.parentSlug)?.id ?? null) : null
     const categoryTranslations = catDef.translations as unknown as Prisma.InputJsonValue
     const category = await prisma.category.upsert({
       where: { slug: catDef.slug },
       update: {
         name: catDef.name,
+        parentId,
         specTemplateId: specTemplate.id,
         intro: catDef.intro,
         seoTitle: catDef.seoTitle,
@@ -1529,6 +1683,7 @@ async function main() {
       create: {
         slug: catDef.slug,
         name: catDef.name,
+        parentId,
         specTemplateId: specTemplate.id,
         intro: catDef.intro,
         seoTitle: catDef.seoTitle,
@@ -1631,9 +1786,13 @@ async function main() {
   }
 
   // --------------------------------------------------------------------------
-  // 6.4 Products (20 CATALOG items + 6 Turkish cookware sets)
+  // 6.4 Products (20 CATALOG items + 6 Turkish cookware sets + 4 small appliances)
   // --------------------------------------------------------------------------
-  const allCatalogItems: CatalogSeedItem[] = [...PROTOTYPE_CATALOG, ...COOKWARE_CATALOG]
+  const allCatalogItems: CatalogSeedItem[] = [
+    ...PROTOTYPE_CATALOG,
+    ...COOKWARE_CATALOG,
+    ...SMALL_APPLIANCES_CATALOG,
+  ]
   const productByModelCode = new Map<
     string,
     { id: string; slug: string; modelCode: string; name: string; price: number; taxRate: number }
