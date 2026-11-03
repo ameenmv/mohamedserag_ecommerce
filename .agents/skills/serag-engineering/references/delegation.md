@@ -49,6 +49,19 @@ When Antigravity is out of quota, the same loop runs through the OpenCode CLI wi
 - Free models come and go and sometimes return a server error. List the current ones with `opencode models | grep -E 'free|big-pickle'` and probe with a tiny read-only brief before a real one. As of 2026-10-19, `big-pickle` and `nemotron-3-ultra-free` work; the others returned errors.
 - The briefs, the "no shell commands" rule and Claude's review and gates are exactly the same as for agy.
 
+### Free code review step (OpenCode, read-only)
+
+After the gates pass and before committing, get a second opinion for free:
+
+```bash
+.agents/skills/serag-engineering/scripts/opencode-review.sh            # reviews the working tree against HEAD
+.agents/skills/serag-engineering/scripts/opencode-review.sh origin/main # reviews a whole branch
+```
+
+- It sends the diff (no `.env`, no lockfile, capped at about 150 KB) to a free OpenCode model with the read-only permission file (`opencode-readonly.json`: read, search, list only; no edits, shell or web), which reads this checklist and reports findings.
+- It only reports. Claude reads each finding, checks it against the code, fixes what is real and ignores the rest. A free model can be wrong or return nothing; "No findings" is not proof.
+- Use `/code-review` (Claude Code) on the risky changes: security, money, auth, migrations.
+
 ### Delegation Principles:
 - **Implementer does NOT run shell commands**: Antigravity is instructed not to execute terminal commands (such as `pnpm install`, `pnpm test`, or `prisma migrate`).
 - **Implementer does NOT commit**: Only the orchestrator reviews the diff, verifies the gates, and creates git commits.

@@ -6,6 +6,7 @@
 #
 #   .agents/skills/serag-engineering/scripts/opencode-relay.sh --brief brief.txt [relay options]
 #
+# OPENCODE_PERMISSION_FILE swaps the permission file (the review script uses the no-edit one).
 # Default model is the free opencode/big-pickle; pass --model to override (free models change,
 # list them with `opencode models | grep -E 'free|big-pickle'`).
 set -euo pipefail
@@ -14,7 +15,7 @@ here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 root="$(git -C "$here" rev-parse --show-toplevel)"
 
 # Inline config has the highest precedence, so a project opencode.json cannot loosen it.
-OPENCODE_CONFIG_CONTENT="$(cat "$here/opencode-noshell.json")"
+OPENCODE_CONFIG_CONTENT="$(cat "${OPENCODE_PERMISSION_FILE:-$here/opencode-noshell.json}")"
 export OPENCODE_CONFIG_CONTENT
 
 args=("$@")
