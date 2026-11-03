@@ -28,6 +28,7 @@ import {
   findZone,
   type CategoryAccent,
   type CategoryIllustration,
+  type FaqTopic,
   type Permission,
 } from '@serag/shared'
 import { seedQuizzes } from './seed-quizzes.js'
@@ -2749,6 +2750,324 @@ async function main() {
   // 6.7c «ساعدني أختار» quizzes (refrigerators, washers, tvs, acs)
   // --------------------------------------------------------------------------
   await seedQuizzes(prisma)
+
+  // --------------------------------------------------------------------------
+  // 6.7d Frequently Asked Questions (FaqEntry starter set across 5 topics)
+  // --------------------------------------------------------------------------
+  interface FaqSeedDef {
+    id: string
+    topic: FaqTopic
+    question: string
+    answer: string
+    sort: number
+    visible: boolean
+    translations: {
+      en: {
+        question: string
+        answer: string
+      }
+    }
+  }
+
+  const faqDefs: FaqSeedDef[] = [
+    // --- Delivery & Payment (delivery-payment) ---
+    {
+      id: 'faq-deliv-orders',
+      topic: 'delivery-payment',
+      question: 'إزاي أطلب أجهزة من المعرض أو من الموقع؟',
+      answer:
+        '<p>تقدر تطلب مباشرة من الموقع باختيار جهازك وإضافته للسلة وإدخال عنوانك، أو تكلمنا مباشرة على واتساب ونجهز طلبك وننسق معاك كل التفاصيل لحظة بلحظة.</p>',
+      sort: 0,
+      visible: true,
+      translations: {
+        en: {
+          question: 'How can I place an order online or from the showroom?',
+          answer:
+            '<p>You can order directly on our website by choosing your appliances, adding them to the cart, and entering your address, or reach out to us on WhatsApp and we will guide you and prepare your order step by step.</p>',
+        },
+      },
+    },
+    {
+      id: 'faq-deliv-payment-methods',
+      topic: 'delivery-payment',
+      question: 'إيه هي طرق الدفع المتاحة عندكم؟',
+      answer:
+        '<p>بنوفر لك كذا طريقة دفع مريحة وآمنة: الدفع كاش عند الاستلام، أو التحويل الفوري عبر إنستا باي (InstaPay)، أو محافظ الموبايل زي فودافون كاش، وتقدر تدفع بالفيزا داخل معرضنا في المنصورة.</p>',
+      sort: 1,
+      visible: true,
+      translations: {
+        en: {
+          question: 'What payment methods are available?',
+          answer:
+            '<p>We offer convenient and secure payment options: Cash on delivery (COD), instant transfer via InstaPay, mobile wallets such as Vodafone Cash, and credit cards at our Mansoura showroom.</p>',
+        },
+      },
+    },
+    // CONFIRM WITH CLIENT: Delivery timeframes (24-48 hours inside Mansoura, 3-5 business days across governorates)
+    {
+      id: 'faq-deliv-time-coverage',
+      topic: 'delivery-payment',
+      question: 'الشحن بياخد وقت قد إيه وبيغطي محافظات إيه؟',
+      answer:
+        '<p>سيارات المعرض بتغطي مدينة المنصورة والدقهلية وجميع محافظات مصر. التوصيل داخل المنصورة والمراكز المجاورة عادة بيتم خلال 24 إلى 48 ساعة، وباقي المحافظات خلال 3 إلى 5 أيام عمل، مع إمكانية تنسيق يوم التوصيل الأنسب ليك.</p>',
+      sort: 2,
+      visible: true,
+      translations: {
+        en: {
+          question: 'How long does delivery take and which areas do you cover?',
+          answer:
+            '<p>Our fleet delivers across Mansoura, Dakahlia, and all Egyptian governorates. Delivery within Mansoura takes 24 to 48 hours, and 3 to 5 business days for other governorates, coordinated to suit your schedule.</p>',
+        },
+      },
+    },
+    // CONFIRM WITH CLIENT: Advance deposit policy (10% deposit for cash-on-delivery orders over 15,000 EGP)
+    {
+      id: 'faq-deliv-deposit',
+      topic: 'delivery-payment',
+      question: 'هل بيطلب مني عربون قبل الشحن للدفع عند الاستلام؟',
+      answer:
+        '<p>للطلبات الكبيرة ذات القيمة العالية (أكتر من 15,000 جنيه كاش عند الاستلام)، قد نطلب عربوناً بسيطاً (10%) لتأكيد جدية الحجز قبل خروج سيارة التوصيل الخاصة بالمعرض، والمبلغ بيظهر بوضوح في صفحة إتمام الطلب.</p>',
+      sort: 3,
+      visible: true,
+      translations: {
+        en: {
+          question: 'Is an advance deposit required for cash on delivery?',
+          answer:
+            '<p>For large high-value orders (exceeding 15,000 EGP cash on delivery), a modest 10% advance deposit may be requested to confirm the order before showroom dispatch. The exact requirement is shown clearly during checkout.</p>',
+        },
+      },
+    },
+
+    // --- Warranty (warranty) ---
+    {
+      id: 'faq-warr-original',
+      topic: 'warranty',
+      question: 'هل الأجهزة أصلية وجديدة فرز أول بضمان الوكيل؟',
+      answer:
+        '<p>بنضمن لك 100% إن كل الأجهزة والمنتجات في معرض محمد سراج جديدة تماماً وفرز أول بالكرتونة الأصلية، ومصحوبة ببطاقة ضمان الوكيل الرسمي المعتمد في مصر وفاتورة شراء رسمية.</p>',
+      sort: 0,
+      visible: true,
+      translations: {
+        en: {
+          question: 'Are appliances genuine, brand-new first grade with official agent warranty?',
+          answer:
+            '<p>We guarantee 100% that all products at Mohamed Serag are brand new, certified first-grade in factory-sealed boxes, accompanied by official authorized agent warranty cards in Egypt and an official showroom invoice.</p>',
+        },
+      },
+    },
+    {
+      id: 'faq-warr-activation',
+      topic: 'warranty',
+      question: 'إزاي أفعل الضمان بعد استلام الجهاز؟',
+      answer:
+        '<p>للأجهزة الكبيرة (تكييفات، غسالات، ثلاجات، بوتاجازات، وشاشات كبيرة)، سيب الكرتونة مقفولة وكلم الخط الساخن للوكيل الموضح على الكرتونة علشان ييجي الفني المعتمد يركب الجهاز ويختم شهادة الضمان ويفعلها رسمياً.</p>',
+      sort: 1,
+      visible: true,
+      translations: {
+        en: {
+          question: 'How do I activate the warranty after delivery?',
+          answer:
+            '<p>For major appliances (air conditioners, washing machines, refrigerators, cookers, and large TVs), keep the box factory-sealed and call the authorized brand hotline on the carton so a certified technician installs the unit and stamps the warranty card.</p>',
+        },
+      },
+    },
+    // CONFIRM WITH CLIENT: Warranty durations (5-10 years on major appliances/compressors, 1-2 years on small appliances/cookware)
+    {
+      id: 'faq-warr-period',
+      topic: 'warranty',
+      question: 'مدة الضمان للأجهزة الكهربائية بتكون قد إيه؟',
+      answer:
+        '<p>مدة الضمان بتختلف حسب الماركة ونوع الجهاز؛ عادة مواتير الثلاجات والغسالات والتكييفات بيكون عليها ضمان من 5 إلى 10 سنوات من الوكيل الرسمي، والأجهزة الصغيرة وأطقم الطهي من سنة لسنتين. مدة كل جهاز مكتوبة بالتفصيل في صفحته.</p>',
+      sort: 2,
+      visible: true,
+      translations: {
+        en: {
+          question: 'How long is the warranty coverage for home appliances?',
+          answer:
+            '<p>Warranty durations depend on the brand and product type; refrigerator, washer, and AC compressors typically carry 5 to 10 years of authorized warranty, while small appliances and cookware carry 1 to 2 years. Exact terms are detailed on each product page.</p>',
+        },
+      },
+    },
+
+    // --- Returns & Exchanges (returns) ---
+    // CONFIRM WITH CLIENT: 14-day return window for unopened/unused products under Law 181/2018
+    {
+      id: 'faq-ret-window',
+      topic: 'returns',
+      question: 'إيه هي مهلة استرجاع أو استبدال جهاز مش مستخدم؟',
+      answer:
+        '<p>حسب قانون حماية المستهلك المصري، تقدر تسترجع أو تستبدل أي منتج غير مستخدم خلال 14 يوماً من تاريخ الاستلام، بشرط وجود الكرتونة الأصلية بحالتها وسليمة وبكل ملحقاتها وأوراق الضمان والفاتورة.</p>',
+      sort: 0,
+      visible: true,
+      translations: {
+        en: {
+          question: 'What is the return and exchange window for unused products?',
+          answer:
+            '<p>In accordance with Egyptian Consumer Protection Law, you can exchange or return an unused product within 14 days of receipt, provided it is in its original unopened packaging with all accessories, warranty cards, and the invoice.</p>',
+        },
+      },
+    },
+    // CONFIRM WITH CLIENT: 30-day technical report defect replacement policy
+    {
+      id: 'faq-ret-defect',
+      topic: 'returns',
+      question: 'لو ظهر عيب صناعة في الجهاز بعد الاستلام أعمل إيه؟',
+      answer:
+        '<p>لو ظهر عيب تصنيع أو عطل فني خلال 30 يوماً من الاستلام، بتطلب فحص فني من الخط الساخن للوكيل المعتمد لعمل تقرير فني، وبمجرد صدور التقرير بنبدل الجهاز فوراً بجهاز جديد أو بنسترد المبلغ بالكامل دون أي خصومات.</p>',
+      sort: 1,
+      visible: true,
+      translations: {
+        en: {
+          question: 'What happens if a manufacturing defect appears after delivery?',
+          answer:
+            '<p>If a manufacturing defect occurs within 30 days of delivery, contact the authorized brand hotline for a home inspection report. Upon receiving the official technical report, we replace the unit immediately or issue a full refund without deductions.</p>',
+        },
+      },
+    },
+    // CONFIRM WITH CLIENT: 3-5 business days refund processing timeline
+    {
+      id: 'faq-ret-refund',
+      topic: 'returns',
+      question: 'استرداد الفلوس بياخد وقت قد إيه؟',
+      answer:
+        '<p>في حالة إرجاع المنتج المستوفي للشروط، بيتم رد المبلغ بنفس طريقة الدفع الأصلية: نقداً فوري في المعرض، أو عبر إنستا باي والمحافظ الإلكترونية خلال 3 إلى 5 أيام عمل من استلام وفحص الجهاز.</p>',
+      sort: 2,
+      visible: true,
+      translations: {
+        en: {
+          question: 'How long does a refund take to process?',
+          answer:
+            '<p>For eligible returns, refunds are issued using the original payment method: instant cash at the showroom, or via InstaPay and mobile wallets within 3 to 5 business days after inspection.</p>',
+        },
+      },
+    },
+
+    // --- Products & Showroom (products) ---
+    {
+      id: 'faq-prod-inspect',
+      topic: 'products',
+      question: 'هل ممكن أعاين الأجهزة بنفسي قبل ما أشتري؟',
+      answer:
+        '<p>بكل تأكيد! صالة عرض معرض محمد سراج في المنصورة مفتوحة يومياً ومجهزة بأحدث الموديلات لتشاهد وتجرب بنفسك، وحتى مع التوصيل تقدر تفحص سلامة التغليف والموديل مع مندوب المعرض قبل التوقيع.</p>',
+      sort: 0,
+      visible: true,
+      translations: {
+        en: {
+          question: 'Can I inspect appliances in person before buying?',
+          answer:
+            '<p>Absolutely! Our Mohamed Serag showroom in Mansoura is open daily with models on display for personal inspection. For home deliveries, you can also inspect the outer box and model code before signing for the courier.</p>',
+        },
+      },
+    },
+    {
+      id: 'faq-prod-turkish',
+      topic: 'products',
+      question: 'إيه اللي بيميز أطقم الحلل وأدوات المطبخ التركي عند سراج؟',
+      answer:
+        '<p>بنستورد حصرياً أطقم أواني الطهي التركية الأصلية (جرانيت صحي وتيتانيوم واستانلس ستيل 18/10 عالي الجودة) من كبرى المصانع في تركيا، بألوان وتصميمات حديثة وخامات مقاومة للخدش وآمنة تماماً على صحة الأسرة.</p>',
+      sort: 1,
+      visible: true,
+      translations: {
+        en: {
+          question: 'What makes Serag Turkish cookware and kitchenware special?',
+          answer:
+            '<p>We exclusively import authentic Turkish cookware sets (healthy granite, titanium, and 18/10 premium stainless steel) directly from Turkey leading factories, offering scratch-resistant, family-safe, elegant modern designs.</p>',
+        },
+      },
+    },
+    // CONFIRM WITH CLIENT: 30-day price lock deposit for bridal packages
+    {
+      id: 'faq-prod-bridal',
+      topic: 'products',
+      question: 'هل عندكم باقات وتخفيضات خاصة لتجهيز العرايس؟',
+      answer:
+        '<p>طبعاً! من 1972 وإحنا متخصصين في جهاز العروسة. بنوفر باقات متكاملة (أساسية، ذهبية، وقصر) بتغطي كل أجهزة البيت بخصومات خاصة وعربون بسيط يثبت لك الأسعار لمدة 30 يوماً ضد أي زيادات في السوق.</p>',
+      sort: 2,
+      visible: true,
+      translations: {
+        en: {
+          question: 'Do you offer special packages and discounts for brides?',
+          answer:
+            '<p>Absolutely! Since 1972, bridal home preparation has been our core specialty. We offer curated packages (Basic, Golden, and Palace) covering all home appliances with bundle savings and a deposit that locks prices for 30 days.</p>',
+        },
+      },
+    },
+
+    // --- Wholesale & Traders (wholesale) ---
+    {
+      id: 'faq-whol-traders',
+      topic: 'wholesale',
+      question: 'هل بتبيعوا بسعر الجملة للتجار والمعارض في المحافظات؟',
+      answer:
+        '<p>نعم، معرض محمد سراج موزع جملة رئيسي للأجهزة الكهربائية وأدوات المطبخ التركية لمعارض وتجار الدقهلية والدلتا ومختلف محافظات مصر، وبنوفر فواتير ضريبية رسمية وضمانات الوكلاء كاملة.</p>',
+      sort: 0,
+      visible: true,
+      translations: {
+        en: {
+          question: 'Do you offer wholesale pricing for merchants and retail showrooms?',
+          answer:
+            '<p>Yes, Mohamed Serag is a leading primary wholesale distributor of home appliances and Turkish cookware to showrooms across the Delta and Egypt, with official tax invoices and complete agent warranties.</p>',
+        },
+      },
+    },
+    // CONFIRM WITH CLIENT: Minimum wholesale order volume (5 pieces per model or 30,000 EGP total invoice)
+    {
+      id: 'faq-whol-moq',
+      topic: 'wholesale',
+      question: 'إيه هو الحد الأدنى لطلبات الجملة ونظام الخصومات؟',
+      answer:
+        '<p>الحد الأدنى لطلبات الجملة يبدأ من 5 قطع للموديل الواحد أو فاتورة إجمالية تبدأ من 30,000 جنيه، وتتدرج نسب الخصم الإضافية بحسب الكميات المسحوبة شهرياً. كلم قسم الجملة على واتساب لعروض الأسعار الحالية.</p>',
+      sort: 1,
+      visible: true,
+      translations: {
+        en: {
+          question: 'What is the minimum wholesale order and discount structure?',
+          answer:
+            '<p>Wholesale orders start from 5 units per model or a minimum order value of 30,000 EGP, with tiered discounts based on monthly volumes. Contact our wholesale team on WhatsApp for current quotes.</p>',
+        },
+      },
+    },
+    {
+      id: 'faq-whol-contact',
+      topic: 'wholesale',
+      question: 'إزاي أبدأ التعامل معاكم كتاجر وأحصل على قوائم الأسعار؟',
+      answer:
+        '<p>تقدر تسجل بيانات معرضك عبر صفحة «مبيعات الجملة والتجار» على موقعنا، أو تتواصل مباشرة مع إدارة مبيعات الجملة عبر واتساب لإرسال السجل التجاري والبطاقة الضريبية واستلام قوائم الأسعار المحدثة والتوافر أسبوعياً.</p>',
+      sort: 2,
+      visible: true,
+      translations: {
+        en: {
+          question: 'How can I register as a merchant and receive wholesale price lists?',
+          answer:
+            '<p>Register your showroom details on our Wholesale & Traders page or message our wholesale management directly on WhatsApp to submit your commercial registry and tax card and receive updated weekly price lists.</p>',
+        },
+      },
+    },
+  ]
+
+  for (const f of faqDefs) {
+    const faqTranslations = f.translations as unknown as Prisma.InputJsonValue
+    await prisma.faqEntry.upsert({
+      where: { id: f.id },
+      update: {
+        topic: f.topic,
+        question: f.question,
+        answer: f.answer,
+        sort: f.sort,
+        visible: f.visible,
+        translations: faqTranslations,
+      },
+      create: {
+        id: f.id,
+        topic: f.topic,
+        question: f.question,
+        answer: f.answer,
+        sort: f.sort,
+        visible: f.visible,
+        translations: faqTranslations,
+      },
+    })
+  }
 
   // --------------------------------------------------------------------------
   // 6.8 Demo Orders (6 orders: SR-2026-000101..106)

@@ -610,6 +610,24 @@ model Page {
   @@map("pages")
 }
 
+// PRD §9 — US-11.2, Spec 015: FAQ questions, answers and topics
+model FaqEntry {
+  id           String   @id @default(cuid())
+  topic        String
+  question     String
+  answer       String
+  sort         Int      @default(0)
+  visible      Boolean  @default(true)
+  /// English text for the /en storefront: { en: { question, answer } }
+  translations Json     @default("{}")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@index([topic, sort])
+  @@index([visible])
+  @@map("faq_entries")
+}
+
 // PRD §9 — US-11.3, US-12.6: Buying guides blog articles
 model Guide {
   id             String    @id @default(cuid())

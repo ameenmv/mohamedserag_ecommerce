@@ -4,6 +4,8 @@ import { PromotionsModule } from '../promotions/promotions.module.js'
 import { ReviewsModule } from '../reviews/reviews.module.js'
 import { ContentController } from './content.controller.js'
 import { ContentService } from './content.service.js'
+import { FaqController } from './faq.controller.js'
+import { FaqService } from './faq.service.js'
 import { GuidesController } from './guides.controller.js'
 import { GuidesService } from './guides.service.js'
 import { PagesController } from './pages.controller.js'
@@ -11,8 +13,8 @@ import { PagesService } from './pages.service.js'
 
 @Module({
   imports: [PrismaModule, PromotionsModule, ReviewsModule],
-  controllers: [ContentController, PagesController, GuidesController],
-  providers: [ContentService, PagesService, GuidesService],
-  exports: [ContentService],
+  controllers: [ContentController, PagesController, GuidesController, FaqController],
+  providers: [ContentService, PagesService, GuidesService, FaqService],
+  exports: [ContentService, FaqService],
 })
 export class ContentModule {}
