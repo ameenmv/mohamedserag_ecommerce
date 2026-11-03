@@ -77,6 +77,14 @@ export default defineNuxtConfig({
         preload: false,
       },
       {
+        // Arabic headlines: bold modern sans replacing the client-disliked serif.
+        name: 'Alexandria',
+        provider: 'google',
+        weights: [800, 900],
+        subsets: ['arabic'],
+        preload: false,
+      },
+      {
         name: 'Lalezar',
         provider: 'google',
         weights: [400],
