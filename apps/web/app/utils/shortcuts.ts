@@ -25,6 +25,7 @@ const ALL_ADMIN_NAV_SHORTCUTS: readonly AdminNavShortcut[] = [
   { key: 'n', hint: 'G N', paletteHint: 'G N', labelKey: 'admin.nav.notify', to: '/admin/notify', group: 'store', permission: PERMISSIONS.notify.manage },
   { key: 'r', hint: 'G R', paletteHint: 'G R', labelKey: 'admin.nav.reviews', to: '/admin/reviews', group: 'store', permission: PERMISSIONS.reviews.moderate },
   { key: 'e', hint: 'G E', paletteHint: 'G E', labelKey: 'admin.nav.content', to: '/admin/content', group: 'content', permission: PERMISSIONS.content.manage },
+  { key: 'f', hint: 'G F', paletteHint: 'G F', labelKey: 'admin.nav.faq', to: '/admin/content/faq', group: 'content', permission: PERMISSIONS.content.manage },
   { key: 't', hint: 'G T', paletteHint: 'G T', labelKey: 'admin.nav.reports', to: '/admin/reports', group: 'system', permission: PERMISSIONS.reports.read },
   { key: 's', hint: 'G S', paletteHint: 'G S', labelKey: 'admin.nav.settings', to: '/admin/settings', group: 'system', permission: PERMISSIONS.settings.manage },
 ] as const

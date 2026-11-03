@@ -56,6 +56,12 @@ const TABS: ContentTab[] = [
     icon: HelpCircle,
     available: true,
   },
+  {
+    id: 'faq',
+    labelKey: 'admin.content.tabs.faq',
+    icon: HelpCircle,
+    available: true,
+  },
 ]
 
 const activeTab = computed(() => {
@@ -135,6 +141,15 @@ function setTab(tab: string): void {
       :class="activeTab === 'quiz' ? 'block' : 'hidden'"
     >
       <AdminContentQuiz v-if="activeTab === 'quiz'" />
+    </div>
+
+    <div
+      id="panel-faq"
+      role="tabpanel"
+      aria-labelledby="tab-faq"
+      :class="activeTab === 'faq' ? 'block' : 'hidden'"
+    >
+      <AdminContentFaq v-if="activeTab === 'faq'" />
     </div>
   </div>
 </template>

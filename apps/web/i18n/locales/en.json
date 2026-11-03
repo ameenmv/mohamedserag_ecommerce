@@ -1002,6 +1002,34 @@
       "loadError": "Failed to load reviews",
       "retry": "Retry"
     },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "seoTitle": "FAQ | Mohamed Serag Showroom",
+      "seoDescription": "Clear answers to all your questions about purchasing, authorized warranties, payment and delivery methods, and returns at Mohamed Serag Showroom.",
+      "headline": "Everything You Need to Know",
+      "subtitle": "Quick and comprehensive answers about shopping, authorized warranties, delivery, and bridal packages at Mohamed Serag Showroom",
+      "searchPlaceholder": "Search questions or keywords (e.g. warranty, delivery, payment)...",
+      "searchLabel": "Search frequently asked questions",
+      "clearSearch": "Clear search",
+      "allTopics": "All Questions",
+      "topics": {
+        "delivery-payment": "Delivery & Payment",
+        "warranty": "Warranty & Service",
+        "returns": "Returns & Exchanges",
+        "products": "Products & Showroom",
+        "wholesale": "Wholesale"
+      },
+      "emptyTitle": "No questions match your search",
+      "emptyDescription": "Try using different keywords or browse all topics",
+      "resetSearch": "Show all questions",
+      "contactCard": {
+        "title": "Still have questions?",
+        "description": "The Mohamed Serag customer service team is ready to help answer all your inquiries daily.",
+        "whatsappButton": "Chat on WhatsApp",
+        "callButton": "Call Us"
+      },
+      "whatsappMessage": "Hello, I have an inquiry about Mohamed Serag showroom products or services"
+    },
     "trust": {
       "warranty": "Official warranty",
       "delivery": "Delivered to your door",

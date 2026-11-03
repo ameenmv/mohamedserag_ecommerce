@@ -2,6 +2,12 @@
 const { t } = useI18n()
 const route = useRoute()
 const localePath = useLocalePath()
+
+// Redirect legacy /pages/faq to dedicated /faq
+if (route.params.slug === 'faq') {
+  await navigateTo(localePath('/faq'), { redirectCode: 301 })
+}
+
 // The same list as the footer's service column, so shoppers can move between policies
 const { links } = useFooterPages()
 

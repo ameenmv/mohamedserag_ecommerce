@@ -6,6 +6,7 @@ import {
   BellRing,
   FilePenLine,
   FolderTree,
+  HelpCircle,
   LayoutDashboard,
   Package,
   Settings,
@@ -34,6 +35,7 @@ const iconByKey: Record<string, Component> = {
   n: BellRing,
   r: Star,
   e: FilePenLine,
+  f: HelpCircle,
   t: BarChart3,
   s: Settings,
 }

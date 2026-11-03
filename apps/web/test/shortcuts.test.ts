@@ -21,10 +21,11 @@ describe('ADMIN_NAV_SHORTCUTS', () => {
       n: '/admin/notify',
       r: '/admin/reviews',
       e: '/admin/content',
+      f: '/admin/content/faq',
       t: '/admin/reports',
       s: '/admin/settings',
     })
-    expect(ADMIN_NAV_SHORTCUTS).toHaveLength(FEATURES.bridal ? 11 : 10)
+    expect(ADMIN_NAV_SHORTCUTS).toHaveLength(FEATURES.bridal ? 12 : 11)
     for (const item of ADMIN_NAV_SHORTCUTS) {
       expect(item.labelKey).toMatch(/^admin\.nav\./)
       expect(['main', 'store', 'content', 'system']).toContain(item.group)

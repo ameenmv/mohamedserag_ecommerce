@@ -15,6 +15,9 @@ export function useNavActive(rootPath = '/') {
     if (target === normalizedRoot) {
       return current === normalizedRoot
     }
+    if (target === '/admin/content' && current.startsWith('/admin/content/faq')) {
+      return false
+    }
     return current === target || current.startsWith(`${target}/`)
   }
 

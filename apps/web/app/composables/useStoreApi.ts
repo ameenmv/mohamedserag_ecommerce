@@ -9,6 +9,7 @@ import type {
   ProductDetail,
   ProductListResponse,
   ProductQueryInput,
+  PublicFaqEntry,
   PublicGuide,
   PublicHome,
   PublicPage,
@@ -164,6 +165,17 @@ export function useStoreApi() {
     page(slug: string): Promise<PublicPage> {
       return apiFetch<PublicPage>(`/pages/${encodeURIComponent(slug)}`, {
         method: 'GET',
+      })
+    },
+
+    /**
+     * GET /faq
+     * Returns published FAQ entries ordered by topic rank then sort.
+     */
+    faq(topic?: string): Promise<{ items: PublicFaqEntry[] }> {
+      return apiFetch<{ items: PublicFaqEntry[] }>('/faq', {
+        method: 'GET',
+        query: topic ? { topic } : undefined,
       })
     },
 
