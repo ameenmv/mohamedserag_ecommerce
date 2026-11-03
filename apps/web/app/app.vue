@@ -4,7 +4,7 @@ import { firstInput } from '~/composables/useGsap'
 
 useAppHead()
 
-// The storefront's splash (not the admin's), CSS only. `?splash=` (any value) replays it.
+// The storefront's splash (not the admin's), CSS only.
 const route = useRoute()
 const isStorefront = computed(() => !/^\/(?:en\/)?admin(?:\/|$)/.test(route.path))
 const showSplash = isStorefront
@@ -22,13 +22,6 @@ useHead({
       key: 'theme',
       tagPosition: 'head',
       innerHTML: "try{if(localStorage.getItem('serag-theme')==='dark')document.documentElement.classList.add('dark')}catch(e){}",
-    },
-    {
-      // The splash greets the first page of a visit only; a `?splash=` preview always plays it.
-      key: 'splash-seen',
-      tagPosition: 'head',
-      innerHTML:
-        "try{if(location.search.indexOf('splash=')<0){if(sessionStorage.getItem('serag-splash'))document.documentElement.classList.add('splash-seen');else sessionStorage.setItem('serag-splash','1')}}catch(e){}",
     },
     {
       // Web fonts start loading only after the first paint (the splash covers the swap). Until

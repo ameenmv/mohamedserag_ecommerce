@@ -6,7 +6,8 @@
   },
   "common": {
     "splash": {
-      "word": "SERAG"
+      "word": "SERAG",
+      "tagline": "Everything your home needs"
     },
     "mainNav": "Main Navigation",
     "openMenu": "Open Menu",

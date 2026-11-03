@@ -11,7 +11,7 @@ const { t } = useI18n()
 // (the component is never hydrated), so it costs no client JavaScript: registering it through
 // useHead pulled a shared chunk into the home's first load. The hero is already parsed when it
 // runs (the splash comes after the page in app.vue); the CSP hashes it like every inline script.
-const LAND_SCRIPT = "try{var d=document.documentElement,s=document.querySelector('.splash');if(s&&!d.classList.contains('splash-seen')&&!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)){d.classList.add('splash-landing');setTimeout(function(){try{var c=['fridges','washers','screens','acs'],h=[],p=[],iw=window.innerWidth,ih=window.innerHeight;for(var i=0;i<c.length;i++){var he=document.querySelector('[data-hero-card=\"'+c[i]+'\"]'),se=document.querySelector('[data-splash-card=\"'+c[i]+'\"]');if(!he||!se)return;var r=he.getBoundingClientRect();if(r.top<0||r.bottom>ih||r.left<0||r.right>iw)return;h.push(he);p.push(se)}for(var j=0;j<c.length;j++){var el=h[j],sp=p[j],rc=el.getBoundingClientRect(),cs=window.getComputedStyle(el);sp.style.setProperty('--land-x',(rc.left+rc.width/2-iw/2)+'px');sp.style.setProperty('--land-y',(rc.top+rc.height/2-ih/2)+'px');sp.style.setProperty('--land-w',el.offsetWidth+'px');sp.style.setProperty('--land-h',el.offsetHeight+'px');sp.style.setProperty('--land-r',cs.getPropertyValue('--tilt').trim()||'0deg');sp.style.setProperty('--land-rad',cs.borderTopLeftRadius)}s.setAttribute('data-land','hero')}catch(e){}},950);setTimeout(function(){d.classList.remove('splash-landing')},2000)}}catch(e){}"
+const LAND_SCRIPT = "try{var d=document.documentElement,s=document.querySelector('.splash');if(s&&!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)){d.classList.add('splash-landing');var f=parseFloat(getComputedStyle(d).getPropertyValue('--sp'))||1;setTimeout(function(){try{var c=['fridges','washers','screens','acs'],h=[],p=[],iw=window.innerWidth,ih=window.innerHeight;for(var i=0;i<c.length;i++){var he=document.querySelector('[data-hero-card=\"'+c[i]+'\"]'),se=document.querySelector('[data-splash-card=\"'+c[i]+'\"]');if(!he||!se)return;var r=he.getBoundingClientRect();if(r.top<0||r.bottom>ih||r.left<0||r.right>iw)return;h.push(he);p.push(se)}for(var j=0;j<c.length;j++){var el=h[j],sp=p[j],rc=el.getBoundingClientRect(),cs=window.getComputedStyle(el);sp.style.setProperty('--land-x',(rc.left+rc.width/2-iw/2)+'px');sp.style.setProperty('--land-y',(rc.top+rc.height/2-ih/2)+'px');sp.style.setProperty('--land-w',el.offsetWidth+'px');sp.style.setProperty('--land-h',el.offsetHeight+'px');sp.style.setProperty('--land-r',cs.getPropertyValue('--tilt').trim()||'0deg');sp.style.setProperty('--land-rad',cs.borderTopLeftRadius)}s.setAttribute('data-land','hero')}catch(e){}},950*f);setTimeout(function(){d.classList.remove('splash-landing')},2000*f)}}catch(e){}"
 // A render function: templates drop <script> tags, the server renderer outputs this one as is
 const LandScript = () => h('script', { innerHTML: LAND_SCRIPT })
 </script>
@@ -23,15 +23,32 @@ const LandScript = () => h('script', { innerHTML: LAND_SCRIPT })
   >
     <!-- Center brand showcase: rises above the fan, fades before landing fly -->
     <div class="splash-logo absolute flex flex-col items-center text-center">
-      <svg class="splash-mark aspect-[268/260] w-14 lg:w-[72px]" focusable="false">
-        <use href="#brand-mark" />
-      </svg>
-      <div class="splash-wordmark-wrap mt-3.5 lg:mt-5">
-        <svg class="splash-wordmark aspect-[688/267] w-[170px] text-serag-ivory lg:w-[220px]" focusable="false">
-          <use href="#brand-wordmark" />
+      <div class="splash-logo-group relative flex flex-col items-center overflow-hidden">
+        <svg class="splash-mark aspect-[268/260] w-14 lg:w-[72px]" focusable="false">
+          <use href="#brand-mark" />
         </svg>
+        <div class="splash-wordmark-wrap mt-3.5 lg:mt-5">
+          <svg class="splash-wordmark aspect-[688/267] w-[170px] text-serag-ivory lg:w-[220px]" focusable="false">
+            <use href="#brand-wordmark" />
+          </svg>
+        </div>
       </div>
+      <div class="splash-hairline" />
+      <p class="splash-tagline">
+        {{ t('common.splash.tagline') }}
+      </p>
     </div>
+
+    <!-- Gold sparks floating behind the deck during the fan phase -->
+    <i class="splash-spark" style="--x: -26vw; --y: 6vh; --d: 0.55s; --s: 5px;" />
+    <i class="splash-spark" style="--x: -16vw; --y: -8vh; --d: 0.62s; --s: 4px;" />
+    <i class="splash-spark" style="--x: -8vw; --y: 10vh; --d: 0.58s; --s: 6px;" />
+    <i class="splash-spark" style="--x: -2vw; --y: -14vh; --d: 0.70s; --s: 4px;" />
+    <i class="splash-spark" style="--x: 5vw; --y: 14vh; --d: 0.65s; --s: 5px;" />
+    <i class="splash-spark" style="--x: 14vw; --y: -6vh; --d: 0.60s; --s: 6px;" />
+    <i class="splash-spark" style="--x: 22vw; --y: 8vh; --d: 0.75s; --s: 4px;" />
+    <i class="splash-spark" style="--x: 30vw; --y: -4vh; --d: 0.68s; --s: 5px;" />
+    <i class="splash-spark" style="--x: -12vw; --y: 18vh; --d: 0.72s; --s: 5px;" />
 
     <!-- Cards deck: drops, fans out, flies into hero, morphs/lands on matching hero card -->
     <div class="splash-deck">
