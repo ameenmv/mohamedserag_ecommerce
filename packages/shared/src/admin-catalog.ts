@@ -1,6 +1,6 @@
 import type { AvailabilityState } from './availability.js'
 import type { AvailabilityMode } from './enums.js'
-import type { SpecFieldType } from './catalog.js'
+import type { CategoryAccent, CategoryIllustration, SpecFieldType } from './catalog.js'
 
 export interface AdminSpecTemplateField {
   key: string
@@ -38,6 +38,8 @@ export interface AdminCategory {
   parentId: string | null
   specTemplateId: string | null
   intro: string | null
+  accent: CategoryAccent
+  illustration: CategoryIllustration
   seoTitle: string | null
   seoDescription: string | null
   translations?: {

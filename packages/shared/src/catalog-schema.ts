@@ -2,6 +2,8 @@ import { z } from 'zod'
 import {
   CATALOG_SORTS,
   CATALOG_AVAILABILITY_FILTERS,
+  CATEGORY_ACCENTS,
+  CATEGORY_ILLUSTRATIONS,
   SPEC_FIELD_TYPES,
   type CatalogSort,
 } from './catalog.js'
@@ -9,6 +11,8 @@ import {
 export const catalogSortSchema = z.enum(CATALOG_SORTS)
 export const catalogAvailabilityFilterSchema = z.enum(CATALOG_AVAILABILITY_FILTERS)
 export const specFieldTypeSchema = z.enum(SPEC_FIELD_TYPES)
+export const categoryAccentSchema = z.enum(CATEGORY_ACCENTS)
+export const categoryIllustrationSchema = z.enum(CATEGORY_ILLUSTRATIONS)
 
 /**
  * Validates category spec template field definitions (PRD US-1.5).

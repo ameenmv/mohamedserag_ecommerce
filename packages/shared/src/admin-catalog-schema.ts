@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { AVAILABILITY_MODES } from './enums.js'
+import { categoryAccentSchema, categoryIllustrationSchema } from './catalog-schema.js'
 
 export const SPEC_KEY_REGEX = /^[a-z][a-z0-9_]*$/
 
@@ -151,6 +152,8 @@ export const createCategorySchema = z.object({
   parentId: z.string().trim().nullable().optional(),
   specTemplateId: z.string().trim().nullable().optional(),
   intro: z.string().trim().nullable().optional(),
+  accent: categoryAccentSchema.default('green'),
+  illustration: categoryIllustrationSchema.default('default'),
   seoTitle: z.string().trim().nullable().optional(),
   seoDescription: z.string().trim().nullable().optional(),
   sort: z.coerce.number().int().default(0),
@@ -167,6 +170,8 @@ export const updateCategorySchema = z.object({
   parentId: z.string().trim().nullable().optional(),
   specTemplateId: z.string().trim().nullable().optional(),
   intro: z.string().trim().nullable().optional(),
+  accent: categoryAccentSchema.optional(),
+  illustration: categoryIllustrationSchema.optional(),
   seoTitle: z.string().trim().nullable().optional(),
   seoDescription: z.string().trim().nullable().optional(),
   sort: z.coerce.number().int().optional(),

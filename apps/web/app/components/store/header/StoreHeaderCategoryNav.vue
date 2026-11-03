@@ -8,10 +8,17 @@ defineProps<{
 
 const { t } = useI18n()
 const localePath = useLocalePath()
+const route = useRoute()
 
 // Tight enough that every link fits on one row at 1440 px in both languages.
 const linkClass =
-  'flex min-h-12 items-center whitespace-nowrap px-2.5 text-[15px] transition-colors hover:text-serag-gold focus-visible:ring-2 focus-visible:ring-serag-gold focus-visible:outline-none focus-visible:ring-inset xl:px-3'
+  'relative flex min-h-12 items-center whitespace-nowrap px-2.5 text-[15px] transition-colors hover:text-serag-gold focus-visible:ring-2 focus-visible:ring-serag-gold focus-visible:outline-none focus-visible:ring-inset xl:px-3'
+
+function isCategoryActive(slug: string): boolean {
+  if (route.params.slug === slug) return true
+  const path = route.path.replace(/^\/en/, '').replace(/\/$/, '')
+  return path === `/c/${slug}` || path.startsWith(`/c/${slug}/`)
+}
 </script>
 
 <template>
@@ -28,7 +35,13 @@ const linkClass =
         v-for="category in categories"
         :key="category.slug"
         :to="localePath(`/c/${category.slug}`)"
-        :class="[linkClass, 'font-medium']"
+        :class="[
+          linkClass,
+          isCategoryActive(category.slug)
+            ? 'font-bold text-serag-gold after:absolute after:bottom-0 after:inset-x-2.5 after:h-[3px] after:rounded-full after:bg-serag-gold xl:after:inset-x-3'
+            : 'font-medium',
+        ]"
+        :aria-current="isCategoryActive(category.slug) ? 'page' : undefined"
       >
         {{ category.name }}
       </NuxtLink>

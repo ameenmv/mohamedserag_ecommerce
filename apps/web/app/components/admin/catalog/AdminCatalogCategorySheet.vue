@@ -1,6 +1,18 @@
 <script setup lang="ts">
-import type { AdminCategory, AdminSpecTemplate, CreateCategoryInput, UpdateCategoryInput } from '@serag/shared'
-import { createCategorySchema, updateCategorySchema } from '@serag/shared'
+import type {
+  AdminCategory,
+  AdminSpecTemplate,
+  CategoryAccent,
+  CategoryIllustration,
+  CreateCategoryInput,
+  UpdateCategoryInput,
+} from '@serag/shared'
+import {
+  CATEGORY_ACCENTS,
+  CATEGORY_ILLUSTRATIONS,
+  createCategorySchema,
+  updateCategorySchema,
+} from '@serag/shared'
 import { Loader2 } from '@lucide/vue'
 import {
   Sheet,
@@ -34,11 +46,24 @@ const saving = ref(false)
 const errors = ref<Record<string, string>>({})
 const serverError = ref('')
 
+const ACCENT_SWATCH_COLORS: Record<CategoryAccent, string> = {
+  green: '#1b4332',
+  sand: '#c4a482',
+  gold: '#c5a24d',
+  'deep-teal': '#0d5c63',
+  charcoal: '#2f3e46',
+  clay: '#b85d43',
+  olive: '#606c38',
+  plum: '#5b3256',
+}
+
 const form = reactive({
   name: '',
   slug: '',
   parentId: '',
   specTemplateId: '',
+  accent: 'green' as CategoryAccent,
+  illustration: 'default' as CategoryIllustration,
   intro: '',
   seoTitle: '',
   seoDescription: '',
@@ -64,6 +89,8 @@ watch(
         form.slug = props.category.slug
         form.parentId = props.category.parentId ?? ''
         form.specTemplateId = props.category.specTemplateId ?? ''
+        form.accent = (props.category.accent ?? 'green') as CategoryAccent
+        form.illustration = (props.category.illustration ?? 'default') as CategoryIllustration
         form.intro = props.category.intro ?? ''
         form.seoTitle = props.category.seoTitle ?? ''
         form.seoDescription = props.category.seoDescription ?? ''
@@ -78,6 +105,8 @@ watch(
         form.slug = ''
         form.parentId = ''
         form.specTemplateId = ''
+        form.accent = 'green'
+        form.illustration = 'default'
         form.intro = ''
         form.seoTitle = ''
         form.seoDescription = ''
@@ -106,6 +135,8 @@ async function handleSubmit() {
     slug: form.slug.trim(),
     parentId: form.parentId ? form.parentId : null,
     specTemplateId: form.specTemplateId ? form.specTemplateId : null,
+    accent: form.accent,
+    illustration: form.illustration,
     intro: form.intro.trim() || null,
     seoTitle: form.seoTitle.trim() || null,
     seoDescription: form.seoDescription.trim() || null,
@@ -255,6 +286,78 @@ async function handleSubmit() {
             </AdminFormSelect>
           </template>
         </FormField>
+
+        <!-- Accent Swatch Picker -->
+        <div class="flex flex-col gap-2">
+          <div class="flex items-center justify-between">
+            <label class="text-sm font-semibold text-foreground">
+              {{ t('admin.catalog.categories.accent') }}
+            </label>
+            <span class="text-xs font-medium text-muted-foreground">
+              {{ t(`admin.catalog.categories.accents.${form.accent}`) }}
+            </span>
+          </div>
+          <div
+            class="flex flex-wrap items-center gap-2.5 pt-1"
+            role="radiogroup"
+            :aria-label="t('admin.catalog.categories.accent')"
+          >
+            <button
+              v-for="accent in CATEGORY_ACCENTS"
+              :key="accent"
+              type="button"
+              role="radio"
+              :aria-checked="form.accent === accent"
+              :aria-label="t(`admin.catalog.categories.accents.${accent}`)"
+              :disabled="saving"
+              :class="[
+                'size-8 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-serag-gold focus-visible:ring-offset-2',
+                form.accent === accent
+                  ? 'ring-2 ring-serag-gold ring-offset-2 ring-offset-background scale-110 shadow-sm'
+                  : 'hover:scale-105 opacity-80 hover:opacity-100',
+              ]"
+              :style="{ backgroundColor: ACCENT_SWATCH_COLORS[accent] }"
+              @click="form.accent = accent"
+            />
+          </div>
+          <p class="text-xs text-muted-foreground">
+            {{ t('admin.catalog.categories.accentHint') }}
+          </p>
+        </div>
+
+        <!-- Illustration Picker -->
+        <div class="flex flex-col gap-2">
+          <label class="text-sm font-semibold text-foreground">
+            {{ t('admin.catalog.categories.illustration') }}
+          </label>
+          <div
+            class="grid grid-cols-3 gap-2"
+            role="radiogroup"
+            :aria-label="t('admin.catalog.categories.illustration')"
+          >
+            <button
+              v-for="ill in CATEGORY_ILLUSTRATIONS"
+              :key="ill"
+              type="button"
+              role="radio"
+              :aria-checked="form.illustration === ill"
+              :disabled="saving"
+              :class="[
+                'flex items-center gap-2 rounded-lg border p-2 text-xs transition-colors text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-serag-gold',
+                form.illustration === ill
+                  ? 'border-serag-gold bg-serag-gold/10 font-bold text-foreground ring-1 ring-serag-gold'
+                  : 'border-border bg-card text-muted-foreground hover:border-foreground/30 hover:text-foreground',
+              ]"
+              @click="form.illustration = ill"
+            >
+              <StoreCategoryIllustration :name="ill" class="size-5 shrink-0" />
+              <span class="truncate">{{ t(`admin.catalog.categories.illustrations.${ill}`) }}</span>
+            </button>
+          </div>
+          <p class="text-xs text-muted-foreground">
+            {{ t('admin.catalog.categories.illustrationHint') }}
+          </p>
+        </div>
 
         <FormField
           id="cat-intro"

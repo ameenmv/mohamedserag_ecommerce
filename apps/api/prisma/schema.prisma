@@ -138,6 +138,8 @@ model Category {
   specTemplateId String?       @map("spec_template_id")
   specTemplate   SpecTemplate? @relation(fields: [specTemplateId], references: [id], onDelete: SetNull)
   intro          String?
+  accent         String        @default("green")
+  illustration   String        @default("default")
   seoTitle       String?       @map("seo_title")
   seoDescription String?       @map("seo_description")
   /// English text for the /en storefront: { en: { name, intro, seoTitle, seoDescription } }

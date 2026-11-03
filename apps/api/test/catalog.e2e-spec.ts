@@ -316,11 +316,13 @@ describe('Catalog API E2E (/api/categories, /api/brands, /api/products)', () => 
 
       // Collect all category IDs in the tree
       const collectedIds: string[] = []
-      const checkNode = (node: { id: string; productCount: number; children: unknown[]; sort: number }) => {
+      const checkNode = (node: { id: string; productCount: number; children: unknown[]; sort: number; accent?: string; illustration?: string }) => {
         collectedIds.push(node.id)
         expect(node.productCount).toBeGreaterThan(0)
+        expect(node.accent).toBeDefined()
+        expect(node.illustration).toBeDefined()
         expect(Array.isArray(node.children)).toBe(true)
-        for (const child of node.children as Array<{ id: string; productCount: number; children: unknown[]; sort: number }>) {
+        for (const child of node.children as Array<{ id: string; productCount: number; children: unknown[]; sort: number; accent?: string; illustration?: string }>) {
           checkNode(child)
         }
       }
@@ -346,6 +348,8 @@ describe('Catalog API E2E (/api/categories, /api/brands, /api/products)', () => 
       expect(res.body.slug).toBe('refrigerators')
       expect(res.body.name).toBe('ثلاجات وفريزر')
       expect(res.body.intro).toBeDefined()
+      expect(res.body.accent).toBe('deep-teal')
+      expect(res.body.illustration).toBe('fridge')
       expect(Array.isArray(res.body.fields)).toBe(true)
       expect(res.body.fields.length).toBeGreaterThan(0)
 

@@ -4,11 +4,13 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common'
-import type {
-  AdminCategory,
-  CreateCategoryOutput,
-  ReorderCategoriesInput,
-  UpdateCategoryOutput,
+import {
+  type AdminCategory,
+  type CreateCategoryOutput,
+  type ReorderCategoriesInput,
+  resolveCategoryAccent,
+  resolveCategoryIllustration,
+  type UpdateCategoryOutput,
 } from '@serag/shared'
 import { Prisma } from '../generated/prisma/client.js'
 import { PrismaService } from '../prisma/prisma.service.js'
@@ -82,19 +84,23 @@ export class AdminCategoriesService {
       }
     }
 
+    const createData: Prisma.CategoryUncheckedCreateInput = {
+      name: data.name,
+      slug: data.slug,
+      parentId: data.parentId ?? null,
+      specTemplateId: data.specTemplateId ?? null,
+      intro: data.intro ?? null,
+      seoTitle: data.seoTitle ?? null,
+      seoDescription: data.seoDescription ?? null,
+      sort: data.sort,
+      visible: data.visible,
+      translations: (data.translations ?? {}) as Prisma.InputJsonValue,
+      ...(data.accent !== undefined && { accent: data.accent }),
+      ...(data.illustration !== undefined && { illustration: data.illustration }),
+    }
+
     const created = await this.prisma.category.create({
-      data: {
-        name: data.name,
-        slug: data.slug,
-        parentId: data.parentId ?? null,
-        specTemplateId: data.specTemplateId ?? null,
-        intro: data.intro ?? null,
-        seoTitle: data.seoTitle ?? null,
-        seoDescription: data.seoDescription ?? null,
-        sort: data.sort,
-        visible: data.visible,
-        translations: (data.translations ?? {}) as Prisma.InputJsonValue,
-      },
+      data: createData,
       include: categoryInclude,
     })
 
@@ -148,6 +154,8 @@ export class AdminCategoriesService {
         data.specTemplateId === null ? { disconnect: true } : { connect: { id: data.specTemplateId } }
     }
     if (data.intro !== undefined) updateData.intro = data.intro
+    if (data.accent !== undefined) updateData.accent = data.accent
+    if (data.illustration !== undefined) updateData.illustration = data.illustration
     if (data.seoTitle !== undefined) updateData.seoTitle = data.seoTitle
     if (data.seoDescription !== undefined) updateData.seoDescription = data.seoDescription
     if (data.sort !== undefined) updateData.sort = data.sort
@@ -249,6 +257,8 @@ export class AdminCategoriesService {
       parentId: c.parentId,
       specTemplateId: c.specTemplateId,
       intro: c.intro,
+      accent: resolveCategoryAccent((c as { accent?: string | null }).accent),
+      illustration: resolveCategoryIllustration(c.slug, (c as { illustration?: string | null }).illustration),
       seoTitle: c.seoTitle,
       seoDescription: c.seoDescription,
       sort: c.sort,

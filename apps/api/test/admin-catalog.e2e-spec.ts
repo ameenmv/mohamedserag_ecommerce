@@ -188,6 +188,22 @@ describe('Admin Catalog API E2E (/api/admin/...)', () => {
 
     categoryAId = cRes.body.id
     expect(categoryAId).toBeDefined()
+    expect(cRes.body.accent).toBe('green')
+    expect(cRes.body.illustration).toBe('default')
+
+    // Update category accent and illustration
+    const cPatchRes = await request(app.getHttpServer())
+      .patch(`/api/admin/categories/${categoryAId}`)
+      .set('Cookie', sessionCookie)
+      .set('x-csrf-token', csrfToken)
+      .send({
+        accent: 'plum',
+        illustration: 'tv',
+      })
+      .expect(200)
+
+    expect(cPatchRes.body.accent).toBe('plum')
+    expect(cPatchRes.body.illustration).toBe('tv')
 
     // Brand
     const bRes = await request(app.getHttpServer())

@@ -26,6 +26,8 @@ import {
   buildProductSearchText,
   egpToPiastres,
   findZone,
+  type CategoryAccent,
+  type CategoryIllustration,
   type Permission,
 } from '@serag/shared'
 import { seedQuizzes } from './seed-quizzes.js'
@@ -114,6 +116,8 @@ interface CategorySeedDef {
   templateName: string
   sort: number
   intro: string
+  accent: CategoryAccent
+  illustration: CategoryIllustration
   seoTitle: string
   seoDescription: string
   translations: { en: CategoryTranslationsEn }
@@ -127,6 +131,8 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
     templateName: 'منزلي',
     sort: 1,
     intro: 'تشكيلة أدوات منزلية وأواني طهي وأجهزة صغيرة لكل بيت مصري.',
+    accent: 'green',
+    illustration: 'household',
     seoTitle: 'أدوات منزلية وأجهزة صغيرة | معرض محمد سراج',
     seoDescription: 'تسوق أفضل الأدوات المنزلية وأواني الطهي التركية والأجهزة الصغيرة بضمان معتمد من معرض محمد سراج بالمنصورة.',
     translations: {
@@ -146,6 +152,8 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
     templateName: 'ثلاجات',
     sort: 2,
     intro: 'تشكيلة ثلاجات نوفروست وديفروست أصلية بضمان الوكيل الرسمي وتوصيل لحد باب البيت.',
+    accent: 'deep-teal',
+    illustration: 'fridge',
     seoTitle: 'ثلاجات وفريزر بأفضل سعر في مصر | معرض محمد سراج',
     seoDescription: 'اشترِ ثلاجات سامسونج وإل جي وتوشيبا وفريش بضمان الوكيل الرسمي من معرض محمد سراج بالمنصورة.',
     translations: {
@@ -222,6 +230,8 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
     templateName: 'غسالات',
     sort: 3,
     intro: 'غسالات أوتوماتيك تحميل أمامي وفوق أوتوماتيك ونصف أوتوماتيك من أكبر الماركات المعتمدة.',
+    accent: 'charcoal',
+    illustration: 'washer',
     seoTitle: 'غسالات ملابس أوتوماتيك وفوق أوتوماتيك | معرض محمد سراج',
     seoDescription: 'قارن أسعار ومواصفات غسالات إل جي وسامسونج وتوشيبا وتورنيدو بضمان الوكيل الرسمي.',
     translations: {
@@ -288,6 +298,8 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
     templateName: 'شاشات',
     sort: 4,
     intro: 'شاشات سمارت 4K وQLED وFull HD بريسيفر داخلي وضمان رسمي.',
+    accent: 'plum',
+    illustration: 'tv',
     seoTitle: 'شاشات وتلفزيونات سمارت 4K وQLED | معرض محمد سراج',
     seoDescription: 'تسوق أحدث شاشات سامسونج وإل جي وشارب بمقاسات متنوعة وضمان الوكيل المعتمد.',
     translations: {
@@ -344,6 +356,8 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
     templateName: 'تكييفات',
     sort: 5,
     intro: 'تكييفات سبليت بارد وبارد ساخن وتكنولوجيا انفرتر موفرة للكهرباء.',
+    accent: 'sand',
+    illustration: 'ac',
     seoTitle: 'تكييفات شارب وتوشيبا وفريش إنفرتر | معرض محمد سراج',
     seoDescription: 'أفضل أسعار التكييفات السبليت 1.5 و2.25 و3 حصان بضمان العربي جروب ومصانع فريش.',
     translations: {
@@ -402,6 +416,8 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
     templateName: 'بوتاجازات',
     sort: 6,
     intro: 'بوتاجازات غاز 4 و5 شعلة استانلس كامل وأمان كامل من أشهر المصانع المصرية.',
+    accent: 'clay',
+    illustration: 'cooker',
     seoTitle: 'بوتاجازات 4 و5 شعلة استانلس وأمان كامل | معرض محمد سراج',
     seoDescription: 'بوتاجازات يونيون إير وفريش وتورنيدو العربي بمروحة فرن وإشعال ذاتي بضمان المصنع.',
     translations: {
@@ -459,6 +475,8 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
     templateName: 'أدوات مطبخ',
     sort: 1,
     intro: 'أطقم حلل وأواني طهي تركية أصلية مستوردة مباشرة (جرانيت، ستانلس 18/10، سيراميك، تيفال).',
+    accent: 'gold',
+    illustration: 'cookware',
     seoTitle: 'أدوات مطبخ وأطقم حلل تركي أصلية | معرض محمد سراج',
     seoDescription: 'أطقم حلل تركي مستوردة حصرياً من مصانع TAÇ وGlore وÖztef وYonca وMarti وEdessa.',
     translations: {
@@ -516,6 +534,8 @@ const CATEGORY_DEFS: CategorySeedDef[] = [
     templateName: 'أجهزة صغيرة',
     sort: 2,
     intro: 'خلاطات، غلايات، قلايات هوائية، ومكاوي ملابس بضمان معتمد من كبرى الماركات العالمية والمصرية.',
+    accent: 'olive',
+    illustration: 'small-appliances',
     seoTitle: 'أجهزة منزلية صغيرة | خلاطات وغلايات وقلايات | معرض محمد سراج',
     seoDescription: 'تسوق خلاطات، قلايات هوائية، غلايات كهربائية ومكاوي أصلية بضمان معتمد من معرض محمد سراج بالمنصورة.',
     translations: {
@@ -1667,31 +1687,39 @@ async function main() {
 
     const parentId = catDef.parentSlug ? (categoryBySlug.get(catDef.parentSlug)?.id ?? null) : null
     const categoryTranslations = catDef.translations as unknown as Prisma.InputJsonValue
+    const updateData: Prisma.CategoryUncheckedUpdateInput = {
+      name: catDef.name,
+      parentId,
+      specTemplateId: specTemplate.id,
+      intro: catDef.intro,
+      seoTitle: catDef.seoTitle,
+      seoDescription: catDef.seoDescription,
+      translations: categoryTranslations,
+      sort: catDef.sort,
+      visible: true,
+      accent: catDef.accent,
+      illustration: catDef.illustration,
+    }
+
+    const createData: Prisma.CategoryUncheckedCreateInput = {
+      slug: catDef.slug,
+      name: catDef.name,
+      parentId,
+      specTemplateId: specTemplate.id,
+      intro: catDef.intro,
+      seoTitle: catDef.seoTitle,
+      seoDescription: catDef.seoDescription,
+      translations: categoryTranslations,
+      sort: catDef.sort,
+      visible: true,
+      accent: catDef.accent,
+      illustration: catDef.illustration,
+    }
+
     const category = await prisma.category.upsert({
       where: { slug: catDef.slug },
-      update: {
-        name: catDef.name,
-        parentId,
-        specTemplateId: specTemplate.id,
-        intro: catDef.intro,
-        seoTitle: catDef.seoTitle,
-        seoDescription: catDef.seoDescription,
-        translations: categoryTranslations,
-        sort: catDef.sort,
-        visible: true,
-      },
-      create: {
-        slug: catDef.slug,
-        name: catDef.name,
-        parentId,
-        specTemplateId: specTemplate.id,
-        intro: catDef.intro,
-        seoTitle: catDef.seoTitle,
-        seoDescription: catDef.seoDescription,
-        translations: categoryTranslations,
-        sort: catDef.sort,
-        visible: true,
-      },
+      update: updateData,
+      create: createData,
     })
 
     categoryBySlug.set(catDef.slug, category)

@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import type { BreadcrumbItem, CatalogSort } from '@serag/shared'
-import { buildBreadcrumbList } from '@serag/shared'
+import {
+  buildBreadcrumbList,
+  resolveCategoryAccent,
+  resolveCategoryIllustration,
+} from '@serag/shared'
 
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
@@ -21,6 +25,13 @@ const { data: category, error: categoryError } = await useAsyncData(
 if (categoryError.value || !category.value) {
   throw createError({ statusCode: 404, fatal: true })
 }
+
+const categoryAccent = computed(() =>
+  resolveCategoryAccent(category.value?.accent, slug.value),
+)
+const categoryIllustration = computed(() =>
+  resolveCategoryIllustration(category.value?.illustration, slug.value),
+)
 
 const categoryFields = computed(() => category.value?.fields ?? [])
 
@@ -104,18 +115,13 @@ function handleSortUpdate(sort: CatalogSort) {
       <!-- Breadcrumbs: Home (automatic) › parent › category -->
       <StoreListingBreadcrumb :items="breadcrumbItems" />
 
-      <!-- Category Heading & Intro -->
-      <div class="flex flex-col gap-2">
-        <h1 class="title-draw font-display text-4xl text-foreground sm:text-5xl lg:text-6xl">
-          {{ category?.name }}
-        </h1>
-        <p
-          v-if="category?.intro"
-          class="max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base"
-        >
-          {{ category.intro }}
-        </p>
-      </div>
+      <!-- Category Identity Header (rounded band, accent tint, motion illustration) -->
+      <StoreCategoryHeader
+        v-if="category"
+        :category="category"
+        :accent="categoryAccent"
+        :illustration="categoryIllustration"
+      />
 
       <!-- Quiz entry (hidden when this category has no quiz) -->
       <StoreQuizEntry :slug="slug" />
