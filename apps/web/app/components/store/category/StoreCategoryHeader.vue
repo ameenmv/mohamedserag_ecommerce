@@ -1,62 +1,84 @@
 <script setup lang="ts">
 import {
   resolveCategoryAccent,
-  resolveCategoryIllustration,
   type CategoryAccent,
   type CategoryIllustration,
 } from '@serag/shared'
 
-const props = defineProps<{
-  category: {
-    name: string
-    slug?: string
-    intro?: string | null
-    accent?: string | null
-    illustration?: string | null
-  }
-  accent?: CategoryAccent | string | null
-  illustration?: CategoryIllustration | string | null
-}>()
+const props = withDefaults(
+  defineProps<{
+    category: {
+      name: string
+      slug?: string
+      intro?: string | null
+      accent?: string | null
+      illustration?: string | null
+    }
+    accent?: CategoryAccent | string | null
+    illustration?: CategoryIllustration | string | null
+    productCount?: number
+    startingPrice?: number | null
+  }>(),
+  {
+    accent: undefined,
+    illustration: undefined,
+    productCount: undefined,
+    startingPrice: undefined,
+  },
+)
+
+const { t } = useI18n()
+const { money } = usePrice()
 
 const resolvedAccent = computed<CategoryAccent>(() =>
   resolveCategoryAccent(props.accent ?? props.category?.accent, props.category?.slug),
 )
 
-const resolvedIllustration = computed<CategoryIllustration>(() =>
-  resolveCategoryIllustration(
-    props.illustration ?? props.category?.illustration,
-    props.category?.slug,
-  ),
-)
+const metaLine = computed(() => {
+  const parts: string[] = []
+  if (props.productCount !== undefined && props.productCount !== null) {
+    parts.push(t('store.category.categoryCount', { count: props.productCount }))
+  }
+  if (props.startingPrice !== undefined && props.startingPrice !== null) {
+    parts.push(t('store.category.startingFrom', { price: money(props.startingPrice) }))
+  }
+  return parts.join(' · ')
+})
 </script>
 
 <template>
-  <div
-    class="category-identity-band relative flex flex-col justify-between overflow-hidden rounded-2xl border p-6 sm:rounded-3xl sm:p-8 md:min-h-[170px] md:flex-row md:items-center md:gap-8 lg:p-10"
+  <header
+    class="relative py-2 sm:py-3"
     :data-accent="resolvedAccent"
   >
-    <!-- Text column: Title and Intro with entrance stagger -->
-    <div class="relative z-10 flex max-w-2xl flex-col gap-2">
-      <h1 class="cat-title font-display text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
+    <div class="flex flex-col gap-2.5 sm:gap-3">
+      <!-- Large title in category accent colour -->
+      <h1 class="font-display text-[clamp(40px,5.5vw,72px)] font-extrabold leading-[1.1] text-[var(--cat-fg)]">
         <CommonMadText :text="category.name" size="lg" />
       </h1>
+
+      <!-- Short accent underline bar under the title -->
+      <div
+        class="h-1.5 w-24 rounded-full"
+        :style="{ backgroundColor: 'var(--cat-accent)' }"
+        aria-hidden="true"
+      />
+
+      <!-- One-line intro (if any) -->
       <p
         v-if="category.intro"
-        class="cat-intro text-sm leading-relaxed opacity-85 sm:text-base md:text-lg"
+        class="max-w-3xl text-sm leading-relaxed text-muted-foreground sm:text-base md:text-lg"
       >
         {{ category.intro }}
       </p>
-    </div>
 
-    <!-- Large line illustration at inline-end side, softly cropped -->
-    <div
-      class="pointer-events-none absolute -bottom-10 -end-8 select-none text-current opacity-25 sm:opacity-35 md:static md:-my-10 md:-me-6 md:opacity-90 lg:-my-12 lg:-me-8"
-      aria-hidden="true"
-    >
-      <StoreCategoryIllustration
-        :name="resolvedIllustration"
-        class="size-44 sm:size-56 md:size-64 lg:size-72"
-      />
+      <!-- Muted metadata line: "N منتج · من X ج.م" -->
+      <p
+        v-if="metaLine"
+        class="text-xs font-medium text-muted-foreground sm:text-sm"
+      >
+        {{ metaLine }}
+      </p>
     </div>
-  </div>
+  </header>
 </template>

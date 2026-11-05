@@ -135,6 +135,8 @@
       "metaDescription": "Mohamed Serag Showroom, Mansoura, since 1972: genuine home appliances and houseware with an authorized warranty and delivery across Egypt.",
       "uspHeading": "Mohamed Serag promises",
       "categoriesEyebrow": "SHOP BY CATEGORY",
+      "categoryCount": "{count} products",
+      "startingFrom": "from {price}",
       "allCategories": "See all categories",
       "allOffers": "See all offers",
       "tradersTiers": "Price tiers",
@@ -335,6 +337,10 @@
       "countdownHours": "HRS",
       "countdownMinutes": "MIN",
       "countdownSeconds": "SEC"
+    },
+    "category": {
+      "categoryCount": "{count} products",
+      "startingFrom": "from {price}"
     },
     "product": {
       "addToCart": "Add to cart",

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BreadcrumbItem, CatalogSort } from '@serag/shared'
+import type { BreadcrumbItem, CatalogSort, CategoryTreeNode } from '@serag/shared'
 import {
   buildBreadcrumbList,
   resolveCategoryAccent,
@@ -46,6 +46,43 @@ const {
 } = await useListing({
   category: slug,
   fields: categoryFields,
+})
+
+const navCategories = await useNavCategories()
+
+function findCategoryNode(nodes: CategoryTreeNode[], targetSlug: string): CategoryTreeNode | null {
+  for (const node of nodes) {
+    if (node.slug === targetSlug) return node
+    if (node.children && node.children.length > 0) {
+      const match = findCategoryNode(node.children, targetSlug)
+      if (match) return match
+    }
+  }
+  return null
+}
+
+const currentCategoryNode = computed(() => {
+  return findCategoryNode(navCategories.value, slug.value)
+})
+
+const categoryProductCount = computed(() => {
+  if (currentCategoryNode.value?.productCount !== undefined) {
+    return currentCategoryNode.value.productCount
+  }
+  return data.value?.total ?? 0
+})
+
+const categoryStartingPrice = computed<number | null>(() => {
+  if (currentCategoryNode.value?.startingPrice !== undefined && currentCategoryNode.value.startingPrice !== null) {
+    return currentCategoryNode.value.startingPrice
+  }
+  if (data.value?.facets?.price?.min != null) {
+    return Math.round(data.value.facets.price.min * 100)
+  }
+  if (data.value?.items && data.value.items.length > 0) {
+    return Math.min(...data.value.items.map((p) => p.price))
+  }
+  return null
 })
 
 // SEO meta
@@ -115,12 +152,14 @@ function handleSortUpdate(sort: CatalogSort) {
       <!-- Breadcrumbs: Home (automatic) › parent › category -->
       <StoreListingBreadcrumb :items="breadcrumbItems" />
 
-      <!-- Category Identity Header (rounded band, accent tint, motion illustration) -->
+      <!-- Category Identity Header (slim text-only header) -->
       <StoreCategoryHeader
         v-if="category"
         :category="category"
         :accent="categoryAccent"
         :illustration="categoryIllustration"
+        :product-count="categoryProductCount"
+        :starting-price="categoryStartingPrice"
       />
 
       <!-- Quiz entry (hidden when this category has no quiz) -->

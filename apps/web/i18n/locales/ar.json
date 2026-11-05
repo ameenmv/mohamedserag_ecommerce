@@ -135,6 +135,8 @@
       "metaDescription": "معرض محمد سراج بالمنصورة من 1972: أجهزة كهربائية وأدوات منزلية أصلية بضمان معتمد وتوصيل لكل محافظات مصر.",
       "uspHeading": "وعود معرض محمد سراج",
       "categoriesEyebrow": "الأقسام",
+      "categoryCount": "{count} منتج",
+      "startingFrom": "من {price}",
       "allCategories": "شوف كل الأقسام",
       "allOffers": "شوف كل العروض",
       "tradersTiers": "شرائح الأسعار",
@@ -335,6 +337,10 @@
       "countdownHours": "ساعة",
       "countdownMinutes": "دقيقة",
       "countdownSeconds": "ثانية"
+    },
+    "category": {
+      "categoryCount": "{count} منتج",
+      "startingFrom": "من {price}"
     },
     "product": {
       "addToCart": "أضف للسلة",
