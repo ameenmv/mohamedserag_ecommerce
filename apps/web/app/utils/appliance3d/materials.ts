@@ -172,9 +172,10 @@ export function createApplianceMaterials(initialFinish: ApplianceFinish = 'steel
   })
 
   const interiorLinerMaterial = new MeshStandardMaterial({
-    color: new Color(0xF4F3EE),
-    roughness: 0.35,
+    color: new Color(0xDDD8CC),
+    roughness: 0.55,
     metalness: 0.0,
+    envMapIntensity: 0.55,
   })
 
   const glassShelfMaterial = new MeshPhysicalMaterial({

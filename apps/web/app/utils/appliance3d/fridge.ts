@@ -172,7 +172,7 @@ export function buildFridge(
   group.add(ledMesh)
 
   // Dynamic interior PointLight (turns on smoothly as door opens)
-  const interiorLight = new PointLight(0xFFF5E4, 0, 1.8, 1.5)
+  const interiorLight = new PointLight(0xFFE8C2, 0, 2.6, 1.6)
   interiorLight.position.set(0, 1.15, 0.12)
   group.add(interiorLight)
 
@@ -425,8 +425,8 @@ export function buildFridge(
     freshPivot.rotation.y = hingeSign * bottomAngle
 
     const lightProgress = easeInOutCubic(clamped)
-    interiorLight.intensity = 1.8 * lightProgress
-    materials.ledMaterial.emissiveIntensity = 2.5 * lightProgress
+    interiorLight.intensity = 2.4 * lightProgress
+    materials.ledMaterial.emissiveIntensity = 4 * lightProgress
   }
 
   function setFinish(finish: ApplianceFinish, immediate = false): void {
