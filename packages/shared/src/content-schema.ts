@@ -5,6 +5,8 @@ import {
   PRODUCT_STORY_APPLIANCES,
   PRODUCT_STORY_CALLOUTS_MAX,
   PRODUCT_STORY_CALLOUTS_MIN,
+  PRODUCT_STORY_FINISHES,
+  PRODUCT_STORY_MODES,
   TRADER_REELS_MAX,
   isSafeContentLink,
   isUploadedImage,
@@ -249,6 +251,8 @@ const productStorySchema = z
       .min(1, 'عنوان قصة المنتج مطلوب')
       .max(80, 'عنوان قصة المنتج بيزيد عن 80 حرف'),
     appliance: z.enum(PRODUCT_STORY_APPLIANCES, { message: 'نوع الجهاز غير صالح' }),
+    finish: z.enum(PRODUCT_STORY_FINISHES, { message: 'لون الجهاز غير صالح' }).optional(),
+    productMode: z.enum(PRODUCT_STORY_MODES, { message: 'طريقة اختيار المنتج غير صالحة' }).optional(),
     productSlug: z
       .string({ message: 'رابط المنتج مطلوب' })
       .trim()

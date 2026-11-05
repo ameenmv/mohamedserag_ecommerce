@@ -131,5 +131,28 @@ describe('parseStoredHome', () => {
       expect(result.english?.productStory).toEqual(DEFAULT_HOME_CONTENT_EN.productStory)
       expect(result.english?.reviews).toEqual(DEFAULT_HOME_CONTENT_EN.reviews)
     })
+
+    it('parses custom finish and productMode on productStory', () => {
+      const custom = {
+        ...DEFAULT_HOME_CONTENT,
+        productStory: {
+          ...DEFAULT_HOME_CONTENT.productStory,
+          finish: 'champagne' as const,
+          productMode: 'bestseller' as const,
+        },
+      }
+      const result = parseStoredHome(custom, DEFAULT_HOME_LAYOUT)
+      expect(result.sections.productStory.finish).toBe('champagne')
+      expect(result.sections.productStory.productMode).toBe('bestseller')
+    })
+
+    it('parses content saved without finish and productMode as valid productStory', () => {
+      const { finish: _f, productMode: _m, ...oldStory } = DEFAULT_HOME_CONTENT.productStory
+      const old = { ...DEFAULT_HOME_CONTENT, productStory: oldStory }
+      const result = parseStoredHome(old, DEFAULT_HOME_LAYOUT)
+      expect(result.sections.productStory.productSlug).toBe(DEFAULT_HOME_CONTENT.productStory.productSlug)
+      expect(result.sections.productStory.finish).toBeUndefined()
+      expect(result.sections.productStory.productMode).toBeUndefined()
+    })
   })
 })

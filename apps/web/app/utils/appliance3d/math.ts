@@ -1,5 +1,7 @@
-export const FINISHES = ['steel', 'white', 'black', 'champagne'] as const
-export type ApplianceFinish = (typeof FINISHES)[number]
+import { PRODUCT_STORY_FINISHES, type ProductStoryFinish } from '@serag/shared'
+
+export const FINISHES = PRODUCT_STORY_FINISHES
+export type ApplianceFinish = ProductStoryFinish
 
 /**
  * Standard cubic ease in-out curve for smooth, realistic mechanical opening.

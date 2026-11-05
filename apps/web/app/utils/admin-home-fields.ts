@@ -16,6 +16,8 @@ export type HomeFieldKind =
   | 'categorySlugs'
   | 'reels'
   | 'appliance'
+  | 'finish'
+  | 'productMode'
 
 export interface HomeFieldMeta {
   /** Top-level key on the section content object. */
@@ -119,6 +121,8 @@ export const HOME_SECTION_META: Record<HomeSectionId, HomeSectionMeta> = {
     fields: [
       { key: 'title', kind: 'text', labelKey: 'admin.content.fields.productStory.title', max: 80 },
       { key: 'appliance', kind: 'appliance', labelKey: 'admin.content.fields.productStory.appliance', max: 20 },
+      { key: 'finish', kind: 'finish', labelKey: 'admin.content.fields.productStory.finish', max: 20 },
+      { key: 'productMode', kind: 'productMode', labelKey: 'admin.content.fields.productStory.productMode', max: 20 },
       {
         key: 'productSlug',
         kind: 'text',

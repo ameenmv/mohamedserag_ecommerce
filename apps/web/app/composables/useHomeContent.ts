@@ -7,7 +7,7 @@ import type {
   PublicHome,
   StoreReviewsResponse,
 } from '@serag/shared'
-import { DEFAULT_HOME_CONTENT, DEFAULT_HOME_LAYOUT } from '@serag/shared'
+import { DEFAULT_HOME_CONTENT, DEFAULT_HOME_LAYOUT, storyCategorySlug } from '@serag/shared'
 
 interface HomeBundle {
   home: PublicHome
@@ -66,14 +66,31 @@ export async function useHomeContent() {
     // After the `await` above the Nuxt context is gone on the server, and the API helper reads the
     // runtime config synchronously: without runWithContext it throws (not rejects), failing the
     // whole bundle so the home falls back to the built-in defaults.
-    const productSlug = home.sections.productStory?.productSlug
-    const storyProduct = productSlug
-      ? await nuxtApp
-          .runWithContext(() => storeApi.product(productSlug))
-          // Imported here, not at the top: on first load the card arrives in the page data, so
-          // the mapper stays out of the home's first-load scripts (Lighthouse budget)
-          .then(async (detail) => (await import('~/utils/product-card-mapper')).toProductCard(detail), () => null)
-      : null
+    const loadCard = async (slug: string): Promise<ProductCard | null> => {
+      return nuxtApp
+        .runWithContext(() => storeApi.product(slug))
+        // Imported here, not at the top: on first load the card arrives in the page data, so
+        // the mapper stays out of the home's first-load scripts (Lighthouse budget)
+        .then(async (detail) => (await import('~/utils/product-card-mapper')).toProductCard(detail), () => null)
+    }
+
+    const story = home.sections.productStory
+    let storyProduct: ProductCard | null = null
+
+    if (story?.productMode === 'bestseller') {
+      const catSlug = storyCategorySlug(story.appliance)
+      const topSlug = await nuxtApp
+        .runWithContext(() => storeApi.products({ category: catSlug, sort: 'popular', pageSize: 1 }))
+        .then((res) => res.items[0]?.slug ?? null, () => null)
+
+      if (topSlug) {
+        storyProduct = await loadCard(topSlug)
+      }
+    }
+
+    if (!storyProduct && story?.productSlug) {
+      storyProduct = await loadCard(story.productSlug)
+    }
 
     return { home, flashProducts, flashEndsAt, categories, brands, guides, reviews, storyProduct }
   })

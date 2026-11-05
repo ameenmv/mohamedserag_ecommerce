@@ -1499,6 +1499,8 @@
         "addItem": "Add item",
         "removeItem": "Remove item",
         "selectAppliance": "Select appliance type",
+        "selectFinish": "Select default finish",
+        "selectProductMode": "Select product selection method",
         "statValue": "Value",
         "statLabel": "Label",
         "uspTitle": "Title",
@@ -1531,9 +1533,23 @@
         "productStory": {
           "title": "Title",
           "appliance": "Appliance type",
+          "finish": "Default appliance finish",
+          "productMode": "Product selection method",
           "productSlug": "Featured product (slug)",
-          "productSlugHint": "The product's slug from its page address, e.g. samsung-fridge-450l-s1",
-          "callouts": "Key callouts"
+          "productSlugHint": "Used in manual mode, or when the category has no products",
+          "callouts": "Key callouts",
+          "selectFinish": "Select default finish",
+          "selectProductMode": "Select product selection method",
+          "finishes": {
+            "steel": "Stainless steel",
+            "white": "White",
+            "black": "Black",
+            "champagne": "Champagne"
+          },
+          "productModes": {
+            "manual": "Manual selection",
+            "bestseller": "Best seller (automatic)"
+          }
         },
         "bridalTeaser": {
           "eyebrow": "Top line",

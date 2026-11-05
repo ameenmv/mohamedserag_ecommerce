@@ -91,7 +91,11 @@ onBeforeUnmount(() => {
           data-story-appliance
           class="order-1 col-span-2 flex justify-center lg:order-2 lg:col-span-1 lg:px-20"
         >
-          <StoreHomeProductStoryScene class="max-sm:-my-10 max-sm:scale-[.78]" :kind="content.appliance" />
+          <StoreHomeProductStoryScene
+            class="max-sm:-my-10 max-sm:scale-[.78]"
+            :kind="content.appliance"
+            :finish="content.finish"
+          />
         </div>
 
         <!-- Callouts 3 & 4 (End side on lg, Col 2 on mobile) -->
@@ -115,58 +119,68 @@ onBeforeUnmount(() => {
       <!-- Price row centred under grid -->
       <div
         data-story-price
-        class="mx-auto flex w-full max-w-3xl flex-wrap items-center justify-between gap-4 rounded-2xl border border-serag-ivory/15 bg-serag-night/75 p-4 backdrop-blur-md sm:rounded-3xl sm:p-5"
+        class="mx-auto flex w-full max-w-3xl flex-col items-center gap-2"
       >
-        <div class="flex min-w-0 items-center gap-3 sm:gap-4">
-          <!-- Product thumbnail -->
-          <div
-            v-if="product.image"
-            class="relative size-14 shrink-0 overflow-hidden rounded-xl border border-serag-ivory/15 bg-black/30 sm:size-16"
-          >
-            <NuxtImg
-              :src="product.image.url"
-              :alt="product.image.alt || product.name"
-              width="64"
-              height="64"
-              loading="lazy"
-              class="size-full object-contain p-1"
-            />
-          </div>
-
-          <!-- Product name & price -->
-          <div class="flex min-w-0 flex-col">
-            <NuxtLink
-              :to="localePath(`/p/${product.slug}`)"
-              class="truncate text-base font-bold text-serag-ivory transition-colors hover:text-serag-gold-hi sm:text-lg"
+        <span
+          v-if="content.productMode === 'bestseller'"
+          class="inline-flex items-center rounded-full border border-serag-gold/30 bg-serag-gold/10 px-3 py-0.5 text-xs font-semibold text-serag-gold-hi"
+        >
+          {{ t('store.home.productStory.bestseller') }}
+        </span>
+        <div
+          class="flex w-full flex-wrap items-center justify-between gap-4 rounded-2xl border border-serag-ivory/15 bg-serag-night/75 p-4 backdrop-blur-md sm:rounded-3xl sm:p-5"
+        >
+          <div class="flex min-w-0 items-center gap-3 sm:gap-4">
+            <!-- Product thumbnail -->
+            <div
+              v-if="product.image"
+              class="relative size-14 shrink-0 overflow-hidden rounded-xl border border-serag-ivory/15 bg-black/30 sm:size-16"
             >
-              {{ product.name }}
-            </NuxtLink>
-            <div class="mt-0.5 flex flex-wrap items-baseline gap-2">
-              <span class="font-display text-xl font-bold text-serag-gold-hi sm:text-2xl">
-                {{ money(product.price) }}
-              </span>
-              <span
-                v-if="product.oldPrice"
-                class="text-xs text-[#C4BEB0] line-through sm:text-sm"
+              <NuxtImg
+                :src="product.image.url"
+                :alt="product.image.alt || product.name"
+                width="64"
+                height="64"
+                loading="lazy"
+                class="size-full object-contain p-1"
+              />
+            </div>
+
+            <!-- Product name & price -->
+            <div class="flex min-w-0 flex-col">
+              <NuxtLink
+                :to="localePath(`/p/${product.slug}`)"
+                class="truncate text-base font-bold text-serag-ivory transition-colors hover:text-serag-gold-hi sm:text-lg"
               >
-                <span class="sr-only">{{ t('store.home.productStory.was') }} </span>
-                {{ money(product.oldPrice) }}
-              </span>
+                {{ product.name }}
+              </NuxtLink>
+              <div class="mt-0.5 flex flex-wrap items-baseline gap-2">
+                <span class="font-display text-xl font-bold text-serag-gold-hi sm:text-2xl">
+                  {{ money(product.price) }}
+                </span>
+                <span
+                  v-if="product.oldPrice"
+                  class="text-xs text-[#C4BEB0] line-through sm:text-sm"
+                >
+                  <span class="sr-only">{{ t('store.home.productStory.was') }} </span>
+                  {{ money(product.oldPrice) }}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- Add to cart & details link -->
-        <div class="flex w-full items-center gap-3 sm:w-auto">
-          <div class="w-full sm:w-44">
-            <StoreProductAddToCart :product="product" />
+          <!-- Add to cart & details link -->
+          <div class="flex w-full items-center gap-3 sm:w-auto">
+            <div class="w-full sm:w-44">
+              <StoreProductAddToCart :product="product" />
+            </div>
+            <NuxtLink
+              :to="localePath(`/p/${product.slug}`)"
+              class="inline-flex h-10 shrink-0 items-center justify-center rounded-xl border border-serag-ivory/25 px-4 text-sm font-bold text-serag-ivory transition-colors hover:border-serag-gold hover:text-serag-gold-hi focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:h-[52px] sm:rounded-2xl sm:px-5 sm:text-base"
+            >
+              {{ t('store.home.productStory.details') }}
+            </NuxtLink>
           </div>
-          <NuxtLink
-            :to="localePath(`/p/${product.slug}`)"
-            class="inline-flex h-10 shrink-0 items-center justify-center rounded-xl border border-serag-ivory/25 px-4 text-sm font-bold text-serag-ivory transition-colors hover:border-serag-gold hover:text-serag-gold-hi focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:h-[52px] sm:rounded-2xl sm:px-5 sm:text-base"
-          >
-            {{ t('store.home.productStory.details') }}
-          </NuxtLink>
         </div>
       </div>
     </div>

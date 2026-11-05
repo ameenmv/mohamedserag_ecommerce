@@ -11,6 +11,9 @@ import {
   isSafeContentLink,
   isUploadedImage,
   HOME_SECTION_IDS,
+  PRODUCT_STORY_FINISHES,
+  PRODUCT_STORY_MODES,
+  storyCategorySlug,
 } from './content.js'
 import {
   homeContentSchema,
@@ -382,6 +385,74 @@ describe('content', () => {
         },
       }
       expect(homeContentSchema.safeParse(badAppliance).success).toBe(false)
+    })
+
+    it('accepts valid finish and productMode values', () => {
+      for (const finish of PRODUCT_STORY_FINISHES) {
+        for (const productMode of PRODUCT_STORY_MODES) {
+          const valid = {
+            ...DEFAULT_HOME_CONTENT,
+            productStory: {
+              ...DEFAULT_HOME_CONTENT.productStory,
+              finish,
+              productMode,
+            },
+          }
+          const res = homeContentSchema.safeParse(valid)
+          expect(res.success).toBe(true)
+          if (res.success) {
+            expect(res.data.productStory.finish).toBe(finish)
+            expect(res.data.productStory.productMode).toBe(productMode)
+          }
+        }
+      }
+    })
+
+    it('rejects invalid finish and invalid productMode', () => {
+      const badFinish = {
+        ...DEFAULT_HOME_CONTENT,
+        productStory: {
+          ...DEFAULT_HOME_CONTENT.productStory,
+          finish: 'silver',
+        },
+      }
+      expect(homeContentSchema.safeParse(badFinish).success).toBe(false)
+
+      const badMode = {
+        ...DEFAULT_HOME_CONTENT,
+        productStory: {
+          ...DEFAULT_HOME_CONTENT.productStory,
+          productMode: 'auto',
+        },
+      }
+      expect(homeContentSchema.safeParse(badMode).success).toBe(false)
+    })
+
+    it('old content without finish and productMode still parses successfully', () => {
+      const { finish: _f, productMode: _m, ...oldProductStory } = DEFAULT_HOME_CONTENT.productStory
+      const oldContent = {
+        ...DEFAULT_HOME_CONTENT,
+        productStory: oldProductStory,
+      }
+      const res = homeContentSchema.safeParse(oldContent)
+      expect(res.success).toBe(true)
+      if (res.success) {
+        expect(res.data.productStory.productSlug).toBe(DEFAULT_HOME_CONTENT.productStory.productSlug)
+        expect(res.data.productStory.finish).toBeUndefined()
+        expect(res.data.productStory.productMode).toBeUndefined()
+      }
+    })
+
+    it('PRODUCT_STORY_FINISHES matches the 4 appliance finishes', () => {
+      expect(PRODUCT_STORY_FINISHES).toEqual(['steel', 'white', 'black', 'champagne'])
+    })
+
+    it('storyCategorySlug maps appliances to category slugs', () => {
+      expect(storyCategorySlug('fridge')).toBe('refrigerators')
+      expect(storyCategorySlug('washer')).toBe('washers')
+      expect(storyCategorySlug('cooker')).toBe('cookers')
+      expect(storyCategorySlug('tv')).toBe('tvs')
+      expect(storyCategorySlug('ac')).toBe('acs')
     })
   })
 

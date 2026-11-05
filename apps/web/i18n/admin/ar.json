@@ -1499,6 +1499,8 @@
         "addItem": "أضف عنصر",
         "removeItem": "امسح العنصر",
         "selectAppliance": "اختر نوع الجهاز",
+        "selectFinish": "اختر اللون الافتراضي",
+        "selectProductMode": "اختر طريقة اختيار المنتج",
         "statValue": "القيمة",
         "statLabel": "الوصف",
         "uspTitle": "العنوان",
@@ -1531,9 +1533,23 @@
         "productStory": {
           "title": "العنوان",
           "appliance": "نوع الجهاز",
+          "finish": "لون الجهاز الافتراضي",
+          "productMode": "طريقة اختيار المنتج",
           "productSlug": "المنتج المعروض (الـ slug)",
-          "productSlugHint": "اكتب الـslug بتاع المنتج من رابط صفحته، مثلاً samsung-fridge-450l-s1",
-          "callouts": "أبرز المواصفات"
+          "productSlugHint": "يُستخدم في الاختيار اليدوي، أو إذا مفيش منتجات في القسم",
+          "callouts": "أبرز المواصفات",
+          "selectFinish": "اختر اللون الافتراضي",
+          "selectProductMode": "اختر طريقة اختيار المنتج",
+          "finishes": {
+            "steel": "ستانلس",
+            "white": "أبيض",
+            "black": "أسود",
+            "champagne": "شامبانيا"
+          },
+          "productModes": {
+            "manual": "اختيار يدوي",
+            "bestseller": "الأكثر مبيعاً (تلقائي)"
+          }
         },
         "bridalTeaser": {
           "eyebrow": "السطر العلوي",

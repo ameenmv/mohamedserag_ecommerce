@@ -24,6 +24,15 @@ const isMounted = ref(false)
 const mode = ref<'loading' | 'webgl' | 'fallback'>('loading')
 const currentFinish = ref<ApplianceFinish>(props.finish ?? defaultFinishForKind(props.kind))
 
+watch(
+  () => props.finish,
+  (next) => {
+    if (next && next !== currentFinish.value) {
+      onSelectFinish(next)
+    }
+  },
+)
+
 let scene: ApplianceScene | null = null
 let unregisterBridge: (() => void) | null = null
 let loadObserver: IntersectionObserver | null = null

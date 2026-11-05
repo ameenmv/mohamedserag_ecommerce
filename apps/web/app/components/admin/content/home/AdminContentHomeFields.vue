@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import {
   PRODUCT_STORY_APPLIANCES,
+  PRODUCT_STORY_FINISHES,
+  PRODUCT_STORY_MODES,
   facebookEmbedSrc,
   isSafeContentLink,
   isUploadedImage,
@@ -708,6 +710,60 @@ onMounted(() => {
               :value="appliance"
             >
               {{ t(`admin.content.appliances.${appliance}`) }}
+            </SelectItem>
+          </SelectContent>
+        </Select>
+      </template>
+
+      <!-- finish -->
+      <template v-else-if="field.kind === 'finish'">
+        <Select
+          :model-value="textValue(field.key)"
+          :disabled="!hydrated"
+          @update:model-value="emit('set', field.key, $event, locale)"
+        >
+          <SelectTrigger
+            :id="`f-${sectionId}-${field.key}`"
+            class="min-h-11 w-full justify-between"
+            :aria-invalid="Boolean(fieldError(field.key))"
+            :aria-describedby="fieldError(field.key) ? `e-${sectionId}-${field.key}` : undefined"
+          >
+            <SelectValue :placeholder="t('admin.content.fields.productStory.selectFinish')" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem
+              v-for="finish in PRODUCT_STORY_FINISHES"
+              :key="finish"
+              :value="finish"
+            >
+              {{ t(`admin.content.fields.productStory.finishes.${finish}`) }}
+            </SelectItem>
+          </SelectContent>
+        </Select>
+      </template>
+
+      <!-- productMode -->
+      <template v-else-if="field.kind === 'productMode'">
+        <Select
+          :model-value="textValue(field.key) || 'manual'"
+          :disabled="!hydrated"
+          @update:model-value="emit('set', field.key, $event, locale)"
+        >
+          <SelectTrigger
+            :id="`f-${sectionId}-${field.key}`"
+            class="min-h-11 w-full justify-between"
+            :aria-invalid="Boolean(fieldError(field.key))"
+            :aria-describedby="fieldError(field.key) ? `e-${sectionId}-${field.key}` : undefined"
+          >
+            <SelectValue :placeholder="t('admin.content.fields.productStory.selectProductMode')" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem
+              v-for="mode in PRODUCT_STORY_MODES"
+              :key="mode"
+              :value="mode"
+            >
+              {{ t(`admin.content.fields.productStory.productModes.${mode}`) }}
             </SelectItem>
           </SelectContent>
         </Select>

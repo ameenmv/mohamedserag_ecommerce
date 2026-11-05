@@ -42,6 +42,31 @@ export type ProductStoryAppliance = (typeof PRODUCT_STORY_APPLIANCES)[number]
 export const PRODUCT_STORY_CALLOUTS_MIN = 2
 export const PRODUCT_STORY_CALLOUTS_MAX = 4
 
+export const PRODUCT_STORY_FINISHES = ['steel', 'white', 'black', 'champagne'] as const
+export type ProductStoryFinish = (typeof PRODUCT_STORY_FINISHES)[number]
+
+export const PRODUCT_STORY_MODES = ['manual', 'bestseller'] as const
+export type ProductStoryMode = (typeof PRODUCT_STORY_MODES)[number]
+
+/**
+ * Maps an appliance kind from the product story section to the corresponding
+ * store category slug (e.g. 'fridge' -> 'refrigerators').
+ */
+export function storyCategorySlug(appliance: ProductStoryAppliance): string {
+  switch (appliance) {
+    case 'fridge':
+      return 'refrigerators'
+    case 'washer':
+      return 'washers'
+    case 'cooker':
+      return 'cookers'
+    case 'tv':
+      return 'tvs'
+    case 'ac':
+      return 'acs'
+  }
+}
+
 export interface ProductStoryCallout {
   value: string
   label: string
@@ -50,6 +75,8 @@ export interface ProductStoryCallout {
 export interface ProductStoryContent {
   title: string
   appliance: ProductStoryAppliance
+  finish?: ProductStoryFinish
+  productMode?: ProductStoryMode
   productSlug: string
   callouts: ProductStoryCallout[]
 }
@@ -161,6 +188,8 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
   productStory: {
     title: 'ثلاجة سامسونج نوفروست 450 لتر',
     appliance: 'fridge',
+    finish: 'steel',
+    productMode: 'manual',
     productSlug: 'samsung-fridge-450l-s1',
     callouts: [
       { value: '450 لتر', label: 'مساحة لعيلة كاملة' },
@@ -262,6 +291,8 @@ export const DEFAULT_HOME_CONTENT_EN: HomeContent = {
   productStory: {
     title: 'Samsung No Frost fridge, 450 L',
     appliance: 'fridge',
+    finish: 'steel',
+    productMode: 'manual',
     productSlug: 'samsung-fridge-450l-s1',
     callouts: [
       { value: '450 L', label: 'Room for the whole family' },
