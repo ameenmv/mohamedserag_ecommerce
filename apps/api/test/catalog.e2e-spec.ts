@@ -29,6 +29,14 @@ describe('Catalog API E2E (/api/categories, /api/brands, /api/products)', () => 
   let popRecentOrderId = ''
   let popOldOrderId = ''
 
+  let twoProductsCatId = ''
+  let twoProductsCatSlug = ''
+  let twoProd1Id = ''
+  let twoProd2Id = ''
+  let noImagesCatId = ''
+  let noImagesCatSlug = ''
+  let noImgProdId = ''
+
   let knownFridgeSlug = ''
   let knownProductIds: string[] = []
 
@@ -270,6 +278,83 @@ describe('Catalog API E2E (/api/categories, /api/brands, /api/products)', () => 
         },
       })
       popOldOrderId = orderOld.id
+
+      // f. Category with two products: one featured with image (price 3,000 EGP), one cheaper (price 1,500 EGP)
+      twoProductsCatSlug = `two-prod-cat-${fixtureTag}`
+      const twoProdCat = await prisma.category.create({
+        data: {
+          name: `قسم منتجين ${fixtureTag}`,
+          slug: twoProductsCatSlug,
+          visible: true,
+          sort: 810,
+        },
+      })
+      twoProductsCatId = twoProdCat.id
+
+      const twoP1 = await prisma.product.create({
+        data: {
+          slug: `two-prod-p1-${fixtureTag}`,
+          modelCode: `TWO-P1-${fixtureTag}`,
+          name: `منتج أول مميز ${fixtureTag}`,
+          brandId: baseBrand.id,
+          categoryId: twoProdCat.id,
+          price: 300000,
+          featured: true,
+          visible: true,
+          stock: 10,
+          images: {
+            create: [
+              {
+                url: `/uploads/cover-${fixtureTag}.webp`,
+                sort: 1,
+              },
+            ],
+          },
+        },
+      })
+      twoProd1Id = twoP1.id
+
+      const twoP2 = await prisma.product.create({
+        data: {
+          slug: `two-prod-p2-${fixtureTag}`,
+          modelCode: `TWO-P2-${fixtureTag}`,
+          name: `منتج ثاني أرخص ${fixtureTag}`,
+          brandId: baseBrand.id,
+          categoryId: twoProdCat.id,
+          price: 150000,
+          featured: false,
+          visible: true,
+          stock: 10,
+        },
+      })
+      twoProd2Id = twoP2.id
+
+      // g. Category with no images
+      noImagesCatSlug = `no-img-cat-${fixtureTag}`
+      const noImgCat = await prisma.category.create({
+        data: {
+          name: `قسم بدون صور ${fixtureTag}`,
+          slug: noImagesCatSlug,
+          visible: true,
+          sort: 820,
+        },
+      })
+      noImagesCatId = noImgCat.id
+
+      const pNoImg = await prisma.product.create({
+        data: {
+          slug: `no-img-prod-${fixtureTag}`,
+          modelCode: `NO-IMG-${fixtureTag}`,
+          name: `منتج بدون صورة ${fixtureTag}`,
+          brandId: baseBrand.id,
+          categoryId: noImgCat.id,
+          price: 250000,
+          featured: false,
+          visible: true,
+          stock: 10,
+        },
+      })
+      noImgProdId = pNoImg.id
     }
   })
 
@@ -287,11 +372,20 @@ describe('Catalog API E2E (/api/categories, /api/brands, /api/products)', () => 
         popProductRecentId,
         popProductOldId,
         popProductNoneId,
+        twoProd1Id,
+        twoProd2Id,
+        noImgProdId,
       ].filter(Boolean)
       if (productIds.length > 0) {
         await prisma.product.deleteMany({ where: { id: { in: productIds } } }).catch(() => undefined)
       }
-      const categoryIds = [emptyCategoryId, hiddenCategoryId, popCategoryId].filter(Boolean)
+      const categoryIds = [
+        emptyCategoryId,
+        hiddenCategoryId,
+        popCategoryId,
+        twoProductsCatId,
+        noImagesCatId,
+      ].filter(Boolean)
       if (categoryIds.length > 0) {
         await prisma.category.deleteMany({ where: { id: { in: categoryIds } } }).catch(() => undefined)
       }
@@ -316,13 +410,33 @@ describe('Catalog API E2E (/api/categories, /api/brands, /api/products)', () => 
 
       // Collect all category IDs in the tree
       const collectedIds: string[] = []
-      const checkNode = (node: { id: string; productCount: number; children: unknown[]; sort: number; accent?: string; illustration?: string }) => {
+      const checkNode = (node: {
+        id: string
+        productCount: number
+        children: unknown[]
+        sort: number
+        accent?: string
+        illustration?: string
+        coverImage?: string | null
+        startingPrice?: number | null
+      }) => {
         collectedIds.push(node.id)
         expect(node.productCount).toBeGreaterThan(0)
         expect(node.accent).toBeDefined()
         expect(node.illustration).toBeDefined()
+        expect('coverImage' in node).toBe(true)
+        expect('startingPrice' in node).toBe(true)
         expect(Array.isArray(node.children)).toBe(true)
-        for (const child of node.children as Array<{ id: string; productCount: number; children: unknown[]; sort: number; accent?: string; illustration?: string }>) {
+        for (const child of node.children as Array<{
+          id: string
+          productCount: number
+          children: unknown[]
+          sort: number
+          accent?: string
+          illustration?: string
+          coverImage?: string | null
+          startingPrice?: number | null
+        }>) {
           checkNode(child)
         }
       }
@@ -335,6 +449,38 @@ describe('Catalog API E2E (/api/categories, /api/brands, /api/products)', () => 
       expect(collectedIds).not.toContain(emptyCategoryId)
       // Hidden category must be omitted
       expect(collectedIds).not.toContain(hiddenCategoryId)
+    })
+
+    it('asserts a category with two products returns min price and cover image, and a category with no images returns coverImage null', async () => {
+      const res = await request(app.getHttpServer()).get('/api/categories').expect(200)
+
+      type TreeNode = {
+        slug: string
+        startingPrice: number | null
+        coverImage: string | null
+        children: TreeNode[]
+      }
+
+      const findNode = (nodes: TreeNode[], targetSlug: string): TreeNode | null => {
+        for (const node of nodes) {
+          if (node.slug === targetSlug) return node
+          if (Array.isArray(node.children) && node.children.length > 0) {
+            const found = findNode(node.children, targetSlug)
+            if (found) return found
+          }
+        }
+        return null
+      }
+
+      const twoProdNode = findNode(res.body as TreeNode[], twoProductsCatSlug)
+      expect(twoProdNode).not.toBeNull()
+      expect(twoProdNode?.startingPrice).toBe(150000)
+      expect(twoProdNode?.coverImage).toBe(`/uploads/cover-${fixtureTag}.webp`)
+
+      const noImgNode = findNode(res.body as TreeNode[], noImagesCatSlug)
+      expect(noImgNode).not.toBeNull()
+      expect(noImgNode?.startingPrice).toBe(250000)
+      expect(noImgNode?.coverImage).toBeNull()
     })
   })
 

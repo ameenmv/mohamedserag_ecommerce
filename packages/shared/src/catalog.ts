@@ -149,6 +149,10 @@ export interface CategoryTreeNode {
   seoDescription: string | null
   sort: number
   productCount: number
+  /** Best visible product image url in the category or descendants */
+  coverImage: string | null
+  /** Min visible product price in piastres, descendants included */
+  startingPrice: number | null
   children: CategoryTreeNode[]
 }
 

@@ -54,6 +54,54 @@ export class CatalogService {
       directCounts.set(p.categoryId, p._count._all)
     }
 
+    const products = await this.prisma.product.findMany({
+      where: { visible: true, archivedAt: null },
+      select: {
+        categoryId: true,
+        price: true,
+        featured: true,
+        images: {
+          orderBy: { sort: 'asc' },
+          take: 1,
+          select: { url: true },
+        },
+      },
+    })
+
+    const directMinPrices = new Map<string, number>()
+    const directCoverCandidates = new Map<string, { featured: boolean; price: number; url: string }>()
+
+    for (const p of products) {
+      const currentMin = directMinPrices.get(p.categoryId)
+      if (currentMin === undefined || p.price < currentMin) {
+        directMinPrices.set(p.categoryId, p.price)
+      }
+
+      const firstImage = p.images[0]
+      if (firstImage) {
+        const currentCandidate = directCoverCandidates.get(p.categoryId)
+        if (!currentCandidate) {
+          directCoverCandidates.set(p.categoryId, {
+            featured: p.featured,
+            price: p.price,
+            url: firstImage.url,
+          })
+        } else {
+          const isBetter =
+            (p.featured && !currentCandidate.featured) ||
+            (p.featured === currentCandidate.featured && p.price > currentCandidate.price)
+
+          if (isBetter) {
+            directCoverCandidates.set(p.categoryId, {
+              featured: p.featured,
+              price: p.price,
+              url: firstImage.url,
+            })
+          }
+        }
+      }
+    }
+
     const childrenByParentId = new Map<string, typeof allCategories>()
     for (const cat of allCategories) {
       const parentKey = cat.parentId ?? '__ROOT__'
@@ -84,6 +132,25 @@ export class CatalogService {
 
       nonZeroChildren.sort((a, b) => a.sort - b.sort || a.name.localeCompare(b.name, locale))
 
+      const directMin = directMinPrices.get(cat.id)
+      const candidatePrices: number[] = []
+      if (directMin !== undefined) {
+        candidatePrices.push(directMin)
+      }
+      for (const child of nonZeroChildren) {
+        if (child.startingPrice !== null) {
+          candidatePrices.push(child.startingPrice)
+        }
+      }
+      const startingPrice = candidatePrices.length > 0 ? Math.min(...candidatePrices) : null
+
+      const directCover = directCoverCandidates.get(cat.id)?.url ?? null
+      let coverImage = directCover
+      if (coverImage === null) {
+        const firstChildWithCover = nonZeroChildren.find((ch) => ch.coverImage !== null)
+        coverImage = firstChildWithCover ? firstChildWithCover.coverImage : null
+      }
+
       return {
         id: cat.id,
         name: localizedText(cat.name, cat.translations, 'name', locale),
@@ -95,6 +162,8 @@ export class CatalogService {
         seoDescription: localizedText(cat.seoDescription, cat.translations, 'seoDescription', locale),
         sort: cat.sort,
         productCount: totalCount,
+        coverImage,
+        startingPrice,
         children: nonZeroChildren,
       }
     }
