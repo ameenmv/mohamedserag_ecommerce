@@ -195,7 +195,10 @@ export function createApplianceScene(
 
   // 7. Interaction & Turntable State
   let currentYaw = 0
-  let currentPitch = 0
+  // Resting tilt per appliance: the cooker's burners and the AC's top need to be seen from above
+  const REST_PITCH: Record<string, number> = { cooker: 0.42, washer: 0.14, ac: 0.12, fridge: 0.04, tv: 0.03 }
+  const restPitch = REST_PITCH[options.kind ?? 'fridge'] ?? 0.04
+  let currentPitch = restPitch
   let yawVelocity = 0
   let isDragging = false
   let activePointerId: number | null = null
@@ -210,8 +213,8 @@ export function createApplianceScene(
 
   const minYaw = -0.96 // ~ -55°
   const maxYaw = 0.96  // ~ +55°
-  const minPitch = -0.105 // ~ -6°
-  const maxPitch = 0.105  // ~ +6°
+  const minPitch = -0.1
+  const maxPitch = 0.8 // ~ 46°: lets the visitor look down onto the cooktop
 
   function requestFrame(): void {
     if (isPaused || isDisposed) return
@@ -260,8 +263,8 @@ export function createApplianceScene(
           currentYaw += (0 - currentYaw) * Math.min(1, delta * 2.5)
           keepLooping = true
         }
-        if (Math.abs(currentPitch) > 0.001) {
-          currentPitch += (0 - currentPitch) * Math.min(1, delta * 2.5)
+        if (Math.abs(currentPitch - restPitch) > 0.001) {
+          currentPitch += (restPitch - currentPitch) * Math.min(1, delta * 2.5)
           keepLooping = true
         }
 
@@ -324,7 +327,10 @@ export function createApplianceScene(
     currentYaw = clampYaw(currentYaw + yawVelocity, minYaw, maxYaw)
 
     // Vertical pitch tilt
-    currentPitch = clampPitch(currentPitch + deltaY * 0.002, minPitch, maxPitch)
+    // Touch keeps vertical drags for page scrolling
+    if (e.pointerType !== 'touch') {
+      currentPitch = clampPitch(currentPitch + deltaY * 0.004, minPitch, maxPitch)
+    }
 
     lastInteractionTime = performance.now()
     requestFrame()

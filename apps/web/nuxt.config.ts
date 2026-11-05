@@ -214,8 +214,8 @@ export default defineNuxtConfig({
   typescript: { strict: true },
 
   routeRules: {
-    '/': { swr: 60 },
-    '/en': { swr: 60 },
+    // No page cache in dev: a published change (e.g. the product story appliance) must show on the next reload
+    ...(process.env.NODE_ENV === 'production' ? { '/': { swr: 60 }, '/en': { swr: 60 } } : {}),
     '/sitemap.xml': { swr: 3600 },
     '/robots.txt': { swr: 3600 },
     '/feeds/google.xml': { swr: 3600 },

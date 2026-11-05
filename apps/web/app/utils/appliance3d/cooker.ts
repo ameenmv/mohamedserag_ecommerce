@@ -383,9 +383,9 @@ export function buildCooker(
     group,
     materials,
     bounds: {
-      height: 0.90,
-      width: 0.76,
-      centerY: 0.45,
+      height: 1.12,
+      width: 0.92,
+      centerY: 0.5,
     },
     setFinish,
     setOpen,
