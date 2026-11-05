@@ -21,7 +21,7 @@ const { t } = useI18n()
       </span>
 
       <h1 class="title-draw font-display text-4xl leading-tight text-serag-ivory sm:text-5xl lg:text-6xl">
-        {{ title }}
+        <CommonMadText :text="title" size="xl" />
       </h1>
 
       <p class="max-w-2xl text-sm leading-relaxed text-serag-ivory/85 sm:text-base">

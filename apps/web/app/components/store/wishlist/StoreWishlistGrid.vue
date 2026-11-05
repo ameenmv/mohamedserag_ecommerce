@@ -60,7 +60,7 @@ const unavailableItems = computed(() =>
     <div v-else class="space-y-6">
       <div>
         <h1 class="title-draw font-display text-4xl sm:text-5xl text-foreground">
-          {{ t('store.wishlist.title') }}
+          <CommonMadText :text="t('store.wishlist.title')" size="xl" />
         </h1>
         <p class="mt-1 text-xs sm:text-sm text-muted-foreground">
           {{ t('store.wishlist.subtitle') }}

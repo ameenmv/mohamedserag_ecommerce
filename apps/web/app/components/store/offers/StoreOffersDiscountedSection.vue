@@ -28,7 +28,7 @@ const { t } = useI18n()
         id="discounted-section-heading"
         class="font-display text-xl font-bold text-foreground sm:text-2xl"
       >
-        {{ t('store.offers.discountedSectionTitle') }}
+        <CommonMadText :text="t('store.offers.discountedSectionTitle')" size="md" />
       </h2>
     </div>
 

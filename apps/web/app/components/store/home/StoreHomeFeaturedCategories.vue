@@ -28,7 +28,7 @@ const headingId = useId()
             :id="headingId"
             class="mt-2 font-display text-[clamp(36px,5vw,64px)] leading-none text-serag-green"
           >
-            {{ content.title }}
+            <CommonMadText :text="content.title" size="xl" />
           </h2>
         </div>
         <NuxtLink

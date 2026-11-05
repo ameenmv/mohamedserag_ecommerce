@@ -44,7 +44,7 @@ const hasAnyContact = computed(() => Boolean(whatsappNumber.value || phoneNumber
     <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-serag-gold to-transparent" aria-hidden="true" />
 
     <h2 class="font-display text-2xl font-black text-foreground sm:text-3xl">
-      {{ t('store.faq.contactCard.title') }}
+      <CommonMadText :text="t('store.faq.contactCard.title')" size="lg" />
     </h2>
 
     <p class="mt-3 text-sm leading-relaxed text-muted-foreground sm:text-base">

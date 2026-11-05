@@ -38,7 +38,7 @@ const resolvedIllustration = computed<CategoryIllustration>(() =>
     <!-- Text column: Title and Intro with entrance stagger -->
     <div class="relative z-10 flex max-w-2xl flex-col gap-2">
       <h1 class="cat-title font-display text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
-        {{ category.name }}
+        <CommonMadText :text="category.name" size="lg" />
       </h1>
       <p
         v-if="category.intro"

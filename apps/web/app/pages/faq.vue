@@ -33,7 +33,7 @@ useJsonLd('ld-faq', () => buildFaqJsonLd(rawItems.value))
     <template v-if="!hasEntries && cmsPage">
       <article class="mt-4">
         <h1 class="title-draw font-display text-4xl text-foreground sm:text-5xl lg:text-6xl">
-          {{ cmsPage.title }}
+          <CommonMadText :text="cmsPage.title" size="xl" />
         </h1>
         <p class="mt-2 text-xs text-muted-foreground sm:text-sm">
           {{ t('store.pages.updatedAt', { date: formatDate(cmsPage.updatedAt, locale) }) }}

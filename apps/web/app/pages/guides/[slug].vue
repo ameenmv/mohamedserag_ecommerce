@@ -52,7 +52,7 @@ const breadcrumbItems = computed(() => [{ label: t('store.guides.heading'), to: 
 
     <article v-if="guide" class="mt-4">
       <h1 class="title-draw font-display text-4xl text-foreground sm:text-5xl lg:text-6xl">
-        {{ title }}
+        <CommonMadText :text="title" size="xl" />
       </h1>
 
       <div class="mt-3 flex flex-wrap items-center gap-3">
@@ -76,7 +76,7 @@ const breadcrumbItems = computed(() => [{ label: t('store.guides.heading'), to: 
         :aria-label="t('store.guides.relatedProducts')"
       >
         <h2 class="mb-6 font-display text-2xl text-foreground sm:text-3xl">
-          {{ t('store.guides.relatedProducts') }}
+          <CommonMadText :text="t('store.guides.relatedProducts')" size="lg" />
         </h2>
         <div ref="productsRef" class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
           <StoreProductCard

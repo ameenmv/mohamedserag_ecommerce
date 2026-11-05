@@ -63,7 +63,7 @@ onBeforeUnmount(() => {
           :id="headingId"
           class="mt-4 max-w-3xl font-display text-[clamp(40px,5.6vw,80px)] font-bold leading-[1.05] text-serag-ivory"
         >
-          {{ content.title }}
+          <CommonMadText :text="content.title" size="xl" />
         </h2>
       </header>
 

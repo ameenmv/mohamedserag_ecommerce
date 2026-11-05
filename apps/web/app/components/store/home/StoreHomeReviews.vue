@@ -142,8 +142,8 @@ onBeforeUnmount(() => {
             :id="headingId"
             class="font-display text-[clamp(40px,7.5vw,64px)] leading-[0.95] text-center lg:text-[clamp(64px,8vw,128px)]"
           >
-            <span class="block text-serag-green">{{ content.title }}</span>
-            <span v-if="content.highlight" class="ink-fill block text-serag-gold-ink">{{ content.highlight }}</span>
+            <span class="block text-serag-green"><CommonMadText :text="content.title" size="xl" /></span>
+            <span v-if="content.highlight" class="ink-fill block text-serag-gold-ink"><CommonMadText :text="content.highlight" size="xl" /></span>
           </h2>
 
           <div v-if="summary.count > 0" class="flex items-center gap-4">

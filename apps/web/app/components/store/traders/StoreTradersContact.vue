@@ -19,7 +19,7 @@ const hasAny = computed(() => Boolean(props.phone || props.address || props.hour
     :aria-label="t('store.traders.contact.title')"
   >
     <h2 class="font-display text-xl text-foreground sm:text-2xl">
-      {{ t('store.traders.contact.title') }}
+      <CommonMadText :text="t('store.traders.contact.title')" size="md" />
     </h2>
 
     <dl class="mt-4 flex flex-col gap-3 text-sm sm:text-base">

@@ -159,7 +159,7 @@ useRevealOnScroll(relatedRef, ':scope > article', () => product.value?.related)
     >
       <div class="mb-6 flex items-center justify-between">
         <h2 class="font-display text-2xl text-foreground sm:text-3xl lg:text-4xl">
-          {{ t('store.productPage.related.title') }}
+          <CommonMadText :text="t('store.productPage.related.title')" size="lg" />
         </h2>
       </div>
 

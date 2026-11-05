@@ -8,7 +8,7 @@ defineProps<{
 <template>
   <header class="flex flex-col items-center text-center">
     <h1 class="font-display text-3xl font-black tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-      {{ title }}
+      <CommonMadText :text="title" size="xl" />
     </h1>
 
     <!-- Thin gold hairline -->

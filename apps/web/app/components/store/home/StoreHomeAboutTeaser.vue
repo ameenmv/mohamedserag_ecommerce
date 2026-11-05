@@ -61,7 +61,7 @@ const headingId = useId()
         <div class="flex min-w-0 flex-[1_1_520px] flex-col gap-6">
           <p class="eyebrow text-serag-gold-ink">{{ content.eyebrow }}</p>
           <h2 :id="headingId" class="font-display text-[clamp(42px,5.5vw,76px)] leading-none text-serag-green">
-            {{ content.title }}
+            <CommonMadText :text="content.title" size="xl" />
           </h2>
           <p class="text-lg leading-[1.9] text-[#2B2925] sm:text-xl">{{ content.subtitle }}</p>
           <p class="text-lg leading-[1.9] text-[#66625B]">{{ t('store.home.about.today') }}</p>

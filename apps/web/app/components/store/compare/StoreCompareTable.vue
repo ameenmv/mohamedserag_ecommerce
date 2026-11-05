@@ -68,7 +68,7 @@ function getRowLabel(row: { key: string; label: string; type: string }): string 
         <div>
           <p class="eyebrow text-serag-gold-ink dark:text-serag-gold-hi">{{ t('store.compare.eyebrow', { count: products.length }) }}</p>
           <h1 class="title-draw font-display mt-1 text-4xl text-foreground sm:text-5xl">
-            {{ t('store.compare.title') }}
+            <CommonMadText :text="t('store.compare.title')" size="xl" />
           </h1>
           <p class="mt-1 text-xs text-muted-foreground sm:text-sm">
             {{ t('store.compare.subtitle', { max: MAX_COMPARE_ITEMS }) }}

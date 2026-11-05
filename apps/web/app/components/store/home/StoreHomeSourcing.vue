@@ -32,8 +32,8 @@ const warrantyBrands = computed(() => props.brands.slice(0, 6))
       <div class="mb-14 max-w-[760px]">
         <p class="eyebrow text-serag-gold-hi">{{ t('store.home.sourcingEyebrow') }}</p>
         <h2 :id="headingId" class="mt-2.5 mb-4 font-display text-[clamp(44px,6vw,84px)] leading-none">
-          {{ t('store.home.sourcing.title') }}
-          <span class="ink-fill text-serag-gold-hi">{{ t('store.home.sourcing.titleHighlight') }}</span>
+          <CommonMadText :text="t('store.home.sourcing.title')" size="xl" />
+          <span class="ink-fill text-serag-gold-hi"><CommonMadText :text="t('store.home.sourcing.titleHighlight')" size="xl" /></span>
         </h2>
         <p class="text-lg leading-[1.9] text-[#D8D3C7] sm:text-[19px]">{{ t('store.home.sourcing.subtitle') }}</p>
       </div>

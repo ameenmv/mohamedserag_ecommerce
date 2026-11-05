@@ -32,7 +32,7 @@ function formatNumber(idx: number): string {
       </div>
 
       <h3 class="mt-4 font-display text-lg font-bold text-foreground sm:text-xl">
-        {{ t('store.faq.emptyTitle') }}
+        <CommonMadText :text="t('store.faq.emptyTitle')" size="md" />
       </h3>
 
       <p class="mt-2 max-w-md text-xs text-muted-foreground sm:text-sm">

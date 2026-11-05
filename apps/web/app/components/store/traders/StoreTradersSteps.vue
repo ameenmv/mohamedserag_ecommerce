@@ -21,7 +21,7 @@ const steps = computed(() =>
     :aria-label="t('store.traders.steps.title')"
   >
     <h2 class="font-display text-xl text-foreground sm:text-2xl">
-      {{ t('store.traders.steps.title') }}
+      <CommonMadText :text="t('store.traders.steps.title')" size="md" />
     </h2>
 
     <ol ref="listRef" class="mt-5 grid gap-4 sm:grid-cols-3">

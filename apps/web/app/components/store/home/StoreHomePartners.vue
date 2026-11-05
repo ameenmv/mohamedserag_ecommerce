@@ -33,7 +33,7 @@ const headingId = useId()
         <div class="max-w-[720px] flex-[1_1_520px]">
           <p class="eyebrow text-serag-gold-ink">{{ t('store.home.trustedPartnersEyebrow') }}</p>
           <h2 :id="headingId" class="mt-2.5 mb-[18px] font-display text-[clamp(42px,5.5vw,76px)] leading-none text-serag-green">
-            {{ title.lead }}{{ title.highlight ? ' ' : '' }}<span v-if="title.highlight" class="ink-fill text-[#7C6A4B]">{{ title.highlight }}</span>
+            <CommonMadText :text="title.lead" size="xl" />{{ title.highlight ? ' ' : '' }}<span v-if="title.highlight" class="ink-fill text-[#7C6A4B]"><CommonMadText :text="title.highlight" size="xl" /></span>
           </h2>
           <p class="text-lg leading-[1.9] text-[#66625B] sm:text-[19px]">{{ t('store.home.partners.subtitle') }}</p>
         </div>

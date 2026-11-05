@@ -39,7 +39,7 @@ const headingId = useId()
             :id="headingId"
             class="mt-3 font-display text-5xl leading-none sm:text-6xl"
           >
-            {{ content.title }}
+            <CommonMadText :text="content.title" size="lg" />
           </h2>
           <p class="mt-4 text-lg leading-relaxed text-serag-ivory/80">
             {{ content.subtitle }}

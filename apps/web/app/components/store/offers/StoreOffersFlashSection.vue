@@ -38,7 +38,7 @@ const { t, locale } = useI18n()
           :id="`flash-sale-${group.id}`"
           class="font-display text-xl font-bold text-foreground sm:text-2xl"
         >
-          {{ group.name }}
+          <CommonMadText :text="group.name" size="md" />
         </h2>
       </div>
 

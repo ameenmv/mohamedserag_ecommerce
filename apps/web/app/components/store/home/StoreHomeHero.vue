@@ -92,7 +92,7 @@ onBeforeUnmount(() => {
           data-hero-title
           class="font-display text-[clamp(52px,min(7vw,11.5svh),112px)] leading-[0.95] [&:lang(en)]:text-[clamp(48px,min(6vw,9.5svh),92px)] tracking-[-1px] text-serag-ivory"
         >
-          {{ title.lead }}<template v-if="title.highlight"><br><span class="text-serag-gold-hi">{{ title.highlight }}</span></template>
+          <CommonMadText :text="title.lead" size="xl" /><template v-if="title.highlight"><br><span class="text-serag-gold-hi"><CommonMadText :text="title.highlight" size="xl" /></span></template>
         </h1>
 
         <p data-hero-intro class="[--d:.12s] max-w-[560px] text-lg leading-[1.8] text-[#D8D3C7] sm:text-[clamp(18px,2vw,22px)]">

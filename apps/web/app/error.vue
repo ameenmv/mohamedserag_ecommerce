@@ -54,7 +54,7 @@ function handleGoShop(): Promise<void> {
 
         <!-- Heading -->
         <h1 class="mt-4 font-display text-2xl font-bold text-foreground sm:mt-6 sm:text-3xl lg:text-4xl">
-          {{ title }}
+          <CommonMadText :text="title" size="lg" />
         </h1>
 
         <!-- Description -->

@@ -39,7 +39,7 @@ const {
             id="reviews-heading"
             class="font-display text-2xl text-foreground sm:text-3xl lg:text-4xl"
           >
-            {{ t('store.reviews.heading') }}
+            <CommonMadText :text="t('store.reviews.heading')" size="lg" />
           </h2>
           <p class="text-xs sm:text-sm text-muted-foreground leading-relaxed">
             {{ t('store.reviews.subheading') }}

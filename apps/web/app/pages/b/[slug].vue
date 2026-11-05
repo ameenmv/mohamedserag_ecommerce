@@ -102,7 +102,7 @@ function handleSortUpdate(sort: CatalogSort) {
         </div>
         <div class="flex flex-col gap-1">
           <h1 class="title-draw font-display text-4xl text-foreground sm:text-5xl lg:text-6xl">
-            {{ brand?.name }}
+            <CommonMadText :text="brand?.name" size="xl" />
           </h1>
           <p
             v-if="brand?.intro"

@@ -33,7 +33,7 @@ const headingId = useId()
               :id="headingId"
               class="font-display text-[clamp(38px,5vw,60px)] leading-none text-serag-ink"
             >
-              {{ content.title }}
+              <CommonMadText :text="content.title" size="xl" />
             </h2>
             <p class="mt-1.5 text-base text-muted-foreground">{{ content.subtitle }}</p>
           </div>

@@ -44,7 +44,7 @@ const headingId = useId()
           {{ content.badge }}
         </span>
         <h2 :id="headingId" class="font-display text-[clamp(42px,5.5vw,76px)] leading-none text-serag-green">
-          {{ title.lead }}{{ title.highlight ? ' ' : '' }}<span v-if="title.highlight" class="ink-fill text-serag-gold-ink">{{ title.highlight }}</span>
+          <CommonMadText :text="title.lead" size="xl" />{{ title.highlight ? ' ' : '' }}<span v-if="title.highlight" class="ink-fill text-serag-gold-ink"><CommonMadText :text="title.highlight" size="xl" /></span>
         </h2>
         <p class="max-w-[540px] text-lg leading-[1.9] text-[#4A4640] sm:text-[19px]">
           {{ content.subtitle }}

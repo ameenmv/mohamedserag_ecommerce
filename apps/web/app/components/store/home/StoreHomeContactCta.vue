@@ -23,7 +23,7 @@ const whatsappUrl = computed(() =>
         </div>
         <div class="relative max-w-[640px]">
           <h2 :id="headingId" class="mb-3.5 font-display text-[clamp(38px,5vw,68px)] leading-none">
-            {{ t('store.home.contact.title') }}
+            <CommonMadText :text="t('store.home.contact.title')" size="xl" />
           </h2>
           <p class="text-lg leading-[1.8] text-[#1C1A0E] sm:text-[19px]">{{ t('store.home.contact.subtitle') }}</p>
         </div>

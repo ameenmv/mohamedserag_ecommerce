@@ -60,7 +60,7 @@ if (import.meta.client) {
     <!-- Page Content -->
     <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 sm:py-8">
       <h1 class="title-draw mb-8 font-display text-3xl text-foreground sm:text-4xl">
-        {{ t('store.checkout.title') }}
+        <CommonMadText :text="t('store.checkout.title')" size="lg" />
       </h1>
 
       <!-- Empty Cart State -->

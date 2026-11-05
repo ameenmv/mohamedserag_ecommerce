@@ -35,7 +35,7 @@ const headingId = useId()
   <section class="bg-serag-ivory" :aria-labelledby="headingId">
     <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-10 lg:py-24">
       <h2 :id="headingId" class="mb-8 font-display text-[clamp(34px,4.5vw,56px)] leading-none text-serag-green sm:mb-10">
-        {{ t('store.home.uspHeading') }}
+        <CommonMadText :text="t('store.home.uspHeading')" size="xl" />
       </h2>
       <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:auto-rows-[minmax(170px,auto)] lg:grid-cols-4">
         <div
@@ -56,7 +56,7 @@ const headingId = useId()
             <component :is="iconFor(index)" class="size-7" :stroke-width="1.8" />
           </div>
           <div class="relative min-w-0">
-            <p :class="['font-display leading-tight', index === 0 ? 'text-[clamp(30px,3.6vw,48px)]' : 'text-xl sm:text-2xl']">{{ item.title }}</p>
+            <p :class="['font-display leading-tight', index === 0 ? 'text-[clamp(30px,3.6vw,48px)]' : 'text-xl sm:text-2xl']"><CommonMadText :text="item.title" size="md" /></p>
             <p :class="['mt-1.5', index === 0 ? 'text-base sm:text-lg' : 'text-sm']">{{ item.description }}</p>
           </div>
         </div>

@@ -31,7 +31,7 @@ const localePath = useLocalePath()
     <div v-else-if="products.length === 1" class="space-y-6">
       <div>
         <h1 class="title-draw font-display text-4xl sm:text-5xl text-foreground">
-          {{ t('store.compare.title') }}
+          <CommonMadText :text="t('store.compare.title')" size="xl" />
         </h1>
         <p class="mt-1 text-xs sm:text-sm text-muted-foreground">
           {{ t('store.compare.subtitle', { max: 3 }) }}

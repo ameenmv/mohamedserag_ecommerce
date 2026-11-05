@@ -24,16 +24,16 @@
   --font-num: system-ui, sans-serif;
 }
 
-/* Arabic headlines use Cairo: bold, clean sans. Arabic letters must never get
-   letter-spacing (it breaks cursive joins). Line-height and bottom padding give room for
-   Cairo's ascenders and descenders without clipping. */
+/* Arabic headlines: Thmanyah Serif Display Black (thmanyah.css), Cairo when its files are absent.
+   Arabic letters must never get letter-spacing (it breaks cursive joins). Line-height and bottom
+   padding leave room for tall ascenders and deep descenders and for the مد (utils/mad.ts). */
 :root:lang(ar) .font-display {
   letter-spacing: 0;
 }
 :root:lang(ar) .font-display:not(.text-outline) {
   line-height: 1.25;
   letter-spacing: 0;
-  font-weight: 800;
+  font-weight: 900;
   font-kerning: normal;
   text-rendering: optimizeLegibility;
 }
@@ -1148,4 +1148,17 @@
     animation: none !important;
     stroke-dashoffset: 0 !important;
   }
+}
+
+/* The مد of a title (components/common/CommonMadText.vue): it fades in just after the title, so
+   the word seems to stretch. Opacity only: an inline-block here would break the cursive join. */
+.mad {
+  animation: mad-in 0.9s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)) 0.25s both;
+}
+@keyframes mad-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mad { animation: none; }
 }

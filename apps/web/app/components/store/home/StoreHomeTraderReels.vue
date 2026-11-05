@@ -82,8 +82,8 @@ const avatars = computed(() => reels.value.slice(0, 4).map((reel) => initial(ree
             {{ t('store.home.reels.badge') }}
           </span>
           <h2 :id="headingId" class="my-4 font-display text-[clamp(40px,5.5vw,76px)] leading-none">
-            {{ t('store.home.reels.title') }}
-            <span class="ink-fill text-serag-gold-hi">{{ t('store.home.reels.titleHighlight') }}</span>
+            <CommonMadText :text="t('store.home.reels.title')" size="xl" />
+            <span class="ink-fill text-serag-gold-hi"><CommonMadText :text="t('store.home.reels.titleHighlight')" size="xl" /></span>
           </h2>
           <p class="text-lg leading-[1.9] text-[#D8D3C7] sm:text-[19px]">{{ t('store.home.reels.subtitle') }}</p>
         </div>
