@@ -1,6 +1,8 @@
 import {
   AdditiveBlending,
   BoxGeometry,
+  CanvasTexture,
+  SRGBColorSpace,
   CapsuleGeometry,
   CylinderGeometry,
   DoubleSide,
@@ -17,6 +19,52 @@ import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeom
 import { createApplianceMaterials, type ApplianceFinish } from './materials'
 import { doorAngle, easeInOutCubic, flickerFlame } from './math'
 import type { ApplianceInstance, ApplianceOptions } from './types'
+
+/** Oven cavity seen through the open door: warm dark enamel, rack bars and a glowing top element. */
+function createOvenCavityTexture(): CanvasTexture | null {
+  if (typeof document === 'undefined') return null
+  try {
+    const w = 512
+    const h = 330
+    const canvas = document.createElement('canvas')
+    canvas.width = w
+    canvas.height = h
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return null
+    const bg = ctx.createRadialGradient(w / 2, h * 0.35, 20, w / 2, h / 2, w * 0.7)
+    bg.addColorStop(0, '#5a2a10')
+    bg.addColorStop(0.6, '#2a140a')
+    bg.addColorStop(1, '#0b0604')
+    ctx.fillStyle = bg
+    ctx.fillRect(0, 0, w, h)
+    // Glowing top heating element
+    const glow = ctx.createLinearGradient(0, 18, 0, 70)
+    glow.addColorStop(0, 'rgba(255,150,60,0.95)')
+    glow.addColorStop(1, 'rgba(255,90,20,0)')
+    ctx.fillStyle = glow
+    ctx.fillRect(40, 18, w - 80, 52)
+    // Rack bars
+    for (const y of [150, 240]) {
+      ctx.fillStyle = 'rgba(210,210,215,0.85)'
+      ctx.fillRect(16, y, w - 32, 6)
+      ctx.fillStyle = 'rgba(0,0,0,0.5)'
+      for (let x = 30; x < w - 30; x += 22) ctx.fillRect(x, y + 6, 3, 26)
+    }
+    // Side wall shading
+    const side = ctx.createLinearGradient(0, 0, w, 0)
+    side.addColorStop(0, 'rgba(0,0,0,0.6)')
+    side.addColorStop(0.12, 'rgba(0,0,0,0)')
+    side.addColorStop(0.88, 'rgba(0,0,0,0)')
+    side.addColorStop(1, 'rgba(0,0,0,0.6)')
+    ctx.fillStyle = side
+    ctx.fillRect(0, 0, w, h)
+    const tex = new CanvasTexture(canvas)
+    tex.colorSpace = SRGBColorSpace
+    return tex
+  } catch {
+    return null
+  }
+}
 
 /**
  * Builds a realistic generic freestanding 5-burner gas cooker with oven.
@@ -247,8 +295,16 @@ export function buildCooker(
   group.add(ovenInteriorLight)
 
   // Dark recessed cavity behind the drop-down door: without it the open oven shows a blank steel front
+  const cavityTex = createOvenCavityTexture()
   const cavityMat = registerMaterial(
-    new MeshStandardMaterial({ color: 0x17110c, roughness: 0.7, emissive: 0x4a2008, emissiveIntensity: 0 }),
+    new MeshStandardMaterial({
+      map: cavityTex,
+      emissiveMap: cavityTex,
+      color: cavityTex ? 0xffffff : 0x17110c,
+      roughness: 0.7,
+      emissive: 0xffffff,
+      emissiveIntensity: 0,
+    }),
   )
   const cavityGeom = registerGeometry(new BoxGeometry(0.62, 0.4, 0.012))
   const cavity = new Mesh(cavityGeom, cavityMat)
@@ -339,7 +395,7 @@ export function buildCooker(
     // Interior glow
     const lightProgress = easeInOutCubic(clamped)
     ovenInteriorLight.intensity = 2.2 * lightProgress
-    cavityMat.emissiveIntensity = 1.4 * lightProgress
+    cavityMat.emissiveIntensity = 0.75 * lightProgress
 
     // Gas flames scale & opacity
     flameMat.opacity = 0.85 * lightProgress
@@ -369,6 +425,7 @@ export function buildCooker(
   }
 
   function dispose(): void {
+    cavityTex?.dispose()
     for (const geom of geometriesToDispose) {
       geom.dispose()
     }

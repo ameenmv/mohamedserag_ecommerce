@@ -1,6 +1,8 @@
 import {
   BoxGeometry,
   CanvasTexture,
+  CircleGeometry,
+  SRGBColorSpace,
   CylinderGeometry,
   Group,
   Mesh,
@@ -17,6 +19,46 @@ import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeom
 import { createApplianceMaterials, type ApplianceFinish } from './materials'
 import { doorAngle, easeInOutCubic } from './math'
 import type { ApplianceInstance, ApplianceOptions } from './types'
+
+/**
+ * What the visitor sees through the open door: a perforated steel drum wall fading into a dark centre.
+ */
+function createDrumOpeningTexture(): CanvasTexture | null {
+  if (typeof document === 'undefined') return null
+  try {
+    const size = 512
+    const canvas = document.createElement('canvas')
+    canvas.width = size
+    canvas.height = size
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return null
+    const c = size / 2
+    const wall = ctx.createRadialGradient(c, c, size * 0.05, c, c, c)
+    wall.addColorStop(0, '#020202')
+    wall.addColorStop(0.45, '#15171a')
+    wall.addColorStop(0.8, '#6d737b')
+    wall.addColorStop(1, '#2a2d31')
+    ctx.fillStyle = wall
+    ctx.fillRect(0, 0, size, size)
+    // Perforation holes on concentric rings, denser towards the rim
+    for (let ring = 0; ring < 9; ring++) {
+      const r = size * (0.16 + ring * 0.036)
+      const count = 14 + ring * 7
+      for (let i = 0; i < count; i++) {
+        const a = (i / count) * Math.PI * 2 + (ring % 2) * 0.2
+        ctx.beginPath()
+        ctx.arc(c + Math.cos(a) * r, c + Math.sin(a) * r, 3 + ring * 0.4, 0, Math.PI * 2)
+        ctx.fillStyle = 'rgba(0,0,0,0.75)'
+        ctx.fill()
+      }
+    }
+    const tex = new CanvasTexture(canvas)
+    tex.colorSpace = SRGBColorSpace
+    return tex
+  } catch {
+    return null
+  }
+}
 
 /**
  * Procedural perforated metal hole texture for the washing machine drum.
@@ -205,8 +247,25 @@ export function buildWasher(
   // Rubber bellows ring (seals drum cavity to cabinet)
   const bellowsGeom = registerGeometry(new TorusGeometry(0.205, 0.022, 16, 32))
   const bellowsMesh = new Mesh(bellowsGeom, materials.gasketMaterial)
-  bellowsMesh.position.set(0, drumCenterY, 0.25)
+  bellowsMesh.position.set(0, drumCenterY, 0.286)
   group.add(bellowsMesh)
+
+  // Opening the door reveals the drum wall (the cabinet front is otherwise a solid panel)
+  const openingTex = createDrumOpeningTexture()
+  const openingGeom = registerGeometry(new CircleGeometry(0.196, 64))
+  const openingMat = registerMaterial(
+    new MeshStandardMaterial({
+      map: openingTex,
+      emissiveMap: openingTex,
+      emissive: 0xffffff,
+      emissiveIntensity: 0,
+      metalness: 0.5,
+      roughness: 0.55,
+    }),
+  )
+  const opening = new Mesh(openingGeom, openingMat)
+  opening.position.set(0, drumCenterY, 0.2935)
+  group.add(opening)
 
   // Outer porthole bezel trim
   const portholeTrimGeom = registerGeometry(new TorusGeometry(0.232, 0.012, 16, 36))
@@ -342,6 +401,7 @@ export function buildWasher(
 
     const lightProgress = easeInOutCubic(clamped)
     drumInteriorLight.intensity = 1.9 * lightProgress
+    openingMat.emissiveIntensity = 0.55 * lightProgress
   }
 
   function tick(dt: number): boolean {
@@ -358,6 +418,7 @@ export function buildWasher(
   }
 
   function dispose(): void {
+    openingTex?.dispose()
     drumPerforationTex?.dispose()
     for (const geom of geometriesToDispose) {
       geom.dispose()
