@@ -1,5 +1,6 @@
 import type { ProductStoryAppliance } from '@serag/shared'
 import type { GsapKit } from '~/composables/useGsap'
+import { setStorySceneOpen } from '~/utils/story-scene-bridge'
 
 /**
  * Pinned scroll scene for the product story section.
@@ -54,6 +55,7 @@ export function startProductStoryMotion(
       }
 
       if (appliance === 'fridge') {
+        setStorySceneOpen(0)
         const origin = isRtl ? 'right center' : 'left center'
         if (fridgeDoorTop) gsap.set(fridgeDoorTop, { rotationY: 0, transformOrigin: origin })
         if (fridgeDoorBottom) gsap.set(fridgeDoorBottom, { rotationY: 0, transformOrigin: origin })
@@ -99,8 +101,21 @@ export function startProductStoryMotion(
 
       // Step 2: Kind-specific open
       if (appliance === 'fridge') {
+        const fridgeProxy = { progress: 0 }
+        tl.to(
+          fridgeProxy,
+          {
+            progress: 1,
+            duration: 1.15,
+            ease: 'power2.out',
+            onUpdate: () => {
+              setStorySceneOpen(fridgeProxy.progress)
+            },
+          },
+          '>-0.2',
+        )
         if (fridgeDoorTop) {
-          tl.to(fridgeDoorTop, { rotationY: sign * 105, duration: 1, ease: 'power2.out' }, '>-0.2')
+          tl.to(fridgeDoorTop, { rotationY: sign * 105, duration: 1, ease: 'power2.out' }, '<')
         }
         if (fridgeDoorBottom) {
           tl.to(fridgeDoorBottom, { rotationY: sign * 95, duration: 1, ease: 'power2.out' }, '<0.15')

@@ -34,6 +34,7 @@
     "reka-ui": "^2.11.0",
     "tailwind-merge": "^3.7.0",
     "tailwindcss": "^4.3.3",
+    "three": "0.172.0",
     "vue": "^3.5.43",
     "vue-router": "^5.4.0",
     "vue-sonner": "^2.0.9",
@@ -41,6 +42,7 @@
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.17.0",
+    "@types/three": "0.172.0",
     "eslint": "catalog:",
     "shadcn-nuxt": "^2.8.2",
     "typescript": "catalog:",

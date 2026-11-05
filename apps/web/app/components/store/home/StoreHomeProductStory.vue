@@ -91,7 +91,7 @@ onBeforeUnmount(() => {
           data-story-appliance
           class="order-1 col-span-2 flex justify-center lg:order-2 lg:col-span-1 lg:px-20"
         >
-          <StoreHomeProductStoryAppliance class="max-sm:-my-10 max-sm:scale-[.78]" :kind="content.appliance" />
+          <StoreHomeProductStoryScene class="max-sm:-my-10 max-sm:scale-[.78]" :kind="content.appliance" />
         </div>
 
         <!-- Callouts 3 & 4 (End side on lg, Col 2 on mobile) -->

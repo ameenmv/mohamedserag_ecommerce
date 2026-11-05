@@ -124,7 +124,15 @@
       "productStory": {
         "eyebrow": "قصة منتج",
         "details": "التفاصيل",
-        "was": "بدل"
+        "was": "بدل",
+        "illustrative": "شكل توضيحي عام. صور المنتج الفعلية في صفحته.",
+        "finishLabel": "اختر اللون",
+        "finishes": {
+          "steel": "ستانلس",
+          "white": "أبيض",
+          "black": "أسود",
+          "champagne": "شامبانيا"
+        }
       },
       "reviews": {
         "rating": "{average} من 5",

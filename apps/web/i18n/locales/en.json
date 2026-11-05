@@ -124,7 +124,15 @@
       "productStory": {
         "eyebrow": "Product story",
         "details": "Details",
-        "was": "was"
+        "was": "was",
+        "illustrative": "Generic illustration. Real product photos are on the product page.",
+        "finishLabel": "Choose a finish",
+        "finishes": {
+          "steel": "Steel",
+          "white": "White",
+          "black": "Black",
+          "champagne": "Champagne"
+        }
       },
       "reviews": {
         "rating": "{average} of 5",
