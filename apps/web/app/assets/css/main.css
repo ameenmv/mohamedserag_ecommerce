@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root:lang(ar) {
-  --font-display: 'Alexandria', 'Thmanyah Sans', system-ui, sans-serif;
+  --font-display: 'Cairo', 'Thmanyah Sans', system-ui, sans-serif;
 }
 
 :root:lang(en) {
@@ -24,9 +24,9 @@
   --font-num: system-ui, sans-serif;
 }
 
-/* Arabic headlines use Alexandria: bold modern sans. Arabic letters must never get
+/* Arabic headlines use Cairo: bold, clean sans. Arabic letters must never get
    letter-spacing (it breaks cursive joins). Line-height and bottom padding give room for
-   Alexandria's ascenders and descenders without clipping. */
+   Cairo's ascenders and descenders without clipping. */
 :root:lang(ar) .font-display {
   letter-spacing: 0;
 }

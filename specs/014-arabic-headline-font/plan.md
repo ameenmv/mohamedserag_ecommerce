@@ -10,9 +10,9 @@ Branch `013-client-feedback-round-1` · Spec: [spec.md](spec.md)
 
 ## Decisions
 
-1. Add **Alexandria** (variable, weights 100-900, open license) through `@nuxt/fonts` (google provider, weights 800-900, arabic subset) in `nuxt.config.ts`, consistent with the existing font entries (no preload, applied after first paint).
-2. Define the Arabic display face in one place (`--font-display` for `:root:lang(ar)`): `'Alexandria', 'Thmanyah Sans', system-ui, sans-serif`. Body `--font-sans` stays Thmanyah Sans.
-3. Re-tune the Arabic `.font-display` rules (leading, padding for ascenders/descenders, no letter-spacing) in `thmanyah.css` or main.css for Alexandria; remove the serif-specific comments. The Thmanyah Serif Display `@font-face` is removed (not needed), the Sans faces stay.
+1. Add **Cairo** (variable, weights 100-900, open license) through `@nuxt/fonts` (google provider, weights 800-900, arabic subset) in `nuxt.config.ts`, consistent with the existing font entries (no preload, applied after first paint).
+2. Define the Arabic display face in one place (`--font-display` for `:root:lang(ar)`): `'Cairo', 'Thmanyah Sans', system-ui, sans-serif`. Body `--font-sans` stays Thmanyah Sans.
+3. Re-tune the Arabic `.font-display` rules (leading, padding for ascenders/descenders, no letter-spacing) in `thmanyah.css` or main.css for Cairo; remove the serif-specific comments. The Thmanyah Serif Display `@font-face` is removed (not needed), the Sans faces stay.
 4. Check CLS with the font-swap and keep the `size-adjust`/fallback metrics from `@nuxt/fonts`.
 
 ## Risks

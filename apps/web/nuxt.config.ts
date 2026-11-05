@@ -78,7 +78,7 @@ export default defineNuxtConfig({
       },
       {
         // Arabic headlines: bold modern sans replacing the client-disliked serif.
-        name: 'Alexandria',
+        name: 'Cairo',
         provider: 'google',
         weights: [800, 900],
         subsets: ['arabic'],

@@ -6,7 +6,7 @@
 
 **Status**: Draft
 
-**Input**: User description: "The client dislikes the Thmanyah look in Arabic and wants something bolder that expresses the store. Change the Arabic headline font (Alexandria, Black/ExtraBold), keep the clean Thmanyah Sans for body text."
+**Input**: User description: "The client dislikes the Thmanyah look in Arabic and wants something bolder that expresses the store. Change the Arabic headline font (Cairo, Black/ExtraBold), keep the clean Thmanyah Sans for body text."
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -51,7 +51,7 @@ The new face loads without hurting first paint or layout stability on mobile.
 
 ### Functional Requirements
 
-- **FR-001**: Arabic headline text MUST use a bold modern sans face (Alexandria Black/ExtraBold) across the storefront.
+- **FR-001**: Arabic headline text MUST use a bold modern sans face (Cairo Black/ExtraBold) across the storefront.
 - **FR-002**: Body text, prices and form controls MUST keep their current face.
 - **FR-003**: Headline spacing (line height, padding, tracking) MUST be re-tuned for the new face: no clipping, no letter-spacing on Arabic.
 - **FR-004**: The font MUST be loaded without a new runtime dependency and without being requested before first paint.
@@ -68,6 +68,6 @@ The new face loads without hurting first paint or layout stability on mobile.
 
 ## Assumptions
 
-- Alexandria (open license) is the chosen face ("just pick the best"); the client may still ask to swap it, so the face is defined in one place.
+- Cairo (open license) is the chosen face ("just pick the best"); the client may still ask to swap it, so the face is defined in one place.
 - Thmanyah Sans stays for body text; its files remain outside git.
 - Headline styles tuned for the previous display face are re-tuned, not duplicated.
