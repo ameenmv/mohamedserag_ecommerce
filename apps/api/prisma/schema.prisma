@@ -96,6 +96,7 @@ enum RedemptionStatus {
 enum WhatsAppChannel {
   link
   cloud_api
+  open_wa
 }
 
 enum WhatsAppStatus {

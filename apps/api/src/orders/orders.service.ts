@@ -14,8 +14,10 @@ import { StoreSettingsService } from '../settings/store-settings.service.js'
 import { loadCartProducts } from './cart-products.js'
 import { CouponService } from './coupon.service.js'
 import { nextOrderNo } from './order-number.js'
+import { WhatsAppAlertsService } from '../whatsapp/whatsapp-alerts.service.js'
 
 export const ORDER_RESULT_SELECT = {
+  id: true,
   no: true,
   publicToken: true,
   status: true,
@@ -23,6 +25,7 @@ export const ORDER_RESULT_SELECT = {
 } as const
 
 export function toCreateOrderResult(row: {
+  id?: string
   no: string
   publicToken: string
   status: OrderStatus
@@ -37,6 +40,7 @@ export class OrdersService {
     private readonly prisma: PrismaService,
     private readonly settingsService: StoreSettingsService,
     private readonly couponService: CouponService,
+    private readonly alerts?: WhatsAppAlertsService,
   ) {}
 
   /**
@@ -205,6 +209,10 @@ export class OrdersService {
 
         return { order: created, isNew: true }
       })
+
+      if (txResult.isNew && this.alerts) {
+        void this.alerts.notifyAdminsOfNewOrder(txResult.order.id)
+      }
 
       return {
         result: toCreateOrderResult(txResult.order),

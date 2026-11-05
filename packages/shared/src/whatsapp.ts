@@ -1,4 +1,5 @@
-import type { OrderStatus } from './enums.js'
+import { PAYMENT_METHOD_LABELS, type OrderStatus, type PaymentMethod } from './enums.js'
+import { formatEgpWithUnit } from './money.js'
 import { normalizePhone } from './phone.js'
 
 /**
@@ -84,4 +85,107 @@ export function statusTemplateKey(status: OrderStatus): WhatsAppTemplateKey | nu
     default:
       return null
   }
+}
+
+export interface AdminOrderMessageItem {
+  name: string
+  qty: number
+  unitPrice?: number
+  lineTotal?: number
+}
+
+export interface AdminOrderMessageInput {
+  id: string
+  no: string
+  customerName: string
+  customerPhone: string
+  governorate?: string | null
+  city?: string | null
+  address: string
+  subtotal: number
+  discount: number
+  deliveryFee: number
+  total: number
+  paymentMethod: PaymentMethod | string
+  notes?: string | null
+  items: AdminOrderMessageItem[]
+  webOrigin?: string
+}
+
+/**
+ * Builds an Arabic WhatsApp message for the store owner/admins when a new order is placed.
+ * Formatted cleanly with line breaks, integer piastre money converted to EGP, and kept
+ * under ~900 characters (truncates items with "و N أصناف أخرى" when long).
+ */
+export function buildAdminOrderMessage(order: AdminOrderMessageInput): string {
+  const methodLabel =
+    (PAYMENT_METHOD_LABELS as Record<string, string>)[order.paymentMethod] ?? order.paymentMethod
+
+  const locationParts: string[] = []
+  if (order.governorate) locationParts.push(order.governorate)
+  if (order.city) locationParts.push(order.city)
+  if (order.address) locationParts.push(order.address)
+  const location = locationParts.join(' - ') || order.address
+
+  const header = [
+    `🛒 أوردر جديد #${order.no}`,
+    `العميل: ${order.customerName}`,
+    `الهاتف: ${order.customerPhone}`,
+    `العنوان: ${location}`,
+  ].join('\n')
+
+  const totals = [
+    `المجموع الفرعي: ${formatEgpWithUnit(order.subtotal)}`,
+    ...(order.discount > 0 ? [`الخصم: ${formatEgpWithUnit(order.discount)}`] : []),
+    `مصاريف التوصيل: ${formatEgpWithUnit(order.deliveryFee)}`,
+    `الإجمالي: ${formatEgpWithUnit(order.total)}`,
+    `طريقة الدفع: ${methodLabel}`,
+    ...(order.notes && order.notes.trim() ? [`ملاحظات: ${order.notes.trim()}`] : []),
+    `رابط الطلب: ${(order.webOrigin ?? 'http://localhost:3000').replace(/\/$/, '')}/admin/orders/${order.id}`,
+  ].join('\n')
+
+  const formatItem = (item: AdminOrderMessageItem) => {
+    const total =
+      item.lineTotal !== undefined
+        ? item.lineTotal
+        : item.unitPrice !== undefined
+          ? item.unitPrice * item.qty
+          : 0
+    return `• ${item.name} × ${item.qty} — ${formatEgpWithUnit(total)}`
+  }
+
+  // Check full message with all items
+  const allItemsLines = order.items.map(formatItem)
+  const fullMessage = `${header}\n\nالأصناف:\n${allItemsLines.join('\n')}\n\n${totals}`
+  if (fullMessage.length <= 900 || order.items.length <= 1) {
+    return fullMessage
+  }
+
+  // Truncate items from end until it fits under 900 chars
+  for (let visible = order.items.length - 1; visible >= 1; visible--) {
+    const remaining = order.items.length - visible
+    const truncatedItems = [
+      ...order.items.slice(0, visible).map(formatItem),
+      `• و ${remaining} أصناف أخرى`,
+    ]
+    const candidate = `${header}\n\nالأصناف:\n${truncatedItems.join('\n')}\n\n${totals}`
+    if (candidate.length <= 900 || visible === 1) {
+      return candidate
+    }
+  }
+
+  return fullMessage
+}
+
+/**
+ * Builds an Arabic WhatsApp message for customers when a requested product is back in stock.
+ */
+export function buildRestockMessage({
+  productName,
+  url,
+}: {
+  productName: string
+  url: string
+}): string {
+  return `✅ ${productName} رجع متاح عندنا في معرض محمد سراج! اطلبه من هنا: ${url} `
 }

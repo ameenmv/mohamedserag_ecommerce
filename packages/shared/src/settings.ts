@@ -8,6 +8,7 @@ export const SETTINGS_SECTIONS = [
   'lowStock',
   'searchSynonyms',
   'templates',
+  'whatsappAlerts',
 ] as const
 export type SettingsSection = (typeof SETTINGS_SECTIONS)[number]
 

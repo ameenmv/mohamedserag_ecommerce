@@ -2,6 +2,7 @@ import { ConflictException, Injectable, NotFoundException } from '@nestjs/common
 import { canTransition, type OrderStatus, type OrderStockShortage } from '@serag/shared'
 import { Prisma } from '../generated/prisma/client.js'
 import { PrismaService } from '../prisma/prisma.service.js'
+import { WhatsAppAlertsService } from '../whatsapp/whatsapp-alerts.service.js'
 import { OrderStockService } from './order-stock.service.js'
 
 export interface TransitionParams {
@@ -11,11 +12,17 @@ export interface TransitionParams {
   note?: string | null
 }
 
+export interface TransitionResult {
+  shortages: OrderStockShortage[]
+  restoredProductIds?: string[]
+}
+
 @Injectable()
 export class OrderStatusService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly orderStockService: OrderStockService,
+    private readonly whatsappAlerts?: WhatsAppAlertsService,
   ) {}
 
   /**
@@ -25,7 +32,7 @@ export class OrderStatusService {
   async transition(
     tx: Prisma.TransactionClient,
     params: TransitionParams,
-  ): Promise<{ shortages: OrderStockShortage[] }> {
+  ): Promise<TransitionResult> {
     const order = await tx.order.findUnique({
       where: { id: params.orderId },
       select: { id: true, status: true, type: true, bridalListId: true, bridalStatus: true },
@@ -103,8 +110,12 @@ export class OrderStatusService {
     }
 
     if (params.to === 'cancelled') {
-      await this.orderStockService.restoreForOrder(tx, params.orderId, params.userId)
-      return { shortages: [] }
+      const restoredProductIds = await this.orderStockService.restoreForOrder(
+        tx,
+        params.orderId,
+        params.userId,
+      )
+      return { shortages: [], restoredProductIds }
     }
 
     return { shortages: [] }
@@ -114,8 +125,16 @@ export class OrderStatusService {
    * Convenience wrapper that executes a transition in its own transaction.
    */
   async transitionOrder(params: TransitionParams): Promise<{ shortages: OrderStockShortage[] }> {
-    return this.prisma.$transaction(async (tx) => {
+    const result = await this.prisma.$transaction(async (tx) => {
       return this.transition(tx, params)
     })
+
+    if (result.restoredProductIds && result.restoredProductIds.length > 0 && this.whatsappAlerts) {
+      for (const pid of result.restoredProductIds) {
+        void this.whatsappAlerts.notifyRestock(pid)
+      }
+    }
+
+    return { shortages: result.shortages }
   }
 }

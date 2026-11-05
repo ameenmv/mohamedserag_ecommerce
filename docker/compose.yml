@@ -77,6 +77,9 @@ services:
       # Error tracking (Sentry); empty = off
       SENTRY_DSN: ${SENTRY_DSN_API:-}
       SENTRY_RELEASE: ${GIT_SHA:-}
+      # WhatsApp automated alerts (open-wa); empty = off
+      OPEN_WA_URL: ${OPEN_WA_URL:-}
+      OPEN_WA_KEY: ${OPEN_WA_KEY:-}
     volumes:
       - uploads:/uploads
     healthcheck:
@@ -194,8 +197,24 @@ services:
       - uploads:/uploads:ro
       - caddy-data:/data
 
+  # Optional self-hosted WhatsApp automation container (open-wa EASY API).
+  # Run only when WhatsApp automated alerts are enabled:
+  # docker compose -f docker/compose.yml --profile whatsapp up -d wa
+  wa:
+    profiles: ["whatsapp"]
+    image: openwa/wa-automate:latest
+    restart: unless-stopped
+    command: ["--key", "${OPEN_WA_KEY:-}", "--port", "8002"]
+    environment:
+      KEY: ${OPEN_WA_KEY:-}
+      PORT: 8002
+    shm_size: 1gb
+    volumes:
+      - wa-session:/app/session
+
 volumes:
   db-data:
   uploads:
   caddy-data:
   backups:
+  wa-session:

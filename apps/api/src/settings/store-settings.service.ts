@@ -5,17 +5,20 @@ import {
   DEFAULT_LOW_STOCK,
   DEFAULT_PAYMENTS,
   DEFAULT_TEMPLATES,
+  DEFAULT_WHATSAPP_ALERTS,
   DEFAULT_ZONES,
   bridalSettingsSchema,
   codDepositSchema,
   lowStockSettingSchema,
   paymentsSettingSchema,
+  whatsappAlertsSettingSchema,
   zonesSchema,
   type BridalSettings,
   type CodDepositSetting,
   type LowStockSetting,
   type PaymentsSetting,
   type PublicStoreInfo,
+  type WhatsappAlertsSetting,
   type Zone,
 } from '@serag/shared'
 import { z } from 'zod'
@@ -100,5 +103,14 @@ export class StoreSettingsService {
     })
     const parsed = lowStockSettingSchema.safeParse(row?.value)
     return parsed.success ? parsed.data : DEFAULT_LOW_STOCK
+  }
+
+  /** WhatsApp automated alerts configuration; falls back to `DEFAULT_WHATSAPP_ALERTS` (disabled). */
+  async getWhatsappAlerts(): Promise<WhatsappAlertsSetting> {
+    const row = await this.prisma.setting.findUnique({
+      where: { key: 'whatsappAlerts' },
+    })
+    const parsed = whatsappAlertsSettingSchema.safeParse(row?.value)
+    return parsed.success ? parsed.data : DEFAULT_WHATSAPP_ALERTS
   }
 }

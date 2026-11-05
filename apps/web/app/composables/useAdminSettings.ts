@@ -11,6 +11,7 @@ import {
   type SettingsSectionState,
   type StoreInfoSettingOutput,
   type TemplatesSettingInput,
+  type WhatsappAlertsSetting,
 } from '@serag/shared'
 import { parseAdminApiError } from '~/utils/admin-api-errors'
 import {
@@ -29,6 +30,7 @@ export interface AdminSettingsValues {
   lowStock: LowStockSettingInput
   searchSynonyms: SearchSynonymsSettingInput
   templates: TemplatesSettingInput
+  whatsappAlerts: WhatsappAlertsSetting
 }
 
 export interface AdminSettingsSectionState {

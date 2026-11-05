@@ -1725,7 +1725,8 @@
         "codDeposit": "Cash on delivery deposit",
         "lowStock": "Stock alert",
         "searchSynonyms": "Search synonyms",
-        "templates": "Message templates"
+        "templates": "Message templates",
+        "whatsappAlerts": "WhatsApp alerts"
       },
       "store": {
         "hint": "These details appear in the footer, contact page and WhatsApp messages.",
@@ -1816,6 +1817,19 @@
           "product_question": "Product question",
           "traders_contact": "Traders contact"
         }
+      },
+      "whatsappAlerts": {
+        "hint": "Send automated WhatsApp alerts to admins on new orders, and to customers when a requested product is back in stock.",
+        "enabled": "Enable alerts",
+        "enableAria": "Enable WhatsApp alerts",
+        "adminNumbers": "Admin phone numbers (up to 5)",
+        "adminNumbersHint": "Egyptian mobile numbers to receive new order details as soon as placed",
+        "addNumber": "Add number",
+        "removeNumber": "Remove number",
+        "removeNumberAria": "Remove admin phone number",
+        "phonePlaceholder": "010XXXXXXXX",
+        "empty": "No admin numbers added yet. Add a number to receive new order alerts.",
+        "maxNumbers": "Maximum 5 numbers"
       }
     },
     "form": {

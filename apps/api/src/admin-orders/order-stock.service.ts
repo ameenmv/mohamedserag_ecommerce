@@ -77,12 +77,13 @@ export class OrderStockService {
    * Restores deducted stock upon entering 'cancelled'.
    * For each product: restore = -SUM(deducted) - SUM(order_cancelled).
    * Only restores what was actually deducted and not yet restored.
+   * Returns list of restored product IDs.
    */
   async restoreForOrder(
     tx: Prisma.TransactionClient,
     orderId: string,
     userId?: string | null,
-  ): Promise<void> {
+  ): Promise<string[]> {
     const movements = await tx.stockMovement.findMany({
       where: { orderId },
     })
@@ -90,6 +91,8 @@ export class OrderStockService {
     const productIds = Array.from(new Set(movements.map((m) => m.productId))).sort((a, b) =>
       a.localeCompare(b),
     )
+
+    const restoredProductIds: string[] = []
 
     for (const productId of productIds) {
       const confirmed = movements
@@ -119,7 +122,11 @@ export class OrderStockService {
             userId: userId ?? null,
           },
         })
+
+        restoredProductIds.push(productId)
       }
     }
+
+    return restoredProductIds
   }
 }

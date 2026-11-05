@@ -9,7 +9,7 @@ import {
 import { Prisma } from '../generated/prisma/client.js'
 import { PrismaService } from '../prisma/prisma.service.js'
 import { escapeCsvCell } from '../common/csv-cell.js'
-
+import { WhatsAppAlertsService } from '../whatsapp/whatsapp-alerts.service.js'
 
 export interface ImportApplyResult {
   updated: number
@@ -19,7 +19,10 @@ export interface ImportApplyResult {
 
 @Injectable()
 export class AdminProductImportService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly whatsappAlerts?: WhatsAppAlertsService,
+  ) {}
 
   /**
    * Generates a CSV of all non-archived products for admin price/stock bulk export.
@@ -91,7 +94,9 @@ export class AdminProductImportService {
       })
     }
 
-    return this.prisma.$transaction(async (tx) => {
+    const restockedProductIds = new Set<string>()
+
+    const result = await this.prisma.$transaction(async (tx) => {
       const sources = await this.loadProductSources(tx)
       const plan = buildImportPlan(rows, sources)
 
@@ -123,6 +128,9 @@ export class AdminProductImportService {
 
         if (row.changes.includes('stock') && row.current) {
           const stockDiff = row.next.stock - row.current.stock
+          if (row.current.stock <= 0 && row.next.stock > 0) {
+            restockedProductIds.add(row.productId)
+          }
           await tx.stockMovement.create({
             data: {
               productId: row.productId,
@@ -146,6 +154,14 @@ export class AdminProductImportService {
         errors,
       }
     })
+
+    if (this.whatsappAlerts && restockedProductIds.size > 0) {
+      for (const pid of restockedProductIds) {
+        void this.whatsappAlerts.notifyRestock(pid)
+      }
+    }
+
+    return result
   }
 
   private async loadProductSources(

@@ -11,6 +11,7 @@ import {
   storeInfoSettingSchema,
   templatesSettingSchema,
   unknownTemplateVariables,
+  whatsappAlertsSettingSchema,
   type AdminSettingsResponse,
   type SettingsSection,
   type SettingsSectionState,
@@ -33,6 +34,7 @@ type SectionSchema =
   | typeof lowStockSettingSchema
   | typeof searchSynonymsSettingSchema
   | typeof templatesSettingSchema
+  | typeof whatsappAlertsSettingSchema
 
 export function isSettingsSection(value: string): value is SettingsSection {
   return SETTINGS_SECTIONS.some((section) => section === value)
@@ -54,6 +56,8 @@ function sectionSchema(section: SettingsSection): SectionSchema {
       return searchSynonymsSettingSchema
     case 'templates':
       return templatesSettingSchema
+    case 'whatsappAlerts':
+      return whatsappAlertsSettingSchema
   }
 }
 
@@ -108,6 +112,7 @@ export class AdminSettingsService {
         lowStock: this.requireSection(byKey, 'lowStock'),
         searchSynonyms: this.requireSection(byKey, 'searchSynonyms'),
         templates: this.requireSection(byKey, 'templates'),
+        whatsappAlerts: this.requireSection(byKey, 'whatsappAlerts'),
       },
     }
   }
@@ -230,6 +235,8 @@ export class AdminSettingsService {
         return this.searchService.getSynonyms()
       case 'templates':
         return this.storeSettings.getTemplates()
+      case 'whatsappAlerts':
+        return this.storeSettings.getWhatsappAlerts()
     }
   }
 }

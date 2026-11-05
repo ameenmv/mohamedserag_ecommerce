@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { paymentMethodSchema } from './enums-schema.js'
 import { normalizePhone, PHONE_ERROR_MESSAGE } from './phone.js'
+import { phoneSchema } from './phone-schema.js'
 import { EGYPT_GOVERNORATES } from './governorates.js'
 import type { WhatsAppTemplateKey } from './whatsapp.js'
 import { unknownTemplateVariables, TEMPLATE_VARIABLES, type SettingsSection } from './settings.js'
@@ -355,6 +356,19 @@ export const templatePreviewInputSchema = z.object({
 })
 export type TemplatePreviewInput = z.infer<typeof templatePreviewInputSchema>
 
+export const whatsappAlertsSettingSchema = z.object({
+  enabled: z.boolean({ message: 'حالة التنبيهات مطلوبة' }),
+  adminNumbers: z.array(phoneSchema).max(5, { message: 'الحد الأقصى 5 أرقام' }),
+})
+export type WhatsappAlertsSetting = z.infer<typeof whatsappAlertsSettingSchema>
+export type WhatsappAlertsSettingInput = z.input<typeof whatsappAlertsSettingSchema>
+export type WhatsappAlertsSettingOutput = z.output<typeof whatsappAlertsSettingSchema>
+
+export const DEFAULT_WHATSAPP_ALERTS: WhatsappAlertsSetting = {
+  enabled: false,
+  adminNumbers: [],
+}
+
 export const SETTINGS_SECTION_SCHEMAS: Record<SettingsSection, z.ZodType> = {
   store: storeInfoSettingSchema,
   payments: adminPaymentsSettingSchema,
@@ -363,6 +377,7 @@ export const SETTINGS_SECTION_SCHEMAS: Record<SettingsSection, z.ZodType> = {
   lowStock: lowStockSettingSchema,
   searchSynonyms: searchSynonymsSettingSchema,
   templates: templatesSettingSchema,
+  whatsappAlerts: whatsappAlertsSettingSchema,
 }
 
 export const settingsUpdateSchema = z.object({

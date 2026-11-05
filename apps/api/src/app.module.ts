@@ -21,6 +21,7 @@ import { QuizModule } from './quiz/quiz.module.js'
 import { SeoModule } from './seo/seo.module.js'
 import { OrdersModule } from './orders/orders.module.js'
 import { BridalModule } from './bridal/bridal.module.js'
+import { WhatsAppModule } from './whatsapp/whatsapp.module.js'
 import { SettingsModule } from './settings/settings.module.js'
 import { PromotionsModule } from './promotions/promotions.module.js'
 import { ReviewsModule } from './reviews/reviews.module.js'
@@ -56,6 +57,7 @@ import { TestSeedModule } from './test-seed/test-seed.module.js'
     AdminDashboardModule,
     AdminReportsModule,
     AdminSettingsModule,
+    WhatsAppModule,
     OrdersModule,
     BridalModule,
   ],

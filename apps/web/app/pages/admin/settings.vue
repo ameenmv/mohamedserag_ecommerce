@@ -7,6 +7,7 @@ import AdminSettingsPaymentsSection from '~/components/admin/settings/AdminSetti
 import AdminSettingsStoreSection from '~/components/admin/settings/AdminSettingsStoreSection.vue'
 import AdminSettingsSynonymsSection from '~/components/admin/settings/AdminSettingsSynonymsSection.vue'
 import AdminSettingsTemplatesSection from '~/components/admin/settings/AdminSettingsTemplatesSection.vue'
+import AdminSettingsWhatsappAlertsSection from '~/components/admin/settings/AdminSettingsWhatsappAlertsSection.vue'
 import AdminSettingsZonesSection from '~/components/admin/settings/AdminSettingsZonesSection.vue'
 import { PERMISSIONS, SETTINGS_SECTIONS, type SettingsSection } from '@serag/shared'
 import { onBeforeRouteLeave } from 'vue-router'
@@ -89,6 +90,7 @@ const sectionComponents: Record<SettingsSection, Component> = {
   lowStock: AdminSettingsLowStockSection,
   searchSynonyms: AdminSettingsSynonymsSection,
   templates: AdminSettingsTemplatesSection,
+  whatsappAlerts: AdminSettingsWhatsappAlertsSection,
 }
 
 const sectionComponent = computed(() => sectionComponents[activeSection.value])

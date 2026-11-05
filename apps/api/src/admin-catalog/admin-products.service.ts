@@ -22,6 +22,7 @@ import { SearchIndexService } from '../catalog/search-index.service.js'
 import { Prisma } from '../generated/prisma/client.js'
 import { PrismaService } from '../prisma/prisma.service.js'
 import { StoreSettingsService } from '../settings/store-settings.service.js'
+import { WhatsAppAlertsService } from '../whatsapp/whatsapp-alerts.service.js'
 import {
   parseProductSetContents,
   parseProductSpecs,
@@ -49,6 +50,7 @@ export class AdminProductsService {
     private readonly prisma: PrismaService,
     private readonly searchIndexService: SearchIndexService,
     private readonly storeSettings: StoreSettingsService,
+    private readonly whatsappAlerts?: WhatsAppAlertsService,
   ) {}
 
   async list(query: AdminProductQueryOutput): Promise<AdminProductListResponse> {
@@ -434,6 +436,10 @@ export class AdminProductsService {
     })
 
     await this.searchIndexService.reindexProduct(id)
+
+    if (existing.stock <= 0 && data.stock !== undefined && data.stock > 0 && this.whatsappAlerts) {
+      void this.whatsappAlerts.notifyRestock(id)
+    }
 
     return this.getById(id)
   }

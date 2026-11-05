@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common'
 import { CatalogModule } from '../catalog/catalog.module.js'
 import { SettingsModule } from '../settings/settings.module.js'
+import { WhatsAppModule } from '../whatsapp/whatsapp.module.js'
 import { AdminBrandsController } from './admin-brands.controller.js'
 import { AdminBrandsService } from './admin-brands.service.js'
 import { AdminCategoriesController } from './admin-categories.controller.js'
@@ -13,7 +14,7 @@ import { AdminSpecTemplatesController } from './admin-spec-templates.controller.
 import { AdminSpecTemplatesService } from './admin-spec-templates.service.js'
 
 @Module({
-  imports: [CatalogModule, SettingsModule],
+  imports: [CatalogModule, SettingsModule, WhatsAppModule],
   controllers: [
     AdminProductsController,
     AdminCategoriesController,
