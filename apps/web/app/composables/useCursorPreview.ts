@@ -62,8 +62,14 @@ export function useCursorPreview() {
     return finePointer && !reducedMotion
   }
 
+  let lastClientX = 0
+  let lastClientY = 0
+  let lastTick = 0
+
   function updateTarget(clientX: number, clientY: number) {
     if (typeof window === 'undefined') return
+    lastClientX = clientX
+    lastClientY = clientY
     const isRtl = document.documentElement.dir === 'rtl'
     const pos = calculateTargetPosition(
       clientX,
@@ -84,9 +90,13 @@ export function useCursorPreview() {
       return
     }
 
-    // Lerp smoothing with factor ~0.14
-    currX = lerp(currX, targetX, 0.14)
-    currY = lerp(currY, targetY, 0.14)
+    // Frame-rate independent smoothing (~70ms time constant) so it keeps up on slow frames too
+    const now = performance.now()
+    const dt = lastTick === 0 ? 16 : Math.min(now - lastTick, 64)
+    lastTick = now
+    const k = 1 - Math.exp(-dt / 70)
+    currX = lerp(currX, targetX, k)
+    currY = lerp(currY, targetY, k)
 
     // Velocity-based tilt with smooth decay
     const targetTilt = tiltFromVelocity(vx, 6, 0.18)
@@ -102,6 +112,7 @@ export function useCursorPreview() {
 
   function startRaf() {
     if (rafId === null) {
+      lastTick = 0
       rafId = requestAnimationFrame(tick)
     }
   }
@@ -253,11 +264,20 @@ export function useCursorPreview() {
     }, 350)
   }
 
+  // Scrolling moves rows under a still pointer without any mouse event: keep the tile beside it
+  function onScroll() {
+    if (!isVisible.value) return
+    updateTarget(lastClientX, lastClientY)
+    startRaf()
+  }
+
   onMounted(() => {
     isSupported.value = checkSupport()
+    if (isSupported.value) window.addEventListener('scroll', onScroll, { passive: true })
   })
 
   onBeforeUnmount(() => {
+    if (typeof window !== 'undefined') window.removeEventListener('scroll', onScroll)
     stopRaf()
     if (hideTimer) {
       clearTimeout(hideTimer)

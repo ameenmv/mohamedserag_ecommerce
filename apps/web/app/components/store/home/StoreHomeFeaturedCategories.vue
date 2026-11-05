@@ -167,6 +167,8 @@ const {
 
     <!-- Floating Cursor Preview (ClientOnly, fine-pointer desktop only) -->
     <ClientOnly>
+      <!-- Teleported to body: an ancestor with a transform would otherwise become the containing block of this fixed tile and offset it -->
+      <Teleport to="body">
       <!-- Physical left-0: the position is computed in viewport coordinates, so it must not flip in RTL -->
       <div
         v-if="isSupported && activeCategory"
@@ -217,6 +219,7 @@ const {
           </div>
         </div>
       </div>
+      </Teleport>
     </ClientOnly>
   </section>
 </template>
