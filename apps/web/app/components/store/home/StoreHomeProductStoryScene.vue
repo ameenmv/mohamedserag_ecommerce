@@ -4,15 +4,16 @@ import type { ApplianceScene } from '~/utils/appliance3d/scene'
 import { FINISHES, type ApplianceFinish } from '~/utils/appliance3d/math'
 import { registerStoryScene } from '~/utils/story-scene-bridge'
 
-const props = withDefaults(
-  defineProps<{
-    kind: ProductStoryAppliance
-    finish?: ApplianceFinish
-  }>(),
-  {
-    finish: 'steel',
-  },
-)
+const props = defineProps<{
+  kind: ProductStoryAppliance
+  finish?: ApplianceFinish
+}>()
+
+const defaultFinishForKind = (k: ProductStoryAppliance): ApplianceFinish => {
+  if (k === 'tv') return 'black'
+  if (k === 'ac') return 'white'
+  return 'steel'
+}
 
 const { t } = useI18n()
 
@@ -21,7 +22,7 @@ const canvasRef = ref<HTMLCanvasElement | null>(null)
 
 const isMounted = ref(false)
 const mode = ref<'loading' | 'webgl' | 'fallback'>('loading')
-const currentFinish = ref<ApplianceFinish>(props.finish)
+const currentFinish = ref<ApplianceFinish>(props.finish ?? defaultFinishForKind(props.kind))
 
 let scene: ApplianceScene | null = null
 let unregisterBridge: (() => void) | null = null
@@ -106,6 +107,7 @@ async function loadAndInitScene(): Promise<void> {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     scene = createApplianceScene(canvasRef.value, {
+      kind: props.kind,
       finish: currentFinish.value,
       hingeSide: isRtl ? 'right' : 'left',
       reducedMotion: prefersReducedMotion,
@@ -142,12 +144,6 @@ onMounted(() => {
   unregisterBridge = registerStoryScene((progress) => {
     setOpen(progress)
   })
-
-  // Only the refrigerator is currently modeled in 3D; other appliances use CSS
-  if (props.kind !== 'fridge') {
-    mode.value = 'fallback'
-    return
-  }
 
   // Detect WebGL2 support
   const hasWebGL2 = (() => {
@@ -206,13 +202,13 @@ onBeforeUnmount(() => {
       aria-hidden="true"
     />
 
-    <!-- CSS Fallback (non-fridge appliances, no WebGL2, or load error) -->
+    <!-- CSS Fallback (no WebGL2, or load error) -->
     <StoreHomeProductStoryAppliance
       v-else-if="mode === 'fallback'"
       :kind="kind"
     />
 
-    <!-- Interactive 3D WebGL Refrigerator Scene -->
+    <!-- Interactive 3D WebGL Appliance Scene -->
     <template v-else-if="mode === 'webgl'">
       <div class="relative flex aspect-[4/5] w-full items-center justify-center">
         <canvas

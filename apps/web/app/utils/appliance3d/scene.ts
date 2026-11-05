@@ -16,11 +16,13 @@ import {
   WebGLRenderer,
 } from 'three'
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
-import { buildFridge, type FridgeInstance, type FridgeOptions } from './fridge'
+import { buildAppliance } from './build'
 import type { ApplianceFinish } from './materials'
 import { clampPitch, clampYaw, inertiaStep } from './math'
+import type { ApplianceInstance, ApplianceKind, ApplianceOptions } from './types'
 
-export interface ApplianceSceneOptions extends FridgeOptions {
+export interface ApplianceSceneOptions extends ApplianceOptions {
+  kind?: ApplianceKind
   finish?: ApplianceFinish
   reducedMotion?: boolean
 }
@@ -71,7 +73,9 @@ export function createApplianceScene(
   options: ApplianceSceneOptions = {},
 ): ApplianceScene {
   const reducedMotion = options.reducedMotion ?? false
-  const initialFinish = options.finish ?? 'steel'
+  const kind = options.kind ?? 'fridge'
+  const initialFinish =
+    options.finish ?? (kind === 'tv' ? 'black' : kind === 'ac' ? 'white' : 'steel')
 
   // Enforce touch-action so mobile vertical scroll is never captured
   canvas.style.touchAction = 'pan-y'
@@ -140,7 +144,17 @@ export function createApplianceScene(
   const ambientLight = new AmbientLight(0xFFFFFF, 0.35)
   scene.add(ambientLight)
 
-  // 4. Ground Shadow & Soft Contact Plane
+  // 4. Turntable Root & Appliance Instance
+  const turntableGroup = new Group()
+  turntableGroup.name = 'turntable-root'
+  scene.add(turntableGroup)
+
+  const applianceInstance: ApplianceInstance = buildAppliance(kind, initialFinish, {
+    hingeSide: options.hingeSide,
+  })
+  turntableGroup.add(applianceInstance.group)
+
+  // 5. Ground Shadow & Soft Contact Plane (scales with bounds.width)
   const shadowPlaneGeom = new PlaneGeometry(3.5, 3.5)
   const shadowPlaneMat = new ShadowMaterial({ opacity: 0.26 })
   const shadowPlane = new Mesh(shadowPlaneGeom, shadowPlaneMat)
@@ -166,24 +180,18 @@ export function createApplianceScene(
     groundPlane = new Mesh(groundPlaneGeom, groundPlaneMat)
     groundPlane.rotation.x = -Math.PI / 2
     groundPlane.position.y = 0.0005
-    groundPlane.scale.set(1.15, 1.0, 1.0)
+    const widthRatio = applianceInstance.bounds.width / 0.66
+    const shadowWidthScale = widthRatio * 1.15
+    const shadowDepthScale = Math.max(0.6, widthRatio * 0.9)
+    groundPlane.scale.set(shadowWidthScale, shadowDepthScale, 1.0)
     scene.add(groundPlane)
   }
 
-  // 5. Turntable Root & Fridge Instance
-  const turntableGroup = new Group()
-  turntableGroup.name = 'turntable-root'
-  scene.add(turntableGroup)
-
-  const fridgeInstance: FridgeInstance = buildFridge(initialFinish, {
-    hingeSide: options.hingeSide,
-  })
-  turntableGroup.add(fridgeInstance.group)
-
-  // 6. Camera Setup (Product-shot perspective)
+  // 6. Camera Setup (Framed from instance.bounds)
   const camera = new PerspectiveCamera(30, 1, 0.1, 20)
-  camera.position.set(0, 1.1, 4.35)
-  camera.lookAt(0, 0.9, 0)
+  const initialCamY = applianceInstance.bounds.centerY + applianceInstance.bounds.height * 0.083
+  camera.position.set(0, initialCamY, 4.35)
+  camera.lookAt(0, applianceInstance.bounds.centerY, 0)
 
   // 7. Interaction & Turntable State
   let currentYaw = 0
@@ -226,8 +234,14 @@ export function createApplianceScene(
     let keepLooping = false
 
     // Transition crossfading finishes
-    const matTransitioning = fridgeInstance.materials.tickTransition(delta)
+    const matTransitioning = applianceInstance.materials.tickTransition(delta)
     if (matTransitioning) keepLooping = true
+
+    // Custom appliance tick (drum rotation, flame flicker, cool air flow, tv screen pan)
+    if (applianceInstance.tick) {
+      const isTicking = applianceInstance.tick(delta)
+      if (isTicking) keepLooping = true
+    }
 
     // Inertia decay when released
     if (!isDragging && Math.abs(yawVelocity) > 0.0001) {
@@ -359,17 +373,20 @@ export function createApplianceScene(
 
     camera.aspect = width / height
 
-    // Frame fridge (1.85m tall) to fill ~85% of height with safe horizontal clearance
-    const targetHeight = 1.8 / 0.74
+    // Frame appliance from bounds (fit height with ~26% margin, and width with margin)
+    const targetHeight = applianceInstance.bounds.height / 0.74
     const halfFovRad = (camera.fov / 2) * (Math.PI / 180)
     let dist = (targetHeight / 2) / Math.tan(halfFovRad)
 
     const hFov = 2 * Math.atan(Math.tan(halfFovRad) * camera.aspect)
-    const distForWidth = (0.65 / 0.82) / (2 * Math.tan(hFov / 2))
+    const targetWidth = applianceInstance.bounds.width / 0.82
+    const distForWidth = (targetWidth / 2) / Math.tan(hFov / 2)
     dist = Math.max(dist, distForWidth)
 
-    camera.position.set(0, 1.05, dist)
-    camera.lookAt(0, 0.9, 0)
+    const centerY = applianceInstance.bounds.centerY
+    const camY = centerY + applianceInstance.bounds.height * 0.083
+    camera.position.set(0, camY, dist)
+    camera.lookAt(0, centerY, 0)
     camera.updateProjectionMatrix()
 
     renderer.setPixelRatio(dpr)
@@ -378,12 +395,12 @@ export function createApplianceScene(
   }
 
   function setOpen(progress: number): void {
-    fridgeInstance.setOpen(progress)
+    applianceInstance.setOpen(progress)
     requestFrame()
   }
 
   function setFinish(finish: ApplianceFinish): void {
-    fridgeInstance.setFinish(finish)
+    applianceInstance.setFinish(finish)
     requestFrame()
   }
 
@@ -419,7 +436,7 @@ export function createApplianceScene(
     canvas.removeEventListener('webglcontextlost', onContextLost)
     canvas.removeEventListener('webglcontextrestored', onContextRestored)
 
-    fridgeInstance.dispose()
+    applianceInstance.dispose()
 
     shadowPlaneGeom.dispose()
     shadowPlaneMat.dispose()

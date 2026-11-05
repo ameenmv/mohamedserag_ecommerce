@@ -9,20 +9,11 @@ import {
   type BufferGeometry,
 } from 'three'
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js'
-import { createApplianceMaterials, type ApplianceFinish, type ApplianceMaterials } from './materials'
+import { createApplianceMaterials, type ApplianceFinish } from './materials'
 import { doorAngle, easeInOutCubic } from './math'
+import type { FridgeInstance, FridgeOptions } from './types'
 
-export interface FridgeOptions {
-  hingeSide?: 'left' | 'right'
-}
-
-export interface FridgeInstance {
-  group: Group
-  materials: ApplianceMaterials
-  setFinish: (finish: ApplianceFinish, immediate?: boolean) => void
-  setOpen: (progress: number) => void
-  dispose: () => void
-}
+export type { FridgeInstance, FridgeOptions }
 
 /**
  * Builds a realistic, high-fidelity generic top-freezer refrigerator.
@@ -444,6 +435,11 @@ export function buildFridge(
   return {
     group,
     materials,
+    bounds: {
+      height: 1.8,
+      width: 0.66,
+      centerY: 0.9,
+    },
     setFinish,
     setOpen,
     dispose,

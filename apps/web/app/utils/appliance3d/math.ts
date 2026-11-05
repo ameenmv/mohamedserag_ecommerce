@@ -58,3 +58,26 @@ export function inertiaStep(
 export function isValidFinish(finish: unknown): finish is ApplianceFinish {
   return typeof finish === 'string' && (FINISHES as readonly string[]).includes(finish)
 }
+
+/**
+ * Calculates a smooth, organic flicker multiplier for gas flames or heat elements.
+ * Generates values in [0.75, 1.25] using multi-harmonic sine waves.
+ */
+export function flickerFlame(time: number, seed = 0): number {
+  const t = time * 20 + seed * 17.3
+  const raw =
+    0.88 +
+    0.08 * Math.sin(t) +
+    0.04 * Math.sin(t * 2.3 + 1.1) +
+    0.02 * Math.sin(t * 5.7 + 2.4)
+  return Math.max(0.7, Math.min(1.3, raw))
+}
+
+/**
+ * Calculates motorized louver opening rotation angle in radians based on progress (0..1)
+ * and maximum angular swing (default ~50°).
+ */
+export function louverAngle(progress: number, maxRad = (50 * Math.PI) / 180): number {
+  return easeInOutCubic(progress) * maxRad
+}
+

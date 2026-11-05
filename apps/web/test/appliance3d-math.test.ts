@@ -5,8 +5,10 @@ import {
   clampYaw,
   doorAngle,
   easeInOutCubic,
+  flickerFlame,
   inertiaStep,
   isValidFinish,
+  louverAngle,
 } from '../app/utils/appliance3d/math'
 
 describe('appliance3d math utilities', () => {
@@ -124,6 +126,44 @@ describe('appliance3d math utilities', () => {
       expect(isValidFinish(123)).toBe(false)
       expect(isValidFinish({})).toBe(false)
       expect(isValidFinish(['steel'])).toBe(false)
+    })
+  })
+
+  describe('flickerFlame', () => {
+    it('returns values bounded between 0.7 and 1.3', () => {
+      for (let t = 0; t <= 10; t += 0.25) {
+        const val = flickerFlame(t, 1)
+        expect(val).toBeGreaterThanOrEqual(0.7)
+        expect(val).toBeLessThanOrEqual(1.3)
+      }
+    })
+
+    it('produces distinct patterns for different seeds', () => {
+      const val1 = flickerFlame(1.0, 0)
+      const val2 = flickerFlame(1.0, 3)
+      expect(val1).not.toBeCloseTo(val2, 4)
+    })
+
+    it('is deterministic for the same time and seed', () => {
+      expect(flickerFlame(2.5, 4)).toBe(flickerFlame(2.5, 4))
+    })
+  })
+
+  describe('louverAngle', () => {
+    const maxRad50 = (50 * Math.PI) / 180
+
+    it('evaluates to 0 at progress 0 and maxRad at progress 1', () => {
+      expect(louverAngle(0, maxRad50)).toBe(0)
+      expect(louverAngle(1, maxRad50)).toBeCloseTo(maxRad50, 5)
+    })
+
+    it('evaluates to half the max angle at midpoint', () => {
+      expect(louverAngle(0.5, maxRad50)).toBeCloseTo(maxRad50 / 2, 5)
+    })
+
+    it('clamps inputs beyond [0, 1]', () => {
+      expect(louverAngle(-0.2, maxRad50)).toBe(0)
+      expect(louverAngle(1.5, maxRad50)).toBeCloseTo(maxRad50, 5)
     })
   })
 })

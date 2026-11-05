@@ -54,8 +54,10 @@ export function startProductStoryMotion(
         gsap.set(applianceEl, { scale: 0.75, rotationY: sign * -20, autoAlpha: 0.4 })
       }
 
+      // Reset 3D appliance scene openness
+      setStorySceneOpen(0)
+
       if (appliance === 'fridge') {
-        setStorySceneOpen(0)
         const origin = isRtl ? 'right center' : 'left center'
         if (fridgeDoorTop) gsap.set(fridgeDoorTop, { rotationY: 0, transformOrigin: origin })
         if (fridgeDoorBottom) gsap.set(fridgeDoorBottom, { rotationY: 0, transformOrigin: origin })
@@ -121,28 +123,80 @@ export function startProductStoryMotion(
           tl.to(fridgeDoorBottom, { rotationY: sign * 95, duration: 1, ease: 'power2.out' }, '<0.15')
         }
       } else if (appliance === 'washer') {
+        const washerProxy = { progress: 0 }
+        tl.to(
+          washerProxy,
+          {
+            progress: 1,
+            duration: 1.15,
+            ease: 'power2.out',
+            onUpdate: () => {
+              setStorySceneOpen(washerProxy.progress)
+            },
+          },
+          '>-0.2',
+        )
         if (washerDoor) {
-          tl.to(washerDoor, { rotationY: sign * 110, duration: 1, ease: 'power2.out' }, '>-0.2')
+          tl.to(washerDoor, { rotationY: sign * 110, duration: 1, ease: 'power2.out' }, '<')
         }
         if (washerDrum) {
           tl.to(washerDrum, { rotation: 540, duration: 1.2, ease: 'power2.out' }, '<')
         }
       } else if (appliance === 'cooker') {
+        const cookerProxy = { progress: 0 }
+        tl.to(
+          cookerProxy,
+          {
+            progress: 1,
+            duration: 1.15,
+            ease: 'power2.out',
+            onUpdate: () => {
+              setStorySceneOpen(cookerProxy.progress)
+            },
+          },
+          '>-0.2',
+        )
         if (cookerKnobs.length > 0) {
-          tl.to(cookerKnobs, { rotation: -120, duration: 0.6, stagger: 0.08, ease: 'power2.out' }, '>-0.2')
+          tl.to(cookerKnobs, { rotation: -120, duration: 0.6, stagger: 0.08, ease: 'power2.out' }, '<')
         }
         if (cookerFlames.length > 0) {
           tl.to(cookerFlames, { scale: 1, autoAlpha: 1, duration: 0.6, stagger: 0.08, ease: 'back.out(1.7)' }, '<0.2')
         }
       } else if (appliance === 'tv') {
+        const tvProxy = { progress: 0 }
+        tl.to(
+          tvProxy,
+          {
+            progress: 1,
+            duration: 1.15,
+            ease: 'power2.out',
+            onUpdate: () => {
+              setStorySceneOpen(tvProxy.progress)
+            },
+          },
+          '>-0.2',
+        )
         const tvTargets = [tvScreen, tvGlow].filter((el): el is HTMLElement => el !== null)
         if (tvTargets.length > 0) {
-          tl.to(tvTargets, { autoAlpha: 0.7, duration: 0.15, yoyo: true, repeat: 3, ease: 'power1.inOut' }, '>-0.2')
+          tl.to(tvTargets, { autoAlpha: 0.7, duration: 0.15, yoyo: true, repeat: 3, ease: 'power1.inOut' }, '<')
           tl.to(tvTargets, { autoAlpha: 1, duration: 0.35, ease: 'power2.out' })
         }
       } else if (appliance === 'ac') {
+        const acProxy = { progress: 0 }
+        tl.to(
+          acProxy,
+          {
+            progress: 1,
+            duration: 1.15,
+            ease: 'power2.out',
+            onUpdate: () => {
+              setStorySceneOpen(acProxy.progress)
+            },
+          },
+          '>-0.2',
+        )
         if (acLouver) {
-          tl.to(acLouver, { rotationX: 40, duration: 0.8, ease: 'power2.out' }, '>-0.2')
+          tl.to(acLouver, { rotationX: 40, duration: 0.8, ease: 'power2.out' }, '<')
         }
         if (acAirLines.length > 0) {
           tl.to(acAirLines, { strokeDashoffset: 0, autoAlpha: 1, duration: 1, stagger: 0.12, ease: 'power1.out' }, '<0.2')
