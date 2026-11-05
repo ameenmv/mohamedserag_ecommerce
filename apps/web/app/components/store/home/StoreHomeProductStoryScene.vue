@@ -197,12 +197,12 @@ onBeforeUnmount(() => {
   <div
     ref="containerRef"
     class="story-appliance-3d relative flex flex-col items-center justify-center select-none"
-    style="width: min(70vw, 300px);"
+    style="width: min(80vw, 300px);"
   >
     <!-- Server-side & pre-mount reservation to prevent CLS -->
     <div
       v-if="!isMounted || mode === 'loading'"
-      class="h-[370px] w-[240px]"
+      class="aspect-[4/5] w-full"
       aria-hidden="true"
     />
 
@@ -214,7 +214,7 @@ onBeforeUnmount(() => {
 
     <!-- Interactive 3D WebGL Refrigerator Scene -->
     <template v-else-if="mode === 'webgl'">
-      <div class="relative h-[370px] w-[240px] flex items-center justify-center">
+      <div class="relative flex aspect-[4/5] w-full items-center justify-center">
         <canvas
           ref="canvasRef"
           class="size-full"

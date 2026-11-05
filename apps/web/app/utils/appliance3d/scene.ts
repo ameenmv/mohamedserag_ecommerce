@@ -5,8 +5,8 @@ import {
   DirectionalLight,
   Group,
   Mesh,
-  MeshPhysicalMaterial,
-  PCFSoftShadowMap,
+  VSMShadowMap,
+  MeshBasicMaterial,
   PerspectiveCamera,
   PlaneGeometry,
   PMREMGenerator,
@@ -49,9 +49,9 @@ function createGroundGradientTexture(): CanvasTexture | null {
     const ctx = canvas.getContext('2d')
     if (!ctx) return null
 
-    const gradient = ctx.createRadialGradient(128, 128, 20, 128, 128, 120)
-    gradient.addColorStop(0, 'rgba(0, 0, 0, 0.40)')
-    gradient.addColorStop(0.5, 'rgba(10, 20, 15, 0.18)')
+    const gradient = ctx.createRadialGradient(128, 128, 10, 128, 128, 96)
+    gradient.addColorStop(0, 'rgba(0, 0, 0, 0.55)')
+    gradient.addColorStop(0.45, 'rgba(10, 16, 12, 0.22)')
     gradient.addColorStop(1, 'rgba(0, 0, 0, 0)')
 
     ctx.fillStyle = gradient
@@ -88,7 +88,7 @@ export function createApplianceScene(
   renderer.toneMapping = ACESFilmicToneMapping
   renderer.toneMappingExposure = 1.0
   renderer.shadowMap.enabled = true
-  renderer.shadowMap.type = PCFSoftShadowMap
+  renderer.shadowMap.type = VSMShadowMap
 
   // 2. Scene & Environment
   const scene = new Scene()
@@ -96,16 +96,31 @@ export function createApplianceScene(
   const pmremGenerator = new PMREMGenerator(renderer)
   pmremGenerator.compileEquirectangularShader()
   const roomEnv = new RoomEnvironment()
+  // Tall soft boxes only in the reflection environment: they give the metal long vertical highlights
+  const softboxGeom = new PlaneGeometry(1.6, 7)
+  const softboxMat = new MeshBasicMaterial({ color: 0xffffff })
+  softboxMat.color.setScalar(9)
+  const softboxLeft = new Mesh(softboxGeom, softboxMat)
+  softboxLeft.position.set(-5, 3, 1.5)
+  softboxLeft.rotation.y = Math.PI / 2.6
+  const softboxRight = new Mesh(softboxGeom, softboxMat)
+  softboxRight.position.set(5, 3, 2.5)
+  softboxRight.rotation.y = -Math.PI / 2.6
+  roomEnv.add(softboxLeft, softboxRight)
   const envTexture = pmremGenerator.fromScene(roomEnv, 0.04).texture
   scene.environment = envTexture
+  scene.environmentIntensity = 1.25
   pmremGenerator.dispose()
   roomEnv.dispose()
+  softboxGeom.dispose()
+  softboxMat.dispose()
 
   // 3. Studio Lighting Setup
   const keyLight = new DirectionalLight(0xFFFFFF, 2.2)
-  keyLight.position.set(2.2, 3.4, 2.8)
-  keyLight.castShadow = true
-  keyLight.shadow.mapSize.set(1024, 1024)
+  keyLight.position.set(1.4, 4.6, 3.4)
+  // Baked contact shadow below: a shadow map gave hard polygon edges on the transparent canvas
+  keyLight.castShadow = false
+  keyLight.shadow.mapSize.set(2048, 2048)
   keyLight.shadow.camera.near = 0.5
   keyLight.shadow.camera.far = 10
   keyLight.shadow.camera.left = -1.2
@@ -114,7 +129,8 @@ export function createApplianceScene(
   keyLight.shadow.camera.bottom = -0.5
   keyLight.shadow.bias = -0.0002
   keyLight.shadow.normalBias = 0.02
-  keyLight.shadow.radius = 2.5
+  keyLight.shadow.radius = 9
+  keyLight.shadow.blurSamples = 20
   scene.add(keyLight)
 
   const rimLight = new DirectionalLight(0xD0E2FF, 1.3)
@@ -126,7 +142,7 @@ export function createApplianceScene(
 
   // 4. Ground Shadow & Soft Contact Plane
   const shadowPlaneGeom = new PlaneGeometry(3.5, 3.5)
-  const shadowPlaneMat = new ShadowMaterial({ opacity: 0.42 })
+  const shadowPlaneMat = new ShadowMaterial({ opacity: 0.26 })
   const shadowPlane = new Mesh(shadowPlaneGeom, shadowPlaneMat)
   shadowPlane.rotation.x = -Math.PI / 2
   shadowPlane.position.y = 0.001
@@ -136,20 +152,21 @@ export function createApplianceScene(
   const groundTexture = createGroundGradientTexture()
   let groundPlane: Mesh | undefined
   let groundPlaneGeom: PlaneGeometry | null = null
-  let groundPlaneMat: MeshPhysicalMaterial | null = null
+  let groundPlaneMat: MeshBasicMaterial | null = null
 
   if (groundTexture) {
-    groundPlaneGeom = new PlaneGeometry(1.6, 1.6)
-    groundPlaneMat = new MeshPhysicalMaterial({
+    groundPlaneGeom = new PlaneGeometry(2.4, 2.4)
+    groundPlaneMat = new MeshBasicMaterial({
       map: groundTexture,
+      toneMapped: false,
       transparent: true,
-      opacity: 0.7,
+      opacity: 0.9,
       depthWrite: false,
     })
     groundPlane = new Mesh(groundPlaneGeom, groundPlaneMat)
     groundPlane.rotation.x = -Math.PI / 2
     groundPlane.position.y = 0.0005
-    groundPlane.scale.set(1.0, 1.2, 1.0)
+    groundPlane.scale.set(1.15, 1.0, 1.0)
     scene.add(groundPlane)
   }
 
@@ -165,8 +182,8 @@ export function createApplianceScene(
 
   // 6. Camera Setup (Product-shot perspective)
   const camera = new PerspectiveCamera(30, 1, 0.1, 20)
-  camera.position.set(0, 0.925, 4.05)
-  camera.lookAt(0, 0.925, 0)
+  camera.position.set(0, 1.1, 4.35)
+  camera.lookAt(0, 0.9, 0)
 
   // 7. Interaction & Turntable State
   let currentYaw = 0
@@ -343,7 +360,7 @@ export function createApplianceScene(
     camera.aspect = width / height
 
     // Frame fridge (1.85m tall) to fill ~85% of height with safe horizontal clearance
-    const targetHeight = 1.85 / 0.85
+    const targetHeight = 1.8 / 0.74
     const halfFovRad = (camera.fov / 2) * (Math.PI / 180)
     let dist = (targetHeight / 2) / Math.tan(halfFovRad)
 
@@ -351,8 +368,8 @@ export function createApplianceScene(
     const distForWidth = (0.65 / 0.82) / (2 * Math.tan(hFov / 2))
     dist = Math.max(dist, distForWidth)
 
-    camera.position.set(0, 0.925, dist)
-    camera.lookAt(0, 0.925, 0)
+    camera.position.set(0, 1.05, dist)
+    camera.lookAt(0, 0.9, 0)
     camera.updateProjectionMatrix()
 
     renderer.setPixelRatio(dpr)
