@@ -2,6 +2,7 @@ import {
   calculateTargetPosition,
   lerp,
   tiltFromVelocity,
+  zoneIndex,
 } from '../utils/cursor-preview'
 
 export interface CategoryPreviewData {
@@ -10,6 +11,7 @@ export interface CategoryPreviewData {
   accent: string
   illustration?: string | null
   coverImage: string | null
+  coverImages?: string[]
 }
 
 /**
@@ -20,8 +22,12 @@ export function useCursorPreview() {
   const isSupported = ref(false)
   const isVisible = ref(false)
   const activeCategory = shallowRef<CategoryPreviewData | null>(null)
+  const activeImageIndex = ref(0)
   const currentImage = ref<string | null>(null)
-  const isImageFading = ref(false)
+  const previousImage = ref<string | null>(null)
+  const slideOffset = ref(0)
+  const imageTransitionKey = ref(0)
+  const isImageFading = computed(() => previousImage.value !== null)
   const previewContainerEl = ref<HTMLElement | null>(null)
 
   let currX = -9999
@@ -33,6 +39,21 @@ export function useCursorPreview() {
   let lastMouseX = 0
   let rafId: number | null = null
   let hideTimer: ReturnType<typeof setTimeout> | null = null
+  let fadeTimer: ReturnType<typeof setTimeout> | null = null
+  let currentRowRect: { left: number; width: number } | null = null
+
+  const preloadedUrls = new Set<string>()
+
+  function preloadImages(urls: readonly string[]) {
+    if (typeof window === 'undefined' || typeof Image === 'undefined') return
+    for (const url of urls) {
+      if (url && !preloadedUrls.has(url)) {
+        preloadedUrls.add(url)
+        const img = new Image()
+        img.src = url
+      }
+    }
+  }
 
   function checkSupport(): boolean {
     if (typeof window === 'undefined') return false
@@ -48,7 +69,7 @@ export function useCursorPreview() {
       clientX,
       clientY,
       320,
-      400,
+      300,
       window.innerWidth,
       window.innerHeight,
       { offset: 28, padding: 20, isRtl },
@@ -93,22 +114,35 @@ export function useCursorPreview() {
   }
 
   function setCategory(item: CategoryPreviewData) {
-    if (!activeCategory.value) {
-      activeCategory.value = item
-      currentImage.value = item.coverImage
-      return
-    }
+    const images =
+      item.coverImages && item.coverImages.length > 0
+        ? item.coverImages
+        : item.coverImage
+          ? [item.coverImage]
+          : []
 
-    if (activeCategory.value.slug === item.slug) return
+    preloadImages(images)
+
+    const isSameCategory = activeCategory.value?.slug === item.slug
+    if (isSameCategory) return
+
+    const firstImage = images[0] ?? item.coverImage ?? null
+    if (activeCategory.value && currentImage.value && currentImage.value !== firstImage) {
+      previousImage.value = currentImage.value
+      if (fadeTimer) clearTimeout(fadeTimer)
+      fadeTimer = setTimeout(() => {
+        previousImage.value = null
+        fadeTimer = null
+      }, 130)
+    } else {
+      previousImage.value = null
+    }
 
     activeCategory.value = item
-    if (currentImage.value !== item.coverImage) {
-      isImageFading.value = true
-      setTimeout(() => {
-        currentImage.value = item.coverImage
-        isImageFading.value = false
-      }, 80)
-    }
+    activeImageIndex.value = 0
+    slideOffset.value = 0
+    currentImage.value = firstImage
+    imageTransitionKey.value++
   }
 
   function onRowEnter(item: CategoryPreviewData, event: MouseEvent) {
@@ -116,6 +150,13 @@ export function useCursorPreview() {
     if (hideTimer) {
       clearTimeout(hideTimer)
       hideTimer = null
+    }
+
+    if (event.currentTarget instanceof HTMLElement) {
+      const rect = event.currentTarget.getBoundingClientRect()
+      currentRowRect = { left: rect.left, width: rect.width }
+    } else {
+      currentRowRect = null
     }
 
     updateTarget(event.clientX, event.clientY)
@@ -138,13 +179,56 @@ export function useCursorPreview() {
 
   function onMouseMove(event: MouseEvent) {
     if (!isSupported.value || !isVisible.value) return
+
+    if (event.currentTarget instanceof HTMLElement) {
+      const rect = event.currentTarget.getBoundingClientRect()
+      currentRowRect = { left: rect.left, width: rect.width }
+    }
+
     vx = event.clientX - lastMouseX
     lastMouseX = event.clientX
     updateTarget(event.clientX, event.clientY)
     startRaf()
+
+    // Handle horizontal scrubbing inside the row
+    if (activeCategory.value && currentRowRect) {
+      const images =
+        activeCategory.value.coverImages && activeCategory.value.coverImages.length > 0
+          ? activeCategory.value.coverImages
+          : activeCategory.value.coverImage
+            ? [activeCategory.value.coverImage]
+            : []
+
+      const count = Math.min(images.length, 3)
+      if (count > 1) {
+        const isRtl = typeof document !== 'undefined' && document.documentElement.dir === 'rtl'
+        const newIndex = zoneIndex(event.clientX, currentRowRect, count, isRtl)
+
+        if (newIndex !== activeImageIndex.value) {
+          const nextImage = images[newIndex]
+          if (nextImage && nextImage !== currentImage.value) {
+            const forward = isRtl ? newIndex < activeImageIndex.value : newIndex > activeImageIndex.value
+            const dir = vx !== 0 ? (vx > 0 ? 1 : -1) : forward ? 1 : -1
+
+            previousImage.value = currentImage.value
+            currentImage.value = nextImage
+            activeImageIndex.value = newIndex
+            slideOffset.value = -6 * dir
+            imageTransitionKey.value++
+
+            if (fadeTimer) clearTimeout(fadeTimer)
+            fadeTimer = setTimeout(() => {
+              previousImage.value = null
+              fadeTimer = null
+            }, 130)
+          }
+        }
+      }
+    }
   }
 
   function onRowLeave() {
+    currentRowRect = null
     if (!isSupported.value) return
     if (hideTimer) clearTimeout(hideTimer)
     hideTimer = setTimeout(() => {
@@ -153,6 +237,7 @@ export function useCursorPreview() {
   }
 
   function onListLeave() {
+    currentRowRect = null
     if (!isSupported.value) return
     if (hideTimer) clearTimeout(hideTimer)
     hide()
@@ -163,6 +248,7 @@ export function useCursorPreview() {
     setTimeout(() => {
       if (!isVisible.value) {
         stopRaf()
+        previousImage.value = null
       }
     }, 350)
   }
@@ -177,13 +263,21 @@ export function useCursorPreview() {
       clearTimeout(hideTimer)
       hideTimer = null
     }
+    if (fadeTimer) {
+      clearTimeout(fadeTimer)
+      fadeTimer = null
+    }
   })
 
   return {
     isSupported,
     isVisible,
     activeCategory,
+    activeImageIndex,
     currentImage,
+    previousImage,
+    slideOffset,
+    imageTransitionKey,
     isImageFading,
     previewContainerEl,
     onRowEnter,

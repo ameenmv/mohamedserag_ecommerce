@@ -94,3 +94,35 @@ export function calculateTargetPosition(
 
   return clampToViewport(candidateX, candidateY, width, height, viewportWidth, viewportHeight, padding)
 }
+
+export interface RowRect {
+  left: number
+  width: number
+}
+
+/**
+ * Computes the active zone index (0 to count - 1) for horizontal cursor scrubbing within a row.
+ * In RTL, the start of the row (right side) is zone 0.
+ * Edges are clamped so the returned index is always valid.
+ */
+export function zoneIndex(
+  clientX: number,
+  rowRect: RowRect,
+  count: number,
+  isRtl = false,
+): number {
+  if (count <= 1 || rowRect.width <= 0) return 0
+  const total = Math.floor(count)
+  if (total <= 1) return 0
+
+  const offset = isRtl
+    ? rowRect.left + rowRect.width - clientX
+    : clientX - rowRect.left
+
+  if (offset <= 0) return 0
+  if (offset >= rowRect.width) return total - 1
+
+  const ratio = offset / rowRect.width
+  const idx = Math.floor(ratio * total)
+  return clamp(idx, 0, total - 1)
+}

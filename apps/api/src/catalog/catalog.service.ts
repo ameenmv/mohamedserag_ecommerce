@@ -69,7 +69,7 @@ export class CatalogService {
     })
 
     const directMinPrices = new Map<string, number>()
-    const directCoverCandidates = new Map<string, { featured: boolean; price: number; url: string }>()
+    const directProductCandidates = new Map<string, Array<{ featured: boolean; price: number; url: string }>>()
 
     for (const p of products) {
       const currentMin = directMinPrices.get(p.categoryId)
@@ -78,28 +78,37 @@ export class CatalogService {
       }
 
       const firstImage = p.images[0]
-      if (firstImage) {
-        const currentCandidate = directCoverCandidates.get(p.categoryId)
-        if (!currentCandidate) {
-          directCoverCandidates.set(p.categoryId, {
-            featured: p.featured,
-            price: p.price,
-            url: firstImage.url,
-          })
-        } else {
-          const isBetter =
-            (p.featured && !currentCandidate.featured) ||
-            (p.featured === currentCandidate.featured && p.price > currentCandidate.price)
+      if (firstImage?.url) {
+        let list = directProductCandidates.get(p.categoryId)
+        if (!list) {
+          list = []
+          directProductCandidates.set(p.categoryId, list)
+        }
+        list.push({
+          featured: p.featured,
+          price: p.price,
+          url: firstImage.url,
+        })
+      }
+    }
 
-          if (isBetter) {
-            directCoverCandidates.set(p.categoryId, {
-              featured: p.featured,
-              price: p.price,
-              url: firstImage.url,
-            })
-          }
+    const directCoverImages = new Map<string, string[]>()
+    for (const [catId, candidates] of directProductCandidates.entries()) {
+      candidates.sort((a, b) => {
+        if (a.featured !== b.featured) {
+          return a.featured ? -1 : 1
+        }
+        return b.price - a.price
+      })
+
+      const urls: string[] = []
+      for (const c of candidates) {
+        if (!urls.includes(c.url)) {
+          urls.push(c.url)
+          if (urls.length === 3) break
         }
       }
+      directCoverImages.set(catId, urls)
     }
 
     const childrenByParentId = new Map<string, typeof allCategories>()
@@ -144,12 +153,26 @@ export class CatalogService {
       }
       const startingPrice = candidatePrices.length > 0 ? Math.min(...candidatePrices) : null
 
-      const directCover = directCoverCandidates.get(cat.id)?.url ?? null
-      let coverImage = directCover
-      if (coverImage === null) {
-        const firstChildWithCover = nonZeroChildren.find((ch) => ch.coverImage !== null)
-        coverImage = firstChildWithCover ? firstChildWithCover.coverImage : null
+      const ownUrls = directCoverImages.get(cat.id) ?? []
+      const mergedCoverImages: string[] = [...ownUrls]
+
+      if (mergedCoverImages.length < 3) {
+        for (const child of nonZeroChildren) {
+          for (const url of child.coverImages) {
+            if (!mergedCoverImages.includes(url)) {
+              mergedCoverImages.push(url)
+              if (mergedCoverImages.length === 3) {
+                break
+              }
+            }
+          }
+          if (mergedCoverImages.length === 3) {
+            break
+          }
+        }
       }
+
+      const coverImage = mergedCoverImages[0] ?? null
 
       return {
         id: cat.id,
@@ -163,6 +186,7 @@ export class CatalogService {
         sort: cat.sort,
         productCount: totalCount,
         coverImage,
+        coverImages: mergedCoverImages,
         startingPrice,
         children: nonZeroChildren,
       }

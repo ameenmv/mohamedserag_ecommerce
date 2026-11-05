@@ -21,7 +21,9 @@ const {
   isVisible,
   activeCategory,
   currentImage,
-  isImageFading,
+  previousImage,
+  slideOffset,
+  imageTransitionKey,
   previewContainerEl,
   onRowEnter,
   onRowLeave,
@@ -79,6 +81,7 @@ const {
                   accent: resolveCategoryAccent(category.accent, category.slug),
                   illustration: category.illustration,
                   coverImage: category.coverImage,
+                  coverImages: category.coverImages,
                 },
                 $event,
               )
@@ -168,7 +171,7 @@ const {
       <div
         v-if="isSupported && activeCategory"
         ref="previewContainerEl"
-        class="pointer-events-none fixed top-0 left-0 z-30 hidden h-[400px] w-[320px] md:block"
+        class="pointer-events-none fixed top-0 left-0 z-30 hidden h-[300px] w-[320px] md:block"
         :style="{
           willChange: 'transform',
           transform: 'translate3d(-9999px, -9999px, 0)',
@@ -185,20 +188,31 @@ const {
           }"
         >
           <div class="relative flex size-full items-center justify-center">
+            <!-- Underneath image during crossfade: stays visible, no flashing blank -->
+            <img
+              v-if="previousImage"
+              :src="previousImage"
+              alt=""
+              width="280"
+              height="240"
+              class="pointer-events-none absolute inset-0 z-0 m-auto max-h-[240px] max-w-[280px] object-contain mix-blend-multiply"
+            >
+            <!-- Current active image: crossfade + scale/slide -->
             <img
               v-if="currentImage"
+              :key="imageTransitionKey"
               :src="currentImage"
               alt=""
               width="280"
-              height="340"
-              class="max-h-[340px] max-w-[280px] object-contain mix-blend-multiply transition-opacity duration-200"
-              :class="isImageFading ? 'opacity-0' : 'opacity-100'"
+              height="240"
+              class="scrub-image-enter pointer-events-none absolute inset-0 z-10 m-auto max-h-[240px] max-w-[280px] object-contain mix-blend-multiply"
+              :style="{ '--slide-x': `${slideOffset}px` }"
             >
+            <!-- Fallback illustration if category has no images -->
             <StoreCategoryIllustration
-              v-else
+              v-else-if="!previousImage"
               :name="activeCategory.illustration"
-              class="size-48 text-[var(--cat-accent)] transition-opacity duration-200"
-              :class="isImageFading ? 'opacity-0' : 'opacity-100'"
+              class="size-44 text-[var(--cat-accent)] transition-opacity duration-200"
             />
           </div>
         </div>
@@ -244,12 +258,31 @@ const {
   transform: scale(1.12);
 }
 
+@keyframes scrub-enter {
+  from {
+    opacity: 0;
+    transform: scale(1.04) translateX(var(--slide-x, 0px));
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateX(0);
+  }
+}
+
+.scrub-image-enter {
+  animation: scrub-enter 120ms cubic-bezier(0.2, 0, 0.2, 1) forwards;
+  will-change: transform, opacity;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .editorial-category-row,
   .row-arrow-circle,
   .row-thumbnail-img {
     transition: none !important;
     transform: none !important;
+  }
+  .scrub-image-enter {
+    animation: none !important;
   }
 }
 </style>

@@ -90,12 +90,17 @@ describe('CatalogService - getCategoriesTree', () => {
     expect(twoProdsNode).toBeDefined()
     expect(twoProdsNode?.startingPrice).toBe(150000)
     expect(twoProdsNode?.coverImage).toBe('/uploads/featured-product.webp')
+    expect(twoProdsNode?.coverImages).toEqual([
+      '/uploads/featured-product.webp',
+      '/uploads/cheaper-product.webp',
+    ])
 
     // Category with no images: startingPrice is 250,000 piastres, coverImage is null
     const noImgsNode = tree.find((c) => c.slug === 'no-images')
     expect(noImgsNode).toBeDefined()
     expect(noImgsNode?.startingPrice).toBe(250000)
     expect(noImgsNode?.coverImage).toBeNull()
+    expect(noImgsNode?.coverImages).toEqual([])
   })
 
   it('aggregates startingPrice and coverImage from descendants', async () => {
@@ -169,7 +174,124 @@ describe('CatalogService - getCategoriesTree', () => {
     expect(parentNode?.slug).toBe('parent')
     expect(parentNode?.startingPrice).toBe(180000)
     expect(parentNode?.coverImage).toBe('/uploads/child-cover.webp')
+    expect(parentNode?.coverImages).toEqual(['/uploads/child-cover.webp'])
     expect(parentNode?.children[0]?.startingPrice).toBe(180000)
     expect(parentNode?.children[0]?.coverImage).toBe('/uploads/child-cover.webp')
+    expect(parentNode?.children[0]?.coverImages).toEqual(['/uploads/child-cover.webp'])
+  })
+
+  it('picks up to 3 images from different products (featured first, higher price), merges from children, and deduplicates urls', async () => {
+    const mockCategories = [
+      {
+        id: 'cat-parent',
+        name: 'أجهزة التبريد',
+        slug: 'cooling',
+        parentId: null,
+        intro: null,
+        accent: 'deep-teal',
+        illustration: 'fridge',
+        seoTitle: null,
+        seoDescription: null,
+        sort: 1,
+        translations: {},
+      },
+      {
+        id: 'cat-child',
+        name: 'ثلاجات',
+        slug: 'fridges',
+        parentId: 'cat-parent',
+        intro: null,
+        accent: 'deep-teal',
+        illustration: 'fridge',
+        seoTitle: null,
+        seoDescription: null,
+        sort: 1,
+        translations: {},
+      },
+    ]
+
+    const mockProductCounts = [
+      { categoryId: 'cat-parent', _count: { _all: 3 } },
+      { categoryId: 'cat-child', _count: { _all: 2 } },
+    ]
+
+    const mockProducts = [
+      // Parent product 1: standard, 500k
+      {
+        categoryId: 'cat-parent',
+        price: 500000,
+        featured: false,
+        images: [{ url: '/uploads/parent-standard-500k.webp' }],
+      },
+      // Parent product 2: featured, 200k
+      {
+        categoryId: 'cat-parent',
+        price: 200000,
+        featured: true,
+        images: [{ url: '/uploads/parent-featured-200k.webp' }],
+      },
+      // Parent product 3: duplicate url with product 2, featured, 100k
+      {
+        categoryId: 'cat-parent',
+        price: 100000,
+        featured: true,
+        images: [{ url: '/uploads/parent-featured-200k.webp' }],
+      },
+      // Child product 1: duplicate of parent's url
+      {
+        categoryId: 'cat-child',
+        price: 350000,
+        featured: true,
+        images: [{ url: '/uploads/parent-standard-500k.webp' }],
+      },
+      // Child product 2: unique url
+      {
+        categoryId: 'cat-child',
+        price: 300000,
+        featured: false,
+        images: [{ url: '/uploads/child-unique-300k.webp' }],
+      },
+    ]
+
+    const mockPrisma = {
+      category: {
+        findMany: vi.fn().mockResolvedValue(mockCategories),
+      },
+      product: {
+        groupBy: vi.fn().mockResolvedValue(mockProductCounts),
+        findMany: vi.fn().mockResolvedValue(mockProducts),
+      },
+    }
+
+    const moduleRef = await Test.createTestingModule({
+      providers: [
+        CatalogService,
+        {
+          provide: PrismaService,
+          useValue: mockPrisma,
+        },
+      ],
+    }).compile()
+
+    const service = moduleRef.get(CatalogService)
+    const tree = await service.getCategoriesTree()
+
+    expect(tree).toHaveLength(1)
+    const parentNode = tree[0]
+    expect(parentNode).toBeDefined()
+
+    // Parent direct candidates:
+    // 1. featured 200k -> '/uploads/parent-featured-200k.webp'
+    // 2. standard 500k -> '/uploads/parent-standard-500k.webp'
+    // Duplicate url at 100k is skipped.
+    // To reach 3, parent takes from child:
+    // - '/uploads/parent-standard-500k.webp' is duplicate, skipped.
+    // - '/uploads/child-unique-300k.webp' fills the 3rd slot.
+    expect(parentNode?.coverImages).toEqual([
+      '/uploads/parent-featured-200k.webp',
+      '/uploads/parent-standard-500k.webp',
+      '/uploads/child-unique-300k.webp',
+    ])
+    expect(parentNode?.coverImage).toBe('/uploads/parent-featured-200k.webp')
   })
 })

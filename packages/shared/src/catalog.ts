@@ -151,6 +151,8 @@ export interface CategoryTreeNode {
   productCount: number
   /** Best visible product image url in the category or descendants */
   coverImage: string | null
+  /** Up to 3 images of DIFFERENT products, best first; descendants included */
+  coverImages: string[]
   /** Min visible product price in piastres, descendants included */
   startingPrice: number | null
   children: CategoryTreeNode[]
