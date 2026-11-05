@@ -275,6 +275,31 @@ export function buildFridge(
     }
   }
 
+  // Shelf 1: milk cartons next to the bottles
+  const cartonGeom = registerGeometry(new RoundedBoxGeometry(0.062, 0.17, 0.062, 2, 0.006))
+  const cartonCapGeom = registerGeometry(new CylinderGeometry(0.014, 0.014, 0.014, 12))
+  for (const [x, capMat] of [[0.12, materials.props.foodContainerCapBlue], [0.19, materials.props.foodContainerCap]] as const) {
+    const carton = new Mesh(cartonGeom, materials.props.foodContainerBody)
+    carton.position.set(x, 1.109, 0.05)
+    group.add(carton)
+    const cartonCap = new Mesh(cartonCapGeom, capMat)
+    cartonCap.position.set(x, 1.2, 0.05)
+    group.add(cartonCap)
+  }
+
+  // Shelf 3: glass jars with coloured lids
+  const jarGeom = registerGeometry(new CylinderGeometry(0.032, 0.032, 0.085, 20))
+  const jarLidGeom = registerGeometry(new CylinderGeometry(0.034, 0.034, 0.012, 20))
+  for (let i = 0; i < 4; i++) {
+    const jx = -0.18 + i * 0.1
+    const jar = new Mesh(jarGeom, materials.props.bottleClear)
+    jar.position.set(jx, 0.5265, 0.05)
+    group.add(jar)
+    const jarLid = new Mesh(jarLidGeom, i % 2 === 0 ? materials.props.foodContainerCap : materials.props.foodContainerCapBlue)
+    jarLid.position.set(jx, 0.5785, 0.05)
+    group.add(jarLid)
+  }
+
   // -------------------------------------------------------------
   // 5. DOORS & HINGES (Top Freezer & Bottom Fresh Food)
   // -------------------------------------------------------------
@@ -398,6 +423,20 @@ export function buildFridge(
   const doorBinLower = new Mesh(doorBinLowerGeom, materials.crisperMaterial)
   doorBinLower.position.set(doorLocalOffset, -0.26, -doorDepth / 2 - 0.05)
   freshPivot.add(doorBinLower)
+
+  // Bottles standing in the door bins
+  const binBottleGeom = registerGeometry(new CylinderGeometry(0.02, 0.02, 0.13, 14))
+  const binTallBottleGeom = registerGeometry(new CylinderGeometry(0.028, 0.028, 0.21, 16))
+  for (let i = -2; i <= 2; i++) {
+    const b = new Mesh(binBottleGeom, i % 2 === 0 ? materials.props.bottleAmber : materials.props.bottleGreen)
+    b.position.set(doorLocalOffset + i * 0.085, 0.345, -doorDepth / 2 - 0.04)
+    freshPivot.add(b)
+  }
+  for (let i = -1; i <= 1; i++) {
+    const b = new Mesh(binTallBottleGeom, i === 0 ? materials.props.bottleGreen : materials.props.bottleClear)
+    b.position.set(doorLocalOffset + i * 0.12, -0.155, -doorDepth / 2 - 0.05)
+    freshPivot.add(b)
+  }
 
   // -------------------------------------------------------------
   // 6. DOOR OPEN / CLOSE CONTROLLER

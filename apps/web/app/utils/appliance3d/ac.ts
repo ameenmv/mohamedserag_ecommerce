@@ -167,36 +167,22 @@ export function buildAc(
     }),
   )
 
-  const streakDefinitions = [
-    [
-      new Vector3(-0.34, 0.07, 0.06),
-      new Vector3(-0.37, 0.01, 0.18),
-      new Vector3(-0.32, -0.07, 0.30),
-      new Vector3(-0.28, -0.16, 0.38),
-    ],
-    [
-      new Vector3(-0.11, 0.07, 0.06),
-      new Vector3(-0.13, 0.00, 0.20),
-      new Vector3(-0.09, -0.08, 0.32),
-      new Vector3(-0.07, -0.17, 0.40),
-    ],
-    [
-      new Vector3(0.11, 0.07, 0.06),
-      new Vector3(0.09, 0.00, 0.20),
-      new Vector3(0.12, -0.08, 0.32),
-      new Vector3(0.14, -0.17, 0.40),
-    ],
-    [
-      new Vector3(0.34, 0.07, 0.06),
-      new Vector3(0.37, 0.01, 0.18),
-      new Vector3(0.32, -0.07, 0.30),
-      new Vector3(0.28, -0.16, 0.38),
-    ],
-  ]
+  // Cool air ribbons falling and fanning out below the louver
+  const streakDefinitions: Vector3[][] = []
+  for (let i = 0; i < 7; i++) {
+    const x = -0.39 + i * 0.13
+    const wiggle = i % 2 === 0 ? 0.025 : -0.025
+    streakDefinitions.push([
+      new Vector3(x, 0.06, 0.07),
+      new Vector3(x * 1.04 + wiggle, -0.09, 0.13),
+      new Vector3(x * 1.1 - wiggle, -0.25, 0.19),
+      new Vector3(x * 1.18 + wiggle, -0.42, 0.24),
+    ])
+  }
 
   for (const pts of streakDefinitions) {
     const curve = new CatmullRomCurve3(pts)
-    const tubeGeom = registerGeometry(new TubeGeometry(curve, 24, 0.007, 8, false))
+    const tubeGeom = registerGeometry(new TubeGeometry(curve, 32, 0.01, 8, false))
     const tubeMesh = new Mesh(tubeGeom, airStreakMat)
     group.add(tubeMesh)
   }
@@ -250,9 +236,9 @@ export function buildAc(
     group,
     materials,
     bounds: {
-      height: 0.45,
-      width: 1.00,
-      centerY: 0.20,
+      height: 0.78,
+      width: 0.9,
+      centerY: 0.02,
     },
     setFinish,
     setOpen,
