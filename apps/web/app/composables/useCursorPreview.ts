@@ -144,7 +144,7 @@ export function useCursorPreview() {
       fadeTimer = setTimeout(() => {
         previousImage.value = null
         fadeTimer = null
-      }, 130)
+      }, 60)
     } else {
       previousImage.value = null
     }
@@ -231,7 +231,7 @@ export function useCursorPreview() {
             fadeTimer = setTimeout(() => {
               previousImage.value = null
               fadeTimer = null
-            }, 130)
+            }, 60)
           }
         }
       }

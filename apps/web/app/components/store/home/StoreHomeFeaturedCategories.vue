@@ -273,7 +273,7 @@ const {
 }
 
 .scrub-image-enter {
-  animation: scrub-enter 120ms cubic-bezier(0.2, 0, 0.2, 1) forwards;
+  animation: scrub-enter 45ms linear forwards;
   will-change: transform, opacity;
 }
 
