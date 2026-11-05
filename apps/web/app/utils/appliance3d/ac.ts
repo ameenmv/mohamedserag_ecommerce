@@ -77,23 +77,6 @@ export function buildAc(
   }
 
   // -------------------------------------------------------------
-  // 1. SUBTLE WALL MOUNTING PATCH (Behind the unit)
-  // -------------------------------------------------------------
-  const wallPatchGeom = registerGeometry(new RoundedBoxGeometry(1.14, 0.40, 0.006, 2, 0.012))
-  const wallPatchMat = registerMaterial(
-    new MeshStandardMaterial({
-      color: 0xE4E8EE,
-      roughness: 0.95,
-      metalness: 0.0,
-      transparent: true,
-      opacity: 0.28,
-    }),
-  )
-  const wallPatch = new Mesh(wallPatchGeom, wallPatchMat)
-  wallPatch.position.set(0, 0.20, -0.108)
-  group.add(wallPatch)
-
-  // -------------------------------------------------------------
   // 2. MAIN SPLIT INDOOR UNIT CASING (1.00 W x 0.30 H x 0.22 D)
   // -------------------------------------------------------------
   const casingGeom = registerGeometry(new RoundedBoxGeometry(1.00, 0.28, 0.20, 4, 0.018))

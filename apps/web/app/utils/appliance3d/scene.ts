@@ -53,7 +53,7 @@ function createGroundGradientTexture(): CanvasTexture | null {
 
     const gradient = ctx.createRadialGradient(128, 128, 10, 128, 128, 96)
     gradient.addColorStop(0, 'rgba(0, 0, 0, 0.55)')
-    gradient.addColorStop(0.45, 'rgba(10, 16, 12, 0.22)')
+    gradient.addColorStop(0.45, 'rgba(0, 0, 0, 0.22)')
     gradient.addColorStop(1, 'rgba(0, 0, 0, 0)')
 
     ctx.fillStyle = gradient
@@ -90,7 +90,7 @@ export function createApplianceScene(
   })
   renderer.outputColorSpace = SRGBColorSpace
   renderer.toneMapping = ACESFilmicToneMapping
-  renderer.toneMappingExposure = 1.0
+  renderer.toneMappingExposure = 0.92
   renderer.shadowMap.enabled = true
   renderer.shadowMap.type = VSMShadowMap
 
@@ -113,15 +113,15 @@ export function createApplianceScene(
   roomEnv.add(softboxLeft, softboxRight)
   const envTexture = pmremGenerator.fromScene(roomEnv, 0.04).texture
   scene.environment = envTexture
-  scene.environmentIntensity = 1.25
+  scene.environmentIntensity = 0.85
   pmremGenerator.dispose()
   roomEnv.dispose()
   softboxGeom.dispose()
   softboxMat.dispose()
 
   // 3. Studio Lighting Setup
-  const keyLight = new DirectionalLight(0xFFFFFF, 2.2)
-  keyLight.position.set(1.4, 4.6, 3.4)
+  const keyLight = new DirectionalLight(0xFFF4E4, 3.0)
+  keyLight.position.set(-2.6, 3.6, 3.4)
   // Baked contact shadow below: a shadow map gave hard polygon edges on the transparent canvas
   keyLight.castShadow = false
   keyLight.shadow.mapSize.set(2048, 2048)
@@ -137,11 +137,11 @@ export function createApplianceScene(
   keyLight.shadow.blurSamples = 20
   scene.add(keyLight)
 
-  const rimLight = new DirectionalLight(0xD0E2FF, 1.3)
-  rimLight.position.set(-2.4, 2.2, -2.0)
+  const rimLight = new DirectionalLight(0xFFD9A0, 3.4)
+  rimLight.position.set(2.8, 2.4, -2.2)
   scene.add(rimLight)
 
-  const ambientLight = new AmbientLight(0xFFFFFF, 0.35)
+  const ambientLight = new AmbientLight(0xFFFFFF, 0.12)
   scene.add(ambientLight)
 
   // 4. Turntable Root & Appliance Instance
@@ -184,6 +184,8 @@ export function createApplianceScene(
     const shadowWidthScale = widthRatio * 1.15
     const shadowDepthScale = Math.max(0.6, widthRatio * 0.9)
     groundPlane.scale.set(shadowWidthScale, shadowDepthScale, 1.0)
+    // Black colour stops only: the canvas is premultiplied, tinted stops would brighten the page behind
+    groundPlane.visible = kind !== 'ac'
     scene.add(groundPlane)
   }
 

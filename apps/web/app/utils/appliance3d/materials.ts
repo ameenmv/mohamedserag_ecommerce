@@ -21,9 +21,9 @@ interface FinishConfig {
 
 const FINISH_CONFIGS: Record<ApplianceFinish, FinishConfig> = {
   steel: {
-    color: new Color(0xE8ECF0),
+    color: new Color(0xB9BFC7),
     metalness: 1.0,
-    roughness: 0.38,
+    roughness: 0.3,
     clearcoat: 0.0,
     clearcoatRoughness: 0.0,
     hasBrushedMap: true,
