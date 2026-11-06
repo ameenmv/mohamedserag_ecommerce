@@ -3,13 +3,13 @@ import { ConfigService } from '@nestjs/config'
 import { normalizePhone } from '@serag/shared'
 import type { WhatsAppSender } from './whatsapp-sender.js'
 
-export function buildOpenWaSendPayload(to: string, content: string) {
-  return {
-    args: {
-      to,
-      content,
-    },
-  }
+/** Body of OpenWA's `POST /api/sessions/{id}/messages/send-text`. */
+export function buildOpenWaSendPayload(chatId: string, text: string) {
+  return { chatId, text }
+}
+
+export function buildOpenWaSendUrl(baseUrl: string, sessionId: string): string {
+  return `${baseUrl.replace(/\/$/, '')}/api/sessions/${encodeURIComponent(sessionId)}/messages/send-text`
 }
 
 export function formatOpenWaRecipient(phone: string): string {
@@ -18,64 +18,49 @@ export function formatOpenWaRecipient(phone: string): string {
     return `2${normalized}@c.us`
   }
   const cleaned = phone
-    .replace(/[\u0660-\u0669]/g, (d) => String(d.charCodeAt(0) - 0x0660))
-    .replace(/[\u06F0-\u06F9]/g, (d) => String(d.charCodeAt(0) - 0x06f0))
+    .replace(/[٠-٩]/g, (d) => String(d.charCodeAt(0) - 0x0660))
+    .replace(/[۰-۹]/g, (d) => String(d.charCodeAt(0) - 0x06f0))
     .replace(/\D+/g, '')
     .replace(/^00/, '')
   const intl = cleaned.startsWith('0') ? `2${cleaned}` : cleaned
   return `${intl}@c.us`
 }
 
+/** Sends through a self-hosted OpenWA gateway (github.com/rmyndharis/OpenWA). */
 @Injectable()
 export class OpenWaSender implements WhatsAppSender {
   constructor(private readonly config?: ConfigService) {}
 
-  private getUrl(): string | undefined {
-    return this.config?.get<string>('OPEN_WA_URL') ?? process.env.OPEN_WA_URL
-  }
-
-  private getKey(): string | undefined {
-    return this.config?.get<string>('OPEN_WA_KEY') ?? process.env.OPEN_WA_KEY
+  private read(name: string): string | undefined {
+    const value = this.config?.get<string>(name) ?? process.env[name]
+    return value && value.trim().length > 0 ? value.trim() : undefined
   }
 
   isConfigured(): boolean {
-    const url = this.getUrl()
-    const key = this.getKey()
-    return Boolean(url && url.trim().length > 0 && key && key.trim().length > 0)
+    return Boolean(this.read('OPEN_WA_URL') && this.read('OPEN_WA_KEY') && this.read('OPEN_WA_SESSION'))
   }
 
   async send(to: string, text: string): Promise<void> {
-    const url = this.getUrl()
-    const key = this.getKey()
-    if (!url || !key) {
-      throw new Error('open-wa is not configured')
+    const url = this.read('OPEN_WA_URL')
+    const key = this.read('OPEN_WA_KEY')
+    const session = this.read('OPEN_WA_SESSION')
+    if (!url || !key || !session) {
+      throw new Error('OpenWA is not configured')
     }
 
-    const recipient = formatOpenWaRecipient(to)
-    const payload = buildOpenWaSendPayload(recipient, text)
-    const endpoint = `${url.replace(/\/$/, '')}/sendText`
-
-    const response = await fetch(endpoint, {
+    const response = await fetch(buildOpenWaSendUrl(url, session), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        key,
+        'X-API-Key': key,
       },
-      body: JSON.stringify(payload),
-      signal: AbortSignal.timeout(8000),
+      body: JSON.stringify(buildOpenWaSendPayload(formatOpenWaRecipient(to), text)),
+      signal: AbortSignal.timeout(15000),
     })
 
     if (!response.ok) {
-      throw new Error(`open-wa request failed with HTTP ${response.status}: ${response.statusText}`)
-    }
-
-    const body = (await response.json().catch(() => ({}))) as {
-      success?: boolean
-      [key: string]: unknown
-    }
-
-    if (body.success === false) {
-      throw new Error('open-wa returned success: false')
+      const detail = await response.text().catch(() => '')
+      throw new Error(`OpenWA request failed with HTTP ${response.status}: ${detail.slice(0, 200)}`)
     }
   }
 }

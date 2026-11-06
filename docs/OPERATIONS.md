@@ -104,22 +104,24 @@ docker compose -f docker/compose.yml logs api | grep HttpError
 
 Point any uptime service at both URLs with a **1-minute** interval and alert after **2 consecutive failures**. Docker uses the same endpoints for its own container health checks.
 
-## 6. WhatsApp alerts (optional, open-wa)
+## 6. WhatsApp alerts (optional, OpenWA)
 
 The store can message the admin number(s) on every new order and tell shoppers who asked "notify me" when a product is back in stock. Nothing else is sent.
 
-**Important:** open-wa is an unofficial WhatsApp Web automation. Using it can get the paired number banned by WhatsApp. Use a dedicated number, keep the volume low, and never use it for bulk or marketing messages. If the store moves to the official WhatsApp Cloud API later, only the sender class in `apps/api/src/whatsapp/` changes.
+**Important:** [OpenWA](https://github.com/rmyndharis/OpenWA) drives WhatsApp Web, which WhatsApp does not allow. Using it can get the paired number banned. Use a dedicated number, keep the volume low, and never use it for bulk or marketing messages. If the store moves to the official WhatsApp Cloud API later, only the sender class in `apps/api/src/whatsapp/` changes.
 
 ```bash
-# 1. set OPEN_WA_KEY (a long random string) in the server's .env; OPEN_WA_URL=http://wa:8002
-# 2. start the container
+# 1. start the gateway
 docker compose -f docker/compose.yml --profile whatsapp up -d wa
-# 3. watch the logs for the QR code and scan it once from the phone (WhatsApp > Linked devices)
-docker compose -f docker/compose.yml logs -f wa
+# 2. read its API key and put it in the server's .env as OPEN_WA_KEY; OPEN_WA_URL=http://wa:2785
+docker compose -f docker/compose.yml exec wa cat /app/data/.api-key
+# 3. create a session, start it and scan its QR from the phone (WhatsApp > Linked devices):
+#    POST /api/sessions {"name":"store"} -> id; POST /api/sessions/<id>/start; GET /api/sessions/<id>/qr
+#    (all with the X-API-Key header), then set OPEN_WA_SESSION=<id> in .env
 # 4. restart the api so it picks up the env vars
 docker compose -f docker/compose.yml up -d api
 ```
 
 Then open the dashboard settings, "WhatsApp alerts": switch it on and add the admin number(s). Every attempt (sent or failed) is logged in the WhatsApp messages list of the order. A failed restock message leaves the request "waiting", so the manual button in the notify-me screen still works.
 
-To switch it off: turn the switch off in the dashboard, or empty `OPEN_WA_URL` / `OPEN_WA_KEY` and restart the api; `docker compose ... stop wa` stops the container. The session survives restarts (volume `wa-session`); if WhatsApp logs the device out, scan the QR again.
+To switch it off: turn the switch off in the dashboard, or empty `OPEN_WA_URL` / `OPEN_WA_KEY` / `OPEN_WA_SESSION` and restart the api; `docker compose ... stop wa` stops the container. The session survives restarts (volume `wa-session`); if WhatsApp logs the device out, scan the QR again.

@@ -80,6 +80,7 @@ services:
       # WhatsApp automated alerts (open-wa); empty = off
       OPEN_WA_URL: ${OPEN_WA_URL:-}
       OPEN_WA_KEY: ${OPEN_WA_KEY:-}
+      OPEN_WA_SESSION: ${OPEN_WA_SESSION:-}
     volumes:
       - uploads:/uploads
     healthcheck:
@@ -197,20 +198,17 @@ services:
       - uploads:/uploads:ro
       - caddy-data:/data
 
-  # Optional self-hosted WhatsApp automation container (open-wa EASY API).
+  # Optional self-hosted WhatsApp gateway (OpenWA, github.com/rmyndharis/OpenWA).
   # Run only when WhatsApp automated alerts are enabled:
   # docker compose -f docker/compose.yml --profile whatsapp up -d wa
+  # Its API key is generated on first boot: docker compose ... exec wa cat /app/data/.api-key
   wa:
     profiles: ["whatsapp"]
-    image: openwa/wa-automate:latest
+    image: ghcr.io/rmyndharis/openwa:0.29.0
     restart: unless-stopped
-    command: ["--key", "${OPEN_WA_KEY:-}", "--port", "8002"]
-    environment:
-      KEY: ${OPEN_WA_KEY:-}
-      PORT: 8002
     shm_size: 1gb
     volumes:
-      - wa-session:/app/session
+      - wa-session:/app/data
 
 volumes:
   db-data:

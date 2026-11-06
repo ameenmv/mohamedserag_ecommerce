@@ -6,7 +6,7 @@ Scope decided 2026-11-05 (kept small on purpose):
 Nothing else is sent (no status updates, no marketing).
 
 ## Provider
-- open-wa (unofficial, self-hosted WhatsApp Web automation) running as its own container, called over internal HTTP with a secret key. Env: `OPEN_WA_URL`, `OPEN_WA_KEY`. Without them the feature is simply off (no errors).
+- OpenWA (github.com/rmyndharis/OpenWA, unofficial self-hosted WhatsApp Web gateway, image `ghcr.io/rmyndharis/openwa:0.29.0`) running as its own container, called over internal HTTP (`POST /api/sessions/{id}/messages/send-text`, `X-API-Key` header). Env: `OPEN_WA_URL`, `OPEN_WA_KEY`, `OPEN_WA_SESSION`. Without them the feature is simply off (no errors). The earlier `openwa/wa-automate` image was dropped: its bundled 4.76 no longer completes WhatsApp Web login.
 - A small `WhatsAppSender` interface in the API so the provider can be swapped later (official Cloud API).
 - Number: the owner's own number for the trial.
 
