@@ -4,8 +4,11 @@ import {
   type AdminProductSetContent,
   type AdminSpecTemplateField,
   productSetContentPieceSchema,
+  slugifyModelCode,
 } from '@serag/shared'
 import { z } from 'zod'
+
+export { slugifyModelCode }
 
 export const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024 // 5 MB
 
@@ -21,21 +24,6 @@ export interface UploadedFile {
 export interface DetectedImageInfo {
   mime: 'image/jpeg' | 'image/png' | 'image/webp' | 'image/avif'
   ext: 'jpg' | 'png' | 'webp' | 'avif'
-}
-
-/**
- * Converts model code to a lowercase, kebab-case URL-safe slug.
- * Does not transliterate Arabic.
- */
-export function slugifyModelCode(modelCode: string): string {
-  const slug = modelCode
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .replace(/-{2,}/g, '-')
-
-  return slug.length > 0 ? slug : 'product'
 }
 
 /**

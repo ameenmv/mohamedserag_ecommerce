@@ -7,8 +7,15 @@ import type {
   AdminSpecTemplate,
   AvailabilityMode,
   CreateProductInput,
+  ProductSeoInput,
 } from '@serag/shared'
-import { validateProductSpecs } from '@serag/shared'
+import {
+  buildProductSeoDescription,
+  buildProductSeoTitle,
+  buildProductSlug,
+  deriveAvailability,
+  validateProductSpecs,
+} from '@serag/shared'
 import { parseAdminApiError } from '~/utils/admin-api-errors'
 import { egpInputToPiastres, piastresToEgpInput } from '~/utils/admin-money'
 import { buildProductCardPreview } from '~/utils/admin-product-preview'
@@ -180,6 +187,62 @@ export function useProductForm(initialDetail?: AdminProductDetail | null) {
 
   const currentCategory = computed(() =>
     categories.value.find((c) => c.id === form.categoryId),
+  )
+
+  const currentBrand = computed(() =>
+    brands.value.find((b) => b.id === form.brandId),
+  )
+
+  const autoSlug = computed(() =>
+    buildProductSlug({
+      brandSlug: currentBrand.value?.slug ?? '',
+      categorySlug: currentCategory.value?.slug ?? '',
+      modelCode: form.modelCode,
+    }),
+  )
+
+  function buildSeoInput(locale: 'ar' | 'en'): ProductSeoInput {
+    const brand = currentBrand.value
+    const brandName =
+      locale === 'en'
+        ? brand?.translations?.en?.name?.trim() || brand?.name || ''
+        : brand?.name || ''
+    const name =
+      locale === 'en'
+        ? form.translations.en.name.trim() || form.name.trim()
+        : form.name.trim()
+    const warranty =
+      locale === 'en'
+        ? form.translations.en.warranty.trim() || form.warranty.trim()
+        : form.warranty.trim()
+    const availability = deriveAvailability({
+      mode: form.availabilityMode,
+      stock: form.stock,
+      lowStockThreshold: form.lowStockThreshold,
+    })
+
+    return {
+      name,
+      brandName,
+      modelCode: form.modelCode.trim(),
+      price: egpInputToPiastres(form.priceEgp) ?? 0,
+      compareAtPrice: egpInputToPiastres(form.oldPriceEgp),
+      warranty: warranty || null,
+      available: availability.state !== 'out',
+    }
+  }
+
+  const autoSeoTitleAr = computed(() =>
+    buildProductSeoTitle(buildSeoInput('ar'), 'ar'),
+  )
+  const autoSeoDescriptionAr = computed(() =>
+    buildProductSeoDescription(buildSeoInput('ar'), 'ar'),
+  )
+  const autoSeoTitleEn = computed(() =>
+    buildProductSeoTitle(buildSeoInput('en'), 'en'),
+  )
+  const autoSeoDescriptionEn = computed(() =>
+    buildProductSeoDescription(buildSeoInput('en'), 'en'),
   )
 
   const currentTemplate = computed(() => {
@@ -561,6 +624,12 @@ export function useProductForm(initialDetail?: AdminProductDetail | null) {
     specTemplates,
     loadingRefs,
     currentCategory,
+    currentBrand,
+    autoSlug,
+    autoSeoTitleAr,
+    autoSeoDescriptionAr,
+    autoSeoTitleEn,
+    autoSeoDescriptionEn,
     currentTemplate,
     showSetContents,
     previewProduct,

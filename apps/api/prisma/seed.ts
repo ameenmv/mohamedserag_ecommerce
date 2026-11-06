@@ -1885,8 +1885,6 @@ async function main() {
       warranty: itemEn.warranty,
       warrantyActivation: warrantyActivationEn,
       origin: itemEn.origin,
-      seoTitle: itemEn.seoTitle,
-      seoDescription: itemEn.seoDescription,
     }
     if (itemEn.leadTimeText) {
       productTranslationsEn.leadTimeText = itemEn.leadTimeText
@@ -1915,8 +1913,9 @@ async function main() {
       visible: true,
       featured,
       taxRate: 14,
-      seoTitle: `${item.name} - ${brand.name} | معرض محمد سراج`,
-      seoDescription: `${item.name} (${item.cap}) — ${item.tech} — ${item.warranty}.`,
+      // Left empty so the storefront builds title and description from the product (spec 023).
+      seoTitle: null,
+      seoDescription: null,
       searchText,
       translations,
     }

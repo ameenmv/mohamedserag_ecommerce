@@ -17,6 +17,10 @@ export function useAppHead(): void {
       if (!trimmed || trimmed === storeName) {
         return storeName
       }
+      // Older manual titles already end with the store name; do not repeat it.
+      if (trimmed.includes(storeName)) {
+        return trimmed
+      }
       return `${trimmed} · ${storeName}`
     },
     link: () => head.value.link || [],

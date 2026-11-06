@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { PRODUCT_SEO_TITLE_MAX } from '@serag/shared'
 import { useProductFormContext } from '~/composables/useProductFormContext'
 
 defineProps<{
@@ -6,7 +7,12 @@ defineProps<{
   disabled: boolean
 }>()
 
-const { form, showSetContents } = useProductFormContext()
+const {
+  form,
+  showSetContents,
+  autoSeoTitleEn,
+  autoSeoDescriptionEn,
+} = useProductFormContext()
 const { t } = useI18n()
 </script>
 
@@ -210,6 +216,7 @@ const { t } = useI18n()
               dir="ltr"
               lang="en"
               maxlength="100"
+              :placeholder="autoSeoTitleEn"
               :disabled="disabled"
               :aria-invalid="invalid"
               :aria-describedby="describedBy"
@@ -217,15 +224,15 @@ const { t } = useI18n()
             />
             <div class="flex justify-between text-[11px] text-muted-foreground">
               <span>{{ t('admin.products.editor.english.seoTitleHint') }}</span>
-              <span class="num font-semibold" :class="form.translations.en.seoTitle.length > 60 ? 'text-amber-800 dark:text-amber-400' : ''">
-                {{ t('admin.products.editor.seo.chars', { count: form.translations.en.seoTitle.length }) }} / 60
+              <span class="num font-semibold" :class="form.translations.en.seoTitle.length > PRODUCT_SEO_TITLE_MAX ? 'text-amber-800 dark:text-amber-400' : ''">
+                {{ t('admin.products.editor.seo.chars', { count: form.translations.en.seoTitle.length }) }} / {{ PRODUCT_SEO_TITLE_MAX }}
               </span>
             </div>
           </div>
         </template>
       </FormField>
 
-      <!-- SEO Description with counter (~160) -->
+      <!-- SEO Description with counter (~155) -->
       <FormField
         id="product-en-seo-desc"
         :label="t('admin.products.editor.english.seoDescription')"
@@ -240,6 +247,7 @@ const { t } = useI18n()
               dir="ltr"
               lang="en"
               maxlength="250"
+              :placeholder="autoSeoDescriptionEn"
               :disabled="disabled"
               :aria-invalid="invalid"
               :aria-describedby="describedBy"
@@ -247,8 +255,8 @@ const { t } = useI18n()
             />
             <div class="flex justify-between text-[11px] text-muted-foreground">
               <span>{{ t('admin.products.editor.english.seoDescriptionHint') }}</span>
-              <span class="num font-semibold" :class="form.translations.en.seoDescription.length > 160 ? 'text-amber-800 dark:text-amber-400' : ''">
-                {{ t('admin.products.editor.seo.chars', { count: form.translations.en.seoDescription.length }) }} / 160
+              <span class="num font-semibold" :class="form.translations.en.seoDescription.length > 155 ? 'text-amber-800 dark:text-amber-400' : ''">
+                {{ t('admin.products.editor.seo.chars', { count: form.translations.en.seoDescription.length }) }} / 155
               </span>
             </div>
           </div>

@@ -11,6 +11,7 @@ import {
   type AdminProductListItem,
   type AdminProductListResponse,
   type AdminProductQueryOutput,
+  buildProductSlug,
   type CreateProductOutput,
   deriveAvailability,
   type UpdateProductOutput,
@@ -28,7 +29,6 @@ import {
   parseProductSpecs,
   parseTemplateFields,
   resolveUploadsDir,
-  slugifyModelCode,
 } from './admin-catalog.util.js'
 
 interface IdTotalRow {
@@ -265,7 +265,11 @@ export class AdminProductsService {
       }
       slug = customSlug
     } else {
-      const base = slugifyModelCode(data.modelCode)
+      const base = buildProductSlug({
+        brandSlug: brand.slug,
+        categorySlug: category.slug,
+        modelCode: data.modelCode,
+      })
       let candidate = base
       while (await this.prisma.product.findUnique({ where: { slug: candidate } })) {
         candidate = `${base}-${nanoid(4).toLowerCase()}`

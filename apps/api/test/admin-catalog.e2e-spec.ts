@@ -2,7 +2,7 @@ import * as fs from 'node:fs'
 import * as path from 'node:path'
 import type { INestApplication } from '@nestjs/common'
 import { Test } from '@nestjs/testing'
-import { ALL_PERMISSIONS, OWNER_ROLE_KEY } from '@serag/shared'
+import { ALL_PERMISSIONS, buildProductSlug, OWNER_ROLE_KEY } from '@serag/shared'
 import argon2 from 'argon2'
 import cookieParser from 'cookie-parser'
 import { customAlphabet } from 'nanoid'
@@ -301,7 +301,12 @@ describe('Admin Catalog API E2E (/api/admin/...)', () => {
       .expect(201)
 
     autoSlugProdId = res1.body.id
-    expect(res1.body.slug).toBe(`mod-auto-${fixtureTag}-x`.toLowerCase())
+    const expectedBaseSlug = buildProductSlug({
+      brandSlug: `brand-${fixtureTag}`,
+      categorySlug: `cat-${fixtureTag}`,
+      modelCode: rawModel,
+    })
+    expect(res1.body.slug).toBe(expectedBaseSlug)
 
     // Duplicate modelCode -> 409
     const dupRes = await request(app.getHttpServer())
@@ -334,7 +339,7 @@ describe('Admin Catalog API E2E (/api/admin/...)', () => {
       .expect(201)
 
     autoSlugProd2Id = res2.body.id
-    expect(res2.body.slug).toContain(`mod-auto-${fixtureTag}-x`.toLowerCase())
+    expect(res2.body.slug).toContain(expectedBaseSlug)
     expect(res2.body.slug).not.toBe(res1.body.slug)
   })
 

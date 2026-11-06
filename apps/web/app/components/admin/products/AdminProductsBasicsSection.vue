@@ -66,7 +66,7 @@ const { t } = useI18n()
         </FormField>
       </div>
 
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         <FormField
           id="product-brand"
           :label="t('admin.products.editor.basics.brand')"
@@ -111,26 +111,6 @@ const { t } = useI18n()
                 {{ c.name }}
               </option>
             </AdminFormSelect>
-          </template>
-        </FormField>
-
-        <FormField
-          id="product-slug"
-          :label="t('admin.products.editor.basics.slug')"
-          :error="errors.slug"
-        >
-          <template #default="{ id, invalid, describedBy }">
-            <Input
-              :id="id"
-              v-model="form.slug"
-              type="text"
-              dir="ltr"
-              :placeholder="t('admin.products.editor.basics.slugPlaceholder')"
-              :disabled="disabled"
-              :aria-invalid="invalid"
-              :aria-describedby="describedBy"
-              class="h-10 rounded-lg text-start font-mono"
-            />
           </template>
         </FormField>
       </div>

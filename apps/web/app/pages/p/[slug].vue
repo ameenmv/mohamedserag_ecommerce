@@ -1,6 +1,10 @@
 <script setup lang="ts">
-import type { BreadcrumbItem } from '@serag/shared'
-import { buildBreadcrumbList } from '@serag/shared'
+import type { BreadcrumbItem, ProductDetail } from '@serag/shared'
+import {
+  buildBreadcrumbList,
+  buildProductSeoDescription,
+  buildProductSeoTitle,
+} from '@serag/shared'
 import { buildProductJsonLd } from '~/utils/product-jsonld'
 import { useRevealOnScroll } from '~/composables/useRevealOnScroll'
 
@@ -24,19 +28,36 @@ if (error.value || !product.value) {
 }
 
 // SEO metadata
-const pageTitle = computed(
-  () => product.value?.seoTitle || product.value?.name || '',
-)
-const pageDescription = computed(
-  () =>
-    product.value?.seoDescription ||
-    (product.value
-      ? t('store.productPage.meta.fallbackDescription', {
-          name: product.value.name,
-          brand: product.value.brand.name,
-        })
-      : ''),
-)
+const seoLocale = computed<'ar' | 'en'>(() => (locale.value === 'en' ? 'en' : 'ar'))
+
+function toSeoInput(current: ProductDetail) {
+  return {
+    name: current.name,
+    brandName: current.brand.name,
+    modelCode: current.modelCode,
+    price: current.price,
+    compareAtPrice: current.oldPrice,
+    warranty: current.warranty,
+    available: current.availability.state !== 'out',
+  }
+}
+
+const pageTitle = computed(() => {
+  const current = product.value
+  if (!current) return ''
+  return (
+    current.seoTitle?.trim() ||
+    buildProductSeoTitle(toSeoInput(current), seoLocale.value)
+  )
+})
+const pageDescription = computed(() => {
+  const current = product.value
+  if (!current) return ''
+  return (
+    current.seoDescription?.trim() ||
+    buildProductSeoDescription(toSeoInput(current), seoLocale.value)
+  )
+})
 const ogImage = computed(
   () => product.value?.images[0]?.url || product.value?.image?.url || undefined,
 )
