@@ -124,6 +124,25 @@ onMounted(() => {
 
 const summaryRef = ref<{ addToCartButton: HTMLElement | null } | null>(null)
 
+// In-page section nav items (specs, warranty, delivery, reviews)
+const sectionNavItems = computed(() => {
+  if (!product.value) return []
+  const items: { id: string; labelKey: string }[] = []
+  if (product.value.specs && product.value.specs.length > 0) {
+    items.push({ id: 'specs-section', labelKey: 'store.productPage.sectionNav.specs' })
+  }
+  if (
+    product.value.warranty?.trim() ||
+    product.value.warrantyActivation?.trim() ||
+    product.value.origin?.trim()
+  ) {
+    items.push({ id: 'warranty-section', labelKey: 'store.productPage.sectionNav.warranty' })
+  }
+  items.push({ id: 'delivery-section', labelKey: 'store.productPage.sectionNav.delivery' })
+  items.push({ id: 'reviews-section', labelKey: 'store.productPage.sectionNav.reviews' })
+  return items
+})
+
 // Related products rise in as they scroll into view
 const relatedRef = ref<HTMLElement | null>(null)
 useRevealOnScroll(relatedRef, ':scope > article', () => product.value?.related)
@@ -157,20 +176,26 @@ useRevealOnScroll(relatedRef, ':scope > article', () => product.value?.related)
 
       <!-- Product Details: Specs, Set Contents, Warranty, Delivery -->
       <div class="scroll-reveal flex flex-col gap-6 lg:col-span-7 lg:row-start-2">
-      <LazyStoreProductPageSpecs hydrate-never :specs="product.specs" />
-      <LazyStoreProductPageSetContents hydrate-never :set-contents="product.setContents" />
-      <LazyStoreProductPageWarranty
-        hydrate-never
-        :warranty="product.warranty"
-        :warranty-activation="product.warrantyActivation"
-        :origin="product.origin"
-      />
-      <LazyStoreProductPageDelivery hydrate-never />
+        <StoreProductPageSectionNav
+          v-if="sectionNavItems.length > 0"
+          :items="sectionNavItems"
+          class="hidden lg:block sticky top-20 z-20"
+        />
+        <LazyStoreProductPageSpecs id="specs-section" hydrate-never :specs="product.specs" />
+        <LazyStoreProductPageSetContents hydrate-never :set-contents="product.setContents" />
+        <LazyStoreProductPageWarranty
+          id="warranty-section"
+          hydrate-never
+          :warranty="product.warranty"
+          :warranty-activation="product.warrantyActivation"
+          :origin="product.origin"
+        />
+        <LazyStoreProductPageDelivery id="delivery-section" hydrate-never />
       </div>
     </div>
 
     <!-- Product Reviews -->
-    <StoreProductPageReviews :product="product" class="scroll-reveal" />
+    <StoreProductPageReviews id="reviews-section" :product="product" class="scroll-reveal" />
 
     <!-- Related Products -->
     <section
@@ -184,11 +209,15 @@ useRevealOnScroll(relatedRef, ':scope > article', () => product.value?.related)
         </h2>
       </div>
 
-      <div ref="relatedRef" class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+      <div
+        ref="relatedRef"
+        class="flex gap-3 overflow-x-auto pb-4 pt-1 snap-x snap-mandatory scroll-smooth -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 sm:overflow-visible sm:pb-0"
+      >
         <StoreProductCard
           v-for="rel in product.related"
           :key="rel.id"
           :product="rel"
+          class="w-[260px] shrink-0 snap-start sm:w-auto"
         />
       </div>
     </section>

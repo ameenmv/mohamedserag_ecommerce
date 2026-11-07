@@ -443,6 +443,14 @@
     "productPage": {
       "modelCode": "Model: {code}",
       "saving": "Save {amount}",
+      "savingWithPercent": "Save {amount} ({percent}%)",
+      "sectionNav": {
+        "ariaLabel": "Quick section navigation",
+        "specs": "Specifications",
+        "warranty": "Warranty & Origin",
+        "delivery": "Delivery",
+        "reviews": "Reviews"
+      },
       "vatIncluded": "Prices are VAT inclusive",
       "installmentAvailable": "Installments available in showroom",
       "askWhatsapp": "Ask on WhatsApp",
@@ -456,7 +464,13 @@
         "next": "Next image",
         "realPhoto": "Real photo from showroom",
         "thumbnailAria": "Image {index} of {name}",
-        "placeholderAlt": "Product placeholder image"
+        "placeholderAlt": "Product placeholder image",
+        "expandAria": "Expand image and open gallery",
+        "openLightboxAria": "Open photo gallery for {name}",
+        "closeLightbox": "Close gallery",
+        "zoomIn": "Zoom in",
+        "zoomOut": "Zoom out",
+        "counter": "{current} / {total}"
       },
       "delivery": {
         "title": "Showroom Truck Delivery",
@@ -475,7 +489,9 @@
         "property": "Property",
         "value": "Value",
         "yes": "Yes",
-        "no": "No"
+        "no": "No",
+        "keyFigures": "Key specifications",
+        "allSpecs": "All specifications"
       },
       "setContents": {
         "title": "Set Contents",

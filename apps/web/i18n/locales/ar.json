@@ -443,6 +443,14 @@
     "productPage": {
       "modelCode": "الموديل: {code}",
       "saving": "وفّر {amount}",
+      "savingWithPercent": "وفّر {amount} ({percent}%)",
+      "sectionNav": {
+        "ariaLabel": "تنقل سريع لأقسام المنتج",
+        "specs": "المواصفات",
+        "warranty": "الضمان والمنشأ",
+        "delivery": "التوصيل",
+        "reviews": "التقييمات"
+      },
       "vatIncluded": "الأسعار شاملة ضريبة القيمة المضافة",
       "installmentAvailable": "التقسيط متاح في المعرض",
       "askWhatsapp": "اسأل على واتساب",
@@ -456,7 +464,13 @@
         "next": "الصورة التالية",
         "realPhoto": "صورة حقيقية من المعرض",
         "thumbnailAria": "صورة {index} من {name}",
-        "placeholderAlt": "صورة غير متوفرة"
+        "placeholderAlt": "صورة غير متوفرة",
+        "expandAria": "تكبير الصورة وفتح المعرض",
+        "openLightboxAria": "فتح معرض الصور لـ {name}",
+        "closeLightbox": "إغلاق المعرض",
+        "zoomIn": "تكبير",
+        "zoomOut": "تصغير",
+        "counter": "{current} / {total}"
       },
       "delivery": {
         "title": "التوصيل بعربيات المعرض",
@@ -475,7 +489,9 @@
         "property": "الخاصية",
         "value": "القيمة",
         "yes": "أيوه",
-        "no": "لأ"
+        "no": "لأ",
+        "keyFigures": "أبرز المواصفات",
+        "allSpecs": "كل المواصفات"
       },
       "setContents": {
         "title": "محتويات الطقم",

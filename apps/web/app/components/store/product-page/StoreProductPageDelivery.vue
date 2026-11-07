@@ -8,7 +8,7 @@ const { format } = usePrice()
 
 <template>
   <details
-    class="group rounded-2xl border border-border bg-card p-4 sm:p-5 transition-all duration-200 open:shadow-xs"
+    class="scroll-mt-32 group rounded-2xl border border-border bg-card p-4 sm:p-5 transition-all duration-200 open:shadow-xs"
   >
     <summary
       class="flex cursor-pointer list-none items-center justify-between rounded-xl p-1 text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"

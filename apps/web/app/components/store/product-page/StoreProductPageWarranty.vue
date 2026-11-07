@@ -20,7 +20,7 @@ const hasAnyInfo = computed(
 <template>
   <section
     v-if="hasAnyInfo"
-    class="rounded-3xl border border-border bg-card p-5 sm:p-6"
+    class="scroll-mt-32 rounded-3xl border border-border bg-card p-5 sm:p-6"
     :aria-label="t('store.productPage.warranty.title')"
   >
     <h2 class="mb-4 text-base font-bold text-foreground sm:text-lg">

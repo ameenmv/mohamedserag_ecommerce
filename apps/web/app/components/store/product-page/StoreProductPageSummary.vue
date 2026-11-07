@@ -83,6 +83,20 @@ const savingText = computed(() => {
   return null
 })
 
+const savingPercent = computed<number | null>(() => {
+  if (props.product.discountPercent && props.product.discountPercent > 0) {
+    return props.product.discountPercent
+  }
+  if (
+    props.product.oldPrice &&
+    props.product.oldPrice > props.product.price
+  ) {
+    const diff = props.product.oldPrice - props.product.price
+    return Math.round((diff / props.product.oldPrice) * 100)
+  }
+  return null
+})
+
 // WhatsApp link: waLink(settings.whatsapp, renderTemplate(DEFAULT_TEMPLATES.product_question, { productName, productUrl }))
 const whatsappUrl = computed(() => {
   if (!settings.whatsapp) return ''
@@ -161,12 +175,16 @@ function scrollToReviews(): void {
         />
 
         <div class="mt-1 flex flex-wrap items-center gap-2">
-          <!-- Saving line «وفّر {amount}» -->
+          <!-- Saving line «وفّر {amount} ({percent}%)» -->
           <span
             v-if="savingText"
             class="num inline-flex items-center rounded-full bg-card px-2.5 py-0.5 text-xs font-bold text-emerald-800 border border-emerald-600/25 dark:bg-emerald-950/40 dark:text-emerald-400"
           >
-            {{ t('store.productPage.saving', { amount: savingText }) }}
+            {{
+              savingPercent !== null
+                ? t('store.productPage.savingWithPercent', { amount: savingText, percent: savingPercent })
+                : t('store.productPage.saving', { amount: savingText })
+            }}
           </span>
 
           <!-- VAT Label -->
@@ -273,6 +291,6 @@ function scrollToReviews(): void {
       </a>
     </div>
 
-    <StoreTrustRow class="border-t border-border/70 pt-4" />
+    <StoreTrustRow :warranty="product.warranty" class="border-t border-border/70 pt-4" />
   </div>
 </template>
