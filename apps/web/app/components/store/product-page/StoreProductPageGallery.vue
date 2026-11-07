@@ -15,6 +15,7 @@ const isRtl = computed(() => locale.value === 'ar')
 const currentIndex = ref(0)
 const isLightboxOpen = ref(false)
 const mainViewportRef = ref<HTMLElement | null>(null)
+const openerRect = ref<DOMRect | null>(null)
 const thumbnailRefs = ref<HTMLElement[]>([])
 
 watch(
@@ -42,6 +43,9 @@ function next(): void {
 }
 
 function openLightbox(): void {
+  if (mainViewportRef.value && typeof window !== 'undefined') {
+    openerRect.value = mainViewportRef.value.getBoundingClientRect()
+  }
   isLightboxOpen.value = true
 }
 
@@ -106,11 +110,31 @@ function onThumbnailKeydown(currentIndexPosition: number, direction: 1 | -1): vo
     thumbnailRefs.value[targetIndex]?.focus()
   })
 }
+
+function onViewportKeydown(e: KeyboardEvent): void {
+  if (e.key === 'ArrowRight') {
+    e.preventDefault()
+    // ArrowRight goes visually right: prev in RTL, next in LTR
+    if (isRtl.value) {
+      prev()
+    } else {
+      next()
+    }
+  } else if (e.key === 'ArrowLeft') {
+    e.preventDefault()
+    // ArrowLeft goes visually left: next in RTL, prev in LTR
+    if (isRtl.value) {
+      next()
+    } else {
+      prev()
+    }
+  }
+}
 </script>
 
 <template>
   <div class="flex flex-col">
-    <!-- Main image viewport -->
+    <!-- Main image viewport with cursor zoom-in, logical layout and keyboard nav -->
     <div
       ref="mainViewportRef"
       data-fly-source
@@ -124,29 +148,32 @@ function onThumbnailKeydown(currentIndexPosition: number, direction: 1 | -1): vo
       @pointercancel="onPointerUp"
       @keydown.enter.prevent="openLightbox"
       @keydown.space.prevent="openLightbox"
+      @keydown="onViewportKeydown"
     >
-      <!-- NuxtImg with explicit width/height and LCP prioritization on first image -->
-      <NuxtImg
-        v-if="currentImage?.url"
-        :key="currentImage.url"
-        :src="currentImage.url"
-        :alt="currentImage.alt || productName"
-        width="600"
-        height="600"
-        :loading="currentIndex === 0 ? 'eager' : 'lazy'"
-        :fetchpriority="currentIndex === 0 ? 'high' : 'auto'"
-        class="img-swap size-full object-contain transition-transform duration-500 ease-out group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-        draggable="false"
-      />
+      <!-- Crossfade transition between images -->
+      <Transition name="gallery-crossfade" mode="out-in">
+        <NuxtImg
+          v-if="currentImage?.url"
+          :key="currentImage.url"
+          :src="currentImage.url"
+          :alt="currentImage.alt || productName"
+          width="600"
+          height="600"
+          :loading="currentIndex === 0 ? 'eager' : 'lazy'"
+          :fetchpriority="currentIndex === 0 ? 'high' : 'auto'"
+          class="size-full object-contain mix-blend-multiply dark:mix-blend-normal transition-transform duration-500 ease-out group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+          draggable="false"
+        />
 
-      <!-- Neutral placeholder when images are missing -->
-      <div
-        v-else
-        class="flex size-full items-center justify-center text-serag-green"
-        aria-hidden="true"
-      >
-        <StoreCategoryIcon :slug="categorySlug ?? ''" class="size-40 sm:size-56" stroke-width="1.1" />
-      </div>
+        <!-- Neutral placeholder when images are missing -->
+        <div
+          v-else
+          class="flex size-full items-center justify-center text-serag-green"
+          aria-hidden="true"
+        >
+          <StoreCategoryIcon :slug="categorySlug ?? ''" class="size-40 sm:size-56" stroke-width="1.1" />
+        </div>
+      </Transition>
 
       <!-- Image counter chip "2 / 5" when > 1 image -->
       <span
@@ -175,29 +202,31 @@ function onThumbnailKeydown(currentIndexPosition: number, direction: 1 | -1): vo
         {{ t('store.productPage.gallery.realPhoto') }}
       </span>
 
-      <!-- Prev / Next navigation buttons -->
+      <!-- Prev / Next navigation buttons: previous sits on start side pointing start; next sits on end side pointing end -->
       <div
         v-if="hasMultiple"
-        class="pointer-events-none absolute inset-x-2 top-1/2 flex -translate-y-1/2 items-center justify-between"
+        class="pointer-events-none absolute inset-x-3 top-1/2 flex -translate-y-1/2 items-center justify-between"
       >
+        <!-- Previous (inline-start edge): ChevronLeft points to start; flipped in RTL -->
         <button
           type="button"
           :aria-label="t('store.productPage.gallery.prev')"
-          class="pointer-events-auto inline-flex size-11 items-center justify-center rounded-full border border-border/80 bg-background/90 text-foreground shadow-sm backdrop-blur-xs transition-colors hover:border-serag-gold hover:bg-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+          class="pointer-events-auto inline-flex size-11 min-h-11 min-w-11 items-center justify-center rounded-full border border-border/80 bg-background/90 text-foreground shadow-sm backdrop-blur-xs opacity-0 transition-all duration-200 group-hover:opacity-100 hover:border-serag-gold hover:text-serag-gold focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
           @pointerdown.stop
           @click.stop="prev"
         >
-          <ChevronRight class="size-5 rtl:-scale-x-100" aria-hidden="true" />
+          <ChevronLeft class="size-5 rtl:-scale-x-100" aria-hidden="true" />
         </button>
 
+        <!-- Next (inline-end edge): ChevronRight points to end; flipped in RTL -->
         <button
           type="button"
           :aria-label="t('store.productPage.gallery.next')"
-          class="pointer-events-auto inline-flex size-11 items-center justify-center rounded-full border border-border/80 bg-background/90 text-foreground shadow-sm backdrop-blur-xs transition-colors hover:border-serag-gold hover:bg-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+          class="pointer-events-auto inline-flex size-11 min-h-11 min-w-11 items-center justify-center rounded-full border border-border/80 bg-background/90 text-foreground shadow-sm backdrop-blur-xs opacity-0 transition-all duration-200 group-hover:opacity-100 hover:border-serag-gold hover:text-serag-gold focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
           @pointerdown.stop
           @click.stop="next"
         >
-          <ChevronLeft class="size-5 rtl:-scale-x-100" aria-hidden="true" />
+          <ChevronRight class="size-5 rtl:-scale-x-100" aria-hidden="true" />
         </button>
       </div>
     </div>
@@ -267,7 +296,7 @@ function onThumbnailKeydown(currentIndexPosition: number, direction: 1 | -1): vo
           :alt="img.alt || productName"
           width="80"
           height="80"
-          class="size-full object-contain"
+          class="size-full object-contain mix-blend-multiply dark:mix-blend-normal"
         />
       </button>
     </div>
@@ -280,6 +309,32 @@ function onThumbnailKeydown(currentIndexPosition: number, direction: 1 | -1): vo
       :product-name="productName"
       :initial-index="currentIndex"
       :opener-element="mainViewportRef"
+      :opener-rect="openerRect"
     />
   </div>
 </template>
+
+<style scoped>
+.gallery-crossfade-enter-active,
+.gallery-crossfade-leave-active {
+  transition: opacity 280ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.gallery-crossfade-enter-from {
+  opacity: 0;
+  transform: scale(0.98);
+}
+
+.gallery-crossfade-leave-to {
+  opacity: 0;
+  transform: scale(1.02);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery-crossfade-enter-active,
+  .gallery-crossfade-leave-active {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+</style>

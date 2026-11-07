@@ -8,6 +8,21 @@ export interface BoxDimensions {
   height: number
 }
 
+export interface SnapTargetParams {
+  currentIndex: number
+  total: number
+  offsetInline: number
+  velocityInline: number
+  distanceThreshold?: number
+  velocityThreshold?: number
+}
+
+export interface CloseDragProgress {
+  progress: number
+  opacity: number
+  shouldClose: boolean
+}
+
 /**
  * Wraps an index into the valid cyclical range [0, count - 1].
  * Returns 0 if count <= 0.
@@ -20,14 +35,10 @@ export function wrapIndex(index: number, count: number): number {
 /**
  * Determines the navigation step (-1, 0, or 1) based on horizontal touch swipe deltaX.
  *
- * Convention:
- * - In LTR: Next images sit to the right. Swiping left (deltaX <= -threshold) pulls
- *   the right content into view -> returns 1 (next). Swiping right (deltaX >= threshold)
- *   pulls the left content into view -> returns -1 (prev).
- * - In RTL: Next images sit to the left (matching the visual order of thumbnails:
- *   [2] [1] [0]). Swiping right (deltaX >= threshold) pulls the left content into view
- *   -> returns 1 (next). Swiping left (deltaX <= -threshold) pulls the right content
- *   into view -> returns -1 (prev).
+ * Direction convention (content follows the finger): the next image sits on the inline-end
+ * side, so dragging toward the inline-start side pulls it into view.
+ * - LTR: next is on the right; dragging left (deltaX <= -threshold) → 1, dragging right → -1.
+ * - RTL: next is on the left; dragging right (deltaX >= threshold) → 1, dragging left → -1.
  */
 export function swipeStep(
   deltaX: number,
@@ -35,10 +46,8 @@ export function swipeStep(
   threshold = 40,
 ): -1 | 0 | 1 {
   if (Math.abs(deltaX) < threshold) return 0
-  if (isRtl) {
-    return deltaX > 0 ? 1 : -1
-  }
-  return deltaX < 0 ? 1 : -1
+  const deltaInline = isRtl ? -deltaX : deltaX
+  return deltaInline < 0 ? 1 : -1
 }
 
 /**
@@ -112,4 +121,76 @@ export function calculateFittedDimensions(
     width: natural.width * ratio,
     height: natural.height * ratio,
   }
+}
+
+/**
+ * Standard rubber-band damping curve for over-scroll / over-drag past track bounds.
+ * Formula: f(x) = (x * dimension * constant) / (dimension + constant * x)
+ */
+export function applyRubberBand(
+  offset: number,
+  dimension: number,
+  constant = 0.55,
+): number {
+  if (
+    !Number.isFinite(offset) ||
+    !Number.isFinite(dimension) ||
+    dimension <= 0 ||
+    offset === 0
+  ) {
+    return 0
+  }
+  const sign = Math.sign(offset)
+  const absOffset = Math.abs(offset)
+  const damped = (absOffset * dimension * constant) / (dimension + constant * absOffset)
+  return sign * damped
+}
+
+/**
+ * Calculates the target slide index after a pointer drag release.
+ * `offsetInline` / `velocityInline` are positive toward the inline-end side; a drag toward the
+ * inline-start side reveals the next slide (content follows the finger).
+ * Flick velocity (> 0.4 px/ms) takes precedence over distance threshold.
+ * Clamps result strictly to [0, total - 1] (drag gestures do not loop).
+ */
+export function calculateSnapTarget({
+  currentIndex,
+  total,
+  offsetInline,
+  velocityInline,
+  distanceThreshold = 60,
+  velocityThreshold = 0.4,
+}: SnapTargetParams): number {
+  if (total <= 1) return 0
+
+  let step = 0
+  if (velocityInline < -velocityThreshold) {
+    step = 1
+  } else if (velocityInline > velocityThreshold) {
+    step = -1
+  } else if (offsetInline <= -distanceThreshold) {
+    step = 1
+  } else if (offsetInline >= distanceThreshold) {
+    step = -1
+  }
+
+  const target = currentIndex + step
+  return Math.max(0, Math.min(total - 1, target))
+}
+
+/**
+ * Calculates close progress and backdrop opacity during vertical downward touch drag.
+ */
+export function calculateCloseDragProgress(
+  deltaY: number,
+  threshold = 120,
+): CloseDragProgress {
+  if (threshold <= 0 || !Number.isFinite(deltaY) || deltaY <= 0) {
+    return { progress: 0, opacity: 1, shouldClose: false }
+  }
+  const progress = Math.min(1, Math.max(0, deltaY / threshold))
+  // Fade backdrop smoothly down to ~0.2 at full threshold
+  const opacity = Math.max(0.2, 1 - progress * 0.8)
+  const shouldClose = deltaY >= threshold
+  return { progress, opacity, shouldClose }
 }
