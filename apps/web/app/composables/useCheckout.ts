@@ -79,13 +79,15 @@ export function useCheckout(options?: { hydrated?: Ref<boolean> }) {
     [
       () => form.value.governorate,
       () => form.value.city,
+      () => form.value.phone,
       () => form.value.paymentMethod,
       () => form.value.couponCode,
     ],
-    ([gov, city, method, coupon]) => {
+    ([gov, city, phone, method, coupon]) => {
       setQuoteContext({
         governorate: gov,
         city,
+        phone,
         paymentMethod: method,
         couponCode: coupon,
       })

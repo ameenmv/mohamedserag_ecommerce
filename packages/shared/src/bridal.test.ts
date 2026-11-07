@@ -329,7 +329,7 @@ describe('bridal domain helpers', () => {
       }
       const zone = {
         name: 'المنصورة',
-        fee: 10_000, // 100 EGP
+        fees: { small: 5_000, medium: 7_500, large: 10_000 }, // 100 EGP large
       }
       const settings = {
         depositPct: 10,

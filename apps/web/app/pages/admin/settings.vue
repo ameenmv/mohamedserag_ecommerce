@@ -8,7 +8,6 @@ import AdminSettingsStoreSection from '~/components/admin/settings/AdminSettings
 import AdminSettingsSynonymsSection from '~/components/admin/settings/AdminSettingsSynonymsSection.vue'
 import AdminSettingsTemplatesSection from '~/components/admin/settings/AdminSettingsTemplatesSection.vue'
 import AdminSettingsWhatsappAlertsSection from '~/components/admin/settings/AdminSettingsWhatsappAlertsSection.vue'
-import AdminSettingsZonesSection from '~/components/admin/settings/AdminSettingsZonesSection.vue'
 import { PERMISSIONS, SETTINGS_SECTIONS, type SettingsSection } from '@serag/shared'
 import { onBeforeRouteLeave } from 'vue-router'
 import { useEventListener } from '@vueuse/core'
@@ -65,15 +64,27 @@ onMounted(() => {
   hydrated.value = true
 })
 
-const activeSection = computed<SettingsSection>(() => {
+type VisibleSettingsSection = Exclude<SettingsSection, 'zones' | 'deliveryOffers'>
+
+const VISIBLE_SETTINGS_SECTIONS = SETTINGS_SECTIONS.filter(
+  (section): section is VisibleSettingsSection =>
+    section !== 'zones' && section !== 'deliveryOffers',
+)
+
+const activeSection = computed<VisibleSettingsSection>(() => {
   const tab = route.query.tab
-  if (typeof tab === 'string' && isSettingsSection(tab)) {
+  if (
+    typeof tab === 'string' &&
+    isSettingsSection(tab) &&
+    tab !== 'zones' &&
+    tab !== 'deliveryOffers'
+  ) {
     return tab
   }
   return 'store'
 })
 
-function setSection(section: SettingsSection) {
+function setSection(section: VisibleSettingsSection) {
   void router.replace({
     query: {
       ...route.query,
@@ -82,10 +93,9 @@ function setSection(section: SettingsSection) {
   })
 }
 
-const sectionComponents: Record<SettingsSection, Component> = {
+const sectionComponents: Record<VisibleSettingsSection, Component> = {
   store: AdminSettingsStoreSection,
   payments: AdminSettingsPaymentsSection,
-  zones: AdminSettingsZonesSection,
   codDeposit: AdminSettingsCodDepositSection,
   lowStock: AdminSettingsLowStockSection,
   searchSynonyms: AdminSettingsSynonymsSection,
@@ -172,7 +182,7 @@ useEventListener('beforeunload', (event: BeforeUnloadEvent) => {
         class="flex gap-2 overflow-x-auto pb-1 lg:sticky lg:top-4 lg:flex-col lg:overflow-visible lg:pb-0"
       >
         <button
-          v-for="section in SETTINGS_SECTIONS"
+          v-for="section in VISIBLE_SETTINGS_SECTIONS"
           :key="section"
           type="button"
           :aria-current="activeSection === section ? 'true' : undefined"

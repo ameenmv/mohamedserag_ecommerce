@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { AVAILABILITY_MODES } from './enums.js'
 import { categoryAccentSchema, categoryIllustrationSchema } from './catalog-schema.js'
+import { shippingClassSchema } from './shipping-schema.js'
 
 export const SPEC_KEY_REGEX = /^[a-z][a-z0-9_]*$/
 
@@ -152,6 +153,7 @@ export const createCategorySchema = z.object({
   parentId: z.string().trim().nullable().optional(),
   specTemplateId: z.string().trim().nullable().optional(),
   intro: z.string().trim().nullable().optional(),
+  shippingClass: shippingClassSchema.nullable().optional(),
   accent: categoryAccentSchema.default('green'),
   illustration: categoryIllustrationSchema.default('default'),
   seoTitle: z.string().trim().nullable().optional(),
@@ -170,6 +172,7 @@ export const updateCategorySchema = z.object({
   parentId: z.string().trim().nullable().optional(),
   specTemplateId: z.string().trim().nullable().optional(),
   intro: z.string().trim().nullable().optional(),
+  shippingClass: shippingClassSchema.nullable().optional(),
   accent: categoryAccentSchema.optional(),
   illustration: categoryIllustrationSchema.optional(),
   seoTitle: z.string().trim().nullable().optional(),
@@ -344,6 +347,7 @@ export const createProductSchema = z
     warrantyActivation: z.string().trim().nullable().optional(),
     origin: z.string().trim().nullable().optional(),
     setContents: z.array(productSetContentPieceSchema).nullable().optional(),
+    shippingClass: shippingClassSchema.nullable().optional(),
     visible: z.boolean().default(false),
     featured: z.boolean().default(false),
     seoTitle: z.string().trim().nullable().optional(),
@@ -388,6 +392,7 @@ export const updateProductSchema = z
     warrantyActivation: z.string().trim().nullable().optional(),
     origin: z.string().trim().nullable().optional(),
     setContents: z.array(productSetContentPieceSchema).nullable().optional(),
+    shippingClass: shippingClassSchema.nullable().optional(),
     visible: z.boolean().optional(),
     featured: z.boolean().optional(),
     seoTitle: z.string().trim().nullable().optional(),

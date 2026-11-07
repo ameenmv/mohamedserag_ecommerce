@@ -2,6 +2,7 @@ import type { NestExpressApplication } from '@nestjs/platform-express'
 import { Test } from '@nestjs/testing'
 import {
   ALL_PERMISSIONS,
+  DEFAULT_DELIVERY_OFFERS,
   DEFAULT_TEMPLATES,
   OWNER_ROLE_KEY,
   PERMISSIONS,
@@ -225,7 +226,7 @@ describe('Admin Settings API E2E (/api/admin/settings)', () => {
   // Scenario 1: GET returns every section
   // ==========================================================================
   describe('Scenario 1: GET returns all sections', () => {
-    it('returns the 7 settings sections with value, version and warnings', async () => {
+    it('returns every settings section with value, version and warnings', async () => {
       const res = await request(app.getHttpServer())
         .get('/api/admin/settings')
         .set('Cookie', ownerSessionCookie)
@@ -273,8 +274,18 @@ describe('Admin Settings API E2E (/api/admin/settings)', () => {
     it('rejects a governorate placed in two zones', async () => {
       const zones = await getSection('zones')
       const value = [
-        { id: 'z1', name: 'الأولى', fee: 5000, places: [{ governorate: 'الدقهلية' }] },
-        { id: 'z2', name: 'التانية', fee: 6000, places: [{ governorate: 'الدقهلية' }] },
+        {
+          id: 'z1',
+          name: 'الأولى',
+          fees: { small: 2500, medium: 4000, large: 5000 },
+          places: [{ governorate: 'الدقهلية' }],
+        },
+        {
+          id: 'z2',
+          name: 'التانية',
+          fees: { small: 3000, medium: 4500, large: 6000 },
+          places: [{ governorate: 'الدقهلية' }],
+        },
       ]
       const res = await putSection('zones', value, zones.version).expect(400)
       expect(res.body.errors['1.places']).toBeDefined()
@@ -303,6 +314,16 @@ describe('Admin Settings API E2E (/api/admin/settings)', () => {
       const value = { ...DEFAULT_TEMPLATES, order_confirmed: 'أهلاً {{customerName}} {{bogus}}' }
       const res = await putSection('templates', value, templates.version).expect(400)
       expect(res.body.errors.order_confirmed).toBeDefined()
+    })
+
+    it('rejects an enabled free-above offer with a zero amount', async () => {
+      const offers = await getSection('deliveryOffers')
+      const value = {
+        ...(offers.value as Record<string, unknown>),
+        freeAbove: { enabled: true, amount: 0, classes: ['small', 'medium', 'large'] },
+      }
+      const res = await putSection('deliveryOffers', value, offers.version).expect(400)
+      expect(res.body.errors['freeAbove.amount']).toBeDefined()
     })
   })
 
@@ -339,18 +360,26 @@ describe('Admin Settings API E2E (/api/admin/settings)', () => {
         {
           id: 'mansoura',
           name: 'المنصورة',
-          fee: 12345,
+          fees: { small: 6000, medium: 9000, large: 12345 },
           places: [
             { governorate: 'الدقهلية', city: 'المنصورة' },
           ],
         },
-        { id: 'egypt', name: 'باقي مصر', fee: 40000, places: [{ governorate: 'القاهرة' }] },
+        {
+          id: 'egypt',
+          name: 'باقي مصر',
+          fees: { small: 20000, medium: 30000, large: 40000 },
+          places: [{ governorate: 'القاهرة' }],
+        },
       ]
       const res = await putSection('zones', value, zones.version).expect(200)
       expect(typeof res.body.version).toBe('string')
 
+      const offers = await getSection('deliveryOffers')
+      await putSection('deliveryOffers', DEFAULT_DELIVERY_OFFERS, offers.version).expect(200)
+
       const product = await prisma.product.findFirst({
-        where: { visible: true, archivedAt: null },
+        where: { visible: true, archivedAt: null, stock: { gt: 0 } },
         select: { id: true, price: true },
       })
       if (!product) throw new Error('No product available for quote')
@@ -364,8 +393,39 @@ describe('Admin Settings API E2E (/api/admin/settings)', () => {
           city: 'المنصورة',
         })
         .expect(200)
-      expect(quote.body.zone.fee).toBe(12345)
-      expect(quote.body.deliveryFee).toBe(12345)
+      expect(['small', 'medium', 'large']).toContain(quote.body.deliveryClass)
+      expect([6000, 9000, 12345]).toContain(quote.body.zone.fee)
+      expect(quote.body.deliveryFee).toBe(quote.body.zone.fee)
+    })
+
+    it('saves a free-above delivery offer and reflects it in the cart quote', async () => {
+      const offers = await getSection('deliveryOffers')
+      const value = {
+        freeAbove: { enabled: true, amount: 100, classes: ['small', 'medium', 'large'] },
+        firstOrderFree: { enabled: false, classes: ['small', 'medium', 'large'] },
+      }
+      const res = await putSection('deliveryOffers', value, offers.version).expect(200)
+      expect(typeof res.body.version).toBe('string')
+
+      const product = await prisma.product.findFirst({
+        where: { visible: true, archivedAt: null, stock: { gt: 0 }, price: { gt: 100 } },
+        select: { id: true, price: true },
+      })
+      if (!product) throw new Error('No product available for quote')
+
+      const quote = await request(app.getHttpServer())
+        .post('/api/cart/quote')
+        .set('X-Forwarded-For', nextIp())
+        .send({
+          items: [{ productId: product.id, qty: 1 }],
+          governorate: 'الدقهلية',
+          city: 'المنصورة',
+        })
+        .expect(200)
+
+      expect(quote.body.deliveryFreeReason).toBe('threshold')
+      expect(quote.body.deliveryFee).toBe(0)
+      expect(quote.body.freeAboveRemaining).toBeNull()
     })
 
     it('saves store info and reflects the new phone publicly', async () => {

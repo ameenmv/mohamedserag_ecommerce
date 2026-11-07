@@ -3205,7 +3205,7 @@ async function main() {
     }
 
     const zone = findZone(DEFAULT_ZONES, orderDef.governorate, orderDef.city)
-    const deliveryFee = zone.fee
+    const deliveryFee = zone.fees.large
 
     const resolvedItems = orderDef.items.map((line) => {
       const prod = productByModelCode.get(line.modelCode)

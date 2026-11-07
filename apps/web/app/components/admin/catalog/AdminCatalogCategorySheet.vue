@@ -5,11 +5,13 @@ import type {
   CategoryAccent,
   CategoryIllustration,
   CreateCategoryInput,
+  ShippingClass,
   UpdateCategoryInput,
 } from '@serag/shared'
 import {
   CATEGORY_ACCENTS,
   CATEGORY_ILLUSTRATIONS,
+  SHIPPING_CLASSES,
   createCategorySchema,
   updateCategorySchema,
 } from '@serag/shared'
@@ -65,6 +67,7 @@ const form = reactive({
   accent: 'green' as CategoryAccent,
   illustration: 'default' as CategoryIllustration,
   intro: '',
+  shippingClass: '' as ShippingClass | '',
   seoTitle: '',
   seoDescription: '',
   visible: true,
@@ -92,6 +95,7 @@ watch(
         form.accent = (props.category.accent ?? 'green') as CategoryAccent
         form.illustration = (props.category.illustration ?? 'default') as CategoryIllustration
         form.intro = props.category.intro ?? ''
+        form.shippingClass = props.category.shippingClass ?? ''
         form.seoTitle = props.category.seoTitle ?? ''
         form.seoDescription = props.category.seoDescription ?? ''
         form.visible = props.category.visible
@@ -108,6 +112,7 @@ watch(
         form.accent = 'green'
         form.illustration = 'default'
         form.intro = ''
+        form.shippingClass = ''
         form.seoTitle = ''
         form.seoDescription = ''
         form.visible = true
@@ -138,6 +143,7 @@ async function handleSubmit() {
     accent: form.accent,
     illustration: form.illustration,
     intro: form.intro.trim() || null,
+    shippingClass: form.shippingClass || null,
     seoTitle: form.seoTitle.trim() || null,
     seoDescription: form.seoDescription.trim() || null,
     visible: form.visible,
@@ -358,6 +364,27 @@ async function handleSubmit() {
             {{ t('admin.catalog.categories.illustrationHint') }}
           </p>
         </div>
+
+        <FormField
+          id="cat-shipping-class"
+          :label="t('admin.delivery.categoryClasses.label')"
+          :error="errors.shippingClass"
+        >
+          <template #default="{ id, invalid, describedBy }">
+            <AdminFormSelect
+              :id="id"
+              v-model="form.shippingClass"
+              :disabled="saving"
+              :aria-invalid="invalid"
+              :aria-describedby="describedBy"
+            >
+              <option value="">{{ t('admin.delivery.categoryClasses.inheritOption') }}</option>
+              <option v-for="shippingClass in SHIPPING_CLASSES" :key="shippingClass" :value="shippingClass">
+                {{ t(`admin.delivery.classes.${shippingClass}`) }}
+              </option>
+            </AdminFormSelect>
+          </template>
+        </FormField>
 
         <FormField
           id="cat-intro"

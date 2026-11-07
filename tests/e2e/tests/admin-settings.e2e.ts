@@ -26,7 +26,7 @@ interface PaymentsValue {
 interface ZoneValue {
   id: string
   name: string
-  fee: number
+  fees: { small: number; medium: number; large: number }
   places: { governorate: string; city?: string }[]
 }
 
@@ -108,7 +108,7 @@ test('settings changes reach the storefront: store numbers, payment methods, zon
   await saveSection(
     s,
     'zones',
-    zones.map((zone) => (zone.id === catchAll.id ? { ...zone, fee: 45500 } : zone)),
+    zones.map((zone) => (zone.id === catchAll.id ? { ...zone, fees: { ...zone.fees, large: 45500 } } : zone)),
   )
 
   const product = await seed.product({ name: `مكواة إعدادات ${seed.runId}`, priceEgp: 900, stock: 5 })

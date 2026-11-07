@@ -1,5 +1,6 @@
 import type { AvailabilityMode, BridalStatus, OrderStatus } from './enums.js'
 import { deriveAvailability } from './availability.js'
+import type { ZoneFees } from './shipping.js'
 
 export const BRIDAL_ROOM_KEYS = [
   'kitchen',
@@ -283,11 +284,11 @@ export interface BridalReserveQuote {
 
 export function buildBridalReserveQuote(
   priced: PricedRoomsResult,
-  zone: { name: string; fee: number },
+  zone: { name: string; fees: ZoneFees },
   settings: { depositPct: number; lockDays: number },
 ): BridalReserveQuote {
   const subtotal = priced.total
-  const deliveryFee = zone.fee
+  const deliveryFee = zone.fees.large
   const total = subtotal + deliveryFee
   const depositPct = settings.depositPct
   const depositAmount = bridalDeposit(total, depositPct)

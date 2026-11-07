@@ -21,6 +21,8 @@ const displayDiscount = computed(() => props.quote?.discount ?? 0)
 const displayTotal = computed(() => props.quote?.total ?? props.subtotal)
 const hasZone = computed(() => Boolean(props.quote?.zone))
 const deliveryFee = computed(() => props.quote?.deliveryFee ?? 0)
+const deliveryFreeReason = computed(() => props.quote?.deliveryFreeReason ?? null)
+const freeAboveRemaining = computed(() => props.quote?.freeAboveRemaining ?? null)
 </script>
 
 <template>
@@ -45,13 +47,25 @@ const deliveryFee = computed(() => props.quote?.deliveryFee ?? 0)
       <!-- Delivery Fee -->
       <div class="flex items-center justify-between">
         <span class="text-muted-foreground">{{ t('store.cart.deliveryFee') }}</span>
-        <span v-if="hasZone" class="num font-bold text-foreground">
+        <span v-if="hasZone && deliveryFreeReason" class="font-bold text-emerald-700 dark:text-emerald-400">
+          {{ t('store.cart.freeDelivery') }}
+        </span>
+        <span v-else-if="hasZone" class="num font-bold text-foreground">
           {{ money(deliveryFee) }}
         </span>
         <span v-else class="text-xs text-muted-foreground">
           {{ t('store.cart.deliveryFeeNextStep') }}
         </span>
       </div>
+      <p
+        v-if="hasZone && deliveryFreeReason"
+        class="text-xs font-semibold text-emerald-700 dark:text-emerald-400"
+      >
+        {{ t(`store.cart.freeDeliveryReasons.${deliveryFreeReason}`) }}
+      </p>
+      <p v-else-if="freeAboveRemaining !== null" class="text-xs font-semibold text-serag-gold-ink dark:text-serag-gold-hi">
+        {{ t('store.cart.freeAboveRemaining', { amount: money(freeAboveRemaining) }) }}
+      </p>
 
       <div class="my-1 border-t border-border/60" />
 

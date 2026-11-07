@@ -59,6 +59,7 @@ describe('buildCartQuote', () => {
       imageUrl: '/images/p1.jpg',
       purchasable: true,
       flash: null,
+      shippingClass: 'large',
     },
     {
       id: 'p2',
@@ -77,6 +78,7 @@ describe('buildCartQuote', () => {
       imageUrl: '/images/p2.jpg',
       purchasable: true,
       flash: null,
+      shippingClass: 'large',
     },
     {
       id: 'p3',
@@ -95,6 +97,7 @@ describe('buildCartQuote', () => {
       imageUrl: '/images/p3.jpg',
       purchasable: true,
       flash: null,
+      shippingClass: 'large',
     },
     {
       id: 'p4',
@@ -113,6 +116,7 @@ describe('buildCartQuote', () => {
       imageUrl: null,
       purchasable: false,
       flash: null,
+      shippingClass: 'large',
     },
     {
       id: 'p5',
@@ -131,6 +135,7 @@ describe('buildCartQuote', () => {
       imageUrl: null,
       purchasable: true,
       flash: null,
+      shippingClass: 'large',
     },
     {
       id: 'pHighStock',
@@ -149,6 +154,7 @@ describe('buildCartQuote', () => {
       imageUrl: null,
       purchasable: true,
       flash: null,
+      shippingClass: 'large',
     },
     {
       id: 'pBigCod',
@@ -167,6 +173,7 @@ describe('buildCartQuote', () => {
       imageUrl: null,
       purchasable: true,
       flash: null,
+      shippingClass: 'large',
     },
   ]
 
@@ -236,6 +243,92 @@ describe('buildCartQuote', () => {
     expect(qNoGov.zone).toBeNull()
     expect(qNoGov.deliveryFee).toBe(0)
     expect(qNoGov.total).toBe(100_000)
+  })
+
+  it('charges one delivery fee at the largest class in the cart', () => {
+    const products = sampleProducts.map((product) =>
+      product.id === 'p1'
+        ? { ...product, shippingClass: 'small' as const }
+        : product.id === 'p5'
+          ? { ...product, shippingClass: 'large' as const }
+          : product,
+    )
+
+    const quote = buildCartQuote(
+      {
+        items: [
+          { productId: 'p1', qty: 1 },
+          { productId: 'p5', qty: 1 },
+        ],
+        governorate: 'الدقهلية',
+        city: 'المنصورة',
+      },
+      products,
+      ctx,
+    )
+
+    expect(quote.deliveryClass).toBe('large')
+    expect(quote.zone?.fee).toBe(10_000)
+    expect(quote.deliveryFee).toBe(10_000)
+  })
+
+  it('applies the enabled threshold offer and reports the reason', () => {
+    const quote = buildCartQuote(
+      {
+        items: [{ productId: 'p1', qty: 1 }],
+        governorate: 'الدقهلية',
+        city: 'المنصورة',
+      },
+      sampleProducts,
+      {
+        ...ctx,
+        deliveryOffers: {
+          freeAbove: { enabled: true, amount: 50_000, classes: ['large'] },
+          firstOrderFree: { enabled: false, classes: ['large'] },
+        },
+      },
+    )
+
+    expect(quote.deliveryFreeReason).toBe('threshold')
+    expect(quote.deliveryFee).toBe(0)
+    expect(quote.freeAboveRemaining).toBeNull()
+    expect(quote.total).toBe(100_000)
+  })
+
+  it('applies the first-order offer only when the phone is known to be new', () => {
+    const offers = {
+      freeAbove: { enabled: false, amount: 50_000, classes: ['large' as const] },
+      firstOrderFree: { enabled: true, classes: ['large' as const] },
+    }
+    const input = {
+      items: [{ productId: 'p1', qty: 1 }],
+      governorate: 'الدقهلية',
+      city: 'المنصورة',
+    }
+
+    const first = buildCartQuote(input, sampleProducts, {
+      ...ctx,
+      deliveryOffers: offers,
+      isFirstOrder: true,
+    })
+    expect(first.deliveryFreeReason).toBe('first_order')
+    expect(first.deliveryFee).toBe(0)
+
+    const returning = buildCartQuote(input, sampleProducts, {
+      ...ctx,
+      deliveryOffers: offers,
+      isFirstOrder: false,
+    })
+    expect(returning.deliveryFreeReason).toBeNull()
+    expect(returning.deliveryFee).toBe(10_000)
+
+    const unknownPhone = buildCartQuote(input, sampleProducts, {
+      ...ctx,
+      deliveryOffers: offers,
+      isFirstOrder: null,
+    })
+    expect(unknownPhone.deliveryFreeReason).toBeNull()
+    expect(unknownPhone.deliveryFee).toBe(10_000)
   })
 
   it('flags out-of-stock line as unavailable, sets qty to 0, and excludes it from totals', () => {

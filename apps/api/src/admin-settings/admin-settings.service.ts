@@ -1,6 +1,7 @@
 import { BadRequestException, ConflictException, Injectable } from '@nestjs/common'
 import {
   adminCodDepositSchema,
+  adminDeliveryOffersSchema,
   adminPaymentsSettingSchema,
   adminZonesSettingSchema,
   lowStockSettingSchema,
@@ -30,6 +31,7 @@ type SectionSchema =
   | typeof storeInfoSettingSchema
   | typeof adminPaymentsSettingSchema
   | typeof adminZonesSettingSchema
+  | typeof adminDeliveryOffersSchema
   | typeof adminCodDepositSchema
   | typeof lowStockSettingSchema
   | typeof searchSynonymsSettingSchema
@@ -48,6 +50,8 @@ function sectionSchema(section: SettingsSection): SectionSchema {
       return adminPaymentsSettingSchema
     case 'zones':
       return adminZonesSettingSchema
+    case 'deliveryOffers':
+      return adminDeliveryOffersSchema
     case 'codDeposit':
       return adminCodDepositSchema
     case 'lowStock':
@@ -108,6 +112,7 @@ export class AdminSettingsService {
         store: this.requireSection(byKey, 'store'),
         payments: this.requireSection(byKey, 'payments'),
         zones: this.requireSection(byKey, 'zones'),
+        deliveryOffers: this.requireSection(byKey, 'deliveryOffers'),
         codDeposit: this.requireSection(byKey, 'codDeposit'),
         lowStock: this.requireSection(byKey, 'lowStock'),
         searchSynonyms: this.requireSection(byKey, 'searchSynonyms'),
@@ -227,6 +232,8 @@ export class AdminSettingsService {
         return this.storeSettings.getPayments()
       case 'zones':
         return this.storeSettings.getZones()
+      case 'deliveryOffers':
+        return this.storeSettings.getDeliveryOffers()
       case 'codDeposit':
         return this.storeSettings.getCodDeposit()
       case 'lowStock':

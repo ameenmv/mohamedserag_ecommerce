@@ -201,7 +201,7 @@ export class TestSeedService {
     const parsedZones = zonesSchema.safeParse(zonesSetting?.value)
     const zones = parsedZones.success ? parsedZones.data : DEFAULT_ZONES
     const zone = findZone(zones, governorate, city)
-    const deliveryFee = zone.fee
+    const deliveryFee = zone.fees.large
 
     const subtotal = resolvedItems.reduce((sum, item) => sum + item.unitPrice * item.qty, 0)
     const total = subtotal + deliveryFee

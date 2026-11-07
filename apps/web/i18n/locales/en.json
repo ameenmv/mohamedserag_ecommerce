@@ -507,6 +507,12 @@
       "discount": "Discount",
       "deliveryFee": "Delivery Fee",
       "deliveryFeeNextStep": "Calculated in next step",
+      "freeDelivery": "Free delivery",
+      "freeDeliveryReasons": {
+        "threshold": "Free delivery — your order is above the free-delivery threshold",
+        "first_order": "Free delivery — this is your first order"
+      },
+      "freeAboveRemaining": "{amount} away from free delivery",
       "total": "Total",
       "quantity": "Quantity",
       "decreaseQty": "Decrease quantity",

@@ -4,6 +4,7 @@ export const SETTINGS_SECTIONS = [
   'store',
   'payments',
   'zones',
+  'deliveryOffers',
   'codDeposit',
   'lowStock',
   'searchSynonyms',

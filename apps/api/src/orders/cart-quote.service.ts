@@ -8,6 +8,7 @@ import { PrismaService } from '../prisma/prisma.service.js'
 import { StoreSettingsService } from '../settings/store-settings.service.js'
 import { loadCartProducts } from './cart-products.js'
 import { CouponService } from './coupon.service.js'
+import { isFirstOrderForPhone } from './first-order.js'
 
 @Injectable()
 export class CartQuoteService {
@@ -24,9 +25,10 @@ export class CartQuoteService {
     const productIds = input.items.map((i) => i.productId)
     const products = await loadCartProducts(this.prisma, productIds)
 
-    const [zones, codDeposit, coupon] = await Promise.all([
+    const [zones, codDeposit, deliveryOffers, coupon, isFirstOrder] = await Promise.all([
       this.settingsService.getZones(),
       this.settingsService.getCodDeposit(),
+      this.settingsService.getDeliveryOffers(),
       this.couponService.evaluateForQuote(
         input.couponCode,
         products,
@@ -34,8 +36,15 @@ export class CartQuoteService {
         input.phone,
         ip,
       ),
+      isFirstOrderForPhone(this.prisma, input.phone),
     ])
 
-    return buildCartQuote(input, products, { zones, codDeposit, coupon })
+    return buildCartQuote(input, products, {
+      zones,
+      codDeposit,
+      coupon,
+      deliveryOffers,
+      isFirstOrder,
+    })
   }
 }

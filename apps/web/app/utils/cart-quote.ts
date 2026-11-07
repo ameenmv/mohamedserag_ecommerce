@@ -1,4 +1,4 @@
-import type { CartQuote, CartQuoteInput, PaymentMethod } from '@serag/shared'
+import { normalizePhone, type CartQuote, type CartQuoteInput, type PaymentMethod } from '@serag/shared'
 import type { CartLine } from './cart'
 
 export interface PriceChange {
@@ -9,6 +9,7 @@ export interface PriceChange {
 export interface CartQuoteContext {
   governorate?: string
   city?: string
+  phone?: string
   paymentMethod?: PaymentMethod
   couponCode?: string
 }
@@ -37,6 +38,8 @@ export function buildQuoteRequest(
     })),
     governorate: context?.governorate?.trim() || undefined,
     city: context?.city?.trim() || undefined,
+    // Send only a complete phone: partial input cannot resolve the first-order offer.
+    phone: (context?.phone ? normalizePhone(context.phone) : null) ?? undefined,
     paymentMethod: context?.paymentMethod || undefined,
     couponCode: context?.couponCode?.trim() || undefined,
   }

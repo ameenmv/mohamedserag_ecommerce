@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { AdminBrand, AdminCategory } from '@serag/shared'
+import { SHIPPING_CLASSES } from '@serag/shared'
 import { useProductFormContext } from '~/composables/useProductFormContext'
 
 defineProps<{
@@ -13,8 +14,13 @@ const emit = defineEmits<{
   categoryChange: [categoryId: string]
 }>()
 
-const { form } = useProductFormContext()
+const { form, resolvedCategoryShippingClass } = useProductFormContext()
 const { t } = useI18n()
+
+const resolvedClassLabel = computed(() => {
+  const cls = resolvedCategoryShippingClass.value
+  return t(`admin.delivery.classes.${cls}`)
+})
 </script>
 
 <template>
@@ -114,6 +120,36 @@ const { t } = useI18n()
           </template>
         </FormField>
       </div>
+
+      <FormField
+        id="product-shipping-class"
+        :label="t('admin.products.editor.basics.shippingClass')"
+        :error="errors.shippingClass"
+      >
+        <template #default="{ id, invalid, describedBy }">
+          <AdminFormSelect
+            :id="id"
+            v-model="form.shippingClass"
+            :disabled="disabled"
+            :aria-invalid="invalid"
+            :aria-describedby="describedBy"
+          >
+            <option value="">
+              {{
+                t('admin.products.editor.basics.shippingClassInherit', {
+                  value: resolvedClassLabel,
+                })
+              }}
+            </option>
+            <option v-for="shippingClass in SHIPPING_CLASSES" :key="shippingClass" :value="shippingClass">
+              {{ t(`admin.delivery.classes.${shippingClass}`) }}
+            </option>
+          </AdminFormSelect>
+          <p class="mt-1 text-xs text-muted-foreground">
+            {{ t('admin.products.editor.basics.shippingClassHint') }}
+          </p>
+        </template>
+      </FormField>
     </CardContent>
   </Card>
 </template>

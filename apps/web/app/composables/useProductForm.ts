@@ -8,12 +8,14 @@ import type {
   AvailabilityMode,
   CreateProductInput,
   ProductSeoInput,
+  ShippingClass,
 } from '@serag/shared'
 import {
   buildProductSeoDescription,
   buildProductSeoTitle,
   buildProductSlug,
   deriveAvailability,
+  resolveShippingClass,
   validateProductSpecs,
 } from '@serag/shared'
 import { parseAdminApiError } from '~/utils/admin-api-errors'
@@ -33,6 +35,7 @@ export interface ProductFormState {
   lowStockThreshold: number
   availabilityMode: AvailabilityMode
   leadTimeText: string
+  shippingClass: ShippingClass | ''
   taxRate: number
   specs: Record<string, unknown>
   setContents: AdminProductSetContent[]
@@ -104,6 +107,7 @@ export function useProductForm(initialDetail?: AdminProductDetail | null) {
     lowStockThreshold: initialDetail?.lowStockThreshold ?? 3,
     availabilityMode: initialDetail?.availabilityMode ?? 'auto',
     leadTimeText: initialDetail?.leadTimeText ?? '',
+    shippingClass: initialDetail?.shippingClass ?? '',
     taxRate: initialDetail?.taxRate ?? 14,
     specs: initialDetail?.specs ? JSON.parse(JSON.stringify(initialDetail.specs)) : {},
     setContents: initialSetContents,
@@ -188,6 +192,18 @@ export function useProductForm(initialDetail?: AdminProductDetail | null) {
   const currentCategory = computed(() =>
     categories.value.find((c) => c.id === form.categoryId),
   )
+
+  const resolvedCategoryShippingClass = computed<ShippingClass>(() => {
+    const chain: (ShippingClass | null)[] = []
+    const visited = new Set<string>()
+    let current = currentCategory.value
+    while (current && !visited.has(current.id)) {
+      visited.add(current.id)
+      chain.push(current.shippingClass)
+      current = categories.value.find((c) => c.id === current?.parentId)
+    }
+    return resolveShippingClass(null, chain)
+  })
 
   const currentBrand = computed(() =>
     brands.value.find((b) => b.id === form.brandId),
@@ -424,6 +440,7 @@ export function useProductForm(initialDetail?: AdminProductDetail | null) {
       lowStockThreshold: form.lowStockThreshold,
       availabilityMode: form.availabilityMode,
       leadTimeText: form.availabilityMode === 'on_request' ? form.leadTimeText.trim() : null,
+      shippingClass: form.shippingClass || null,
       taxRate: form.taxRate,
       specs: form.specs,
       setContents: form.setContents.length > 0 ? form.setContents : null,
@@ -620,6 +637,7 @@ export function useProductForm(initialDetail?: AdminProductDetail | null) {
     errors,
     serverError,
     categories,
+    resolvedCategoryShippingClass,
     brands,
     specTemplates,
     loadingRefs,

@@ -24,7 +24,52 @@
       "content": "Site Editor",
       "faq": "FAQ",
       "reports": "Reports",
-      "settings": "Settings"
+      "settings": "Settings",
+      "delivery": "Delivery"
+    },
+    "delivery": {
+      "pageTitle": "Delivery",
+      "intro": "Set delivery fees per zone and class, assign a delivery class to each category, and manage free-delivery offers.",
+      "loading": "Loading delivery settings…",
+      "feesTitle": "Delivery Fees",
+      "feesIntro": "Each zone has a fee per delivery class. A cart pays the fee of its largest class, charged once.",
+      "offersTitle": "Free-Delivery Offers",
+      "offersIntro": "These offers are off by default. Enable them when needed.",
+      "discardAll": "Discard all changes",
+      "classes": {
+        "small": "Small",
+        "medium": "Medium",
+        "large": "Large"
+      },
+      "categoryClasses": {
+        "title": "Category Delivery Classes",
+        "intro": "A category's class applies to its products unless a product overrides it.",
+        "hint": "A category without a class inherits its parent's class, and defaults to large if none is set.",
+        "loading": "Loading delivery classes…",
+        "empty": "No categories yet.",
+        "label": "Delivery class",
+        "labelFor": "Delivery class for {name}",
+        "inherit": "Same as category ({value})",
+        "inheritOption": "Same as parent category",
+        "resolved": "Resolved class: {value}",
+        "updated": "Delivery class updated"
+      },
+      "offers": {
+        "hint": "Disabled offers do not affect delivery calculation.",
+        "freeAboveTitle": "Free delivery above amount",
+        "freeAboveDescription": "When the cart total after discount reaches or exceeds this amount, delivery is free.",
+        "firstOrderTitle": "Free delivery on first order",
+        "firstOrderDescription": "When the phone number has no previous order, delivery is free.",
+        "amount": "Amount (EGP)",
+        "amountInvalid": "Enter a valid amount greater than zero",
+        "classes": "Included classes"
+      },
+      "example": {
+        "title": "Live Example",
+        "line": "Fridge + pan to {zone} = {amount} (large-class fee)",
+        "hint": "A fridge plus a pan pays the large fee once (delivery is charged at the largest class in the cart).",
+        "noZone": "No zone"
+      }
     },
     "login": {
       "title": "Sign In",
@@ -342,7 +387,10 @@
           "category": "Category",
           "selectCategory": "Select a category",
           "categoryChangeWarnTitle": "Category Change Discards Specs",
-          "categoryChangeWarnDescription": "Changing category will reload technical spec fields and remove values not present in the new template. Proceed?"
+          "categoryChangeWarnDescription": "Changing category will reload technical spec fields and remove values not present in the new template. Proceed?",
+          "shippingClass": "Delivery class",
+          "shippingClassInherit": "From category ({value})",
+          "shippingClassHint": "Optional. When unset, the category's class is used."
         },
         "pricing": {
           "title": "Pricing & Inventory",
@@ -1695,7 +1743,7 @@
     },
     "settings": {
       "pageTitle": "Settings",
-      "intro": "Edit the store details, payment methods, delivery zones and messages in one place, saving each section on its own.",
+      "intro": "Edit store details, payment methods, order settings and messages in one place, saving each section on its own.",
       "sectionNavLabel": "Settings sections",
       "dirty": "Unsaved draft",
       "loading": "Loading settings…",
@@ -1764,6 +1812,7 @@
         "name": "Zone name",
         "namePlaceholder": "e.g. Dakahlia and Damietta",
         "fee": "Delivery fee (EGP)",
+        "classFee": "Delivery fee — {class} (EGP)",
         "places": "Governorates",
         "addPlace": "Add governorate",
         "removePlace": "Remove governorate",

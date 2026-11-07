@@ -14,6 +14,7 @@ import {
   Sparkles,
   Star,
   Tag,
+  Truck,
 } from '@lucide/vue'
 import { ADMIN_NAV_SHORTCUTS } from '~/utils/shortcuts'
 import { PERMISSIONS } from '@serag/shared'
@@ -33,6 +34,7 @@ const iconByKey: Record<string, Component> = {
   b: Sparkles,
   m: Tag,
   n: BellRing,
+  d: Truck,
   r: Star,
   e: FilePenLine,
   f: HelpCircle,

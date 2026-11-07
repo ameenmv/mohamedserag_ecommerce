@@ -1,6 +1,7 @@
 import type { AvailabilityState } from './availability.js'
 import type { AvailabilityMode } from './enums.js'
 import type { CategoryAccent, CategoryIllustration, SpecFieldType } from './catalog.js'
+import type { ShippingClass } from './shipping.js'
 
 export interface AdminSpecTemplateField {
   key: string
@@ -38,6 +39,7 @@ export interface AdminCategory {
   parentId: string | null
   specTemplateId: string | null
   intro: string | null
+  shippingClass: ShippingClass | null
   accent: CategoryAccent
   illustration: CategoryIllustration
   seoTitle: string | null
@@ -133,6 +135,7 @@ export interface AdminProductListItem {
   archived: boolean
   archivedAt: string | null
   availability: AdminProductListItemAvailability
+  shippingClass: ShippingClass | null
   translations?: {
     en?: AdminProductTranslationsEn
   } | null
@@ -168,6 +171,7 @@ export interface AdminProductDetail {
   warrantyActivation: string | null
   origin: string | null
   setContents: AdminProductSetContent[] | null
+  shippingClass: ShippingClass | null
   visible: boolean
   featured: boolean
   archivedAt: string | null

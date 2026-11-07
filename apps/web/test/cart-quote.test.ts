@@ -61,6 +61,9 @@ describe('cart-quote utils - applyQuoteToCartState', () => {
       subtotal: 1100000,
       discount: 0,
       deliveryFee: 10000,
+      deliveryClass: 'large',
+      deliveryFreeReason: null,
+      freeAboveRemaining: null,
       total: 1110000,
       zone: { id: 'mansoura', name: 'المنصورة', fee: 10000 },
       coupon: null,
@@ -150,19 +153,21 @@ describe('cart-quote utils - cartQuoteKey', () => {
 })
 
 describe('cart-quote utils - buildQuoteRequest', () => {
-  it('includes governorate, city, and coupon only when provided and non-empty', () => {
+  it('includes governorate, city, phone, and coupon only when provided and non-empty', () => {
     const lines = [createMockCartLine({ productId: 'prod-1', qty: 2, price: 500000 })]
 
     // With explicit context
     const reqWithZone = buildQuoteRequest(lines, {
       governorate: '  الدقهلية  ',
       city: '  المنصورة  ',
+      phone: '  01012345678  ',
       paymentMethod: 'cod',
       couponCode: '  SAVE10  ',
     })
 
     expect(reqWithZone.governorate).toBe('الدقهلية')
     expect(reqWithZone.city).toBe('المنصورة')
+    expect(reqWithZone.phone).toBe('01012345678')
     expect(reqWithZone.paymentMethod).toBe('cod')
     expect(reqWithZone.couponCode).toBe('SAVE10')
     expect(reqWithZone.items).toEqual([
@@ -173,12 +178,18 @@ describe('cart-quote utils - buildQuoteRequest', () => {
     const reqEmpty = buildQuoteRequest(lines, {
       governorate: '   ',
       city: '',
+      phone: '   ',
       couponCode: '   ',
     })
 
     expect(reqEmpty.governorate).toBeUndefined()
     expect(reqEmpty.city).toBeUndefined()
+    expect(reqEmpty.phone).toBeUndefined()
     expect(reqEmpty.couponCode).toBeUndefined()
+
+    // A partial phone must not reach the API (it would fail validation mid-typing)
+    const reqPartialPhone = buildQuoteRequest(lines, { phone: '0101234' })
+    expect(reqPartialPhone.phone).toBeUndefined()
   })
 })
 

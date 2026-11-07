@@ -2,6 +2,7 @@ import {
   SETTINGS_SECTIONS,
   SETTINGS_SECTION_SCHEMAS,
   type AdminCodDeposit,
+  type AdminDeliveryOffers,
   type AdminPaymentsSetting,
   type AdminSettingsResponse,
   type AdminZonesSetting,
@@ -26,6 +27,7 @@ export interface AdminSettingsValues {
   store: StoreInfoSettingOutput
   payments: AdminPaymentsSetting
   zones: AdminZonesSetting
+  deliveryOffers: AdminDeliveryOffers
   codDeposit: AdminCodDeposit
   lowStock: LowStockSettingInput
   searchSynonyms: SearchSynonymsSettingInput

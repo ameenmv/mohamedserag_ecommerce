@@ -13,6 +13,11 @@ const { lines, count, subtotal, setQty, remove } = useCart()
 const { quote, priceChanges, dismissPriceChange } = useCartQuote()
 const { isOpen, close } = useCartDrawer()
 
+const hasZone = computed(() => Boolean(quote.value?.zone))
+const deliveryFee = computed(() => quote.value?.deliveryFee ?? 0)
+const deliveryFreeReason = computed(() => quote.value?.deliveryFreeReason ?? null)
+const freeAboveRemaining = computed(() => quote.value?.freeAboveRemaining ?? null)
+
 // Physical side matching logical 'end'
 const sheetSide = computed(() => (locale.value === 'ar' ? 'left' : 'right'))
 
@@ -100,8 +105,23 @@ function handleBrowseShop(): void {
         <dl class="flex flex-col gap-1.5 text-sm">
           <div class="flex items-center justify-between">
             <dt class="text-muted-foreground">{{ t('store.cart.deliveryFee') }}</dt>
-            <dd class="text-xs text-muted-foreground">{{ t('store.cart.deliveryFeeNextStep') }}</dd>
+            <dd v-if="hasZone && deliveryFreeReason" class="font-bold text-emerald-700 dark:text-emerald-400">
+              {{ t('store.cart.freeDelivery') }}
+            </dd>
+            <dd v-else-if="hasZone" class="num font-bold text-foreground">
+              {{ money(deliveryFee) }}
+            </dd>
+            <dd v-else class="text-xs text-muted-foreground">{{ t('store.cart.deliveryFeeNextStep') }}</dd>
           </div>
+          <p
+            v-if="hasZone && deliveryFreeReason"
+            class="text-xs font-semibold text-emerald-700 dark:text-emerald-400"
+          >
+            {{ t(`store.cart.freeDeliveryReasons.${deliveryFreeReason}`) }}
+          </p>
+          <p v-else-if="freeAboveRemaining !== null" class="text-xs font-semibold text-serag-gold-ink dark:text-serag-gold-hi">
+            {{ t('store.cart.freeAboveRemaining', { amount: money(freeAboveRemaining) }) }}
+          </p>
           <div class="flex items-baseline justify-between">
             <dt class="font-bold text-foreground">{{ t('store.cart.subtotal') }}</dt>
             <dd class="num text-xl font-extrabold text-serag-night dark:text-serag-gold">

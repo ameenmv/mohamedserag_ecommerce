@@ -1,4 +1,9 @@
-import { applyFlashToPrice, type CartProductRecord } from '@serag/shared'
+import {
+  applyFlashToPrice,
+  resolveShippingClass,
+  type CartProductRecord,
+  type ShippingClass,
+} from '@serag/shared'
 import type { Prisma } from '../generated/prisma/client.js'
 import type { PrismaService } from '../prisma/prisma.service.js'
 import { activeFlashFor } from '../promotions/flash-pricing.service.js'
@@ -34,6 +39,7 @@ export async function loadCartProducts(
         lowStockThreshold: true,
         availabilityMode: true,
         leadTimeText: true,
+        shippingClass: true,
         visible: true,
         archivedAt: true,
         images: {
@@ -45,6 +51,11 @@ export async function loadCartProducts(
     }),
     activeFlashFor(db, uniqueIds, now),
   ])
+
+  const categoryChains = await loadCategoryChains(
+    db,
+    dbProducts.map((p) => p.categoryId),
+  )
 
   return dbProducts.map((p) => {
     const flash = flashes.get(p.id) ?? null
@@ -67,6 +78,58 @@ export async function loadCartProducts(
       imageUrl: p.images[0]?.url ?? null,
       purchasable: p.visible && p.archivedAt === null,
       flash,
+      shippingClass: resolveShippingClass(
+        p.shippingClass,
+        categoryChains.get(p.categoryId) ?? [],
+      ),
     }
   })
+}
+
+interface CategoryRow {
+  id: string
+  parentId: string | null
+  shippingClass: ShippingClass | null
+}
+
+/** Loads the category chain of each product, nearest category first. */
+async function loadCategoryChains(
+  db: PrismaService | Prisma.TransactionClient,
+  categoryIds: string[],
+): Promise<Map<string, ShippingClass[]>> {
+  const rows = new Map<string, CategoryRow>()
+  let pending = Array.from(new Set(categoryIds))
+
+  while (pending.length > 0) {
+    const batch = await db.category.findMany({
+      where: { id: { in: pending } },
+      select: { id: true, parentId: true, shippingClass: true },
+    })
+
+    const next: string[] = []
+    for (const row of batch) {
+      rows.set(row.id, row)
+      if (row.parentId !== null && !rows.has(row.parentId)) {
+        next.push(row.parentId)
+      }
+    }
+    pending = Array.from(new Set(next))
+  }
+
+  const chains = new Map<string, ShippingClass[]>()
+  for (const categoryId of categoryIds) {
+    const chain: ShippingClass[] = []
+    const visited = new Set<string>()
+    let current: string | null = categoryId
+    while (current !== null && !visited.has(current)) {
+      visited.add(current)
+      const row = rows.get(current)
+      if (row === undefined) break
+      if (row.shippingClass !== null) chain.push(row.shippingClass)
+      current = row.parentId
+    }
+    chains.set(categoryId, chain)
+  }
+
+  return chains
 }

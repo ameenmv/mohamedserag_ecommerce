@@ -188,6 +188,7 @@ export class AdminProductsService {
             orderable: avail.orderable,
             leadTimeText: p.leadTimeText,
           },
+          shippingClass: p.shippingClass,
           updatedAt: p.updatedAt.toISOString(),
         }
       })
@@ -301,6 +302,7 @@ export class AdminProductsService {
           data.setContents && data.setContents.length > 0
             ? (data.setContents as unknown as Prisma.InputJsonValue)
             : Prisma.JsonNull,
+        shippingClass: data.shippingClass ?? null,
         visible: data.visible,
         featured: data.featured,
         seoTitle: data.seoTitle ?? null,
@@ -409,6 +411,7 @@ export class AdminProductsService {
           ? (data.setContents as unknown as Prisma.InputJsonValue)
           : Prisma.JsonNull
     }
+    if (data.shippingClass !== undefined) updateData.shippingClass = data.shippingClass
     if (data.visible !== undefined) updateData.visible = data.visible
     if (data.featured !== undefined) updateData.featured = data.featured
     if (data.seoTitle !== undefined) updateData.seoTitle = data.seoTitle
@@ -525,6 +528,7 @@ export class AdminProductsService {
       warrantyActivation: p.warrantyActivation,
       origin: p.origin,
       setContents: parseProductSetContents(p.setContents),
+      shippingClass: p.shippingClass,
       visible: p.visible,
       featured: p.featured,
       archivedAt: p.archivedAt ? p.archivedAt.toISOString() : null,

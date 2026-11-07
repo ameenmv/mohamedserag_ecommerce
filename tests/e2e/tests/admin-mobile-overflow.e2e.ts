@@ -29,7 +29,7 @@ const ADMIN_MOBILE_PATHS = [
   '/admin/reports?tab=bridal-funnel',
   '/admin/settings',
   '/admin/settings?tab=payments',
-  '/admin/settings?tab=zones',
+  '/admin/delivery',
   '/admin/settings?tab=searchSynonyms',
   '/admin/settings?tab=templates',
   '/en/admin',
@@ -39,7 +39,7 @@ const ADMIN_MOBILE_PATHS = [
   '/en/admin/reviews',
   '/en/admin/reports',
   '/en/admin/reports?tab=splits',
-  '/en/admin/settings?tab=zones',
+  '/en/admin/delivery',
   '/en/admin/settings?tab=templates',
 ] as const;
 

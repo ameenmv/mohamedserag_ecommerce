@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import {
   DEFAULT_BRIDAL_SETTINGS,
   DEFAULT_COD_DEPOSIT,
+  DEFAULT_DELIVERY_OFFERS,
   DEFAULT_LOW_STOCK,
   DEFAULT_PAYMENTS,
   DEFAULT_TEMPLATES,
@@ -9,12 +10,14 @@ import {
   DEFAULT_ZONES,
   bridalSettingsSchema,
   codDepositSchema,
+  deliveryOffersSchema,
   lowStockSettingSchema,
   paymentsSettingSchema,
   whatsappAlertsSettingSchema,
   zonesSchema,
   type BridalSettings,
   type CodDepositSetting,
+  type DeliveryOffers,
   type LowStockSetting,
   type PaymentsSetting,
   type PublicStoreInfo,
@@ -34,6 +37,14 @@ export class StoreSettingsService {
     })
     const parsed = zonesSchema.safeParse(row?.value)
     return parsed.success ? parsed.data : DEFAULT_ZONES
+  }
+
+  async getDeliveryOffers(): Promise<DeliveryOffers> {
+    const row = await this.prisma.setting.findUnique({
+      where: { key: 'deliveryOffers' },
+    })
+    const parsed = deliveryOffersSchema.safeParse(row?.value)
+    return parsed.success ? parsed.data : DEFAULT_DELIVERY_OFFERS
   }
 
   async getCodDeposit(): Promise<CodDepositSetting> {

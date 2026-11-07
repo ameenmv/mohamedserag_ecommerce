@@ -1,4 +1,5 @@
 import { normalizeArabic } from './arabic.js'
+import { legacyZoneFees, type ZoneFees } from './shipping.js'
 
 export interface ZonePlace {
   governorate: string
@@ -8,8 +9,8 @@ export interface ZonePlace {
 export interface Zone {
   id: string
   name: string
-  /** Delivery fee in integer piastres */
-  fee: number
+  /** Delivery fees per shipping class, in integer piastres */
+  fees: ZoneFees
   places: ZonePlace[]
 }
 
@@ -24,7 +25,7 @@ export const DEFAULT_ZONES: Zone[] = [
   {
     id: 'mansoura',
     name: 'المنصورة',
-    fee: 10000,
+    fees: legacyZoneFees(10000),
     places: [
       { governorate: 'الدقهلية', city: 'المنصورة' },
       { governorate: 'الدقهلية', city: 'طلخا' },
@@ -33,13 +34,13 @@ export const DEFAULT_ZONES: Zone[] = [
   {
     id: 'dakahlia',
     name: 'مراكز الدقهلية',
-    fee: 15000,
+    fees: legacyZoneFees(15000),
     places: [{ governorate: 'الدقهلية' }],
   },
   {
     id: 'delta',
     name: 'باقي الدلتا',
-    fee: 25000,
+    fees: legacyZoneFees(25000),
     places: [
       { governorate: 'الغربية' },
       { governorate: 'دمياط' },
@@ -53,7 +54,7 @@ export const DEFAULT_ZONES: Zone[] = [
   {
     id: 'egypt',
     name: 'باقي مصر',
-    fee: 40000,
+    fees: legacyZoneFees(40000),
     places: [],
   },
 ]
@@ -115,7 +116,7 @@ export function findZone(zones: readonly Zone[], governorate: string, city?: str
   return {
     id: 'egypt',
     name: 'باقي مصر',
-    fee: 40000,
+    fees: legacyZoneFees(40000),
     places: [],
   }
 }

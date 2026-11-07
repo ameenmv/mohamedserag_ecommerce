@@ -5,6 +5,7 @@ import { nanoid } from 'nanoid'
 import request from 'supertest'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { AppModule } from '../src/app.module.js'
+import { Prisma } from '../src/generated/prisma/client.js'
 import { PrismaService } from '../src/prisma/prisma.service.js'
 
 describe('Orders and Cart API E2E (/api/cart, /api/orders)', () => {
@@ -16,11 +17,13 @@ describe('Orders and Cart API E2E (/api/cart, /api/orders)', () => {
   let outOfStockProductId = ''
   let lowStockProductId = ''
   let expensiveProductId = ''
+  let smallProductId = ''
 
   const inStockPrice = 500_000 // 5,000 EGP
   const outOfStockPrice = 300_000 // 3,000 EGP
   const lowStockPrice = 200_000 // 2,000 EGP
   const expensivePrice = 3_500_000 // 35,000 EGP
+  const smallPrice = 100_000 // 1,000 EGP
 
   const createdOrderNos: string[] = []
   let ipCounter = 1
@@ -57,6 +60,7 @@ describe('Orders and Cart API E2E (/api/cart, /api/orders)', () => {
         availabilityMode: 'auto',
         visible: true,
         taxRate: 14,
+        shippingClass: 'large',
         images: {
           create: [{ url: `https://example.com/test-${runId}-1.jpg`, sort: 0 }],
         },
@@ -78,6 +82,7 @@ describe('Orders and Cart API E2E (/api/cart, /api/orders)', () => {
         availabilityMode: 'auto',
         visible: true,
         taxRate: 14,
+        shippingClass: 'large',
       },
     })
     outOfStockProductId = p2.id
@@ -96,6 +101,7 @@ describe('Orders and Cart API E2E (/api/cart, /api/orders)', () => {
         availabilityMode: 'auto',
         visible: true,
         taxRate: 14,
+        shippingClass: 'large',
       },
     })
     lowStockProductId = p3.id
@@ -114,9 +120,29 @@ describe('Orders and Cart API E2E (/api/cart, /api/orders)', () => {
         availabilityMode: 'auto',
         visible: true,
         taxRate: 14,
+        shippingClass: 'large',
       },
     })
     expensiveProductId = p4.id
+
+    // 5. Small-class product (explicit override)
+    const p5 = await prisma.product.create({
+      data: {
+        modelCode: `TEST-${runId}-5`,
+        slug: `test-${runId}-5`,
+        name: `طقم حلل اختبار ${runId}`,
+        brandId: brand.id,
+        categoryId: category.id,
+        price: smallPrice,
+        stock: 10,
+        lowStockThreshold: 3,
+        availabilityMode: 'auto',
+        visible: true,
+        taxRate: 14,
+        shippingClass: 'small',
+      },
+    })
+    smallProductId = p5.id
   })
 
   afterAll(async () => {
@@ -139,6 +165,7 @@ describe('Orders and Cart API E2E (/api/cart, /api/orders)', () => {
         outOfStockProductId,
         lowStockProductId,
         expensiveProductId,
+        smallProductId,
       ].filter(Boolean)
       if (productIds.length > 0) {
         await prisma.productImage.deleteMany({ where: { productId: { in: productIds } } })
@@ -190,6 +217,7 @@ describe('Orders and Cart API E2E (/api/cart, /api/orders)', () => {
         .expect(200)
 
       expect(resMansoura.body.zone.fee).toBe(10000)
+      expect(resMansoura.body.deliveryClass).toBe('large')
       expect(resMansoura.body.deliveryFee).toBe(10000)
       expect(resMansoura.body.total).toBe(inStockPrice + 10000)
 
@@ -205,6 +233,7 @@ describe('Orders and Cart API E2E (/api/cart, /api/orders)', () => {
         .expect(200)
 
       expect(resDakahlia.body.zone.fee).toBe(15000)
+      expect(resDakahlia.body.deliveryClass).toBe('large')
       expect(resDakahlia.body.deliveryFee).toBe(15000)
       expect(resDakahlia.body.total).toBe(inStockPrice + 15000)
 
@@ -220,8 +249,45 @@ describe('Orders and Cart API E2E (/api/cart, /api/orders)', () => {
         .expect(200)
 
       expect(resCairo.body.zone.fee).toBe(40000)
+      expect(resCairo.body.deliveryClass).toBe('large')
       expect(resCairo.body.deliveryFee).toBe(40000)
       expect(resCairo.body.total).toBe(inStockPrice + 40000)
+    })
+
+    it('charges the small class fee for a small-only cart', async () => {
+      const res = await request(app.getHttpServer())
+        .post('/api/cart/quote')
+        .set('X-Forwarded-For', nextIp())
+        .send({
+          items: [{ productId: smallProductId, qty: 1 }],
+          governorate: 'الدقهلية',
+          city: 'المنصورة',
+        })
+        .expect(200)
+
+      expect(res.body.deliveryClass).toBe('small')
+      expect(res.body.zone.fee).toBe(5000)
+      expect(res.body.deliveryFee).toBe(5000)
+      expect(res.body.total).toBe(smallPrice + 5000)
+    })
+
+    it('charges once at the largest class for a mixed cart', async () => {
+      const res = await request(app.getHttpServer())
+        .post('/api/cart/quote')
+        .set('X-Forwarded-For', nextIp())
+        .send({
+          items: [
+            { productId: smallProductId, qty: 1 },
+            { productId: inStockProductId, qty: 1 },
+          ],
+          governorate: 'الدقهلية',
+          city: 'المنصورة',
+        })
+        .expect(200)
+
+      expect(res.body.deliveryClass).toBe('large')
+      expect(res.body.deliveryFee).toBe(10000)
+      expect(res.body.total).toBe(smallPrice + inStockPrice + 10000)
     })
 
     it('flags out-of-stock line as unavailable, sets qty to 0, and excludes it from totals', async () => {
@@ -357,6 +423,163 @@ describe('Orders and Cart API E2E (/api/cart, /api/orders)', () => {
         where: { idempotencyKey: key },
       })
       expect(count).toBe(1)
+    })
+
+    it('stores the small-only and largest-class fees on placed orders', async () => {
+      const smallRes = await request(app.getHttpServer())
+        .post('/api/orders')
+        .set('X-Forwarded-For', nextIp())
+        .send({
+          items: [{ productId: smallProductId, qty: 1 }],
+          customer: {
+            name: 'طلب صغير',
+            phone: '01077770001',
+            governorate: 'الدقهلية',
+            city: 'المنصورة',
+            address: 'شارع الجيش',
+          },
+          paymentMethod: 'cod',
+          idempotencyKey: `small_${nanoid(20)}`,
+          expectedTotal: smallPrice + 5000,
+        })
+        .expect(201)
+      createdOrderNos.push(smallRes.body.no)
+      expect(smallRes.body.total).toBe(smallPrice + 5000)
+      const smallOrder = await prisma.order.findUnique({
+        where: { no: smallRes.body.no },
+        select: { deliveryFee: true },
+      })
+      expect(smallOrder?.deliveryFee).toBe(5000)
+
+      const mixedRes = await request(app.getHttpServer())
+        .post('/api/orders')
+        .set('X-Forwarded-For', nextIp())
+        .send({
+          items: [
+            { productId: smallProductId, qty: 1 },
+            { productId: inStockProductId, qty: 1 },
+          ],
+          customer: {
+            name: 'طلب مختلط',
+            phone: '01077770002',
+            governorate: 'الدقهلية',
+            city: 'المنصورة',
+            address: 'شارع الجيش',
+          },
+          paymentMethod: 'cod',
+          idempotencyKey: `mixed_${nanoid(20)}`,
+          expectedTotal: smallPrice + inStockPrice + 10000,
+        })
+        .expect(201)
+      createdOrderNos.push(mixedRes.body.no)
+      expect(mixedRes.body.total).toBe(smallPrice + inStockPrice + 10000)
+      const mixedOrder = await prisma.order.findUnique({
+        where: { no: mixedRes.body.no },
+        select: { deliveryFee: true },
+      })
+      expect(mixedOrder?.deliveryFee).toBe(10000)
+    })
+
+    it('waives delivery for a first order once the offer is enabled, then charges the repeat phone', async () => {
+      const previous = await prisma.setting.findUnique({
+        where: { key: 'deliveryOffers' },
+        select: { value: true },
+      })
+      const offers = {
+        freeAbove: { enabled: false, amount: 0, classes: ['small', 'medium', 'large'] },
+        firstOrderFree: { enabled: true, classes: ['small', 'medium', 'large'] },
+      }
+      await prisma.setting.upsert({
+        where: { key: 'deliveryOffers' },
+        update: { value: offers },
+        create: { key: 'deliveryOffers', value: offers },
+      })
+
+      const phone = '01077770009'
+      try {
+        const firstQuote = await request(app.getHttpServer())
+          .post('/api/cart/quote')
+          .set('X-Forwarded-For', nextIp())
+          .send({
+            items: [{ productId: inStockProductId, qty: 1 }],
+            governorate: 'الدقهلية',
+            city: 'المنصورة',
+            phone,
+          })
+          .expect(200)
+
+        expect(firstQuote.body.deliveryFreeReason).toBe('first_order')
+        expect(firstQuote.body.deliveryFee).toBe(0)
+        expect(firstQuote.body.total).toBe(inStockPrice)
+
+        const firstOrder = await request(app.getHttpServer())
+          .post('/api/orders')
+          .set('X-Forwarded-For', nextIp())
+          .send({
+            items: [{ productId: inStockProductId, qty: 1 }],
+            customer: {
+              name: 'أول طلب',
+              phone,
+              governorate: 'الدقهلية',
+              city: 'المنصورة',
+              address: 'شارع الجيش',
+            },
+            paymentMethod: 'cod',
+            idempotencyKey: `first_${nanoid(20)}`,
+            expectedTotal: inStockPrice,
+          })
+          .expect(201)
+        createdOrderNos.push(firstOrder.body.no)
+        expect(firstOrder.body.total).toBe(inStockPrice)
+        const firstStored = await prisma.order.findUnique({
+          where: { no: firstOrder.body.no },
+          select: { deliveryFee: true },
+        })
+        expect(firstStored?.deliveryFee).toBe(0)
+
+        const repeatQuote = await request(app.getHttpServer())
+          .post('/api/cart/quote')
+          .set('X-Forwarded-For', nextIp())
+          .send({
+            items: [{ productId: inStockProductId, qty: 1 }],
+            governorate: 'الدقهلية',
+            city: 'المنصورة',
+            phone,
+          })
+          .expect(200)
+
+        expect(repeatQuote.body.deliveryFreeReason).toBeNull()
+        expect(repeatQuote.body.deliveryFee).toBe(10000)
+
+        const repeatOrder = await request(app.getHttpServer())
+          .post('/api/orders')
+          .set('X-Forwarded-For', nextIp())
+          .send({
+            items: [{ productId: inStockProductId, qty: 1 }],
+            customer: {
+              name: 'طلب متكرر',
+              phone,
+              governorate: 'الدقهلية',
+              city: 'المنصورة',
+              address: 'شارع الجيش',
+            },
+            paymentMethod: 'cod',
+            idempotencyKey: `repeat_${nanoid(20)}`,
+            expectedTotal: inStockPrice + 10000,
+          })
+          .expect(201)
+        createdOrderNos.push(repeatOrder.body.no)
+        expect(repeatOrder.body.total).toBe(inStockPrice + 10000)
+      } finally {
+        if (previous) {
+          await prisma.setting.update({
+            where: { key: 'deliveryOffers' },
+            data: { value: JSON.parse(JSON.stringify(previous.value)) as Prisma.InputJsonValue },
+          })
+        } else {
+          await prisma.setting.deleteMany({ where: { key: 'deliveryOffers' } })
+        }
+      }
     })
 
     it('handles concurrent requests with the same idempotency key and produces only one order', async () => {

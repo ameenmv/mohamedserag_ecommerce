@@ -13,6 +13,7 @@ import { PrismaService } from '../prisma/prisma.service.js'
 import { StoreSettingsService } from '../settings/store-settings.service.js'
 import { loadCartProducts } from './cart-products.js'
 import { CouponService } from './coupon.service.js'
+import { isFirstOrderForPhone } from './first-order.js'
 import { nextOrderNo } from './order-number.js'
 import { WhatsAppAlertsService } from '../whatsapp/whatsapp-alerts.service.js'
 
@@ -65,9 +66,10 @@ export class OrdersService {
       throw new BadRequestException('طريقة الدفع دي مش متاحة')
     }
 
-    const [zones, codDeposit] = await Promise.all([
+    const [zones, codDeposit, deliveryOffers] = await Promise.all([
       this.settingsService.getZones(),
       this.settingsService.getCodDeposit(),
+      this.settingsService.getDeliveryOffers(),
     ])
 
     try {
@@ -82,6 +84,7 @@ export class OrdersService {
 
         const productIds = input.items.map((i) => i.productId)
         const products = await loadCartProducts(tx, productIds)
+        const isFirstOrder = await isFirstOrderForPhone(tx, input.customer.phone)
         const couponResult = await this.couponService.applyInOrderTx(
           tx,
           input.couponCode,
@@ -100,7 +103,7 @@ export class OrdersService {
               paymentMethod: input.paymentMethod,
             },
             products,
-            { zones, codDeposit, coupon: null },
+            { zones, codDeposit, coupon: null, deliveryOffers, isFirstOrder },
           )
           throw new ConflictException({
             code: 'COUPON_REJECTED',
@@ -118,7 +121,7 @@ export class OrdersService {
             couponCode: input.couponCode,
           },
           products,
-          { zones, codDeposit, coupon: couponResult.evaluation },
+          { zones, codDeposit, coupon: couponResult.evaluation, deliveryOffers, isFirstOrder },
         )
 
         const countableLines = quote.lines.filter((l) => l.qty > 0)

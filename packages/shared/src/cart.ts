@@ -4,6 +4,15 @@ import { findZone, type Zone } from './zones.js'
 import { initialStatus, type CodDepositRule } from './order-flow.js'
 import { mergeCartItems, type CartQuoteInput, type CartQuoteItemInput } from './cart-schema.js'
 import type { CouponReasonCode, ProductFlash } from './promotions.js'
+import {
+  DEFAULT_DELIVERY_OFFERS,
+  evaluateDeliveryOffers,
+  maxShippingClass,
+  zoneFeeFor,
+  type DeliveryFreeReason,
+  type DeliveryOffers,
+  type ShippingClass,
+} from './shipping.js'
 
 export interface CartProductRecord {
   id: string
@@ -22,6 +31,7 @@ export interface CartProductRecord {
   imageUrl: string | null
   purchasable: boolean
   flash: ProductFlash | null
+  shippingClass: ShippingClass
 }
 
 export interface CouponEvaluation {
@@ -37,6 +47,9 @@ export interface CartQuoteContext {
   zones: readonly Zone[]
   codDeposit: CodDepositRule
   coupon?: CouponEvaluation | null
+  deliveryOffers?: DeliveryOffers
+  /** null = phone unknown, so the first-order offer is not applied. */
+  isFirstOrder?: boolean | null
 }
 
 export type CartQuoteIssue = 'not_found' | 'unavailable' | 'qty_capped' | 'price_changed'
@@ -69,6 +82,9 @@ export interface CartQuote {
   subtotal: number
   discount: number
   deliveryFee: number
+  deliveryClass: ShippingClass
+  deliveryFreeReason: DeliveryFreeReason
+  freeAboveRemaining: number | null
   total: number
   zone: { id: string; name: string; fee: number } | null
   coupon: CouponEvaluation | null
@@ -188,18 +204,44 @@ export function buildCartQuote(
     discount = Math.min(subtotal, Math.max(0, ctx.coupon.discount))
   }
 
+  // The order pays one fee at the largest class in the cart (fridge + pan = one large fee).
+  let deliveryClass: ShippingClass = 'large'
+  if (countableLines.length > 0) {
+    deliveryClass = 'small'
+    for (const line of countableLines) {
+      const product = productMap.get(line.productId)
+      if (product) {
+        deliveryClass = maxShippingClass(deliveryClass, product.shippingClass)
+      }
+    }
+  }
+
+  const deliveryOffers = ctx.deliveryOffers ?? DEFAULT_DELIVERY_OFFERS
+  const isFirstOrder = ctx.isFirstOrder ?? null
+
   let zone: { id: string; name: string; fee: number } | null = null
   let deliveryFee = 0
+  let deliveryFreeReason: DeliveryFreeReason = null
+  let freeAboveRemaining: number | null = null
 
   if (input.governorate && input.governorate.trim().length > 0) {
     const matchedZone = findZone(ctx.zones, input.governorate.trim(), input.city?.trim())
+    const classFee = zoneFeeFor(matchedZone.fees, deliveryClass)
     zone = {
       id: matchedZone.id,
       name: matchedZone.name,
-      fee: matchedZone.fee,
+      fee: classFee,
     }
     if (countableLines.length > 0) {
-      deliveryFee = matchedZone.fee
+      const evaluation = evaluateDeliveryOffers({
+        shippingClass: deliveryClass,
+        subtotalAfterDiscount: Math.max(0, subtotal - discount),
+        offers: deliveryOffers,
+        isFirstOrder,
+      })
+      deliveryFreeReason = evaluation.freeReason
+      freeAboveRemaining = evaluation.freeAboveRemaining
+      deliveryFee = evaluation.freeReason === null ? classFee : 0
     }
   }
 
@@ -221,6 +263,9 @@ export function buildCartQuote(
     subtotal,
     discount,
     deliveryFee,
+    deliveryClass,
+    deliveryFreeReason,
+    freeAboveRemaining,
     total,
     zone,
     coupon: ctx.coupon ?? null,

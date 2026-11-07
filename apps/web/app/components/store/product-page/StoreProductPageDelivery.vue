@@ -45,7 +45,7 @@ const { format } = usePrice()
         >
           <span class="font-medium text-foreground">{{ zone.name }}</span>
           <span class="num font-bold text-serag-night dark:text-serag-gold-hi">
-            {{ format(zone.fee).formatted }}
+            {{ format(zone.fees.large).formatted }}
           </span>
         </li>
       </ul>

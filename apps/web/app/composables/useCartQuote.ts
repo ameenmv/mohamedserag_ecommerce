@@ -100,7 +100,7 @@ export function useCartQuoteController(options: UseCartQuoteControllerOptions = 
   const cartKey = computed(() => cartQuoteKey(lines.value))
   const contextKey = computed(() => {
     const c = context.value
-    return `${c.governorate ?? ''}|${c.city ?? ''}|${c.paymentMethod ?? ''}|${c.couponCode ?? ''}`
+    return `${c.governorate ?? ''}|${c.city ?? ''}|${c.phone ?? ''}|${c.paymentMethod ?? ''}|${c.couponCode ?? ''}`
   })
 
   watch(

@@ -507,6 +507,12 @@
       "discount": "الخصم",
       "deliveryFee": "مصاريف التوصيل",
       "deliveryFeeNextStep": "بيتحسب في الخطوة الجاية",
+      "freeDelivery": "التوصيل مجاني",
+      "freeDeliveryReasons": {
+        "threshold": "التوصيل مجاني — طلبك فوق حد التوصيل المجاني",
+        "first_order": "التوصيل مجاني — أول طلب ليك"
+      },
+      "freeAboveRemaining": "باقي {amount} وتوصيلك يبقى مجاني",
       "total": "الإجمالي",
       "quantity": "الكمية",
       "decreaseQty": "تقليل الكمية",

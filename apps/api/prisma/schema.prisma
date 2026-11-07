@@ -64,6 +64,12 @@ enum AvailabilityMode {
   out
 }
 
+enum ShippingClass {
+  small
+  medium
+  large
+}
+
 enum ReviewStatus {
   pending
   approved
@@ -139,6 +145,7 @@ model Category {
   specTemplateId String?       @map("spec_template_id")
   specTemplate   SpecTemplate? @relation(fields: [specTemplateId], references: [id], onDelete: SetNull)
   intro          String?
+  shippingClass  ShippingClass? @map("shipping_class")
   accent         String        @default("green")
   illustration   String        @default("default")
   seoTitle       String?       @map("seo_title")
@@ -202,6 +209,7 @@ model Product {
   origin             String?
   /// Cookware set pieces list (JSON array)
   setContents        Json?            @map("set_contents")
+  shippingClass      ShippingClass?   @map("shipping_class")
   visible            Boolean          @default(false)
   featured           Boolean          @default(false)
   archivedAt         DateTime?        @map("archived_at")

@@ -5,6 +5,12 @@ import { phoneSchema } from './phone-schema.js'
 import { EGYPT_GOVERNORATES } from './governorates.js'
 import type { WhatsAppTemplateKey } from './whatsapp.js'
 import { unknownTemplateVariables, TEMPLATE_VARIABLES, type SettingsSection } from './settings.js'
+import { legacyZoneFees } from './shipping.js'
+import {
+  adminDeliveryOffersSchema,
+  adminZoneFeesSchema,
+  zoneFeesSchema,
+} from './shipping-schema.js'
 
 export const zonePlaceSchema = z.object({
   governorate: z.string().trim().min(1, { message: 'اسم المحافظة مطلوب' }),
@@ -12,15 +18,27 @@ export const zonePlaceSchema = z.object({
 })
 export type ZonePlaceSetting = z.infer<typeof zonePlaceSchema>
 
-export const zoneSchema = z.object({
-  id: z.string().min(1, { message: 'معرف المنطقة مطلوب' }),
-  name: z.string().min(1, { message: 'اسم المنطقة مطلوب' }),
-  fee: z
-    .number()
-    .int({ message: 'مصاريف التوصيل يجب أن تكون عدداً صحيحاً' })
-    .min(0, { message: 'مصاريف التوصيل لا يمكن أن تكون سالبة' }),
-  places: z.array(zonePlaceSchema),
-})
+/** Migrates a legacy zone `{ fee }` to `{ fees: { small, medium, large } }` before validation. */
+function migrateZoneFees(value: unknown): unknown {
+  if (value === null || typeof value !== 'object' || Array.isArray(value)) {
+    return value
+  }
+  const record = value as Record<string, unknown>
+  if (!('fees' in record) && typeof record.fee === 'number' && Number.isFinite(record.fee)) {
+    return { ...record, fees: legacyZoneFees(record.fee) }
+  }
+  return value
+}
+
+export const zoneSchema = z.preprocess(
+  migrateZoneFees,
+  z.object({
+    id: z.string().min(1, { message: 'معرف المنطقة مطلوب' }),
+    name: z.string().min(1, { message: 'اسم المنطقة مطلوب' }),
+    fees: zoneFeesSchema,
+    places: z.array(zonePlaceSchema),
+  }),
+)
 export type ZoneSetting = z.infer<typeof zoneSchema>
 
 export const zonesSchema = z.array(zoneSchema)
@@ -186,21 +204,20 @@ const adminZonePlaceSchema = z.object({
   city: z.string().trim().min(1).optional(),
 })
 
-const adminZoneSchema = z.object({
-  id: z.string().min(1, { message: 'معرف المنطقة مطلوب' }),
-  name: z
-    .string()
-    .trim()
-    .min(1, { message: 'اسم المنطقة مطلوب' })
-    .max(40, { message: 'اسم المنطقة بيزيد عن 40 حرف' }),
-  fee: z
-    .number()
-    .int({ message: 'مصاريف التوصيل لازم تكون عدد صحيح' })
-    .min(0, { message: 'مصاريف التوصيل مش ممكن تكون سالبة' })
-    .max(100_000_000, { message: 'مصاريف التوصيل كبيرة أوي' }),
-  /** Empty places = the catch-all zone for every place no other zone covers (at most one). */
-  places: z.array(adminZonePlaceSchema),
-})
+const adminZoneSchema = z.preprocess(
+  migrateZoneFees,
+  z.object({
+    id: z.string().min(1, { message: 'معرف المنطقة مطلوب' }),
+    name: z
+      .string()
+      .trim()
+      .min(1, { message: 'اسم المنطقة مطلوب' })
+      .max(40, { message: 'اسم المنطقة بيزيد عن 40 حرف' }),
+    fees: adminZoneFeesSchema,
+    /** Empty places = the catch-all zone for every place no other zone covers (at most one). */
+    places: z.array(adminZonePlaceSchema),
+  }),
+)
 
 export const adminZonesSettingSchema = z
   .array(adminZoneSchema)
@@ -373,6 +390,7 @@ export const SETTINGS_SECTION_SCHEMAS: Record<SettingsSection, z.ZodType> = {
   store: storeInfoSettingSchema,
   payments: adminPaymentsSettingSchema,
   zones: adminZonesSettingSchema,
+  deliveryOffers: adminDeliveryOffersSchema,
   codDeposit: adminCodDepositSchema,
   lowStock: lowStockSettingSchema,
   searchSynonyms: searchSynonymsSettingSchema,

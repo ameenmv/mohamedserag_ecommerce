@@ -90,6 +90,7 @@ export class AdminCategoriesService {
       parentId: data.parentId ?? null,
       specTemplateId: data.specTemplateId ?? null,
       intro: data.intro ?? null,
+      shippingClass: data.shippingClass ?? null,
       seoTitle: data.seoTitle ?? null,
       seoDescription: data.seoDescription ?? null,
       sort: data.sort,
@@ -154,6 +155,7 @@ export class AdminCategoriesService {
         data.specTemplateId === null ? { disconnect: true } : { connect: { id: data.specTemplateId } }
     }
     if (data.intro !== undefined) updateData.intro = data.intro
+    if (data.shippingClass !== undefined) updateData.shippingClass = data.shippingClass
     if (data.accent !== undefined) updateData.accent = data.accent
     if (data.illustration !== undefined) updateData.illustration = data.illustration
     if (data.seoTitle !== undefined) updateData.seoTitle = data.seoTitle
@@ -257,6 +259,7 @@ export class AdminCategoriesService {
       parentId: c.parentId,
       specTemplateId: c.specTemplateId,
       intro: c.intro,
+      shippingClass: c.shippingClass,
       accent: resolveCategoryAccent((c as { accent?: string | null }).accent),
       illustration: resolveCategoryIllustration(c.slug, (c as { illustration?: string | null }).illustration),
       seoTitle: c.seoTitle,
