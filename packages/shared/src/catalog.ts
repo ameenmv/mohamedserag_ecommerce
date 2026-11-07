@@ -122,6 +122,9 @@ export function resolveCategoryIllustration(
   return 'default'
 }
 
+export const SPEC_BETTER_DIRECTIONS = ['higher', 'lower', 'none'] as const
+export type SpecBetterDirection = (typeof SPEC_BETTER_DIRECTIONS)[number]
+
 export interface SpecTemplateField {
   key: string
   label: string
@@ -136,6 +139,8 @@ export interface SpecTemplateField {
   optionLabels?: string[] | null
   filterable: boolean
   comparable: boolean
+  /** Direction for best-value comparison on number fields ('higher' default, 'lower', or 'none') */
+  better?: SpecBetterDirection | null
 }
 
 export interface CategoryTreeNode {

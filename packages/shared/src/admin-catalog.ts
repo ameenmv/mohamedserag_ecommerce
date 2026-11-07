@@ -14,6 +14,8 @@ export interface AdminSpecTemplateField {
   optionsEn?: string[] | null
   filterable: boolean
   comparable: boolean
+  /** Which value wins on the compare page for number fields (default 'higher') */
+  better?: 'higher' | 'lower' | 'none' | null
 }
 
 export interface AdminSpecTemplate {

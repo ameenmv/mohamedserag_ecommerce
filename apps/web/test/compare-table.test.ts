@@ -2,8 +2,13 @@ import { describe, expect, it } from 'vitest'
 import type { CategoryDetail, ProductDetail, SpecTemplateField } from '@serag/shared'
 import {
   areValuesDifferent,
+  buildCompareSummary,
   buildCompareTable,
   formatCompareValue,
+  groupCompareRows,
+  parseWarrantyYears,
+  pickBestIndexes,
+  type CompareTableRow,
 } from '../app/utils/compare-table'
 
 function createMockCategory(
@@ -345,5 +350,294 @@ describe('compare-table utils - buildCompareTable', () => {
       'warranty',
       'origin',
     ])
+  })
+})
+
+describe('compare-table utils - parseWarrantyYears', () => {
+  it('parses English warranty text formats', () => {
+    expect(parseWarrantyYears('10 years')).toBe(10)
+    expect(parseWarrantyYears('10 Years Samsung Warranty')).toBe(10)
+    expect(parseWarrantyYears('5 yr warranty')).toBe(5)
+    expect(parseWarrantyYears('1 year')).toBe(1)
+    expect(parseWarrantyYears(10)).toBe(10)
+  })
+
+  it('parses Arabic warranty text formats including digits and words', () => {
+    expect(parseWarrantyYears('10 سنوات')).toBe(10)
+    expect(parseWarrantyYears('١٠ سنوات')).toBe(10)
+    expect(parseWarrantyYears('5 سنين')).toBe(5)
+    expect(parseWarrantyYears('سنتين')).toBe(2)
+    expect(parseWarrantyYears('عامين')).toBe(2)
+    expect(parseWarrantyYears('سنة واحدة')).toBe(1)
+    expect(parseWarrantyYears('ضمان سنة')).toBe(1)
+  })
+
+  it('returns null for null, empty or unparseable warranty text', () => {
+    expect(parseWarrantyYears(null)).toBeNull()
+    expect(parseWarrantyYears(undefined)).toBeNull()
+    expect(parseWarrantyYears('')).toBeNull()
+    expect(parseWarrantyYears('بدون ضمان')).toBeNull()
+    expect(parseWarrantyYears('ضمان محلي')).toBeNull()
+  })
+})
+
+describe('compare-table utils - pickBestIndexes', () => {
+  it('picks lowest price as winner and handles ties/nulls', () => {
+    const rowDiff: CompareTableRow = {
+      key: 'price',
+      label: 'price',
+      type: 'price',
+      values: [2500000, 3000000],
+      different: true,
+    }
+    expect(pickBestIndexes(rowDiff)).toEqual([0])
+
+    const rowTie: CompareTableRow = {
+      key: 'price',
+      label: 'price',
+      type: 'price',
+      values: [2500000, 2500000],
+      different: false,
+    }
+    expect(pickBestIndexes(rowTie)).toEqual([])
+
+    const rowNulls: CompareTableRow = {
+      key: 'price',
+      label: 'price',
+      type: 'price',
+      values: [null, null],
+      different: false,
+    }
+    expect(pickBestIndexes(rowNulls)).toEqual([])
+  })
+
+  it('picks warranty with most years parsed from text', () => {
+    const rowDiff: CompareTableRow = {
+      key: 'warranty',
+      label: 'warranty',
+      type: 'warranty',
+      values: ['5 سنوات', '10 years'],
+      different: true,
+    }
+    expect(pickBestIndexes(rowDiff)).toEqual([1])
+
+    const rowTie: CompareTableRow = {
+      key: 'warranty',
+      label: 'warranty',
+      type: 'warranty',
+      values: ['10 years', '١٠ سنوات'],
+      different: false,
+    }
+    expect(pickBestIndexes(rowTie)).toEqual([])
+
+    const rowUnparseable: CompareTableRow = {
+      key: 'warranty',
+      label: 'warranty',
+      type: 'warranty',
+      values: ['ضمان محلي', 'غير محدد'],
+      different: true,
+    }
+    expect(pickBestIndexes(rowUnparseable)).toEqual([])
+  })
+
+  it('picks boolean spec: yes wins when others are no', () => {
+    const rowOneYes: CompareTableRow = {
+      key: 'spec_inverter',
+      label: 'انفرتر',
+      type: 'spec',
+      values: [true, false],
+      different: true,
+    }
+    expect(pickBestIndexes(rowOneYes, { key: 'inverter', label: 'انفرتر', type: 'boolean', filterable: true, comparable: true })).toEqual([0])
+
+    const rowAllYes: CompareTableRow = {
+      key: 'spec_inverter',
+      label: 'انفرتر',
+      type: 'spec',
+      values: [true, true],
+      different: false,
+    }
+    expect(pickBestIndexes(rowAllYes)).toEqual([])
+
+    const rowAllNo: CompareTableRow = {
+      key: 'spec_inverter',
+      label: 'انفرتر',
+      type: 'spec',
+      values: [false, false],
+      different: false,
+    }
+    expect(pickBestIndexes(rowAllNo)).toEqual([])
+  })
+
+  it('picks number spec: highest by default', () => {
+    const row: CompareTableRow = {
+      key: 'spec_capacity',
+      label: 'السعة',
+      type: 'spec',
+      unit: 'لتر',
+      values: [450, 500],
+      different: true,
+    }
+    expect(pickBestIndexes(row)).toEqual([1])
+  })
+
+  it('picks number spec: lowest when field.better is lower', () => {
+    const row: CompareTableRow = {
+      key: 'spec_noise',
+      label: 'مستوى الضوضاء',
+      type: 'spec',
+      unit: 'ديسيبل',
+      values: [42, 38],
+      different: true,
+    }
+    const field: SpecTemplateField = {
+      key: 'noise',
+      label: 'مستوى الضوضاء',
+      type: 'number',
+      better: 'lower',
+      filterable: false,
+      comparable: true,
+    }
+    expect(pickBestIndexes(row, field)).toEqual([1])
+  })
+
+  it('picks no winner when field.better is none', () => {
+    const row: CompareTableRow = {
+      key: 'spec_ports',
+      label: 'عدد المنافذ',
+      type: 'spec',
+      values: [2, 4],
+      different: true,
+    }
+    const field: SpecTemplateField = {
+      key: 'ports',
+      label: 'عدد المنافذ',
+      type: 'number',
+      better: 'none',
+      filterable: false,
+      comparable: true,
+    }
+    expect(pickBestIndexes(row, field)).toEqual([])
+  })
+
+  it('handles ties and nulls gracefully in number specs', () => {
+    const rowTie: CompareTableRow = {
+      key: 'spec_capacity',
+      label: 'السعة',
+      type: 'spec',
+      values: [450, 450],
+      different: false,
+    }
+    expect(pickBestIndexes(rowTie)).toEqual([])
+
+    const rowWithNull: CompareTableRow = {
+      key: 'spec_capacity',
+      label: 'السعة',
+      type: 'spec',
+      values: [450, null],
+      different: true,
+    }
+    expect(pickBestIndexes(rowWithNull)).toEqual([0])
+  })
+})
+
+describe('compare-table utils - buildCompareSummary', () => {
+  it('returns empty string for fewer than 2 products', () => {
+    expect(buildCompareSummary([], [])).toBe('')
+    const p1 = createMockProduct('p1', 'منتج 1', 'fridges', 2000000)
+    expect(buildCompareSummary([p1], [])).toBe('')
+  })
+
+  it('returns identical notice when no differences exist', () => {
+    const p1 = createMockProduct('p1', 'منتج 1', 'fridges', 2000000)
+    const p2 = createMockProduct('p2', 'منتج 2', 'fridges', 2000000)
+    const rowSame: CompareTableRow = {
+      key: 'price',
+      label: 'price',
+      type: 'price',
+      values: [2000000, 2000000],
+      different: false,
+    }
+    expect(buildCompareSummary([p1, p2], [rowSame], { locale: 'ar' })).toContain('متطابقة')
+    expect(buildCompareSummary([p1, p2], [rowSame], { locale: 'en' })).toContain('identical')
+  })
+
+  it('builds editorial sentence with price difference first, then wins', () => {
+    const fresh = createMockProduct('fresh', 'غسالة فريش', 'washers', 1500000, {
+      brandName: 'Fresh',
+    })
+    const tornado = createMockProduct('tornado', 'غسالة تورنيدو', 'washers', 1730000, {
+      brandName: 'Tornado',
+    })
+
+    const rows: CompareTableRow[] = [
+      {
+        key: 'price',
+        label: 'price',
+        type: 'price',
+        values: [1500000, 1730000],
+        different: true,
+        bestIndexes: [0], // Fresh is cheaper by 2,300 EGP
+      },
+      {
+        key: 'spec_inverter',
+        label: 'إشعال ذاتي',
+        type: 'spec',
+        values: [true, false],
+        different: true,
+        bestIndexes: [0], // Fresh has auto-ignition
+      },
+      {
+        key: 'spec_capacity',
+        label: 'السعة',
+        type: 'spec',
+        unit: 'كجم',
+        values: [8, 10],
+        different: true,
+        bestIndexes: [1], // Tornado has 2 kg higher capacity
+      },
+    ]
+
+    const arSummary = buildCompareSummary([fresh, tornado], rows, { locale: 'ar' })
+    expect(arSummary).toContain('Fresh')
+    expect(arSummary).toContain('أرخص بـ 2,300 ج.م')
+    expect(arSummary).toContain('إشعال ذاتي')
+    expect(arSummary).toContain('Tornado')
+    expect(arSummary).toContain('السعة أعلى بـ 2 كجم')
+
+    const enSummary = buildCompareSummary([fresh, tornado], rows, { locale: 'en' })
+    expect(enSummary).toContain('Fresh')
+    expect(enSummary).toContain('2,300 EGP cheaper')
+    expect(enSummary).toContain('has إشعال ذاتي')
+    expect(enSummary).toContain('Tornado')
+    expect(enSummary).toContain('higher السعة')
+  })
+})
+
+describe('compare-table utils - groupCompareRows', () => {
+  it('groups rows into price_warranty, dimensions, features, other', () => {
+    const rows: CompareTableRow[] = [
+      { key: 'price', label: 'price', type: 'price', values: [100, 200], different: true },
+      { key: 'warranty', label: 'warranty', type: 'warranty', values: ['5 years', '10 years'], different: true },
+      { key: 'spec_capacity', label: 'السعة اللترية', type: 'spec', unit: 'لتر', values: [400, 450], different: true },
+      { key: 'spec_inverter', label: 'انفرتر', type: 'spec', values: [true, false], different: true, field: { key: 'inverter', label: 'انفرتر', type: 'boolean', filterable: true, comparable: true } },
+      { key: 'origin', label: 'origin', type: 'origin', values: ['مصر', 'تركيا'], different: true },
+    ]
+
+    const groups = groupCompareRows(rows)
+    expect(groups.map((g) => g.id)).toEqual(['price_warranty', 'dimensions', 'features', 'other'])
+    expect(groups[0]?.rows.map((r) => r.key)).toEqual(['price', 'warranty'])
+    expect(groups[1]?.rows.map((r) => r.key)).toEqual(['spec_capacity'])
+    expect(groups[2]?.rows.map((r) => r.key)).toEqual(['spec_inverter'])
+    expect(groups[3]?.rows.map((r) => r.key)).toEqual(['origin'])
+  })
+
+  it('omits empty groups when rows are absent', () => {
+    const rows: CompareTableRow[] = [
+      { key: 'price', label: 'price', type: 'price', values: [100, 200], different: true },
+    ]
+    const groups = groupCompareRows(rows)
+    expect(groups).toHaveLength(1)
+    expect(groups[0]?.id).toBe('price_warranty')
   })
 })

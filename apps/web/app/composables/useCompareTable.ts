@@ -14,6 +14,7 @@ export function useCompareTable() {
   const products = ref<ProductDetail[]>([])
   const categories = ref<CategoryDetail[]>([])
   const showOnlyDifferences = ref(false)
+  const differencesInitialized = ref(false)
 
   const tableData = computed<CompareTableResult>(() =>
     buildCompareTable(products.value, categories.value),
@@ -57,6 +58,12 @@ export function useCompareTable() {
         distinctCategories.map((slug) => storeApi.category(slug)),
       )
       categories.value = categoryDetails
+
+      // On initial data load, default showOnlyDifferences to true when any row differs
+      if (!differencesInitialized.value && tableData.value.rows.length > 0) {
+        showOnlyDifferences.value = tableData.value.hasDifferences
+        differencesInitialized.value = true
+      }
     } catch {
       // Retain existing products on transient error
     } finally {

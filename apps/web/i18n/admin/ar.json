@@ -626,6 +626,12 @@
         "removeOption": "حذف الخيار",
         "filterable": "فلترة بالمتجر",
         "comparable": "مقارنة",
+        "better": "الأفضل في المقارنة",
+        "betterDirections": {
+          "higher": "الأعلى قيمة",
+          "lower": "الأقل قيمة",
+          "none": "بدون تفضيل"
+        },
         "emptyHint": "اضغط «إضافة خاصية» لإضافة أول مواصفة فنية للقالب.",
         "types": {
           "text": "نص",

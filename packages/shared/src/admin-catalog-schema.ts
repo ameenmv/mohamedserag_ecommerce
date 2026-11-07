@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { AVAILABILITY_MODES } from './enums.js'
-import { categoryAccentSchema, categoryIllustrationSchema } from './catalog-schema.js'
+import { categoryAccentSchema, categoryIllustrationSchema, specBetterDirectionSchema } from './catalog-schema.js'
 import { shippingClassSchema } from './shipping-schema.js'
 
 export const SPEC_KEY_REGEX = /^[a-z][a-z0-9_]*$/
@@ -36,6 +36,7 @@ export const adminSpecTemplateFieldSchema = z
     optionsEn: z.array(z.string().trim()).nullable().optional(),
     filterable: z.boolean().default(false),
     comparable: z.boolean().default(false),
+    better: specBetterDirectionSchema.nullable().optional(),
   })
   .superRefine((data, ctx) => {
     if (data.type === 'choice') {

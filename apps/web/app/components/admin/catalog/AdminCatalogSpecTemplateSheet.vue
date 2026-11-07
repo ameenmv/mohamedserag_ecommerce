@@ -33,6 +33,7 @@ interface EditableFieldRow {
   choiceOptions: ChoiceOptionRow[]
   filterable: boolean
   comparable: boolean
+  better?: 'higher' | 'lower' | 'none'
 }
 
 const props = defineProps<{
@@ -83,6 +84,7 @@ watch(
             choiceOptions,
             filterable: f.filterable,
             comparable: f.comparable,
+            better: f.better ?? (f.type === 'number' ? 'higher' : undefined),
           }
         })
       } else {
@@ -105,6 +107,7 @@ function addFieldRow() {
     choiceOptions: [],
     filterable: false,
     comparable: false,
+    better: undefined,
   })
 }
 
@@ -123,6 +126,9 @@ function removeChoiceOption(fieldIndex: number, optionIndex: number) {
 function handleTypeChange(row: EditableFieldRow) {
   if (row.type === 'choice' && row.choiceOptions.length === 0) {
     row.choiceOptions.push({ ar: '', en: '' })
+  }
+  if (row.type === 'number' && !row.better) {
+    row.better = 'higher'
   }
 }
 
@@ -168,6 +174,7 @@ async function handleSubmit() {
       optionsEn,
       filterable: f.filterable,
       comparable: f.comparable,
+      better: f.type === 'number' ? (f.better ?? 'higher') : (f.better ?? null),
     }
   })
 
@@ -347,8 +354,8 @@ async function handleSubmit() {
                 </div>
               </div>
 
-              <!-- Row secondary: Unit & UnitEn (if number) or Options (if choice) -->
-              <div v-if="row.type === 'number'" class="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+              <!-- Row secondary: Unit & UnitEn & Better Direction (if number) or Options (if choice) -->
+              <div v-if="row.type === 'number'" class="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
                 <div class="flex flex-col gap-1">
                   <label class="text-[11px] font-semibold text-muted-foreground">
                     {{ t('admin.catalog.specTemplates.unit') }}
@@ -374,6 +381,20 @@ async function handleSubmit() {
                     :disabled="saving"
                     class="h-9 text-xs text-start"
                   />
+                </div>
+                <div class="flex flex-col gap-1">
+                  <label class="text-[11px] font-semibold text-muted-foreground">
+                    {{ t('admin.catalog.specTemplates.better') }}
+                  </label>
+                  <AdminFormSelect
+                    v-model="row.better"
+                    :disabled="saving"
+                    class="h-9 text-xs"
+                  >
+                    <option value="higher">{{ t('admin.catalog.specTemplates.betterDirections.higher') }}</option>
+                    <option value="lower">{{ t('admin.catalog.specTemplates.betterDirections.lower') }}</option>
+                    <option value="none">{{ t('admin.catalog.specTemplates.betterDirections.none') }}</option>
+                  </AdminFormSelect>
                 </div>
               </div>
 

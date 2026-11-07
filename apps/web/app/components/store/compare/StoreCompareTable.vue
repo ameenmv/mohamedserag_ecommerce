@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { ArrowLeftRight, Check, Minus, Plus, X } from '@lucide/vue'
-import type { ProductDetail } from '@serag/shared'
+import { AlertCircle, SlidersHorizontal, Trash2 } from '@lucide/vue'
+import type { ProductCard, ProductDetail } from '@serag/shared'
 import {
-  formatCompareValue,
+  groupCompareRows,
   type CompareTableRow,
   type CompareTableResult,
 } from '~/utils/compare-table'
 import { MAX_COMPARE_ITEMS } from '~/utils/compare'
-import { toProductCard } from '~/utils/product-card-mapper'
 
 const props = defineProps<{
   products: readonly ProductDetail[]
@@ -23,27 +22,15 @@ const showOnlyDifferences = defineModel<boolean>('showOnlyDifferences', {
 const emit = defineEmits<{
   remove: [id: string]
   clear: []
+  productAdded: [product: ProductCard]
 }>()
 
 const { t } = useI18n()
-const { money } = usePrice()
-const localePath = useLocalePath()
 
 const differenceCount = computed(() => props.tableData.rows.filter((r) => r.different).length)
-const cheapestId = computed(() => {
-  const prices = props.products.map((p) => p.price)
-  if (prices.length < 2 || new Set(prices).size < 2) return null
-  const min = Math.min(...prices)
-  return props.products.find((p) => p.price === min)?.id ?? null
-})
+const totalRowCount = computed(() => props.tableData.rows.length)
 
-function getRowLabel(row: { key: string; label: string; type: string }): string {
-  if (row.type === 'price') return t('store.compare.price')
-  if (row.type === 'brand') return t('store.compare.brand')
-  if (row.type === 'warranty') return t('store.compare.warranty')
-  if (row.type === 'origin') return t('store.compare.origin')
-  return row.label
-}
+const rowGroups = computed(() => groupCompareRows(props.displayedRows))
 </script>
 
 <template>
@@ -63,11 +50,13 @@ function getRowLabel(row: { key: string; label: string; type: string }): string 
     </div>
 
     <div v-else class="space-y-6">
-      <!-- Title and controls -->
+      <!-- Title, Subtitle, and Controls Header -->
       <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p class="eyebrow text-serag-gold-ink dark:text-serag-gold-hi">{{ t('store.compare.eyebrow', { count: products.length }) }}</p>
-          <h1 class="title-draw font-display mt-1 text-4xl text-foreground sm:text-5xl">
+          <p class="eyebrow text-serag-gold-ink dark:text-serag-gold-hi">
+            {{ t('store.compare.eyebrow', { count: products.length }) }}
+          </p>
+          <h1 class="title-draw font-display mt-1 text-3xl text-foreground sm:text-4xl lg:text-5xl">
             <CommonMadText :text="t('store.compare.title')" size="xl" />
           </h1>
           <p class="mt-1 text-xs text-muted-foreground sm:text-sm">
@@ -75,211 +64,118 @@ function getRowLabel(row: { key: string; label: string; type: string }): string 
           </p>
         </div>
 
+        <!-- Controls: Differences switch & Clear -->
         <div class="flex flex-wrap items-center gap-3">
+          <!-- Differences Switch with Count -->
           <div
             v-if="products.length >= 2"
-            role="group"
-            :aria-label="t('store.compare.viewAria')"
-            class="inline-flex rounded-full border border-border bg-card p-1 text-xs font-bold sm:text-sm"
+            class="inline-flex items-center gap-2.5 rounded-full border border-border bg-card p-1 shadow-2xs"
           >
-            <button
-              type="button"
-              :aria-pressed="!showOnlyDifferences"
-              :class="[
-                'min-h-9 rounded-full px-4 transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
-                !showOnlyDifferences ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground',
-              ]"
-              @click="showOnlyDifferences = false"
+            <div
+              role="group"
+              :aria-label="t('store.compare.viewAria')"
+              class="inline-flex rounded-full bg-secondary/50 p-0.5 text-xs font-bold"
             >
-              {{ t('store.compare.allSpecs') }}
-            </button>
-            <button
-              type="button"
-              :aria-pressed="showOnlyDifferences"
-              :class="[
-                'inline-flex min-h-9 items-center gap-1.5 rounded-full px-4 transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
-                showOnlyDifferences ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground',
-              ]"
-              @click="showOnlyDifferences = true"
-            >
-              {{ t('store.compare.differencesOnly') }}
-              <span class="num rounded-full bg-serag-gold/25 px-1.5 text-[11px] text-serag-gold-ink dark:text-serag-gold-hi">{{ differenceCount }}</span>
-            </button>
+              <button
+                type="button"
+                :aria-pressed="!showOnlyDifferences"
+                :class="[
+                  'min-h-9 rounded-full px-3.5 transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none cursor-pointer',
+                  !showOnlyDifferences
+                    ? 'bg-primary text-primary-foreground shadow-xs'
+                    : 'text-muted-foreground hover:text-foreground',
+                ]"
+                @click="showOnlyDifferences = false"
+              >
+                {{ t('store.compare.allSpecs') }}
+              </button>
+              <button
+                type="button"
+                :aria-pressed="showOnlyDifferences"
+                :class="[
+                  'inline-flex min-h-9 items-center gap-1.5 rounded-full px-3.5 transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none cursor-pointer',
+                  showOnlyDifferences
+                    ? 'bg-primary text-primary-foreground shadow-xs'
+                    : 'text-muted-foreground hover:text-foreground',
+                ]"
+                @click="showOnlyDifferences = true"
+              >
+                <SlidersHorizontal class="size-3.5" aria-hidden="true" />
+                <span>{{ t('store.compare.differencesOnly') }}</span>
+              </button>
+            </div>
+
+            <!-- "5 فروقات من 9 مواصفات" badge -->
+            <span class="num pe-2 text-xs font-semibold text-muted-foreground">
+              {{ t('store.compare.differencesCount', { diff: differenceCount, total: totalRowCount }) }}
+            </span>
           </div>
 
+          <!-- Clear comparison list button -->
           <button
             type="button"
-            class="inline-flex min-h-9 items-center gap-1.5 rounded-full px-3 text-xs font-bold text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+            class="inline-flex min-h-9 items-center gap-1.5 rounded-full px-3.5 text-xs font-bold text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none cursor-pointer"
             :aria-label="t('store.compare.clearAria')"
             @click="emit('clear')"
           >
-            <X class="size-3.5" aria-hidden="true" />
-            {{ t('store.compare.clear') }}
+            <Trash2 class="size-3.5" aria-hidden="true" />
+            <span>{{ t('store.compare.clear') }}</span>
           </button>
         </div>
       </div>
 
+      <!-- Editorial Summary Card above table -->
+      <StoreCompareSummary
+        :products="products"
+        :rows="tableData.rows"
+      />
+
+      <!-- Mixed Categories Notice -->
       <div
         v-if="tableData.isMixed"
-        class="rounded-2xl border border-border bg-secondary/60 p-3.5 text-xs font-semibold text-muted-foreground"
+        class="flex items-center gap-2.5 rounded-2xl border border-serag-gold/30 bg-serag-gold/10 p-3.5 text-xs font-semibold text-serag-gold-ink dark:text-serag-gold-hi"
+        role="status"
       >
-        {{ t('store.compare.mixedCategoriesNotice') }}
+        <AlertCircle class="size-4 shrink-0" aria-hidden="true" />
+        <span>{{ t('store.compare.mixedCategoriesNotice') }}</span>
       </div>
 
-      <div class="overflow-x-auto rounded-3xl border border-border bg-card shadow-sm">
-        <table class="w-full min-w-[640px] border-collapse text-start text-xs sm:text-sm">
-          <thead>
-            <tr>
-              <th
-                scope="col"
-                class="sticky start-0 z-20 w-28 min-w-28 border-b border-e border-border bg-secondary/50 p-3.5 text-start align-bottom backdrop-blur sm:w-44 sm:min-w-44 sm:p-4"
-              >
-                <span class="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-wide text-muted-foreground sm:text-xs">
-                  <ArrowLeftRight class="size-3.5" aria-hidden="true" />
-                  {{ t('store.compare.productColumn') }}
-                </span>
-              </th>
+      <!-- Comparison Table Container: Horizontal scroll with snap on mobile -->
+      <!-- Sideways scrolling only below lg: a scroll container would stop the product header row from sticking -->
+      <div class="relative overflow-x-auto rounded-3xl border border-border bg-card shadow-sm snap-x snap-mandatory scroll-smooth lg:overflow-visible">
+        <table class="w-full min-w-[620px] border-collapse text-start text-xs sm:text-sm">
+          <!-- Sticky Header Row with real-height offset from floating site header -->
+          <StoreCompareHeaderRow
+            :products="products"
+            @remove="emit('remove', $event)"
+            @product-added="emit('productAdded', $event)"
+          />
 
-              <th
-                v-for="product in products"
-                :key="product.id"
-                scope="col"
-                class="min-w-[180px] border-b border-e border-border p-3 align-top font-normal sm:min-w-[240px] sm:p-4"
-              >
-                <div class="flex flex-col gap-3">
-                  <div class="relative flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded-2xl bg-secondary/60 p-3">
-                    <NuxtLink
-                      :to="localePath(`/p/${product.slug}`)"
-                      class="flex size-full items-center justify-center"
-                      :aria-label="t('store.compare.viewProduct', { name: product.name })"
-                      tabindex="-1"
-                    >
-                      <NuxtImg
-                        v-if="product.image?.url"
-                        :src="product.image.url"
-                        :alt="product.image.alt || product.name"
-                        width="240"
-                        height="180"
-                        class="size-full object-contain transition-transform duration-300 hover:scale-105 motion-reduce:transition-none"
-                      />
-                    </NuxtLink>
-                    <span
-                      v-if="cheapestId === product.id"
-                      class="absolute top-2 start-2 rounded-full bg-serag-gold px-2.5 py-1 text-[11px] font-bold text-serag-night"
-                    >
-                      {{ t('store.compare.cheapest') }}
-                    </span>
-                    <button
-                      type="button"
-                      class="absolute top-2 end-2 flex size-8 items-center justify-center rounded-full bg-background/90 text-muted-foreground shadow-xs transition-colors hover:bg-destructive hover:text-destructive-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-                      :aria-label="t('store.compare.removeAria', { name: product.name })"
-                      @click="emit('remove', product.id)"
-                    >
-                      <X class="size-4" aria-hidden="true" />
-                    </button>
-                  </div>
+          <!-- Grouped Spec Rows with Winner Badges -->
+          <tbody class="divide-y divide-border/60">
+            <template v-for="group in rowGroups" :key="group.id">
+              <StoreCompareSpecGroup
+                :group="group"
+                :product-count="products.length"
+              />
+            </template>
 
-                  <div>
-                    <span class="text-[11px] font-bold tracking-wider text-serag-gold-ink uppercase dark:text-serag-gold-hi">
-                      {{ product.brand.name }}
-                    </span>
-                    <h2 class="mt-0.5 line-clamp-2 min-h-[2.6em] text-sm font-bold leading-snug">
-                      <NuxtLink
-                        :to="localePath(`/p/${product.slug}`)"
-                        class="text-foreground transition-colors hover:text-primary"
-                      >
-                        {{ product.name }}
-                      </NuxtLink>
-                    </h2>
-                  </div>
-
-                  <StoreProductPrice
-                    :price="product.price"
-                    :old-price="product.oldPrice"
-                    :discount-percent="product.discountPercent"
-                    :flash="product.flash"
-                  />
-
-                  <StoreProductAddToCart :product="toProductCard(product)" />
-                </div>
-              </th>
-
-              <!-- Free slot: invites one more product -->
-              <th
-                v-if="products.length < MAX_COMPARE_ITEMS"
-                scope="col"
-                class="hidden min-w-[180px] border-b border-border p-3 align-top font-normal sm:table-cell sm:p-4"
-              >
-                <NuxtLink
-                  :to="localePath('/shop')"
-                  class="flex min-h-[260px] flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border text-muted-foreground transition-colors hover:border-primary hover:bg-secondary/40 hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-                >
-                  <span class="flex size-11 items-center justify-center rounded-full bg-secondary">
-                    <Plus class="size-5" aria-hidden="true" />
-                  </span>
-                  <span class="text-xs font-bold">{{ t('store.compare.addAnother') }}</span>
-                </NuxtLink>
-              </th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr
-              v-for="row in displayedRows"
-              :key="row.key"
-              :class="['group transition-colors', row.different ? 'bg-serag-gold/[0.07]' : 'hover:bg-secondary/30']"
-            >
-              <th
-                scope="row"
-                :class="[
-                  'sticky start-0 z-10 w-28 min-w-28 border-b border-e border-border bg-card p-3.5 text-start font-bold text-foreground sm:w-44 sm:min-w-44 sm:p-4',
-                  row.different ? 'border-s-4 border-s-serag-gold' : '',
-                ]"
-              >
-                {{ getRowLabel(row) }}
-              </th>
-
-              <td
-                v-for="(val, idx) in row.values"
-                :key="idx"
-                class="border-b border-e border-border p-3.5 text-foreground sm:p-4"
-              >
-                <!-- Kept out of the row header so its accessible name stays the row label -->
-                <span v-if="row.different && idx === 0" class="sr-only">{{ t('store.compare.differentValue') }}: </span>
-                <span
-                  v-if="row.type === 'price'"
-                  :class="[
-                    'num text-sm font-bold sm:text-base',
-                    products[idx]?.id === cheapestId ? 'text-primary' : '',
-                  ]"
-                >
-                  {{ money(val as number) }}
-                </span>
-                <span v-else-if="typeof val === 'boolean'" class="inline-flex items-center gap-1.5 font-semibold">
-                  <span
-                    :class="[
-                      'flex size-5 items-center justify-center rounded-full',
-                      val ? 'bg-primary/15 text-primary' : 'bg-muted text-muted-foreground',
-                    ]"
-                  >
-                    <Check v-if="val" class="size-3" aria-hidden="true" />
-                    <Minus v-else class="size-3" aria-hidden="true" />
-                  </span>
-                  {{ formatCompareValue(val, row.unit, { yesLabel: t('store.productPage.specs.yes'), noLabel: t('store.productPage.specs.no') }) }}
-                </span>
-                <span v-else :class="['text-xs sm:text-sm', val === null || val === undefined ? 'text-muted-foreground' : '']">
-                  {{ formatCompareValue(val, row.unit) }}
-                </span>
-              </td>
-              <td v-if="products.length < MAX_COMPARE_ITEMS" class="hidden border-b border-border sm:table-cell" />
-            </tr>
-
+            <!-- Empty rows notice when showOnlyDifferences filters out everything -->
             <tr v-if="displayedRows.length === 0">
               <td
-                :colspan="products.length + 1"
-                class="p-8 text-center text-xs text-muted-foreground sm:text-sm"
+                :colspan="products.length < MAX_COMPARE_ITEMS ? products.length + 2 : products.length + 1"
+                class="p-10 text-center text-xs text-muted-foreground sm:text-sm"
               >
-                {{ t('store.compare.noDifferencesNotice') }}
+                <p class="font-bold text-foreground">
+                  {{ t('store.compare.noDifferencesNotice') }}
+                </p>
+                <button
+                  type="button"
+                  class="mt-3 inline-flex min-h-9 items-center justify-center rounded-full bg-secondary px-4 text-xs font-bold text-foreground transition-colors hover:bg-secondary/80 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none cursor-pointer"
+                  @click="showOnlyDifferences = false"
+                >
+                  {{ t('store.compare.allSpecs') }}
+                </button>
               </td>
             </tr>
           </tbody>

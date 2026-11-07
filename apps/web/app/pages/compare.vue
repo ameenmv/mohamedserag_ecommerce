@@ -34,6 +34,7 @@ const compare = useCompareTable()
         :loading="!compare.isMounted.value || compare.loading.value"
         @remove="compare.remove"
         @clear="compare.clear"
+        @product-added="compare.refresh"
       />
     </div>
   </main>

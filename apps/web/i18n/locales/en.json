@@ -691,7 +691,26 @@
       "viewAria": "How to show the specs",
       "cheapest": "Lowest price",
       "addAnother": "Add a product",
-      "viewProduct": "View {name}"
+      "viewProduct": "View {name}",
+      "differencesCount": "{diff} differences of {total} specs",
+      "best": "Best",
+      "bestAria": "Best value",
+      "priceDiffMore": "+{amount} EGP",
+      "yes": "Yes",
+      "no": "No",
+      "searchInCategory": "Search in {category}...",
+      "searchPlaceholder": "Search model to add...",
+      "searching": "Searching...",
+      "noSuggestions": "No matching results",
+      "addSlotTitle": "Add product to compare",
+      "addSlotSubtitle": "Search and add up to {max} products",
+      "summaryTitle": "Comparison Summary",
+      "groups": {
+        "priceWarranty": "Price & Warranty",
+        "dimensions": "Dimensions & Sizes",
+        "features": "Features",
+        "other": "Other"
+      }
     },
     "availability": {
       "inStock": "In stock",

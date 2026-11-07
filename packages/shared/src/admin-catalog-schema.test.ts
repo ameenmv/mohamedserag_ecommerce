@@ -30,6 +30,38 @@ describe('Admin Catalog Schemas', () => {
       expect(res.success).toBe(true)
     })
 
+    it('accepts and validates better direction on numeric or comparable fields', () => {
+      const res1 = adminSpecTemplateFieldSchema.safeParse({
+        key: 'capacity',
+        label: 'السعة',
+        type: 'number',
+        better: 'higher',
+      })
+      expect(res1.success).toBe(true)
+      if (res1.success) {
+        expect(res1.data.better).toBe('higher')
+      }
+
+      const res2 = adminSpecTemplateFieldSchema.safeParse({
+        key: 'power_consumption',
+        label: 'استهلاك الكهرباء',
+        type: 'number',
+        better: 'lower',
+      })
+      expect(res2.success).toBe(true)
+      if (res2.success) {
+        expect(res2.data.better).toBe('lower')
+      }
+
+      const resInvalid = adminSpecTemplateFieldSchema.safeParse({
+        key: 'capacity',
+        label: 'السعة',
+        type: 'number',
+        better: 'invalid-direction',
+      })
+      expect(resInvalid.success).toBe(false)
+    })
+
     it('validates a choice field with options', () => {
       const res = adminSpecTemplateFieldSchema.safeParse({
         key: 'cooling',

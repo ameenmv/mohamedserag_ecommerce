@@ -626,6 +626,12 @@
         "removeOption": "Remove Option",
         "filterable": "Store Filter",
         "comparable": "Compare",
+        "better": "Best in comparison",
+        "betterDirections": {
+          "higher": "Higher value",
+          "lower": "Lower value",
+          "none": "No preference"
+        },
         "emptyHint": "Click \"Add Field\" to add the first spec definition to this template.",
         "types": {
           "text": "Text",

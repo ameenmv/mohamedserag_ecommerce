@@ -4,6 +4,7 @@ import {
   CATALOG_AVAILABILITY_FILTERS,
   CATEGORY_ACCENTS,
   CATEGORY_ILLUSTRATIONS,
+  SPEC_BETTER_DIRECTIONS,
   SPEC_FIELD_TYPES,
   type CatalogSort,
 } from './catalog.js'
@@ -11,6 +12,7 @@ import {
 export const catalogSortSchema = z.enum(CATALOG_SORTS)
 export const catalogAvailabilityFilterSchema = z.enum(CATALOG_AVAILABILITY_FILTERS)
 export const specFieldTypeSchema = z.enum(SPEC_FIELD_TYPES)
+export const specBetterDirectionSchema = z.enum(SPEC_BETTER_DIRECTIONS)
 export const categoryAccentSchema = z.enum(CATEGORY_ACCENTS)
 export const categoryIllustrationSchema = z.enum(CATEGORY_ILLUSTRATIONS)
 
@@ -30,6 +32,7 @@ export const specTemplateFieldSchema = z.object({
   optionLabels: z.array(z.string()).nullable().optional(),
   filterable: z.boolean().default(false),
   comparable: z.boolean().default(false),
+  better: specBetterDirectionSchema.nullable().optional(),
 })
 
 /**

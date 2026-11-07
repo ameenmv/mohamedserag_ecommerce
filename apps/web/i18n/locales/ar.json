@@ -691,7 +691,26 @@
       "viewAria": "طريقة عرض المواصفات",
       "cheapest": "الأرخص",
       "addAnother": "أضف منتج للمقارنة",
-      "viewProduct": "عرض {name}"
+      "viewProduct": "عرض {name}",
+      "differencesCount": "{diff} فروقات من {total} مواصفات",
+      "best": "الأفضل",
+      "bestAria": "القيمة الأفضل",
+      "priceDiffMore": "+{amount} ج.م",
+      "yes": "نعم",
+      "no": "لا",
+      "searchInCategory": "ابحث في {category}...",
+      "searchPlaceholder": "ابحث عن موديل للإضافة...",
+      "searching": "جاري البحث...",
+      "noSuggestions": "مفيش نتائج مطابقة",
+      "addSlotTitle": "أضف منتج للمقارنة",
+      "addSlotSubtitle": "ابحث وأضف حتى {max} منتجات",
+      "summaryTitle": "خلاصة المقارنة",
+      "groups": {
+        "priceWarranty": "السعر والضمان",
+        "dimensions": "المقاسات والأبعاد",
+        "features": "المميزات",
+        "other": "أخرى"
+      }
     },
     "availability": {
       "inStock": "متوفر",
